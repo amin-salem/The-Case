@@ -1,0 +1,405 @@
+<title>پرونده</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Markazi+Text:wght@400;600&family=Vazirmatn:wght@400;600;800&display=swap">
+<style>
+/* Layout: one narrow case-file column on a desk; list view -> folder view, everything stacks on phones */
+:root {
+  --desk: #e7e1d6;          /* light desk surface */
+  --folder: #d2a965;        /* kraft folder */
+  --folder-edge: #b08443;
+  --paper: #fbf8f1;         /* typed sheet */
+  --ink: #1f2a3a;           /* navy typewriter ink */
+  --ink-soft: #5b6475;
+  --rule: #d9d2c3;
+  --stamp: #b3261e;         /* rubber-stamp red */
+  --clue: #fff2b8;          /* highlighter */
+  --ok: #2f7d4f;
+  --coin: #c58b12;
+  --shadow: 0 1px 0 rgba(31,42,58,.06), 0 8px 24px rgba(31,42,58,.10);
+  --f-display: "Lalezar", "Vazirmatn", Tahoma, sans-serif;
+  --f-story: "Markazi Text", "Vazirmatn", "Times New Roman", serif;
+  --f-ui: "Vazirmatn", Tahoma, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --desk: #141a22; --folder: #8a6a3b; --folder-edge: #6b5130; --paper: #1e2632;
+  --ink: #e9e4d8; --ink-soft: #a7afbd; --rule: #303b4b; --stamp: #ef5b4c;
+  --clue: #5a4a12; --ok: #6cc690; --coin: #e6b84a;
+  --shadow: 0 1px 0 rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.45); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --desk: #141a22; --folder: #8a6a3b; --folder-edge: #6b5130; --paper: #1e2632;
+  --ink: #e9e4d8; --ink-soft: #a7afbd; --rule: #303b4b; --stamp: #ef5b4c;
+  --clue: #5a4a12; --ok: #6cc690; --coin: #e6b84a;
+  --shadow: 0 1px 0 rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.45); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--desk); color: var(--ink); font-family: var(--f-ui); font-size: 15px; line-height: 1.75; }
+.wrap { max-width: 640px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 48px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--coin); outline-offset: 2px; }
+h1, h2, h3 { margin: 0; font-weight: normal; text-wrap: balance; }
+
+/* top bar */
+.bar { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.brand { font-family: var(--f-display); font-size: 34px; line-height: 1; letter-spacing: 0; }
+.brand small { display: block; font-family: var(--f-ui); font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+.wallet { margin-inline-start: auto; display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
+  background: var(--paper); box-shadow: var(--shadow); font-weight: 800; font-variant-numeric: tabular-nums; }
+.wallet svg { width: 18px; height: 18px; }
+.back { border: 0; background: var(--paper); box-shadow: var(--shadow); border-radius: 12px; padding: 8px 12px; font-weight: 600; }
+
+/* tonight teaser */
+.tonight { background: var(--ink); color: var(--paper); border-radius: 16px; padding: 14px 16px; display: flex; gap: 14px; align-items: center; margin-bottom: 18px; }
+.tonight .t { font-family: var(--f-display); font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums; }
+.tonight p { margin: 0; font-size: 13px; opacity: .85; }
+
+/* case list = folder tabs */
+.cases { display: grid; gap: 14px; }
+.tab { position: relative; text-align: start; border: 0; padding: 0; background: none; }
+.tab .ear { display: inline-block; background: var(--folder); border-radius: 10px 10px 0 0; padding: 4px 14px 2px; font-size: 12px; font-weight: 800; color: #2a1d08; }
+.tab .body { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; background: var(--folder); border-radius: 0 14px 14px 14px; padding: 14px 16px; box-shadow: var(--shadow); border-bottom: 3px solid var(--folder-edge); color: #2a1d08; }
+.tab h2 { font-family: var(--f-display); font-size: 24px; line-height: 1.3; }
+.tab .meta { grid-column: 1; font-size: 13px; opacity: .8; }
+.tab .state { grid-row: 1 / span 2; grid-column: 2; font-weight: 800; font-size: 13px; }
+.tab:hover .body { transform: translateY(-2px); transition: transform .15s; }
+
+/* case sheet */
+.sheet { background: var(--paper); border-radius: 6px 6px 14px 14px; box-shadow: var(--shadow); padding: 20px 18px 22px; position: relative; overflow: hidden; }
+.sheet::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 10px; background: var(--folder); }
+.label { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+.case-title { font-family: var(--f-display); font-size: 32px; line-height: 1.3; margin-top: 4px; }
+.story { font-family: var(--f-story); font-size: 21px; line-height: 1.7; margin: 12px 0 0; }
+.sec { margin-top: 22px; }
+.sec-h { display: flex; align-items: baseline; gap: 8px; border-bottom: 1px dashed var(--rule); padding-bottom: 6px; margin-bottom: 10px; }
+.sec-h h3 { font-family: var(--f-display); font-size: 21px; }
+.sec-h span { font-size: 12px; color: var(--ink-soft); }
+
+.ev { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ev li { display: grid; grid-template-columns: auto 1fr; gap: 10px; padding: 8px 10px; border-radius: 10px; transition: background .3s; }
+.ev li b { font-size: 12px; color: var(--ink-soft); white-space: nowrap; padding-top: 2px; font-variant-numeric: tabular-nums; }
+.ev li.hl { background: var(--clue); }
+
+.sus { display: grid; gap: 10px; }
+.s { display: grid; grid-template-columns: 44px 1fr; gap: 4px 12px; padding: 12px; border: 1px solid var(--rule); border-radius: 14px; text-align: start; background: transparent; width: 100%; }
+.s[aria-pressed="true"] { border: 2px solid var(--ink); padding: 11px; }
+.s .av { grid-row: 1 / span 2; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--folder); color: #2a1d08; font-family: var(--f-display); font-size: 22px; }
+.s .nm { font-weight: 800; }
+.s .nm small { font-weight: 400; color: var(--ink-soft); margin-inline-start: 6px; }
+.s q { grid-column: 2; font-family: var(--f-story); font-size: 18.5px; line-height: 1.65; quotes: "«" "»"; min-width: 0; }
+.s .lie.hl { background: var(--clue); border-radius: 4px; box-shadow: 0 0 0 2px var(--clue); }
+.s.out { opacity: .45; }
+.s.out .nm::after { content: " · بی‌گناه"; color: var(--ok); font-weight: 800; }
+
+/* hints */
+.hints { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.hint { border: 1px solid var(--rule); background: transparent; border-radius: 12px; padding: 8px 6px; font-size: 13px; line-height: 1.4; display: grid; gap: 2px; justify-items: center; }
+.hint .c { color: var(--coin); font-weight: 800; font-variant-numeric: tabular-nums; }
+.hint[disabled] { opacity: .45; cursor: default; }
+
+.accuse { margin-top: 18px; width: 100%; border: 0; border-radius: 14px; padding: 14px; background: var(--stamp); color: #fff; font-family: var(--f-display); font-size: 22px; }
+.accuse[disabled] { opacity: .4; cursor: default; }
+.msg { min-height: 1.75em; margin-top: 10px; text-align: center; font-weight: 600; }
+.msg.bad { color: var(--stamp); }
+
+/* solved */
+.stamp { position: absolute; top: 26px; inset-inline-end: 14px; transform: rotate(-12deg); border: 3px solid var(--stamp); color: var(--stamp);
+  font-family: var(--f-display); font-size: 26px; padding: 0 12px; border-radius: 8px; opacity: .9; pointer-events: none; }
+.result { margin-top: 18px; border-top: 2px solid var(--ink); padding-top: 14px; }
+.stars { display: flex; gap: 4px; }
+.stars svg { width: 28px; height: 28px; }
+.result p { font-family: var(--f-story); font-size: 20px; margin: 8px 0; }
+.share { display: flex; gap: 8px; align-items: stretch; margin-top: 10px; }
+.share code { flex: 1; min-width: 0; background: var(--desk); border-radius: 10px; padding: 8px 10px; font-family: var(--f-ui); font-size: 13px; white-space: pre-wrap; }
+.share button { border: 0; border-radius: 10px; padding: 0 14px; background: var(--ink); color: var(--paper); font-weight: 800; }
+
+.shake { animation: shake .4s; }
+@keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+@media (prefers-reduced-motion: reduce) { .shake { animation: none; } .tab:hover .body { transform: none; } }
+
+/* coin sheet */
+.modal { position: fixed; inset: 0; background: rgba(10,14,20,.55); display: grid; place-items: end center; padding: 16px; z-index: 5; }
+.modal .box { width: 100%; max-width: 420px; background: var(--paper); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+.modal h3 { font-family: var(--f-display); font-size: 24px; }
+.packs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 12px 0; }
+.pack { border: 1px solid var(--rule); border-radius: 12px; background: transparent; padding: 10px 4px; display: grid; gap: 2px; justify-items: center; font-size: 13px; }
+.pack b { color: var(--coin); font-size: 17px; }
+.row { display: flex; gap: 8px; }
+.row button { flex: 1; border: 0; border-radius: 12px; padding: 10px; font-weight: 800; }
+.btn-ad { background: var(--ok); color: #fff; }
+.btn-close { background: var(--desk); }
+.note { font-size: 12px; color: var(--ink-soft); margin-top: 8px; }
+.foot { margin-top: 22px; font-size: 12px; color: var(--ink-soft); text-align: center; }
+</style>
+
+<div class="wrap" id="app" dir="rtl" lang="fa"></div>
+
+<script>
+const COIN_SVG = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="var(--coin)"/><circle cx="10" cy="10" r="5.5" fill="none" stroke="var(--paper)" stroke-width="1.6"/></svg>';
+const STAR = on => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.5l1.3-6.6L2.5 9.3l6.6-.8z" fill="${on ? 'var(--coin)' : 'none'}" stroke="var(--coin)" stroke-width="1.6"/></svg>`;
+const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+// Each case: story, evidence, 4 suspects (the culprit's statement holds a lie), and the explanation.
+const CASES = [
+  {
+    id: 1, title: 'هندونه‌ی شب یلدا', place: 'خونه‌ی ما، شب یلدا',
+    story: 'شب یلدا بود. مامان یه قاچ بزرگ هندونه رو برای مادربزرگ کنار گذاشته بود توی یخچال. ساعت ۹:۳۰ که مادربزرگ رسید، بشقاب خالی بود. فقط چند تا تخمه‌ی سیاه روی زمینِ بالکن ریخته بود.',
+    evidence: [
+      'مامان: «ساعت ۸ هندونه رو با دست خودم گذاشتم توی یخچال.»',
+      'پیامک اداره‌ی برق: برق ساختمون از ساعت ۹ تا ۹:۲۰ قطع بود.',
+      'گزارش بازی فوتبال: تنها گلِ بازی ساعت ۹:۱۰ زده شد.',
+      'تخمه‌های هندونه روی زمین بالکن پیدا شد. بالکن فقط از اتاق نشیمن در داره.',
+      'آیفون: عمو رضا ساعت ۹:۴۰ زنگ خونه رو زد.'
+    ],
+    key: 1,
+    suspects: [
+      { n: 'علی', r: 'پسر خونه، ۱۲ ساله', s: ['از ساعت ۸ توی اتاقم بودم و با گوشی بازی می‌کردم. ', 'برق که رفت، گوشیم شارژ داشت، ادامه دادم.'] },
+      { n: 'سارا', r: 'دختر خونه، ۱۵ ساله', s: ['ساعت ۹ رفتم حموم. ', 'برق که رفت توی تاریکی جیغ زدم، همه شنیدن!'] },
+      { n: 'بابا', r: 'پدر خانواده', s: ['از هشت و نیم تا ده جلوی تلویزیون فوتبال می‌دیدم. ', 'گلِ بازی رو هم زنده دیدم، عجب گلی بود!'], lie: 1 },
+      { n: 'عمو رضا', r: 'مهمون', s: ['من که وقتی رسیدم مادربزرگ اونجا بود. ', 'اصلاً هندونه‌ای ندیدم.'] }
+    ],
+    culprit: 2, innocent: 3,
+    explain: 'بابا گفت گلِ بازی رو زنده دیده. ولی گل ساعت ۹:۱۰ زده شد و اون موقع برق رفته بود و تلویزیون خاموش بود. بابا توی تاریکی رفت سراغ یخچال و هندونه رو توی بالکن خورد!'
+  },
+  {
+    id: 2, title: 'عینکِ بابابزرگ', place: 'خونه‌ی بابابزرگ، عصر جمعه',
+    story: 'بابابزرگ ساعت ۴ عصر روی مبل اتاق نشیمن خوابش برد و عینکش رو گذاشت روی میز. ساعت ۵ که بیدار شد، عینک نبود. شب عینک زیر کوسنِ مبل پیدا شد. ولی کی برش داشته بود؟',
+    evidence: [
+      'بابابزرگ از ساعت ۴ تا ۵ روی مبل اتاق نشیمن خواب بود.',
+      'ساعت ۴:۳۰ بارون تندی گرفت و ده دقیقه بارید.',
+      'لباس‌های مهدی وقتی برگشت خونه خیسِ آب بود.',
+      'نقاشی تارا: یه پیرمرد که روی مبل خوابیده و ساعتِ دیواری که ۴:۳۰ رو نشون می‌ده.',
+      'خاله مریم برای همه آش رشته آورد؛ آش دقیقاً ساعت ۵ آماده شد.'
+    ],
+    key: 3,
+    suspects: [
+      { n: 'مهدی', r: 'پسر همسایه', s: ['تمام مدت توی کوچه فوتبال بازی کردیم. ', 'بارون هم که اومد ول نکردیم!'] },
+      { n: 'خاله مریم', r: 'دختر بابابزرگ', s: ['توی آشپزخونه داشتم آش می‌پختم. ', 'از کنار گاز تکون نخوردم.'] },
+      { n: 'نیما', r: 'پسرخاله، ۱۶ ساله', s: ['توی اتاق بالا برای امتحان فردا درس می‌خوندم. ', 'هدفون داشتم، چیزی نشنیدم.'] },
+      { n: 'تارا', r: 'نوه، ۷ ساله', s: ['توی اتاقم نقاشی می‌کشیدم. ', 'اصلاً نیومدم اتاق نشیمن!'], lie: 1 }
+    ],
+    culprit: 3, innocent: 0,
+    explain: 'تارا گفت اصلاً نیومده اتاق نشیمن. ولی نقاشیش بابابزرگ رو خواب روی مبل نشون می‌ده، با ساعتی که ۴:۳۰ رو نشون می‌ده. یعنی همون موقع اونجا بوده! تارا عینک رو برداشته بود که مثل بابابزرگ نقاشی بکشه، بعد ترسید و قایمش کرد زیر کوسن.'
+  },
+  {
+    id: 3, title: 'سکه‌ی عیدی', place: 'خونه‌ی ما، روز اول عید',
+    story: 'روز اول عید بود. مامان یه سکه‌ی طلا برای عیدی گذاشته بود سر سفره‌ی هفت‌سین. ساعت ۲ که مهمون‌ها رسیدن، سکه غیب شده بود.',
+    evidence: [
+      'صبح، سکه جلوی آینه‌ی سفره بود.',
+      'ساعت ۱۲:۳۰ مامان برای عکس انداختن، سکه رو برداشت و گذاشت کنار تنگ ماهی. عکسش رو داریم.',
+      'حسن‌آقا، لوله‌کش، از ۱۲ تا ۱ توی آشپزخونه کار کرد. مامان تمام مدت پیشش بود.',
+      'خانم پروین، همسایه، ساعت ۱۱ اومد سبزه آورد و زود رفت.',
+      'کیان ساعت ۱ از اتاقش اومد بیرون و صبحونه خورد.'
+    ],
+    key: 1,
+    suspects: [
+      { n: 'امیر', r: 'پسرعمو', s: ['ما ساعت ۲ رسیدیم. ', 'مستقیم رفتیم توی حیاط پیش بقیه.'] },
+      { n: 'حسن‌آقا', r: 'لوله‌کش', s: ['من فقط توی آشپزخونه بودم. ', 'سفره رو اصلاً ندیدم.'] },
+      { n: 'خانم پروین', r: 'همسایه', s: ['صبح سبزه رو گذاشتم کنار آینه. ', 'سکه هم همون جلوی آینه بود، قشنگ یادمه.'] },
+      { n: 'کیان', r: 'برادر بزرگ، ۱۹ ساله', s: ['تا ساعت ۱ خواب بودم، امروز سمت سفره هم نرفتم. ', 'به سکه‌ای که کنار تنگ ماهی بود دست نزدم!'], lie: 1 }
+    ],
+    culprit: 3, innocent: 2,
+    explain: 'سکه فقط از ساعت ۱۲:۳۰ کنار تنگ ماهی بود. کیان می‌گه اصلاً سمت سفره نرفته، ولی می‌دونه سکه کنار تنگ ماهی بوده! پس بعد از ۱۲:۳۰ سفره رو دیده. کیان سکه رو برداشت که خودش زودتر عیدی بگیره.'
+  }
+];
+
+const HINTS = [
+  { t: 'مدرک مهم', cost: 20 },
+  { t: 'حذف یک بی‌گناه', cost: 30 },
+  { t: 'نشون دادن دروغ', cost: 40 }
+];
+
+// ---- state (kept in this browser only; the demo works without it)
+let S = { coins: 120, solved: {} };
+try { const saved = JSON.parse(localStorage.getItem('parvandeh-demo') || 'null'); if (saved) S = saved; } catch (e) {}
+const save = () => { try { localStorage.setItem('parvandeh-demo', JSON.stringify(S)); } catch (e) {} };
+let view = { name: 'list' };
+let play = null; // { c, hints:Set, wrong, pick, done, failed }
+
+const app = document.getElementById('app');
+
+function wallet() { return `<div class="wallet" aria-label="سکه‌ها">${COIN_SVG}<span>${fa(S.coins)}</span></div>`; }
+
+function tonightLeft() {
+  try {
+    const now = new Date();
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Tehran', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).formatToParts(now);
+    const g = k => +parts.find(p => p.type === k).value;
+    let secs = (21 * 3600) - (g('hour') * 3600 + g('minute') * 60 + g('second'));
+    if (secs <= 0) secs += 24 * 3600;
+    const h = Math.floor(secs / 3600), m = Math.floor(secs % 3600 / 60);
+    return fa(String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0'));
+  } catch (e) { return fa('21:00'); }
+}
+
+function renderList() {
+  app.innerHTML = `
+    <div class="bar">
+      <h1 class="brand">پرونده<small>هر شب یه معمای تازه، برای همه‌ی ایران</small></h1>
+      ${wallet()}
+    </div>
+    <div class="tonight">
+      <div class="t">${tonightLeft()}</div>
+      <p>تا باز شدن پرونده‌ی امشب (ساعت ۹ شب). همه‌ی ایران همزمان یه پرونده رو حل می‌کنن.</p>
+    </div>
+    <div class="cases">
+      ${CASES.map(c => {
+        const r = S.solved[c.id];
+        const state = r ? (r.stars ? '★'.repeat(r.stars) : 'حل نشد') : 'باز';
+        return `<button class="tab" data-open="${c.id}">
+          <span class="ear">پرونده‌ی شماره‌ی ${fa(c.id)}</span>
+          <span class="body"><h2>${c.title}</h2><span class="meta">${c.place}</span><span class="state">${state}</span></span>
+        </button>`;
+      }).join('')}
+    </div>
+    <p class="foot">نسخه‌ی نمایشی · سه پرونده‌ی نمونه</p>`;
+  app.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openCase(+b.dataset.open));
+}
+
+function openCase(id) {
+  const c = CASES.find(x => x.id === id);
+  const r = S.solved[id];
+  play = { c, hints: new Set(), wrong: 0, pick: null, done: !!r, failed: r ? !r.stars : false };
+  view = { name: 'case' };
+  render();
+  window.scrollTo({ top: 0 });
+}
+
+function stars() {
+  const score = 100 - [...play.hints].reduce((a, i) => a + [15, 20, 25][i], 0) - play.wrong * 30;
+  return score >= 85 ? 3 : score >= 55 ? 2 : 1;
+}
+
+function renderCase() {
+  const { c } = play;
+  const h = play.hints;
+  const result = S.solved[c.id];
+  app.innerHTML = `
+    <div class="bar">
+      <button class="back" id="back">→ پرونده‌ها</button>
+      ${wallet()}
+    </div>
+    <article class="sheet" id="sheet">
+      ${play.done && !play.failed ? '<div class="stamp">حل شد</div>' : ''}
+      <div class="label">پرونده‌ی شماره‌ی ${fa(c.id)} · ${c.place}</div>
+      <h2 class="case-title">${c.title}</h2>
+      <p class="story">${c.story}</p>
+
+      <section class="sec">
+        <div class="sec-h"><h3>مدارک</h3><span>با دقت بخون</span></div>
+        <ul class="ev">
+          ${c.evidence.map((e, i) => `<li class="${h.has(0) && i === c.key ? 'hl' : ''}"><b>مدرک ${fa(i + 1)}</b><span>${e}</span></li>`).join('')}
+        </ul>
+      </section>
+
+      <section class="sec">
+        <div class="sec-h"><h3>مظنون‌ها</h3><span>${play.done ? '' : 'یکی دروغ می‌گه. انتخابش کن'}</span></div>
+        <div class="sus">
+          ${c.suspects.map((s, i) => {
+            const out = h.has(1) && i === c.innocent;
+            const parts = s.s.map((p, j) => `<span class="${s.lie === j ? 'lie' : ''} ${s.lie === j && (h.has(2) || play.done) ? 'hl' : ''}">${p}</span>`).join('');
+            return `<button class="s ${out ? 'out' : ''}" data-pick="${i}" aria-pressed="${play.pick === i}" ${play.done || out ? 'disabled' : ''}>
+              <span class="av" aria-hidden="true">${s.n[0]}</span>
+              <span class="nm">${s.n}<small>${s.r}</small></span>
+              <q>${parts}</q>
+            </button>`;
+          }).join('')}
+        </div>
+      </section>
+
+      ${play.done ? resultHtml(result) : `
+      <section class="sec">
+        <div class="sec-h"><h3>سرنخ</h3><span>گیر کردی؟ با سکه کمک بگیر</span></div>
+        <div class="hints">
+          ${HINTS.map((x, i) => `<button class="hint" data-hint="${i}" ${h.has(i) ? 'disabled' : ''}>${x.t}<span class="c">${h.has(i) ? 'گرفتی' : fa(x.cost) + ' سکه'}</span></button>`).join('')}
+        </div>
+      </section>
+      <button class="accuse" id="accuse" ${play.pick === null ? 'disabled' : ''}>${play.pick === null ? 'یه مظنون رو انتخاب کن' : 'متهم کن: ' + c.suspects[play.pick].n}</button>
+      <div class="msg ${play.wrong ? 'bad' : ''}" id="msg" role="status">${play.wrong ? 'اشتباه بود! فقط یه فرصت دیگه داری.' : ''}</div>`}
+    </article>`;
+
+  document.getElementById('back').onclick = () => { view = { name: 'list' }; render(); };
+  app.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { play.pick = +b.dataset.pick; render(); });
+  app.querySelectorAll('[data-hint]').forEach(b => b.onclick = () => useHint(+b.dataset.hint));
+  const acc = document.getElementById('accuse'); if (acc) acc.onclick = accuse;
+  const cp = document.getElementById('copy'); if (cp) cp.onclick = copyShare;
+}
+
+function shareText(r) {
+  const c = play.c;
+  return r.stars
+    ? `پرونده‌ی شماره‌ی ${fa(c.id)} رو حل کردم 🕵️ ${'★'.repeat(r.stars)}${'☆'.repeat(3 - r.stars)}\nبا ${fa(r.hints)} سرنخ و ${fa(r.wrong)} اشتباه. تو می‌تونی؟`
+    : `پرونده‌ی شماره‌ی ${fa(c.id)} من رو شکست داد 🕵️ تو می‌تونی حلش کنی؟`;
+}
+
+function resultHtml(r) {
+  const c = play.c;
+  return `<section class="result">
+    ${r.stars ? `<div class="stars" aria-label="${fa(r.stars)} ستاره">${[1, 2, 3].map(i => STAR(i <= r.stars)).join('')}</div>` : '<h3 style="font-family:var(--f-display);font-size:22px;color:var(--stamp)">پرونده رو باختی</h3>'}
+    <p><b>مقصر: ${c.suspects[c.culprit].n}.</b> ${c.explain}</p>
+    ${r.stars ? `<div class="label">جایزه: ${fa([0, 20, 35, 50][r.stars])} سکه</div>` : ''}
+    <div class="share"><code id="sharetext">${shareText(r)}</code><button id="copy">کپی</button></div>
+  </section>`;
+}
+
+function useHint(i) {
+  const cost = HINTS[i].cost;
+  if (S.coins < cost) { coinSheet(cost); return; }
+  S.coins -= cost; play.hints.add(i); save(); render();
+}
+
+function accuse() {
+  const c = play.c;
+  if (play.pick === c.culprit) {
+    const st = stars();
+    S.solved[c.id] = { stars: st, hints: play.hints.size, wrong: play.wrong };
+    S.coins += [0, 20, 35, 50][st];
+    play.done = true; save(); render();
+    window.scrollTo({ top: document.querySelector('.result').offsetTop - 20, behavior: 'smooth' });
+    return;
+  }
+  play.wrong++;
+  if (play.wrong >= 2) {
+    S.solved[c.id] = { stars: 0, hints: play.hints.size, wrong: play.wrong };
+    play.done = true; play.failed = true; save(); render();
+    window.scrollTo({ top: document.querySelector('.result').offsetTop - 20, behavior: 'smooth' });
+    return;
+  }
+  play.pick = null; render();
+  const sheet = document.getElementById('sheet'); sheet.classList.add('shake');
+}
+
+function copyShare() {
+  const el = document.getElementById('sharetext'); const btn = document.getElementById('copy');
+  const done = () => { btn.textContent = 'کپی شد'; };
+  try {
+    navigator.clipboard.writeText(el.textContent).then(done, () => selectText(el));
+  } catch (e) { selectText(el); }
+}
+function selectText(el) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+function coinSheet(need) {
+  const m = document.createElement('div');
+  m.className = 'modal';
+  m.innerHTML = `<div class="box" role="dialog" aria-modal="true" aria-labelledby="ch">
+    <h3 id="ch">سکه کم داری!</h3>
+    <div class="label">برای این سرنخ ${fa(need)} سکه لازمه. تو ${fa(S.coins)} سکه داری.</div>
+    <div class="packs">
+      <button class="pack" data-buy="200"><b>${fa(200)}</b>سکه<span>۱۹٬۰۰۰ ت</span></button>
+      <button class="pack" data-buy="700"><b>${fa(700)}</b>سکه<span>۴۹٬۰۰۰ ت</span></button>
+      <button class="pack" data-buy="2000"><b>${fa(2000)}</b>سکه<span>۹۹٬۰۰۰ ت</span></button>
+    </div>
+    <div class="row"><button class="btn-ad" data-ad>دیدن تبلیغ: ${fa(30)} سکه</button><button class="btn-close" data-close>بستن</button></div>
+    <p class="note">نسخه‌ی نمایشی: خرید و تبلیغ واقعی نیست و سکه رایگان اضافه می‌شه. قیمت‌ها نمونه است.</p>
+  </div>`;
+  document.body.appendChild(m);
+  const close = () => { m.remove(); render(); };
+  m.querySelector('[data-close]').onclick = close;
+  m.onclick = e => { if (e.target === m) close(); };
+  m.querySelector('[data-ad]').onclick = () => { S.coins += 30; save(); close(); };
+  m.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => { S.coins += +b.dataset.buy; save(); close(); });
+}
+
+function render() { view.name === 'list' ? renderList() : renderCase(); }
+render();
+setInterval(() => { if (view.name === 'list') { const t = document.querySelector('.tonight .t'); if (t) t.textContent = tonightLeft(); } }, 30000);
+</script>
