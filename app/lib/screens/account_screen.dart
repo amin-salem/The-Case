@@ -24,6 +24,14 @@ class _AccountScreenState extends State<AccountScreen> {
   String? _myCode;
   bool _busy = false;
 
+  @override
+  void dispose() {
+    for (final c in [_email, _pass, _loginEmail, _loginPass, _invite, _transfer]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
   Future<void> _run(Future<void> Function() job) async {
     if (_busy) return;
     setState(() => _busy = true);
@@ -58,6 +66,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ],
       ),
     );
+    c.dispose();
     if (name == null || name.isEmpty || !mounted) return;
     try {
       await Api.i.updateProfile(nickname: name);

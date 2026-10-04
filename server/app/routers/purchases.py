@@ -77,5 +77,6 @@ async def verify(body: VerifyIn, player: Player = Depends(current_player),
         await session.commit()
     except IntegrityError:
         await session.rollback()
+        await session.refresh(player)
         return _out(player, "already_granted", consume=consume)
     return _out(player, "granted", added=added, consume=consume)

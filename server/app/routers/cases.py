@@ -1,6 +1,4 @@
 """Cases: today's case (free), the archive (bought with coins), hints and accusations."""
-from datetime import date, timedelta
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import and_, func, or_, select
 from sqlalchemy.exc import IntegrityError
@@ -38,6 +36,12 @@ def _opened_case(case_id: str) -> Case:
     if c is None or c not in content.opened():
         raise HTTPException(404, "no_case")
     return c
+
+
+def _previous_case(c: Case) -> Case | None:
+    cases = content.all_cases()
+    i = cases.index(c)
+    return cases[i - 1] if i > 0 else None
 
 
 def _is_today(c: Case) -> bool:
@@ -162,11 +166,14 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         reward = eco.SOLVE_REWARD[p.stars]
         if today_case:
             reward += eco.DAILY_BONUS
-            if player.last_daily_solved != today:
-                yesterday = (date.fromisoformat(today) - timedelta(days=1)).isoformat()
-                player.streak = player.streak + 1 if player.last_daily_solved == yesterday else 1
+            # the streak counts daily cases in a row (by case, not by calendar day,
+            # because a daily case stays "today's case" from 21:00 to 21:00)
+            mine = c.publish.isoformat()
+            if player.last_daily_solved != mine:
+                prev = _previous_case(c)
+                player.streak = player.streak + 1 if prev and player.last_daily_solved == prev.publish.isoformat() else 1
                 player.best_streak = max(player.best_streak, player.streak)
-                player.last_daily_solved = today
+                player.last_daily_solved = mine
                 if player.streak % eco.STREAK_BONUS_EVERY == 0:
                     reward += eco.STREAK_BONUS
         player.cases_solved += 1

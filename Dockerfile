@@ -11,7 +11,7 @@ COPY server/app ./app
 COPY server/alembic ./alembic
 COPY server/alembic.ini server/start.sh ./
 
-RUN useradd --create-home appuser
+RUN useradd --create-home appuser && chown appuser /srv
 USER appuser
 
 EXPOSE 3000

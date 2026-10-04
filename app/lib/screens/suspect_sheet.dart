@@ -31,6 +31,7 @@ class _SuspectSheetState extends State<_SuspectSheet> {
   int _asked = -1; // -1 = the first statement
   bool _talking = true;
   final Set<int> _seen = {};
+  int _turn = 0; // new Typewriter each time a question is asked
 
   String get _line => _asked < 0 ? widget.s.statement : widget.s.questions[_asked].a;
 
@@ -40,6 +41,7 @@ class _SuspectSheetState extends State<_SuspectSheet> {
   void _ask(int i) => setState(() {
         _asked = i;
         _talking = true;
+        _turn++;
         _seen.add(i);
       });
 
@@ -87,7 +89,7 @@ class _SuspectSheetState extends State<_SuspectSheet> {
                   Text('تو: ${s.questions[_asked].q}', style: tBody(13, color: K.inkSoft, w: FontWeight.w700)),
                 Typewriter(
                   '«$_line»',
-                  key: ValueKey(_asked),
+                  key: ValueKey(_turn),
                   style: tBody(16.5, color: K.ink),
                   onDone: () {
                     if (mounted) setState(() => _talking = false);

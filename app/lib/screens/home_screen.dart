@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   CasesList? _cases;
   String? _error;
   Timer? _tick;
+  DateTime _lastReload = DateTime.now();
 
   @override
   void initState() {
@@ -34,7 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _tick = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) setState(() {});
       final next = _cases?.nextCaseAt;
-      if (next != null && DateTime.now().isAfter(next.add(const Duration(seconds: 2)))) _load();
+      final now = DateTime.now();
+      if (next != null && now.isAfter(next.add(const Duration(seconds: 2))) &&
+          now.difference(_lastReload).inSeconds >= 30) {
+        _lastReload = now;
+        _load();
+      }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final r = Api.i.profile?.loginReward ?? 0;
@@ -132,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final p = Api.i.profile;
     final det = kDetectives[(p?.avatar ?? 0) % kDetectives.length];
     return Row(children: [
-      GestureDetector(
+      Flexible(
+        child: GestureDetector(
         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AccountScreen())),
         child: Row(children: [
           Container(
@@ -142,16 +149,22 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ClipOval(child: CustomPaint(painter: CharacterPainter(det))),
           ),
           const SizedBox(width: 8),
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(p?.nickname ?? '', style: tBody(14, w: FontWeight.w900)),
-            Row(children: [
-              const Icon(Icons.local_fire_department_rounded, size: 16, color: K.stamp),
-              Text(' ${fa(p?.streak ?? 0)} روز پشت سر هم', style: tBody(12, color: K.textSoft)),
+          Flexible(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(p?.nickname ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900)),
+              Row(children: [
+                const Icon(Icons.local_fire_department_rounded, size: 16, color: K.stamp),
+                Flexible(
+                  child: Text(' ${fa(p?.streak ?? 0)} روز پشت سر هم',
+                      maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.textSoft)),
+                ),
+              ]),
             ]),
-          ]),
+          ),
         ]),
+        ),
       ),
-      const Spacer(),
+      const SizedBox(width: 4),
       _iconBtn(Icons.emoji_events_rounded, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LeaderboardScreen()))),
       Stack(clipBehavior: Clip.none, children: [
         _iconBtn(Icons.mail_rounded, () => showInbox(context)),
