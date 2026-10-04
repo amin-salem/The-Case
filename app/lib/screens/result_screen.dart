@@ -2,19 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../models/models.dart';
+import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/fx.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'leaderboard_screen.dart';
 
 /// The big moment: stamp, stars, reward, explanation, share.
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key, required this.caseData, required this.result});
   final CaseData caseData;
   final AccuseResult result;
 
+  @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  CaseData get caseData => widget.caseData;
+  AccuseResult get result => widget.result;
   bool get solved => result.result == 'solved';
+
+  @override
+  void initState() {
+    super.initState();
+    // stamp, then the verdict music
+    Future<void>.delayed(const Duration(milliseconds: 300), () => Sfx.i.play('stamp', volume: 0.9));
+    Future<void>.delayed(const Duration(milliseconds: 900), () => Sfx.i.play(solved ? 'win' : 'lose'));
+  }
 
   String get _shareText {
     final stars = '★' * result.stars + '☆' * (3 - result.stars);
@@ -30,6 +47,7 @@ class ResultScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(children: [
         Positioned.fill(child: AnimatedScene(scene: caseData.scene, height: double.infinity, dim: 0.7)),
+        if (solved) const Positioned.fill(child: Confetti()),
         SafeArea(
           child: ListView(padding: const EdgeInsets.fromLTRB(18, 24, 18, 24), children: [
             Center(
@@ -45,7 +63,8 @@ class ResultScreen extends StatelessWidget {
               FadeSlideIn(
                 delay: const Duration(milliseconds: 1000),
                 child: Wrap(alignment: WrapAlignment.center, spacing: 10, runSpacing: 8, children: [
-                  _pill(Icons.monetization_on_rounded, '+${fa(result.reward)} سکه', K.brass),
+                  _pillW(Icons.monetization_on_rounded,
+                      AnimatedCount(value: result.reward, prefix: 'پاداش ', suffix: ' سکه', style: tBody(14, w: FontWeight.w900)), K.brass),
                   _pill(Icons.local_fire_department_rounded, '${fa(result.streak)} روز پشت سر هم', K.stamp),
                   if (result.rank != null) _pill(Icons.emoji_events_rounded, 'رتبه‌ی ${fa(result.rank!)} امروز', K.ok),
                 ]),
@@ -106,13 +125,15 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _pill(IconData icon, String text, Color color) => Container(
+  Widget _pill(IconData icon, String text, Color color) => _pillW(icon, Text(text, style: tBody(14, w: FontWeight.w900)), color);
+
+  Widget _pillW(IconData icon, Widget label, Color color) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(99), border: Border.all(color: color)),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           Icon(icon, color: color, size: 18),
           const SizedBox(width: 6),
-          Text(text, style: tBody(14, w: FontWeight.w900)),
+          label,
         ]),
       );
 }

@@ -21,7 +21,9 @@ class _TypewriterState extends State<Typewriter> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(widget.speed, (t) {
+    // long texts must not take forever: at most about 9 seconds in total
+    final every = Duration(milliseconds: widget.text.isEmpty ? widget.speed.inMilliseconds : (9000 / widget.text.length).clamp(6, widget.speed.inMilliseconds.toDouble()).round());
+    _timer = Timer.periodic(every, (t) {
       if (!mounted) return t.cancel();
       setState(() => _n += 1);
       if (_n >= widget.text.length) {

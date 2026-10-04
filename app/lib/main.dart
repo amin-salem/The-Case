@@ -3,8 +3,11 @@ import 'package:flutter/services.dart';
 
 import 'screens/home_screen.dart';
 import 'services/api.dart';
+import 'services/sound.dart';
 import 'theme.dart';
+import 'widgets/fx.dart';
 import 'widgets/scene.dart';
+import 'widgets/typewriter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,11 +15,39 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light));
   await Api.i.init();
+  await Sfx.i.init();
   runApp(const TheCaseApp());
 }
 
-class TheCaseApp extends StatelessWidget {
+class TheCaseApp extends StatefulWidget {
   const TheCaseApp({super.key});
+
+  @override
+  State<TheCaseApp> createState() => _TheCaseAppState();
+}
+
+class _TheCaseAppState extends State<TheCaseApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // the ambience stops when the app goes to the background
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      Sfx.i.resumeAll();
+    } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      Sfx.i.pauseAll();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +77,7 @@ class _StartScreenState extends State<StartScreen> {
   void initState() {
     super.initState();
     _connect();
+    Future<void>.delayed(const Duration(milliseconds: 500), () => Sfx.i.play('stamp', volume: 0.7));
   }
 
   Future<void> _connect() async {
@@ -74,12 +106,13 @@ class _StartScreenState extends State<StartScreen> {
     return Scaffold(
       body: Stack(children: [
         const Positioned.fill(child: AnimatedScene(scene: 'villa_rain', height: double.infinity, dim: 0.4)),
+        const Positioned.fill(child: Torchlight(child: SizedBox.expand())),
         SafeArea(
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                const StampMark('پرونده', size: 54),
+                StampIn(delay: const Duration(milliseconds: 350), child: const StampMark('پرونده', size: 54)),
                 const SizedBox(height: 14),
                 Text('هر شب ساعت ۹، یه جنایت تازه', style: tBody(15, color: K.textSoft)),
                 const SizedBox(height: 32),

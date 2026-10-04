@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
+import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/fx.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'account_screen.dart';
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _load();
+    Sfx.i.ambient('amb_home', volume: 0.28);
     _tick = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) setState(() {});
       final next = _cases?.nextCaseAt;
@@ -90,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (!mounted) return;
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: row.id)));
+    Sfx.i.ambient('amb_home', volume: 0.28);
     _load();
   }
 
@@ -114,6 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (_cases != null) ...[
                     _todayCard(_cases!.today),
                     const SizedBox(height: 12),
+                    _collection(),
+                    const SizedBox(height: 10),
                     _nextCase(),
                     _secureBanner(),
                     const SizedBox(height: 22),
@@ -165,6 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       const SizedBox(width: 4),
+      const SoundButton(),
       _iconBtn(Icons.emoji_events_rounded, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LeaderboardScreen()))),
       Stack(clipBehavior: Clip.none, children: [
         _iconBtn(Icons.mail_rounded, () => showInbox(context)),
@@ -229,7 +236,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     left: 14,
                     top: 14,
                     child: StampMark(c.solved ? 'حل شد' : 'باخت', size: 26, color: c.solved ? K.brass : K.stamp),
-                  ),
+                  )
+                else
+                  const Positioned(right: 12, top: 12, child: _NewBadge()),
               ]),
             ),
             Padding(
@@ -256,6 +265,35 @@ class _HomeScreenState extends State<HomeScreen> {
               ]),
             ),
           ]),
+        ),
+      ]),
+    );
+  }
+
+  /// How many of the opened cases the player has solved.
+  Widget _collection() {
+    final all = [if (_cases!.today != null) _cases!.today!, ..._cases!.archive];
+    final solved = all.where((c) => c.solved).length;
+    final frac = all.isEmpty ? 0.0 : solved / all.length;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
+      decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(12), border: Border.all(color: K.kraft.withValues(alpha: 0.25))),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          const Icon(Icons.folder_special_rounded, color: K.brass, size: 20),
+          const SizedBox(width: 8),
+          Expanded(child: Text('کلکسیون پرونده‌های حل‌شده', style: tBody(13, w: FontWeight.w700))),
+          Text('${fa(solved)} از ${fa(all.length)}', style: tBody(13, color: K.brass, w: FontWeight.w900)),
+        ]),
+        const SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: frac),
+            duration: const Duration(milliseconds: 900),
+            curve: Curves.easeOutCubic,
+            builder: (_, v, __) => LinearProgressIndicator(value: v, minHeight: 8, backgroundColor: K.night3, color: K.brass),
+          ),
         ),
       ]),
     );
@@ -309,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: SizedBox(width: 74, height: 56, child: AnimatedScene(scene: c.scene, height: 56)),
+            child: SizedBox(width: 74, height: 56, child: AnimatedScene(scene: c.scene, height: 56, animated: false)),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -335,4 +373,36 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+/// Pulsing "new" tag on tonight's case.
+class _NewBadge extends StatefulWidget {
+  const _NewBadge();
+
+  @override
+  State<_NewBadge> createState() => _NewBadgeState();
+}
+
+class _NewBadgeState extends State<_NewBadge> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1100))..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _c,
+        builder: (_, __) => Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          decoration: BoxDecoration(
+            color: K.stamp,
+            borderRadius: BorderRadius.circular(99),
+            boxShadow: [BoxShadow(color: K.stamp.withValues(alpha: 0.35 + 0.4 * _c.value), blurRadius: 6 + 12 * _c.value)],
+          ),
+          child: Text('جدید', style: tBody(12, w: FontWeight.w900)),
+        ),
+      );
 }
