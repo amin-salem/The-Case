@@ -1,0 +1,9 @@
+{
+  "platform": "docker",
+  "app": "thecase",
+  "port": 3000,
+  "build": {
+    "location": "germany"
+  },
+  "disks": []
+}

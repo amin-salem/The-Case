@@ -1,0 +1,6 @@
+*
+!server/
+server/.env
+server/*.db
+server/tests/
+server/**/__pycache__/
