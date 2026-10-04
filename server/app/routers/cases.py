@@ -87,7 +87,10 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
         except IntegrityError:  # opened twice at the same moment
             await session.rollback()
             p = await _progress(session, player.id, c.id)
-    return CaseOut(case=c.public(), progress=_progress_out(c, p), today=_is_today(c))
+    data = c.public()
+    if p is not None and (p.solved or p.failed):
+        data["solution"] = c.data["solution"]  # finished: show how it was solved
+    return CaseOut(case=data, progress=_progress_out(c, p), today=_is_today(c))
 
 
 @router.post("/{case_id}/unlock", response_model=CaseOut)

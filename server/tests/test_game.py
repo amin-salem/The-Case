@@ -51,6 +51,8 @@ async def test_today_case_flow_solve(client):
     again = await client.post(f"/v1/cases/{c.id}/accuse", headers=h,
                               json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})
     assert again.status_code == 409
+    reopened = (await client.get(f"/v1/cases/{c.id}", headers=h)).json()
+    assert reopened["case"]["solution"]["culprit"] == c.culprit
 
 
 async def test_wrong_proof_and_fail(client):

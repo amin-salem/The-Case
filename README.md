@@ -25,7 +25,7 @@ JWT_SECRET=<long random string>
 ADMIN_API_KEY=<another long random string>
 AUTO_CREATE_TABLES=false
 BAZAAR_MODE=fake             # api_secret + BAZAAR_API_SECRET for real payments
-BAZAAR_PACKAGE_NAME=ir.aminsalem.thecase
+BAZAAR_PACKAGE_NAME=ir.aminsalem.the_case
 ```
 To check that it's running, open `https://thecase.liara.run/health`. It shows how many cases are loaded.
 

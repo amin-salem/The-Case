@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 
     # Cafe Bazaar
     bazaar_mode: str = "fake"  # fake | api_secret | oauth
-    bazaar_package_name: str = "ir.aminsalem.thecase"
+    bazaar_package_name: str = "ir.aminsalem.the_case"
     bazaar_base_url: str = "https://pardakht.cafebazaar.ir/devapi/v2"
     bazaar_api_secret: str = ""
     bazaar_client_id: str = ""

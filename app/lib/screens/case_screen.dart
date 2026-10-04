@@ -1,0 +1,438 @@
+import 'package:flutter/material.dart';
+
+import '../models/models.dart';
+import '../services/api.dart';
+import '../theme.dart';
+import '../widgets/character.dart';
+import '../widgets/scene.dart';
+import '../widgets/typewriter.dart';
+import 'accuse_screen.dart';
+import 'dialogs.dart';
+import 'result_screen.dart';
+import 'suspect_sheet.dart';
+
+IconData evidenceIcon(String type) => switch (type) {
+      'cctv' => Icons.videocam_rounded,
+      'document' => Icons.description_rounded,
+      'forensic' => Icons.biotech_rounded,
+      'phone' => Icons.smartphone_rounded,
+      'receipt' => Icons.receipt_long_rounded,
+      'witness' => Icons.record_voice_over_rounded,
+      'object' => Icons.inventory_2_rounded,
+      _ => Icons.push_pin_rounded,
+    };
+
+String evidenceType(String type) => switch (type) {
+      'cctv' => 'دوربین',
+      'document' => 'سند',
+      'forensic' => 'پزشکی قانونی',
+      'phone' => 'گوشی',
+      'receipt' => 'فاکتور',
+      'witness' => 'شاهد',
+      'object' => 'شیء',
+      _ => 'مدرک',
+    };
+
+/// Notes the player puts on suspects while thinking.
+enum SuspectMark { none, suspicious, innocent }
+
+class CaseScreen extends StatefulWidget {
+  const CaseScreen({super.key, required this.caseId});
+  final String caseId;
+
+  @override
+  State<CaseScreen> createState() => _CaseScreenState();
+}
+
+class _CaseScreenState extends State<CaseScreen> {
+  CaseData? _case;
+  Progress? _progress;
+  String? _error;
+  bool _intro = true;
+  final Map<String, SuspectMark> _marks = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final (c, p, _) = await Api.i.openCase(widget.caseId);
+      if (!mounted) return;
+      setState(() {
+        _case = c;
+        _progress = p;
+        if (p.finished || p.hints.isNotEmpty || p.attempts > 0) _intro = false;
+      });
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = Api.errorText(e.code));
+    } catch (e) {
+      if (mounted) setState(() => _error = Api.describe(e));
+    }
+  }
+
+  Future<void> _hint() async {
+    final p = _progress!;
+    final cost = p.nextHintCost;
+    if (cost == null) return;
+    final vipFree = (Api.i.profile?.vip ?? false) && p.hints.isEmpty;
+    final ok = await confirm(context, 'سرنخ ${fa(p.hints.length + 1)} از ${fa(p.hintCosts.length)}',
+        vipFree ? 'اولین سرنخ برای VIP رایگانه.' : 'این سرنخ ${fa(cost)} سکه هزینه داره. ستاره‌هات هم ممکنه کمتر بشه.',
+        'بگیر');
+    if (!ok || !mounted) return;
+    try {
+      final (hint, progress) = await Api.i.buyHint(_case!.id);
+      if (!mounted) return;
+      setState(() => _progress = progress);
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: StampIn(
+            child: Paper(
+              color: K.clue,
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                const Icon(Icons.lightbulb_rounded, color: K.ink, size: 34),
+                const SizedBox(height: 8),
+                Text(hint, textAlign: TextAlign.center, style: tBody(17, color: K.ink, w: FontWeight.w700)),
+              ]),
+            ),
+          ),
+        ),
+      );
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      if (e.code == 'not_enough_coins') {
+        await showNeedCoins(context, e.need);
+      } else {
+        toast(context, Api.errorText(e.code));
+      }
+    } catch (e) {
+      if (mounted) toast(context, 'اتصال به سرور برقرار نیست');
+    }
+  }
+
+  Future<void> _accuse() async {
+    final r = await Navigator.of(context).push<AccuseResult>(
+        MaterialPageRoute(builder: (_) => AccuseScreen(caseData: _case!, progress: _progress!, marks: _marks)));
+    if (r == null || !mounted) return;
+    if (r.progress != null) setState(() => _progress = r.progress);
+    if (r.result == 'solved' || r.result == 'failed') {
+      await Navigator.of(context).push(MaterialPageRoute(builder: (_) => ResultScreen(caseData: _case!, result: r)));
+      await _load();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = _case;
+    if (c == null) {
+      return Scaffold(
+        appBar: AppBar(backgroundColor: K.night),
+        body: Center(
+          child: _error == null
+              ? const CircularProgressIndicator(color: K.brass)
+              : Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    Text(_error!, textAlign: TextAlign.center, style: tBody(15)),
+                    const SizedBox(height: 12),
+                    StampButton(label: 'دوباره', onTap: _load),
+                  ]),
+                ),
+        ),
+      );
+    }
+    if (_intro) return _introView(c);
+    return _investigation(c);
+  }
+
+  // ---------------------------------------------------------------- intro
+
+  Widget _introView(CaseData c) {
+    return Scaffold(
+      body: Stack(children: [
+        Positioned.fill(child: AnimatedScene(scene: c.scene, height: double.infinity, dim: 0.55)),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_rounded, color: K.text)),
+              ),
+              const Spacer(),
+              StampIn(child: Align(alignment: Alignment.centerRight, child: StampMark('پرونده‌ی شماره‌ی ${fa(c.number)}', size: 22))),
+              const SizedBox(height: 14),
+              FadeSlideIn(delay: const Duration(milliseconds: 300), child: Text(c.title, style: tDisplay(32))),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 500),
+                child: Row(children: [
+                  const Icon(Icons.place_rounded, size: 16, color: K.brass),
+                  const SizedBox(width: 4),
+                  Expanded(child: Text(c.location, style: tBody(14, color: K.textSoft))),
+                  Difficulty(c.difficulty, color: K.brass),
+                ]),
+              ),
+              const SizedBox(height: 16),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 800),
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(12)),
+                  child: Typewriter(c.intro, style: tBody(16.5)),
+                ),
+              ),
+              const SizedBox(height: 18),
+              StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, onTap: () => setState(() => _intro = false)),
+            ]),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  // ---------------------------------------------------------------- investigation
+
+  Widget _investigation(CaseData c) {
+    final p = _progress!;
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        body: GrainBackground(
+          child: SafeArea(
+            child: Column(children: [
+              _header(c, p),
+              TabBar(
+                indicatorColor: K.stamp,
+                labelColor: K.text,
+                unselectedLabelColor: K.textSoft,
+                labelStyle: tBody(15, w: FontWeight.w900),
+                dividerColor: Colors.transparent,
+                tabs: [
+                  const Tab(text: 'پرونده'),
+                  Tab(text: 'مدارک (${fa(c.evidence.length)})'),
+                  Tab(text: 'مظنون‌ها (${fa(c.suspects.length)})'),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(children: [_storyTab(c, p), _evidenceTab(c), _suspectsTab(c)]),
+              ),
+              if (!p.finished) _bottomBar(p),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _header(CaseData c, Progress p) {
+    return SizedBox(
+      height: 120,
+      child: Stack(children: [
+        Positioned.fill(child: AnimatedScene(scene: c.scene, height: 120, dim: 0.5)),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(4, 4, 12, 8),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_forward_rounded, color: K.text)),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                const SizedBox(height: 8),
+                Text(c.title, style: tDisplay(20), maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text(c.location, style: tBody(12, color: K.textSoft), maxLines: 1, overflow: TextOverflow.ellipsis),
+                const Spacer(),
+                if (p.solved)
+                  Row(children: [Stars(count: p.stars, size: 18), const SizedBox(width: 6), Text('حل شد', style: tBody(13, color: K.brass, w: FontWeight.w900))])
+                else if (p.failed)
+                  Text('این پرونده رو باختی', style: tBody(13, color: K.stamp, w: FontWeight.w900))
+                else
+                  Row(children: [
+                    for (int i = 0; i < p.attemptsLeft + p.attempts; i++)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 3),
+                        child: Icon(Icons.gavel_rounded, size: 16, color: i < p.attemptsLeft ? K.stamp : K.textSoft.withValues(alpha: 0.3)),
+                      ),
+                    const SizedBox(width: 6),
+                    Text('${fa(p.attemptsLeft)} فرصت متهم کردن', style: tBody(12, color: K.textSoft)),
+                  ]),
+              ]),
+            ),
+            ListenableBuilder(listenable: Api.i, builder: (_, __) => CoinChip(coins: Api.i.coins)),
+          ]),
+        ),
+      ]),
+    );
+  }
+
+  Widget _storyTab(CaseData c, Progress p) {
+    return ListView(padding: const EdgeInsets.fromLTRB(16, 12, 16, 24), children: [
+      Paper(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const SectionTitle('گزارش اولیه'),
+          Text(c.intro, style: tBody(16, color: K.ink)),
+        ]),
+      ),
+      if (p.hints.isNotEmpty) ...[
+        const SizedBox(height: 14),
+        for (int i = 0; i < p.hints.length; i++)
+          Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(color: K.clue, borderRadius: BorderRadius.circular(6)),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Icon(Icons.lightbulb_rounded, color: K.ink, size: 20),
+              const SizedBox(width: 8),
+              Expanded(child: Text('سرنخ ${fa(i + 1)}: ${p.hints[i]}', style: tBody(14, color: K.ink, w: FontWeight.w700))),
+            ]),
+          ),
+      ],
+      if (p.finished && c.explanation != null) ...[
+        const SizedBox(height: 14),
+        _solutionBox(c),
+      ] else ...[
+        const SizedBox(height: 14),
+        Text('چطور حل کنم؟', style: tDisplay(16)),
+        const SizedBox(height: 4),
+        Text('مدارک رو بخون و از مظنون‌ها سؤال کن. یکی‌شون دروغ می‌گه. '
+            'وقتی پیداش کردی، متهمش کن و مدرکی رو نشون بده که دروغش رو ثابت می‌کنه. '
+            'هر سرنخ و هر اتهام اشتباه، ستاره‌هات رو کم می‌کنه.', style: tBody(14, color: K.textSoft)),
+      ],
+    ]);
+  }
+
+  Widget _solutionBox(CaseData c) {
+    final culprit = c.culprit == null ? null : c.suspect(c.culprit!);
+    return Paper(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          if (culprit != null) AnimatedSuspect(avatar: culprit.avatar, size: 64, mood: Mood.sad),
+          const SizedBox(width: 10),
+          Expanded(child: Text('مقصر: ${culprit?.name ?? ''}', style: tDisplay(19, color: K.stamp))),
+        ]),
+        const SizedBox(height: 8),
+        Text(c.explanation ?? '', style: tBody(15.5, color: K.ink)),
+        if (c.proof.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text('مدرک کلیدی: ${c.proof.map((id) => c.evidenceById(id)?.title ?? id).join('، ')}',
+              style: tBody(13, color: K.inkSoft, w: FontWeight.w700)),
+        ],
+      ]),
+    );
+  }
+
+  Widget _evidenceTab(CaseData c) {
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+      itemCount: c.evidence.length,
+      itemBuilder: (_, i) {
+        final e = c.evidence[i];
+        final key = (_progress?.finished ?? false) && c.proof.contains(e.id);
+        return FadeSlideIn(
+          delay: Duration(milliseconds: 50 * i),
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: Paper(
+              color: key ? K.clue : K.paper,
+              padding: const EdgeInsets.all(14),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(color: K.ink, borderRadius: BorderRadius.circular(10)),
+                  child: Icon(evidenceIcon(e.type), color: K.paper, size: 22),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Row(children: [
+                      Expanded(child: Text(e.title, style: tBody(15, color: K.ink, w: FontWeight.w900))),
+                      Text(evidenceType(e.type), style: tBody(11, color: K.inkSoft)),
+                    ]),
+                    const SizedBox(height: 4),
+                    Text(e.text, style: tBody(14.5, color: K.ink)),
+                    if (key) Text('مدرک کلیدی', style: tBody(12, color: K.stamp, w: FontWeight.w900)),
+                  ]),
+                ),
+              ]),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _suspectsTab(CaseData c) {
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+      itemCount: c.suspects.length,
+      itemBuilder: (_, i) {
+        final s = c.suspects[i];
+        final mark = _marks[s.id] ?? SuspectMark.none;
+        final culprit = (_progress?.finished ?? false) && c.culprit == s.id;
+        return FadeSlideIn(
+          delay: Duration(milliseconds: 60 * i),
+          child: GestureDetector(
+            onTap: () async {
+              final m = await showSuspect(context, s, mark);
+              if (m != null && mounted) setState(() => _marks[s.id] = m);
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: K.night2,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                    color: culprit ? K.stamp : mark == SuspectMark.suspicious ? K.brass : K.night3, width: culprit ? 2 : 1),
+              ),
+              child: Row(children: [
+                Container(
+                  decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12)),
+                  child: AnimatedSuspect(avatar: s.avatar, size: 78, mood: culprit ? Mood.sad : Mood.calm),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Row(children: [
+                      Expanded(child: Text(s.name, style: tBody(16, w: FontWeight.w900))),
+                      if (culprit) Text('مقصر', style: tBody(12, color: K.stamp, w: FontWeight.w900))
+                      else if (mark == SuspectMark.suspicious) Text('مشکوک', style: tBody(12, color: K.brass, w: FontWeight.w900))
+                      else if (mark == SuspectMark.innocent) Text('بی‌گناه', style: tBody(12, color: K.ok, w: FontWeight.w900)),
+                    ]),
+                    Text('${s.role} · ${fa(s.age)} ساله', style: tBody(12, color: K.textSoft)),
+                    const SizedBox(height: 4),
+                    Text('«${s.statement}»', maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(13.5)),
+                    Text('برای بازجویی بزن', style: tBody(11, color: K.brass)),
+                  ]),
+                ),
+              ]),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _bottomBar(Progress p) {
+    final cost = p.nextHintCost;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+      decoration: const BoxDecoration(color: K.night2, border: Border(top: BorderSide(color: K.night3))),
+      child: Row(children: [
+        Expanded(
+          flex: 2,
+          child: StampButton(
+            label: cost == null ? 'سرنخی نمونده' : 'سرنخ · ${fa(cost)}',
+            icon: Icons.lightbulb_rounded,
+            color: K.night3,
+            onTap: cost == null ? null : _hint,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(flex: 3, child: StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
+      ]),
+    );
+  }
+}
