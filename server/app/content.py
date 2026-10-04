@@ -17,6 +17,11 @@ from .config import get_settings
 
 CASES_DIR = Path(__file__).parent / "content" / "cases"
 SECRET_KEYS = ("hints", "solution")
+# the scenes the app can draw and play sound for (app/lib/widgets/scene.dart, app/assets/sounds)
+SCENES = frozenset({
+    "bazaar_night", "office", "train", "museum", "villa_rain", "warehouse", "harbor", "hospital", "library",
+    "theater", "hotel", "kitchen", "snow_lodge", "desert", "subway", "lab", "wedding", "school", "airport", "tower",
+})
 
 
 class CaseError(ValueError):
@@ -57,8 +62,14 @@ def validate(d: dict) -> None:
                 "suspects", "evidence", "hints", "solution"):
         if key not in d:
             raise CaseError(f"{d.get('id', '?')}: missing {key}")
+    if d["scene"] not in SCENES:
+        raise CaseError(f"{d['id']}: unknown scene {d['scene']!r}")
+    if d["difficulty"] not in (1, 2, 3, 4, 5):
+        raise CaseError(f"{d['id']}: difficulty must be 1-5")
     sids = [s["id"] for s in d["suspects"]]
     eids = [e["id"] for e in d["evidence"]]
+    if len(eids) < 5:
+        raise CaseError(f"{d['id']}: needs at least 5 pieces of evidence")
     if len(set(sids)) != len(sids) or len(set(eids)) != len(eids):
         raise CaseError(f"{d['id']}: duplicate suspect/evidence id")
     if not 3 <= len(sids) <= 6:
@@ -74,6 +85,8 @@ def validate(d: dict) -> None:
         for key in ("name", "role", "avatar", "statement", "questions"):
             if key not in s:
                 raise CaseError(f"{d['id']}/{s['id']}: missing {key}")
+        if len(s["questions"]) < 2:
+            raise CaseError(f"{d['id']}/{s['id']}: needs at least 2 questions")
     for e in d["evidence"]:
         for key in ("type", "title", "text"):
             if key not in e:

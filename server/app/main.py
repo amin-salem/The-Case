@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from . import content, db
 from .config import get_settings
+from .version import VERSION
 from .routers import admin, auth, cases, inbox, leaderboard, meta, profile, purchases
 from .services.ratelimit import RateLimitMiddleware
 
@@ -27,7 +28,7 @@ async def lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     s = get_settings()
-    app = FastAPI(title="The Case API", version="1.0.1", lifespan=lifespan,
+    app = FastAPI(title="The Case API", version=VERSION, lifespan=lifespan,
                   docs_url="/docs" if s.env != "prod" else None, redoc_url=None)
     app.add_middleware(RateLimitMiddleware)
     app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in s.cors_origins.split(",")],
