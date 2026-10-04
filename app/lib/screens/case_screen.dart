@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
+import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/fx.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'accuse_screen.dart';
@@ -50,6 +52,7 @@ class _CaseScreenState extends State<CaseScreen> {
   String? _error;
   bool _intro = true;
   final Map<String, SuspectMark> _marks = {};
+  final Set<String> _pins = {}; // evidence the player has pinned to the board
 
   @override
   void initState() {
@@ -66,6 +69,12 @@ class _CaseScreenState extends State<CaseScreen> {
         _progress = p;
         if (p.finished || p.hints.isNotEmpty || p.attempts > 0) _intro = false;
       });
+      // the case file opens with its own sting and the sounds of the place
+      if (_intro) {
+        Sfx.i.openCase(c.scene);
+      } else {
+        Sfx.i.ambient('amb_${c.scene}');
+      }
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = Api.errorText(e.code));
     } catch (e) {
@@ -86,6 +95,7 @@ class _CaseScreenState extends State<CaseScreen> {
       final (hint, progress) = await Api.i.buyHint(_case!.id);
       if (!mounted) return;
       setState(() => _progress = progress);
+      Sfx.i.play('clue');
       await showDialog<void>(
         context: context,
         builder: (ctx) => Dialog(
@@ -161,7 +171,10 @@ class _CaseScreenState extends State<CaseScreen> {
             child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_rounded, color: K.text)),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_rounded, color: K.text)),
+                  const SoundButton(),
+                ]),
               ),
               const Spacer(),
               StampIn(child: Align(alignment: Alignment.centerRight, child: StampMark('پرونده‌ی شماره‌ی ${fa(c.number)}', size: 22))),
@@ -259,6 +272,7 @@ class _CaseScreenState extends State<CaseScreen> {
                   ]),
               ]),
             ),
+            const SoundButton(),
             ListenableBuilder(listenable: Api.i, builder: (_, __) => CoinChip(coins: Api.i.coins)),
           ]),
         ),
@@ -329,11 +343,21 @@ class _CaseScreenState extends State<CaseScreen> {
       itemBuilder: (_, i) {
         final e = c.evidence[i];
         final key = (_progress?.finished ?? false) && c.proof.contains(e.id);
+        final pinned = _pins.contains(e.id);
         return FadeSlideIn(
           delay: Duration(milliseconds: 50 * i),
-          child: Container(
+          child: GestureDetector(
+            onTap: () {
+              Sfx.i.play('paper', volume: 0.6);
+              setState(() => pinned ? _pins.remove(e.id) : _pins.add(e.id));
+            },
+            child: AnimatedRotation(
+            turns: pinned ? 0 : ((i % 3) - 1) * 0.0015,
+            duration: const Duration(milliseconds: 250),
+            child: Container(
             margin: const EdgeInsets.only(bottom: 10),
-            child: Paper(
+            child: Stack(clipBehavior: Clip.none, children: [
+            Paper(
               color: key ? K.clue : K.paper,
               padding: const EdgeInsets.all(14),
               child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -353,10 +377,15 @@ class _CaseScreenState extends State<CaseScreen> {
                     const SizedBox(height: 4),
                     Text(e.text, style: tBody(14.5, color: K.ink)),
                     if (key) Text('مدرک کلیدی', style: tBody(12, color: K.stamp, w: FontWeight.w900)),
+                    if (pinned && !key) Text('نشان‌شده', style: tBody(11, color: K.stamp, w: FontWeight.w900)),
                   ]),
                 ),
               ]),
             ),
+            Positioned(top: -8, left: 10, child: PinBadge(on: pinned)),
+            ]),
+          ),
+          ),
           ),
         );
       },

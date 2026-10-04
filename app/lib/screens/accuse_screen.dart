@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
+import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
 import 'case_screen.dart';
@@ -29,6 +30,12 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
   late final AnimationController _shake = AnimationController(vsync: this, duration: const Duration(milliseconds: 420));
 
   @override
+  void initState() {
+    super.initState();
+    Sfx.i.play('heartbeat', volume: 0.5); // the moment of accusing
+  }
+
+  @override
   void dispose() {
     _shake.dispose();
     super.dispose();
@@ -41,9 +48,11 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
       final r = await Api.i.accuse(widget.caseData.id, _suspect!, _evidence!);
       if (!mounted) return;
       if (r.result == 'solved' || r.result == 'failed') {
+        Sfx.i.play('reveal');
         Navigator.pop(context, r);
         return;
       }
+      Sfx.i.play('wrong');
       _shake.forward(from: 0);
       setState(() {
         _busy = false;
@@ -121,6 +130,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
           ),
         ),
         bottomSheet: Container(
+          width: double.infinity,
           color: K.night2,
           padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
           child: SafeArea(

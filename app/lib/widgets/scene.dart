@@ -2,20 +2,31 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'scene_extra.dart';
+
 /// An animated night illustration for each kind of crime scene
 /// (rain, flickering lamps, passing train lights, fire embers...).
+/// Twenty scenes; every case file names one of them in its "scene" field.
 class AnimatedScene extends StatefulWidget {
-  const AnimatedScene({super.key, required this.scene, this.height = 200, this.dim = 0});
+  const AnimatedScene({super.key, required this.scene, this.height = 200, this.dim = 0, this.animated = true});
   final String scene;
   final double height;
   final double dim; // 0..1 darken (for text on top)
+  final bool animated; // false: a still frame (cheap, for thumbnails in long lists)
 
   @override
   State<AnimatedScene> createState() => _AnimatedSceneState();
 }
 
 class _AnimatedSceneState extends State<AnimatedScene> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(seconds: 12))..repeat();
+  // runs for an hour before wrapping, so no animation ever jumps back mid-scene
+  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(hours: 1));
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.animated) _c.repeat();
+  }
 
   @override
   void dispose() {
@@ -30,7 +41,8 @@ class _AnimatedSceneState extends State<AnimatedScene> with SingleTickerProvider
       width: double.infinity,
       child: AnimatedBuilder(
         animation: _c,
-        builder: (_, __) => CustomPaint(painter: ScenePainter(widget.scene, _c.value * 12, widget.dim)),
+        builder: (_, __) => RepaintBoundary(
+            child: CustomPaint(painter: ScenePainter(widget.scene, widget.animated ? _c.value * 3600 : 3.0, widget.dim))),
       ),
     );
   }
@@ -39,7 +51,7 @@ class _AnimatedSceneState extends State<AnimatedScene> with SingleTickerProvider
 class ScenePainter extends CustomPainter {
   ScenePainter(this.scene, this.t, this.dim);
   final String scene;
-  final double t; // seconds 0..12 (loops)
+  final double t; // seconds
   final double dim;
 
   static final _rng = Random(3);
@@ -61,9 +73,38 @@ class ScenePainter extends CustomPainter {
         _villa(c, s);
       case 'warehouse':
         _warehouse(c, s);
+      case 'harbor':
+        ExtraScenes.harbor(c, s, t);
+      case 'hospital':
+        ExtraScenes.hospital(c, s, t);
+      case 'library':
+        ExtraScenes.library(c, s, t);
+      case 'theater':
+        ExtraScenes.theater(c, s, t);
+      case 'hotel':
+        ExtraScenes.hotel(c, s, t);
+      case 'kitchen':
+        ExtraScenes.kitchen(c, s, t);
+      case 'snow_lodge':
+        ExtraScenes.snowLodge(c, s, t);
+      case 'desert':
+        ExtraScenes.desert(c, s, t);
+      case 'subway':
+        ExtraScenes.subway(c, s, t);
+      case 'lab':
+        ExtraScenes.lab(c, s, t);
+      case 'wedding':
+        ExtraScenes.wedding(c, s, t);
+      case 'school':
+        ExtraScenes.school(c, s, t);
+      case 'airport':
+        ExtraScenes.airport(c, s, t);
+      case 'tower':
+        ExtraScenes.tower(c, s, t);
       default:
         _city(c, s);
     }
+    _atmosphere(c, s);
     // vignette + optional dim
     final r = Offset.zero & s;
     c.drawRect(
@@ -74,6 +115,23 @@ class ScenePainter extends CustomPainter {
             Colors.black.withValues(alpha: 0.55 + dim * 0.3),
           ]).createShader(r));
     if (dim > 0) c.drawRect(r, Paint()..color = Colors.black.withValues(alpha: dim * 0.4));
+  }
+
+  /// Drifting fog, floating dust and a faint film flicker on top of every scene.
+  void _atmosphere(Canvas c, Size s) {
+    for (int i = 0; i < 3; i++) {
+      final cx = ((t * 5 * (1 + i * 0.6) + i * s.width * 0.45) % (s.width * 1.7)) - s.width * 0.35;
+      final rect = Rect.fromCenter(center: Offset(cx, s.height * (0.58 + i * 0.13)), width: s.width * 0.95, height: s.height * 0.3);
+      c.drawOval(rect, Paint()..shader = RadialGradient(colors: [Colors.white.withValues(alpha: 0.055), Colors.transparent]).createShader(rect));
+    }
+    for (int i = 0; i < 16; i++) {
+      final p = _stars[i % _stars.length];
+      final x = (p.dx * s.width + sin(t * 0.6 + i) * 14 + t * 2) % s.width;
+      final y = s.height - ((p.dy * 2 + t * (0.01 + (i % 4) * 0.004)) % 1.0) * s.height;
+      c.drawCircle(Offset(x, y), 1.1, Paint()..color = Colors.white.withValues(alpha: 0.12 + 0.12 * sin(t * 1.7 + i)));
+    }
+    final fl = 0.015 + 0.02 * max(0.0, sin(t * 31) * sin(t * 7.3));
+    c.drawRect(Offset.zero & s, Paint()..color = Colors.black.withValues(alpha: fl));
   }
 
   void _sky(Canvas c, Size s, List<Color> colors) {

@@ -1,6 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'services/sound.dart';
+import 'widgets/fx.dart';
 
 /// Colors: a detective's desk at night. Dark ink background, paper case
 /// sheets, kraft folders, a red rubber stamp and brass details.
@@ -54,6 +58,13 @@ ThemeData buildTheme() => ThemeData(
       scaffoldBackgroundColor: K.night,
       colorScheme: ColorScheme.fromSeed(seedColor: K.stamp, brightness: Brightness.dark),
       useMaterial3: true,
+      pageTransitionsTheme: const PageTransitionsTheme(builders: {
+        TargetPlatform.android: NoirTransitions(),
+        TargetPlatform.iOS: NoirTransitions(),
+        TargetPlatform.linux: NoirTransitions(),
+        TargetPlatform.macOS: NoirTransitions(),
+        TargetPlatform.windows: NoirTransitions(),
+      }),
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: K.paper,
         contentTextStyle: TextStyle(fontFamily: kFont, color: K.ink, fontWeight: FontWeight.w700),
@@ -115,6 +126,8 @@ class _StampButtonState extends State<StampButton> {
       onTapUp: enabled
           ? (_) {
               setState(() => _down = false);
+              HapticFeedback.lightImpact();
+              Sfx.i.play('stamp', volume: 0.45);
               widget.onTap!();
             }
           : null,
@@ -185,7 +198,7 @@ class CoinChip extends StatelessWidget {
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           const CoinIcon(size: 18),
           const SizedBox(width: 6),
-          Text(fa(coins), style: tBody(15, w: FontWeight.w900)),
+          AnimatedCount(value: coins, style: tBody(15, w: FontWeight.w900)),
           if (onTap != null) ...[
             const SizedBox(width: 4),
             const Icon(Icons.add_circle_rounded, size: 18, color: K.brass),
@@ -280,7 +293,7 @@ class Difficulty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
           Icon(Icons.search_rounded, size: 16, color: i < level ? color : color.withValues(alpha: 0.25)),
       ]);
 }

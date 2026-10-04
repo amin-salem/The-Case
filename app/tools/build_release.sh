@@ -27,6 +27,9 @@ API=${API_URL:-https://thecase.liara.run}
 echo "Building version $NAME (build $BUILD) for $API ..."
 
 flutter pub get
+# never ship a build that fails its own checks (cases parse, scenes paint, sounds exist)
+flutter analyze
+flutter test
 flutter build apk --release --obfuscate --split-debug-info=build/symbols \
   --dart-define=APP_BUILD="$BUILD" --dart-define=API_URL="$API"
 

@@ -14,13 +14,15 @@ from ..security import current_player
 from ..services.remote_config import load_config
 from ..util import from_ts
 
+from ..version import VERSION
+
 router = APIRouter(tags=["meta"])
 
 
 @router.get("/health")
 async def health(session: AsyncSession = Depends(get_session)):
     await session.execute(text("SELECT 1"))
-    return {"ok": True, "cases": len(content.all_cases())}
+    return {"ok": True, "cases": len(content.all_cases()), "version": VERSION}
 
 
 @router.get("/v1/config")
