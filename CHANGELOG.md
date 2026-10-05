@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.0 (app build 13, server 1.9.0): bottom tabs and harder cases
+
+- Bottom navigation with five tabs: خانه, روزانه (quick riddles + missions), برترها, فروشگاه, پروفایل. The home page
+  now shows only tonight's case, the next-case timer, short riddle/mission summaries, the streak and the archive.
+- The reminder sentence in the profile now says clearly what happens at 21:00 and 22:30.
+- Cases c008-c012 (6-10 Oct) rewritten to be harder: no card that gives the answer away on its own, a red herring in
+  each, and the proof only makes sense when two cards are read together.
+
 ## 1.8.0 (app build 12, server 1.8.0): achievements
 
 - 33 achievements in 7 groups (cases, skill, streaks, quick riddles, missions, account, rank), each with coins
