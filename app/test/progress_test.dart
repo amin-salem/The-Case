@@ -85,4 +85,26 @@ void main() {
     expect(l.items.last.earned, isFalse);
     expect(l.items.last.progress, 3);
   });
+
+  test('weekly case data: chapters, next chapter, motives', () {
+    final c = CaseData({
+      'id': 'w001',
+      'chapters': [
+        {'title': 'یک', 'text': ''},
+        {'title': 'دو', 'text': 'متن'},
+      ],
+      'chapters_total': 3,
+      'next_chapter_at': 1790000000,
+      'motives': [
+        {'id': 'm1', 'text': 'ارث'},
+        {'id': 'm2', 'text': 'دزدی'},
+      ],
+    });
+    expect(c.weekly, isTrue);
+    expect(c.chapters.length, 2);
+    expect(c.nextChapterAt, isNotNull);
+    expect(c.motive, isNull);
+    expect(CaseData({'id': 'c001'}).weekly, isFalse);
+  });
 }
+

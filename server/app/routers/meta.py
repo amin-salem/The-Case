@@ -44,7 +44,7 @@ async def config(session: AsyncSession = Depends(get_session)):
                     "riddles_per_day": eco.RIDDLES_PER_DAY, "riddle_free": eco.RIDDLE_FREE,
                     "riddle_unlock_cost": eco.RIDDLE_UNLOCK_COST, "riddle_reward": eco.RIDDLE_REWARD,
                     "riddle_seconds": eco.RIDDLE_SECONDS, "chest_coins": eco.CHEST_COINS,
-                    "chest_bonus": eco.CHEST_BONUS,
+                    "chest_bonus": eco.CHEST_BONUS, "weekly_reward": eco.WEEKLY_REWARD[3],
                     "ranks": [{"xp": x, "title": t} for x, t in eco.RANKS], "products": {
                         k: {"coins": p.coins, "no_ads": p.no_ads, "kind": p.kind} for k, p in eco.PRODUCTS.items()}},
     })

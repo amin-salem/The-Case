@@ -10,7 +10,7 @@ from ..content import Case
 from ..db import get_session
 from ..models import CaseProgress, Player, utcnow
 from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut, HintOut, ProgressOut, SeenIn, SeenOut,
-                       StatsOut, SuspectStat)
+                       StatsOut, SuspectStat, TickIn, TickOut)
 from ..security import current_player
 from ..util import add_coins
 from .common import vip_active
@@ -33,6 +33,11 @@ async def _progress(session: AsyncSession, player_id: str, case_id: str) -> Case
 
 
 def _opened_case(case_id: str) -> Case:
+    if content.is_weekly(case_id):
+        c = content.weekly_by_id(case_id)
+        if c is None or content.opens_at(c) > content.now_local():
+            raise HTTPException(404, "no_case")
+        return c
     c = content.by_id(case_id)
     if c is None or c not in content.opened():
         raise HTTPException(404, "no_case")
@@ -49,12 +54,25 @@ def _missed_between(last_solved: str, c: Case) -> int | None:
     return cases.index(c) - last - 1
 
 
+def add_active_time(p: CaseProgress, seconds: int, now) -> int:
+    """Adds time the app says the case was open. Never more than really passed since the last
+    report (plus a little slack), and at most TICK_MAX per report. Returns what was added."""
+    since = p.last_tick_at or p.opened_at
+    real = int((now - since).total_seconds()) + 5 if since else seconds
+    add = max(0, min(seconds, eco.TICK_MAX, real))
+    p.active_seconds = (p.active_seconds or 0) + add
+    p.last_tick_at = now
+    return add
+
+
 def _is_today(c: Case) -> bool:
     t = content.todays_case()
     return t is not None and t.id == c.id
 
 
 def _can_open(c: Case, p: CaseProgress | None, player: Player) -> bool:
+    if content.is_weekly(c.id):
+        return True  # the weekend case is free for everyone
     return _is_today(c) or vip_active(player) or bool(p and (p.unlocked or p.solved or p.failed))
 
 
@@ -77,8 +95,11 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
                        stars=p.stars if p else 0, solvers=int(counts.get(c.id, 0)))
 
     archive = [row(c) for c in reversed(opened) if today is None or c.id != today.id]
+    weekly = content.current_weekly()
     return CasesOut(today=row(today) if today else None,
-                    next_case_at=int(content.next_case_at().timestamp()), archive=archive)
+                    next_case_at=int(content.next_case_at().timestamp()), archive=archive,
+                    weekly=row(weekly) if weekly else None,
+                    weekly_closes_at=int(content.weekly_closes_at(weekly).timestamp()) if weekly else None)
 
 
 @router.get("/{case_id}", response_model=CaseOut)
@@ -96,7 +117,7 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
         except IntegrityError:  # opened twice at the same moment
             await session.rollback()
             p = await _progress(session, player.id, c.id)
-    data = c.public()
+    data = content.weekly_public(c) if content.is_weekly(c.id) else c.public()
     if p is not None and (p.solved or p.failed):
         data["solution"] = c.data["solution"]  # finished: show how it was solved
     return CaseOut(case=data, progress=_progress_out(c, p), today=_is_today(c))
@@ -167,12 +188,16 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     if p.first_accused is None and body.suspect in {s["id"] for s in c.data["suspects"]}:
         p.first_accused = body.suspect  # the player's first instinct, for the "what others thought" stats
 
-    if body.suspect == c.culprit and body.evidence in c.proof:
+    weekly = content.is_weekly(c.id)
+    right_motive = not weekly or body.motive == c.data["solution"].get("motive")
+    if body.suspect == c.culprit and body.evidence in c.proof and right_motive:
         now = utcnow()
         p.solved, p.finished_at, p.day, p.was_daily = True, now, today, today_case
-        p.seconds = max(1, int((now - p.opened_at).total_seconds()))
+        add_active_time(p, body.extra_seconds, now)
+        # apps that report their open time are timed by it; older apps by the clock since opening
+        p.seconds = max(1, p.active_seconds) if p.active_seconds else max(1, int((now - p.opened_at).total_seconds()))
         p.stars = eco.stars_for(p.hints, p.attempts, p.proof_misses or 0)
-        reward = eco.SOLVE_REWARD[p.stars]
+        reward = (eco.WEEKLY_REWARD if weekly else eco.SOLVE_REWARD)[p.stars]
         freezes_used, badge = 0, None
         if today_case:
             reward += eco.DAILY_BONUS
@@ -200,13 +225,13 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         player.cases_solved += 1
         player.stars_total += p.stars
         add_coins(session, player, reward, f"solve:{c.id}")
-        xp = eco.XP_CASE[p.stars] + (eco.XP_DAILY_BONUS if today_case else 0)
+        xp = eco.WEEKLY_XP[p.stars] if weekly else eco.XP_CASE[p.stars] + (eco.XP_DAILY_BONUS if today_case else 0)
         early = today_case and (content.now_local() - content.opens_at(c)).total_seconds() <= 30 * 60
         gains = await progress.record(
             session, player, xp=xp, case_solved=1, daily_solved=int(today_case),
             case_3stars=int(p.stars == 3), case_no_hint=int(p.hints == 0),
             first_try=int(p.attempts == 0 and not p.proof_misses), fast5=int(p.seconds <= 300),
-            fast2=int(p.seconds <= 120), early_daily=int(early))
+            fast2=int(p.seconds <= 120 and not weekly), early_daily=int(early), weekly_solved=int(weekly))
         await session.commit()
         rank = await _daily_rank(session, c.id, p.stars, p.seconds) if today_case else None
         return AccuseOut(result="solved", attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,
@@ -215,14 +240,16 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
                          seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge,
                          gains=GainsOut(**gains.out()))
 
-    # right person but not the evidence that proves it: the first few times it costs a star, not a try
+    # right person but not the evidence that proves it (or, in the weekly case, the wrong motive):
+    # the first few times it costs a star, not a try
+    near = "wrong_motive" if body.evidence in c.proof else "wrong_proof"
     if body.suspect == c.culprit and (p.proof_misses or 0) < eco.FREE_PROOF_MISSES:
         p.proof_misses = (p.proof_misses or 0) + 1
         await session.commit()
-        return AccuseOut(result="wrong_proof", attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
+        return AccuseOut(result=near, attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
                          streak=player.streak, progress=_progress_out(c, p))
     p.attempts += 1
-    result = "wrong_proof" if body.suspect == c.culprit else "wrong_suspect"
+    result = near if body.suspect == c.culprit else "wrong_suspect"
     if p.attempts >= eco.MAX_ATTEMPTS:
         p.failed, p.finished_at, p.day = True, utcnow(), today
         gains = await progress.record(session, player, xp=eco.XP_CASE_FAILED, case_failed=1)
@@ -284,3 +311,17 @@ async def seen(case_id: str, body: SeenIn, player: Player = Depends(current_play
             gains = await progress.record(session, player, interrogate_all=1)
         await session.commit()
     return SeenOut(seen=len(after), total=len(ids), gains=GainsOut(**gains.out()) if gains else GainsOut())
+
+
+@router.post("/{case_id}/tick", response_model=TickOut)
+async def tick(case_id: str, body: TickIn, player: Player = Depends(current_player),
+               session: AsyncSession = Depends(get_session)):
+    """The app reports, every half minute and when leaving, how long the case screen was open."""
+    c = _opened_case(case_id)
+    p = await _progress(session, player.id, c.id)
+    if p is None:
+        raise HTTPException(409, "open_case_first")
+    if not (p.solved or p.failed):
+        add_active_time(p, body.seconds, utcnow())
+        await session.commit()
+    return TickOut(active_seconds=p.active_seconds or 0)

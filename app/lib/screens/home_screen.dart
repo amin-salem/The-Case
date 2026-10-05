@@ -197,6 +197,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (_cases == null && _error == null)
                     const Padding(padding: EdgeInsets.all(40), child: Center(child: CircularProgressIndicator(color: K.brass))),
                   if (_cases != null) ...[
+                    if (_cases!.weekly != null) ...[
+                      _weeklyCard(_cases!.weekly!, _cases!.weeklyClosesAt),
+                      const SizedBox(height: 14),
+                    ],
                     _todayCard(_cases!.today),
                     const SizedBox(height: 12),
                     _nextCase(),
@@ -310,6 +314,57 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 12),
         StampButton(label: 'دوباره امتحان کن', icon: Icons.refresh_rounded, onTap: _refresh),
       ]),
+    );
+  }
+
+  /// The weekend's big case: harder, in three chapters, open Thursday night to Saturday night.
+  Widget _weeklyCard(CaseRow c, DateTime? closes) {
+    final left = closes?.difference(DateTime.now());
+    final status = c.solved
+        ? 'حلش کردی!'
+        : c.failed
+            ? 'این بار نشد'
+            : left == null || left.isNegative
+                ? ''
+                : 'تا پایان: ${faClock(left)}';
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () => _open(c),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: K.brass, width: 1.5),
+          boxShadow: [BoxShadow(color: K.brass.withValues(alpha: 0.18), blurRadius: 18)],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Stack(children: [
+            AnimatedScene(scene: c.scene, height: 150, dim: 0.45),
+            Positioned.fill(
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(999)),
+                    child: Text('پرونده‌ی آخر هفته · خیلی سخت', style: tBody(11.5, color: K.ink, w: FontWeight.w900)),
+                  ),
+                  const Spacer(),
+                  Text(c.title, style: tDisplay(22)),
+                  const SizedBox(height: 2),
+                  Row(children: [
+                    Expanded(
+                      child: Text('سه فصل، هشت مظنون · جایزه‌ی ${fa(Api.i.weeklyReward)} سکه',
+                          style: tBody(12.5, color: K.text.withValues(alpha: 0.85))),
+                    ),
+                    Text(status, style: tBody(12.5, color: c.solved ? K.ok : K.brass, w: FontWeight.w900)),
+                  ]),
+                ]),
+              ),
+            ),
+          ]),
+        ),
+      ),
     );
   }
 

@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/models.dart';
 import '../models/progress.dart';
+import 'case_clock.dart';
 
 /// Server address (Liara). Another server for testing:
 ///   flutter run --dart-define=API_URL=http://192.168.1.5:8000
@@ -513,9 +514,13 @@ class Api extends ChangeNotifier {
     return (j['hint'] as String, Progress((j['progress'] as Map).cast<String, dynamic>()));
   }
 
-  Future<AccuseResult> accuse(String caseId, String suspectId, String evidenceId) async {
-    final j = (await _call('POST', '/v1/cases/$caseId/accuse', body: {'suspect': suspectId, 'evidence': evidenceId})
-            as Map)
+  Future<AccuseResult> accuse(String caseId, String suspectId, String evidenceId, {String? motive}) async {
+    final j = (await _call('POST', '/v1/cases/$caseId/accuse', body: {
+      'suspect': suspectId,
+      'evidence': evidenceId,
+      if (motive != null) 'motive': motive,
+      'extra_seconds': CaseClock.i.take(caseId),
+    }) as Map)
         .cast<String, dynamic>();
     final r = AccuseResult(j);
     _emitGains(j['gains']);
@@ -526,6 +531,19 @@ class Api extends ChangeNotifier {
       _setCoins(r.coins);
     }
     return r;
+  }
+
+  /// Reports how long the case screen was open. Quiet: returns false when it didn't reach the server.
+  Future<bool> tickCase(String caseId, int seconds) async {
+    if (!online) return false;
+    try {
+      await _call('POST', '/v1/cases/$caseId/tick', body: {'seconds': seconds});
+      return true;
+    } on ApiException {
+      return true; // the server answered (e.g. the case is finished): nothing to retry
+    } catch (e) {
+      return false;
+    }
   }
 
   /// What everyone else guessed (only after the player finished the case).
@@ -540,6 +558,7 @@ class Api extends ChangeNotifier {
 
   Map<String, dynamic> get _economy =>
       config['economy'] is Map ? (config['economy'] as Map).cast<String, dynamic>() : const {};
+  int get weeklyReward => _economy['weekly_reward'] as int? ?? 300;
   int get freezeCost => _economy['freeze_cost'] as int? ?? 150;
   int get maxFreezes => _economy['max_freezes'] as int? ?? 2;
   List<int> get loginCalendar =>

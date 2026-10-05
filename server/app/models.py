@@ -93,6 +93,9 @@ class CaseProgress(Base):
     proof_misses: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # right suspect, wrong proof
     first_accused: Mapped[str | None] = mapped_column(String(16), nullable=True)  # for "what others thought"
     seen: Mapped[list | None] = mapped_column(JSON, nullable=True)  # suspects interrogated (ids)
+    # solving time = only the time the case screen was really open (the app reports it in ticks)
+    active_seconds: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    last_tick_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 
 class Purchase(Base):
