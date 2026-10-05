@@ -25,10 +25,10 @@ def test_content_is_valid_and_rotates():
     assert len(items) >= 60
     assert {r.answer for r in items} == {0, 1, 2}  # the right answer is not always in the same place
     days_per_cycle = len(items) // eco.RIDDLES_PER_DAY
-    start = datetime(2026, 10, 1)
+    start = riddles.EPOCH + timedelta(days=days_per_cycle * 25)  # the first day of a cycle
     seen = []
     for d in range(days_per_cycle):
-        day = (start + timedelta(days=d)).date().isoformat()
+        day = (start + timedelta(days=d)).isoformat()
         got = riddles.for_day(day)
         assert len(got) == eco.RIDDLES_PER_DAY
         assert got == riddles.for_day(day)  # the same set every time it is asked
