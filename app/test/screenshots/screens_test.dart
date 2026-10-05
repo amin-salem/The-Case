@@ -31,6 +31,7 @@ import 'package:the_case/screens/dialogs.dart';
 import 'package:the_case/screens/home_screen.dart';
 import 'package:the_case/screens/inbox_sheet.dart';
 import 'package:the_case/screens/leaderboard_screen.dart';
+import 'package:the_case/screens/main_shell.dart';
 import 'package:the_case/screens/result_screen.dart';
 import 'package:the_case/screens/riddles_screen.dart';
 import 'package:the_case/screens/shop_screen.dart';
@@ -804,6 +805,13 @@ void main() {
 
   // home
   shot('home', () => const HomeScreen(), wait: const Duration(milliseconds: 1600));
+  shot('shell_home', () => const MainShell(), wait: const Duration(milliseconds: 1600));
+  shot('shell_daily', () => const MainShell(), size: const Size(390, 1500), wait: const Duration(milliseconds: 600), then: (t) async {
+    await _tap(t, find.text('روزانه'), wait: const Duration(milliseconds: 1500));
+  });
+  shot('shell_profile', () => const MainShell(), wait: const Duration(milliseconds: 600), then: (t) async {
+    await _tap(t, find.text('پروفایل'), wait: const Duration(milliseconds: 1500));
+  });
   shot('home_full', () => const HomeScreen(), size: const Size(390, 2400), wait: const Duration(milliseconds: 1800));
   shot('home_login_calendar', () => const HomeScreen(),
       before: () => Api.i.profile = Profile({..._profileJson, 'login_reward': 50, 'login_day': 4}),

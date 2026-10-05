@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'screens/home_screen.dart';
+import 'screens/main_shell.dart';
 import 'services/api.dart';
 import 'services/billing.dart';
 import 'services/reminders.dart';
@@ -108,7 +108,7 @@ class _StartScreenState extends State<StartScreen> {
     }
     if (!mounted) return;
     Navigator.of(context).pushReplacement(PageRouteBuilder<void>(
-      pageBuilder: (_, __, ___) => const HomeScreen(),
+      pageBuilder: (_, __, ___) => const MainShell(),
       transitionsBuilder: (_, a, __, child) => FadeTransition(opacity: a, child: child),
       transitionDuration: const Duration(milliseconds: 500),
     ));

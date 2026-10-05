@@ -6,6 +6,7 @@ import '../models/progress.dart';
 import '../services/api.dart';
 import '../services/sound.dart';
 import '../theme.dart';
+import '../widgets/missions_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
@@ -13,7 +14,10 @@ import 'dialogs.dart';
 
 /// Today's quick riddles («معمای سریع»): one-minute mini mysteries, the same for everyone.
 class RiddlesScreen extends StatefulWidget {
-  const RiddlesScreen({super.key});
+  const RiddlesScreen({super.key, this.embedded = false});
+
+  /// Inside the bottom tabs ("روزانه"): no back button, today's missions on top.
+  final bool embedded;
 
   @override
   State<RiddlesScreen> createState() => _RiddlesScreenState();
@@ -21,6 +25,7 @@ class RiddlesScreen extends StatefulWidget {
 
 class _RiddlesScreenState extends State<RiddlesScreen> {
   RiddleDay? _day;
+  MissionsDay? _missions;
   String? _error;
   Timer? _tick;
 
@@ -46,6 +51,7 @@ class _RiddlesScreenState extends State<RiddlesScreen> {
   }
 
   Future<void> _load() async {
+    if (widget.embedded) unawaited(_loadMissions());
     try {
       final d = await Api.i.riddles();
       if (!mounted) return;
@@ -85,6 +91,14 @@ class _RiddlesScreenState extends State<RiddlesScreen> {
     Sfx.i.ambient('amb_home', volume: 0.28);
     _load();
   }
+  Future<void> _loadMissions() async {
+    try {
+      final m = await Api.i.missions();
+      if (mounted) setState(() => _missions = m);
+    } catch (e) {
+      debugPrint('missions: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,10 +114,12 @@ class _RiddlesScreenState extends State<RiddlesScreen> {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
               children: [
                 Row(children: [
-                  IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_forward_rounded, color: K.text)),
-                  Expanded(child: Text('معمای سریع', style: tDisplay(24))),
+                  if (!widget.embedded)
+                    IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_forward_rounded, color: K.text)),
+                  Expanded(child: Text(widget.embedded ? 'کارهای روزانه' : 'معمای سریع', style: tDisplay(24))),
                   ListenableBuilder(listenable: Api.i, builder: (_, __) => CoinChip(coins: Api.i.coins)),
                 ]),
+                if (!widget.embedded) ...[
                 const SizedBox(height: 4),
                 Text(
                   d == null
@@ -112,8 +128,18 @@ class _RiddlesScreenState extends State<RiddlesScreen> {
                           '${fa(d.items.where((r) => r.free).length)}تای اول رایگانه؛ هر جواب درست ${fa(d.reward)} سکه.',
                   style: tBody(13, color: K.textSoft),
                 ),
+                ],
                 const SizedBox(height: 12),
                 const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
+                if (widget.embedded && _missions != null) ...[
+                  MissionsCard(day: _missions!, onChanged: (m) => setState(() => _missions = m)),
+                  const SizedBox(height: 18),
+                  Text('معمای سریع', style: tDisplay(20)),
+                  if (d != null)
+                    Text('${fa(d.items.where((r) => r.free).length)}تای اول رایگانه؛ هر جواب درست ${fa(d.reward)} سکه.',
+                        style: tBody(13, color: K.textSoft)),
+                  const SizedBox(height: 8),
+                ],
                 if (d == null && _error == null)
                   const Padding(padding: EdgeInsets.all(40), child: Center(child: CircularProgressIndicator(color: K.brass))),
                 if (d == null && _error != null)
