@@ -82,3 +82,11 @@ def check_grants(grants: list) -> list[dict]:
         else:
             out.append({"type": "no_ads"})
     return out
+
+
+# quick riddles («معمای سریع»): a few one-minute mini mysteries every day, the same for everyone
+RIDDLES_PER_DAY = 5
+RIDDLE_FREE = 3                  # the first ones of the day are free ...
+RIDDLE_UNLOCK_COST = 20          # ... the rest are opened with coins
+RIDDLE_REWARD = 10               # coins for a right answer
+RIDDLE_SECONDS = 60              # the timer in the app (an answer after it runs out counts as wrong)

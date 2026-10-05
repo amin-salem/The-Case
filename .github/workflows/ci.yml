@@ -31,20 +31,40 @@ jobs:
           set -e
           alembic upgrade head
           rm -f mig.db
+          cat > /tmp/mig_lists.py <<'EOF'
+          # columns and tables added by migrations after 0001 (an old database misses them)
+          COLUMNS = [("players", "login_day"), ("players", "streak_freezes"),
+                     ("case_progress", "first_accused"), ("case_progress", "proof_misses")]
+          TABLES = ["riddle_answers"]
+          EOF
           python - <<'EOF'
-          import sqlite3
+          import sqlite3, sys
+          sys.path.insert(0, "/tmp")
+          from mig_lists import COLUMNS, TABLES
           from sqlalchemy import create_engine
           from app import models  # noqa: F401
           from app.db import Base
           Base.metadata.create_all(create_engine("sqlite:///mig.db"))
           db = sqlite3.connect("mig.db")
-          for t, c in [("players", "login_day"), ("players", "streak_freezes"), ("case_progress", "first_accused"), ("case_progress", "proof_misses")]:
+          for t, c in COLUMNS:
               db.execute(f"ALTER TABLE {t} DROP COLUMN {c}")
+          for t in TABLES:
+              db.execute(f"DROP TABLE {t}")
           db.commit()
           EOF
           alembic stamp 0001
           alembic upgrade head
-          python -c "import sqlite3; d=sqlite3.connect('mig.db'); cols={r[1] for t in ('players','case_progress') for r in d.execute(f'PRAGMA table_info({t})')}; assert {'login_day','streak_freezes','first_accused','proof_misses'} <= cols, cols; print('migration ok')"
+          python - <<'EOF'
+          import sqlite3, sys
+          sys.path.insert(0, "/tmp")
+          from mig_lists import COLUMNS, TABLES
+          d = sqlite3.connect("mig.db")
+          tables = {r[0] for r in d.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+          assert set(TABLES) <= tables, tables
+          for t, c in COLUMNS:
+              assert c in {r[1] for r in d.execute(f"PRAGMA table_info({t})")}, (t, c)
+          print("migration ok")
+          EOF
       - name: Start the server and run the smoke test against it
         working-directory: server
         run: |
