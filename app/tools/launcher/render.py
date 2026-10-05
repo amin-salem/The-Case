@@ -66,6 +66,13 @@ def main() -> None:
     (RES / "values" / "ic_launcher_colors.xml").write_text(
         f'<?xml version="1.0" encoding="utf-8"?>\n<resources>\n'
         f'    <color name="ic_launcher_background">{BACKGROUND}</color>\n</resources>\n')
+    # the notification icon is only named in Dart ('@drawable/ic_stat_case'), so the release
+    # resource shrinker would delete it without this
+    (RES / "raw").mkdir(parents=True, exist_ok=True)
+    (RES / "raw" / "keep_icons.xml").write_text(
+        '<?xml version="1.0" encoding="utf-8"?>\n'
+        '<resources xmlns:tools="http://schemas.android.com/tools"\n'
+        '    tools:keep="@drawable/ic_stat_case,@mipmap/ic_launcher_foreground,@mipmap/ic_launcher_monochrome" />\n')
     render(SRC / "icon_full.svg", 512, HERE / "store" / "icon_512.png")  # Cafe Bazaar listing
     render(SRC / "icon_legacy.svg", 512, APP / "assets" / "icon" / "logo.png")  # in-app logo
     print("rendered into", RES)
