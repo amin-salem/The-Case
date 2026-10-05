@@ -168,7 +168,7 @@ class Api extends ChangeNotifier {
       'player_id': p.playerId, 'nickname': p.nickname, 'avatar': p.avatar, 'invite_code': p.inviteCode,
       'referred': p.referred, 'email': p.email, 'secured': p.secured, 'coins': coins, 'no_ads': p.noAds,
       'vip_until': p.vipUntil, 'streak': p.streak, 'best_streak': p.bestStreak, 'cases_solved': p.casesSolved,
-      'stars_total': p.starsTotal,
+      'stars_total': p.starsTotal, 'login_day': p.loginDay, 'streak_freezes': p.streakFreezes,
     });
     notifyListeners();
   }
@@ -232,6 +232,28 @@ class Api extends ChangeNotifier {
     }
     return r;
   }
+
+  /// What everyone else guessed (only after the player finished the case).
+  Future<CaseStats> caseStats(String id) async =>
+      CaseStats((await _call('GET', '/v1/cases/$id/stats') as Map).cast<String, dynamic>());
+
+  /// Buys one streak insurance with coins. Throws ApiException (not_enough_coins / max_freezes).
+  Future<void> buyStreakFreeze() async {
+    final j = await _call('POST', '/v1/wallet/streak-freeze') as Map;
+    profile = Profile(j.cast<String, dynamic>());
+    notifyListeners();
+  }
+
+  Map<String, dynamic> get _economy =>
+      config['economy'] is Map ? (config['economy'] as Map).cast<String, dynamic>() : const {};
+  int get freezeCost => _economy['freeze_cost'] as int? ?? 150;
+  int get maxFreezes => _economy['max_freezes'] as int? ?? 2;
+  List<int> get loginCalendar =>
+      [for (final v in (_economy['login_calendar'] as List? ?? const [20, 30, 40, 50, 60, 80])) (v as num).toInt()];
+  List<int> get streakBadges => [for (final v in (_economy['streak_badges'] as List? ?? const [7, 30, 100])) (v as num).toInt()];
+  String get shareUrl => config['share_url'] is String
+      ? config['share_url'] as String
+      : (config['update_url'] is String ? config['update_url'] as String : 'https://cafebazaar.ir/app/ir.aminsalem.the_case');
 
   Future<Leaderboard> leaderboard(String period) async =>
       Leaderboard((await _call('GET', '/v1/leaderboard?period=$period') as Map).cast<String, dynamic>());
@@ -361,6 +383,8 @@ class Api extends ChangeNotifier {
         'bad_nickname' => 'این اسم قابل قبول نیست',
         'banned' => 'این حساب مسدود شده',
         'too_many_requests' => 'خیلی سریع امتحان کردی، کمی صبر کن',
+        'max_freezes' => 'بیشتر از این نمی‌شه بیمه نگه داشت',
+        'finish_first' => 'اول پرونده رو تموم کن',
         _ => 'خطا، دوباره امتحان کن',
       };
 }

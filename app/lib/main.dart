@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'screens/home_screen.dart';
 import 'services/api.dart';
+import 'services/reminders.dart';
 import 'services/sound.dart';
 import 'theme.dart';
 import 'widgets/fx.dart';
@@ -16,6 +17,7 @@ Future<void> main() async {
       statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light));
   await Api.i.init();
   await Sfx.i.init();
+  await Reminders.i.init();
   runApp(const TheCaseApp());
 }
 

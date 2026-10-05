@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../models/models.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
@@ -31,14 +31,9 @@ class _ResultScreenState extends State<ResultScreen> {
     // stamp, then the verdict music
     Future<void>.delayed(const Duration(milliseconds: 300), () => Sfx.i.play('stamp', volume: 0.9));
     Future<void>.delayed(const Duration(milliseconds: 900), () => Sfx.i.play(solved ? 'win' : 'lose'));
-  }
-
-  String get _shareText {
-    final stars = '★' * result.stars + '☆' * (3 - result.stars);
-    return solved
-        ? '🕵️ پرونده‌ی شماره‌ی ${fa(caseData.number)} «${caseData.title}» رو حل کردم! $stars\n'
-            'تو می‌تونی؟ «پرونده» رو از کافه‌بازار بگیر.'
-        : '🕵️ پرونده‌ی شماره‌ی ${fa(caseData.number)} «${caseData.title}» من رو شکست داد! تو می‌تونی حلش کنی؟';
+    if (result.badge != null) {
+      Future<void>.delayed(const Duration(milliseconds: 1600), () => Sfx.i.play('clue', volume: 0.8));
+    }
   }
 
   @override
@@ -67,8 +62,13 @@ class _ResultScreenState extends State<ResultScreen> {
                       AnimatedCount(value: result.reward, prefix: 'پاداش ', suffix: ' سکه', style: tBody(14, w: FontWeight.w900)), K.brass),
                   _pill(Icons.local_fire_department_rounded, '${fa(result.streak)} روز پشت سر هم', K.stamp),
                   if (result.rank != null) _pill(Icons.emoji_events_rounded, 'رتبه‌ی ${fa(result.rank!)} امروز', K.ok),
+                  if (result.freezesUsed > 0) _pill(Icons.shield_rounded, 'بیمه زنجیره‌ات رو نجات داد', K.ok),
                 ]),
               ),
+              if (result.badge != null) ...[
+                const SizedBox(height: 14),
+                BadgeBanner(badge: result.badge!),
+              ],
             ],
             const SizedBox(height: 20),
             FadeSlideIn(
@@ -100,12 +100,12 @@ class _ResultScreenState extends State<ResultScreen> {
                 ]),
               ),
             ),
-            const SizedBox(height: 18),
-            StampButton(
-              label: 'برای دوستات بفرست',
-              icon: Icons.share_rounded,
-              color: K.ok,
-              onTap: () => SharePlus.instance.share(ShareParams(text: _shareText)),
+            const SizedBox(height: 14),
+            GuessStatsCard(caseData: caseData),
+            const SizedBox(height: 14),
+            FadeSlideIn(
+              delay: const Duration(milliseconds: 1500),
+              child: ShareCard(caseData: caseData, result: result),
             ),
             const SizedBox(height: 10),
             Row(children: [

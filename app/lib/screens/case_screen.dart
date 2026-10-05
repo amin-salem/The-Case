@@ -5,6 +5,7 @@ import '../services/api.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
@@ -305,6 +306,8 @@ class _CaseScreenState extends State<CaseScreen> {
       if (p.finished && c.explanation != null) ...[
         const SizedBox(height: 14),
         _solutionBox(c),
+        const SizedBox(height: 14),
+        GuessStatsCard(key: ValueKey('stats-${c.id}'), caseData: c),
       ] else ...[
         const SizedBox(height: 14),
         Text('چطور حل کنم؟', style: tDisplay(16)),

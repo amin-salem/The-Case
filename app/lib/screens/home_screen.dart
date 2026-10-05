@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
+import '../services/reminders.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
@@ -45,10 +47,16 @@ class _HomeScreenState extends State<HomeScreen> {
         _load();
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final r = Api.i.profile?.loginReward ?? 0;
-      if (r > 0 && mounted) toast(context, 'جایزه‌ی ورود امروز: ${fa(r)} سکه');
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _welcome());
+  }
+
+  /// Today's login calendar, then (once) the permission for the nightly reminders.
+  Future<void> _welcome() async {
+    final p = Api.i.profile;
+    if (p != null && p.loginReward > 0 && mounted) {
+      await showLoginCalendar(context, day: p.loginDay < 1 ? 1 : p.loginDay, reward: p.loginReward);
+    }
+    if (mounted) await Reminders.i.askOnce();
   }
 
   @override
@@ -66,6 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
           _error = null;
         });
       }
+      await Reminders.i.plan(
+          nextCaseAt: c.nextCaseAt, tonightSolved: c.today?.solved ?? false, streak: Api.i.profile?.streak ?? 0);
     } catch (e) {
       if (mounted) setState(() => _error = Api.describe(e));
     }
@@ -121,6 +131,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     _collection(),
                     const SizedBox(height: 10),
                     _nextCase(),
+                    if (Api.i.profile != null) ...[
+                      const SizedBox(height: 10),
+                      StreakCard(profile: Api.i.profile!),
+                    ],
                     _secureBanner(),
                     const SizedBox(height: 22),
                     if (_cases!.archive.isNotEmpty) ...[

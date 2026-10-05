@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../services/api.dart';
+import '../services/reminders.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/engagement.dart';
 import 'dialogs.dart';
 
 /// The detective's profile: portrait, name, stats, account safety, invites.
@@ -134,6 +136,22 @@ class _AccountScreenState extends State<AccountScreen> {
                 _stat('ستاره', fa(p.starsTotal)),
                 _stat('بهترین رکورد پشت سر هم', '${fa(p.bestStreak)} روز'),
               ]),
+              const SizedBox(height: 14),
+              Text('نشان‌ها', style: tBody(14, w: FontWeight.w700)),
+              const SizedBox(height: 6),
+              StreakBadges(best: p.bestStreak),
+              const SizedBox(height: 14),
+              ListenableBuilder(
+                listenable: Reminders.i,
+                builder: (_, __) => _box('یادآوری‌ها', 'ساعت ۹ شب که پرونده‌ی تازه باز می‌شه، و ۱۰:۳۰ اگه هنوز حلش نکردی و زنجیره داری.', [
+                  SwitchListTile(
+                    value: Reminders.i.enabled,
+                    onChanged: (v) => Reminders.i.setEnabled(v),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('یادآوری پرونده‌ی هر شب', style: tBody(14, w: FontWeight.w700)),
+                  ),
+                ]),
+              ),
               const SizedBox(height: 18),
               if (!p.secured) _secureBox() else _passwordHint(),
               const SizedBox(height: 14),

@@ -152,10 +152,16 @@ class AccuseResult {
         culprit = j['culprit'] as String?,
         proof = [for (final p in (j['proof'] as List? ?? const [])) '$p'],
         rank = j['rank'] is int ? j['rank'] as int : null,
-        progress = j['progress'] is Map ? Progress((j['progress'] as Map).cast<String, dynamic>()) : null;
+        progress = j['progress'] is Map ? Progress((j['progress'] as Map).cast<String, dynamic>()) : null,
+        seconds = _i(j['seconds']),
+        hintsUsed = _i(j['hints_used']),
+        freezesUsed = _i(j['freezes_used']),
+        badge = j['badge'] is int ? j['badge'] as int : null;
 
   final String result; // solved | wrong_suspect | wrong_proof | failed
   final int attemptsLeft, stars, reward, coins, streak;
+  final int seconds, hintsUsed, freezesUsed;
+  final int? badge; // a streak badge (7, 30, 100) reached right now
   final String? explanation, culprit;
   final List<String> proof;
   final int? rank;
@@ -178,10 +184,13 @@ class Profile {
         bestStreak = _i(j['best_streak']),
         casesSolved = _i(j['cases_solved']),
         starsTotal = _i(j['stars_total']),
-        loginReward = _i(j['login_reward']);
+        loginReward = _i(j['login_reward']),
+        loginDay = _i(j['login_day']),
+        streakFreezes = _i(j['streak_freezes']);
 
   final String playerId, nickname, inviteCode;
   final int avatar, coins, streak, bestStreak, casesSolved, starsTotal, loginReward;
+  final int loginDay, streakFreezes; // 1..7 in the login calendar; streak insurance held
   final bool referred, secured, noAds;
   final String? email;
   final int? vipUntil;
@@ -222,4 +231,17 @@ class InboxGift {
             .fold(0, (a, b) => a + b);
   final String id, title, message;
   final int coins;
+}
+
+/// "What everyone else thought" for a finished case.
+class CaseStats {
+  CaseStats(Map<String, dynamic> j)
+      : players = _i(j['players']),
+        solvedPct = _i(j['solved_pct']),
+        firstTryPct = _i(j['first_try_pct']),
+        culprit = _s(j['culprit']),
+        suspects = {for (final s in _maps(j['suspects'])) _s(s['id']): _i(s['pct'])};
+  final int players, solvedPct, firstTryPct;
+  final String culprit;
+  final Map<String, int> suspects; // suspect id -> % of first accusations
 }

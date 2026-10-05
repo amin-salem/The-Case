@@ -1,7 +1,7 @@
 name: the_case
 description: "پرونده - a daily Persian crime-mystery game."
 publish_to: 'none'
-version: 1.1.0+2
+version: 1.2.0+3
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -13,6 +13,9 @@ dependencies:
   shared_preferences: ^2.2.0
   share_plus: ^13.3.1
   audioplayers: ^6.1.0
+  # local reminders at 21:00 / 22:30 (v20 needs Flutter 3.32+; v21+ would need 3.38+)
+  flutter_local_notifications: ^20.1.0
+  timezone: ^0.10.0
 
 dev_dependencies:
   flutter_test:

@@ -5,18 +5,8 @@
 set -e
 cd "$(dirname "$0")/.."
 
-MANIFEST=android/app/src/main/AndroidManifest.xml
-if [ ! -f "$MANIFEST" ]; then
-  echo "Android project missing - run first:  flutter create --org ir.aminsalem --project-name the_case --platforms android ."
-  exit 1
-fi
-# Release builds can't use the internet without this permission.
-if ! grep -q 'android.permission.INTERNET' "$MANIFEST"; then
-  echo "Adding the INTERNET permission ..."
-  sed -i '0,/<application/s||<uses-permission android:name="android.permission.INTERNET"/>\n    <application|' "$MANIFEST"
-fi
-# Persian app name on the home screen
-sed -i 's|android:label="the_case"|android:label="پرونده"|' "$MANIFEST"
+# INTERNET permission, Persian name, reminder permissions/receivers, desugaring (safe to repeat)
+python3 tools/patch_android.py
 
 if [ ! -f android/key.properties ]; then
   echo "NOTE: android/key.properties is missing, so this APK is signed with the DEBUG key (fine for testing, not for Bazaar)."

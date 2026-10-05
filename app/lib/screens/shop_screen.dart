@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../services/api.dart';
 import '../theme.dart';
+import '../widgets/engagement.dart';
 import 'dialogs.dart';
 
 /// Coin packs and perks. RIGHT NOW: test store (no money is taken; the server
@@ -69,6 +70,7 @@ class _ShopScreenState extends State<ShopScreen> {
             _row('vip_monthly', 'اشتراک ویژه (VIP)', 'همه‌ی پرونده‌های بایگانی رایگان، اولین سرنخ هر پرونده رایگان، بدون تبلیغ',
                 Icons.workspace_premium_rounded, K.brass),
             _row('remove_ads', 'حذف تبلیغات', 'تبلیغ‌های اجباری برای همیشه حذف می‌شن', Icons.block_rounded, K.textSoft),
+            ListenableBuilder(listenable: Api.i, builder: (_, __) => _insuranceRow()),
             const SizedBox(height: 10),
             StampButton(label: 'دیدن تبلیغ و گرفتن سکه رایگان', icon: Icons.play_circle_fill_rounded, color: K.ok,
                 onTap: () => watchAd(context)),
@@ -114,6 +116,34 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
           ),
       ]),
+    );
+  }
+
+  /// Streak insurance is bought with coins, not money.
+  Widget _insuranceRow() {
+    final api = Api.i;
+    final held = api.profile?.streakFreezes ?? 0;
+    return GestureDetector(
+      onTap: () => buyStreakInsurance(context),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(14), border: Border.all(color: K.ok.withValues(alpha: 0.5))),
+        child: Row(children: [
+          const Icon(Icons.shield_rounded, color: K.ok, size: 32),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('بیمه‌ی زنجیره', style: tBody(16, w: FontWeight.w900)),
+              Text('یه شب جا بمونی، زنجیره‌ات نمی‌شکنه · داری: ${fa(held)} از ${fa(api.maxFreezes)}',
+                  style: tBody(12.5, color: K.textSoft)),
+            ]),
+          ),
+          const CoinIcon(size: 18),
+          const SizedBox(width: 4),
+          Text(fa(api.freezeCost), style: tBody(13, color: K.brass, w: FontWeight.w900)),
+        ]),
+      ),
     );
   }
 
