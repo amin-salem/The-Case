@@ -264,10 +264,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(p?.nickname ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900)),
               Row(children: [
-                const Icon(Icons.workspace_premium_rounded, size: 16, color: K.brass),
+                const Icon(Icons.local_fire_department_rounded, size: 16, color: K.stamp),
                 Flexible(
-                  child: Text(' ${p?.rankTitle ?? ''}',
-                      maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.brass)),
+                  child: Text(' ${fa(p?.streak ?? 0)} روز پشت سر هم',
+                      maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.textSoft)),
                 ),
               ]),
             ]),
