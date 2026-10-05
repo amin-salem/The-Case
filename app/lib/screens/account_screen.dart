@@ -181,7 +181,7 @@ class _AccountScreenState extends State<AccountScreen> {
               const SizedBox(height: 14),
               ListenableBuilder(
                 listenable: Reminders.i,
-                builder: (_, __) => _box('یادآوری‌ها', 'ساعت ۹ شب که پرونده‌ی تازه باز می‌شه، و ۱۰:۳۰ اگه هنوز حلش نکردی و زنجیره داری.', [
+                builder: (_, __) => _box('یادآوری‌ها', 'هر شب ساعت ۹ که پرونده‌ی تازه باز می‌شه خبرت می‌کنیم. اگه زنجیره داری و تا ساعت ۱۰:۳۰ هنوز حلش نکردی، یه یادآوری دیگه هم می‌فرستیم.', [
                   SwitchListTile(
                     value: Reminders.i.enabled,
                     onChanged: (v) => Reminders.i.setEnabled(v),

@@ -12,19 +12,13 @@ import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
-import '../widgets/missions_card.dart';
 import '../widgets/offline.dart';
-import '../widgets/rank.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
-import 'account_screen.dart';
-import 'achievements_screen.dart';
 import 'case_screen.dart';
 import 'dialogs.dart';
 import 'inbox_sheet.dart';
-import 'leaderboard_screen.dart';
-import 'riddles_screen.dart';
-import 'shop_screen.dart';
+import 'main_shell.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Api.i.addListener(_onApi);
+    MainShell.tab.addListener(_onTab);
     _load();
     Sfx.i.ambient('amb_home', volume: 0.28);
     _tick = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -96,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     Api.i.removeListener(_onApi);
+    MainShell.tab.removeListener(_onTab);
     _tick?.cancel();
     super.dispose();
   }
@@ -140,10 +136,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _openRiddles() async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RiddlesScreen()));
-    Sfx.i.ambient('amb_home', volume: 0.28);
-    unawaited(_loadExtras());
+  void _openRiddles() => MainShell.tab.value = MainShell.daily;
+
+  /// Coming back to the home tab: fresh cases, riddles and missions.
+  void _onTab() {
+    if (MainShell.tab.value == MainShell.home && mounted) _load();
   }
 
   /// Pull-to-refresh and the retry buttons: wake the connection first if it was down.
@@ -194,13 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 28),
                 children: [
                   _topBar(),
-                  const SizedBox(height: 10),
-                  if (Api.i.profile != null)
-                    RankBar(
-                      profile: Api.i.profile!,
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AccountScreen())),
-                    ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 16),
                   const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
                   if (_error != null && _cases == null) _errorBox(),
                   if (_cases == null && _error == null)
@@ -208,17 +199,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (_cases != null) ...[
                     _todayCard(_cases!.today),
                     const SizedBox(height: 12),
-                    _riddleCard(),
-                    const SizedBox(height: 12),
-                    if (_missions != null) ...[
-                      MissionsCard(day: _missions!, onChanged: (m) => setState(() => _missions = m)),
-                      const SizedBox(height: 12),
-                    ],
-                    _achievementsRow(),
-                    const SizedBox(height: 12),
-                    _collection(),
-                    const SizedBox(height: 10),
                     _nextCase(),
+                    const SizedBox(height: 12),
+                    _riddleCard(),
+                    if (_missions != null) ...[
+                      const SizedBox(height: 10),
+                      _missionsRow(_missions!),
+                    ],
                     if (Api.i.profile != null) ...[
                       const SizedBox(height: 10),
                       StreakCard(profile: Api.i.profile!),
@@ -251,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(children: [
       Flexible(
         child: GestureDetector(
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AccountScreen())),
+        onTap: () => MainShell.tab.value = MainShell.profile,
         child: Row(children: [
           Container(
             width: 46,
@@ -277,9 +264,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       const SizedBox(width: 4),
       const SoundButton(),
-      _iconBtn(Icons.emoji_events_rounded, () {
-        if (needOnline(context)) Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LeaderboardScreen()));
-      }),
       Stack(clipBehavior: Clip.none, children: [
         _iconBtn(Icons.mail_rounded, () {
           if (needOnline(context)) showInbox(context);
@@ -298,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
       ]),
       const SizedBox(width: 4),
-      CoinChip(coins: Api.i.coins, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreen()))),
+      CoinChip(coins: Api.i.coins, onTap: () => MainShell.tab.value = MainShell.shop),
       ]),
     );
   }
@@ -461,51 +445,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _achievementsRow() {
-    final n = Api.i.profile?.achievements ?? 0;
+  /// One line for today's missions; the full list is in the "روزانه" tab.
+  Widget _missionsRow(MissionsDay m) {
+    final (String text, Color color) = m.claimed
+        ? ('صندوقچه‌ی امروز باز شد', K.ok)
+        : m.allDone
+            ? ('صندوقچه آماده‌ست، بازش کن!', K.ok)
+            : ('${fa(m.done)} از ${fa(m.missions.length)} انجام شد', K.brass);
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AchievementsScreen())),
+      onTap: _openRiddles,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12)),
         child: Row(children: [
-          const Icon(Icons.military_tech_rounded, color: K.brass),
+          const Icon(Icons.assignment_turned_in_rounded, color: K.brass),
           const SizedBox(width: 8),
-          Expanded(child: Text('دستاوردها', style: tBody(14, w: FontWeight.w700))),
-          Text(n > 0 ? '${fa(n)} تا گرفتی' : 'اولی رو بگیر!', style: tBody(13, color: K.brass, w: FontWeight.w700)),
+          Expanded(child: Text('مأموریت‌های امروز', style: tBody(14, w: FontWeight.w700))),
+          Text(text, style: tBody(12.5, color: color, w: FontWeight.w700)),
           const Icon(Icons.chevron_left_rounded, color: K.brass),
         ]),
       ),
-    );
-  }
-
-  Widget _collection() {
-    final all = [if (_cases!.today != null) _cases!.today!, ..._cases!.archive];
-    final solved = all.where((c) => c.solved).length;
-    final frac = all.isEmpty ? 0.0 : solved / all.length;
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
-      decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(12), border: Border.all(color: K.kraft.withValues(alpha: 0.25))),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          const Icon(Icons.folder_special_rounded, color: K.brass, size: 20),
-          const SizedBox(width: 8),
-          Expanded(child: Text('کلکسیون پرونده‌های حل‌شده', style: tBody(13, w: FontWeight.w700))),
-          const SizedBox(width: 6),
-          Text('${fa(solved)} از ${fa(all.length)}', style: tBody(13, color: K.brass, w: FontWeight.w900)),
-        ]),
-        const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: frac),
-            duration: const Duration(milliseconds: 900),
-            curve: Curves.easeOutCubic,
-            builder: (_, v, __) => LinearProgressIndicator(value: v, minHeight: 8, backgroundColor: K.night3, color: K.brass),
-          ),
-        ),
-      ]),
     );
   }
 
@@ -531,7 +491,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: GestureDetector(
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AccountScreen())),
+        onTap: () => MainShell.tab.value = MainShell.profile,
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(color: const Color(0xFF1F3A34), borderRadius: BorderRadius.circular(12),
