@@ -10,6 +10,7 @@ import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
+import '../widgets/offline.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'account_screen.dart';
@@ -29,12 +30,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   CasesList? _cases;
   String? _error;
+  bool _loading = false;
   Timer? _tick;
   DateTime _lastReload = DateTime.now();
+  bool _wasOnline = Api.i.online;
+  int _account = Api.i.account;
+  bool _calendarShown = false;
 
   @override
   void initState() {
     super.initState();
+    Api.i.addListener(_onApi);
     _load();
     Sfx.i.ambient('amb_home', volume: 0.28);
     _tick = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -52,20 +58,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Today's login calendar, then (once) the permission for the nightly reminders.
   Future<void> _welcome() async {
-    final p = Api.i.profile;
-    if (p != null && p.loginReward > 0 && mounted) {
-      await showLoginCalendar(context, day: p.loginDay < 1 ? 1 : p.loginDay, reward: p.loginReward);
-    }
+    await _showCalendar();
     if (mounted) await Reminders.i.askOnce();
+  }
+
+  /// Today's login reward (once per visit; it may only arrive after coming back online).
+  Future<void> _showCalendar() async {
+    final p = Api.i.profile;
+    if (_calendarShown || p == null || p.loginReward <= 0 || !mounted) return;
+    _calendarShown = true;
+    await showLoginCalendar(context, day: p.loginDay < 1 ? 1 : p.loginDay, reward: p.loginReward);
+  }
+
+  /// Back online, or another account on this phone: fetch fresh cases.
+  void _onApi() {
+    final api = Api.i;
+    final cameBack = api.online && !_wasOnline;
+    final switched = api.account != _account;
+    _wasOnline = api.online;
+    _account = api.account;
+    if (!mounted) return;
+    if (switched) setState(() => _cases = null);
+    if (cameBack || switched) {
+      _load();
+      _showCalendar();
+    }
   }
 
   @override
   void dispose() {
+    Api.i.removeListener(_onApi);
     _tick?.cancel();
     super.dispose();
   }
 
   Future<void> _load() async {
+    if (_loading) return;
+    _loading = true;
     try {
       final c = await Api.i.cases();
       if (mounted) {
@@ -77,12 +106,21 @@ class _HomeScreenState extends State<HomeScreen> {
       await Reminders.i.plan(
           nextCaseAt: c.nextCaseAt, tonightSolved: c.today?.solved ?? false, streak: Api.i.profile?.streak ?? 0);
     } catch (e) {
-      if (mounted) setState(() => _error = Api.describe(e));
+      if (mounted) setState(() => _error = Api.friendly(e));
+    } finally {
+      _loading = false;
     }
+  }
+
+  /// Pull-to-refresh and the retry buttons: wake the connection first if it was down.
+  Future<void> _refresh() async {
+    if (!Api.i.online || Api.i.profile == null) await Api.i.reconnect();
+    await _load();
   }
 
   Future<void> _open(CaseRow row) async {
     if (row.locked) {
+      if (!needOnline(context)) return;
       final ok = await confirm(context, 'باز کردن پرونده‌ی قدیمی',
           'این پرونده مال روزهای قبله. با ${fa(row.unlockCost)} سکه بازش کن.', 'باز کن');
       if (!ok || !mounted) return;
@@ -93,11 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
         if (e.code == 'not_enough_coins') {
           await showNeedCoins(context, row.unlockCost);
         } else {
-          toast(context, Api.errorText(e.code));
+          toast(context, Api.friendly(e));
         }
         return;
       } catch (e) {
-        if (mounted) toast(context, 'اتصال به سرور برقرار نیست');
+        if (mounted) toast(context, Api.friendly(e));
         return;
       }
     }
@@ -115,13 +153,15 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListenableBuilder(
             listenable: Api.i,
             builder: (context, _) => RefreshIndicator(
-              onRefresh: _load,
+              onRefresh: _refresh,
               color: K.stamp,
               child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 28),
                 children: [
                   _topBar(),
                   const SizedBox(height: 16),
+                  const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
                   if (_error != null && _cases == null) _errorBox(),
                   if (_cases == null && _error == null)
                     const Padding(padding: EdgeInsets.all(40), child: Center(child: CircularProgressIndicator(color: K.brass))),
@@ -157,7 +197,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _topBar() {
     final p = Api.i.profile;
     final det = kDetectives[(p?.avatar ?? 0) % kDetectives.length];
-    return Row(children: [
+    // a crowded row on a small phone: a very large system font is capped here so nothing overflows
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.15,
+      child: Row(children: [
       Flexible(
         child: GestureDetector(
         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AccountScreen())),
@@ -186,9 +229,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       const SizedBox(width: 4),
       const SoundButton(),
-      _iconBtn(Icons.emoji_events_rounded, () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LeaderboardScreen()))),
+      _iconBtn(Icons.emoji_events_rounded, () {
+        if (needOnline(context)) Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LeaderboardScreen()));
+      }),
       Stack(clipBehavior: Clip.none, children: [
-        _iconBtn(Icons.mail_rounded, () => showInbox(context)),
+        _iconBtn(Icons.mail_rounded, () {
+          if (needOnline(context)) showInbox(context);
+        }),
         if (Api.i.inboxCount > 0)
           Positioned(
             top: 4,
@@ -204,20 +251,35 @@ class _HomeScreenState extends State<HomeScreen> {
       ]),
       const SizedBox(width: 4),
       CoinChip(coins: Api.i.coins, onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreen()))),
-    ]);
+      ]),
+    );
   }
 
   Widget _iconBtn(IconData icon, VoidCallback onTap) =>
       IconButton(onPressed: onTap, icon: Icon(icon, color: K.text), splashRadius: 22);
 
-  Widget _errorBox() => Paper(
-        child: Column(children: [
-          Text('پرونده‌ها بارگذاری نشد', style: tDisplay(18, color: K.ink)),
-          Text(_error ?? '', textDirection: TextDirection.ltr, style: tBody(11, color: K.inkSoft)),
-          const SizedBox(height: 10),
-          StampButton(label: 'دوباره', onTap: _load),
-        ]),
-      );
+  /// Nothing to show yet. With no internet and nothing saved, explain the one-time need.
+  Widget _errorBox() {
+    final offline = !Api.i.online;
+    return Paper(
+      child: Column(children: [
+        Icon(offline ? Icons.wifi_off_rounded : Icons.cloud_off_rounded, color: K.inkSoft, size: 36),
+        const SizedBox(height: 6),
+        Text(offline ? 'هنوز پرونده‌ای روی گوشیت نیست' : 'پرونده‌ها الان باز نشد',
+            textAlign: TextAlign.center, style: tDisplay(18, color: K.ink)),
+        const SizedBox(height: 4),
+        Text(
+          offline
+              ? 'برای گرفتن اولین پرونده باید یه بار به اینترنت وصل بشی. بعدش پرونده‌هایی که باز کردی بدون اینترنت هم خونده می‌شن.'
+              : (_error ?? Api.genericText),
+          textAlign: TextAlign.center,
+          style: tBody(14, color: K.inkSoft),
+        ),
+        const SizedBox(height: 12),
+        StampButton(label: 'دوباره امتحان کن', icon: Icons.refresh_rounded, onTap: _refresh),
+      ]),
+    );
+  }
 
   Widget _todayCard(CaseRow? c) {
     if (c == null) {
@@ -265,8 +327,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Difficulty(c.difficulty, color: K.ink),
                   const SizedBox(width: 10),
                   const Icon(Icons.people_alt_rounded, size: 16, color: K.ink),
-                  Text(' ${fa(c.solvers)} نفر حلش کردن', style: tBody(12, color: K.ink)),
-                  const Spacer(),
+                  Expanded(
+                    child: Text(' ${fa(c.solvers)} نفر حلش کردن',
+                        maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.ink)),
+                  ),
                   if (c.solved) Stars(count: c.stars, size: 20),
                 ]),
                 const SizedBox(height: 10),
@@ -297,6 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Icon(Icons.folder_special_rounded, color: K.brass, size: 20),
           const SizedBox(width: 8),
           Expanded(child: Text('کلکسیون پرونده‌های حل‌شده', style: tBody(13, w: FontWeight.w700))),
+          const SizedBox(width: 6),
           Text('${fa(solved)} از ${fa(all.length)}', style: tBody(13, color: K.brass, w: FontWeight.w900)),
         ]),
         const SizedBox(height: 8),
@@ -323,7 +388,8 @@ class _HomeScreenState extends State<HomeScreen> {
         const Icon(Icons.schedule_rounded, color: K.brass),
         const SizedBox(width: 8),
         Expanded(child: Text('پرونده‌ی بعدی', style: tBody(14, w: FontWeight.w700))),
-        Text(faClock(left), style: tDisplay(18, color: K.brass)),
+        // offline, the saved time may already be past: then the new case is waiting online
+        Text(left.isNegative && !Api.i.online ? 'رسیده!' : faClock(left), style: tDisplay(18, color: K.brass)),
       ]),
     );
   }

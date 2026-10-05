@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/engagement.dart';
+import '../widgets/offline.dart';
 import 'dialogs.dart';
 
 /// Coin packs and perks. RIGHT NOW: test store (no money is taken; the server
@@ -21,6 +22,7 @@ class _ShopScreenState extends State<ShopScreen> {
   bool _busy = false;
 
   Future<void> _buy(String productId, String title) async {
+    if (!needOnline(context)) return;
     final ok = await confirm(context, 'خرید آزمایشی: $title',
         'این یه خرید آزمایشیه و پولی گرفته نمی‌شه. بعداً اینجا درگاه کافه‌بازار قرار می‌گیره.', 'خرید');
     if (!ok || !mounted) return;
@@ -31,7 +33,7 @@ class _ShopScreenState extends State<ShopScreen> {
       if (!mounted) return;
       toast(context, status == 'granted' ? (added > 0 ? '${fa(added)} سکه اضافه شد!' : 'خرید انجام شد!') : 'خرید تأیید نشد');
     } catch (e) {
-      if (mounted) toast(context, 'خرید انجام نشد: ${Api.describe(e)}');
+      if (mounted) toast(context, 'خرید انجام نشد. ${Api.friendly(e)}');
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -54,7 +56,11 @@ class _ShopScreenState extends State<ShopScreen> {
       body: GrainBackground(
         child: AbsorbPointer(
           absorbing: _busy,
-          child: ListView(padding: const EdgeInsets.all(16), children: [
+          // SafeArea: the last button must not end up under the phone's navigation bar
+          child: SafeArea(
+            top: false,
+            child: ListView(padding: const EdgeInsets.all(16), children: [
+            const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
             Text('با سکه سرنخ بگیر و پرونده‌های قدیمی رو باز کن.', style: tBody(14, color: K.textSoft)),
             const SizedBox(height: 12),
             Row(children: [
@@ -74,7 +80,8 @@ class _ShopScreenState extends State<ShopScreen> {
             const SizedBox(height: 10),
             StampButton(label: 'دیدن تبلیغ و گرفتن سکه رایگان', icon: Icons.play_circle_fill_rounded, color: K.ok,
                 onTap: () => watchAd(context)),
-          ]),
+            ]),
+          ),
         ),
       ),
     );
@@ -91,8 +98,8 @@ class _ShopScreenState extends State<ShopScreen> {
           child: Column(children: [
             Wrap(alignment: WrapAlignment.center, children: [for (int i = 0; i < size; i++) const CoinIcon(size: 24)]),
             const SizedBox(height: 6),
-            Text(fa(api.productCoins(id)), style: tDisplay(20, color: K.ink)),
-            Text(title, style: tBody(12, color: K.inkSoft)),
+            Text(fa(api.productCoins(id)), maxLines: 1, style: tDisplay(20, color: K.ink)),
+            Text(title, textAlign: TextAlign.center, style: tBody(12, color: K.inkSoft)),
             const SizedBox(height: 6),
             Container(
               width: double.infinity,
@@ -139,6 +146,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   style: tBody(12.5, color: K.textSoft)),
             ]),
           ),
+          const SizedBox(width: 6),
           const CoinIcon(size: 18),
           const SizedBox(width: 4),
           Text(fa(api.freezeCost), style: tBody(13, color: K.brass, w: FontWeight.w900)),
@@ -163,6 +171,7 @@ class _ShopScreenState extends State<ShopScreen> {
               Text(sub, style: tBody(12.5, color: K.textSoft)),
             ]),
           ),
+          const SizedBox(width: 6),
           Text(Api.i.price(id), style: tBody(13, color: K.brass, w: FontWeight.w900)),
         ]),
       ),

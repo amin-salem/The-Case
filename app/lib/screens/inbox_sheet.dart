@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/api.dart';
 import '../theme.dart';
+import '../widgets/offline.dart';
 
 Future<void> showInbox(BuildContext context) => showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) => const _InboxSheet(),
     );
 
@@ -23,12 +25,13 @@ class _InboxSheetState extends State<_InboxSheet> {
   final Set<String> _busy = {};
 
   Future<void> _claim(InboxGift g) async {
+    if (!needOnline(context)) return;
     setState(() => _busy.add(g.id));
     try {
       final coins = await Api.i.claim(g);
       if (mounted) toast(context, coins > 0 ? '${fa(coins)} سکه گرفتی!' : 'دریافت شد!');
-    } catch (_) {
-      if (mounted) toast(context, 'دریافت نشد، دوباره امتحان کن');
+    } catch (e) {
+      if (mounted) toast(context, Api.friendly(e));
     }
     if (mounted) {
       setState(() {
@@ -40,10 +43,13 @@ class _InboxSheetState extends State<_InboxSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    // the floating card keeps clear of the phone's navigation / gesture bar
+    return SafeArea(
+      top: false,
+      child: Container(
       margin: const EdgeInsets.all(12),
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
-      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.7),
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.7),
       decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(22)),
       child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Text('صندوق نامه‌ها', style: tDisplay(22)),
@@ -54,6 +60,14 @@ class _InboxSheetState extends State<_InboxSheet> {
             builder: (context, snap) {
               if (snap.connectionState != ConnectionState.done) {
                 return const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator(color: K.brass)));
+              }
+              if (snap.hasError) {
+                final e = snap.error!;
+                return Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(Api.isNetworkFail(e) ? Api.needOnlineText : Api.friendly(e),
+                      textAlign: TextAlign.center, style: tBody(15, color: K.textSoft)),
+                );
               }
               final gifts = snap.data ?? const <InboxGift>[];
               if (gifts.isEmpty) {
@@ -87,6 +101,7 @@ class _InboxSheetState extends State<_InboxSheet> {
           ),
         ),
       ]),
+      ),
     );
   }
 }

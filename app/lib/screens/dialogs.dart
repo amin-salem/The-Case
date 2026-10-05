@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../services/api.dart';
 import '../theme.dart';
+import '../widgets/offline.dart';
 import 'shop_screen.dart';
 
 /// "Not enough coins": go to the shop or watch an ad.
@@ -11,7 +12,12 @@ Future<void> showNeedCoins(BuildContext context, int need) async {
   await showModalBottomSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,
-    builder: (ctx) => Container(
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (ctx) => SafeArea(
+      top: false, // the card floats above the phone's navigation / gesture bar
+      child: SingleChildScrollView(
+        child: Container(
       margin: const EdgeInsets.all(12),
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 22),
       decoration: BoxDecoration(color: K.paper, borderRadius: BorderRadius.circular(20)),
@@ -39,6 +45,8 @@ Future<void> showNeedCoins(BuildContext context, int need) async {
           },
         ),
       ]),
+        ),
+      ),
     ),
   );
 }
@@ -46,6 +54,7 @@ Future<void> showNeedCoins(BuildContext context, int need) async {
 /// Shows a (placeholder) rewarded ad, then asks the server for the reward.
 /// Replace the waiting part with Tapsell / Adivery later.
 Future<void> watchAd(BuildContext context) async {
+  if (!needOnline(context)) return;
   final ok = await showDialog<bool>(
     context: context,
     barrierDismissible: false,
@@ -56,9 +65,9 @@ Future<void> watchAd(BuildContext context) async {
     final added = await Api.i.adReward();
     if (context.mounted) toast(context, '${fa(added)} سکه گرفتی!');
   } on ApiException catch (e) {
-    if (context.mounted) toast(context, Api.errorText(e.code));
+    if (context.mounted) toast(context, Api.friendly(e));
   } catch (e) {
-    if (context.mounted) toast(context, 'اتصال به سرور برقرار نیست');
+    if (context.mounted) toast(context, Api.friendly(e));
   }
 }
 
@@ -110,6 +119,7 @@ Future<bool> confirm(BuildContext context, String title, String body, String yes
     context: context,
     builder: (ctx) => AlertDialog(
       backgroundColor: K.paper,
+      scrollable: true, // long texts on a small phone / large font
       title: Text(title, style: tDisplay(20, color: K.ink)),
       content: Text(body, style: tBody(15, color: K.ink)),
       actions: [

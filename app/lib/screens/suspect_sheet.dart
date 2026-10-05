@@ -12,6 +12,7 @@ Future<SuspectMark?> showSuspect(BuildContext context, Suspect s, SuspectMark ma
   return showModalBottomSheet<SuspectMark>(
     context: context,
     isScrollControlled: true,
+    useSafeArea: true, // keeps the top below the status bar; the sheet pads its own bottom
     backgroundColor: Colors.transparent,
     builder: (_) => _SuspectSheet(s: s, mark: mark),
   );
@@ -49,13 +50,14 @@ class _SuspectSheetState extends State<_SuspectSheet> {
   Widget build(BuildContext context) {
     final s = widget.s;
     return Container(
-      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
       decoration: const BoxDecoration(
         color: K.night2,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: SafeArea(
         top: false,
+        minimum: const EdgeInsets.only(bottom: 8),
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [

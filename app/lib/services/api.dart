@@ -26,24 +26,102 @@ class ApiException implements Exception {
   String toString() => 'ApiException($status, $detail)';
 }
 
-/// Everything that talks to the game server. The game is online: coins,
-/// cases and solutions live on the server.
+/// Why a call failed, as far as the player is concerned.
+enum FailKind {
+  /// no internet on the phone
+  offline,
+
+  /// the server is down, slow, restarting, or something in between answers instead of it
+  server,
+
+  /// the server said no for a game reason ("not_enough_coins", ...)
+  business,
+
+  /// anything else (a bug)
+  other,
+}
+
+/// Everything that talks to the game server. Coins, cases and solutions live
+/// on the server; the last answers are kept on the phone so the game still
+/// opens (and opened cases can be read) without internet.
 class Api extends ChangeNotifier {
   Api._();
   static final Api i = Api._();
 
   late SharedPreferences _p;
-  final http.Client _http = http.Client();
+  http.Client _http = http.Client();
   String? _playerId, _secret, _token;
   int _tokenExp = 0;
 
   Map<String, dynamic> config = const {};
   Profile? profile;
+  Map<String, dynamic> _profileJson = const {};
   int inboxCount = 0;
+
+  /// The last connection problem, already in friendly Persian ('' when fine).
   String lastError = '';
   bool ready = false;
 
+  /// False while the server can't be reached. Screens rebuild when it changes.
+  bool online = true;
+
+  /// Grows each time this phone switches to another account, so screens can reload.
+  int account = 0;
+
+  bool _configFromServer = false;
+  bool _reconnecting = false;
+  Timer? _retry;
+
   int get coins => profile?.coins ?? 0;
+
+  /// Something from an earlier session is on the phone.
+  bool get hasCache => profile != null || _p.containsKey(_kCases);
+
+  @visibleForTesting
+  set httpClient(http.Client c) => _http = c;
+
+  // ---------------------------------------------------------------- friendly texts
+
+  static const offlineText = 'اینترنت وصل نیست';
+  static const serverDownText = 'الان به سرور دسترسی نداریم، چند دقیقه دیگه دوباره امتحان کن';
+  static const genericText = 'یه مشکلی پیش اومد، دوباره امتحان کن';
+  static const needOnlineText = 'برای این کار باید به اینترنت وصل باشی';
+  static const offlineBannerText = 'آفلاینی؛ بعضی کارها به اینترنت نیاز داره';
+  static const notSavedText = 'این پرونده هنوز روی گوشیت ذخیره نشده. برای باز کردنش یه بار به اینترنت وصل شو.';
+
+  static FailKind failKind(Object e) {
+    if (e is ApiException) return e.status >= 500 ? FailKind.server : FailKind.business;
+    if (e is TimeoutException || e is FormatException) return FailKind.server;
+    final t = e.toString();
+    if (t.contains('HandshakeException') || t.contains('TlsException') || t.contains('CertificateException')) {
+      return FailKind.server;
+    }
+    if (e is http.ClientException ||
+        t.contains('SocketException') ||
+        t.contains('Failed host lookup') ||
+        t.contains('Connection refused') ||
+        t.contains('Network is unreachable')) {
+      return FailKind.offline;
+    }
+    return FailKind.other;
+  }
+
+  /// The server could not be reached (as opposed to "it answered no").
+  static bool isNetworkFail(Object e) {
+    final k = failKind(e);
+    return k == FailKind.offline || k == FailKind.server;
+  }
+
+  /// A short Persian message for the player. Technical details only go to the debug log.
+  static String friendly(Object e) {
+    debugPrint('Api error: $e');
+    return switch (failKind(e)) {
+      FailKind.offline => offlineText,
+      FailKind.server => serverDownText,
+      FailKind.business => errorText((e as ApiException).code),
+      FailKind.other => genericText,
+    };
+  }
 
   // ---------------------------------------------------------------- start
 
@@ -53,23 +131,78 @@ class Api extends ChangeNotifier {
     _secret = _p.getString('secret');
     _token = _p.getString('token');
     _tokenExp = _p.getInt('token_exp') ?? 0;
+    final cfg = _readCache(_kConfig);
+    if (cfg is Map) config = Map<String, dynamic>.from(cfg);
+    final me = _readCache(_kMe);
+    if (me is Map) {
+      _profileJson = Map<String, dynamic>.from(me);
+      profile = Profile(_profileJson);
+    }
   }
 
-  /// Connects (register / login) and loads profile + config. Returns an error text or null.
-  Future<String?> connect() async {
+  /// Connects (register / login) and loads profile + config. Never throws:
+  /// without internet the app goes on with what is saved on the phone.
+  Future<void> connect() async {
     try {
-      config = (await _call('GET', '/v1/config', auth: false) as Map).cast<String, dynamic>();
-      await _ensureLogin();
-      await refreshProfile();
-      ready = true;
+      await _loadConfig();
+      await _connectRest();
       lastError = '';
-      unawaited(refreshInbox());
-      notifyListeners();
-      return null;
     } catch (e) {
-      lastError = describe(e);
+      lastError = friendly(e);
+    }
+    ready = true;
+    notifyListeners();
+  }
+
+  /// Quietly tries the server again (used every ~20 s while offline, on app resume
+  /// and by the retry buttons). Returns whether the server answered.
+  Future<bool> reconnect() async {
+    if (_reconnecting) return online;
+    _reconnecting = true;
+    try {
+      if (!_configFromServer) await _loadConfig();
+      await _connectRest();
+      lastError = '';
+    } catch (e) {
+      lastError = friendly(e);
+    } finally {
+      _reconnecting = false;
+    }
+    notifyListeners();
+    return online;
+  }
+
+  Future<void> _loadConfig() async {
+    final j = await _call('GET', '/v1/config', auth: false);
+    if (j is! Map) throw const FormatException('config is not an object');
+    config = Map<String, dynamic>.from(j);
+    _configFromServer = true;
+    await _writeCache(_kConfig, config);
+  }
+
+  Future<void> _connectRest() async {
+    await _ensureLogin();
+    await refreshProfile();
+    unawaited(refreshInbox());
+  }
+
+  void _wentOffline(Object e) {
+    debugPrint('Api: server not reachable: $e');
+    _retry ??= Timer.periodic(const Duration(seconds: 20), (_) {
+      if (!online) unawaited(reconnect());
+    });
+    if (online) {
+      online = false;
       notifyListeners();
-      return lastError;
+    }
+  }
+
+  void _cameOnline() {
+    _retry?.cancel();
+    _retry = null;
+    if (!online) {
+      online = true;
+      notifyListeners();
     }
   }
 
@@ -83,9 +216,17 @@ class Api extends ChangeNotifier {
     return id;
   }
 
+  Future<void>? _loginRun;
+
+  /// One login at a time: a reconnect and a screen reload must not register two accounts.
   Future<void> _ensureLogin() async {
     final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     if (_token != null && _tokenExp - now > 3600) return;
+    final run = _loginRun ??= _login().whenComplete(() => _loginRun = null);
+    await run;
+  }
+
+  Future<void> _login() async {
     if (_playerId == null || _secret == null) {
       final j = await _call('POST', '/v1/auth/register',
           auth: false, body: {'device_id': _deviceId(), 'app_version': kAppBuild}) as Map;
@@ -100,15 +241,18 @@ class Api extends ChangeNotifier {
       await _p.setString('token', _token!);
       await _p.setInt('token_exp', _tokenExp);
     } on ApiException catch (e) {
-      if (e.status != 401) rethrow;
-      // the account moved to another phone: start fresh here
+      // Only the server's own "this secret is wrong" answer drops the saved account
+      // (it moved to another phone). No internet / server trouble never does.
+      if (e.status != 401 || e.code != 'wrong_login') rethrow;
       _playerId = _secret = null;
-      return _ensureLogin();
+      return _login();
     }
   }
 
   Future<void> _storeLogin(Map<String, dynamic> j) async {
-    _playerId = j['player_id'] as String;
+    final newId = j['player_id'] as String;
+    final switched = _p.getString('player') != null && _p.getString('player') != newId;
+    _playerId = newId;
     _secret = j['secret'] as String;
     _token = j['token'] as String;
     _tokenExp = j['expires_at'] as int;
@@ -116,20 +260,99 @@ class Api extends ChangeNotifier {
     await _p.setString('secret', _secret!);
     await _p.setString('token', _token!);
     await _p.setInt('token_exp', _tokenExp);
+    if (switched) {
+      await _clearCache();
+      account++;
+      notifyListeners();
+    }
   }
+
+  // ---------------------------------------------------------------- cache
+
+  static const _kConfig = 'c_config';
+  static const _kMe = 'c_me';
+  static const _kCases = 'c_cases';
+  static const _kCasePrefix = 'c_case_';
+  static const _kNotesPrefix = 'notes_';
+
+  Object? _readCache(String key) {
+    final s = _p.getString(key);
+    if (s == null) return null;
+    try {
+      return jsonDecode(s);
+    } catch (e) {
+      debugPrint('cache $key: $e');
+      return null;
+    }
+  }
+
+  Future<void> _writeCache(String key, Object? json) async {
+    try {
+      await _p.setString(key, jsonEncode(json));
+    } catch (e) {
+      debugPrint('cache $key: $e');
+    }
+  }
+
+  /// Another account's data must not show up after a login on this phone.
+  Future<void> _clearCache() async {
+    for (final k in _p.getKeys().toList()) {
+      if (k == _kMe || k == _kCases || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix)) {
+        await _p.remove(k);
+      }
+    }
+  }
+
+  /// GET that saves the answer; without a server, the saved answer comes back instead.
+  Future<Map<String, dynamic>> _cachedGet(String path, String key) async {
+    try {
+      final j = await _call('GET', path);
+      if (j is! Map) throw const FormatException('answer is not an object');
+      final m = Map<String, dynamic>.from(j);
+      await _writeCache(key, m);
+      return m;
+    } catch (e) {
+      if (!isNetworkFail(e)) rethrow;
+      final saved = _readCache(key);
+      if (saved is Map) return Map<String, dynamic>.from(saved);
+      rethrow;
+    }
+  }
+
+  /// Keeps the saved copy of a case in step with what the server just said
+  /// (bought hints, wrong accusations), so it reads the same offline.
+  Future<void> _saveProgress(String caseId, Object? progress) async {
+    if (progress is! Map) return;
+    final saved = _readCache('$_kCasePrefix$caseId');
+    if (saved is! Map) return;
+    await _writeCache('$_kCasePrefix$caseId', {...Map<String, dynamic>.from(saved), 'progress': progress});
+  }
+
+  /// The player's own marks on a case (suspicious / innocent, pinned evidence). Only on the phone.
+  Map<String, dynamic> loadNotes(String caseId) {
+    final j = _readCache('$_kNotesPrefix$caseId');
+    return j is Map ? Map<String, dynamic>.from(j) : <String, dynamic>{};
+  }
+
+  Future<void> saveNotes(String caseId, Map<String, dynamic> notes) => _writeCache('$_kNotesPrefix$caseId', notes);
 
   // ---------------------------------------------------------------- http
 
-  static String describe(Object e) {
-    final t = e.toString();
-    if (e is ApiException) return 'server error ${e.status}: ${e.detail}';
-    if (t.contains('Failed host lookup') || t.contains('SocketException')) {
-      return 'no internet / server not found ($kApiUrl)';
+  Future<http.Response> _send(String method, Uri uri, Map<String, String> headers, String? data) async {
+    const t = Duration(seconds: 15);
+    try {
+      switch (method) {
+        case 'GET':
+          return await _http.get(uri, headers: headers).timeout(t);
+        case 'PATCH':
+          return await _http.patch(uri, headers: headers, body: data).timeout(t);
+        default:
+          return await _http.post(uri, headers: headers, body: data).timeout(t);
+      }
+    } catch (e) {
+      _wentOffline(e);
+      rethrow;
     }
-    if (t.contains('TimeoutException')) return 'server did not answer in time';
-    if (t.contains('HandshakeException')) return 'HTTPS/SSL problem';
-    if (e is FormatException) return 'server sent a non-JSON answer (it may be restarting)';
-    return t.length > 140 ? t.substring(0, 140) : t;
   }
 
   Future<Object?> _call(String method, String path, {Object? body, bool auth = true, bool retried = false}) async {
@@ -140,18 +363,25 @@ class Api extends ChangeNotifier {
       headers['Authorization'] = 'Bearer $_token';
     }
     final data = body == null ? null : jsonEncode(body);
-    const t = Duration(seconds: 15);
-    final http.Response r;
-    switch (method) {
-      case 'GET':
-        r = await _http.get(uri, headers: headers).timeout(t);
-      case 'PATCH':
-        r = await _http.patch(uri, headers: headers, body: data).timeout(t);
-      default:
-        r = await _http.post(uri, headers: headers, body: data).timeout(t);
+    final r = await _send(method, uri, headers, data);
+    Object? decoded;
+    try {
+      final text = utf8.decode(r.bodyBytes);
+      decoded = text.isEmpty ? null : jsonDecode(text);
+    } on FormatException catch (e) {
+      if (r.statusCode < 400) {
+        // a page that isn't ours (Wi-Fi login page, filter page): treat it as no server
+        _wentOffline(e);
+        rethrow;
+      }
+      decoded = null;
     }
-    final text = utf8.decode(r.bodyBytes);
-    final decoded = text.isEmpty ? null : jsonDecode(text);
+    if (r.statusCode >= 500) {
+      final err = ApiException(r.statusCode, decoded is Map ? decoded['detail'] : decoded);
+      _wentOffline(err);
+      throw err;
+    }
+    _cameOnline();
     if (r.statusCode == 401 && auth && !retried) {
       _token = null;
       _tokenExp = 0;
@@ -161,25 +391,36 @@ class Api extends ChangeNotifier {
     return decoded;
   }
 
-  void _setCoins(int coins) {
-    final p = profile;
-    if (p == null) return;
-    profile = Profile({
-      'player_id': p.playerId, 'nickname': p.nickname, 'avatar': p.avatar, 'invite_code': p.inviteCode,
-      'referred': p.referred, 'email': p.email, 'secured': p.secured, 'coins': coins, 'no_ads': p.noAds,
-      'vip_until': p.vipUntil, 'streak': p.streak, 'best_streak': p.bestStreak, 'cases_solved': p.casesSolved,
-      'stars_total': p.starsTotal, 'login_day': p.loginDay, 'streak_freezes': p.streakFreezes,
-    });
+  // ---------------------------------------------------------------- profile
+
+  void _setProfile(Map<String, dynamic> j) {
+    _profileJson = j;
+    profile = Profile(j);
+    // the daily login reward is shown once; the saved copy must not show it again
+    unawaited(_writeCache(_kMe, Map<String, dynamic>.of(j)..remove('login_reward')));
     notifyListeners();
   }
 
-  // ---------------------------------------------------------------- profile
+  void _setCoins(int coins) {
+    if (profile == null) return;
+    _setProfile(Map<String, dynamic>.of(_profileJson)
+      ..['coins'] = coins
+      ..remove('login_reward'));
+  }
 
   Future<Profile?> refreshProfile() async {
     final j = await _call('GET', '/v1/me') as Map;
-    profile = Profile(j.cast<String, dynamic>());
-    notifyListeners();
+    _setProfile(Map<String, dynamic>.from(j));
     return profile;
+  }
+
+  /// After something already went through on the server: a failed refresh is not an error.
+  Future<void> _refreshProfileQuietly() async {
+    try {
+      await refreshProfile();
+    } catch (e) {
+      debugPrint('refresh profile: $e');
+    }
   }
 
   Future<void> updateProfile({String? nickname, int? avatar}) async {
@@ -187,8 +428,7 @@ class Api extends ChangeNotifier {
       if (nickname != null) 'nickname': nickname,
       if (avatar != null) 'avatar': avatar,
     }) as Map;
-    profile = Profile(j.cast<String, dynamic>());
-    notifyListeners();
+    _setProfile(Map<String, dynamic>.from(j));
   }
 
   Future<int> adReward() async {
@@ -199,24 +439,26 @@ class Api extends ChangeNotifier {
 
   // ---------------------------------------------------------------- cases
 
-  Future<CasesList> cases() async => CasesList((await _call('GET', '/v1/cases') as Map).cast<String, dynamic>());
+  /// The case list; offline, the last saved list.
+  Future<CasesList> cases() async => CasesList(await _cachedGet('/v1/cases', _kCases));
 
-  /// Returns (case, progress, isToday).
+  /// Returns (case, progress, isToday). Offline, a case opened before comes from the phone.
   Future<(CaseData, Progress, bool)> openCase(String id) async {
-    final j = (await _call('GET', '/v1/cases/$id') as Map).cast<String, dynamic>();
+    final j = await _cachedGet('/v1/cases/$id', '$_kCasePrefix$id');
     return (CaseData((j['case'] as Map).cast<String, dynamic>()),
         Progress((j['progress'] as Map).cast<String, dynamic>()), j['today'] == true);
   }
 
   Future<void> unlockCase(String id) async {
     await _call('POST', '/v1/cases/$id/unlock');
-    await refreshProfile();
+    await _refreshProfileQuietly();
   }
 
   /// Returns (hint text, progress).
   Future<(String, Progress)> buyHint(String id) async {
     final j = (await _call('POST', '/v1/cases/$id/hint') as Map).cast<String, dynamic>();
     _setCoins(j['coins'] as int);
+    await _saveProgress(id, j['progress']);
     return (j['hint'] as String, Progress((j['progress'] as Map).cast<String, dynamic>()));
   }
 
@@ -225,8 +467,9 @@ class Api extends ChangeNotifier {
             as Map)
         .cast<String, dynamic>();
     final r = AccuseResult(j);
+    await _saveProgress(caseId, j['progress']);
     if (r.result == 'solved') {
-      await refreshProfile();
+      await _refreshProfileQuietly();
     } else {
       _setCoins(r.coins);
     }
@@ -240,8 +483,7 @@ class Api extends ChangeNotifier {
   /// Buys one streak insurance with coins. Throws ApiException (not_enough_coins / max_freezes).
   Future<void> buyStreakFreeze() async {
     final j = await _call('POST', '/v1/wallet/streak-freeze') as Map;
-    profile = Profile(j.cast<String, dynamic>());
-    notifyListeners();
+    _setProfile(Map<String, dynamic>.from(j));
   }
 
   Map<String, dynamic> get _economy =>
@@ -278,7 +520,7 @@ class Api extends ChangeNotifier {
     final j = (await _call('POST', '/v1/purchases/verify', body: {'product_id': productId, 'purchase_token': token})
             as Map)
         .cast<String, dynamic>();
-    await refreshProfile();
+    await _refreshProfileQuietly();
     return ('${j['status']}', j['added'] as int? ?? 0);
   }
 
@@ -289,13 +531,10 @@ class Api extends ChangeNotifier {
     try {
       final j = (await _call('POST', '/v1/auth/email', body: {'email': email, 'password': password}) as Map)
           .cast<String, dynamic>();
-      profile = Profile((j['profile'] as Map).cast<String, dynamic>());
-      notifyListeners();
+      _setProfile(Map<String, dynamic>.from(j['profile'] as Map));
       return (j['reward'] as int? ?? 0, null);
-    } on ApiException catch (e) {
-      return (0, errorText(e.code));
     } catch (e) {
-      return (0, 'اتصال به سرور برقرار نیست\n(${describe(e)})');
+      return (0, friendly(e));
     }
   }
 
@@ -308,21 +547,20 @@ class Api extends ChangeNotifier {
     try {
       final j = await _call('POST', path, auth: false, body: {...body, 'device_id': _deviceId()}) as Map;
       await _storeLogin(j.cast<String, dynamic>());
-      await refreshProfile();
-      return null;
-    } on ApiException catch (e) {
-      return errorText(e.code);
     } catch (e) {
-      return 'اتصال به سرور برقرار نیست\n(${describe(e)})';
+      return friendly(e);
     }
+    await _refreshProfileQuietly();
+    return null;
   }
 
-  Future<String?> makeTransferCode() async {
+  /// Returns (code, error text).
+  Future<(String?, String?)> makeTransferCode() async {
     try {
       final j = await _call('POST', '/v1/auth/transfer-code') as Map;
-      return '${j['code']}';
-    } catch (_) {
-      return null;
+      return ('${j['code']}', null);
+    } catch (e) {
+      return (null, friendly(e));
     }
   }
 
@@ -330,13 +568,11 @@ class Api extends ChangeNotifier {
   Future<(int, String?)> redeemInvite(String code) async {
     try {
       final j = await _call('POST', '/v1/referrals/redeem', body: {'code': code.trim()}) as Map;
-      await refreshProfile();
+      await _refreshProfileQuietly();
       final grants = (j['grants'] as List?) ?? const [];
       return (grants.isEmpty ? 0 : ((grants.first as Map)['amount'] as int? ?? 0), null);
-    } on ApiException catch (e) {
-      return (0, errorText(e.code));
     } catch (e) {
-      return (0, 'اتصال به سرور برقرار نیست');
+      return (0, friendly(e));
     }
   }
 
@@ -353,7 +589,9 @@ class Api extends ChangeNotifier {
   Future<void> refreshInbox() async {
     try {
       await inbox();
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('inbox: $e');
+    }
   }
 
   Future<int> claim(InboxGift g) async {
@@ -385,6 +623,7 @@ class Api extends ChangeNotifier {
         'too_many_requests' => 'خیلی سریع امتحان کردی، کمی صبر کن',
         'max_freezes' => 'بیشتر از این نمی‌شه بیمه نگه داشت',
         'finish_first' => 'اول پرونده رو تموم کن',
-        _ => 'خطا، دوباره امتحان کن',
+        'no_case' => 'هنوز پرونده‌ای باز نشده',
+        _ => genericText,
       };
 }

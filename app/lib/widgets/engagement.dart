@@ -6,6 +6,7 @@ import '../screens/dialogs.dart';
 import '../services/api.dart';
 import '../services/sound.dart';
 import '../theme.dart';
+import 'offline.dart';
 import 'typewriter.dart';
 
 // ------------------------------------------------------------------ share card
@@ -62,7 +63,7 @@ class ShareCard extends StatelessWidget {
           Row(children: [
             const Icon(Icons.ios_share_rounded, size: 18, color: K.inkSoft),
             const SizedBox(width: 6),
-            Text('کارت نتیجه‌ات (بدون لو دادن جواب)', style: tBody(12.5, color: K.inkSoft, w: FontWeight.w700)),
+            Expanded(child: Text('کارت نتیجه‌ات (بدون لو دادن جواب)', style: tBody(12.5, color: K.inkSoft, w: FontWeight.w700))),
           ]),
           const SizedBox(height: 6),
           for (final line in shareLines(caseData, result)) Text(line, style: tBody(15.5, color: K.ink, w: FontWeight.w700)),
@@ -195,7 +196,7 @@ class _CalendarDialog extends StatelessWidget {
       backgroundColor: K.paper,
       insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Text('جایزه‌ی ورود روزانه', textAlign: TextAlign.center, style: tDisplay(22, color: K.ink)),
@@ -214,7 +215,7 @@ class _CalendarDialog extends StatelessWidget {
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               const CoinIcon(size: 30),
               const SizedBox(width: 8),
-              Text('+${fa(reward)} سکه', style: tDisplay(28, color: K.kraftDark)),
+              Flexible(child: Text('+${fa(reward)} سکه', style: tDisplay(28, color: K.kraftDark))),
             ]),
           ),
           if (day >= 7)
@@ -230,14 +231,14 @@ class _CalendarDialog extends StatelessWidget {
     final past = d < day, now = d == day;
     final tile = Container(
       width: 70,
-      height: 84,
+      constraints: const BoxConstraints(minHeight: 84), // grows with a large system font
       padding: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
         color: now ? K.kraft : (past ? K.paperDark : Colors.white.withValues(alpha: 0.55)),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: now ? K.stamp : K.inkSoft.withValues(alpha: 0.25), width: now ? 2.5 : 1),
       ),
-      child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text('روز ${fa(d)}', style: tBody(12, color: K.ink, w: FontWeight.w700)),
         if (past)
           const Icon(Icons.check_circle_rounded, color: K.ok, size: 26)
@@ -259,6 +260,7 @@ const Map<int, String> kBadgeNames = {7: 'کارآگاه پیگیر', 30: 'کا�
 
 /// Asks, then buys one streak insurance with coins.
 Future<void> buyStreakInsurance(BuildContext context) async {
+  if (!needOnline(context)) return;
   final api = Api.i;
   final ok = await confirm(
       context,
@@ -276,10 +278,10 @@ Future<void> buyStreakInsurance(BuildContext context) async {
     if (e.code == 'not_enough_coins') {
       await showNeedCoins(context, e.need > 0 ? e.need : api.freezeCost);
     } else {
-      toast(context, Api.errorText(e.code));
+      toast(context, Api.friendly(e));
     }
-  } catch (_) {
-    if (context.mounted) toast(context, 'اتصال به سرور برقرار نیست');
+  } catch (e) {
+    if (context.mounted) toast(context, Api.friendly(e));
   }
 }
 

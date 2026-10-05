@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -46,6 +48,8 @@ class _TheCaseAppState extends State<TheCaseApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       Sfx.i.resumeAll();
+      // back from the background: if we were offline, try the server again right away
+      if (Api.i.ready && !Api.i.online) unawaited(Api.i.reconnect());
     } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
       Sfx.i.pauseAll();
     }
@@ -63,7 +67,8 @@ class _TheCaseAppState extends State<TheCaseApp> with WidgetsBindingObserver {
   }
 }
 
-/// Connects to the server, then opens the home screen.
+/// Connects to the server, then opens the home screen. Without internet it
+/// still opens: the home screen works from what is saved on the phone.
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
 
@@ -72,9 +77,6 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  String? _error;
-  bool _busy = true;
-
   @override
   void initState() {
     super.initState();
@@ -83,24 +85,19 @@ class _StartScreenState extends State<StartScreen> {
   }
 
   Future<void> _connect() async {
-    setState(() {
-      _busy = true;
-      _error = null;
-    });
-    final err = await Api.i.connect();
-    if (!mounted) return;
-    if (err == null) {
-      Navigator.of(context).pushReplacement(PageRouteBuilder(
-        pageBuilder: (_, __, ___) => const HomeScreen(),
-        transitionsBuilder: (_, a, __, child) => FadeTransition(opacity: a, child: child),
-        transitionDuration: const Duration(milliseconds: 500),
-      ));
+    final started = Api.i.connect();
+    if (Api.i.hasCache) {
+      // a slow network must not hold the door: the saved data is enough to start
+      await Future.any<void>([started, Future<void>.delayed(const Duration(seconds: 5))]);
     } else {
-      setState(() {
-        _busy = false;
-        _error = err;
-      });
+      await started;
     }
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(PageRouteBuilder<void>(
+      pageBuilder: (_, __, ___) => const HomeScreen(),
+      transitionsBuilder: (_, a, __, child) => FadeTransition(opacity: a, child: child),
+      transitionDuration: const Duration(milliseconds: 500),
+    ));
   }
 
   @override
@@ -111,7 +108,7 @@ class _StartScreenState extends State<StartScreen> {
         const Positioned.fill(child: Torchlight(child: SizedBox.expand())),
         SafeArea(
           child: Center(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(24),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 FadeSlideIn(
@@ -123,20 +120,9 @@ class _StartScreenState extends State<StartScreen> {
                 const SizedBox(height: 18),
                 StampIn(delay: const Duration(milliseconds: 350), child: const StampMark('پرونده', size: 54)),
                 const SizedBox(height: 14),
-                Text('هر شب ساعت ۹، یه جنایت تازه', style: tBody(15, color: K.textSoft)),
+                Text('هر شب ساعت ۹، یه جنایت تازه', textAlign: TextAlign.center, style: tBody(15, color: K.textSoft)),
                 const SizedBox(height: 32),
-                if (_busy)
-                  const SizedBox(width: 28, height: 28, child: CircularProgressIndicator(strokeWidth: 2.5, color: K.brass))
-                else ...[
-                  Text('اتصال به سرور برقرار نشد', style: tBody(16, w: FontWeight.w700)),
-                  if (_error != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6, bottom: 12),
-                      child: Text(_error!, textAlign: TextAlign.center, textDirection: TextDirection.ltr,
-                          style: tBody(11, color: K.textSoft)),
-                    ),
-                  StampButton(label: 'دوباره', icon: Icons.refresh_rounded, onTap: _connect),
-                ],
+                const SizedBox(width: 28, height: 28, child: CircularProgressIndicator(strokeWidth: 2.5, color: K.brass)),
               ]),
             ),
           ),

@@ -7,6 +7,7 @@ import '../services/api.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/offline.dart';
 import 'case_screen.dart';
 
 /// Two steps: who did it, and which evidence proves their lie.
@@ -43,6 +44,8 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
 
   Future<void> _submit() async {
     if (_suspect == null || _evidence == null) return;
+    // the choices stay on screen; nothing is sent without the server
+    if (!needOnline(context)) return;
     setState(() => _busy = true);
     try {
       final r = await Api.i.accuse(widget.caseData.id, _suspect!, _evidence!);
@@ -64,14 +67,10 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
       });
       // keep the wrong result for the case screen to update its counters
       _lastWrong = r;
-    } on ApiException catch (e) {
-      if (!mounted) return;
-      setState(() => _busy = false);
-      toast(context, Api.errorText(e.code));
     } catch (e) {
       if (!mounted) return;
       setState(() => _busy = false);
-      toast(context, 'اتصال به سرور برقرار نیست');
+      toast(context, Api.friendly(e));
     }
   }
 
@@ -100,7 +99,8 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
           child: AnimatedBuilder(
             animation: _shake,
             builder: (_, child) => Transform.translate(offset: Offset(sin(_shake.value * pi * 6) * 10 * (1 - _shake.value), 0), child: child),
-            child: ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 120), children: [
+            child: ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 24), children: [
+              const OfflineBanner(margin: EdgeInsets.only(bottom: 10)),
               Text('۱. مقصر کیه؟', style: tDisplay(19)),
               const SizedBox(height: 8),
               GridView.count(
@@ -117,34 +117,42 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
               Text('فقط یه مدرک انتخاب کن: همونی که با حرفش جور درنمیاد.', style: tBody(13, color: K.textSoft)),
               const SizedBox(height: 8),
               for (final e in c.evidence) _evidenceTile(e),
-              if (_feedback != null) ...[
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: K.stamp.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: K.stamp)),
-                  child: Text(_feedback!, style: tBody(14, w: FontWeight.w700)),
-                ),
-              ],
             ]),
           ),
         ),
-        bottomSheet: Container(
-          width: double.infinity,
-          color: K.night2,
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+        // A real bottom bar (not a sheet over the list): the list ends above it,
+        // and it stays clear of the phone's navigation / gesture bar.
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(color: K.night2, border: Border(top: BorderSide(color: K.night3))),
           child: SafeArea(
             top: false,
-            child: StampButton(
-              label: _busy
-                  ? '...'
-                  : (_suspect == null
-                      ? 'یه مظنون انتخاب کن'
-                      : _evidence == null
-                          ? 'یه مدرک انتخاب کن'
-                          : 'متهم می‌کنم: ${c.suspect(_suspect!).name}'),
-              icon: Icons.gavel_rounded,
-              onTap: _busy || _suspect == null || _evidence == null ? null : _submit,
+            minimum: const EdgeInsets.only(bottom: 12),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                // the verdict of a wrong try sits right above the button, never hidden under it
+                if (_feedback != null) ...[
+                  Container(
+                    constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.25),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(color: K.stamp.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: K.stamp)),
+                    child: SingleChildScrollView(child: Text(_feedback!, style: tBody(14, w: FontWeight.w700))),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+                StampButton(
+                  label: _busy
+                      ? '...'
+                      : (_suspect == null
+                          ? 'یه مظنون انتخاب کن'
+                          : _evidence == null
+                              ? 'یه مدرک انتخاب کن'
+                              : 'متهم می‌کنم: ${c.suspect(_suspect!).name}'),
+                  icon: Icons.gavel_rounded,
+                  onTap: _busy || _suspect == null || _evidence == null ? null : _submit,
+                ),
+              ]),
             ),
           ),
         ),

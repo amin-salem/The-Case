@@ -6,6 +6,7 @@ import '../services/reminders.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
+import '../widgets/offline.dart';
 import 'dialogs.dart';
 
 /// The detective's profile: portrait, name, stats, account safety, invites.
@@ -34,8 +35,10 @@ class _AccountScreenState extends State<AccountScreen> {
     super.dispose();
   }
 
+  /// Account actions all need the server.
   Future<void> _run(Future<void> Function() job) async {
     if (_busy) return;
+    if (!needOnline(context)) return;
     setState(() => _busy = true);
     try {
       await job();
@@ -54,6 +57,7 @@ class _AccountScreenState extends State<AccountScreen> {
       );
 
   Future<void> _editName() async {
+    if (!needOnline(context)) return;
     final c = TextEditingController(text: Api.i.profile?.nickname ?? '');
     final name = await showDialog<String>(
       context: context,
@@ -72,10 +76,17 @@ class _AccountScreenState extends State<AccountScreen> {
     if (name == null || name.isEmpty || !mounted) return;
     try {
       await Api.i.updateProfile(nickname: name);
-    } on ApiException catch (e) {
-      if (mounted) toast(context, Api.errorText(e.code));
-    } catch (_) {
-      if (mounted) toast(context, 'اتصال به سرور برقرار نیست');
+    } catch (e) {
+      if (mounted) toast(context, Api.friendly(e));
+    }
+  }
+
+  Future<void> _setAvatar(int i) async {
+    if (!needOnline(context)) return;
+    try {
+      await Api.i.updateProfile(avatar: i);
+    } catch (e) {
+      if (mounted) toast(context, Api.friendly(e));
     }
   }
 
@@ -88,8 +99,20 @@ class _AccountScreenState extends State<AccountScreen> {
           listenable: Api.i,
           builder: (context, _) {
             final p = Api.i.profile;
-            if (p == null) return const SizedBox.shrink();
-            return ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 32), children: [
+            if (p == null) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(Api.i.online ? Api.genericText : Api.needOnlineText,
+                      textAlign: TextAlign.center, style: tBody(15, color: K.textSoft)),
+                ),
+              );
+            }
+            // SafeArea: the last box must not end up under the phone's navigation bar
+            return SafeArea(
+              top: false,
+              child: ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 32), children: [
+              const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
               Row(children: [
                 Container(
                   width: 92,
@@ -120,7 +143,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   itemCount: kDetectives.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 8),
                   itemBuilder: (_, i) => GestureDetector(
-                    onTap: () => Api.i.updateProfile(avatar: i).catchError((_) {}),
+                    onTap: () => _setAvatar(i),
                     child: Container(
                       width: 64,
                       decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12),
@@ -160,7 +183,8 @@ class _AccountScreenState extends State<AccountScreen> {
               _inviteBox(p.inviteCode, p.referred),
               const SizedBox(height: 14),
               _transferBox(),
-            ]);
+              ]),
+            );
           },
         ),
       ),
@@ -243,7 +267,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ? null
               : () => _run(() async {
                     final ok = await confirm(context, 'مطمئنی؟', 'این گوشی وارد حساب قبلیت می‌شه.', 'وارد شو');
-                    if (!ok) return;
+                    if (!ok || !mounted) return;
                     final err = await Api.i.loginWithEmail(_loginEmail.text.trim(), _loginPass.text);
                     if (mounted) toast(context, err ?? 'خوش برگشتی، کارآگاه!');
                   }),
@@ -304,10 +328,10 @@ class _AccountScreenState extends State<AccountScreen> {
             onTap: _busy
                 ? null
                 : () => _run(() async {
-                      final c = await Api.i.makeTransferCode();
+                      final (c, err) = await Api.i.makeTransferCode();
                       if (!mounted) return;
                       if (c == null) {
-                        toast(context, 'اتصال به سرور برقرار نیست');
+                        toast(context, err ?? Api.genericText);
                       } else {
                         setState(() => _myCode = c);
                       }
@@ -329,7 +353,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   ? null
                   : () => _run(() async {
                         final ok = await confirm(context, 'مطمئنی؟', 'این گوشی وارد حساب گوشی قدیمی می‌شه.', 'انتقال');
-                        if (!ok) return;
+                        if (!ok || !mounted) return;
                         final err = await Api.i.useTransferCode(_transfer.text);
                         if (mounted) toast(context, err ?? 'حساب منتقل شد!');
                       }),

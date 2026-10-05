@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
@@ -7,6 +9,7 @@ import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
+import '../widgets/offline.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'accuse_screen.dart';
@@ -58,7 +61,41 @@ class _CaseScreenState extends State<CaseScreen> {
   @override
   void initState() {
     super.initState();
+    _loadNotes();
     _load();
+  }
+
+  /// The player's marks and pins stay on the phone, so leaving the case (or having
+  /// no internet) never loses them.
+  void _loadNotes() {
+    try {
+      final n = Api.i.loadNotes(widget.caseId);
+      final marks = n['marks'];
+      if (marks is Map) {
+        final byName = SuspectMark.values.asNameMap();
+        for (final e in marks.entries) {
+          final m = byName['${e.value}'];
+          if (m != null) _marks['${e.key}'] = m;
+        }
+      }
+      final pins = n['pins'];
+      if (pins is List) _pins.addAll([for (final p in pins) '$p']);
+    } catch (e) {
+      debugPrint('notes: $e');
+    }
+  }
+
+  void _saveNotes() {
+    Api.i.saveNotes(widget.caseId, {
+      'marks': {for (final e in _marks.entries) if (e.value != SuspectMark.none) e.key: e.value.name},
+      'pins': _pins.toList(),
+    });
+  }
+
+  Future<void> _retry() async {
+    setState(() => _error = null);
+    if (!Api.i.online) await Api.i.reconnect();
+    await _load();
   }
 
   Future<void> _load() async {
@@ -76,10 +113,14 @@ class _CaseScreenState extends State<CaseScreen> {
       } else {
         Sfx.i.ambient('amb_${c.scene}');
       }
-    } on ApiException catch (e) {
-      if (mounted) setState(() => _error = Api.errorText(e.code));
     } catch (e) {
-      if (mounted) setState(() => _error = Api.describe(e));
+      if (!mounted) return;
+      if (_case != null) {
+        // already showing the case: keep it, just say what happened
+        toast(context, Api.friendly(e));
+      } else {
+        setState(() => _error = Api.isNetworkFail(e) && !Api.i.online ? Api.notSavedText : Api.friendly(e));
+      }
     }
   }
 
@@ -87,6 +128,7 @@ class _CaseScreenState extends State<CaseScreen> {
     final p = _progress!;
     final cost = p.nextHintCost;
     if (cost == null) return;
+    if (!needOnline(context)) return;
     final vipFree = (Api.i.profile?.vip ?? false) && p.hints.isEmpty;
     final ok = await confirm(context, 'سرنخ ${fa(p.hints.length + 1)} از ${fa(p.hintCosts.length)}',
         vipFree ? 'اولین سرنخ برای VIP رایگانه.' : 'این سرنخ ${fa(cost)} سکه هزینه داره. ستاره‌هات هم ممکنه کمتر بشه.',
@@ -118,14 +160,15 @@ class _CaseScreenState extends State<CaseScreen> {
       if (e.code == 'not_enough_coins') {
         await showNeedCoins(context, e.need);
       } else {
-        toast(context, Api.errorText(e.code));
+        toast(context, Api.friendly(e));
       }
     } catch (e) {
-      if (mounted) toast(context, 'اتصال به سرور برقرار نیست');
+      if (mounted) toast(context, Api.friendly(e));
     }
   }
 
   Future<void> _accuse() async {
+    if (!needOnline(context)) return;
     final r = await Navigator.of(context).push<AccuseResult>(
         MaterialPageRoute(builder: (_) => AccuseScreen(caseData: _case!, progress: _progress!, marks: _marks)));
     if (r == null || !mounted) return;
@@ -142,17 +185,21 @@ class _CaseScreenState extends State<CaseScreen> {
     if (c == null) {
       return Scaffold(
         appBar: AppBar(backgroundColor: K.night),
-        body: Center(
-          child: _error == null
-              ? const CircularProgressIndicator(color: K.brass)
-              : Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    Text(_error!, textAlign: TextAlign.center, style: tBody(15)),
-                    const SizedBox(height: 12),
-                    StampButton(label: 'دوباره', onTap: _load),
-                  ]),
-                ),
+        body: SafeArea(
+          child: Center(
+            child: _error == null
+                ? const CircularProgressIndicator(color: K.brass)
+                : SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      Icon(Api.i.online ? Icons.cloud_off_rounded : Icons.wifi_off_rounded, color: K.textSoft, size: 40),
+                      const SizedBox(height: 10),
+                      Text(_error!, textAlign: TextAlign.center, style: tBody(15)),
+                      const SizedBox(height: 14),
+                      StampButton(label: 'دوباره امتحان کن', icon: Icons.refresh_rounded, onTap: _retry),
+                    ]),
+                  ),
+          ),
         ),
       );
     }
@@ -167,41 +214,48 @@ class _CaseScreenState extends State<CaseScreen> {
       body: Stack(children: [
         Positioned.fill(child: AnimatedScene(scene: c.scene, height: double.infinity, dim: 0.55)),
         SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_rounded, color: K.text)),
-                  const SoundButton(),
-                ]),
-              ),
-              const Spacer(),
-              StampIn(child: Align(alignment: Alignment.centerRight, child: StampMark('پرونده‌ی شماره‌ی ${fa(c.number)}', size: 22))),
-              const SizedBox(height: 14),
-              FadeSlideIn(delay: const Duration(milliseconds: 300), child: Text(c.title, style: tDisplay(32))),
-              FadeSlideIn(
-                delay: const Duration(milliseconds: 500),
-                child: Row(children: [
-                  const Icon(Icons.place_rounded, size: 16, color: K.brass),
-                  const SizedBox(width: 4),
-                  Expanded(child: Text(c.location, style: tBody(14, color: K.textSoft))),
-                  Difficulty(c.difficulty, color: K.brass),
-                ]),
-              ),
-              const SizedBox(height: 16),
-              FadeSlideIn(
-                delay: const Duration(milliseconds: 800),
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(12)),
-                  child: Typewriter(c.intro, style: tBody(16.5)),
+          child: LayoutBuilder(
+            builder: (context, box) => SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: max(0.0, box.maxHeight - 40)),
+                child: IntrinsicHeight(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(mainAxisSize: MainAxisSize.min, children: [
+                          IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_rounded, color: K.text)),
+                          const SoundButton(),
+                        ]),
+                      ),
+                      const Spacer(),
+                      StampIn(child: Align(alignment: Alignment.centerRight, child: StampMark('پرونده‌ی شماره‌ی ${fa(c.number)}', size: 22))),
+                      const SizedBox(height: 14),
+                      FadeSlideIn(delay: const Duration(milliseconds: 300), child: Text(c.title, style: tDisplay(32))),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 500),
+                        child: Row(children: [
+                          const Icon(Icons.place_rounded, size: 16, color: K.brass),
+                          const SizedBox(width: 4),
+                          Expanded(child: Text(c.location, style: tBody(14, color: K.textSoft))),
+                          Difficulty(c.difficulty, color: K.brass),
+                        ]),
+                      ),
+                      const SizedBox(height: 16),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 800),
+                        child: Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), borderRadius: BorderRadius.circular(12)),
+                          child: Typewriter(c.intro, style: tBody(16.5)),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, onTap: () => setState(() => _intro = false)),
+                  ]),
                 ),
               ),
-              const SizedBox(height: 18),
-              StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, onTap: () => setState(() => _intro = false)),
-            ]),
+            ),
           ),
         ),
       ]),
@@ -215,10 +269,14 @@ class _CaseScreenState extends State<CaseScreen> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        // a real bottom bar: the body ends above it, and it keeps clear of the
+        // phone's navigation / gesture bar
+        bottomNavigationBar: p.finished ? null : _bottomBar(p),
         body: GrainBackground(
           child: SafeArea(
             child: Column(children: [
               _header(c, p),
+              const OfflineBanner(margin: EdgeInsets.fromLTRB(12, 8, 12, 0)),
               TabBar(
                 indicatorColor: K.stamp,
                 labelColor: K.text,
@@ -234,7 +292,6 @@ class _CaseScreenState extends State<CaseScreen> {
               Expanded(
                 child: TabBarView(children: [_storyTab(c, p), _evidenceTab(c), _suspectsTab(c)]),
               ),
-              if (!p.finished) _bottomBar(p),
             ]),
           ),
         ),
@@ -243,7 +300,10 @@ class _CaseScreenState extends State<CaseScreen> {
   }
 
   Widget _header(CaseData c, Progress p) {
-    return SizedBox(
+    // fixed-height header: a very large system font is capped here so it never overflows
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.2,
+      child: SizedBox(
       height: 120,
       child: Stack(children: [
         Positioned.fill(child: AnimatedScene(scene: c.scene, height: 120, dim: 0.5)),
@@ -258,7 +318,11 @@ class _CaseScreenState extends State<CaseScreen> {
                 Text(c.location, style: tBody(12, color: K.textSoft), maxLines: 1, overflow: TextOverflow.ellipsis),
                 const Spacer(),
                 if (p.solved)
-                  Row(children: [Stars(count: p.stars, size: 18), const SizedBox(width: 6), Text('حل شد', style: tBody(13, color: K.brass, w: FontWeight.w900))])
+                  Row(children: [
+                    Stars(count: p.stars, size: 18),
+                    const SizedBox(width: 6),
+                    Flexible(child: Text('حل شد', maxLines: 1, style: tBody(13, color: K.brass, w: FontWeight.w900))),
+                  ])
                 else if (p.failed)
                   Text('این پرونده رو باختی', style: tBody(13, color: K.stamp, w: FontWeight.w900))
                 else
@@ -269,7 +333,10 @@ class _CaseScreenState extends State<CaseScreen> {
                         child: Icon(Icons.gavel_rounded, size: 16, color: i < p.attemptsLeft ? K.stamp : K.textSoft.withValues(alpha: 0.3)),
                       ),
                     const SizedBox(width: 6),
-                    Text('${fa(p.attemptsLeft)} فرصت متهم کردن', style: tBody(12, color: K.textSoft)),
+                    Flexible(
+                      child: Text('${fa(p.attemptsLeft)} فرصت متهم کردن',
+                          maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.textSoft)),
+                    ),
                   ]),
               ]),
             ),
@@ -278,6 +345,7 @@ class _CaseScreenState extends State<CaseScreen> {
           ]),
         ),
       ]),
+      ),
     );
   }
 
@@ -353,6 +421,7 @@ class _CaseScreenState extends State<CaseScreen> {
             onTap: () {
               Sfx.i.play('paper', volume: 0.6);
               setState(() => pinned ? _pins.remove(e.id) : _pins.add(e.id));
+              _saveNotes();
             },
             child: AnimatedRotation(
             turns: pinned ? 0 : ((i % 3) - 1) * 0.0015,
@@ -375,6 +444,7 @@ class _CaseScreenState extends State<CaseScreen> {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Row(children: [
                       Expanded(child: Text(e.title, style: tBody(15, color: K.ink, w: FontWeight.w900))),
+                      const SizedBox(width: 6),
                       Text(evidenceType(e.type), style: tBody(11, color: K.inkSoft)),
                     ]),
                     const SizedBox(height: 4),
@@ -408,7 +478,10 @@ class _CaseScreenState extends State<CaseScreen> {
           child: GestureDetector(
             onTap: () async {
               final m = await showSuspect(context, s, mark);
-              if (m != null && mounted) setState(() => _marks[s.id] = m);
+              if (m != null && mounted) {
+                setState(() => _marks[s.id] = m);
+                _saveNotes();
+              }
             },
             child: Container(
               margin: const EdgeInsets.only(bottom: 10),
@@ -450,21 +523,27 @@ class _CaseScreenState extends State<CaseScreen> {
   Widget _bottomBar(Progress p) {
     final cost = p.nextHintCost;
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
       decoration: const BoxDecoration(color: K.night2, border: Border(top: BorderSide(color: K.night3))),
-      child: Row(children: [
-        Expanded(
-          flex: 2,
-          child: StampButton(
-            label: cost == null ? 'سرنخی نمونده' : 'سرنخ · ${fa(cost)}',
-            icon: Icons.lightbulb_rounded,
-            color: K.night3,
-            onTap: cost == null ? null : _hint,
-          ),
+      child: SafeArea(
+        top: false,
+        minimum: const EdgeInsets.only(bottom: 12),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
+          child: Row(children: [
+              Expanded(
+                flex: 2,
+                child: StampButton(
+                  label: cost == null ? 'سرنخی نمونده' : 'سرنخ · ${fa(cost)}',
+                  icon: Icons.lightbulb_rounded,
+                  color: K.night3,
+                  onTap: cost == null ? null : _hint,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(flex: 3, child: StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
+          ]),
         ),
-        const SizedBox(width: 10),
-        Expanded(flex: 3, child: StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
-      ]),
+      ),
     );
   }
 }

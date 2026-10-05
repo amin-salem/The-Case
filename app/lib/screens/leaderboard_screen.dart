@@ -25,7 +25,11 @@ class LeaderboardScreen extends StatelessWidget {
           ),
         ),
         body: const GrainBackground(
-          child: TabBarView(children: [_Board('daily'), _Board('weekly'), _Board('all')]),
+          // SafeArea: the player's own row at the bottom stays above the phone's navigation bar
+          child: SafeArea(
+            top: false,
+            child: TabBarView(children: [_Board('daily'), _Board('weekly'), _Board('all')]),
+          ),
         ),
       ),
     );
@@ -62,14 +66,17 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
           return const Center(child: CircularProgressIndicator(color: K.brass));
         }
         if (snap.hasError) {
-          final e = snap.error;
-          final msg = e is ApiException && e.code == 'no_case' ? 'هنوز پرونده‌ای باز نشده' : 'اتصال به سرور برقرار نشد';
+          final e = snap.error!;
+          final msg = !Api.i.online && Api.isNetworkFail(e) ? Api.needOnlineText : Api.friendly(e);
           return Center(
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Text(msg, style: tBody(15)),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Text(msg, textAlign: TextAlign.center, style: tBody(15)),
               const SizedBox(height: 10),
               StampButton(label: 'دوباره', onTap: () => setState(() => _f = Api.i.leaderboard(widget.period))),
-            ]),
+              ]),
+            ),
           );
         }
         final lb = snap.data!;
@@ -81,7 +88,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
             ),
           Expanded(
             child: lb.top.isEmpty
-                ? Center(child: Text('هنوز کسی حل نکرده. اولین نفر باش!', style: tBody(15)))
+                ? Center(child: Text('هنوز کسی حل نکرده. اولین نفر باش!', textAlign: TextAlign.center, style: tBody(15)))
                 : ListView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                     itemCount: lb.top.length,

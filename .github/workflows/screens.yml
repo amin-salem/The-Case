@@ -1,0 +1,91 @@
+name: Screens
+
+# Renders the app's real screens to PNGs (app/test/screenshots) and publishes them
+# on the branch `screens-out` (one fresh commit each run: the PNGs + index.md + report.txt).
+on:
+  push:
+    branches: [screens]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: screens
+  cancel-in-progress: true
+
+jobs:
+  screens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Get packages
+        working-directory: app
+        run: flutter pub get
+      - name: Render screenshots
+        id: render
+        continue-on-error: true
+        working-directory: app
+        run: |
+          set -o pipefail
+          flutter --version 2>&1 | tee ../screens.log
+          flutter test test/screenshots --dart-define=SCREENSHOTS=1 -r expanded 2>&1 | tee -a ../screens.log
+      - name: Report screenshot failures
+        if: steps.render.outcome == 'failure'
+        run: |
+          {
+            grep -E '^(FAIL|screens:|===== screenshots)' app/build/screens/report.txt screens.log 2>/dev/null | tail -c 2500 || true
+            echo '----- log tail -----'
+            tail -c 5000 screens.log
+          } > annotation.txt
+          echo "::error title=screens::$(sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g' annotation.txt)"
+      - name: Publish to screens-out
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          shopt -s nullglob
+          pngs=(app/build/screens/*.png)
+          if [ ${#pngs[@]} -eq 0 ]; then
+            echo "::error title=screens::no screenshots were produced"
+            exit 1
+          fi
+          out="$(mktemp -d)"
+          cp "${pngs[@]}" "$out/"
+          [ -f app/build/screens/report.txt ] && cp app/build/screens/report.txt "$out/"
+          tail -c 200000 screens.log > "$out/test.log" || true
+          cd "$out"
+          {
+            echo "# Screens"
+            echo
+            echo "Rendered from \`${GITHUB_SHA}\` (${GITHUB_REF_NAME}) on $(date -u '+%Y-%m-%d %H:%M UTC'), run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}."
+            echo
+            if [ -f report.txt ]; then
+              echo '```'
+              cat report.txt
+              echo '```'
+              echo
+            fi
+            for f in *.png; do
+              echo "- [${f%.png}](${f})"
+            done
+            echo
+            for f in *.png; do
+              echo "## ${f%.png}"
+              echo
+              echo "<img src=\"${f}\" width=\"390\">"
+              echo
+            done
+          } > index.md
+          git init -q -b screens-out
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Screens from ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" screens-out
+      - name: Fail if some screenshots failed
+        if: steps.render.outcome == 'failure'
+        run: exit 1
