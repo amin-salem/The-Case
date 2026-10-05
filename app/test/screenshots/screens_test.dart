@@ -855,6 +855,11 @@ void main() {
     return all[min(i, all.length - 1)];
   }
 
+  shot('portrait_sheet', () => _Host(open: (c) => showSuspect(c, _full('c008').suspects[4], SuspectMark.none), background: _sceneBackground('hospital')),
+      wait: const Duration(milliseconds: 1800));
+  shot('portrait_case_suspects', () => const CaseScreen(caseId: 'c008'),
+      before: () => _progress['c008'] = {..._freshProgress(), 'attempts': 1, 'attempts_left': 2},
+      then: (t) => _tap(t, find.byType(Tab).at(2), wait: const Duration(milliseconds: 1500)));
   shot('suspect_sheet', () => _Host(open: (c) => showSuspect(c, suspect(0), SuspectMark.none), background: _sceneBackground('harbor')),
       wait: const Duration(milliseconds: 1800));
   shot('suspect_sheet_question',

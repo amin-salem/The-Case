@@ -48,3 +48,15 @@ def test_proof_is_not_everything():
     """A player must have to choose: at most half of the evidence may count as proof."""
     for c in content.all_cases():
         assert len(c.proof) <= max(1, len(c.data["evidence"]) // 2), c.id
+
+
+def test_portraits_exist_in_the_app():
+    """A suspect may name a painted portrait; the file must be shipped in the app."""
+    from pathlib import Path
+
+    folder = Path(__file__).resolve().parents[2] / "app" / "assets" / "portraits"
+    for c in content.all_cases():
+        for s in c.data["suspects"]:
+            name = s["avatar"].get("portrait")
+            if name:
+                assert (folder / f"{name}.webp").exists(), f"{c.id}/{s['id']}: no portrait {name}"

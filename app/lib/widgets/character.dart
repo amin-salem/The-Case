@@ -68,6 +68,7 @@ class _AnimatedSuspectState extends State<AnimatedSuspect> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
+    if (kPortraits.contains(widget.avatar.portrait)) return _portrait();
     final blink = _blinkStart >= 0 ? sin((_clock - _blinkStart) / 0.16 * pi) : 0.0;
     return CustomPaint(
       size: Size(widget.size, widget.size * 1.1),
@@ -77,7 +78,37 @@ class _AnimatedSuspectState extends State<AnimatedSuspect> with SingleTickerProv
           gaze: widget.mood == Mood.nervous ? sin(_clock * 1.7) * 2.2 : sin(_clock * 0.5) * 0.8),
     );
   }
+
+  /// A painted portrait that breathes slowly; nervous suspects sway, the caught culprit goes dark.
+  Widget _portrait() {
+    final w = widget.size, h = widget.size * 1.1;
+    final m = widget.mood;
+    final dx = m == Mood.nervous ? sin(_clock * 1.7) * w * 0.012 : 0.0;
+    return SizedBox(
+      width: w,
+      height: h,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(w * 0.12),
+        child: Stack(fit: StackFit.expand, children: [
+          Transform.translate(
+            offset: Offset(dx, 0),
+            child: Transform.scale(
+              scale: 1.04 + 0.012 * sin(_t * 2 * pi) + (widget.talking ? 0.006 * sin(_clock * 9) : 0),
+              child: Image.asset('assets/portraits/${widget.avatar.portrait}.webp',
+                  fit: BoxFit.cover, alignment: const Alignment(0, -0.4), filterQuality: FilterQuality.medium),
+            ),
+          ),
+          if (m == Mood.sad) const ColoredBox(color: Color(0x66000000)),
+          if (m == Mood.nervous) const ColoredBox(color: Color(0x14C0392B)),
+        ]),
+      ),
+    );
+  }
 }
+
+/// Painted portraits shipped with the app (assets/portraits). A suspect whose avatar names one of
+/// these is shown with it; everyone else is drawn by CharacterPainter.
+const Set<String> kPortraits = {'m_mid_business', 'm_young_worker', 'f_young_nurse', 'f_old_grandma'};
 
 /// Draws a character in a 200 x 220 box, scaled to the widget size.
 class CharacterPainter extends CustomPainter {
