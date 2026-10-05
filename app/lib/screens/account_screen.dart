@@ -11,6 +11,7 @@ import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/offline.dart';
 import '../widgets/rank.dart';
+import 'achievements_screen.dart';
 import 'dialogs.dart';
 
 /// The detective's profile: portrait, name, stats, account safety, invites.
@@ -165,6 +166,14 @@ class _AccountScreenState extends State<AccountScreen> {
               ]),
               const SizedBox(height: 14),
               RankLadder(profile: p),
+              const SizedBox(height: 10),
+              StampButton(
+                label: p.achievements > 0 ? 'دستاوردها · ${fa(p.achievements)} تا گرفتی' : 'دستاوردها',
+                icon: Icons.military_tech_rounded,
+                color: K.night3,
+                height: 48,
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AchievementsScreen())),
+              ),
               const SizedBox(height: 14),
               Text('نشان‌ها', style: tBody(14, w: FontWeight.w700)),
               const SizedBox(height: 6),

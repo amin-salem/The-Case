@@ -24,6 +24,7 @@ import 'package:the_case/main.dart' show StartScreen;
 import 'package:the_case/models/models.dart';
 import 'package:the_case/models/progress.dart';
 import 'package:the_case/screens/accuse_screen.dart';
+import 'package:the_case/screens/achievements_screen.dart';
 import 'package:the_case/screens/account_screen.dart';
 import 'package:the_case/screens/case_screen.dart';
 import 'package:the_case/screens/dialogs.dart';
@@ -112,6 +113,7 @@ final Map<String, dynamic> _profileJson = {
   'rank_xp': 1300,
   'next_rank_xp': 2500,
   'next_rank_title': 'بازرس',
+  'achievements': 4,
 };
 
 final Map<String, dynamic> _config = {
@@ -265,6 +267,28 @@ Map<String, dynamic> _riddleItem(int i, {bool answered = false, bool correct = f
   };
 }
 
+Map<String, dynamic> _achievements() {
+  const rows = [
+    ('first_case', 'اولین پرونده', 'اولین پرونده‌ات را حل کن', 'cases', 1, 1, 50, 20),
+    ('cases_10', 'کارآگاه پرکار', '۱۰ پرونده حل کن', 'cases', 10, 10, 100, 50),
+    ('cases_25', 'پرونده‌خوار', '۲۵ پرونده حل کن', 'cases', 25, 27, 200, 100),
+    ('cases_50', 'بایگانی زنده', '۵۰ پرونده حل کن', 'cases', 50, 27, 400, 200),
+    ('stars_10', 'دقت بالا', '۱۰ پرونده را با ۳ ستاره حل کن', 'skill', 10, 7, 200, 100),
+    ('fast_2', 'برق‌آسا', 'یک پرونده را زیر ۲ دقیقه حل کن', 'skill', 1, 0, 150, 80),
+    ('streak_7', 'یک هفته‌ی کامل', '۷ شب پشت سر هم پرونده‌ی روز را حل کن', 'streak', 7, 12, 150, 80),
+    ('streak_30', 'یک ماه بی‌وقفه', '۳۰ شب پشت سر هم پرونده‌ی روز را حل کن', 'streak', 30, 12, 600, 300),
+    ('riddle_10', 'معماباز', '۱۰ معمای سریع را درست جواب بده', 'riddles', 10, 4, 80, 40),
+    ('chest_week', 'هفته‌ی مأموریت', '۷ روز پشت سر هم همه‌ی مأموریت‌ها را انجام بده', 'missions', 7, 3, 300, 150),
+    ('rank_inspector', 'نشان بازرسی', 'به درجه‌ی «بازرس» برس', 'rank', 4, 3, 200, 0),
+  ];
+  final items = [
+    for (final r in rows)
+      {'id': r.$1, 'title': r.$2, 'desc': r.$3, 'group': r.$4, 'target': r.$5, 'progress': min(r.$5, r.$6),
+        'earned': r.$6 >= r.$5, 'earned_at': r.$6 >= r.$5 ? 1790000000 : null, 'coins': r.$7, 'xp': r.$8},
+  ];
+  return {'earned': items.where((x) => x['earned'] == true).length, 'total': 33, 'items': items};
+}
+
 Map<String, dynamic> _missionsDay({bool done = false}) => {
       'day': '2026-10-06',
       'missions': [
@@ -315,6 +339,8 @@ Future<http.Response> _serve(http.Request req) async {
     ];
   } else if (path == '/v1/cases') {
     body = _casesList();
+  } else if (path == '/v1/achievements') {
+    body = _achievements();
   } else if (path == '/v1/missions') {
     body = _missionsDay();
   } else if (path == '/v1/missions/claim') {
@@ -849,6 +875,9 @@ void main() {
     await pick(t);
     await _tap(t, find.byIcon(Icons.gavel_rounded), wait: const Duration(milliseconds: 1200));
   });
+
+  // achievements
+  shot('achievements', () => const AchievementsScreen(), size: const Size(390, 1700), wait: const Duration(milliseconds: 1400));
 
   // daily missions
   shot('missions_done', () => Scaffold(

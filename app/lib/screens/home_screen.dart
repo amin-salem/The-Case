@@ -18,6 +18,7 @@ import '../widgets/rank.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'account_screen.dart';
+import 'achievements_screen.dart';
 import 'case_screen.dart';
 import 'dialogs.dart';
 import 'inbox_sheet.dart';
@@ -213,6 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       MissionsCard(day: _missions!, onChanged: (m) => setState(() => _missions = m)),
                       const SizedBox(height: 12),
                     ],
+                    _achievementsRow(),
+                    const SizedBox(height: 12),
                     _collection(),
                     const SizedBox(height: 10),
                     _nextCase(),
@@ -452,6 +455,25 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ]),
           ),
+          const Icon(Icons.chevron_left_rounded, color: K.brass),
+        ]),
+      ),
+    );
+  }
+
+  Widget _achievementsRow() {
+    final n = Api.i.profile?.achievements ?? 0;
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AchievementsScreen())),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12)),
+        child: Row(children: [
+          const Icon(Icons.military_tech_rounded, color: K.brass),
+          const SizedBox(width: 8),
+          Expanded(child: Text('دستاوردها', style: tBody(14, w: FontWeight.w700))),
+          Text(n > 0 ? '${fa(n)} تا گرفتی' : 'اولی رو بگیر!', style: tBody(13, color: K.brass, w: FontWeight.w700)),
           const Icon(Icons.chevron_left_rounded, color: K.brass),
         ]),
       ),
