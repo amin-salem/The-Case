@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.1 (app build 4, server 1.2.0)
+
+**App icon**
+- New icon: a fingerprint on paper, with a magnifier that shows the night sky and a clock at 9. Adaptive icon for
+  Android 8+ (fits round and rounded-square masks), a themed (monochrome) version for Android 13, a white
+  notification icon for the reminders, the logo on the start screen, and a 512×512 store icon.
+
 ## 1.2.0 (app build 3, server 1.2.0)
 
 **Coming back every night**

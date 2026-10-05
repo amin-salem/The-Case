@@ -1,3 +1,5 @@
+import 'dart:ui' show Color;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +29,7 @@ class Reminders extends ChangeNotifier {
       channelDescription: 'یادآوری پرونده‌ی تازه‌ی ساعت ۹ شب و زنجیره‌ی روزهای پشت سر هم',
       importance: Importance.high,
       priority: Priority.high,
+      color: Color(0xFFC0392B),
     ),
   );
 
@@ -35,9 +38,17 @@ class Reminders extends ChangeNotifier {
     try {
       _prefs = await SharedPreferences.getInstance();
       tzdata.initializeTimeZones();
-      await _plugin.initialize(
-        settings: const InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher')),
-      );
+      try {
+        // the white fingerprint-and-lens icon (copied into res/ by tools/patch_android.py)
+        await _plugin.initialize(
+          settings: const InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_stat_case')),
+        );
+      } catch (_) {
+        // a debug build made without patch_android.py has no ic_stat_case
+        await _plugin.initialize(
+          settings: const InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher')),
+        );
+      }
       _ready = true;
     } catch (e) {
       debugPrint('reminders init: $e');

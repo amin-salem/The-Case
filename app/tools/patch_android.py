@@ -6,10 +6,12 @@
 - AndroidManifest.xml: INTERNET (release builds can't go online without it), Persian app name,
   notification permissions and the receivers that bring scheduled reminders back after a reboot.
 - app/build.gradle(.kts): core library desugaring, which flutter_local_notifications needs.
+- res/: the launcher icon (adaptive + themed), the notification icon (tools/launcher/res, made by render.py).
 """
 from __future__ import annotations
 
 import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -75,11 +77,25 @@ def patch_gradle() -> None:
     path.write_text(s, encoding="utf-8")
 
 
+def copy_icons() -> None:
+    src = APP / "tools" / "launcher" / "res"
+    dst = APP / "android" / "app" / "src" / "main" / "res"
+    n = 0
+    for f in src.rglob("*"):
+        if f.is_file():
+            target = dst / f.relative_to(src)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(f, target)
+            n += 1
+    print(f"  res: {n} icon files copied")
+
+
 def main() -> None:
     if not MANIFEST.exists():
         sys.exit("Android project missing - run first:  flutter create --org ir.aminsalem --project-name the_case --platforms android .")
     patch_manifest()
     patch_gradle()
+    copy_icons()
     print("android/ is ready")
 
 

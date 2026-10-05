@@ -20,6 +20,16 @@ flutter run --dart-define=API_URL=http://192.168.1.5:8000
 python3 tools/make_sounds.py     # numpy + ffmpeg; rewrites assets/sounds/*.ogg
 ```
 
+## App icon
+The icon (fingerprint under a magnifier that shows the night and 9 o'clock) is drawn in `tools/launcher/src/*.svg`.
+```bash
+python3 tools/launcher/render.py   # needs Chrome/Chromium + Pillow; rewrites tools/launcher/res and assets/icon/logo.png
+python3 tools/patch_android.py     # copies the icons into android/ (build_release.sh does this too)
+```
+`tools/launcher/store/icon_512.png` is the 512×512 icon for the Cafe Bazaar listing.
+If you run `flutter run` without the build script, run `python3 tools/patch_android.py` once first so the
+launcher and notification icons are in place.
+
 ## Tests
 ```bash
 flutter analyze && flutter test   # includes: every server case parses, every scene paints, every sound exists
@@ -29,7 +39,8 @@ flutter analyze && flutter test   # includes: every server case parses, every sc
 ```bash
 ./tools/build_release.sh
 ```
-The script adds the internet permission and the Persian app name if they're missing. For signing your release, see `docs/LAUNCH.md` in the flying_slipper repo; it uses the same steps.
+The script runs `tools/patch_android.py` (internet and notification permissions, Persian app name, reminder
+receivers, Gradle desugaring, launcher and notification icons). For signing your release, see `docs/LAUNCH.md` in the flying_slipper repo; it uses the same steps.
 
 ## Code
 | Folder | What's in it |

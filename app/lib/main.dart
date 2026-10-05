@@ -114,6 +114,13 @@ class _StartScreenState extends State<StartScreen> {
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
+                FadeSlideIn(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(28),
+                    child: Image.asset('assets/icon/logo.png', width: 120, height: 120, filterQuality: FilterQuality.medium),
+                  ),
+                ),
+                const SizedBox(height: 18),
                 StampIn(delay: const Duration(milliseconds: 350), child: const StampMark('پرونده', size: 54)),
                 const SizedBox(height: 14),
                 Text('هر شب ساعت ۹، یه جنایت تازه', style: tBody(15, color: K.textSoft)),
