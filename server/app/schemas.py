@@ -113,6 +113,8 @@ class CasesOut(BaseModel):
     today: CaseRow | None
     next_case_at: int   # unix seconds
     archive: list[CaseRow]
+    weekly: CaseRow | None = None         # this weekend's big case, while it is open
+    weekly_closes_at: int | None = None
 
 
 class ProgressOut(BaseModel):

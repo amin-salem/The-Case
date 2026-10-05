@@ -97,7 +97,9 @@ CHEST_COINS = 80
 CHEST_BONUS_EVERY = 7            # every 7 days in a row with all missions done ...
 CHEST_BONUS = 150                # ... this many extra coins
 RIDDLE_FAST_SECONDS = 20
-TICK_MAX = 120                   # one time report from the app counts at most this many seconds         # "fast" riddle answer (missions, achievements)
+TICK_MAX = 120
+WEEKLY_REWARD = {3: 300, 2: 200, 1: 120}   # the weekend's big case pays more ...
+WEEKLY_XP = {3: 150, 2: 100, 1: 60}       # ... and gives more XP                   # one time report from the app counts at most this many seconds         # "fast" riddle answer (missions, achievements)
 
 
 # detective rank: XP from everything a player does

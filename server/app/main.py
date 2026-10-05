@@ -24,6 +24,7 @@ async def lifespan(app: FastAPI):
     s.check_production()
     content.all_cases()  # fail fast if a case file is broken
     riddles.all_riddles()
+    content.weekly_cases()
     if s.auto_create_tables:
         await db.create_tables()
     yield
