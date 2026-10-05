@@ -1,10 +1,16 @@
 name: Release APK
 
-# Run it from the Actions tab, or push a tag like  v1.1.0
+# Run it from the Actions tab, push a tag like v1.1.0, or push to the "release" branch.
+# Every run publishes a GitHub release named after the app version in pubspec.yaml,
+# with the APK and the live server check attached.
 on:
   workflow_dispatch:
   push:
     tags: ["v*"]
+    branches: [release]
+
+permissions:
+  contents: write
 
 jobs:
   live-server:
@@ -59,12 +65,43 @@ jobs:
           flutter analyze
           flutter test
           ./tools/build_release.sh
+      - name: Live server check (the result goes into the release notes)
+        continue-on-error: true
+        run: |
+          cd server
+          {
+            echo "## Live server check: https://thecase.liara.run"
+            echo '```'
+            curl -sS -m 25 https://thecase.liara.run/health || echo "(health failed)"
+            echo
+            python tools/smoke_test.py https://thecase.liara.run 2>&1 && echo "RESULT: ALL OK" || echo "RESULT: FAILED"
+            echo '```'
+          } | tee ../app/release/server_check.md
+      - name: Release notes
+        id: meta
+        run: |
+          V=$(grep '^version:' app/pubspec.yaml | awk '{print $2}')
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "tag=v${V%%+*}-build${V##*+}" >> "$GITHUB_OUTPUT"
+          {
+            echo "App $V, commit ${GITHUB_SHA::7}."
+            echo
+            echo "APK files:"
+            (cd app/release && sha256sum *.apk && ls -l *.apk)
+            echo
+            cat app/release/server_check.md 2>/dev/null || true
+          } > notes.md
       - uses: actions/upload-artifact@v4
         with:
           name: the_case-apk
-          path: app/release/*.apk
-      - name: Attach to the GitHub release (tags only)
-        if: startsWith(github.ref, 'refs/tags/v')
+          path: app/release/*
+      - name: Publish the GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          files: app/release/*.apk
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || steps.meta.outputs.tag }}
+          name: پرونده ${{ steps.meta.outputs.version }}
+          body_path: notes.md
+          target_commitish: ${{ github.sha }}
+          files: |
+            app/release/*.apk
+            app/release/server_check.md
