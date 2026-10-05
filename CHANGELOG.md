@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.9.1 (app build 14, server 1.9.1): first painted portraits
+
+- Suspects can have a painted portrait (assets/portraits, WebP ~25 KB each) shown with slow breathing motion;
+  nervous suspects sway, the caught culprit darkens. Others are still drawn in code.
+- First 4 portraits: c007 (customs inspector, crane operator) and c008 (cleaner, night nurse; the nurse is now
+  «فرشته عزیزی»).
+
 ## 1.9.0 (app build 13, server 1.9.0): bottom tabs and harder cases
 
 - Bottom navigation with five tabs: خانه, روزانه (quick riddles + missions), برترها, فروشگاه, پروفایل. The home page
