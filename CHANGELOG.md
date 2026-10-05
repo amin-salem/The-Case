@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.2 (app build 6)
+
+- **Plays without internet**: the app always opens. Opened cases, the case list, profile and notes are kept on the
+  phone; a calm banner shows when offline and it reconnects by itself. Things that need the server (accusing, hints,
+  shop, leaderboard, account) say so instead of failing.
+- **Only friendly messages**: no technical error text in the app any more.
+- **Buttons no longer hide under the phone's navigation bar** (the «متهم کن» bar, sheets, dialogs); the case intro
+  scrolls on small phones and with big system fonts.
+- Suspect marks and pinned evidence are saved per case.
+- CI renders 39 real screens to the `screens-out` branch for design review.
+
 ## 1.2.1 (app build 5, server 1.2.0)
 
 **App icon**
