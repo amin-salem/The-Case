@@ -192,7 +192,25 @@ class Profile {
         starsTotal = _i(j['stars_total']),
         loginReward = _i(j['login_reward']),
         loginDay = _i(j['login_day']),
-        streakFreezes = _i(j['streak_freezes']);
+        streakFreezes = _i(j['streak_freezes']),
+        xp = _i(j['xp']),
+        rank = _i(j['rank']),
+        rankTitle = _s(j['rank_title'], 'کارآگاه تازه‌کار'),
+        rankXp = _i(j['rank_xp']),
+        nextRankXp = j['next_rank_xp'] is num ? (j['next_rank_xp'] as num).toInt() : null,
+        nextRankTitle = j['next_rank_title'] as String?;
+
+  final int xp, rank, rankXp; // detective rank (index) and the XP where it starts
+  final int? nextRankXp; // null at the top rank
+  final String rankTitle;
+  final String? nextRankTitle;
+
+  /// How far along the way to the next rank (1 at the top).
+  double get rankProgress {
+    final next = nextRankXp;
+    if (next == null || next <= rankXp) return 1;
+    return ((xp - rankXp) / (next - rankXp)).clamp(0.0, 1.0);
+  }
 
   final String playerId, nickname, inviteCode;
   final int avatar, coins, streak, bestStreak, casesSolved, starsTotal, loginReward;
@@ -211,9 +229,10 @@ class LeaderRow {
         avatar = _i(j['avatar']),
         value = _i(j['value']),
         stars = _i(j['stars']),
-        me = _b(j['me']);
+        me = _b(j['me']),
+        rankTitle = _s(j['rank_title']);
   final int rank, avatar, value, stars;
-  final String nickname;
+  final String nickname, rankTitle;
   final bool me;
 }
 

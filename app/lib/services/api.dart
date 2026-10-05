@@ -82,6 +82,14 @@ class Api extends ChangeNotifier {
     if (j is! Map) return;
     final g = Gains(j.cast<String, dynamic>());
     if (!g.isEmpty) gains.value = g;
+    if (g.xp > 0 || g.achievements.isNotEmpty) unawaited(_refreshProfileQuietly()); // new XP / rank / coins
+  }
+
+  /// The detective ranks (XP needed, title), from the server's config.
+  List<(int, String)> get ranks {
+    final list = _economy['ranks'];
+    if (list is! List || list.isEmpty) return const [(0, 'کارآگاه تازه‌کار')];
+    return [for (final r in list) if (r is Map) ((r['xp'] as num?)?.toInt() ?? 0, '${r['title']}')];
   }
 
   /// Something from an earlier session is on the phone.
@@ -718,6 +726,7 @@ class Api extends ChangeNotifier {
         'already_answered' => 'به این معما قبلاً جواب دادی',
         'missions_not_done' => 'اول هر سه مأموریت امروز رو انجام بده',
         'already_claimed' => 'صندوقچه‌ی امروز رو باز کردی',
+        'no_suspect' => genericText,
         'not_today' => 'این معما مال امروز نیست؛ صفحه رو تازه کن',
         _ => genericText,
       };

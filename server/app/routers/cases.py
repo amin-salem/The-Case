@@ -200,7 +200,8 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         player.cases_solved += 1
         player.stars_total += p.stars
         add_coins(session, player, reward, f"solve:{c.id}")
-        gains = await progress.record(session, player, case_solved=1, daily_solved=int(today_case),
+        xp = eco.XP_CASE[p.stars] + (eco.XP_DAILY_BONUS if today_case else 0)
+        gains = await progress.record(session, player, xp=xp, case_solved=1, daily_solved=int(today_case),
                                       case_3stars=int(p.stars == 3), case_no_hint=int(p.hints == 0))
         await session.commit()
         rank = await _daily_rank(session, c.id, p.stars, p.seconds) if today_case else None
@@ -220,10 +221,11 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     result = "wrong_proof" if body.suspect == c.culprit else "wrong_suspect"
     if p.attempts >= eco.MAX_ATTEMPTS:
         p.failed, p.finished_at, p.day = True, utcnow(), today
+        gains = await progress.record(session, player, xp=eco.XP_CASE_FAILED, case_failed=1)
         await session.commit()
         return AccuseOut(result="failed", attempts_left=0, coins=player.coins, streak=player.streak,
                          explanation=explanation, culprit=c.culprit, proof=sorted(c.proof),
-                         progress=_progress_out(c, p), hints_used=p.hints)
+                         progress=_progress_out(c, p), hints_used=p.hints, gains=GainsOut(**gains.out()))
     await session.commit()
     return AccuseOut(result=result, attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
                      streak=player.streak, progress=_progress_out(c, p))

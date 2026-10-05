@@ -66,6 +66,12 @@ class ProfileOut(BaseModel):
     login_reward: int = 0  # coins given right now for today's first visit
     login_day: int = 0     # 1..7: today's place in the login calendar
     streak_freezes: int = 0
+    xp: int = 0
+    rank: int = 0             # index in the ranks list
+    rank_title: str = ""
+    rank_xp: int = 0          # XP where this rank starts
+    next_rank_xp: int | None = None   # None at the top rank
+    next_rank_title: str | None = None
 
 
 class ProfileIn(BaseModel):
@@ -175,6 +181,7 @@ class LeaderRow(BaseModel):
     value: int        # stars (weekly/all) or seconds (daily)
     stars: int = 0
     me: bool = False
+    rank_title: str = ""      # the player's detective rank
 
 
 class LeaderboardOut(BaseModel):

@@ -10,6 +10,7 @@ import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/offline.dart';
+import '../widgets/rank.dart';
 import 'dialogs.dart';
 
 /// The detective's profile: portrait, name, stats, account safety, invites.
@@ -162,6 +163,8 @@ class _AccountScreenState extends State<AccountScreen> {
                 _stat('ستاره', fa(p.starsTotal)),
                 _stat('بهترین رکورد پشت سر هم', '${fa(p.bestStreak)} روز'),
               ]),
+              const SizedBox(height: 14),
+              RankLadder(profile: p),
               const SizedBox(height: 14),
               Text('نشان‌ها', style: tBody(14, w: FontWeight.w700)),
               const SizedBox(height: 6),
