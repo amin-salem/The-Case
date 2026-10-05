@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0 (app build 11, server 1.7.0): detective rank
+
+- XP for everything: solved cases (25/40/60 by stars, +15 on its own day, 5 for a lost case), quick riddles
+  (10 right, 2 wrong) and the mission chest (40). Nine ranks from «کارآگاه تازه‌کار» to «افسانه» (15,000 XP).
+- Rank bar on the home page, the full ladder in the profile, rank titles next to names on every leaderboard,
+  and a banner on rank-up. Existing players start with XP for the stars they already have.
+
 ## 1.6.0 (app build 10, server 1.6.0): daily missions
 
 - Three daily missions for everyone (one about quick riddles, one about cases, one extra), picked from a pool of
