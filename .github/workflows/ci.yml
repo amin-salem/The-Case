@@ -36,8 +36,9 @@ jobs:
           COLUMNS = [("players", "login_day"), ("players", "streak_freezes"),
                      ("case_progress", "first_accused"), ("case_progress", "proof_misses"),
                      ("players", "last_chest_day"), ("players", "chest_streak"), ("players", "chests"),
-                     ("case_progress", "seen"), ("players", "xp")]
-          TABLES = ["riddle_answers", "mission_days"]
+                     ("case_progress", "seen"), ("players", "xp"),
+                     ("players", "stats")]
+          TABLES = ["riddle_answers", "mission_days", "player_achievements"]
           EOF
           python - <<'EOF'
           import sqlite3, sys

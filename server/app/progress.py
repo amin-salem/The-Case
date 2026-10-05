@@ -14,9 +14,10 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import content, missions
+from . import achievements, content, missions
 from . import economy as eco
-from .models import MissionDay, Player
+from .models import MissionDay, Player, PlayerAchievement
+from .util import add_coins
 
 
 @dataclass
@@ -25,6 +26,9 @@ class Gains:
     rank_up: str | None = None
     missions_done: list[str] = field(default_factory=list)
     achievements: list[dict] = field(default_factory=list)
+
+    def is_empty(self) -> bool:
+        return not (self.rank_up or self.missions_done or self.achievements)
 
     def out(self) -> dict:
         return {"xp": self.xp, "rank_up": self.rank_up, "missions_done": self.missions_done,
@@ -57,12 +61,47 @@ async def mission_day(session: AsyncSession, player: Player, day: str | None = N
 
 
 async def record(session: AsyncSession, player: Player, xp: int = 0, **events: int) -> Gains:
-    """xp: experience earned by this action (ranks). events: counters for missions."""
+    """xp: experience earned by this action (ranks). events: counters for missions and achievements."""
     gains = Gains()
     add_xp(player, xp, gains)
     events = {k: v for k, v in events.items() if v}
-    if not events:
-        return gains
+    if events:
+        stats = dict(player.stats or {})
+        for k, v in events.items():
+            stats[k] = stats.get(k, 0) + v
+        player.stats = stats  # a new dict, so the change is saved
+        await _missions(session, player, events, gains)
+    await check_achievements(session, player, gains)
+    return gains
+
+
+def set_stat_max(player: Player, key: str, value: int) -> None:
+    stats = dict(player.stats or {})
+    if value > stats.get(key, 0):
+        stats[key] = value
+        player.stats = stats
+
+
+async def check_achievements(session: AsyncSession, player: Player, gains: Gains) -> None:
+    """Grants every achievement whose target is reached (rewards can lead to more, e.g. a rank)."""
+    earned = set((await session.execute(select(PlayerAchievement.achievement_id).where(
+        PlayerAchievement.player_id == player.id))).scalars().all())
+    for _ in range(3):
+        new = [a for a in achievements.ALL if a.id not in earned and a.value(player) >= a.target]
+        if not new:
+            break
+        for a in new:
+            earned.add(a.id)
+            session.add(PlayerAchievement(player_id=player.id, achievement_id=a.id))
+            if a.coins:
+                add_coins(session, player, a.coins, f"achievement:{a.id}")
+            add_xp(player, a.xp, gains)
+            gains.achievements.append({"id": a.id, "title": a.title, "coins": a.coins})
+    if (player.stats or {}).get("achievements_earned") != len(earned):
+        player.stats = {**(player.stats or {}), "achievements_earned": len(earned)}  # shown on the profile
+
+
+async def _missions(session: AsyncSession, player: Player, events: dict[str, int], gains: Gains) -> None:
     md = await mission_day(session, player)
     before = dict(md.counts or {})
     after = dict(before)
@@ -72,4 +111,3 @@ async def record(session: AsyncSession, player: Player, xp: int = 0, **events: i
     for m in missions.for_day(md.day):
         if before.get(m.event, 0) < m.target <= after.get(m.event, 0):
             gains.missions_done.append(m.title)
-    return gains

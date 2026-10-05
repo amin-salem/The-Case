@@ -4,12 +4,12 @@ from datetime import date, timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import content
+from .. import content, progress
 from .. import economy as eco
 from ..config import get_settings
 from ..db import get_session
 from ..models import Player
-from ..schemas import CoinsOut, ProfileIn, ProfileOut
+from ..schemas import CoinsOut, GainsOut, ProfileIn, ProfileOut
 from ..security import current_player
 from ..util import add_coins, clean_nickname
 from .common import profile_out
@@ -29,8 +29,17 @@ async def me(player: Player = Depends(current_player), session: AsyncSession = D
         player.last_login_reward = today
         reward = eco.login_reward(player.login_day)
         add_coins(session, player, reward, f"daily_login:{player.login_day}")
+        gains = await progress.record(session, player, full_week=int(player.login_day == 7))
         await session.commit()
-    return profile_out(player, login_reward=reward)
+    else:
+        # achievements earned elsewhere (secured account, invites) or added later are granted here
+        gains = progress.Gains()
+        await progress.check_achievements(session, player, gains)
+        if gains.achievements:
+            await session.commit()
+    out = profile_out(player, login_reward=reward)
+    out.gains = GainsOut(**gains.out()) if not gains.is_empty() else None
+    return out
 
 
 @router.post("/me/delete")

@@ -72,6 +72,8 @@ class ProfileOut(BaseModel):
     rank_xp: int = 0          # XP where this rank starts
     next_rank_xp: int | None = None   # None at the top rank
     next_rank_title: str | None = None
+    achievements: int = 0             # earned so far
+    gains: "GainsOut | None" = None   # earned right now (on /me: login-calendar week, late achievements)
 
 
 class ProfileIn(BaseModel):
@@ -341,5 +343,26 @@ class SeenOut(BaseModel):
     gains: GainsOut = GainsOut()
 
 
+ProfileOut.model_rebuild()
 AccuseOut.model_rebuild()
 HintOut.model_rebuild()
+
+
+# --- achievements ------------------------------------------------------------------------
+class AchievementRow(BaseModel):
+    id: str
+    title: str
+    desc: str
+    group: str
+    target: int
+    progress: int
+    earned: bool
+    earned_at: int | None = None
+    coins: int
+    xp: int
+
+
+class AchievementsOut(BaseModel):
+    earned: int
+    total: int
+    items: list[AchievementRow]
