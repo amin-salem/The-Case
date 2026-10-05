@@ -75,6 +75,15 @@ class Api extends ChangeNotifier {
 
   int get coins => profile?.coins ?? 0;
 
+  /// What the last action earned (a finished mission, a new rank, achievements); the app shows banners.
+  final ValueNotifier<Gains?> gains = ValueNotifier(null);
+
+  void _emitGains(Object? j) {
+    if (j is! Map) return;
+    final g = Gains(j.cast<String, dynamic>());
+    if (!g.isEmpty) gains.value = g;
+  }
+
   /// Something from an earlier session is on the phone.
   bool get hasCache => profile != null || _p.containsKey(_kCases);
 
@@ -302,6 +311,7 @@ class Api extends ChangeNotifier {
   static const _kMe = 'c_me';
   static const _kCases = 'c_cases';
   static const _kRiddles = 'c_riddles';
+  static const _kMissions = 'c_missions';
   static const _kCasePrefix = 'c_case_';
   static const _kNotesPrefix = 'notes_';
 
@@ -327,7 +337,7 @@ class Api extends ChangeNotifier {
   /// Another account's data must not show up after a login on this phone.
   Future<void> _clearCache() async {
     for (final k in _p.getKeys().toList()) {
-      if (k == _kMe || k == _kCases || k == _kRiddles || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix)) {
+      if (k == _kMe || k == _kCases || k == _kRiddles || k == _kMissions || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix)) {
         await _p.remove(k);
       }
     }
@@ -488,6 +498,7 @@ class Api extends ChangeNotifier {
   Future<(String, Progress)> buyHint(String id) async {
     final j = (await _call('POST', '/v1/cases/$id/hint') as Map).cast<String, dynamic>();
     _setCoins(j['coins'] as int);
+    _emitGains(j['gains']);
     await _saveProgress(id, j['progress']);
     return (j['hint'] as String, Progress((j['progress'] as Map).cast<String, dynamic>()));
   }
@@ -497,6 +508,7 @@ class Api extends ChangeNotifier {
             as Map)
         .cast<String, dynamic>();
     final r = AccuseResult(j);
+    _emitGains(j['gains']);
     await _saveProgress(caseId, j['progress']);
     if (r.result == 'solved') {
       await _refreshProfileQuietly();
@@ -614,6 +626,7 @@ class Api extends ChangeNotifier {
   Future<RiddleItem> unlockRiddle(String id) async {
     final j = (await _call('POST', '/v1/riddles/$id/unlock') as Map).cast<String, dynamic>();
     _setCoins(j['coins'] as int);
+    _emitGains(j['gains']);
     return RiddleItem((j['item'] as Map).cast<String, dynamic>());
   }
 
@@ -623,7 +636,35 @@ class Api extends ChangeNotifier {
         .cast<String, dynamic>();
     final r = RiddleResult(j);
     _setCoins(r.coins);
+    _emitGains(j['gains']);
     return r;
+  }
+
+  // ---------------------------------------------------------------- daily missions
+
+  /// Today's missions; offline, the last saved ones.
+  Future<MissionsDay> missions() async => MissionsDay(await _cachedGet('/v1/missions', _kMissions));
+
+  /// Opens today's chest. Returns (missions, coins added).
+  Future<(MissionsDay, int)> claimChest() async {
+    final j = (await _call('POST', '/v1/missions/claim') as Map).cast<String, dynamic>();
+    final m = (j['missions'] as Map).cast<String, dynamic>();
+    await _writeCache(_kMissions, m);
+    _setCoins(m['coins'] as int);
+    _emitGains(j['gains']);
+    return (MissionsDay(m), j['reward'] as int? ?? 0);
+  }
+
+  /// Tells the server a suspect's interrogation was opened (for the "interrogate everyone" mission).
+  /// Quiet: offline or failing, nothing happens.
+  Future<void> markSeen(String caseId, String suspectId) async {
+    if (!online) return;
+    try {
+      final j = await _call('POST', '/v1/cases/$caseId/seen', body: {'suspect': suspectId});
+      if (j is Map) _emitGains(j['gains']);
+    } catch (e) {
+      debugPrint('seen: $e');
+    }
   }
 
   // ---------------------------------------------------------------- inbox
@@ -675,6 +716,8 @@ class Api extends ChangeNotifier {
         'finish_first' => 'اول پرونده رو تموم کن',
         'no_case' => 'هنوز پرونده‌ای باز نشده',
         'already_answered' => 'به این معما قبلاً جواب دادی',
+        'missions_not_done' => 'اول هر سه مأموریت امروز رو انجام بده',
+        'already_claimed' => 'صندوقچه‌ی امروز رو باز کردی',
         'not_today' => 'این معما مال امروز نیست؛ صفحه رو تازه کن',
         _ => genericText,
       };

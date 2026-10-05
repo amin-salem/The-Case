@@ -41,4 +41,22 @@ void main() {
     expect(g.rankUp, 'کارآگاه');
     expect(g.achievements.single.coins, 50);
   });
+
+  test('missions: progress, done count, chest', () {
+    final m = MissionsDay({
+      'day': '2026-10-06',
+      'missions': [
+        {'id': 'a', 'title': 'الف', 'target': 3, 'progress': 3, 'done': true},
+        {'id': 'b', 'title': 'ب', 'target': 1, 'progress': 0, 'done': false},
+      ],
+      'all_done': false,
+      'chest_coins': 80,
+      'chest_streak': 2,
+      'next_at': 1790000000,
+    });
+    expect(m.done, 1);
+    expect(m.allDone, isFalse);
+    expect(m.chestCoins, 80);
+    expect(m.missions.first.progress, 3);
+  });
 }

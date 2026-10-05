@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -478,6 +479,7 @@ class _CaseScreenState extends State<CaseScreen> {
           delay: Duration(milliseconds: 60 * i),
           child: GestureDetector(
             onTap: () async {
+              unawaited(Api.i.markSeen(widget.caseId, s.id));
               final m = await showSuspect(context, s, mark);
               if (m != null && mounted) {
                 setState(() => _marks[s.id] = m);

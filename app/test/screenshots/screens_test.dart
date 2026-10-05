@@ -38,6 +38,7 @@ import 'package:the_case/services/api.dart';
 import 'package:the_case/theme.dart';
 import 'package:the_case/widgets/character.dart';
 import 'package:the_case/widgets/engagement.dart';
+import 'package:the_case/widgets/missions_card.dart';
 import 'package:the_case/widgets/scene.dart';
 
 const String _flag = String.fromEnvironment('SCREENSHOTS');
@@ -246,6 +247,21 @@ Map<String, dynamic> _riddleItem(int i, {bool answered = false, bool correct = f
   };
 }
 
+Map<String, dynamic> _missionsDay({bool done = false}) => {
+      'day': '2026-10-06',
+      'missions': [
+        {'id': 'riddle_play3', 'title': 'به ۳ معمای سریع جواب بده', 'target': 3, 'progress': done ? 3 : 2, 'done': done},
+        {'id': 'daily_case', 'title': 'پرونده‌ی امروز را حل کن', 'target': 1, 'progress': done ? 1 : 0, 'done': done},
+        {'id': 'interrogate_all', 'title': 'از همه‌ی مظنون‌های یک پرونده بازجویی کن', 'target': 1, 'progress': 1, 'done': true},
+      ],
+      'all_done': done,
+      'claimed': false,
+      'chest_coins': 80,
+      'chest_streak': 3,
+      'next_at': DateTime.now().add(const Duration(hours: 7, minutes: 12)).millisecondsSinceEpoch ~/ 1000,
+      'coins': 840,
+    };
+
 Map<String, dynamic> _riddleDay() => {
       'day': '2026-10-06',
       'items': [
@@ -281,6 +297,10 @@ Future<http.Response> _serve(http.Request req) async {
     ];
   } else if (path == '/v1/cases') {
     body = _casesList();
+  } else if (path == '/v1/missions') {
+    body = _missionsDay();
+  } else if (path == '/v1/missions/claim') {
+    body = {'missions': {..._missionsDay(), 'claimed': true, 'chest_streak': 4}, 'reward': 80, 'gains': {}};
   } else if (path == '/v1/riddles') {
     body = _riddleDay();
   } else if (parts.length >= 5 && parts[2] == 'riddles') {
@@ -811,6 +831,20 @@ void main() {
     await pick(t);
     await _tap(t, find.byIcon(Icons.gavel_rounded), wait: const Duration(milliseconds: 1200));
   });
+
+  // daily missions
+  shot('missions_done', () => Scaffold(
+        body: GrainBackground(
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: MissionsCard(day: MissionsDay(_missionsDay(done: true)), onChanged: (_) {}),
+            ),
+          ),
+        ),
+      ));
+  shot('chest', () => _Host(open: (c) => showChest(c, 230, 7), background: _sceneBackground('villa_rain')),
+      wait: const Duration(milliseconds: 1400));
 
   // quick riddles
   RiddleDay riddleDay() => RiddleDay(_riddleDay());
