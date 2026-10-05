@@ -69,13 +69,22 @@ def put(buf, sig, at, gain=1.0):
         buf[:m - first] += gain * sig[first:]
 
 
+def release(x, secs=0.05):
+    """Raised-cosine fade at the end, so a cut-off tail never clicks."""
+    m = min(len(x), int(secs * SR))
+    if m > 1:
+        x = x.copy()
+        x[-m:] *= 0.5 + 0.5 * np.cos(np.linspace(0, np.pi, m))
+    return x
+
+
 def bell(f, dur=3.0, partials=(1, 2.01, 2.76, 4.07, 5.43), decay=1.2, gain=1.0):
     n = int(dur * SR)
     t = np.arange(n) / SR
     out = np.zeros(n)
     for k, p in enumerate(partials):
         out += (1 / (1 + k * 0.7)) * np.sin(2 * np.pi * f * p * t) * np.exp(-t / (decay / (1 + 0.5 * k)))
-    return gain * out * np.minimum(1, t / 0.004)
+    return release(gain * out * np.minimum(1, t / 0.004))
 
 
 def pluck(f, dur=1.2, bright=0.5):
@@ -87,7 +96,7 @@ def pluck(f, dur=1.2, bright=0.5):
     for i in range(n):
         out[i] = buf[i % p]
         buf[i % p] = (buf[i % p] + buf[(i + 1) % p]) * (0.5 * (0.996 - 0.01 * (1 - bright)))
-    return out
+    return release(out)
 
 
 def click(dur=0.02, f=2500, gain=1.0, seed=1):
@@ -100,7 +109,7 @@ def thud(f=70, dur=0.5, gain=1.0):
     n = int(dur * SR)
     t = np.arange(n) / SR
     fr = f * (1 + 2.0 * np.exp(-t / 0.04))
-    return gain * np.sin(2 * np.pi * np.cumsum(fr) / SR) * np.exp(-t / (dur / 4))
+    return release(gain * np.sin(2 * np.pi * np.cumsum(fr) / SR) * np.exp(-t / (dur / 4)))
 
 
 def swish(dur=0.5, lo=800, hi=5000, seed=3, gain=1.0):
@@ -123,6 +132,12 @@ def reverb(x, secs=1.6, wet=0.35, seed=5):
     return (1 - wet) * x + wet * wrapped
 
 
+def one_shot_reverb(x, secs=1.4, wet=0.3, tail=1.4):
+    """Reverb for one-shots: pad with silence first so the echo never wraps to the start."""
+    y = reverb(np.concatenate([x, np.zeros(int(tail * SR))]), secs, wet)
+    return release(y, 0.3)
+
+
 def lowpass(x, fc):
     spec = np.fft.rfft(x)
     f = np.fft.rfftfreq(len(x), 1 / SR)
@@ -141,17 +156,18 @@ def highpass(x, fc):
 def mystery_bed(root=55.0, minor=True, eerie=True, seed=11):
     """Low drone with a slow pulse, a dissonant overtone that breathes, and one ghostly glide."""
     third = 1.189 if minor else 1.26
+    root *= 2  # an octave up: phone speakers can play it and earbuds don't throb
     out = np.zeros(N)
-    for ratio, amp in ((1, 0.5), (1.5, 0.28), (third * 2, 0.16), (2.997, 0.1)):
+    for ratio, amp in ((1, 0.5), (1.5, 0.28), (third * 2, 0.16)):
         f = periodic_freq(root * ratio)
         out += amp * sine(f) * (0.75 + 0.25 * lfo(0.2 + 0.1 * ratio, phase=ratio))
-    out += 0.07 * sine(periodic_freq(root * 2.06)) * (0.5 + 0.5 * lfo(0.3))  # beating, uneasy
-    out *= 0.55 + 0.45 * lfo(0.1, phase=2.0)
+    out += 0.02 * sine(periodic_freq(root * 2.06)) * (0.5 + 0.5 * lfo(0.3))  # a little unease
+    out *= 0.8 + 0.2 * lfo(0.1, phase=2.0)
     if eerie:
         # theremin-like glide, once per loop
         n = int(3.2 * SR)
         t = np.arange(n) / SR
-        f = root * 8 * (1 + 0.5 * np.sin(np.pi * t / 3.2) ** 1.3) + 4 * np.sin(2 * np.pi * 5.5 * t)
+        f = root * 4 * (1 + 0.5 * np.sin(np.pi * t / 3.2) ** 1.3) + 4 * np.sin(2 * np.pi * 5.5 * t)
         g = 0.06 * np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.pi * t / 3.2) ** 2
         put(out, g, 3.1 + (seed % 3))
     return out
@@ -175,7 +191,6 @@ def a_office():
     x = mystery_bed(55, seed=2) * 0.5
     hum = sum(sine(periodic_freq(100 * k)) / k for k in (1, 2, 3, 5))
     x += 0.08 * hum * (0.8 + 0.2 * lfo(7.0))
-    x += 0.025 * band_noise(3, 3000, 7000) * (np.sin(2 * np.pi * periodic_freq(3.3) * T) > -0.6)   # flickering tube
     r = rng(4)
     for at in (1.0, 1.15, 1.22, 1.4, 1.5, 1.58, 1.8, 6.0, 6.1, 6.27, 6.4, 6.5):
         put(x, click(0.015, r.uniform(2500, 4000), 1, seed=int(at * 100)), at, 0.12)       # keyboard
@@ -193,8 +208,8 @@ def a_train():
     t = 0.0
     k = 0
     while t < LOOP:
-        put(x, click(0.045, 1100, 1, seed=k) * 1.0, t, 0.3)
-        put(x, click(0.045, 900, 1, seed=k + 99), t + 0.13, 0.22)
+        put(x, lowpass(click(0.045, 1100, 1, seed=k), 2500), t, 0.15)
+        put(x, lowpass(click(0.045, 900, 1, seed=k + 99), 2500), t + 0.13, 0.11)
         t += beat
         k += 1
     n = int(2.6 * SR)
@@ -218,8 +233,8 @@ def a_museum():
 
 def a_villa():
     x = mystery_bed(55, seed=5) * 0.6
-    rain = band_noise(9, 2000, 9000) * (0.8 + 0.2 * band_noise(10, 1, 9)[:N])
-    x += 0.2 * rain
+    rain = band_noise(9, 400, 4000) * (0.8 + 0.2 * band_noise(10, 1, 9)[:N])
+    x += 0.07 * rain
     x += 0.08 * band_noise(12, 300, 1500) * (0.5 + 0.5 * lfo(0.2))
     # distant thunder
     n = int(3.8 * SR)
@@ -257,9 +272,9 @@ def a_harbor():
 def a_hospital():
     x = mystery_bed(58, seed=8) * 0.45
     x += 0.04 * band_noise(18, 80, 400) * 1.0
-    beep = 0.5 * sine(1000, int(0.09 * SR)) * np.hanning(int(0.09 * SR))
+    beep = 0.5 * sine(880, int(0.04 * SR)) * np.hanning(int(0.04 * SR))
     for k in range(10):
-        put(x, beep, k * 1.0 + 0.2, 0.22)                                                   # heart monitor
+        put(x, beep, k * 1.0 + 0.2, 0.07)                                                   # heart monitor, soft
     for at in (4.0, 4.3):
         put(x, 0.5 * sine(1500, int(0.16 * SR)) * np.hanning(int(0.16 * SR)), at, 0.12)
     put(x, band_noise(19, 800, 3000, int(1.6 * SR)) * np.sin(np.linspace(0, np.pi, int(1.6 * SR))), 7.0, 0.05)  # trolley
@@ -272,7 +287,6 @@ def a_library():
         put(x, click(0.012, 700, 1, seed=k + 3), k * 1.0 + 0.3, 0.1 if k % 2 else 0.14)    # old clock
     for at in (2.2, 5.9, 8.3):
         put(x, swish(0.55, 1500, 6000, seed=int(at * 10)), at, 0.12)                        # page turns
-    x += 0.03 * band_noise(20, 4000, 9000) * (0.5 + 0.5 * lfo(0.4))                         # dust shimmer
     put(x, bell(130.8, 3.2, (1, 2, 3.01), 1.4, 0.5), 0.2, 0.05)
     return reverb(x, 2.0, 0.45)
 
@@ -305,7 +319,7 @@ def a_hotel():
 
 def a_kitchen():
     x = mystery_bed(55, seed=12) * 0.35
-    x += 0.16 * highpass(band_noise(22, 3000, 10000), 3000) * (0.6 + 0.4 * band_noise(23, 2, 14))  # sizzle
+    x += 0.05 * band_noise(22, 1500, 5000) * (0.6 + 0.4 * band_noise(23, 2, 14))  # sizzle
     for at in np.arange(0.5, 10, 0.25):
         if rng(int(at * 100)).random() < 0.55:
             put(x, click(0.012, 1400, 1, seed=int(at * 100)), at, 0.3)                      # chopping
@@ -329,9 +343,9 @@ def a_snow():
 
 def a_desert():
     x = mystery_bed(49, seed=14) * 0.65
-    x += 0.2 * band_noise(27, 800, 4500) * (0.35 + 0.65 * np.sin(2 * np.pi * periodic_freq(0.15) * T) ** 2)
+    x += 0.07 * band_noise(27, 200, 1500) * (0.35 + 0.65 * np.sin(2 * np.pi * periodic_freq(0.15) * T) ** 2)
     for at in (1.5, 3.0, 4.6, 6.8, 8.4):
-        put(x, bell(1568 + 40 * (at % 2), 2.0, (1, 2.4), 0.8, 0.5), at, 0.05)               # camel bell
+        put(x, bell(1568 + 40 * (at % 2), 2.0, (1, 2.4), 0.8, 0.5), at, 0.03)               # camel bell
     for at, f in ((2.2, 146.8), (3.4, 164.8), (6.0, 174.6), (7.5, 146.8)):
         put(x, pluck(f, 2.0), at, 0.2)                                                      # lute
     return reverb(x, 1.8, 0.35)
@@ -381,12 +395,10 @@ def a_wedding():
 
 def a_school():
     x = mystery_bed(50, seed=18) * 0.55
-    put(x, bell(1250, 3.5, (1, 1.01, 2.0), 1.6, 1.0), 1.0, 0.12)                            # echoing bell
+    put(x, bell(1250, 3.5, (1, 2.0), 1.6, 1.0), 1.0, 0.1)                            # echoing bell
     for k in range(10):
         put(x, click(0.012, 800, 1, seed=k + 30), k * 1.0 + 0.4, 0.09)
     r = rng(32)
-    for at in (3.1, 3.4, 6.2, 6.5, 6.8):
-        put(x, swish(0.2, 3000, 9000, seed=int(at * 10)), at, 0.1)                           # chalk
     for k in range(6):
         put(x, click(0.04, 300, 1, seed=k), 7.2 + k * 0.4, 0.09)
     return reverb(x, 2.4, 0.5)
@@ -416,7 +428,7 @@ def a_tower():
 def a_home():
     """Noir menu loop: a slow minor chord, rain and a far-off piano."""
     x = mystery_bed(55, seed=21, eerie=False) * 0.6
-    x += 0.12 * band_noise(37, 2000, 9000)
+    x += 0.04 * band_noise(37, 300, 4000)
     for k, f in enumerate((220, 261.6, 329.6, 261.6, 196, 233.1, 293.7, 233.1)):
         put(x, pluck(f, 2.2, 0.3), k * 1.25, 0.22)
     return reverb(x, 2.0, 0.45)
@@ -432,7 +444,7 @@ SCENES = {
 ACCENT = {
     "bazaar_night": lambda: pluck(196, 1.6), "office": lambda: bell(1244, 1.4, (1, 1.5), 0.4),
     "train": lambda: click(0.05, 1000) * 3, "museum": lambda: bell(1760, 2.0, (1, 2.4), 0.8),
-    "villa_rain": lambda: lowpass(band_noise(41, 20, 200, int(2 * SR)), 150) * np.exp(-np.arange(int(2 * SR)) / SR / 0.7),
+    "villa_rain": lambda: band_noise(41, 300, 1500, int(2 * SR)) * np.exp(-np.arange(int(2 * SR)) / SR / 0.6) * 0.8,
     "warehouse": lambda: click(0.2, 700, 1, 4), "harbor": lambda: bell(587, 3.0, (1, 2.4, 4.1), 1.5),
     "hospital": lambda: 0.5 * sine(1000, int(0.4 * SR)) * np.hanning(int(0.4 * SR)),
     "library": lambda: swish(0.6, 1500, 6000), "theater": lambda: swish(1.2, 200, 2500),
@@ -441,7 +453,7 @@ ACCENT = {
     "desert": lambda: bell(1568, 2.0, (1, 2.4), 0.8), "subway": lambda: bell(659, 1.0, (1, 2), 0.4),
     "lab": lambda: 0.5 * sine(1800, int(0.3 * SR)) * np.hanning(int(0.3 * SR)),
     "wedding": lambda: bell(2637, 1.0, (1, 2.5), 0.3), "school": lambda: bell(1250, 2.5, (1, 1.01, 2.0), 1.2),
-    "airport": lambda: bell(659, 1.2, (1, 2), 0.5), "tower": lambda: bell(110, 4.0, (1, 2.0, 2.4, 3.0, 4.2), 2.5),
+    "airport": lambda: bell(659, 1.2, (1, 2), 0.5), "tower": lambda: bell(220, 4.0, (1, 2.0, 2.4, 3.0, 4.2), 2.5),
 }
 ROOT = {s: 49 + 3 * i for i, s in enumerate(SCENES)}
 
@@ -464,14 +476,17 @@ def sting(scene):
     a0 = int(1.9 * SR)
     acc = acc[:n - a0]
     out[a0:a0 + len(acc)] += 0.5 * acc
-    return reverb(out, 1.8, 0.4)
+    return one_shot_reverb(out, 1.8, 0.4, tail=1.6)
 
 
 # ------------------------------------------------------------------ interface sounds
 def ui_sounds():
     s = {}
-    s["tap"] = click(0.03, 1800, 0.6)
-    s["paper"] = swish(0.35, 1500, 7000, seed=3, gain=0.5)
+    n = int(0.08 * SR)
+    t = np.arange(n) / SR
+    s["tap"] = release((0.7 * np.sin(2 * np.pi * 600 * t) + 0.3 * lowpass(rng(2).normal(size=n), 2500))
+                       * np.minimum(1, t / 0.003) * np.exp(-t / 0.018), 0.01)
+    s["paper"] = lowpass(swish(0.35, 900, 3500, seed=3, gain=0.5), 3500)
     n = int(0.6 * SR)
     st = thud(95, 0.5, 1.0)
     st = np.concatenate([st, np.zeros(max(0, n - len(st)))])
@@ -490,32 +505,62 @@ def ui_sounds():
     hit = np.zeros(n)
     h = thud(50, 0.6, 1.0)
     hit[int(2.0 * SR):int(2.0 * SR) + len(h)] = h[:n - int(2.0 * SR)]
-    s["reveal"] = reverb(riser + hit, 1.4, 0.35)
-    n = int(1.1 * SR)
-    t = np.arange(n) / SR
-    s["wrong"] = np.sign(np.sin(2 * np.pi * np.cumsum(180 - 70 * t) / SR)) * np.exp(-t / 0.5) * 0.3
+    s["reveal"] = one_shot_reverb(riser + hit, 1.4, 0.35)
+    wrong = np.zeros(int(0.9 * SR))                       # a soft two-note fall (no buzzer)
+    for at, f in ((0.0, 330.0), (0.16, 262.0)):
+        m = int(0.6 * SR)
+        tt = np.arange(m) / SR
+        note = (np.sin(2 * np.pi * f * tt) + 0.25 * np.sin(4 * np.pi * f * tt)) * np.minimum(1, tt / 0.01) * np.exp(-tt / 0.18)
+        a0 = int(at * SR)
+        wrong[a0:a0 + m] += release(note)[:len(wrong) - a0]
+    s["wrong"] = lowpass(wrong, 2000) * 0.5
     notes = [392, 494, 587, 784]
     win = np.zeros(int(2.4 * SR))
     for k, f in enumerate(notes):
         b = bell(f, 1.8, (1, 2, 3, 4), 0.9, 0.5)
         win[int(k * 0.14 * SR):int(k * 0.14 * SR) + len(b)] += b[:len(win) - int(k * 0.14 * SR)]
-    s["win"] = reverb(win, 1.2, 0.3)
+    s["win"] = one_shot_reverb(win, 1.2, 0.3)
     n = int(2.6 * SR)
     t = np.arange(n) / SR
-    lose = sum(a * np.sin(2 * np.pi * np.cumsum((110 * r_) * (1 - 0.15 * t / 2.6)) / SR) for r_, a in ((1, 0.5), (1.189, 0.3), (1.5, 0.2)))
-    s["lose"] = reverb(lose * np.exp(-t / 1.4) * 0.5, 1.4, 0.3)
+    lose = np.zeros(n)
+    for at, f in ((0.0, 440.0), (0.35, 392.0), (0.7, 349.2), (1.05, 329.6)):   # a slow, sad fall a phone can play
+        b = pluck(f, 1.5, 0.35)
+        a0 = int(at * SR)
+        lose[a0:a0 + len(b)] += b[:n - a0]
+    s["lose"] = one_shot_reverb(lowpass(lose, 3000) * 0.6, 1.4, 0.3)
     hb = np.zeros(int(3.2 * SR))
     for k in range(4):
-        put(hb, thud(60, 0.22, 1.0), k * 0.8, 0.9)
-        put(hb, thud(50, 0.2, 1.0), k * 0.8 + 0.22, 0.6)
+        put(hb, thud(170, 0.18, 1.0), k * 0.8, 0.9)                       # body a phone speaker can play
+        put(hb, thud(150, 0.16, 1.0), k * 0.8 + 0.22, 0.6)
+        put(hb, lowpass(click(0.02, 1000, 0.3, seed=k), 1500), k * 0.8, 0.25)   # soft tick on top
     s["heartbeat"] = hb
     return s
 
 
 # ------------------------------------------------------------------ output
+def phone_db(x):
+    """Loudness as a phone speaker plays it: A-weighting plus a 300 Hz high-pass, as RMS dBFS."""
+    spec = np.fft.rfft(x)
+    f = np.fft.rfftfreq(len(x), 1 / SR) + 1e-9
+    f2 = f * f
+    a = (12194 ** 2 * f2 * f2) / ((f2 + 20.6 ** 2) * np.sqrt((f2 + 107.7 ** 2) * (f2 + 737.9 ** 2)) * (f2 + 12194 ** 2))
+    hp = (f / 300) ** 4 / (1 + (f / 300) ** 4)
+    y = np.fft.irfft(spec * a * 1.2589 * hp, len(x))
+    return 20 * np.log10(np.sqrt(np.mean(y ** 2)) + 1e-12)
+
+
+TARGET_DB = {"amb": -27.0, "sting": -21.0, "tap": -27.0, "paper": -25.0, "stamp": -23.0}  # others: -21
+
+
 def to_ogg(name, x, gain=0.85, fade=0.0):
     x = np.nan_to_num(x)
-    x = np.tanh(1.3 * x / (np.max(np.abs(x)) + 1e-9)) * gain  # soft limiter
+    x = highpass(x, 80)                                     # no sub-bass pressure on earbuds
+    x = x / (np.max(np.abs(x)) + 1e-9) * 0.5
+    target = TARGET_DB.get(name.split("_")[0], TARGET_DB.get(name, -21.0))
+    boost = np.clip(target - phone_db(x), -30, 18)
+    x = x * 10 ** (boost / 20)
+    ceiling = 0.6                                           # about -4.5 dBFS (encoding adds a little)
+    x = ceiling * np.tanh(x / ceiling)                      # soft limiter
     if fade:
         m = int(fade * SR)
         x[:m] *= np.linspace(0, 1, m)

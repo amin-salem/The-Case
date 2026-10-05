@@ -127,7 +127,7 @@ class _StampButtonState extends State<StampButton> {
           ? (_) {
               setState(() => _down = false);
               HapticFeedback.lightImpact();
-              Sfx.i.play('stamp', volume: 0.45);
+              Sfx.i.play('tap', volume: 0.5);
               widget.onTap!();
             }
           : null,

@@ -51,17 +51,16 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
       final r = await Api.i.accuse(widget.caseData.id, _suspect!, _evidence!);
       if (!mounted) return;
       if (r.result == 'solved' || r.result == 'failed') {
-        Sfx.i.play('reveal');
         Navigator.pop(context, r);
         return;
       }
-      Sfx.i.play('wrong');
+      Sfx.i.play('wrong', volume: 0.6);
       _shake.forward(from: 0);
       setState(() {
         _busy = false;
         _left = r.attemptsLeft;
         _feedback = r.result == 'wrong_proof'
-            ? 'شاید آدم درست رو گرفتی، ولی این مدرک دروغش رو ثابت نمی‌کنه! ${fa(r.attemptsLeft)} فرصت دیگه داری.'
+            ? 'آدم درست رو گرفتی، ولی این مدرک دروغش رو ثابت نمی‌کنه. یه ستاره کم شد؛ مدرک دیگه‌ای رو امتحان کن.'
             : 'اشتباه بود! این آدم بی‌گناهه. ${fa(r.attemptsLeft)} فرصت دیگه داری.';
         _evidence = null;
       });

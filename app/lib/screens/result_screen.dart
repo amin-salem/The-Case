@@ -29,10 +29,12 @@ class _ResultScreenState extends State<ResultScreen> {
   void initState() {
     super.initState();
     // stamp, then the verdict music
-    Future<void>.delayed(const Duration(milliseconds: 300), () => Sfx.i.play('stamp', volume: 0.9));
-    Future<void>.delayed(const Duration(milliseconds: 900), () => Sfx.i.play(solved ? 'win' : 'lose'));
+    Sfx.i.duck();
+    Future<void>.delayed(const Duration(milliseconds: 200), () => Sfx.i.play('stamp', volume: 0.8));
+    Future<void>.delayed(const Duration(milliseconds: 700), () => Sfx.i.play(solved ? 'win' : 'lose'));
+    Future<void>.delayed(const Duration(milliseconds: 4500), Sfx.i.unduck);
     if (result.badge != null) {
-      Future<void>.delayed(const Duration(milliseconds: 1600), () => Sfx.i.play('clue', volume: 0.8));
+      Future<void>.delayed(const Duration(milliseconds: 2600), () => Sfx.i.play('clue', volume: 0.7));
     }
   }
 

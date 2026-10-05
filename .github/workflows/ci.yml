@@ -38,13 +38,13 @@ jobs:
           from app.db import Base
           Base.metadata.create_all(create_engine("sqlite:///mig.db"))
           db = sqlite3.connect("mig.db")
-          for t, c in [("players", "login_day"), ("players", "streak_freezes"), ("case_progress", "first_accused")]:
+          for t, c in [("players", "login_day"), ("players", "streak_freezes"), ("case_progress", "first_accused"), ("case_progress", "proof_misses")]:
               db.execute(f"ALTER TABLE {t} DROP COLUMN {c}")
           db.commit()
           EOF
           alembic stamp 0001
           alembic upgrade head
-          python -c "import sqlite3; d=sqlite3.connect('mig.db'); cols={r[1] for t in ('players','case_progress') for r in d.execute(f'PRAGMA table_info({t})')}; assert {'login_day','streak_freezes','first_accused'} <= cols, cols; print('migration ok')"
+          python -c "import sqlite3; d=sqlite3.connect('mig.db'); cols={r[1] for t in ('players','case_progress') for r in d.execute(f'PRAGMA table_info({t})')}; assert {'login_day','streak_freezes','first_accused','proof_misses'} <= cols, cols; print('migration ok')"
       - name: Start the server and run the smoke test against it
         working-directory: server
         run: |

@@ -82,6 +82,7 @@ class CaseProgress(Base):
     was_daily: Mapped[bool] = mapped_column(Boolean, default=False)  # finished as "today's case"
     day: Mapped[str] = mapped_column(String(10), default="")    # Tehran day it was finished
     finished_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    proof_misses: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # right suspect, wrong proof
     first_accused: Mapped[str | None] = mapped_column(String(16), nullable=True)  # for "what others thought"
 
 

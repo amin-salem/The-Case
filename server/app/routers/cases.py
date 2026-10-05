@@ -168,7 +168,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         now = utcnow()
         p.solved, p.finished_at, p.day, p.was_daily = True, now, today, today_case
         p.seconds = max(1, int((now - p.opened_at).total_seconds()))
-        p.stars = eco.stars_for(p.hints, p.attempts)
+        p.stars = eco.stars_for(p.hints, p.attempts, p.proof_misses or 0)
         reward = eco.SOLVE_REWARD[p.stars]
         freezes_used, badge = 0, None
         if today_case:
@@ -204,8 +204,13 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
                          culprit=c.culprit, proof=sorted(c.proof), rank=rank, progress=_progress_out(c, p),
                          seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge)
 
+    # right person but not the evidence that proves it: the first few times it costs a star, not a try
+    if body.suspect == c.culprit and (p.proof_misses or 0) < eco.FREE_PROOF_MISSES:
+        p.proof_misses = (p.proof_misses or 0) + 1
+        await session.commit()
+        return AccuseOut(result="wrong_proof", attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
+                         streak=player.streak, progress=_progress_out(c, p))
     p.attempts += 1
-    # right person but not the evidence that proves it: tell them (it's still a wrong try)
     result = "wrong_proof" if body.suspect == c.culprit else "wrong_suspect"
     if p.attempts >= eco.MAX_ATTEMPTS:
         p.failed, p.finished_at, p.day = True, utcnow(), today

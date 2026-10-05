@@ -131,7 +131,8 @@ class _CaseScreenState extends State<CaseScreen> {
     if (!needOnline(context)) return;
     final vipFree = (Api.i.profile?.vip ?? false) && p.hints.isEmpty;
     final ok = await confirm(context, 'سرنخ ${fa(p.hints.length + 1)} از ${fa(p.hintCosts.length)}',
-        vipFree ? 'اولین سرنخ برای VIP رایگانه.' : 'این سرنخ ${fa(cost)} سکه هزینه داره. ستاره‌هات هم ممکنه کمتر بشه.',
+        '${vipFree ? 'اولین سرنخ برای VIP رایگانه.' : 'این سرنخ ${fa(cost)} سکه هزینه داره.'} '
+            '${p.hints.isEmpty ? 'ستاره‌ای کم نمی‌شه.' : 'یه ستاره از امتیازت کم می‌شه.'}',
         'بگیر');
     if (!ok || !mounted) return;
     try {
@@ -380,9 +381,9 @@ class _CaseScreenState extends State<CaseScreen> {
         const SizedBox(height: 14),
         Text('چطور حل کنم؟', style: tDisplay(16)),
         const SizedBox(height: 4),
-        Text('مدارک رو بخون و از مظنون‌ها سؤال کن. یکی‌شون دروغ می‌گه. '
+        Text('مدارک رو بخون و از مظنون‌ها سؤال کن. مقصر درباره‌ی چیزی دروغ گفته. '
             'وقتی پیداش کردی، متهمش کن و مدرکی رو نشون بده که دروغش رو ثابت می‌کنه. '
-            'هر سرنخ و هر اتهام اشتباه، ستاره‌هات رو کم می‌کنه.', style: tBody(14, color: K.textSoft)),
+            'اتهام اشتباه و سرنخ دوم و سوم، ستاره‌هات رو کم می‌کنه.', style: tBody(14, color: K.textSoft)),
       ],
     ]);
   }
@@ -419,7 +420,7 @@ class _CaseScreenState extends State<CaseScreen> {
           delay: Duration(milliseconds: 50 * i),
           child: GestureDetector(
             onTap: () {
-              Sfx.i.play('paper', volume: 0.6);
+              Sfx.i.play('paper', volume: 0.4);
               setState(() => pinned ? _pins.remove(e.id) : _pins.add(e.id));
               _saveNotes();
             },

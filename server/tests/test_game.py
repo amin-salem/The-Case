@@ -16,6 +16,7 @@ def test_stars():
     assert economy.stars_for(1, 0) == 3
     assert economy.stars_for(2, 0) == 2
     assert economy.stars_for(3, 1) == 1
+    assert economy.stars_for(0, 0, 1) == 2 and economy.stars_for(0, 0, 2) == 1
 
 
 async def test_welcome_coins_and_login_reward(client):
@@ -62,10 +63,25 @@ async def test_wrong_proof_and_fail(client):
     await client.get(f"/v1/cases/{c.id}", headers=h)
     bad_ev = next(e["id"] for e in c.data["evidence"] if e["id"] not in c.proof)
     r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": c.culprit, "evidence": bad_ev})).json()
-    assert r["result"] == "wrong_proof"
-    for _ in range(2):
+    # the right suspect with the wrong proof costs a star, not a try (twice)
+    assert r["result"] == "wrong_proof" and r["attempts_left"] == economy.MAX_ATTEMPTS
+    r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": c.culprit, "evidence": bad_ev})).json()
+    assert r["result"] == "wrong_proof" and r["attempts_left"] == economy.MAX_ATTEMPTS
+    # after that, wrong proofs use up tries
+    for _ in range(3):
         r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": c.culprit, "evidence": bad_ev})).json()
     assert r["result"] == "failed" and r["culprit"] == c.culprit and r["explanation"]
+
+
+async def test_wrong_proof_costs_a_star(client):
+    p = await new_player(client, "proof-misser")
+    h = p["headers"]
+    c = content.todays_case()
+    await client.get(f"/v1/cases/{c.id}", headers=h)
+    bad_ev = next(e["id"] for e in c.data["evidence"] if e["id"] not in c.proof)
+    await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": c.culprit, "evidence": bad_ev})
+    r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})).json()
+    assert r["result"] == "solved" and r["stars"] == 2
 
 
 async def test_archive_unlock_costs_coins(client):

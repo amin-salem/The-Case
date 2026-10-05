@@ -34,8 +34,11 @@ def login_reward(day: int, pick=None) -> int:
     return (pick or random.choice)(LOGIN_ENVELOPE)
 
 
-def stars_for(hints: int, wrong: int) -> int:
-    penalty = wrong + (1 if hints >= 2 else 0) + (1 if hints >= 3 else 0)
+FREE_PROOF_MISSES = 2            # right suspect, wrong proof: costs a star, not a try (this many times)
+
+
+def stars_for(hints: int, wrong: int, proof_misses: int = 0) -> int:
+    penalty = wrong + proof_misses + (1 if hints >= 2 else 0) + (1 if hints >= 3 else 0)
     return max(1, 3 - penalty)
 
 

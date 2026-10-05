@@ -81,7 +81,6 @@ class _StartScreenState extends State<StartScreen> {
   void initState() {
     super.initState();
     _connect();
-    Future<void>.delayed(const Duration(milliseconds: 500), () => Sfx.i.play('stamp', volume: 0.7));
   }
 
   Future<void> _connect() async {
