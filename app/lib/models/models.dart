@@ -22,9 +22,13 @@ class AvatarSpec {
         beard = _s(j['beard'], 'none'),
         glasses = _b(j['glasses']),
         outfit = _s(j['outfit'], '#3b4a5e'),
-        accessory = _s(j['accessory'], 'none');
+        accessory = _s(j['accessory'], 'none'),
+        portrait = _s(j['portrait']);
 
   final String gender, age, hair, hairColor, beard, outfit, accessory;
+
+  /// A painted portrait (assets/portraits/<name>.webp); empty = drawn in code.
+  final String portrait;
   final int skin;
   final bool glasses;
 }

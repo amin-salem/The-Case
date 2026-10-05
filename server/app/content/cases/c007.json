@@ -22,7 +22,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#2e4a4a",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_business"
    },
    "motive": "کم‌حقوقه و اخیراً ماشین گرونی خریده.",
    "statement": "چهارشنبه ساعت ۴ بعدازظهر کانتینر ۱۷ رو بازرسی کردم، گزارش رو همون موقع نوشتم و تحویل دادم، بعد رفتم خونه.",
@@ -41,7 +42,7 @@
    "id": "s2",
    "name": "حمید زارعی",
    "role": "اپراتور جرثقیل",
-   "age": 41,
+   "age": 32,
    "avatar": {
     "gender": "m",
     "age": "mid",
@@ -51,7 +52,8 @@
     "beard": "mustache",
     "glasses": true,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_worker"
    },
    "motive": "قماربازه و چند نفر طلبکار دارن.",
    "statement": "فقط طبق برنامه‌ی روزانه جابه‌جا کردم. بعد از شیفت ساعت ۱۱:۳۰ رفتم خونه.",
