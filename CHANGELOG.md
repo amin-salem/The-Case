@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.10.0 (app build 15, server 1.10.0): weekend case and fair time
+
+- «پرونده‌ی آخر هفته»: a much harder case every Thursday 21:00 until Saturday night, free for everyone.
+  Eight suspects, 16 clues in three chapters (Thursday night, Friday 10:00, Friday 21:00), a twist in the last
+  chapter, and the player must also pick the motive. Reward 300/200/120 coins and 150/100/60 XP. First case:
+  «شب برفی ویلای صدری» (8 Oct). It does not affect the nightly streak.
+- Fair solving time: only the time the case screen is open counts. It pauses when the player leaves the case,
+  switches app or locks the phone; the server caps every report so the time can't be faked upward. Old app
+  versions keep the old clock.
+
 ## 1.9.1 (app build 14, server 1.9.1): first painted portraits
 
 - Suspects can have a painted portrait (assets/portraits, WebP ~25 KB each) shown with slow breathing motion;
