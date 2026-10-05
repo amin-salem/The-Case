@@ -129,6 +129,13 @@ def main() -> int:
     early = call("POST", "/v1/missions/claim", headers=hdr)
     check(early and early[0].status_code in (200, 409), "the chest opens only when all missions are done")
 
+    print("\nRank and achievements")
+    me2 = expect("GET", "/v1/me", headers=hdr, name="GET /v1/me (rank)")
+    check(me2 and me2.get("rank_title") and "xp" in me2, "profile has XP and a detective rank",
+          f"{me2 and me2.get('rank_title')} · {me2 and me2.get('xp')} XP")
+    ach = expect("GET", "/v1/achievements", headers=hdr)
+    check(ach and ach.get("total", 0) >= 28, "achievements list", f"{ach and ach.get('earned')} of {ach and ach.get('total')} earned")
+
     print("\nEconomy, social")
     lb = expect("GET", "/v1/leaderboard?period=daily", headers=hdr)
     check(lb is not None and "me" in lb, "daily leaderboard")
