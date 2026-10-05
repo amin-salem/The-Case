@@ -37,7 +37,10 @@ async def config(session: AsyncSession = Depends(get_session)):
         "economy": {"hint_costs": eco.HINT_COSTS, "unlock_cost": eco.UNLOCK_COST,
                     "max_attempts": eco.MAX_ATTEMPTS, "ad_reward": eco.AD_REWARD, "ads_per_day": eco.AD_PER_DAY,
                     "secure_reward": eco.SECURE_REWARD, "invite_reward": eco.INVITE_INVITER,
-                    "invite_new_player": eco.INVITE_NEW_PLAYER, "products": {
+                    "invite_new_player": eco.INVITE_NEW_PLAYER,
+                    "login_calendar": eco.LOGIN_CALENDAR, "login_envelope": [min(eco.LOGIN_ENVELOPE), max(eco.LOGIN_ENVELOPE)],
+                    "freeze_cost": eco.FREEZE_COST, "max_freezes": eco.MAX_FREEZES,
+                    "streak_badges": list(eco.STREAK_BADGES), "products": {
                         k: {"coins": p.coins, "no_ads": p.no_ads, "kind": p.kind} for k, p in eco.PRODUCTS.items()}},
     })
     return cfg

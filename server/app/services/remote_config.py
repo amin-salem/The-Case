@@ -13,6 +13,7 @@ DEFAULTS: dict[str, Any] = {
     "min_version": 1,
     "latest_version": 1,
     "update_url": "https://cafebazaar.ir/app/ir.aminsalem.the_case",
+    "share_url": "https://cafebazaar.ir/app/ir.aminsalem.the_case",
     "maintenance": False,
     "maintenance_message": "در حال تعمیر سرور هستیم، چند دقیقه دیگه برگرد!",
     # Price labels shown in the shop (the real price is set in the Bazaar panel)

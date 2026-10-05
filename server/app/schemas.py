@@ -64,6 +64,8 @@ class ProfileOut(BaseModel):
     cases_solved: int
     stars_total: int
     login_reward: int = 0  # coins given right now for today's first visit
+    login_day: int = 0     # 1..7: today's place in the login calendar
+    streak_freezes: int = 0
 
 
 class ProfileIn(BaseModel):
@@ -144,6 +146,23 @@ class AccuseOut(BaseModel):
     proof: list[str] = []
     rank: int | None = None  # place on today's leaderboard
     progress: ProgressOut | None = None
+    seconds: int = 0         # time to solve
+    hints_used: int = 0
+    freezes_used: int = 0    # streak insurance spent to keep the streak
+    badge: int | None = None  # a streak badge (7, 30, 100) reached right now
+
+
+class SuspectStat(BaseModel):
+    id: str
+    pct: int            # % of players who accused this suspect first
+
+
+class StatsOut(BaseModel):
+    players: int        # players who finished the case
+    solved_pct: int
+    first_try_pct: int  # solved with no wrong accusation
+    culprit: str
+    suspects: list[SuspectStat]
 
 
 # ---- leaderboard

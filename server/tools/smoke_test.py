@@ -76,6 +76,9 @@ def main() -> int:
     hdr = {"Authorization": f"Bearer {reg['token']}"}
     me = expect("GET", "/v1/me", headers=hdr)
     check(me and me.get("coins", 0) > 0, "new player got welcome coins", f"coins={me and me.get('coins')}")
+    check(me and me.get("login_day") == 1 and me.get("login_reward", 0) > 0, "login calendar: day 1 reward",
+          f"day={me and me.get('login_day')} reward={me and me.get('login_reward')}")
+    check(cfg and "login_calendar" in cfg.get("economy", {}) and cfg.get("share_url"), "config has login calendar and share link")
     expect("PATCH", "/v1/me", headers=hdr, json={"nickname": "smoke test"}, name="PATCH /v1/me (nickname)")
     expect("GET", "/v1/me", status=401, name="GET /v1/me without a token is refused")
 
@@ -100,12 +103,16 @@ def main() -> int:
     evidence = [e["id"] for e in got["case"]["evidence"]]
     wrong = expect("POST", f"/v1/cases/{today['id']}/accuse", headers=hdr, json={"suspect": suspects[0], "evidence": evidence[0]}, name="POST accuse (one try)")
     check(wrong and wrong.get("result") in ("wrong_suspect", "wrong_proof", "solved"), "accusation is judged by the server", str(wrong and wrong.get("result")))
+    if wrong and wrong.get("result") != "solved":
+        expect("GET", f"/v1/cases/{today['id']}/stats", status=409, headers=hdr, name="others' guesses stay hidden until you finish")
     if a.solve:
         f = next((p for p in CASES.glob("*.json") if json.loads(p.read_text(encoding="utf-8"))["id"] == today["id"]), None)
         if f:
             sol = json.loads(f.read_text(encoding="utf-8"))["solution"]
             r = expect("POST", f"/v1/cases/{today['id']}/accuse", headers=hdr, json={"suspect": sol["culprit"], "evidence": sol["proof"][0]}, name="POST accuse (right answer)")
             check(r and r.get("result") == "solved" and r.get("reward", 0) > 0, "solving pays out coins and shows the explanation", str(r and {k: r.get(k) for k in ("result", "stars", "reward", "rank")}))
+            st = expect("GET", f"/v1/cases/{today['id']}/stats", headers=hdr, name="GET what others thought")
+            check(st and st.get("players", 0) >= 1 and len(st.get("suspects", [])) == len(suspects), "stats cover every suspect")
 
     print("\nEconomy, social")
     lb = expect("GET", "/v1/leaderboard?period=daily", headers=hdr)
@@ -114,6 +121,8 @@ def main() -> int:
     expect("GET", "/v1/leaderboard?period=all", headers=hdr, name="GET leaderboard all-time")
     ad = expect("POST", "/v1/wallet/ad-reward", headers=hdr)
     check(ad and ad.get("coins", 0) > 0, "rewarded ad pays coins")
+    fr = expect("POST", "/v1/wallet/streak-freeze", headers=hdr, name="POST streak insurance")
+    check(fr and fr.get("streak_freezes") == 1, "streak insurance bought with coins")
     expect("GET", "/v1/inbox", headers=hdr)
     code = expect("POST", "/v1/auth/transfer-code", headers=hdr)
     check(code and code.get("code"), "transfer code for moving to a new phone")

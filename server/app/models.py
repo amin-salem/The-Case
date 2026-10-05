@@ -47,6 +47,8 @@ class Player(Base):
     best_streak: Mapped[int] = mapped_column(Integer, default=0)
     last_daily_solved: Mapped[str] = mapped_column(String(10), default="")  # YYYY-MM-DD (Tehran)
     last_login_reward: Mapped[str] = mapped_column(String(10), default="")
+    login_day: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # 1..7 in the calendar
+    streak_freezes: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # streak insurance held
     ad_day: Mapped[str] = mapped_column(String(10), default="")
     ad_count: Mapped[int] = mapped_column(Integer, default=0)
     cases_solved: Mapped[int] = mapped_column(Integer, default=0)
@@ -80,6 +82,7 @@ class CaseProgress(Base):
     was_daily: Mapped[bool] = mapped_column(Boolean, default=False)  # finished as "today's case"
     day: Mapped[str] = mapped_column(String(10), default="")    # Tehran day it was finished
     finished_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    first_accused: Mapped[str | None] = mapped_column(String(16), nullable=True)  # for "what others thought"
 
 
 class Purchase(Base):

@@ -17,7 +17,34 @@ jobs:
         run: pip install -r requirements-dev.txt
       - name: Tests (all 50 cases are played through the API)
         working-directory: server
-        run: pytest -q
+        run: |
+          set -o pipefail
+          pytest -q 2>&1 | tee ../pytest.log
+      - name: Report pytest failure
+        if: failure()
+        run: echo "::error title=pytest::$(tail -c 6000 pytest.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"
+      - name: Database migrations (fresh database, and an old one without the new columns)
+        working-directory: server
+        env:
+          DATABASE_URL: sqlite+aiosqlite:///./mig.db
+        run: |
+          set -e
+          alembic upgrade head
+          rm -f mig.db
+          python - <<'EOF'
+          import sqlite3
+          from sqlalchemy import create_engine
+          from app import models  # noqa: F401
+          from app.db import Base
+          Base.metadata.create_all(create_engine("sqlite:///mig.db"))
+          db = sqlite3.connect("mig.db")
+          for t, c in [("players", "login_day"), ("players", "streak_freezes"), ("case_progress", "first_accused")]:
+              db.execute(f"ALTER TABLE {t} DROP COLUMN {c}")
+          db.commit()
+          EOF
+          alembic stamp 0001
+          alembic upgrade head
+          python -c "import sqlite3; d=sqlite3.connect('mig.db'); cols={r[1] for t in ('players','case_progress') for r in d.execute(f'PRAGMA table_info({t})')}; assert {'login_day','streak_freezes','first_accused'} <= cols, cols; print('migration ok')"
       - name: Start the server and run the smoke test against it
         working-directory: server
         run: |
@@ -35,6 +62,10 @@ jobs:
       - name: Analyze and test
         working-directory: app
         run: |
-          flutter pub get
-          flutter analyze
-          flutter test
+          set -o pipefail
+          flutter pub get 2>&1 | tee ../flutter.log
+          flutter analyze 2>&1 | tee -a ../flutter.log
+          flutter test 2>&1 | tee -a ../flutter.log
+      - name: Report Flutter failure
+        if: failure()
+        run: echo "::error title=flutter::$(tail -c 6000 flutter.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"

@@ -9,7 +9,7 @@ from .. import economy as eco
 from ..content import Case
 from ..db import get_session
 from ..models import CaseProgress, Player, utcnow
-from ..schemas import AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, HintOut, ProgressOut
+from ..schemas import AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, HintOut, ProgressOut, StatsOut, SuspectStat
 from ..security import current_player
 from ..util import add_coins
 from .common import vip_active
@@ -38,10 +38,14 @@ def _opened_case(case_id: str) -> Case:
     return c
 
 
-def _previous_case(c: Case) -> Case | None:
+def _missed_between(last_solved: str, c: Case) -> int | None:
+    """How many daily cases came between the last one solved (by publish date) and c.
+    0 = c is the very next case; None = nothing solved before (or unknown)."""
     cases = content.all_cases()
-    i = cases.index(c)
-    return cases[i - 1] if i > 0 else None
+    last = next((i for i, x in enumerate(cases) if x.publish.isoformat() == last_solved), None)
+    if last is None:
+        return None
+    return cases.index(c) - last - 1
 
 
 def _is_today(c: Case) -> bool:
@@ -157,6 +161,8 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     explanation = c.data["solution"]["explanation"]
     today_case = _is_today(c)
     today = content.today_str()
+    if p.first_accused is None and body.suspect in {s["id"] for s in c.data["suspects"]}:
+        p.first_accused = body.suspect  # the player's first instinct, for the "what others thought" stats
 
     if body.suspect == c.culprit and body.evidence in c.proof:
         now = utcnow()
@@ -164,18 +170,30 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         p.seconds = max(1, int((now - p.opened_at).total_seconds()))
         p.stars = eco.stars_for(p.hints, p.attempts)
         reward = eco.SOLVE_REWARD[p.stars]
+        freezes_used, badge = 0, None
         if today_case:
             reward += eco.DAILY_BONUS
             # the streak counts daily cases in a row (by case, not by calendar day,
             # because a daily case stays "today's case" from 21:00 to 21:00)
             mine = c.publish.isoformat()
             if player.last_daily_solved != mine:
-                prev = _previous_case(c)
-                player.streak = player.streak + 1 if prev and player.last_daily_solved == prev.publish.isoformat() else 1
+                missed = _missed_between(player.last_daily_solved, c)
+                held = player.streak_freezes or 0
+                if missed == 0:
+                    player.streak += 1
+                elif missed is not None and 0 < missed <= held and player.streak > 0:
+                    # streak insurance covers the missed cases
+                    player.streak_freezes = held - missed
+                    freezes_used = missed
+                    player.streak += 1
+                else:
+                    player.streak = 1
                 player.best_streak = max(player.best_streak, player.streak)
                 player.last_daily_solved = mine
                 if player.streak % eco.STREAK_BONUS_EVERY == 0:
                     reward += eco.STREAK_BONUS
+                if player.streak in eco.STREAK_BADGES:
+                    badge = player.streak
         player.cases_solved += 1
         player.stars_total += p.stars
         add_coins(session, player, reward, f"solve:{c.id}")
@@ -183,7 +201,8 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         rank = await _daily_rank(session, c.id, p.stars, p.seconds) if today_case else None
         return AccuseOut(result="solved", attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,
                          reward=reward, coins=player.coins, streak=player.streak, explanation=explanation,
-                         culprit=c.culprit, proof=sorted(c.proof), rank=rank, progress=_progress_out(c, p))
+                         culprit=c.culprit, proof=sorted(c.proof), rank=rank, progress=_progress_out(c, p),
+                         seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge)
 
     p.attempts += 1
     # right person but not the evidence that proves it: tell them (it's still a wrong try)
@@ -193,7 +212,36 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         await session.commit()
         return AccuseOut(result="failed", attempts_left=0, coins=player.coins, streak=player.streak,
                          explanation=explanation, culprit=c.culprit, proof=sorted(c.proof),
-                         progress=_progress_out(c, p))
+                         progress=_progress_out(c, p), hints_used=p.hints)
     await session.commit()
     return AccuseOut(result=result, attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
                      streak=player.streak, progress=_progress_out(c, p))
+
+
+@router.get("/{case_id}/stats", response_model=StatsOut)
+async def stats(case_id: str, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """What everyone else thought: shown only after the player has finished the case (no spoilers)."""
+    c = _opened_case(case_id)
+    p = await _progress(session, player.id, c.id)
+    if p is None or not (p.solved or p.failed):
+        raise HTTPException(409, "finish_first")
+    firsts = dict((await session.execute(
+        select(CaseProgress.first_accused, func.count()).where(
+            CaseProgress.case_id == c.id, CaseProgress.first_accused.is_not(None))
+        .group_by(CaseProgress.first_accused))).all())
+    guessed = sum(firsts.values())
+    finished_q = select(func.count()).select_from(CaseProgress).where(
+        CaseProgress.case_id == c.id, or_(CaseProgress.solved.is_(True), CaseProgress.failed.is_(True)))
+    finished = int(await session.scalar(finished_q) or 0)
+    solved = int(await session.scalar(select(func.count()).select_from(CaseProgress).where(
+        CaseProgress.case_id == c.id, CaseProgress.solved.is_(True))) or 0)
+    first_try = int(await session.scalar(select(func.count()).select_from(CaseProgress).where(
+        CaseProgress.case_id == c.id, CaseProgress.solved.is_(True), CaseProgress.attempts == 0)) or 0)
+
+    def pct(n: int, of: int) -> int:
+        return round(100 * n / of) if of else 0
+
+    return StatsOut(players=finished, solved_pct=pct(solved, finished), first_try_pct=pct(first_try, finished),
+                    culprit=c.culprit,
+                    suspects=[SuspectStat(id=s["id"], pct=pct(int(firsts.get(s["id"], 0)), guessed))
+                              for s in c.data["suspects"]])

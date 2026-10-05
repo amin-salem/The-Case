@@ -11,13 +11,27 @@ SOLVE_REWARD = {3: 60, 2: 40, 1: 20}
 DAILY_BONUS = 30                 # extra for solving the case on its own day
 STREAK_BONUS_EVERY = 7           # every 7 days in a row ...
 STREAK_BONUS = 150               # ... this many coins
-LOGIN_REWARD = 20                # once a day
+LOGIN_CALENDAR = [20, 30, 40, 50, 60, 80]  # daily login reward, days 1-6 in a row
+LOGIN_ENVELOPE = [100, 150, 200, 250]      # day 7: a sealed envelope with one of these
+LOGIN_REWARD = LOGIN_CALENDAR[0]           # first day (and after a missed day)
+FREEZE_COST = 150                # "streak insurance": saves the streak for one missed case
+MAX_FREEZES = 2                  # how many a player can hold
+STREAK_BADGES = (7, 30, 100)     # badges for daily cases solved in a row
 AD_REWARD = 25
 AD_PER_DAY = 5
 SECURE_REWARD = 200              # first time an email is added
 INVITE_NEW_PLAYER = 150
 INVITE_INVITER = 300
 MAX_REWARDED_INVITES = 20
+
+
+def login_reward(day: int, pick=None) -> int:
+    """Coins for day 1..7 of the login calendar. Day 7 opens a random envelope."""
+    import random
+
+    if 1 <= day <= len(LOGIN_CALENDAR):
+        return LOGIN_CALENDAR[day - 1]
+    return (pick or random.choice)(LOGIN_ENVELOPE)
 
 
 def stars_for(hints: int, wrong: int) -> int:
