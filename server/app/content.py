@@ -58,7 +58,7 @@ class Case:
                 "scene": d["scene"], "difficulty": d["difficulty"], "publish": self.publish.isoformat()}
 
 
-def validate(d: dict) -> None:
+def validate(d: dict, max_suspects: int = 6) -> None:
     for key in ("id", "number", "publish", "title", "location", "scene", "difficulty", "intro",
                 "suspects", "evidence", "hints", "solution"):
         if key not in d:
@@ -73,8 +73,8 @@ def validate(d: dict) -> None:
         raise CaseError(f"{d['id']}: needs at least 5 pieces of evidence")
     if len(set(sids)) != len(sids) or len(set(eids)) != len(eids):
         raise CaseError(f"{d['id']}: duplicate suspect/evidence id")
-    if not 3 <= len(sids) <= 6:
-        raise CaseError(f"{d['id']}: needs 3-6 suspects")
+    if not 3 <= len(sids) <= max_suspects:
+        raise CaseError(f"{d['id']}: needs 3-{max_suspects} suspects")
     if len(d["hints"]) != 3:
         raise CaseError(f"{d['id']}: needs exactly 3 hints")
     sol = d["solution"]
@@ -159,7 +159,7 @@ WEEKLY_DAYS = 3
 
 
 def validate_weekly(d: dict) -> None:
-    validate(d)
+    validate(d, max_suspects=8)
     eids = {e["id"] for e in d["evidence"]}
     chapters = d.get("chapters") or []
     if not chapters or chapters[0].get("at_hours", 0) != 0:
