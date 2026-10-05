@@ -7,6 +7,21 @@ on:
     tags: ["v*"]
 
 jobs:
+  live-server:
+    # Checks the real server on Liara answers every call the app makes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Smoke test against https://thecase.liara.run
+        working-directory: server
+        run: |
+          pip install httpx==0.28.1
+          curl -sS -m 25 https://thecase.liara.run/health; echo
+          python tools/smoke_test.py https://thecase.liara.run
+
   apk:
     runs-on: ubuntu-latest
     steps:
