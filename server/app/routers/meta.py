@@ -40,7 +40,10 @@ async def config(session: AsyncSession = Depends(get_session)):
                     "invite_new_player": eco.INVITE_NEW_PLAYER,
                     "login_calendar": eco.LOGIN_CALENDAR, "login_envelope": [min(eco.LOGIN_ENVELOPE), max(eco.LOGIN_ENVELOPE)],
                     "freeze_cost": eco.FREEZE_COST, "max_freezes": eco.MAX_FREEZES,
-                    "streak_badges": list(eco.STREAK_BADGES), "products": {
+                    "streak_badges": list(eco.STREAK_BADGES),
+                    "riddles_per_day": eco.RIDDLES_PER_DAY, "riddle_free": eco.RIDDLE_FREE,
+                    "riddle_unlock_cost": eco.RIDDLE_UNLOCK_COST, "riddle_reward": eco.RIDDLE_REWARD,
+                    "riddle_seconds": eco.RIDDLE_SECONDS, "products": {
                         k: {"coins": p.coins, "no_ads": p.no_ads, "kind": p.kind} for k, p in eco.PRODUCTS.items()}},
     })
     return cfg

@@ -175,3 +175,20 @@ class Event(Base):
     name: Mapped[str] = mapped_column(String(48))
     props: Mapped[dict] = mapped_column(JSON, default=dict)
     ts: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class RiddleAnswer(Base):
+    """One player and one quick riddle of one day: opened with coins (if not free) and answered once."""
+
+    __tablename__ = "riddle_answers"
+    __table_args__ = (UniqueConstraint("player_id", "day", "riddle_id", name="uq_riddle_answer"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    day: Mapped[str] = mapped_column(String(10))           # Tehran day of the set
+    riddle_id: Mapped[str] = mapped_column(String(16))
+    unlocked: Mapped[bool] = mapped_column(Boolean, default=False)  # bought with coins
+    choice: Mapped[int | None] = mapped_column(Integer, nullable=True)  # None = not answered yet, -1 = time ran out
+    correct: Mapped[bool] = mapped_column(Boolean, default=False)
+    seconds: Mapped[int] = mapped_column(Integer, default=0)
+    at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

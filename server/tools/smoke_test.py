@@ -114,6 +114,15 @@ def main() -> int:
             st = expect("GET", f"/v1/cases/{today['id']}/stats", headers=hdr, name="GET what others thought")
             check(st and st.get("players", 0) >= 1 and len(st.get("suspects", [])) == len(suspects), "stats cover every suspect")
 
+    print("\nQuick riddles")
+    rd = expect("GET", "/v1/riddles", headers=hdr)
+    items = (rd or {}).get("items", [])
+    check(len(items) >= 3 and all(i.get("answer") is None for i in items), "today's riddles, answers hidden", f"{len(items)} riddles")
+    free = next((i for i in items if not i.get("locked") and not i.get("answered")), None)
+    if free:
+        ans = expect("POST", f"/v1/riddles/{free['id']}/answer", headers=hdr, json={"choice": 0, "seconds": 20})
+        check(ans and ans.get("explain") and ans.get("answer") in (0, 1, 2), "a riddle is judged by the server and explained")
+
     print("\nEconomy, social")
     lb = expect("GET", "/v1/leaderboard?period=daily", headers=hdr)
     check(lb is not None and "me" in lb, "daily leaderboard")

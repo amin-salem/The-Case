@@ -237,3 +237,59 @@ class GiftIn(BaseModel):
 
 class ConfigIn(BaseModel):
     values: dict[str, Any]
+
+
+# --- progress (what an action earned besides coins) -------------------------------------
+class GainsOut(BaseModel):
+    xp: int = 0
+    rank_up: str | None = None          # the new rank's title, when the player just went up
+    missions_done: list[str] = []       # titles of daily missions finished right now
+    achievements: list[dict] = []       # {id, title, coins} earned right now
+
+
+# --- quick riddles ------------------------------------------------------------------------
+class RiddleItem(BaseModel):
+    id: str
+    slot: int                 # 1..RIDDLES_PER_DAY
+    title: str
+    scene: str
+    free: bool
+    locked: bool              # not free and not bought yet: no text until it is opened
+    answered: bool
+    correct: bool = False
+    choice: int | None = None
+    text: str | None = None
+    clue: str | None = None
+    choices: list[str] = []
+    answer: int | None = None   # only after answering
+    explain: str | None = None  # only after answering
+
+
+class RiddlesOut(BaseModel):
+    day: str
+    items: list[RiddleItem]
+    unlock_cost: int
+    reward: int
+    seconds: int
+    next_at: int              # unix seconds: when tomorrow's set opens
+    coins: int
+
+
+class RiddleAnswerIn(BaseModel):
+    choice: int = Field(ge=-1, le=2)   # -1 = the timer ran out
+    seconds: int = Field(default=0, ge=0, le=3600)
+
+
+class RiddleAnswerOut(BaseModel):
+    correct: bool
+    answer: int
+    explain: str
+    reward: int
+    coins: int
+    item: RiddleItem
+    gains: GainsOut = GainsOut()
+
+
+class RiddleUnlockOut(BaseModel):
+    item: RiddleItem
+    coins: int
