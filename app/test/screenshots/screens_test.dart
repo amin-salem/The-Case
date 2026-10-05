@@ -668,8 +668,8 @@ void main() {
     // Api.i is created here, inside the zone, so its http client is the fake server
     http.runWithClient(() => Api.i, () => MockClient(_serve));
     await Api.i.init();
-    final err = await Api.i.connect();
-    if (err != null) stdout.writeln('screens: fake server connect failed: $err');
+    await Api.i.connect();
+    if (!Api.i.online) stdout.writeln('screens: fake server connect failed');
   });
 
   tearDownAll(() async {
