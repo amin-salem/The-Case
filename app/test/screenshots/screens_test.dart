@@ -106,6 +106,12 @@ final Map<String, dynamic> _profileJson = {
   'login_reward': 0,
   'login_day': 4,
   'streak_freezes': 1,
+  'xp': 1840,
+  'rank': 3,
+  'rank_title': 'کارآگاه ارشد',
+  'rank_xp': 1300,
+  'next_rank_xp': 2500,
+  'next_rank_title': 'بازرس',
 };
 
 final Map<String, dynamic> _config = {
@@ -132,6 +138,17 @@ final Map<String, dynamic> _config = {
     'freeze_cost': 150,
     'max_freezes': 2,
     'streak_badges': [7, 30, 100],
+    'ranks': [
+      {'xp': 0, 'title': 'کارآگاه تازه‌کار'},
+      {'xp': 200, 'title': 'دستیار کارآگاه'},
+      {'xp': 600, 'title': 'کارآگاه'},
+      {'xp': 1300, 'title': 'کارآگاه ارشد'},
+      {'xp': 2500, 'title': 'بازرس'},
+      {'xp': 4200, 'title': 'سربازرس'},
+      {'xp': 6500, 'title': 'کارآگاه نخبه'},
+      {'xp': 10000, 'title': 'استاد معما'},
+      {'xp': 15000, 'title': 'افسانه'},
+    ],
     'products': {
       'coins_small': {'coins': 400, 'no_ads': false, 'kind': 'consumable'},
       'coins_medium': {'coins': 1300, 'no_ads': false, 'kind': 'consumable'},
@@ -217,9 +234,10 @@ Map<String, dynamic> _leaderboard(String period) {
     'title': switch (period) { 'weekly' => 'این هفته', 'all' => 'همیشه', _ => 'پرونده‌ی امروز' },
     'top': [
       for (int i = 0; i < names.length; i++)
-        {'rank': i + 1, 'nickname': names[i], 'avatar': i % 12, 'value': 980 - i * 61, 'stars': 3 - (i ~/ 4), 'me': false},
+        {'rank': i + 1, 'nickname': names[i], 'avatar': i % 12, 'value': 980 - i * 61, 'stars': 3 - (i ~/ 4), 'me': false,
+          'rank_title': const ['استاد معما', 'کارآگاه نخبه', 'سربازرس', 'بازرس', 'کارآگاه ارشد'][min(i ~/ 2, 4)]},
     ],
-    'me': {'rank': 23, 'nickname': 'کارآگاه شب', 'avatar': 3, 'value': 412, 'stars': 2, 'me': true},
+    'me': {'rank': 23, 'nickname': 'کارآگاه شب', 'avatar': 3, 'value': 412, 'stars': 2, 'me': true, 'rank_title': 'کارآگاه ارشد'},
   };
 }
 

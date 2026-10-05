@@ -122,7 +122,14 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
         const SizedBox(width: 10),
         SizedBox(width: 40, height: 44, child: CustomPaint(painter: CharacterPainter(kDetectives[r.avatar % kDetectives.length]))),
         const SizedBox(width: 10),
-        Expanded(child: Text(r.me ? '${r.nickname} (تو)' : r.nickname, style: tBody(15, w: FontWeight.w900), maxLines: 1, overflow: TextOverflow.ellipsis)),
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+            Text(r.me ? '${r.nickname} (تو)' : r.nickname,
+                style: tBody(15, w: FontWeight.w900), maxLines: 1, overflow: TextOverflow.ellipsis),
+            if (r.rankTitle.isNotEmpty)
+              Text(r.rankTitle, style: tBody(11.5, color: K.brass), maxLines: 1, overflow: TextOverflow.ellipsis),
+          ]),
+        ),
         if (widget.period == 'daily') ...[Stars(count: r.stars, size: 16), const SizedBox(width: 8)],
         Text(_value(r), style: tBody(14, color: K.brass, w: FontWeight.w900)),
       ]),

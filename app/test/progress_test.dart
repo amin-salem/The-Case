@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:the_case/models/models.dart';
 import 'package:the_case/models/progress.dart';
 
 void main() {
@@ -58,5 +59,14 @@ void main() {
     expect(m.allDone, isFalse);
     expect(m.chestCoins, 80);
     expect(m.missions.first.progress, 3);
+  });
+
+  test('rank progress on the profile', () {
+    final p = Profile({'xp': 1900, 'rank': 3, 'rank_title': 'کارآگاه ارشد', 'rank_xp': 1300, 'next_rank_xp': 2500});
+    expect(p.rankTitle, 'کارآگاه ارشد');
+    expect(p.rankProgress, closeTo(0.5, 0.001));
+    final top = Profile({'xp': 20000, 'rank': 8, 'rank_title': 'افسانه', 'rank_xp': 15000, 'next_rank_xp': null});
+    expect(top.rankProgress, 1);
+    expect(Profile({}).rankTitle, 'کارآگاه تازه‌کار');
   });
 }

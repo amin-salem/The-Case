@@ -14,6 +14,7 @@ import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
 import '../widgets/missions_card.dart';
 import '../widgets/offline.dart';
+import '../widgets/rank.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'account_screen.dart';
@@ -192,7 +193,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 28),
                 children: [
                   _topBar(),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 10),
+                  if (Api.i.profile != null)
+                    RankBar(
+                      profile: Api.i.profile!,
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AccountScreen())),
+                    ),
+                  const SizedBox(height: 14),
                   const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
                   if (_error != null && _cases == null) _errorBox(),
                   if (_cases == null && _error == null)
@@ -254,10 +261,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(p?.nickname ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900)),
               Row(children: [
-                const Icon(Icons.local_fire_department_rounded, size: 16, color: K.stamp),
+                const Icon(Icons.workspace_premium_rounded, size: 16, color: K.brass),
                 Flexible(
-                  child: Text(' ${fa(p?.streak ?? 0)} روز پشت سر هم',
-                      maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.textSoft)),
+                  child: Text(' ${p?.rankTitle ?? ''}',
+                      maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.brass)),
                 ),
               ]),
             ]),
