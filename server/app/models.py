@@ -54,6 +54,11 @@ class Player(Base):
     cases_solved: Mapped[int] = mapped_column(Integer, default=0)
     stars_total: Mapped[int] = mapped_column(Integer, default=0)
 
+    # daily missions
+    last_chest_day: Mapped[str] = mapped_column(String(10), default="", server_default="")
+    chest_streak: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # days in a row, all done
+    chests: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+
     banned: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     last_seen: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
@@ -84,6 +89,7 @@ class CaseProgress(Base):
     finished_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     proof_misses: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # right suspect, wrong proof
     first_accused: Mapped[str | None] = mapped_column(String(16), nullable=True)  # for "what others thought"
+    seen: Mapped[list | None] = mapped_column(JSON, nullable=True)  # suspects interrogated (ids)
 
 
 class Purchase(Base):
@@ -192,3 +198,16 @@ class RiddleAnswer(Base):
     correct: Mapped[bool] = mapped_column(Boolean, default=False)
     seconds: Mapped[int] = mapped_column(Integer, default=0)
     at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class MissionDay(Base):
+    """A player's counters for one Tehran day (what daily missions watch) and whether the chest was opened."""
+
+    __tablename__ = "mission_days"
+    __table_args__ = (UniqueConstraint("player_id", "day", name="uq_mission_day"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    day: Mapped[str] = mapped_column(String(10))
+    counts: Mapped[dict] = mapped_column(JSON, default=dict)
+    claimed: Mapped[bool] = mapped_column(Boolean, default=False)

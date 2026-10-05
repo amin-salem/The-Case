@@ -43,7 +43,8 @@ async def config(session: AsyncSession = Depends(get_session)):
                     "streak_badges": list(eco.STREAK_BADGES),
                     "riddles_per_day": eco.RIDDLES_PER_DAY, "riddle_free": eco.RIDDLE_FREE,
                     "riddle_unlock_cost": eco.RIDDLE_UNLOCK_COST, "riddle_reward": eco.RIDDLE_REWARD,
-                    "riddle_seconds": eco.RIDDLE_SECONDS, "products": {
+                    "riddle_seconds": eco.RIDDLE_SECONDS, "chest_coins": eco.CHEST_COINS,
+                    "chest_bonus": eco.CHEST_BONUS, "products": {
                         k: {"coins": p.coins, "no_ads": p.no_ads, "kind": p.kind} for k, p in eco.PRODUCTS.items()}},
     })
     return cfg

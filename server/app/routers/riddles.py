@@ -79,12 +79,13 @@ async def unlock(riddle_id: str, player: Player = Depends(current_player),
         a = await _row(session, player, day, r.id)
         a.unlocked = True
         add_coins(session, player, -eco.RIDDLE_UNLOCK_COST, f"riddle_unlock:{r.id}")
-        await progress.record(session, player, riddle_unlock=1)
+        gains = await progress.record(session, player, riddle_unlock=1)
         try:
             await session.commit()
         except IntegrityError:  # two taps at once
             await session.rollback()
             raise HTTPException(409, "try_again") from None
+        return RiddleUnlockOut(item=_item(r, slot, a), coins=player.coins, gains=GainsOut(**gains.out()))
     return RiddleUnlockOut(item=_item(r, slot, a), coins=player.coins)
 
 
@@ -107,6 +108,8 @@ async def answer(riddle_id: str, body: RiddleAnswerIn, player: Player = Depends(
     events = {"riddle_answer": 1}
     if ok:
         events["riddle_correct"] = 1
+        if 0 < body.seconds <= eco.RIDDLE_FAST_SECONDS:
+            events["riddle_fast"] = 1
     gains = await progress.record(session, player, **events)
     try:
         await session.commit()
