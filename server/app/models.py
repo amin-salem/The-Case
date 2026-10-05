@@ -54,6 +54,8 @@ class Player(Base):
     cases_solved: Mapped[int] = mapped_column(Integer, default=0)
     stars_total: Mapped[int] = mapped_column(Integer, default=0)
 
+    xp: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # detective rank comes from this
+
     # daily missions
     last_chest_day: Mapped[str] = mapped_column(String(10), default="", server_default="")
     chest_streak: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # days in a row, all done

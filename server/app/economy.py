@@ -97,3 +97,28 @@ CHEST_COINS = 80
 CHEST_BONUS_EVERY = 7            # every 7 days in a row with all missions done ...
 CHEST_BONUS = 150                # ... this many extra coins
 RIDDLE_FAST_SECONDS = 20         # "fast" riddle answer (missions, achievements)
+
+
+# detective rank: XP from everything a player does
+XP_CASE = {3: 60, 2: 40, 1: 25}  # a solved case, by stars
+XP_DAILY_BONUS = 15              # solved on its own day
+XP_CASE_FAILED = 5               # lost, but learned something
+XP_RIDDLE_RIGHT = 10
+XP_RIDDLE_WRONG = 2
+XP_CHEST = 40                    # all daily missions done
+RANKS = [                        # (XP needed, title)
+    (0, "کارآگاه تازه‌کار"),
+    (200, "دستیار کارآگاه"),
+    (600, "کارآگاه"),
+    (1300, "کارآگاه ارشد"),
+    (2500, "بازرس"),
+    (4200, "سربازرس"),
+    (6500, "کارآگاه نخبه"),
+    (10000, "استاد معما"),
+    (15000, "افسانه"),
+]
+
+
+def rank_of(xp: int) -> int:
+    """Index into RANKS for this much XP."""
+    return max(i for i, (need, _) in enumerate(RANKS) if xp >= need)

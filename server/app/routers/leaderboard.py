@@ -10,6 +10,7 @@ from ..db import get_session
 from ..models import CaseProgress, Player
 from ..schemas import LeaderboardOut, LeaderRow
 from ..security import current_player
+from .common import rank_title
 
 router = APIRouter(prefix="/v1", tags=["leaderboard"])
 
@@ -31,7 +32,7 @@ async def leaderboard(period: str = Query("daily", pattern="^(daily|weekly|all)$
              .order_by(CaseProgress.stars.desc(), CaseProgress.seconds.asc()))
         rows = (await session.execute(q)).all()
         out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, value=secs, stars=st,
-                         me=pl.id == player.id) for i, (pl, st, secs) in enumerate(rows)]
+                         me=pl.id == player.id, rank_title=rank_title(pl)) for i, (pl, st, secs) in enumerate(rows)]
         title = f"پرونده‌ی امروز: {c.data['title']}"
     elif period == "weekly":
         start = content.week_start(date.fromisoformat(content.today_str())).isoformat()
@@ -41,14 +42,14 @@ async def leaderboard(period: str = Query("daily", pattern="^(daily|weekly|all)$
              .group_by(Player.id).order_by(total.desc()))
         rows = (await session.execute(q)).all()
         out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, value=int(t), stars=int(t),
-                         me=pl.id == player.id) for i, (pl, t) in enumerate(rows)]
+                         me=pl.id == player.id, rank_title=rank_title(pl)) for i, (pl, t) in enumerate(rows)]
         title = "این هفته"
     else:
         q = (select(Player).where(visible, Player.stars_total > 0)
              .order_by(Player.stars_total.desc(), Player.cases_solved.desc()))
         rows = (await session.execute(q)).scalars().all()
         out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, value=pl.stars_total,
-                         stars=pl.stars_total, me=pl.id == player.id) for i, pl in enumerate(rows)]
+                         stars=pl.stars_total, me=pl.id == player.id, rank_title=rank_title(pl)) for i, pl in enumerate(rows)]
         title = "همه‌ی زمان‌ها"
     me = next((r for r in out if r.me), None)
     return LeaderboardOut(period=period, title=title, top=out[:limit], me=me)

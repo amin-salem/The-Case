@@ -110,7 +110,7 @@ async def answer(riddle_id: str, body: RiddleAnswerIn, player: Player = Depends(
         events["riddle_correct"] = 1
         if 0 < body.seconds <= eco.RIDDLE_FAST_SECONDS:
             events["riddle_fast"] = 1
-    gains = await progress.record(session, player, **events)
+    gains = await progress.record(session, player, xp=eco.XP_RIDDLE_RIGHT if ok else eco.XP_RIDDLE_WRONG, **events)
     try:
         await session.commit()
     except IntegrityError:  # answered twice at the same moment

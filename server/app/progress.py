@@ -15,6 +15,7 @@ from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import content, missions
+from . import economy as eco
 from .models import MissionDay, Player
 
 
@@ -28,6 +29,17 @@ class Gains:
     def out(self) -> dict:
         return {"xp": self.xp, "rank_up": self.rank_up, "missions_done": self.missions_done,
                 "achievements": self.achievements}
+
+
+def add_xp(player: Player, xp: int, gains: Gains) -> None:
+    if xp <= 0:
+        return
+    before = eco.rank_of(player.xp or 0)
+    player.xp = (player.xp or 0) + xp
+    gains.xp += xp
+    after = eco.rank_of(player.xp)
+    if after > before:
+        gains.rank_up = eco.RANKS[after][1]
 
 
 async def mission_day(session: AsyncSession, player: Player, day: str | None = None, create: bool = True) -> MissionDay | None:
@@ -44,8 +56,10 @@ async def mission_day(session: AsyncSession, player: Player, day: str | None = N
     return md
 
 
-async def record(session: AsyncSession, player: Player, **events: int) -> Gains:
+async def record(session: AsyncSession, player: Player, xp: int = 0, **events: int) -> Gains:
+    """xp: experience earned by this action (ranks). events: counters for missions."""
     gains = Gains()
+    add_xp(player, xp, gains)
     events = {k: v for k, v in events.items() if v}
     if not events:
         return gains

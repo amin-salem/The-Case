@@ -36,7 +36,7 @@ jobs:
           COLUMNS = [("players", "login_day"), ("players", "streak_freezes"),
                      ("case_progress", "first_accused"), ("case_progress", "proof_misses"),
                      ("players", "last_chest_day"), ("players", "chest_streak"), ("players", "chests"),
-                     ("case_progress", "seen")]
+                     ("case_progress", "seen"), ("players", "xp")]
           TABLES = ["riddle_answers", "mission_days"]
           EOF
           python - <<'EOF'
