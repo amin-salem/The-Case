@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0 (app build 7, server 1.3.0): fairness and sound
+
+- Suspects and evidence are shuffled per case (same order for everyone); the culprit is no longer usually first.
+- Every card that breaks the culprit's story is accepted as proof (c001, c047, c049 fixed). The right suspect with
+  the wrong proof now costs a star instead of a try (twice).
+- Contradictions fixed in c006, c020, c027, c040, c049 and c050.
+- All women are drawn with hijab; real religious and state places renamed to fictional or generic ones.
+- Sound: even loudness on phone speakers, no hiss or sub-bass drone, no clicks; new gentle wrong/lose/heartbeat
+  sounds; buttons make a soft tap; the verdict lowers the background; plays alongside your music.
+
 ## 1.2.2 (app build 6)
 
 - **Plays without internet**: the app always opens. Opened cases, the case list, profile and notes are kept on the
