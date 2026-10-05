@@ -141,6 +141,16 @@ class HintOut(BaseModel):
 class AccuseIn(BaseModel):
     suspect: str = Field(max_length=16)
     evidence: str = Field(max_length=16)
+    motive: str | None = Field(default=None, max_length=16)   # the weekly case also asks "why"
+    extra_seconds: int = Field(default=0, ge=0, le=3600)      # active time since the last tick
+
+
+class TickIn(BaseModel):
+    seconds: int = Field(ge=0, le=3600)
+
+
+class TickOut(BaseModel):
+    active_seconds: int
 
 
 class AccuseOut(BaseModel):

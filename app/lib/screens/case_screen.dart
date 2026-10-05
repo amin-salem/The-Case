@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
+import '../services/case_clock.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
@@ -62,8 +63,15 @@ class _CaseScreenState extends State<CaseScreen> {
   @override
   void initState() {
     super.initState();
+    CaseClock.i.start(widget.caseId); // solving time counts only while this screen is open
     _loadNotes();
     _load();
+  }
+
+  @override
+  void dispose() {
+    CaseClock.i.stop();
+    super.dispose();
   }
 
   /// The player's marks and pins stay on the phone, so leaving the case (or having

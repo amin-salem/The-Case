@@ -10,7 +10,7 @@ from ..content import Case
 from ..db import get_session
 from ..models import CaseProgress, Player, utcnow
 from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut, HintOut, ProgressOut, SeenIn, SeenOut,
-                       StatsOut, SuspectStat)
+                       StatsOut, SuspectStat, TickIn, TickOut)
 from ..security import current_player
 from ..util import add_coins
 from .common import vip_active
@@ -47,6 +47,17 @@ def _missed_between(last_solved: str, c: Case) -> int | None:
     if last is None:
         return None
     return cases.index(c) - last - 1
+
+
+def add_active_time(p: CaseProgress, seconds: int, now) -> int:
+    """Adds time the app says the case was open. Never more than really passed since the last
+    report (plus a little slack), and at most TICK_MAX per report. Returns what was added."""
+    since = p.last_tick_at or p.opened_at
+    real = int((now - since).total_seconds()) + 5 if since else seconds
+    add = max(0, min(seconds, eco.TICK_MAX, real))
+    p.active_seconds = (p.active_seconds or 0) + add
+    p.last_tick_at = now
+    return add
 
 
 def _is_today(c: Case) -> bool:
@@ -170,7 +181,9 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     if body.suspect == c.culprit and body.evidence in c.proof:
         now = utcnow()
         p.solved, p.finished_at, p.day, p.was_daily = True, now, today, today_case
-        p.seconds = max(1, int((now - p.opened_at).total_seconds()))
+        add_active_time(p, body.extra_seconds, now)
+        # apps that report their open time are timed by it; older apps by the clock since opening
+        p.seconds = max(1, p.active_seconds) if p.active_seconds else max(1, int((now - p.opened_at).total_seconds()))
         p.stars = eco.stars_for(p.hints, p.attempts, p.proof_misses or 0)
         reward = eco.SOLVE_REWARD[p.stars]
         freezes_used, badge = 0, None
@@ -284,3 +297,17 @@ async def seen(case_id: str, body: SeenIn, player: Player = Depends(current_play
             gains = await progress.record(session, player, interrogate_all=1)
         await session.commit()
     return SeenOut(seen=len(after), total=len(ids), gains=GainsOut(**gains.out()) if gains else GainsOut())
+
+
+@router.post("/{case_id}/tick", response_model=TickOut)
+async def tick(case_id: str, body: TickIn, player: Player = Depends(current_player),
+               session: AsyncSession = Depends(get_session)):
+    """The app reports, every half minute and when leaving, how long the case screen was open."""
+    c = _opened_case(case_id)
+    p = await _progress(session, player.id, c.id)
+    if p is None:
+        raise HTTPException(409, "open_case_first")
+    if not (p.solved or p.failed):
+        add_active_time(p, body.seconds, utcnow())
+        await session.commit()
+    return TickOut(active_seconds=p.active_seconds or 0)

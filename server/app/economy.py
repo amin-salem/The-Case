@@ -96,7 +96,8 @@ RIDDLE_SECONDS = 60              # the timer in the app (an answer after it runs
 CHEST_COINS = 80
 CHEST_BONUS_EVERY = 7            # every 7 days in a row with all missions done ...
 CHEST_BONUS = 150                # ... this many extra coins
-RIDDLE_FAST_SECONDS = 20         # "fast" riddle answer (missions, achievements)
+RIDDLE_FAST_SECONDS = 20
+TICK_MAX = 120                   # one time report from the app counts at most this many seconds         # "fast" riddle answer (missions, achievements)
 
 
 # detective rank: XP from everything a player does
