@@ -198,7 +198,10 @@ class Profile {
         rankTitle = _s(j['rank_title'], 'کارآگاه تازه‌کار'),
         rankXp = _i(j['rank_xp']),
         nextRankXp = j['next_rank_xp'] is num ? (j['next_rank_xp'] as num).toInt() : null,
-        nextRankTitle = j['next_rank_title'] as String?;
+        nextRankTitle = j['next_rank_title'] as String?,
+        achievements = _i(j['achievements']);
+
+  final int achievements; // earned so far
 
   final int xp, rank, rankXp; // detective rank (index) and the XP where it starts
   final int? nextRankXp; // null at the top rank

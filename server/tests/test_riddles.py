@@ -52,7 +52,8 @@ async def test_play_a_day(client, clock):
     coins = day["coins"]
     # right answer pays, and can't be answered again
     r = (await client.post(f"/v1/riddles/{free[0]['id']}/answer", headers=h, json={"choice": truth[free[0]['id']], "seconds": 12})).json()
-    assert r["correct"] and r["reward"] == eco.RIDDLE_REWARD and r["coins"] == coins + eco.RIDDLE_REWARD
+    bonus = sum(a["coins"] for a in r["gains"]["achievements"])  # "first riddle" achievement
+    assert r["correct"] and r["reward"] == eco.RIDDLE_REWARD and r["coins"] == coins + eco.RIDDLE_REWARD + bonus
     assert r["item"]["answered"] and r["item"]["explain"] and r["answer"] == truth[free[0]["id"]]
     again = await client.post(f"/v1/riddles/{free[0]['id']}/answer", headers=h, json={"choice": 0})
     assert again.status_code == 409
@@ -64,7 +65,7 @@ async def test_play_a_day(client, clock):
     locked = await client.post(f"/v1/riddles/{paid[0]['id']}/answer", headers=h, json={"choice": 0})
     assert locked.status_code == 402
     u = (await client.post(f"/v1/riddles/{paid[0]['id']}/unlock", headers=h)).json()
-    assert not u["item"]["locked"] and u["item"]["text"] and u["coins"] == coins + eco.RIDDLE_REWARD - eco.RIDDLE_UNLOCK_COST
+    assert not u["item"]["locked"] and u["item"]["text"] and u["coins"] == coins + eco.RIDDLE_REWARD + bonus - eco.RIDDLE_UNLOCK_COST
     u2 = (await client.post(f"/v1/riddles/{paid[0]['id']}/unlock", headers=h)).json()
     assert u2["coins"] == u["coins"]  # opening twice costs once
     r = (await client.post(f"/v1/riddles/{paid[0]['id']}/answer", headers=h, json={"choice": truth[paid[0]['id']]})).json()

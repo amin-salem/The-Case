@@ -201,8 +201,12 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         player.stars_total += p.stars
         add_coins(session, player, reward, f"solve:{c.id}")
         xp = eco.XP_CASE[p.stars] + (eco.XP_DAILY_BONUS if today_case else 0)
-        gains = await progress.record(session, player, xp=xp, case_solved=1, daily_solved=int(today_case),
-                                      case_3stars=int(p.stars == 3), case_no_hint=int(p.hints == 0))
+        early = today_case and (content.now_local() - content.opens_at(c)).total_seconds() <= 30 * 60
+        gains = await progress.record(
+            session, player, xp=xp, case_solved=1, daily_solved=int(today_case),
+            case_3stars=int(p.stars == 3), case_no_hint=int(p.hints == 0),
+            first_try=int(p.attempts == 0 and not p.proof_misses), fast5=int(p.seconds <= 300),
+            fast2=int(p.seconds <= 120), early_daily=int(early))
         await session.commit()
         rank = await _daily_rank(session, c.id, p.stars, p.seconds) if today_case else None
         return AccuseOut(result="solved", attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.8.0 (app build 12, server 1.8.0): achievements
+
+- 33 achievements in 7 groups (cases, skill, streaks, quick riddles, missions, account, rank), each with coins
+  and XP: first 3-star case, cases without hints, solved under 5 and 2 minutes, solved in the first half hour,
+  3/7/30/100-night streaks, 10/50 riddles, error-free riddle days, 7 days of missions in a row, and more.
+- Computed on the server from lifetime counters; ones already deserved (streaks, secured account, invites) are
+  granted on the next visit. A banner shows each one as it is earned.
+- Achievements screen with progress bars, reachable from the home page and the profile.
+
 ## 1.7.0 (app build 11, server 1.7.0): detective rank
 
 - XP for everything: solved cases (25/40/60 by stars, +15 on its own day, 5 for a lost case), quick riddles

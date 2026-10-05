@@ -4,11 +4,16 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from app import content, economy as eco, missions, riddles
+from app import achievements, content, economy as eco, missions, riddles
 
 from .conftest import new_player
 
 TEHRAN = ZoneInfo("Asia/Tehran")
+
+
+def ach_xp(gains: dict) -> int:
+    """XP that came from achievements earned in the same action."""
+    return sum(achievements.BY_ID[a["id"]].xp for a in gains["achievements"])
 
 
 @pytest.fixture
@@ -47,17 +52,18 @@ async def test_xp_from_actions_and_rank_up(client, clock, monkeypatch):
     right = (await client.post(f"/v1/riddles/{items[0]['id']}/answer", headers=h, json={"choice": truth[items[0]['id']]})).json()
     wrong = (await client.post(f"/v1/riddles/{items[1]['id']}/answer", headers=h,
                                json={"choice": (truth[items[1]['id']] + 1) % 3})).json()
-    assert right["gains"]["xp"] == eco.XP_RIDDLE_RIGHT and wrong["gains"]["xp"] == eco.XP_RIDDLE_WRONG
+    assert right["gains"]["xp"] - ach_xp(right["gains"]) == eco.XP_RIDDLE_RIGHT
+    assert wrong["gains"]["xp"] - ach_xp(wrong["gains"]) == eco.XP_RIDDLE_WRONG
 
     # today's case with 3 stars: enough for the second rank
     monkeypatch.setattr(eco, "RANKS", [(0, "یک"), (50, "دو"), (10**6, "سه")])
     await client.get(f"/v1/cases/{c.id}", headers=h)
     r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h,
                            json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})).json()
-    assert r["stars"] == 3 and r["gains"]["xp"] == eco.XP_CASE[3] + eco.XP_DAILY_BONUS
+    assert r["stars"] == 3 and r["gains"]["xp"] - ach_xp(r["gains"]) == eco.XP_CASE[3] + eco.XP_DAILY_BONUS
     assert r["gains"]["rank_up"] == "دو"
     me = (await client.get("/v1/me", headers=h)).json()
-    assert me["xp"] == eco.XP_RIDDLE_RIGHT + eco.XP_RIDDLE_WRONG + eco.XP_CASE[3] + eco.XP_DAILY_BONUS
+    assert me["xp"] == right["gains"]["xp"] + wrong["gains"]["xp"] + r["gains"]["xp"]
     assert me["rank_title"] == "دو" and me["rank_xp"] == 50 and me["next_rank_title"] == "سه"
 
     # leaderboards carry the title

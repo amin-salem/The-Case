@@ -55,6 +55,7 @@ class Player(Base):
     stars_total: Mapped[int] = mapped_column(Integer, default=0)
 
     xp: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # detective rank comes from this
+    stats: Mapped[dict | None] = mapped_column(JSON, nullable=True)  # lifetime counters (achievements)
 
     # daily missions
     last_chest_day: Mapped[str] = mapped_column(String(10), default="", server_default="")
@@ -213,3 +214,13 @@ class MissionDay(Base):
     day: Mapped[str] = mapped_column(String(10))
     counts: Mapped[dict] = mapped_column(JSON, default=dict)
     claimed: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class PlayerAchievement(Base):
+    __tablename__ = "player_achievements"
+    __table_args__ = (UniqueConstraint("player_id", "achievement_id", name="uq_player_achievement"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    achievement_id: Mapped[str] = mapped_column(String(32))
+    at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

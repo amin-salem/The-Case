@@ -110,6 +110,10 @@ async def answer(riddle_id: str, body: RiddleAnswerIn, player: Player = Depends(
         events["riddle_correct"] = 1
         if 0 < body.seconds <= eco.RIDDLE_FAST_SECONDS:
             events["riddle_fast"] = 1
+    # three of today's riddles answered, all of them right
+    answered = [x for x in (await _mine(session, player.id, day)).values() if x.choice is not None]
+    if ok and len(answered) == eco.RIDDLE_FREE and all(x.correct for x in answered):
+        events["riddle_perfect_day"] = 1
     gains = await progress.record(session, player, xp=eco.XP_RIDDLE_RIGHT if ok else eco.XP_RIDDLE_WRONG, **events)
     try:
         await session.commit()

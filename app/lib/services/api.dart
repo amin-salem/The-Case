@@ -320,6 +320,7 @@ class Api extends ChangeNotifier {
   static const _kCases = 'c_cases';
   static const _kRiddles = 'c_riddles';
   static const _kMissions = 'c_missions';
+  static const _kAchievements = 'c_achievements';
   static const _kCasePrefix = 'c_case_';
   static const _kNotesPrefix = 'notes_';
 
@@ -345,7 +346,7 @@ class Api extends ChangeNotifier {
   /// Another account's data must not show up after a login on this phone.
   Future<void> _clearCache() async {
     for (final k in _p.getKeys().toList()) {
-      if (k == _kMe || k == _kCases || k == _kRiddles || k == _kMissions || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix)) {
+      if (k == _kMe || k == _kCases || k == _kRiddles || k == _kMissions || k == _kAchievements || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix)) {
         await _p.remove(k);
       }
     }
@@ -459,6 +460,7 @@ class Api extends ChangeNotifier {
   Future<Profile?> refreshProfile() async {
     final j = await _call('GET', '/v1/me') as Map;
     _setProfile(Map<String, dynamic>.from(j));
+    _emitGains(j['gains']);
     return profile;
   }
 
@@ -647,6 +649,11 @@ class Api extends ChangeNotifier {
     _emitGains(j['gains']);
     return r;
   }
+
+  // ---------------------------------------------------------------- achievements
+
+  /// Every achievement with progress; offline, the last saved list.
+  Future<AchievementsList> achievements() async => AchievementsList(await _cachedGet('/v1/achievements', _kAchievements));
 
   // ---------------------------------------------------------------- daily missions
 

@@ -81,7 +81,9 @@ async def test_missions_chest_and_streak(client, clock, fixed_missions):
     assert m["all_done"] and all(x["done"] and x["progress"] == x["target"] for x in m["missions"])
     coins = m["coins"]
     ch = (await client.post("/v1/missions/claim", headers=h)).json()
-    assert ch["reward"] == eco.CHEST_COINS and ch["missions"]["coins"] == coins + eco.CHEST_COINS
+    bonus = sum(a["coins"] for a in ch["gains"]["achievements"])  # "first chest" achievement
+    assert ch["reward"] == eco.CHEST_COINS and ch["missions"]["coins"] == coins + eco.CHEST_COINS + bonus
+    assert "chest_1" in {a["id"] for a in ch["gains"]["achievements"]}
     assert ch["missions"]["claimed"] and ch["missions"]["chest_streak"] == 1
     assert (await client.post("/v1/missions/claim", headers=h)).status_code == 409
 

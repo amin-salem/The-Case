@@ -69,4 +69,20 @@ void main() {
     expect(top.rankProgress, 1);
     expect(Profile({}).rankTitle, 'کارآگاه تازه‌کار');
   });
+
+  test('achievements list', () {
+    final l = AchievementsList({
+      'earned': 1,
+      'total': 2,
+      'items': [
+        {'id': 'a', 'title': 'الف', 'desc': 'd', 'group': 'cases', 'target': 1, 'progress': 1, 'earned': true,
+          'earned_at': 1790000000, 'coins': 50, 'xp': 20},
+        {'id': 'b', 'title': 'ب', 'desc': 'd', 'group': 'riddles', 'target': 10, 'progress': 3, 'earned': false,
+          'coins': 80, 'xp': 40},
+      ],
+    });
+    expect(l.items.first.earnedAt, isNotNull);
+    expect(l.items.last.earned, isFalse);
+    expect(l.items.last.progress, 3);
+  });
 }

@@ -125,3 +125,32 @@ class MissionsDay {
 
   int get done => missions.where((m) => m.done).length;
 }
+
+class AchievementRow {
+  AchievementRow(Map<String, dynamic> j)
+      : id = _s(j['id']),
+        title = _s(j['title']),
+        desc = _s(j['desc']),
+        group = _s(j['group'], 'cases'),
+        target = _i(j['target'], 1),
+        progress = _i(j['progress']),
+        earned = _b(j['earned']),
+        earnedAt = j['earned_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['earned_at'] as num).toInt() * 1000) : null,
+        coins = _i(j['coins']),
+        xp = _i(j['xp']);
+
+  final String id, title, desc, group;
+  final int target, progress, coins, xp;
+  final bool earned;
+  final DateTime? earnedAt;
+}
+
+class AchievementsList {
+  AchievementsList(Map<String, dynamic> j)
+      : earned = _i(j['earned']),
+        total = _i(j['total']),
+        items = [for (final x in (j['items'] as List? ?? const [])) if (x is Map) AchievementRow(x.cast<String, dynamic>())];
+
+  final int earned, total;
+  final List<AchievementRow> items;
+}
