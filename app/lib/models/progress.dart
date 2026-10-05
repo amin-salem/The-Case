@@ -94,3 +94,34 @@ class RiddleResult {
   final RiddleItem item;
   final Gains gains;
 }
+
+class MissionRow {
+  MissionRow(Map<String, dynamic> j)
+      : id = _s(j['id']),
+        title = _s(j['title']),
+        target = _i(j['target'], 1),
+        progress = _i(j['progress']),
+        done = _b(j['done']);
+  final String id, title;
+  final int target, progress;
+  final bool done;
+}
+
+class MissionsDay {
+  MissionsDay(Map<String, dynamic> j)
+      : day = _s(j['day']),
+        missions = [for (final x in (j['missions'] as List? ?? const [])) if (x is Map) MissionRow(x.cast<String, dynamic>())],
+        allDone = _b(j['all_done']),
+        claimed = _b(j['claimed']),
+        chestCoins = _i(j['chest_coins']),
+        chestStreak = _i(j['chest_streak']),
+        nextAt = DateTime.fromMillisecondsSinceEpoch(_i(j['next_at']) * 1000);
+
+  final String day;
+  final List<MissionRow> missions;
+  final bool allDone, claimed;
+  final int chestCoins, chestStreak;
+  final DateTime nextAt;
+
+  int get done => missions.where((m) => m.done).length;
+}

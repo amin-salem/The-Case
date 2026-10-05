@@ -12,6 +12,7 @@ from . import content, db, riddles
 from .config import get_settings
 from .version import VERSION
 from .routers import admin, auth, cases, inbox, leaderboard, meta, pages, profile, purchases
+from .routers import missions as mission_routes
 from .routers import riddles as riddle_routes
 from .services.ratelimit import RateLimitMiddleware
 
@@ -36,7 +37,7 @@ def create_app() -> FastAPI:
     app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in s.cors_origins.split(",")],
                        allow_methods=["*"], allow_headers=["*"])
     for r in (meta.router, pages.router, auth.router, profile.router, cases.router, leaderboard.router,
-              purchases.router, riddle_routes.router, inbox.router, admin.router):
+              purchases.router, riddle_routes.router, mission_routes.router, inbox.router, admin.router):
         app.include_router(r)
     return app
 

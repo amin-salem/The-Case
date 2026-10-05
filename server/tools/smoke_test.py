@@ -123,6 +123,12 @@ def main() -> int:
         ans = expect("POST", f"/v1/riddles/{free['id']}/answer", headers=hdr, json={"choice": 0, "seconds": 20})
         check(ans and ans.get("explain") and ans.get("answer") in (0, 1, 2), "a riddle is judged by the server and explained")
 
+    print("\nDaily missions")
+    ms = expect("GET", "/v1/missions", headers=hdr)
+    check(ms and len(ms.get("missions", [])) == 3, "three daily missions", ", ".join(m["title"] for m in (ms or {}).get("missions", [])))
+    early = call("POST", "/v1/missions/claim", headers=hdr)
+    check(early and early[0].status_code in (200, 409), "the chest opens only when all missions are done")
+
     print("\nEconomy, social")
     lb = expect("GET", "/v1/leaderboard?period=daily", headers=hdr)
     check(lb is not None and "me" in lb, "daily leaderboard")

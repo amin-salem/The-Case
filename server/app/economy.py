@@ -90,3 +90,10 @@ RIDDLE_FREE = 3                  # the first ones of the day are free ...
 RIDDLE_UNLOCK_COST = 20          # ... the rest are opened with coins
 RIDDLE_REWARD = 10               # coins for a right answer
 RIDDLE_SECONDS = 60              # the timer in the app (an answer after it runs out counts as wrong)
+
+
+# daily missions: three a day, a chest when all three are done
+CHEST_COINS = 80
+CHEST_BONUS_EVERY = 7            # every 7 days in a row with all missions done ...
+CHEST_BONUS = 150                # ... this many extra coins
+RIDDLE_FAST_SECONDS = 20         # "fast" riddle answer (missions, achievements)

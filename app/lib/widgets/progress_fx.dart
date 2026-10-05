@@ -9,6 +9,11 @@ import '../theme.dart';
 /// Shows what an action earned (a finished mission, a new rank, an achievement) as banners
 /// that slide in from the top, one after another. Nothing happens when there is nothing to show.
 void celebrate(BuildContext context, Gains g) {
+  final overlay = Overlay.maybeOf(context, rootOverlay: true);
+  if (overlay != null) celebrateOn(overlay, g);
+}
+
+void celebrateOn(OverlayState overlay, Gains g) {
   final items = <(IconData, String, String)>[
     for (final m in g.missionsDone) (Icons.task_alt_rounded, 'مأموریت انجام شد', m),
     for (final a in g.achievements)
@@ -16,8 +21,6 @@ void celebrate(BuildContext context, Gains g) {
     if (g.rankUp != null) (Icons.workspace_premium_rounded, 'درجه‌ی تازه!', 'حالا «${g.rankUp}» هستی'),
   ];
   if (items.isEmpty) return;
-  final overlay = Overlay.maybeOf(context, rootOverlay: true);
-  if (overlay == null) return;
   unawaited(_show(overlay, items));
 }
 

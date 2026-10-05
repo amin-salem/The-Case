@@ -127,6 +127,7 @@ class HintOut(BaseModel):
     hint: str
     coins: int
     progress: ProgressOut
+    gains: "GainsOut | None" = None
 
 
 class AccuseIn(BaseModel):
@@ -150,6 +151,7 @@ class AccuseOut(BaseModel):
     hints_used: int = 0
     freezes_used: int = 0    # streak insurance spent to keep the streak
     badge: int | None = None  # a streak badge (7, 30, 100) reached right now
+    gains: "GainsOut | None" = None
 
 
 class SuspectStat(BaseModel):
@@ -293,3 +295,44 @@ class RiddleAnswerOut(BaseModel):
 class RiddleUnlockOut(BaseModel):
     item: RiddleItem
     coins: int
+    gains: GainsOut = GainsOut()
+
+
+# --- daily missions -----------------------------------------------------------------------
+class MissionRow(BaseModel):
+    id: str
+    title: str
+    target: int
+    progress: int
+    done: bool
+
+
+class MissionsOut(BaseModel):
+    day: str
+    missions: list[MissionRow]
+    all_done: bool
+    claimed: bool
+    chest_coins: int          # what the chest gives today (with the every-7-days bonus)
+    chest_streak: int         # days in a row the chest was opened
+    next_at: int              # unix seconds: when tomorrow's missions start
+    coins: int
+
+
+class ChestOut(BaseModel):
+    missions: MissionsOut
+    reward: int
+    gains: GainsOut = GainsOut()
+
+
+class SeenIn(BaseModel):
+    suspect: str = Field(max_length=16)
+
+
+class SeenOut(BaseModel):
+    seen: int
+    total: int
+    gains: GainsOut = GainsOut()
+
+
+AccuseOut.model_rebuild()
+HintOut.model_rebuild()

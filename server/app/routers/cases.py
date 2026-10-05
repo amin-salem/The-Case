@@ -4,12 +4,13 @@ from sqlalchemy import and_, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import content
+from .. import content, progress
 from .. import economy as eco
 from ..content import Case
 from ..db import get_session
 from ..models import CaseProgress, Player, utcnow
-from ..schemas import AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, HintOut, ProgressOut, StatsOut, SuspectStat
+from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut, HintOut, ProgressOut, SeenIn, SeenOut,
+                       StatsOut, SuspectStat)
 from ..security import current_player
 from ..util import add_coins
 from .common import vip_active
@@ -110,6 +111,7 @@ async def unlock(case_id: str, player: Player = Depends(current_player),
         if player.coins < eco.UNLOCK_COST:
             raise HTTPException(402, {"error": "not_enough_coins", "need": eco.UNLOCK_COST})
         add_coins(session, player, -eco.UNLOCK_COST, f"unlock:{c.id}")
+        await progress.record(session, player, case_unlock=1)
         if p is None:
             p = CaseProgress(player_id=player.id, case_id=c.id)
             session.add(p)
@@ -137,8 +139,9 @@ async def buy_hint(case_id: str, player: Player = Depends(current_player),
         add_coins(session, player, -cost, f"hint{p.hints + 1}:{c.id}")
     hint = c.hints[p.hints]
     p.hints += 1
+    gains = await progress.record(session, player, hint=1)
     await session.commit()
-    return HintOut(hint=hint, coins=player.coins, progress=_progress_out(c, p))
+    return HintOut(hint=hint, coins=player.coins, progress=_progress_out(c, p), gains=GainsOut(**gains.out()))
 
 
 async def _daily_rank(session: AsyncSession, case_id: str, stars: int, seconds: int) -> int:
@@ -197,12 +200,15 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         player.cases_solved += 1
         player.stars_total += p.stars
         add_coins(session, player, reward, f"solve:{c.id}")
+        gains = await progress.record(session, player, case_solved=1, daily_solved=int(today_case),
+                                      case_3stars=int(p.stars == 3), case_no_hint=int(p.hints == 0))
         await session.commit()
         rank = await _daily_rank(session, c.id, p.stars, p.seconds) if today_case else None
         return AccuseOut(result="solved", attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,
                          reward=reward, coins=player.coins, streak=player.streak, explanation=explanation,
                          culprit=c.culprit, proof=sorted(c.proof), rank=rank, progress=_progress_out(c, p),
-                         seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge)
+                         seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge,
+                         gains=GainsOut(**gains.out()))
 
     # right person but not the evidence that proves it: the first few times it costs a star, not a try
     if body.suspect == c.culprit and (p.proof_misses or 0) < eco.FREE_PROOF_MISSES:
@@ -250,3 +256,25 @@ async def stats(case_id: str, player: Player = Depends(current_player), session:
                     culprit=c.culprit,
                     suspects=[SuspectStat(id=s["id"], pct=pct(int(firsts.get(s["id"], 0)), guessed))
                               for s in c.data["suspects"]])
+
+
+@router.post("/{case_id}/seen", response_model=SeenOut)
+async def seen(case_id: str, body: SeenIn, player: Player = Depends(current_player),
+               session: AsyncSession = Depends(get_session)):
+    """The app says a suspect's interrogation was opened (for the "interrogate everyone" mission)."""
+    c = _opened_case(case_id)
+    p = await _progress(session, player.id, c.id)
+    if p is None or not _can_open(c, p, player):
+        raise HTTPException(409, "open_case_first")
+    ids = [s["id"] for s in c.data["suspects"]]
+    if body.suspect not in ids:
+        raise HTTPException(404, "no_suspect")
+    before = set(p.seen or [])
+    after = before | {body.suspect}
+    gains = None
+    if after != before:
+        p.seen = sorted(after)
+        if after >= set(ids):
+            gains = await progress.record(session, player, interrogate_all=1)
+        await session.commit()
+    return SeenOut(seen=len(after), total=len(ids), gains=GainsOut(**gains.out()) if gains else GainsOut())

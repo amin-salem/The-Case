@@ -34,8 +34,10 @@ jobs:
           cat > /tmp/mig_lists.py <<'EOF'
           # columns and tables added by migrations after 0001 (an old database misses them)
           COLUMNS = [("players", "login_day"), ("players", "streak_freezes"),
-                     ("case_progress", "first_accused"), ("case_progress", "proof_misses")]
-          TABLES = ["riddle_answers"]
+                     ("case_progress", "first_accused"), ("case_progress", "proof_misses"),
+                     ("players", "last_chest_day"), ("players", "chest_streak"), ("players", "chests"),
+                     ("case_progress", "seen")]
+          TABLES = ["riddle_answers", "mission_days"]
           EOF
           python - <<'EOF'
           import sqlite3, sys

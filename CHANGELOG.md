@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6.0 (app build 10, server 1.6.0): daily missions
+
+- Three daily missions for everyone (one about quick riddles, one about cases, one extra), picked from a pool of
+  12. Progress comes from real actions on the server: answering riddles, solving cases (with 3 stars, without
+  hints), interrogating every suspect, buying a hint, opening archive cases or locked riddles.
+- When all three are done, a chest gives 80 coins; every 7th day in a row adds 150 more.
+- A banner slides in on any screen when a mission is finished.
+
 ## 1.5.0 (app build 9, server 1.5.0): quick riddles
 
 - «معمای سریع»: five one-minute mini mysteries every day, the same set for everyone (60 original riddles,

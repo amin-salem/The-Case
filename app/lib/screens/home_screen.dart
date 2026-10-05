@@ -12,6 +12,7 @@ import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
+import '../widgets/missions_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
@@ -33,6 +34,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   CasesList? _cases;
   RiddleDay? _riddles;
+  MissionsDay? _missions;
   String? _error;
   bool _loading = false;
   Timer? _tick;
@@ -128,6 +130,12 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       debugPrint('riddles: $e');
     }
+    try {
+      final m = await Api.i.missions();
+      if (mounted) setState(() => _missions = m);
+    } catch (e) {
+      debugPrint('missions: $e');
+    }
   }
 
   Future<void> _openRiddles() async {
@@ -166,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!mounted) return;
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: row.id)));
     Sfx.i.ambient('amb_home', volume: 0.28);
-    _load();
+    _load(); // also refreshes the missions
   }
 
   @override
@@ -194,6 +202,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 12),
                     _riddleCard(),
                     const SizedBox(height: 12),
+                    if (_missions != null) ...[
+                      MissionsCard(day: _missions!, onChanged: (m) => setState(() => _missions = m)),
+                      const SizedBox(height: 12),
+                    ],
                     _collection(),
                     const SizedBox(height: 10),
                     _nextCase(),

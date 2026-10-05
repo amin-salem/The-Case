@@ -10,6 +10,7 @@ import 'services/reminders.dart';
 import 'services/sound.dart';
 import 'theme.dart';
 import 'widgets/fx.dart';
+import 'widgets/progress_fx.dart';
 import 'widgets/scene.dart';
 import 'widgets/typewriter.dart';
 
@@ -33,16 +34,27 @@ class TheCaseApp extends StatefulWidget {
 }
 
 class _TheCaseAppState extends State<TheCaseApp> with WidgetsBindingObserver {
+  final _nav = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    Api.i.gains.addListener(_onGains);
   }
 
   @override
   void dispose() {
+    Api.i.gains.removeListener(_onGains);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  /// Whatever screen is open: a finished mission, a new rank or an achievement gets a banner.
+  void _onGains() {
+    final g = Api.i.gains.value;
+    final overlay = _nav.currentState?.overlay;
+    if (g != null && overlay != null) celebrateOn(overlay, g);
   }
 
   // the ambience stops when the app goes to the background
@@ -60,6 +72,7 @@ class _TheCaseAppState extends State<TheCaseApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: _nav,
       title: 'پرونده',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),

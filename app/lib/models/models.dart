@@ -1,6 +1,10 @@
 /// Data shapes coming from the server.
 library;
 
+import 'progress.dart';
+
+export 'progress.dart' show Gains;
+
 int _i(Object? v, [int d = 0]) => v is int ? v : (v is num ? v.toInt() : d);
 String _s(Object? v, [String d = '']) => v is String ? v : d;
 bool _b(Object? v) => v == true;
@@ -156,7 +160,8 @@ class AccuseResult {
         seconds = _i(j['seconds']),
         hintsUsed = _i(j['hints_used']),
         freezesUsed = _i(j['freezes_used']),
-        badge = j['badge'] is int ? j['badge'] as int : null;
+        badge = j['badge'] is int ? j['badge'] as int : null,
+        gains = Gains((j['gains'] as Map?)?.cast<String, dynamic>());
 
   final String result; // solved | wrong_suspect | wrong_proof | failed
   final int attemptsLeft, stars, reward, coins, streak;
@@ -166,6 +171,7 @@ class AccuseResult {
   final List<String> proof;
   final int? rank;
   final Progress? progress;
+  final Gains gains;
 }
 
 class Profile {

@@ -7,7 +7,6 @@ import '../services/api.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/offline.dart';
-import '../widgets/progress_fx.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'dialogs.dart';
@@ -263,7 +262,6 @@ class _RiddlePlayScreenState extends State<RiddlePlayScreen> {
         _item = r.item;
       });
       Sfx.i.play(r.correct ? 'win' : 'wrong', volume: 0.8);
-      celebrate(context, r.gains);
     } catch (e) {
       if (choice < 0) _tick?.cancel(); // time ran out but the answer didn't reach the server: don't keep retrying
       if (mounted) toast(context, Api.friendly(e));
@@ -322,7 +320,7 @@ class _RiddlePlayScreenState extends State<RiddlePlayScreen> {
                 if (_next != null)
                   StampButton(
                     label: 'معمای بعدی',
-                    icon: Icons.arrow_back_rounded,
+                    icon: Icons.chevron_left_rounded,
                     onTap: () => Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (_) => RiddlePlayScreen(item: _next!, day: widget.day))),
                   )
