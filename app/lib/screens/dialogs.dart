@@ -34,16 +34,18 @@ Future<void> showNeedCoins(BuildContext context, int need) async {
             Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreen()));
           },
         ),
-        const SizedBox(height: 10),
-        StampButton(
-          label: 'دیدن تبلیغ و گرفتن سکه',
-          icon: Icons.play_circle_fill_rounded,
-          color: K.ok,
-          onTap: () async {
-            Navigator.pop(ctx);
-            await watchAd(context);
-          },
-        ),
+        if (Api.i.adsEnabled) ...[
+          const SizedBox(height: 10),
+          StampButton(
+            label: 'دیدن تبلیغ و گرفتن سکه',
+            icon: Icons.play_circle_fill_rounded,
+            color: K.ok,
+            onTap: () async {
+              Navigator.pop(ctx);
+              await watchAd(context);
+            },
+          ),
+        ],
       ]),
         ),
       ),

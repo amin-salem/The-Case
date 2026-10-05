@@ -145,3 +145,12 @@ async def test_config_has_engagement_numbers(client):
     e = cfg["economy"]
     assert e["login_calendar"] == economy.LOGIN_CALENDAR and e["freeze_cost"] == economy.FREEZE_COST
     assert e["streak_badges"] == list(economy.STREAK_BADGES) and cfg["share_url"].startswith("https://")
+
+
+async def test_delete_account_and_public_pages(client):
+    p = await new_player(client, "leaving-player")
+    assert (await client.post("/v1/me/delete", headers=p["headers"])).status_code == 200
+    assert (await client.get("/v1/me", headers=p["headers"])).status_code == 401
+    for path in ("/privacy", "/terms", "/delete-account"):
+        r = await client.get(path)
+        assert r.status_code == 200 and "پرونده" in r.text

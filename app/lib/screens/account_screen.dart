@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../main.dart' show StartScreen;
 
 import '../services/api.dart';
 import '../services/reminders.dart';
@@ -183,6 +186,8 @@ class _AccountScreenState extends State<AccountScreen> {
               _inviteBox(p.inviteCode, p.referred),
               const SizedBox(height: 14),
               _transferBox(),
+              const SizedBox(height: 14),
+              _legalBox(),
               ]),
             );
           },
@@ -317,6 +322,40 @@ class _AccountScreenState extends State<AccountScreen> {
           ],
         ],
       );
+
+  Future<void> _open(String url) async {
+    try {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } catch (_) {
+      if (mounted) toast(context, 'صفحه باز نشد');
+    }
+  }
+
+  Future<void> _deleteAccount() async {
+    if (!needOnline(context)) return;
+    final ok = await confirm(context, 'حذف حساب',
+        'حساب، پیشرفت، سکه‌ها و ایمیلت برای همیشه پاک می‌شه و برگشت‌پذیر نیست. مطمئنی؟', 'حذف برای همیشه');
+    if (!ok || !mounted) return;
+    final err = await Api.i.deleteAccount();
+    if (!mounted) return;
+    if (err != null) {
+      toast(context, err);
+      return;
+    }
+    toast(context, 'حسابت پاک شد');
+    await Navigator.of(context)
+        .pushAndRemoveUntil(MaterialPageRoute<void>(builder: (_) => const StartScreen()), (_) => false);
+  }
+
+  Widget _legalBox() => _box('قوانین و حریم خصوصی', 'اطلاعاتت فقط برای اجرای بازی نگه داشته می‌شه.', [
+        Row(children: [
+          Expanded(child: GhostButton(label: 'حریم خصوصی', icon: Icons.privacy_tip_rounded, onTap: () => _open(Api.i.privacyUrl))),
+          const SizedBox(width: 10),
+          Expanded(child: GhostButton(label: 'قوانین', icon: Icons.gavel_rounded, onTap: () => _open(Api.i.termsUrl))),
+        ]),
+        const SizedBox(height: 10),
+        GhostButton(label: 'حذف حساب', icon: Icons.delete_forever_rounded, color: K.stamp, onTap: _deleteAccount),
+      ]);
 
   Widget _transferBox() => _box('انتقال با کد', 'بدون ایمیل: روی گوشی قدیمی کد بگیر، روی گوشی جدید واردش کن.', [
         if (_myCode != null)

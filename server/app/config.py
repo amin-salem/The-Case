@@ -28,6 +28,15 @@ class Settings(BaseSettings):
     bazaar_client_secret: str = ""
     bazaar_refresh_token: str = ""
 
+    # Myket (the store we publish on first). The access token is in the Myket developer panel, under the
+    # app's in-app products. Empty in production = Myket purchases are refused.
+    myket_access_token: str = ""
+    myket_package_name: str = "ir.aminsalem.the_case"
+    myket_base_url: str = "https://developer.myket.ir/api/partners/applications"
+
+    # Rewarded ads pay coins only when a real ad network is in the app.
+    ads_enabled: bool = False
+
     # Daily case: the day changes at midnight in Iran, the new case opens at 21:00
     timezone: str = "Asia/Tehran"
     new_case_hour: int = 21
@@ -52,8 +61,8 @@ class Settings(BaseSettings):
                 problems.append("JWT_SECRET")
             if self.admin_api_key == _DEV_ADMIN or len(self.admin_api_key) < 24:
                 problems.append("ADMIN_API_KEY")
-            if self.bazaar_mode == "fake":
-                problems.append("BAZAAR_MODE (must not be 'fake' in prod)")
+            if self.bazaar_mode == "fake" and not self.myket_access_token:
+                problems.append("MYKET_ACCESS_TOKEN (or a real BAZAAR_MODE): no store can verify purchases")
             if problems:
                 raise RuntimeError("Set safe values for: " + ", ".join(problems))
 

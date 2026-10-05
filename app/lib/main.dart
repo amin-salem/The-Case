@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'screens/home_screen.dart';
 import 'services/api.dart';
+import 'services/billing.dart';
 import 'services/reminders.dart';
 import 'services/sound.dart';
 import 'theme.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
   await Api.i.init();
   await Sfx.i.init();
   await Reminders.i.init();
+  unawaited(Billing.i.init());
   runApp(const TheCaseApp());
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
+import '../services/billing.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
 import '../theme.dart';
@@ -105,6 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       await Reminders.i.plan(
           nextCaseAt: c.nextCaseAt, tonightSolved: c.today?.solved ?? false, streak: Api.i.profile?.streak ?? 0);
+      // a purchase paid earlier but not credited yet (app closed, no internet) is credited now
+      final recovered = await Billing.i.recover();
+      if (recovered > 0 && mounted) toast(context, 'خریدت اضافه شد: ${fa(recovered)} سکه');
     } catch (e) {
       if (mounted) setState(() => _error = Api.friendly(e));
     } finally {

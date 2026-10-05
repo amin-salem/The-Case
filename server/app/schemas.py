@@ -186,6 +186,7 @@ class LeaderboardOut(BaseModel):
 class VerifyIn(BaseModel):
     product_id: str = Field(max_length=64)
     purchase_token: str = Field(min_length=4, max_length=255)
+    store: str = Field(default="bazaar", pattern="^(bazaar|myket)$")
 
 
 class VerifyOut(BaseModel):

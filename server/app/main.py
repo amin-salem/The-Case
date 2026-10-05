@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import content, db
 from .config import get_settings
 from .version import VERSION
-from .routers import admin, auth, cases, inbox, leaderboard, meta, profile, purchases
+from .routers import admin, auth, cases, inbox, leaderboard, meta, pages, profile, purchases
 from .services.ratelimit import RateLimitMiddleware
 
 
@@ -33,7 +33,7 @@ def create_app() -> FastAPI:
     app.add_middleware(RateLimitMiddleware)
     app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in s.cors_origins.split(",")],
                        allow_methods=["*"], allow_headers=["*"])
-    for r in (meta.router, auth.router, profile.router, cases.router, leaderboard.router,
+    for r in (meta.router, pages.router, auth.router, profile.router, cases.router, leaderboard.router,
               purchases.router, inbox.router, admin.router):
         app.include_router(r)
     return app

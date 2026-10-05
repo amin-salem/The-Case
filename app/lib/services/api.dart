@@ -249,6 +249,34 @@ class Api extends ChangeNotifier {
     }
   }
 
+  String? get playerId => _playerId;
+
+  bool get adsEnabled => config['ads_enabled'] == true;
+  String get privacyUrl => config['privacy_url'] is String ? config['privacy_url'] as String : '$kApiUrl/privacy';
+  String get termsUrl => config['terms_url'] is String ? config['terms_url'] as String : '$kApiUrl/terms';
+
+  /// Deletes this account on the server for good; the next connect starts a fresh guest account.
+  /// Returns an error text, or null when done.
+  Future<String?> deleteAccount() async {
+    try {
+      await _call('POST', '/v1/me/delete');
+    } on ApiException catch (e) {
+      return errorText(e.code);
+    } catch (e) {
+      return friendly(e);
+    }
+    for (final k in const ['player', 'secret', 'token', 'token_exp']) {
+      await _p.remove(k);
+    }
+    _playerId = _secret = _token = null;
+    _tokenExp = 0;
+    await _clearCache();
+    profile = null;
+    account++;
+    notifyListeners();
+    return null;
+  }
+
   Future<void> _storeLogin(Map<String, dynamic> j) async {
     final newId = j['player_id'] as String;
     final switched = _p.getString('player') != null && _p.getString('player') != newId;
@@ -516,9 +544,9 @@ class Api extends ChangeNotifier {
   }
 
   /// Returns (status, coins added).
-  Future<(String, int)> verifyPurchase(String productId, String token) async {
-    final j = (await _call('POST', '/v1/purchases/verify', body: {'product_id': productId, 'purchase_token': token})
-            as Map)
+  Future<(String, int)> verifyPurchase(String productId, String token, {String store = 'myket'}) async {
+    final j = (await _call('POST', '/v1/purchases/verify',
+            body: {'product_id': productId, 'purchase_token': token, 'store': store}) as Map)
         .cast<String, dynamic>();
     await _refreshProfileQuietly();
     return ('${j['status']}', j['added'] as int? ?? 0);

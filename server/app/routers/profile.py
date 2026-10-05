@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import content
 from .. import economy as eco
+from ..config import get_settings
 from ..db import get_session
 from ..models import Player
 from ..schemas import CoinsOut, ProfileIn, ProfileOut
@@ -30,6 +31,14 @@ async def me(player: Player = Depends(current_player), session: AsyncSession = D
         add_coins(session, player, reward, f"daily_login:{player.login_day}")
         await session.commit()
     return profile_out(player, login_reward=reward)
+
+
+@router.post("/me/delete")
+async def delete_me(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """Deletes the account and its progress for good (stores require an in-app way to do this)."""
+    await session.delete(player)
+    await session.commit()
+    return {"deleted": True}
 
 
 @router.post("/wallet/streak-freeze", response_model=ProfileOut)
@@ -62,6 +71,8 @@ async def update_me(body: ProfileIn, player: Player = Depends(current_player),
 @router.post("/wallet/ad-reward", response_model=CoinsOut)
 async def ad_reward(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """The app calls this after a rewarded ad was watched (limited per day)."""
+    if not get_settings().ads_enabled:
+        raise HTTPException(403, "ads_off")
     today = content.today_str()
     if player.ad_day != today:
         player.ad_day, player.ad_count = today, 0

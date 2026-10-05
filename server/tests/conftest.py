@@ -7,6 +7,7 @@ os.environ.update({
     "DATABASE_URL": f"sqlite+aiosqlite:///{_tmp}/test.db",
     "BAZAAR_MODE": "fake",
     "RATE_LIMIT": "false",
+    "ADS_ENABLED": "true",
     "ADMIN_API_KEY": "test-admin-key",
     "JWT_SECRET": "test-secret-that-is-long-enough-123456",
 })

@@ -119,10 +119,12 @@ def main() -> int:
     check(lb is not None and "me" in lb, "daily leaderboard")
     expect("GET", "/v1/leaderboard?period=weekly", headers=hdr, name="GET leaderboard weekly")
     expect("GET", "/v1/leaderboard?period=all", headers=hdr, name="GET leaderboard all-time")
-    ad = expect("POST", "/v1/wallet/ad-reward", headers=hdr)
-    check(ad and ad.get("coins", 0) > 0, "rewarded ad pays coins")
-    fr = expect("POST", "/v1/wallet/streak-freeze", headers=hdr, name="POST streak insurance")
-    check(fr and fr.get("streak_freezes") == 1, "streak insurance bought with coins")
+    ad = call("POST", "/v1/wallet/ad-reward", headers=hdr)
+    check(ad and ad[0].status_code in (200, 403), "rewarded ads: pay coins, or switched off until real ads exist",
+          f"{ad[0].status_code}" if ad else "")
+    fr = call("POST", "/v1/wallet/streak-freeze", headers=hdr)
+    check(fr and (fr[0].status_code == 200 or (fr[0].status_code == 402 and "not_enough_coins" in fr[0].text)),
+          "streak insurance: bought, or refused for lack of coins", f"{fr[0].status_code}" if fr else "")
     expect("GET", "/v1/inbox", headers=hdr)
     code = expect("POST", "/v1/auth/transfer-code", headers=hdr)
     check(code and code.get("code"), "transfer code for moving to a new phone")

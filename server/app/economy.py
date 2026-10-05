@@ -48,6 +48,7 @@ class Product:
     kind: str  # consumable | permanent | subscription
     coins: int = 0
     no_ads: bool = False
+    vip_days: int = 0
 
 
 PRODUCTS = {
@@ -58,7 +59,7 @@ PRODUCTS = {
         Product("coins_large", "consumable", coins=3600),
         Product("starter_pack", "permanent", coins=1000, no_ads=True),
         Product("remove_ads", "permanent", no_ads=True),
-        Product("vip_monthly", "subscription"),
+        Product("vip_monthly", "consumable", vip_days=30),
     ]
 }
 

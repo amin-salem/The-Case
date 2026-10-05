@@ -1,16 +1,14 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import '../services/api.dart';
+import '../services/billing.dart';
 import '../theme.dart';
 import '../widgets/engagement.dart';
 import '../widgets/offline.dart';
 import 'dialogs.dart';
 
-/// Coin packs and perks. RIGHT NOW: test store (no money is taken; the server
-/// accepts "test-" purchase tokens while BAZAAR_MODE=fake). Later: Poolakey
-/// gives the real purchase token, which goes to the same verify call.
+/// Coin packs and perks, paid through Myket. Every purchase is checked by our server with Myket
+/// before coins are added; the price shown is Myket's own when it can tell us.
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
 
@@ -23,17 +21,26 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Future<void> _buy(String productId, String title) async {
     if (!needOnline(context)) return;
-    final ok = await confirm(context, 'خرید آزمایشی: $title',
-        'این یه خرید آزمایشیه و پولی گرفته نمی‌شه. بعداً اینجا درگاه کافه‌بازار قرار می‌گیره.', 'خرید');
-    if (!ok || !mounted) return;
+    if (!Billing.i.available) {
+      toast(context, 'برای خرید، اپ مایکت باید روی گوشی نصب و به‌روز باشه.');
+      return;
+    }
     setState(() => _busy = true);
     try {
-      final token = 'test-${DateTime.now().millisecondsSinceEpoch}-${Random().nextInt(1 << 30)}';
-      final (status, added) = await Api.i.verifyPurchase(productId, token);
+      final (result, added) = await Billing.i.buy(productId);
       if (!mounted) return;
-      toast(context, status == 'granted' ? (added > 0 ? '${fa(added)} سکه اضافه شد!' : 'خرید انجام شد!') : 'خرید تأیید نشد');
-    } catch (e) {
-      if (mounted) toast(context, 'خرید انجام نشد. ${Api.friendly(e)}');
+      switch (result) {
+        case BuyResult.granted:
+          toast(context, added > 0 ? '${fa(added)} سکه اضافه شد!' : 'خرید انجام شد!');
+        case BuyResult.pending:
+          toast(context, 'پرداخت انجام شد؛ به‌محض وصل شدن اینترنت، خریدت اضافه می‌شه.');
+        case BuyResult.cancelled:
+          break;
+        case BuyResult.unavailable:
+          toast(context, 'برای خرید، اپ مایکت باید روی گوشی نصب و به‌روز باشه.');
+        case BuyResult.failed:
+          toast(context, 'خرید انجام نشد. اگه پولی کم شده، نگران نباش؛ برمی‌گرده یا خریدت اضافه می‌شه.');
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -71,15 +78,18 @@ class _ShopScreenState extends State<ShopScreen> {
               Expanded(child: _pack('coins_large', 'گاوصندوق', 3, tag: 'بهترین ارزش')),
             ]),
             const SizedBox(height: 14),
-            _row('starter_pack', 'بسته‌ی شروع', 'حذف تبلیغات + ${fa(api.productCoins('starter_pack'))} سکه · فقط یک بار',
+            _row('starter_pack', 'بسته‌ی شروع', '${fa(api.productCoins('starter_pack'))} سکه با تخفیف · فقط یک بار',
                 Icons.card_giftcard_rounded, K.stamp),
-            _row('vip_monthly', 'اشتراک ویژه (VIP)', 'همه‌ی پرونده‌های بایگانی رایگان، اولین سرنخ هر پرونده رایگان، بدون تبلیغ',
+            _row('vip_monthly', 'کارآگاه ویژه · ۳۰ روز', 'همه‌ی پرونده‌های بایگانی رایگان و اولین سرنخ هر پرونده رایگان',
                 Icons.workspace_premium_rounded, K.brass),
-            _row('remove_ads', 'حذف تبلیغات', 'تبلیغ‌های اجباری برای همیشه حذف می‌شن', Icons.block_rounded, K.textSoft),
             ListenableBuilder(listenable: Api.i, builder: (_, __) => _insuranceRow()),
             const SizedBox(height: 10),
-            StampButton(label: 'دیدن تبلیغ و گرفتن سکه رایگان', icon: Icons.play_circle_fill_rounded, color: K.ok,
-                onTap: () => watchAd(context)),
+            if (api.adsEnabled)
+              StampButton(label: 'دیدن تبلیغ و گرفتن سکه رایگان', icon: Icons.play_circle_fill_rounded, color: K.ok,
+                  onTap: () => watchAd(context)),
+            const SizedBox(height: 14),
+            Text('پرداخت از طریق مایکت انجام می‌شه. اگه پرداخت کردی و خریدت نرسید، دفعه‌ی بعد که بازی وصل بشه خودش اضافه می‌شه.',
+                style: tBody(12.5, color: K.textSoft)),
             ]),
           ),
         ),
@@ -105,7 +115,7 @@ class _ShopScreenState extends State<ShopScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 4),
               decoration: BoxDecoration(color: K.ok, borderRadius: BorderRadius.circular(8)),
-              child: Text(api.price(id), textAlign: TextAlign.center, style: tBody(12, color: Colors.white, w: FontWeight.w900)),
+              child: Text(Billing.i.price(id) ?? api.price(id), textAlign: TextAlign.center, style: tBody(12, color: Colors.white, w: FontWeight.w900)),
             ),
           ]),
         ),
@@ -172,7 +182,7 @@ class _ShopScreenState extends State<ShopScreen> {
             ]),
           ),
           const SizedBox(width: 6),
-          Text(Api.i.price(id), style: tBody(13, color: K.brass, w: FontWeight.w900)),
+          Text(Billing.i.price(id) ?? Api.i.price(id), style: tBody(13, color: K.brass, w: FontWeight.w900)),
         ]),
       ),
     );
