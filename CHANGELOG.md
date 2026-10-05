@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.0 (app build 9, server 1.5.0): quick riddles
+
+- «معمای سریع»: five one-minute mini mysteries every day, the same set for everyone (60 original riddles,
+  shuffled per 12-day cycle). The first three are free, the others open for 20 coins; a right answer pays 10.
+  Answers are checked on the server and the explanation is shown after answering.
+- A card on the home page shows today's riddles at a glance.
+
 ## 1.4.0 (app build 8, server 1.4.0): ready for Myket
 
 - Real payments through Myket; every purchase is checked by the server with Myket before coins are added, and a
