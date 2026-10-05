@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/models.dart';
+import '../models/progress.dart';
 
 /// Server address (Liara). Another server for testing:
 ///   flutter run --dart-define=API_URL=http://192.168.1.5:8000
@@ -300,6 +301,7 @@ class Api extends ChangeNotifier {
   static const _kConfig = 'c_config';
   static const _kMe = 'c_me';
   static const _kCases = 'c_cases';
+  static const _kRiddles = 'c_riddles';
   static const _kCasePrefix = 'c_case_';
   static const _kNotesPrefix = 'notes_';
 
@@ -325,7 +327,7 @@ class Api extends ChangeNotifier {
   /// Another account's data must not show up after a login on this phone.
   Future<void> _clearCache() async {
     for (final k in _p.getKeys().toList()) {
-      if (k == _kMe || k == _kCases || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix)) {
+      if (k == _kMe || k == _kCases || k == _kRiddles || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix)) {
         await _p.remove(k);
       }
     }
@@ -604,6 +606,26 @@ class Api extends ChangeNotifier {
     }
   }
 
+  // ---------------------------------------------------------------- quick riddles
+
+  /// Today's quick riddles; offline, the last saved set.
+  Future<RiddleDay> riddles() async => RiddleDay(await _cachedGet('/v1/riddles', _kRiddles));
+
+  Future<RiddleItem> unlockRiddle(String id) async {
+    final j = (await _call('POST', '/v1/riddles/$id/unlock') as Map).cast<String, dynamic>();
+    _setCoins(j['coins'] as int);
+    return RiddleItem((j['item'] as Map).cast<String, dynamic>());
+  }
+
+  /// choice -1 = the timer ran out.
+  Future<RiddleResult> answerRiddle(String id, int choice, int seconds) async {
+    final j = (await _call('POST', '/v1/riddles/$id/answer', body: {'choice': choice, 'seconds': seconds}) as Map)
+        .cast<String, dynamic>();
+    final r = RiddleResult(j);
+    _setCoins(r.coins);
+    return r;
+  }
+
   // ---------------------------------------------------------------- inbox
 
   Future<List<InboxGift>> inbox() async {
@@ -652,6 +674,8 @@ class Api extends ChangeNotifier {
         'max_freezes' => 'بیشتر از این نمی‌شه بیمه نگه داشت',
         'finish_first' => 'اول پرونده رو تموم کن',
         'no_case' => 'هنوز پرونده‌ای باز نشده',
+        'already_answered' => 'به این معما قبلاً جواب دادی',
+        'not_today' => 'این معما مال امروز نیست؛ صفحه رو تازه کن',
         _ => genericText,
       };
 }

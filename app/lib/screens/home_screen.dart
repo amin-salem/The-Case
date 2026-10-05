@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
+import '../models/progress.dart';
 import '../services/api.dart';
 import '../services/billing.dart';
 import '../services/reminders.dart';
@@ -19,6 +20,7 @@ import 'case_screen.dart';
 import 'dialogs.dart';
 import 'inbox_sheet.dart';
 import 'leaderboard_screen.dart';
+import 'riddles_screen.dart';
 import 'shop_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,6 +32,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   CasesList? _cases;
+  RiddleDay? _riddles;
   String? _error;
   bool _loading = false;
   Timer? _tick;
@@ -104,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _error = null;
         });
       }
+      unawaited(_loadExtras());
       await Reminders.i.plan(
           nextCaseAt: c.nextCaseAt, tonightSolved: c.today?.solved ?? false, streak: Api.i.profile?.streak ?? 0);
       // a purchase paid earlier but not credited yet (app closed, no internet) is credited now
@@ -114,6 +118,22 @@ class _HomeScreenState extends State<HomeScreen> {
     } finally {
       _loading = false;
     }
+  }
+
+  /// The smaller daily things on the home page (quick riddles); a failure just hides them.
+  Future<void> _loadExtras() async {
+    try {
+      final r = await Api.i.riddles();
+      if (mounted) setState(() => _riddles = r);
+    } catch (e) {
+      debugPrint('riddles: $e');
+    }
+  }
+
+  Future<void> _openRiddles() async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RiddlesScreen()));
+    Sfx.i.ambient('amb_home', volume: 0.28);
+    unawaited(_loadExtras());
   }
 
   /// Pull-to-refresh and the retry buttons: wake the connection first if it was down.
@@ -171,6 +191,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Padding(padding: EdgeInsets.all(40), child: Center(child: CircularProgressIndicator(color: K.brass))),
                   if (_cases != null) ...[
                     _todayCard(_cases!.today),
+                    const SizedBox(height: 12),
+                    _riddleCard(),
                     const SizedBox(height: 12),
                     _collection(),
                     const SizedBox(height: 10),
@@ -353,6 +375,70 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   /// How many of the opened cases the player has solved.
+  Widget _riddleCard() {
+    final r = _riddles;
+    final todo = r?.items.where((x) => !x.answered && !x.locked).length ?? 0;
+    final sub = r == null
+        ? 'چند معمای یک‌دقیقه‌ای، هر روز'
+        : todo > 0
+            ? '${fa(todo)} معمای رایگان منتظرته · هر جواب درست ${fa(r.reward)} سکه'
+            : r.answered == r.items.length
+                ? 'امروز همه رو جواب دادی: ${fa(r.correct)} درست'
+                : 'رایگان‌ها تموم شد؛ بقیه با سکه باز می‌شن';
+    return InkWell(
+      borderRadius: BorderRadius.circular(14),
+      onTap: _openRiddles,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Color(0xFF2B2414), K.night2]),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: K.brass.withValues(alpha: 0.45)),
+        ),
+        child: Row(children: [
+          Stack(clipBehavior: Clip.none, children: [
+            const Icon(Icons.bolt_rounded, color: K.brass, size: 36),
+            if (todo > 0)
+              Positioned(
+                top: -2,
+                left: -2,
+                child: Container(
+                  width: 16,
+                  height: 16,
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(color: K.stamp, shape: BoxShape.circle),
+                  child: Text(fa(todo), style: tBody(10, color: Colors.white, w: FontWeight.w900)),
+                ),
+              ),
+          ]),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('معمای سریع', style: tDisplay(18)),
+              Text(sub, style: tBody(12.5, color: K.textSoft)),
+              if (r != null) ...[
+                const SizedBox(height: 6),
+                Row(children: [
+                  for (final x in r.items)
+                    Container(
+                      width: 18,
+                      height: 6,
+                      margin: const EdgeInsets.only(left: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: x.answered ? (x.correct ? K.ok : K.stamp) : (x.locked ? K.night3 : K.brass.withValues(alpha: 0.5)),
+                      ),
+                    ),
+                ]),
+              ],
+            ]),
+          ),
+          const Icon(Icons.chevron_left_rounded, color: K.brass),
+        ]),
+      ),
+    );
+  }
+
   Widget _collection() {
     final all = [if (_cases!.today != null) _cases!.today!, ..._cases!.archive];
     final solved = all.where((c) => c.solved).length;

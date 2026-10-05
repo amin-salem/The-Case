@@ -22,6 +22,7 @@ import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:the_case/main.dart' show StartScreen;
 import 'package:the_case/models/models.dart';
+import 'package:the_case/models/progress.dart';
 import 'package:the_case/screens/accuse_screen.dart';
 import 'package:the_case/screens/account_screen.dart';
 import 'package:the_case/screens/case_screen.dart';
@@ -30,6 +31,7 @@ import 'package:the_case/screens/home_screen.dart';
 import 'package:the_case/screens/inbox_sheet.dart';
 import 'package:the_case/screens/leaderboard_screen.dart';
 import 'package:the_case/screens/result_screen.dart';
+import 'package:the_case/screens/riddles_screen.dart';
 import 'package:the_case/screens/shop_screen.dart';
 import 'package:the_case/screens/suspect_sheet.dart';
 import 'package:the_case/services/api.dart';
@@ -220,6 +222,46 @@ Map<String, dynamic> _leaderboard(String period) {
   };
 }
 
+// quick riddles: the first five real riddles; the first two answered, the last one locked
+List<Map<String, dynamic>> get _riddleRaw =>
+    (jsonDecode(File('../server/app/content/riddles.json').readAsStringSync()) as List).cast<Map<String, dynamic>>();
+
+Map<String, dynamic> _riddleItem(int i, {bool answered = false, bool correct = false, bool locked = false}) {
+  final r = _riddleRaw[i];
+  return {
+    'id': r['id'],
+    'slot': i + 1,
+    'title': r['title'],
+    'scene': r['scene'],
+    'free': i < 3,
+    'locked': locked,
+    'answered': answered,
+    'correct': correct,
+    'choice': answered ? (correct ? 0 : 1) : null,
+    'text': locked ? null : r['scene_text'],
+    'clue': locked ? null : r['clue'],
+    'choices': locked ? <String>[] : r['choices'],
+    'answer': answered ? 0 : null,
+    'explain': answered ? r['explain'] : null,
+  };
+}
+
+Map<String, dynamic> _riddleDay() => {
+      'day': '2026-10-06',
+      'items': [
+        _riddleItem(0, answered: true, correct: true),
+        _riddleItem(1, answered: true),
+        _riddleItem(2),
+        _riddleItem(3),
+        _riddleItem(4, locked: true),
+      ],
+      'unlock_cost': 20,
+      'reward': 10,
+      'seconds': 60,
+      'next_at': DateTime.now().add(const Duration(hours: 7, minutes: 12)).millisecondsSinceEpoch ~/ 1000,
+      'coins': 840,
+    };
+
 Future<http.Response> _serve(http.Request req) async {
   if (_offline) throw const SocketException('Failed host lookup: thecase.liara.run');
   final path = req.url.path;
@@ -239,6 +281,15 @@ Future<http.Response> _serve(http.Request req) async {
     ];
   } else if (path == '/v1/cases') {
     body = _casesList();
+  } else if (path == '/v1/riddles') {
+    body = _riddleDay();
+  } else if (parts.length >= 5 && parts[2] == 'riddles') {
+    final i = _riddleRaw.indexWhere((r) => r['id'] == parts[3]);
+    body = {
+      'correct': true, 'answer': 0, 'explain': _riddleRaw[i]['explain'], 'reward': 10, 'coins': 850,
+      'item': _riddleItem(i, answered: true, correct: true),
+      'gains': {'xp': 5, 'missions_done': ['۳ معمای سریع جواب بده'], 'achievements': [], 'rank_up': null},
+    };
   } else if (path == '/v1/leaderboard') {
     body = _leaderboard(req.url.queryParameters['period'] ?? 'daily');
   } else if (parts.length >= 4 && parts[1] == 'v1' && parts[2] == 'cases') {
@@ -759,6 +810,16 @@ void main() {
       size: const Size(390, 1900), before: midCase, then: (t) async {
     await pick(t);
     await _tap(t, find.byIcon(Icons.gavel_rounded), wait: const Duration(milliseconds: 1200));
+  });
+
+  // quick riddles
+  RiddleDay riddleDay() => RiddleDay(_riddleDay());
+  shot('riddles', () => const RiddlesScreen(), wait: const Duration(milliseconds: 1400));
+  shot('riddle_play', () => RiddlePlayScreen(item: riddleDay().items[2], day: riddleDay()),
+      size: const Size(390, 1500), wait: const Duration(milliseconds: 1400));
+  shot('riddle_answered', () => RiddlePlayScreen(item: riddleDay().items[2], day: riddleDay()),
+      size: const Size(390, 1900), wait: const Duration(milliseconds: 600), then: (t) async {
+    await _tap(t, find.text('الف'), wait: const Duration(milliseconds: 1500));
   });
 
   // result
