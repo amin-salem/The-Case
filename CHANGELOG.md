@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.1 (app build 4, server 1.2.0)
+## 1.2.1 (app build 5, server 1.2.0)
 
 **App icon**
 - New icon: a fingerprint on paper, with a magnifier that shows the night sky and a clock at 9. Adaptive icon for
