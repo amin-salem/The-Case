@@ -25,6 +25,7 @@ class AccuseScreen extends StatefulWidget {
 class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderStateMixin {
   String? _suspect;
   String? _evidence;
+  String? _motive; // the weekend case also asks why
   bool _busy = false;
   String? _feedback;
   late int _left = widget.progress.attemptsLeft;
@@ -48,7 +49,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
     if (!needOnline(context)) return;
     setState(() => _busy = true);
     try {
-      final r = await Api.i.accuse(widget.caseData.id, _suspect!, _evidence!);
+      final r = await Api.i.accuse(widget.caseData.id, _suspect!, _evidence!, motive: _motive);
       if (!mounted) return;
       if (r.result == 'solved' || r.result == 'failed') {
         Navigator.pop(context, r);
@@ -59,9 +60,11 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
       setState(() {
         _busy = false;
         _left = r.attemptsLeft;
-        _feedback = r.result == 'wrong_proof'
-            ? 'آدم درست رو گرفتی، ولی این مدرک دروغش رو ثابت نمی‌کنه. یه ستاره کم شد؛ مدرک دیگه‌ای رو امتحان کن.'
-            : 'اشتباه بود! این آدم بی‌گناهه. ${fa(r.attemptsLeft)} فرصت دیگه داری.';
+        _feedback = switch (r.result) {
+          'wrong_proof' => 'آدم درست رو گرفتی، ولی این مدرک دروغش رو ثابت نمی‌کنه. یه ستاره کم شد؛ مدرک دیگه‌ای رو امتحان کن.',
+          'wrong_motive' => 'آدم و مدرک درسته، ولی انگیزه‌اش این نبود. یه ستاره کم شد؛ دوباره فکر کن چرا این کار رو کرد.',
+          _ => 'اشتباه بود! این آدم بی‌گناهه. ${fa(r.attemptsLeft)} فرصت دیگه داری.',
+        };
         _evidence = null;
       });
       // keep the wrong result for the case screen to update its counters
@@ -116,6 +119,12 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
               Text('فقط یه مدرک انتخاب کن: همونی که با حرفش جور درنمیاد.', style: tBody(13, color: K.textSoft)),
               const SizedBox(height: 8),
               for (final e in c.evidence) _evidenceTile(e),
+              if (c.weekly) ...[
+                const SizedBox(height: 18),
+                Text('۳. چرا این کار رو کرد؟', style: tDisplay(19)),
+                const SizedBox(height: 8),
+                for (final m in c.motives) _motiveTile(m.id, m.text),
+              ],
             ]),
           ),
         ),
@@ -147,9 +156,11 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
                           ? 'یه مظنون انتخاب کن'
                           : _evidence == null
                               ? 'یه مدرک انتخاب کن'
-                              : 'متهم می‌کنم: ${c.suspect(_suspect!).name}'),
+                              : c.weekly && _motive == null
+                                  ? 'انگیزه رو انتخاب کن'
+                                  : 'متهم می‌کنم: ${c.suspect(_suspect!).name}'),
                   icon: Icons.gavel_rounded,
-                  onTap: _busy || _suspect == null || _evidence == null ? null : _submit,
+                  onTap: _busy || _suspect == null || _evidence == null || (c.weekly && _motive == null) ? null : _submit,
                 ),
               ]),
             ),
@@ -176,6 +187,28 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
           Expanded(child: AnimatedSuspect(avatar: s.avatar, size: 90, mood: on ? Mood.nervous : Mood.calm)),
           Text(s.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(13, w: FontWeight.w900)),
           if (mark == SuspectMark.innocent) Text('بی‌گناه؟', style: tBody(10, color: K.ok)),
+        ]),
+      ),
+    );
+  }
+
+  Widget _motiveTile(String id, String text) {
+    final on = _motive == id;
+    return GestureDetector(
+      onTap: () => setState(() => _motive = id),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: on ? const Color(0xFF3A1C1A) : K.night2,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: on ? K.stamp : K.night3, width: on ? 2 : 1),
+        ),
+        child: Row(children: [
+          Icon(on ? Icons.radio_button_checked_rounded : Icons.radio_button_unchecked_rounded, color: on ? K.stamp : K.textSoft),
+          const SizedBox(width: 10),
+          Expanded(child: Text(text, style: tBody(14.5, w: FontWeight.w700))),
         ]),
       ),
     );

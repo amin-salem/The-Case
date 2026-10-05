@@ -558,6 +558,7 @@ class Api extends ChangeNotifier {
 
   Map<String, dynamic> get _economy =>
       config['economy'] is Map ? (config['economy'] as Map).cast<String, dynamic>() : const {};
+  int get weeklyReward => _economy['weekly_reward'] as int? ?? 300;
   int get freezeCost => _economy['freeze_cost'] as int? ?? 150;
   int get maxFreezes => _economy['max_freezes'] as int? ?? 2;
   List<int> get loginCalendar =>

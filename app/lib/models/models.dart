@@ -79,7 +79,24 @@ class CaseData {
         evidence = [for (final e in _maps(j['evidence'])) Evidence(e)],
         culprit = (j['solution'] as Map?)?['culprit'] as String?,
         proof = [for (final p in ((j['solution'] as Map?)?['proof'] as List? ?? const [])) '$p'],
-        explanation = (j['solution'] as Map?)?['explanation'] as String?;
+        explanation = (j['solution'] as Map?)?['explanation'] as String?,
+        chapters = [for (final c in _maps(j['chapters'])) (title: _s(c['title']), text: _s(c['text']))],
+        chaptersTotal = _i(j['chapters_total']),
+        nextChapterAt = j['next_chapter_at'] is num
+            ? DateTime.fromMillisecondsSinceEpoch((j['next_chapter_at'] as num).toInt() * 1000)
+            : null,
+        motives = [for (final m in _maps(j['motives'])) (id: _s(m['id']), text: _s(m['text']))],
+        motive = (j['solution'] as Map?)?['motive'] as String?;
+
+  /// The weekend case: chapters opened so far (and how many there are), and when the next one opens.
+  final List<({String title, String text})> chapters;
+  final int chaptersTotal;
+  final DateTime? nextChapterAt;
+
+  /// The weekend case also asks why; `motive` is the right one, only for finished cases.
+  final List<({String id, String text})> motives;
+  final String? motive;
+  bool get weekly => motives.isNotEmpty;
 
   final String id, title, location, scene, intro;
   final String? culprit, explanation; // only for finished cases
@@ -142,7 +159,13 @@ class CasesList {
   CasesList(Map<String, dynamic> j)
       : today = j['today'] is Map ? CaseRow((j['today'] as Map).cast<String, dynamic>()) : null,
         nextCaseAt = DateTime.fromMillisecondsSinceEpoch(_i(j['next_case_at']) * 1000),
-        archive = [for (final r in _maps(j['archive'])) CaseRow(r)];
+        archive = [for (final r in _maps(j['archive'])) CaseRow(r)],
+        weekly = j['weekly'] is Map ? CaseRow((j['weekly'] as Map).cast<String, dynamic>()) : null,
+        weeklyClosesAt = j['weekly_closes_at'] is num
+            ? DateTime.fromMillisecondsSinceEpoch((j['weekly_closes_at'] as num).toInt() * 1000)
+            : null;
+  final CaseRow? weekly; // this weekend's big case, while it is open
+  final DateTime? weeklyClosesAt;
   final CaseRow? today;
   final DateTime nextCaseAt;
   final List<CaseRow> archive;

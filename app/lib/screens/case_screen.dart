@@ -363,10 +363,40 @@ class _CaseScreenState extends State<CaseScreen> {
     return ListView(padding: const EdgeInsets.fromLTRB(16, 12, 16, 24), children: [
       Paper(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const SectionTitle('گزارش اولیه'),
+          SectionTitle(c.weekly && c.chapters.isNotEmpty ? c.chapters.first.title : 'گزارش اولیه'),
           Text(c.intro, style: tBody(16, color: K.ink)),
         ]),
       ),
+      for (final ch in c.chapters.skip(1)) ...[
+        const SizedBox(height: 12),
+        Paper(
+          color: K.paperDark,
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            SectionTitle(ch.title),
+            Text(ch.text, style: tBody(15.5, color: K.ink)),
+          ]),
+        ),
+      ],
+      if (c.weekly && c.nextChapterAt != null) ...[
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: K.brass.withValues(alpha: 0.5))),
+          child: Row(children: [
+            const Icon(Icons.lock_clock_rounded, color: K.brass),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text('فصل ${fa(c.chapters.length + 1)} از ${fa(c.chaptersTotal)} با مدارک تازه باز می‌شه',
+                  style: tBody(13.5, w: FontWeight.w700)),
+            ),
+            Text(faClock(c.nextChapterAt!.difference(DateTime.now()).isNegative
+                    ? Duration.zero
+                    : c.nextChapterAt!.difference(DateTime.now())),
+                style: tDisplay(16, color: K.brass)),
+          ]),
+        ),
+      ],
       if (p.hints.isNotEmpty) ...[
         const SizedBox(height: 14),
         for (int i = 0; i < p.hints.length; i++)

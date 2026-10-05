@@ -191,6 +191,21 @@ Map<String, dynamic> _row(String id, {bool today = false, bool locked = false, b
   };
 }
 
+Map<String, dynamic> get _weeklyRaw =>
+    jsonDecode(File('../server/app/content/weekly/w001.json').readAsStringSync()) as Map<String, dynamic>;
+
+/// The weekend case as the server shows it after chapter two (chapter three still locked).
+Map<String, dynamic> _weeklyPublic() {
+  final w = Map<String, dynamic>.of(_weeklyRaw)..remove('solution')..remove('hints');
+  final chapters = (w['chapters'] as List).cast<Map<String, dynamic>>();
+  final hidden = {for (final e in (chapters[2]['evidence'] as List)) '$e'};
+  w['evidence'] = [for (final e in (w['evidence'] as List)) if (!hidden.contains((e as Map)['id'])) e];
+  w['chapters'] = [for (final c in chapters.take(2)) {'title': c['title'], 'text': c['text'] ?? ''}];
+  w['chapters_total'] = 3;
+  w['next_chapter_at'] = DateTime.now().add(const Duration(hours: 9, minutes: 41)).millisecondsSinceEpoch ~/ 1000;
+  return w;
+}
+
 Map<String, dynamic> _casesList() {
   final ids = _caseIds;
   final today = ids.last;
@@ -205,6 +220,14 @@ Map<String, dynamic> _casesList() {
   ];
   return {
     'today': _row(today, today: true),
+    'weekly': {
+      ..._row(today),
+      'id': 'w001',
+      'title': _weeklyRaw['title'],
+      'scene': _weeklyRaw['scene'],
+      'difficulty': 5,
+    },
+    'weekly_closes_at': DateTime.now().add(const Duration(days: 2, hours: 3)).millisecondsSinceEpoch ~/ 1000,
     'next_case_at': DateTime.now().add(const Duration(hours: 5, minutes: 23)).millisecondsSinceEpoch ~/ 1000,
     'archive': [
       for (int i = 0; i < archive.length; i++)
@@ -357,6 +380,8 @@ Future<http.Response> _serve(http.Request req) async {
     };
   } else if (path == '/v1/leaderboard') {
     body = _leaderboard(req.url.queryParameters['period'] ?? 'daily');
+  } else if (path == '/v1/cases/w001') {
+    body = {'case': _weeklyPublic(), 'progress': _freshProgress(), 'today': false};
   } else if (parts.length >= 4 && parts[1] == 'v1' && parts[2] == 'cases') {
     final id = parts[3];
     final action = parts.length > 4 ? parts[4] : '';
@@ -882,6 +907,14 @@ void main() {
   }
 
   shot('accuse', accuse);
+  shot('weekly_story', () => const CaseScreen(caseId: 'w001'),
+      size: const Size(390, 1600), before: () => _progress.remove('w001'), wait: const Duration(milliseconds: 600),
+      then: (t) => _tap(t, find.text('شروع تحقیقات'), wait: const Duration(milliseconds: 1200)));
+  shot('weekly_accuse', () => AccuseScreen(caseData: CaseData(_weeklyPublic()), progress: Progress({'attempts': 0, 'attempts_left': 3}), marks: const {}),
+      size: const Size(390, 3200), then: (t) async {
+    await _tap(t, find.text('هوشنگ راد'), wait: const Duration(milliseconds: 300));
+    await _tap(t, find.textContaining('پنهان کردن دزدی'), wait: const Duration(milliseconds: 600));
+  });
   shot('accuse_selected', accuse, size: const Size(390, 1900), then: pick);
   shot('accuse_wrong', accuse,
       size: const Size(390, 1900), before: midCase, then: (t) async {
