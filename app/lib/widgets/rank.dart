@@ -104,8 +104,11 @@ class RankLadder extends StatelessWidget {
                         w: i == profile.rank ? FontWeight.w900 : FontWeight.w400,
                         color: i == profile.rank ? K.brass : (i < profile.rank ? K.text : K.textSoft))),
               ),
-              Text(i <= profile.rank ? (i == profile.rank ? 'الان' : '✓') : '${fa(ranks[i].$1)} امتیاز',
-                  style: tBody(12, color: i <= profile.rank ? K.ok : K.textSoft)),
+              if (i < profile.rank)
+                const Icon(Icons.check_rounded, color: K.ok, size: 18)
+              else
+                Text(i == profile.rank ? 'الان' : '${fa(ranks[i].$1)} امتیاز',
+                    style: tBody(12, color: i == profile.rank ? K.ok : K.textSoft)),
             ]),
           ),
       ]),
