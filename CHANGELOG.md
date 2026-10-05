@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.2.0 (app build 3, server 1.2.0)
+
+**Coming back every night**
+- **Share card** after a case: tries, stars, time, hints and streak as emoji, with the app link. It never shows the
+  culprit or the evidence.
+- **What others thought**: after finishing a case, bars show who players accused first, plus solved % and first-try %.
+- **Streak insurance**: 150 coins, hold up to 2. If a nightly case is missed, one is spent and the streak survives.
+- **Streak badges** at 7, 30 and 100 nights in a row (account screen, and a banner when one is earned).
+- **7-day login calendar**: 20, 30, 40, 50, 60, 80 coins, and a sealed envelope (100–250) on day 7. Missing a day starts
+  again from day 1.
+- **Reminders** on the phone (no Firebase): 21:00 "tonight's case is open", 22:30 "your streak is in danger" when the
+  case isn't solved yet. A switch in the account screen turns them off.
+
+**Server**
+- New: `POST /v1/wallet/streak-freeze`, `GET /v1/cases/{id}/stats` (only after finishing). Migration 0002 adds three
+  columns. Config has `share_url` and the new numbers.
+- `app/tools/patch_android.py` prepares the manifest and Gradle for the reminders; `build_release.sh` runs it.
+
 ## 1.1.0 (app build 2, server 1.1.0)
 
 **Cases**
