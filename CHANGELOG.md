@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.0 (app build 8, server 1.4.0): ready for Myket
+
+- Real payments through Myket; every purchase is checked by the server with Myket before coins are added, and a
+  purchase paid while offline is credited later. Prices come from Myket (fallback labels in remote config).
+- VIP is a 30-day pass. Ad-removal and rewarded ads are hidden until a real ad network is added.
+- Privacy policy, terms and account deletion (in the app and at /privacy, /terms, /delete-account).
+- Release builds can be signed with a permanent key (GitHub secrets) and carry the Myket RSA key.
+
 ## 1.3.0 (app build 7, server 1.3.0): fairness and sound
 
 - Suspects and evidence are shuffled per case (same order for everyone); the culprit is no longer usually first.
