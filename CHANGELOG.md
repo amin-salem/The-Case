@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.13.3: harder cases 11 and 12
+
+- c011 «مرواریدهای اتاق ۲۱۴» and c012 «سیصد پرس» rewritten under the case-writing rules (difficulty 4, blind-tested). Case log updated.
+
 ## server 1.13.2: harder case 10, weekend case reviewed
 
 - c010 rewritten under the case-writing rules (difficulty 4, «پرده‌ی دوم», blind-tested).
