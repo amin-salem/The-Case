@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.11.1 (app build 17, server 1.11.1): 8 more portraits
+
+- Exact faces for roles that borrowed one: boat captains (c027, c049), train conductors (c023, c043), the male night
+  nurse (c028), receptionists (c019, c031, c039, c044, c048), archaeologists (c014, c034), IT specialists (c002,
+  c022, c042) and wedding DJs (c017, c037). 48 portraits in all.
+
 ## 1.11.0 (app build 16, server 1.11.0): painted art
 
 - 20 painted scene backgrounds replace the drawn ones, with a slow camera drift and rain, snow or floating dust.
