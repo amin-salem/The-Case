@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.13.1: harder case 9
+
+- c009 rewritten under the case-writing rules (difficulty 4, new plot «لنگرگاه چهار قلاچ», blind-tested).
+
 ## 1.13.0 (app build 19, server 1.13.0): crime-scene tape
 
 - Opening a case: two yellow police tapes («صحنه‌ی جرم • وارد نشوید») snap across the screen and are pulled away.
