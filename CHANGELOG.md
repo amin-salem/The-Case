@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.11.0 (app build 16, server 1.11.0): painted art
+
+- 20 painted scene backgrounds replace the drawn ones, with a slow camera drift and rain, snow or floating dust.
+- 40 painted suspect portraits; every one of the 257 suspects in the 50 cases and the weekend case now has one,
+  matched by gender, age and job (no repeats inside a case; the twins in c021 share a face).
+- 10 painted detective avatars for players (home, profile, leaderboards).
+- All art is WebP: about 1.6 MB in total.
+
 ## 1.10.0 (app build 15, server 1.10.0): weekend case and fair time
 
 - «پرونده‌ی آخر هفته»: a much harder case every Thursday 21:00 until Saturday night, free for everyone.
