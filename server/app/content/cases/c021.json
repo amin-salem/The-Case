@@ -22,7 +22,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_rich"
    },
    "motive": "بیمه‌ی ۲ کیلو طلا رو تازه بالا برده.",
    "statement": "تا ساعت ۲۱ غرفه بودم، بعد خونه. ساعت ۲۲ هم با شرکت بیمه تلفنی بودم.",
@@ -51,7 +52,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#7a5c2e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_merchant"
    },
    "motive": "بدهکار و سال‌هاست با غرفه‌ی ماندگار رقابت می‌کنه.",
    "statement": "اون شب خونه بودم و خوابیدم. من چپ‌دستم و ساعتم رو همیشه دست راست می‌بندم؛ بند ساعتم همون بند فولادی اصلیه.",
@@ -80,7 +82,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_student"
    },
    "motive": "حقوق ناچیز.",
    "statement": "کلیدم رو ساعت ۲۱ تحویل کریمی دادم و رفتم خونه.",
@@ -109,7 +112,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#5d4037",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_merchant"
    },
    "motive": "بدهی زیاد و از برادرش کینه داره.",
    "statement": "اون شب تنها خونه‌ی خودم بودم. راست‌دستم و ساعتم رو دست چپم می‌بندم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_old_grandma"
    },
    "motive": "با کریمی بحث ملکی داره.",
    "statement": "ساعت ۲۱:۳۰ غرفه رو بستم و رفتم خونه‌ی بالای بازار. دزد رو ندیدم.",

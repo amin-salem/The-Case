@@ -22,7 +22,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#1b3a4b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_driver"
    },
    "motive": "حرفه‌اش نامشخصه و ظاهر موجهی داره.",
    "statement": "من پسرعموی داماد از اصفهانم و فقط برای عروسی اومدم. دعوت‌نامه هم دارم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_guest"
    },
    "motive": "با پدر عروس بر سر ارث مشکل داره.",
    "statement": "تمام شب کنار میز اصلی بودم و فقط ساعت ۲۱:۴۵ رفتم دستشویی.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "بدهکار و از خانواده قرض زیاد گرفته.",
    "statement": "ساعت ۲۱ تا ۲۲ با عروس و داماد عکس می‌گرفتم، بعد تو سالن آشنایان بودم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_manager"
    },
    "motive": "کارمند تالاره.",
    "statement": "همه‌ی دعوت‌نامه‌ها رو اسکن کردم. همه‌ی QRها معتبر بودن.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "قرارداد شب عروسی رو از دست داده.",
    "statement": "تمام شب پشت میکسر بودم. میز هدیه از اونجا پیدا نیست.",

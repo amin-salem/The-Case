@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4a3b5c",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_manager"
    },
    "motive": "افشار قراردادش رو تمدید نمی‌کنه.",
    "statement": "کل اجرا تو اتاق کنترل بودم و فرمان‌ها رو می‌دادم. رمز گاوصندوق رو می‌دونم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_guest"
    },
    "motive": "افشار دو ماه حقوقش رو نداده.",
    "statement": "ساعت ۲۱:۱۰ پشت صحنه‌ی راست کنار افشار بودم و منتظر تعویض سریع لباسش. از اون‌جا تکون نخوردم.",
@@ -80,7 +82,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#7a5c2e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_artist"
    },
    "motive": "رقیب افشار تو شهرت و نقش.",
    "statement": "از ۲۱:۰۵ تا ۲۱:۲۰ روی صحنه بودم و دیالوگ‌های صحنه‌ی دوم رو می‌گفتم.",
@@ -109,7 +112,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_rich"
    },
    "motive": "تئاتر مقروضه و افشار تهدید به ترک شده.",
    "statement": "ساعت ۲۱ تا ۲۱:۳۰ تو لابی با اسپانسرها بودم و سخنرانی می‌کردم.",
@@ -138,7 +142,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "با افشار دعوای شخصی داره.",
    "statement": "پشت پنل نور بودم و برنامه‌ی ۱۲۰ فرمان نوری اجرا کردم. رمز گاوصندوق رو نمی‌دونم.",

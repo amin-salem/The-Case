@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#33463a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_officer"
    },
    "motive": "از کارش ناراضیه و درخواست انتقال داده.",
    "statement": "تا ساعت ۸:۳۰ پشت میز نگهبانی کنار گیت‌ها بودم. از جام تکون نخوردم.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_merchant"
    },
    "motive": "مدتیه ازش شکایت شده که از فروش‌ها کم می‌گذاره.",
    "statement": "ساعت ۸:۰۵ رفتم طبقه‌ی بالا، اتاق استراحت، یه چای خوردم و به همسرم پیام دادم. ساعت ۸:۲۰ برگشتم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#37474f",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_young_waitress"
    },
    "motive": "اخیراً از ماهان وام گرفته و نتونسته پس بده.",
    "statement": "شیفتم از ۷:۳۰ بود. ساعت ۸:۰۵ تا ۸:۲۵ توی باجه بلیت بودم و تعداد زیادی مسافر داشتم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#33463a",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "غرفه بدهکاره و بیمه‌ی ۵ میلیارد داره.",
    "statement": "ساعت ۸:۰۵ رفتم کیوسک روبرو چای بگیرم و بعد تو دفتر مدیر ایستگاه بودم. ۸:۲۰ برگشتم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#37474f",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "حقوقش ناچیز و پسرش بیماره.",
    "statement": "ساعت ۸ تا ۹ داشتم راه‌پله‌ها رو می‌شستم. به راهرو سرویس نرفتم.",

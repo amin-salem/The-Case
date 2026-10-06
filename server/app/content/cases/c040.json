@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1b3a4b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_lawyer"
    },
    "motive": "هوسپیان داشت حساب‌های او رو بازرسی می‌کرد و اختلاس پیدا کرده بود.",
    "statement": "من از ساعت ۲۲ خونه بودم و تنها خوابیدم. تا صبح از خونه بیرون نیومدم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#6a1b1b",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_old_grandma"
    },
    "motive": "از صدای ناقوس شاکیه و چند بار شکایت کرده.",
    "statement": "از ساعت ۲۱ تو خونه بودم و پنجره‌ام رو به برج‌ه. کسی رو ندیدم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "وارث اصلی عموش.",
    "statement": "شیفت شب داروخانه بودم، از ۲۰ تا ۸ صبح. می‌تونید از مدیرشون بپرسید.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_technician"
    },
    "motive": "هوسپیان گزارش مرمتش رو رد کرده و پرداختش رو نگه داشته بود.",
    "statement": "از ساعت ۲۱:۳۰ تا ۲۳:۳۰ تو سینمای بهمن فیلم «شب‌های دراز» رو می‌دیدم. بلیت دارم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "هوسپیان گزارش غیبتش رو داده بود.",
    "statement": "شب گشت زدم. دستگاه گشت نشون می‌ده ۲۲:۰۰ تا ۲۲:۵۰ تو گشت بودم. کد برج رو دارم.",
@@ -167,7 +172,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "پیر و شاهد همه‌ی دعواهای شورا.",
    "statement": "از ساعت ۲۱ تا ۲۳ تو مراسم دعای شبانه تو سالن کلیسا بودم، با ۱۵ نفر.",

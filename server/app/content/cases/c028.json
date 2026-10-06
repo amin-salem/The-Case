@@ -22,7 +22,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_doctor"
    },
    "motive": "زارعی ارتقاش رو متوقف کرده.",
    "statement": "از ۰۲:۵۵ تا ۰۳:۲۵ برای احیای بیمار اتاق ۱۱ بالای سرش بودم. دفتر احیا ثبت می‌کنه.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1b3a4b",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_pharmacist"
    },
    "motive": "از افشاگری زارعی نگران ثبت‌های دارویی اونه.",
    "statement": "ساعت ۲۲ شیفتم تموم شد و رفتم خونه.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_young_nurse"
    },
    "motive": "زارعی گزارش تخلف‌های او در ثبت دارو رو نوشته بود.",
    "statement": "ساعت ۰۲:۳۰ رفتم اتاق استراحت و تا ۰۳:۳۰ خوابیدم. قرص خواب خورده بودم و هیچ‌چیز نفهمیدم.",
@@ -109,7 +112,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#444b57",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_young_student"
    },
    "motive": "زارعی بورسیه‌اش رو رد کرده بود.",
    "statement": "از ۰۲:۵۰ تا ۰۳:۴۰ تو اتاق عمل سزارین اورژانسی بودم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#2e4a4a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "کارش موقتیه و زارعی نامه‌ی تمدید قراردادش رو امضا نکرده.",
    "statement": "ساعت ۰۳:۰۰ تا ۰۳:۲۰ یک بیمار رو به رادیولوژی بردم و برگردوندم.",

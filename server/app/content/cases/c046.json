@@ -22,7 +22,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#2e4a4a",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_rich"
    },
    "motive": "ورشکستگی و بیمه‌ی ۱۰ میلیاردی.",
    "statement": "اون شب هند بودم. فقط خبر اضافه‌وزن رو تلفنی شنیدم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#5a2a3a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_manager"
    },
    "motive": "از شغلش ناراضی نیست.",
    "statement": "فقط وزن رو ثبت می‌کنم. وزن خالی رو ۴ تن و ناخالص رو ۱۹٫۶ تن ثبت کردم.",
@@ -80,7 +82,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_driver"
    },
    "motive": "مدت‌هاست با شرکت قرارداد داره.",
    "statement": "من فقط پشت فرمونم. وقتی بار می‌زدن، تو اتاق نگهبانی بودم و چای می‌خوردم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "قرض بالا و ازدواج در پیش.",
    "statement": "طبق لیست ۲۰ پالت بار زدم. نه یکی کمتر، نه بیشتر. کامیون رو شمردم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#33463a",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_officer"
    },
    "motive": "نگران بازرسی سالانه.",
    "statement": "من فقط لیست ۲۰ پالتی رو دادم و گفتم همین‌ها بار بشه. با بی‌سیم هم همین رو گفتم.",

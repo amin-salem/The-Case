@@ -22,7 +22,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#6d4c41",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_worker"
    },
    "motive": "برادرش توی کار خرید و فروش عتیقه‌ی قاچاقه.",
    "statement": "یکشنبه ساعت ۴ عصر کارم تموم شد و رفتم خونه.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#5d4037",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_rich"
    },
    "motive": "سال‌هاست می‌خواد آثار کمال‌الملک رو به مجموعه‌اش اضافه کنه.",
    "statement": "شنبه برای بازدید اومدم موزه و تابلو رو از نزدیک دیدم. از یکشنبه تا حالا اصفهان بودم.",
@@ -80,7 +82,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#2b2d42",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "ماه پیش با یه مجموعه‌دار خصوصی جلسه‌ی محرمانه داشته.",
    "statement": "یکشنبه ساعت ۵:۳۰ رفتم خونه. دستور زدن پودر رو تلفنی به نادر دادم و خودم شاهد نبودم.",
@@ -109,7 +112,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "قسط‌های عقب‌افتاده‌ی خونه داره.",
    "statement": "ساعت ۶ با دستکش، پودر رو روی قاب‌ها زدم. بعدش تا صبح سر پستم توی اتاق مانیتورها بودم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#3d5a40",
-    "accessory": "apron"
+    "accessory": "apron",
+    "portrait": "f_mid_restorer"
    },
    "motive": "سه ساله منتظر ارتقای شغلیه و هر بار ردش کردن.",
    "statement": "یکشنبه از ۷ تا ۸:۳۰ شب توی آزمایشگاه مرمت روی یه کاسه‌ی سفالی کار کردم. اصلاً پام رو توی سالن نقاشی نذاشتم.",

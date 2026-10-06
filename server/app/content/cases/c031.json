@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4e342e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_manager"
    },
    "motive": "کارش موقتیه.",
    "statement": "تا ۲۲ پشت میز پذیرش بودم. ساعت ۲۲ در دفتر رو دیدم، قفل و تاریک بود.",
@@ -51,7 +52,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#444b57",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "حقوق کم و آقای زمانی تهدیدش به اخراج کرده.",
    "statement": "تمام شب دم دروازه بودم. از ساعت ۱۹:۳۵ تا ۲۳:۱۰ هیچ‌کس نه وارد شد نه خارج. ساعت ۲۳:۱۰ ماشین آقای زمانی رسید.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_lawyer"
    },
    "motive": "بین او و صاحب هتل اختلاف حقوق وجود داره.",
    "statement": "ساعت ۱۷ رفتم خونه. تا اون موقع تو گاوصندوق فقط حدود ۱۰۰ میلیون بود.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_officer"
    },
    "motive": "هتل بدهی داره و بیمه رو بالا برده.",
    "statement": "ساعت ۱۹:۳۰ هتل رو ترک کردم. تا اون موقع دو میلیارد رو شمرده بودم و تو گاوصندوق گذاشتم. ساعت ۲۳:۱۵ برگشتم.",
@@ -138,7 +142,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "apron"
+    "accessory": "apron",
+    "portrait": "m_mid_chef"
    },
    "motive": "چند ماه حقوق عقب داره.",
    "statement": "تمام شب تو آشپزخونه بودم و ۲۰ نفر مهمون شام داشتیم. دفتر رو ندیدم.",

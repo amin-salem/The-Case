@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#6a1b1b",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "می‌خواد آمار قبولی مدرسه بالا بره.",
    "statement": "شب پنجشنبه تا ۲۱ تو مدرسه بودم برای جلسه. با گوشیم وارد سامانه شدم، ولی فقط برای دیدن آمار.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "پدربزرگ آرمینه.",
    "statement": "شب پنجشنبه تو سرایدارخونه بودم و نوه‌ام رو دیدم. من گوشی ساده دارم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_student"
    },
    "motive": "نمره‌ی واقعیش ۱۲ بود و ۱۸ بهش بورسیه می‌داد.",
    "statement": "من به سامانه‌ی نمره دسترسی ندارم. اون شب خونه‌ی دوستم بودم.",
@@ -109,7 +112,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#4a3b5c",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_teacher"
    },
    "motive": "درگیر شکایت اولیا بود و می‌ترسه کارش رو از دست بده.",
    "statement": "شب پنجشنبه تو خونه بودم و رمزم رو هیچ‌وقت به کسی ندادم. من نمره‌ای تغییر ندادم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#4a3b5c",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_teacher"
    },
    "motive": "با رحیمی اختلاف داره و می‌خواد رئیس گروه بشه.",
    "statement": "تا ۲۰ تو مدرسه بودم و بعدش رفتم. گوشی‌ام همیشه روی وای‌فای خونه‌ست.",

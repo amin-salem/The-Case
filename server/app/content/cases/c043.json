@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_business"
    },
    "motive": "بیمه‌ی گردنبند ۲ میلیارده.",
    "statement": "ساعت ۲۰:۱۵ رفتم برای شام و ۲۰:۵۰ برگشتم. گردنبند نبود.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#37474f",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_business"
    },
    "motive": "مسئول کل قطار.",
    "statement": "از ۲۰ تا ۲۱ تو کابین سرپرست، واگن ۸، در ارتباط رادیویی با مرکز بودم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#4e342e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_artist"
    },
    "motive": "پولدار نیست ولی ظاهر مرتب داره.",
    "statement": "ساعت ۲۰ تا ۲۱ رفتم واگن رستوران شام خوردم و بعد برگشتم کوپه. جز اون جایی نرفتم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#33463a",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_driver"
    },
    "motive": "حقوق کم.",
    "statement": "از ۲۰ تا ۲۱ بین واگن‌های ۱ تا ۳ بلیت چک می‌کردم. دستگاه اسکن ثبت می‌کنه.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#444b57",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_guest"
    },
    "motive": "از نظر مالی تنگه.",
    "statement": "ساعت ۲۰ تا ۲۱ تو کوپه خوابیده بودم. ساعت ۲۰:۳۰ فقط برای آب رفتم راهرو.",

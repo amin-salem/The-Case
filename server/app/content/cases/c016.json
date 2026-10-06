@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#37474f",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_young_student"
    },
    "motive": "دکتر سادقی قرار نیست جلسه‌ی دفاعش رو امضا کنه مگه نمونه‌ها نتیجه بدن.",
    "statement": "ساعت ۷:۴۵ رسیدم و تا اون موقع فریزر رو کسی چک نکرده بود.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#4a3b5c",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "آزمایش بالینی شکست خورده و شهرتش ازش وابسته‌ست.",
    "statement": "تا ساعت ۷:۲۰ خونه بودم و ساعت ۶:۱۵ با همکارم تو بوستون ویدئوکنفرانس داشتم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "حقوقش به نتیجه‌ی آزمایش بسته نیست، ولی از رئیسش عصبانیه.",
    "statement": "ساعت ۷:۱۰ رسیدم و تازه فریزر رو دیدم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_doctor"
    },
    "motive": "اگه نمونه‌ها از بین برن، نتیجه‌ی منفی آزمایش بالینی که ازش ترسیده، دیگه قابل رد نیست و جایزه‌ی پژوهشی‌ش حفظ می‌شه.",
    "statement": "اون روز بچه‌ام مریض بود و ساعت ۷:۳۰ رسیدم. قبل از اون اصلاً پژوهشکده نبودم.",
@@ -138,7 +142,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#37474f",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "ماهیانه‌ی ناچیز و فشار کار زیاد.",
    "statement": "از ساعت ۶ تا ۷ طبقه‌ی همکف و اول رو نظافت می‌کنم. به طبقه‌ی سوم کارت ورود ندارم.",

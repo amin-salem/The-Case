@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#212121",
-    "accessory": "apron"
+    "accessory": "apron",
+    "portrait": "m_young_casual"
    },
    "motive": "هاشمی چند بار مقابل بقیه تحقیرش کرده.",
    "statement": "من تو آشپزخونه‌ی پشتی بودم و ظرف می‌شستم. هیچ‌وقت داخل سردخانه نمی‌رم، دسترسیم رو هم ندارن.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_waiter"
    },
    "motive": "بهرامی انتقاد تندی از او نوشته بود و ازش شاکیه.",
    "statement": "ساعت ۱۷:۵۲ برای آوردن دوغ رفتم سردخانه و ۳ دقیقه بعد بیرون اومدم. هیچ کار دیگه‌ای نکردم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#33463a",
-    "accessory": "apron"
+    "accessory": "apron",
+    "portrait": "f_mid_chef"
    },
    "motive": "از هاشمی کینه داره و می‌خواد جاش رو بگیره.",
    "statement": "ساعت ۱۷:۰۵ ماریناد رو گذاشتم توی سردخانه. بعد از اون دیگه تا ۱۸:۱۰ بهش نزدیک نشدم.",
@@ -113,7 +116,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#4e342e",
-    "accessory": "apron"
+    "accessory": "apron",
+    "portrait": "m_mid_chef"
    },
    "motive": "رستوران زیر بدهی‌ست و بهرامی چندبار از غذاش بد نوشته.",
    "statement": "ساعت ۱۸:۱۰ رفتم سردخانه و سینی ماریناد رو برداشتم. قبلش به ماریناد دست نزده بودم.",
@@ -142,7 +146,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#7a5c2e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "رستوران رو می‌فروشه و بهرامی می‌تونست قیمتش رو پایین بیاره.",
    "statement": "ساعت ۱۹ تا ۱۹:۲۰ برای سر زدن اومدم آشپزخونه. تا اون موقع رستوران نبودم.",

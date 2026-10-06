@@ -22,7 +22,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "توکلی سه ماهه حقوقش رو نداده.",
    "statement": "ساعت ۳ دور زدم، همه‌چی عادی بود. ساعت ۳:۱۰ آژیر زد و از پشت انبار دود دیدم.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_business"
    },
    "motive": "هفته‌ی پیش با دعوا اخراج شد و هنوز کلید انبار رو پس نداده.",
    "statement": "از وقتی اخراجم کردن پام رو اونجا نذاشتم. اون شب تا ۴ صبح عروسی پسرخاله‌ام بودم.",
@@ -80,7 +82,8 @@
     "beard": "mustache",
     "glasses": true,
     "outfit": "#4e342e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_rich"
    },
    "motive": "بدهی بانکی سنگین. بیمه‌نامه‌ی ۲۰ میلیاردی انبار ماه پیش تمدید شد.",
    "statement": "خونه خواب بودم. ساعت سه و بیست‌وپنج دقیقه شرکت دزدگیر زنگ زد و از خواب بیدارم کرد. تازه اونجا فهمیدم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#1a237e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_merchant"
    },
    "motive": "سال‌هاست با توکلی سر بازار فرش صادراتی رقابت داره.",
    "statement": "اون شب مشهد بودم، برای نمایشگاه فرش. اصلاً تهران نبودم.",

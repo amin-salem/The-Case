@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#1a237e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_business"
    },
    "motive": "حقوقش عقب افتاده.",
    "statement": "ساعت ۲۱ ویلا رو ترک کردم، با تاکسی اینترنتی. تا صبح خونه بودم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "بدهکار قماره و عموش کمکش نمی‌کنه.",
    "statement": "اون شب تو خونه‌ام تو تهران بودم و ساعت ۲۲ خوابیدم. اصلاً شمشک نبودم. کباب هم دوست ندارم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_chef"
    },
    "motive": "کار موقتی و نگران اخراج.",
    "statement": "ساعت ۲۰:۳۰ شام رو تموم کردم و رفتم اتاقم. صدایی نشنیدم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_driver"
    },
    "motive": "حقوق کم و حس بی‌اعتباری.",
    "statement": "ساعت ۲۰ ماشین رو پارک کردم و رفتم تماشای فوتبال تو اتاقم.",
@@ -138,7 +142,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#4a3b5c",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "رکس مال اونه و ازش مراقبت می‌کنه.",
    "statement": "تا ساعت ۲۱ باغ بودم، بعد تو سرایدارخونه خوابیدم. رکس رو با خوراک معمولی سیر کردم.",

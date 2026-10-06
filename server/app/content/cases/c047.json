@@ -22,7 +22,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_teacher"
    },
    "motive": "نسخه‌ها رو سال‌ها نگه‌داری کرده و تازه به او اخطار داده شده.",
    "statement": "ساعت ۱۹:۴۰ کارتم رو زدم و رفتم خونه. بعدش به کتابخونه برنگشتم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4e342e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_young_researcher"
    },
    "motive": "ازش خواسته بودن نسخه‌ها رو تحویل بده.",
    "statement": "ساعت ۱۹:۵۰ خارج شدم و تا شب تو خوابگاه بودم.",
@@ -80,7 +82,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#263238",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "کم‌درآمد.",
    "statement": "ساعت ۲۰:۰۵ تمیزکاری رو تموم کردم و رفتم. اتاق نسخه‌ها رو ساعت ۱۹:۵۰ تمیز کردم، هیچ شمعی نبود.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_teacher"
    },
    "motive": "از صالحی ناراضیه.",
    "statement": "ساعت ۱۹:۳۲ رفتم. اون موقع بهرام تو اتاق بود.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "حقوق کم و بیمار.",
    "statement": "ساعت ۲۰:۴۰ شروع گشتم. تا اون موقع تو اتاق نگهبانی بودم و درهای اتاق نسخه‌ها بسته بود.",

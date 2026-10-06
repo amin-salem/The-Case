@@ -22,7 +22,8 @@
     "beard": "mustache",
     "glasses": true,
     "outfit": "#5a2a3a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_lawyer"
    },
    "motive": "پیشنهاد کار از رقیب گرفته و می‌خواد مناقصه رو براش ببره.",
    "statement": "ساعت ۲۰:۲۰ تو جلسه‌ی مدیران بودم. صورتجلسه هست. ایمیل رو یکی دیگه با حساب من فرستاده.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1b3a4b",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_business"
    },
    "motive": "مدیر مناقصه‌ست.",
    "statement": "جلسه از ۱۹:۳۰ تا ۲۱ بود و همه‌ی مدیران بودن، شفیعی هم.",
@@ -80,7 +82,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "با شفیعی رقابت داره و ازش شکایت کرده.",
    "statement": "ساعت ۲۰:۲۰ تو اتاقم تنها بودم و روی نقشه کار می‌کردم. ساعت ۲۳:۳۰ رفتم باشگاه.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#33463a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_manager"
    },
    "motive": "نگران اخراج.",
    "statement": "من ساعت ۲۱ رفتم و شب خونه بودم. دسترسی به ایمیل شفیعی ندارم.",
@@ -138,7 +142,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#37474f",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_professor"
    },
    "motive": "همیشه از شرکت ناراضیه.",
    "statement": "ساعت ۲۱ شرکت رو بستم و رفتم خونه. شب پشت رایانه‌ی خونه‌ام بودم.",

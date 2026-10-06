@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1565c0",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "منصور هفته‌ی پیش پول شهریه‌اش رو قطع کرده بود.",
    "statement": "توی اتاقم بالا بودم و با هدفون بازی می‌کردم. برق که رفت، اینترنت هم قطع شد و همون‌جا موندم.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#37474f",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_artist"
    },
    "motive": "طبق وصیت‌نامه، اگه منصور بی‌فرزند فوت کنه، نصف کارخونه به کامران می‌رسه.",
    "statement": "کل مدتی که برق نبود، کنار شومینه‌ی پذیرایی نشسته بودم. یه لحظه هم از جام تکون نخوردم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#880e4f",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_guest"
    },
    "motive": "شایعه شده بود منصور می‌خواد ازش جدا بشه.",
    "statement": "وقتی برق رفت، توی آشپزخونه شمع روشن می‌کردم. حدود ساعت ۱۱ صدای باز شدن در ورودی رو شنیدم.",
@@ -109,7 +112,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#33691e",
-    "accessory": "apron"
+    "accessory": "apron",
+    "portrait": "m_old_gardener"
    },
    "motive": "منصور تهدیدش کرده بود که بعد از بیست سال اخراجش می‌کنه.",
    "statement": "ساعت ۸ شب کارم تموم شد و رفتم خونه‌ی خودم پایینِ ده. بارون هم که گرفت، دیگه بیرون نیومدم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#263238",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_lawyer"
    },
    "motive": "منصور قرار بود فردا وصیت‌نامه‌ی جدید رو پیش اون امضا کنه.",
    "statement": "وقتی برق رفت، رفتم از ماشینم چراغ‌قوه بیارم. ده دقیقه‌ای طول کشید چون بارون شدید بود.",

@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_manager"
    },
    "motive": "قراردادش موقتیه.",
    "statement": "جمعه‌ها پذیرش تعطیله و من نیستم. گلدان رو شنبه ۱۸ مهر صبح ساعت ۹ تحویل گرفتم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5d4037",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "حقوق کم.",
    "statement": "جمعه‌ها موزه بسته‌ست. من تا عصر ۱۶ پنجشنبه بودم و شنبه ۸ صبح برگشتم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4e342e",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_young_artist"
    },
    "motive": "از تأخیر قرارداد ناراضیه.",
    "statement": "جمعه خونه بودم. شنبه ۱۸ مهر گلدان رو برای ثبت عکس‌برداری کردم، ساعت ۱۰.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_restorer"
    },
    "motive": "گزارش مرمت رو قبول نکرده.",
    "statement": "من جمعه‌ها موزه نمی‌رم. گلدان رو فقط ۱۸ مهر شنبه دیدم و همون‌جا فهمیدم تقلبیه.",
@@ -138,7 +142,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#5d4037",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "شرکت بدهی داره و دو مشتری رو از دست داده.",
    "statement": "گلدان اصلی رو ۱۷ مهر صبح دست خود کارمند پذیرش موزه دادم و رسید گرفتم. کار تمام‌شده بود.",

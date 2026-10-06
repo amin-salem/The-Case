@@ -22,7 +22,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#4a3b5c",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_professor"
    },
    "motive": "ارزیاب شناخته‌شده و چند ساله مورد اعتماد، ولی قرضدار.",
    "statement": "من هرگز گواهی ۶۰ رج برای این فرش ننوشتم. فرش رو اصلاً ندیدم. امضای گواهی شبیه خطمه ولی از من نیست.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#2e4a4a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_guest"
    },
    "motive": "فرش‌هاش رو به عبدی می‌فروشه و پولش رو نگرفته.",
    "statement": "این فرش ۲۸ رج پشمی بود و همین رو هم به عبدی گفتم. ۶۰ رج ابریشم هیچ‌وقت نگفتم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#444b57",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_rich"
    },
    "motive": "پولش رفته و می‌خواد پس بگیره.",
    "statement": "من با اطمینان از گواهی خریدم. گواهی دست عبدی بود.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_merchant"
    },
    "motive": "چند سال تو بازار فعاله و درآمدش افت کرده.",
    "statement": "گواهی رو از حکیمی گرفتم و به فاضلی دادم. من فقط اون رو بهش نشون دادم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_business"
    },
    "motive": "چند بار با عبدی دعوا کرده.",
    "statement": "من فقط مغازه‌ی کناریم. چیزی نمی‌دونم.",

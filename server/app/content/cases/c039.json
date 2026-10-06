@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#4e342e",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_young_waiter"
    },
    "motive": "از شرکت پیشنهاد گرفته و کار می‌خواد.",
    "statement": "ساعت ۲۱ تا ۲۱:۴۰ پشت میز پذیرش سالن بودم و کارت‌های ورود رو ثبت می‌کردم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#2e4a4a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_rich"
    },
    "motive": "از بیمه می‌خواد غرامت بگیره.",
    "statement": "ساعت ۲۱:۲۵ رفتم دستشویی. کیف روی میز بود و وقتی برگشتم، نبود.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_guest"
    },
    "motive": "قراردادش داره تموم می‌شه.",
    "statement": "ساعت ۲۱ تا ۲۲ مهمون‌ها رو با چای پذیرایی می‌کردم و هیچ‌چیز مشکوکی ندیدم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_cleaner"
    },
    "motive": "حقوق کم و شایعه‌ی دزدی از مسافرها.",
    "statement": "ساعت ۲۱:۲۰ تا ۲۱:۴۰ توی دستشویی خانم‌ها ظرف‌های آشپزخونه رو می‌شستم. از میز تاجر دور بودم.",
@@ -138,7 +142,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_teacher"
    },
    "motive": "هیچ. خودش می‌گه فقط به پلیس کمک کرد.",
    "statement": "من از ساعت ۲۱ تو سالن VIP بودم و ساعت ۲۱:۳۰ با چشم خودم دیدم نظافتچی کیف رو برداشت.",

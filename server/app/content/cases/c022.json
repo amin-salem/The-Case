@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_lawyer"
    },
    "motive": "اخیراً سر ارتقا از فروتن کنار گذاشته شد.",
    "statement": "من ماژول تأیید پرداخت رو اصلاً استفاده نمی‌کنم. کارم ثبت فاکتورهاست. کارتم هم همیشه همراهمه.",
@@ -51,7 +52,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#2e4a4a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_merchant"
    },
    "motive": "رقیب نیکانه و از اون ناراضیه.",
    "statement": "من تو این شرکت کاری ندارم. فقط فروشنده‌ی رقیب نیکانم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_young_student"
    },
    "motive": "یه ماه و نیم پیش استخدام شده.",
    "statement": "من فقط پوشه‌ها رو مرتب می‌کنم. کارت کارمندی‌ام رو از ۲۵ مهر گرفتم.",
@@ -109,7 +112,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "حقوقش پایین‌تر از انتظارشه و تازه یه ماشین گرون خریده.",
    "statement": "رمز «مدیر خرید» رو خودم می‌دونم، ولی چند تا از اون تأییدها وقتی ثبت شده که من خارج از کشور بودم.",
@@ -138,7 +142,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#1b3a4b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_professor"
    },
    "motive": "همه‌ی رمزها رو بازنشانی می‌کنه.",
    "statement": "فقط زیرساخت رو نگه می‌دارم. از راه دور هم نمی‌تونم وارد سیستم مالی بشم، دسترسی ندارم.",

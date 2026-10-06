@@ -22,7 +22,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_worker"
    },
    "motive": "بدهکار قماره.",
    "statement": "من چمدان‌ها رو از نوار تا هواپیما می‌برم. بازشون نمی‌کنم و نمی‌تونم هم.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#5d4037",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "ارشدترین فرد شیفت و وام بزرگ داره.",
    "statement": "ساعت ۱:۱۰ تا ۱:۱۸ یه چمدان دیگه رو بازبینی کردم و بعد دیگه وارد اتاق دستی نشدم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#2c3e50",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "نمی‌خواد بابت یه سفر تجاری دردسر داشته باشه.",
    "statement": "چمدانم رو ساعت ۰:۵۰ تحویل دادم. بعدش رفتم سالن انتظار و تا ۳ صبح اونجا بودم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#2c3e50",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_manager"
    },
    "motive": "با هاشمی قبلاً بحث داشت.",
    "statement": "ساعت ۰:۵۰ چمدان رو وزن کردم و تحویل نوار دادم. ۱۹٫۲ بود، نوشتم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#2c3e50",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_officer"
    },
    "motive": "قسط‌های سنگین وام ماشین و بدهی خانواده.",
    "statement": "ساعت ۲:۱۵ رفتم استراحتگاه و تا ۲:۴۰ برنگشتم. تو اتاق بازرسی اون ساعت‌ها نبودم، اتاق خالی بود.",

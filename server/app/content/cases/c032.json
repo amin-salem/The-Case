@@ -22,7 +22,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#2e4a4a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_waiter"
    },
    "motive": "بازرس او را تو یک گزارش اخراج کرده بود.",
    "statement": "ساعت ۲۰:۵۵ تا ۲۱:۰۰ سفارش میز ۴ رو گرفتم و به آشپزخونه برگردوندم. ۲۱:۰۰ تا ۲۱:۰۵ تو آشپزخونه منتظر بشقاب بودم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "apron"
+    "accessory": "apron",
+    "portrait": "m_mid_chef"
    },
    "motive": "بازرس ماه پیش رستوران رو جریمه کرده بود.",
    "statement": "برنج رو ساعت ۲۰:۵۰ از اجاق گرفتم و تا ۲۱:۰۵ همون‌جا پشت اجاق بودم و بشقاب می‌کشیدم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_business"
    },
    "motive": "ورشکستگی رستوران به‌خاطر جریمه‌های بازرس.",
    "statement": "ساعت ۲۱ تا ۲۱:۱۰ پشت صندوق بودم و حساب مهمون‌ها رو می‌کردم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#33463a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_chef"
    },
    "motive": "از سرآشپز کتک زبانی خورده و کاره‌ش ناپایداره.",
    "statement": "برنج رو پهن کردم و ساعت ۲۰:۵۲ تا ۲۱:۰۵ پشت میز سالاد بودم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_worker"
    },
    "motive": "بازرس او را به‌خاطر نداشتن کارت بهداشت گزارش کرده بود.",
    "statement": "تمام شب تو آشپزخونه‌ی پشتی ظرف می‌شستم. نزدیک اجاق نرفتم.",
