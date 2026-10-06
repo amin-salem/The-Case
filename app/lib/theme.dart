@@ -9,21 +9,21 @@ import 'widgets/fx.dart';
 /// Colors: a detective's desk at night. Dark ink background, paper case
 /// sheets, kraft folders, a red rubber stamp and brass details.
 class K {
-  static const night = Color(0xFF10141C);
-  static const night2 = Color(0xFF171D28);
-  static const night3 = Color(0xFF222A38);
-  static const paper = Color(0xFFF2EADB);
-  static const paperDark = Color(0xFFE3D7C1);
-  static const ink = Color(0xFF1E2633); // text on paper
-  static const inkSoft = Color(0xFF5E6676);
-  static const text = Color(0xFFEDE6D8); // text on night
-  static const textSoft = Color(0xFF8E97A8);
-  static const kraft = Color(0xFFC79A57);
-  static const kraftDark = Color(0xFF8F6A33);
-  static const stamp = Color(0xFFC0392B);
-  static const brass = Color(0xFFD4A84B);
-  static const ok = Color(0xFF3FA36B);
-  static const clue = Color(0xFFFFE9A3);
+  static const night = Color(0xFF17181A);
+  static const night2 = Color(0xFF202124);
+  static const night3 = Color(0xFF2B2D31);
+  static const paper = Color(0xFFE9E4D8);
+  static const paperDark = Color(0xFFD9D2C2);
+  static const ink = Color(0xFF222326); // text on paper
+  static const inkSoft = Color(0xFF615F5A);
+  static const text = Color(0xFFE6E2DA); // text on night
+  static const textSoft = Color(0xFF9A9890);
+  static const kraft = Color(0xFFC9A15E);
+  static const kraftDark = Color(0xFF8A6A2E);
+  static const stamp = Color(0xFFD0543F);
+  static const brass = Color(0xFFE0A526);
+  static const ok = Color(0xFF5DAE7E);
+  static const clue = Color(0xFFFFE08A);
 }
 
 const String kFont = 'Vazirmatn';

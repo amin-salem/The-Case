@@ -6,7 +6,7 @@ router = APIRouter(tags=["pages"], include_in_schema=False)
 
 _STYLE = """
 <style>
-body{margin:0;background:#10141c;color:#ede6d8;font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.9}
+body{margin:0;background:#17181a;color:#e6e2da;font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.9}
 main{max-width:760px;margin:0 auto;padding:32px 20px 64px}
 h1{color:#d4a84b;font-size:26px}h2{color:#d4a84b;font-size:19px;margin-top:28px}
 a{color:#e8a87c}p,li{font-size:16px}.muted{color:#8e97a8;font-size:14px}

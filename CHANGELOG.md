@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.0 (app build 18, server 1.12.0): "Evidence room" colors
+
+- New palette: neutral charcoal backgrounds (no pure black), warm off-white text, police-tape amber accents, a softer red for stamps and buttons, calmer green. Easier on the eyes at night; portraits and scenes stand out more.
+
 ## 1.11.1 (app build 17, server 1.11.1): 8 more portraits
 
 - Exact faces for roles that borrowed one: boat captains (c027, c049), train conductors (c023, c043), the male night
