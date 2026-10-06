@@ -22,7 +22,8 @@
     "beard": "mustache",
     "glasses": true,
     "outfit": "#33463a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "حقوق کم و پیشنهاد گرفته بود.",
    "statement": "ساعت ۱۶ تا ۱۶:۳۰ با ماشین رفته بودم چاه آب، رسید خرید آب از چاه دارم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5d4037",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_young_student"
    },
    "motive": "جدیدترین عضو تیمه و کنجکاو درباره‌ی ارزش سفال‌ها.",
    "statement": "ساعت ۱۶:۱۰ همراه دانشجوی دیگه با چای به چادر دکتر ایمانی رفتیم و تا ۱۷ اونجا بودیم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#5a2a3a",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_business"
    },
    "motive": "از کمبود بودجه ناراضیه و گفته می‌خواست اشیا رو به خارج بفرسته.",
    "statement": "ساعت ۱۵ تا ۱۷ تو چادر لابراتوار بودم و سفال‌ها رو فهرست می‌کردم.",
@@ -109,7 +112,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_worker"
    },
    "motive": "حقوق ناچیز و از اتهام قبلی دزدی بدش میاد.",
    "statement": "تمام بعدازظهر تو گودال شماره ۳ خاک‌برداری می‌کردم. دو همکار کنارم بودن.",
@@ -138,7 +142,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#3e4a3e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_artist"
    },
    "motive": "قرض زیاد و نیاز به پول.",
    "statement": "ساعت ۱۵:۴۵ تا ۱۶:۴۰ برای فیلم‌برداری تپه‌های شنی رفتم. عکس ساعت ۱۶:۰۵ دارم که کنار شتر گرفتم.",

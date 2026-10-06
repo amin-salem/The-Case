@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_lawyer"
    },
    "motive": "با مدیریت درگیر پرداخت‌ها بود.",
    "statement": "اون شب تو بیمارستان بودم، عمل کیسه‌ی صفرا داشتم. تا ساعت ۱۰ صبح بستری بودم.",
@@ -51,7 +52,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "حقوق به‌موقع می‌گیره ولی از ساعت‌های اضافه‌کاری ناراضیه.",
    "statement": "ساعت ۲۲ خروج زدم و رفتم خونه. به اتاق اداری هم دسترسی ندارم و دلیلی ندارم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#2e4a4a",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "بیمار قلبیه و فشار کاری زیاد داره.",
    "statement": "تمام شب پشت میز نگهبانی بودم و هر نیم ساعت گشت زدم. نزدیک اتاق اداری نشدم.",
@@ -109,7 +112,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#1b3a4b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_lawyer"
    },
    "motive": "بدهی سنگین و شایعه‌ی فروش اطلاعات انبار به رقیب.",
    "statement": "من وی‌پی‌ان ندارم و تا حالا از خونه کار نکردم. اون شب ساعت ۲۲ خوابیدم و تا صبح بیدار نشدم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#33463a",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_rich"
    },
    "motive": "بیمه‌ی ۵ پالت رو ماه پیش بالا برده.",
    "statement": "تا ساعت ۲ بامداد توی عروسی نوه‌ام بودم و بعدش خونه خوابیدم.",

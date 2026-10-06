@@ -22,7 +22,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#37474f",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "هیچ. فقط می‌خواست کیف رو تحویل بده.",
    "statement": "کیف رو ساعت ۰۸:۳۸ از صندلی برداشتم و رفتم میز گمشده‌ها. بازش نکردم، قفل داشت.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "بدهکاره و از مترو غرامت می‌خواد.",
    "statement": "صبح ۸۰۰ میلیون از خونه برداشتم و تو کیف گذاشتم. حتماً سلطانی ۲۰۰ تاش رو برداشته.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5d4037",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_officer"
    },
    "motive": "حقوق ثابت داره و بیست سال سابقه.",
    "statement": "کیف رو با قفل بسته گرفتم. با اکبری و نگهبان بازش کردم و ۶۰۰ میلیون شمردم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#33463a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "کم‌درآمد.",
    "statement": "ساعت ۰۸:۱۵ تا ۰۸:۴۰ واگن‌های ایستگاه رو جارو می‌کردم. کیف رو ندیدم.",
@@ -138,7 +142,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "خسته از شیفت شب.",
    "statement": "موقع شمارش حضور داشتم. اکبری وقتی عدد ۶۰۰ رو دید داد زد که ۸۰۰ بوده.",

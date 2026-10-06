@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#33463a",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "با وصیت‌نامه‌ی جدید سهم‌اش صفر می‌شه.",
    "statement": "من وصیت‌نامه‌ی جدید رو جعلی می‌دونم و می‌خوام ثابتش کنم. ولی من خودم کار جعل نکردم.",
@@ -51,7 +52,8 @@
     "beard": "mustache",
     "glasses": true,
     "outfit": "#2e4a4a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_driver"
    },
    "motive": "هر روز با زری حرف می‌زنه و به‌دنبال امنیت شغلی برای خواهره.",
    "statement": "من فقط راننده‌ام و بیشتر کارم جاده‌ست. سواد زیادی هم ندارم. هیچ‌وقت با قلم‌دار کار نکردم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_cleaner"
    },
    "motive": "ذی‌نفع وصیت‌نامه‌ی جدید.",
    "statement": "من سواد خوندن و نوشتن ندارم. این وصیت‌نامه رو نمی‌دونم کی نوشته. بهروزی هیچ وقت بهم نگفت.",
@@ -109,7 +112,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#2c3e50",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_doctor"
    },
    "motive": "هزینه‌های درمان بهروزی بدهی به دکتر داشته.",
    "statement": "من تأیید می‌کنم که بهروزی تو دو هفته‌ی آخر نمی‌تونست بدون لرزش امضا کنه. هیچ وصیتی هم ندیدم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#33463a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_manager"
    },
    "motive": "حقوقش عقب افتاده بود و وصیت‌نامه‌ی قبلی رو دقیق می‌شناخت.",
    "statement": "کارهای اداری بهروزی رو من انجام می‌دادم. وصیت‌نامه رو من ننوشتم.",

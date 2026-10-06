@@ -153,7 +153,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       width: 64,
                       decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: p.avatar == i ? K.brass : Colors.transparent, width: 2)),
-                      child: CustomPaint(painter: CharacterPainter(kDetectives[i])),
+                      child: Padding(padding: const EdgeInsets.all(4), child: DetectiveFace(i, size: 56)),
                     ),
                   ),
                 ),

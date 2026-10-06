@@ -22,7 +22,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#1f1f24",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "بدهی سنگین شرط‌بندی آنلاین داره که پدرش خبر نداره.",
    "statement": "دیشب با دوستام تا ۳ صبح توی کافه‌ی خیابون انقلاب فوتبال دیدیم. اصلاً سمت بازار نرفتم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#6b2f3a",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_lawyer"
    },
    "motive": "حاج‌مرتضی سه ماه حقوقش رو نداده.",
    "statement": "ساعت ۷ شب رفتم خونه. من کلید مغازه رو ندارم، فقط رمز گاوصندوق رو دارم که دست هم نخورده.",
@@ -80,7 +82,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#4a3b2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_rich"
    },
    "motive": "ماه پیش بیمه‌ی جواهرات مغازه رو دو برابر کرده.",
    "statement": "ساعت ۸ شب مغازه رو بستم، دزدگیر رو روشن کردم و رفتم خونه. تا صبح خونه بودم.",
@@ -109,7 +112,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#2f4a3a",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "هفته‌ی پیش از اتحادیه‌ی بازار اخطار اخراج گرفته.",
    "statement": "کل شب توی اتاقک نگهبانی سر راسته بودم. از ۲ تا ۲:۳۰ بیدار بودم و تکرار فوتبال رو از رادیو گوش می‌دادم. کسی وارد راسته نشد.",

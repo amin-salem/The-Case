@@ -30,6 +30,8 @@ flutter:
     - assets/sounds/
     - assets/icon/
     - assets/portraits/
+    - assets/scenes/
+    - assets/avatars/
   fonts:
     - family: Vazirmatn
       fonts:

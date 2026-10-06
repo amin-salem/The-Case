@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#7a4b8c",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_business"
    },
    "motive": "از وقتی درخواست افزایش حقوقش رد شده، دنبال کار جدیده.",
    "statement": "شش و نیم از شرکت رفتم. از هفت و نیم تا نه سر کلاس زبانم بودم؛ لیست حضور و غیاب هست.",
@@ -51,7 +52,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#2e3b2e",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "پسرش هفته‌ی پیش به خاطر بدهی ضامن خواسته بود.",
    "statement": "از ۷ تا ۸ پشت‌بوم بودم، آنتن مرکزی رو درست می‌کردم. وقتی پایین اومدم، همه‌چی عادی بود.",
@@ -80,7 +82,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#3a3f47",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "دو بار به خاطر اشتباه در حساب‌ها توبیخ شده.",
    "statement": "پنجشنبه ساعت ۶ از شرکت رفتم خونه و تا صبح شنبه دیگه برنگشتم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#1d2a44",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_rich"
    },
    "motive": "شرکت ماه‌هاست ضرر می‌ده و سهام‌دارها ازش شکایت کردن.",
    "statement": "پنجشنبه ساعت ۵ رفتم فرودگاه، پرواز ۶:۳۰ کیش. کارت پروازم هست.",
@@ -138,7 +142,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#2f5d62",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "وام بانکی‌اش عقب افتاده.",
    "statement": "پنجشنبه تا ۹ شب طبقه‌ی سوم کد می‌زدم. اصلاً طبقه‌ی پنجم نرفتم.",

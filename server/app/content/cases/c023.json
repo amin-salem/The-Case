@@ -22,7 +22,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_waiter"
    },
    "motive": "درآمد کم و مدام شکایت از کارفرما.",
    "statement": "با چرخ چای تو واگن ۳ و ۴ بودم و تا ۰۲:۲۵ فروش کردم. به واگن ۴ هم سر زدم ولی وارد کوپه‌ها نشدم.",
@@ -51,7 +52,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#2e4a4a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_rich"
    },
    "motive": "پیر و بازنشسته. با باقری سر پنجره بحث داشت.",
    "statement": "من با دستگاه تنفسی می‌خوابم. تا صبح بیدار نشدم.",
@@ -80,7 +82,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#1b3a4b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_driver"
    },
    "motive": "ورشکستگی مالی و چند چک برگشتی.",
    "statement": "من توی ایستگاه سمنان ساعت ۰۲:۲۵ سوار شدم. قبل از اون اصلاً تو قطار نبودم و چیزی ندیدم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#2c3e50",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_officer"
    },
    "motive": "قرض بانکی داره.",
    "statement": "از ۰۲:۰۸ تا ۰۲:۲۲ بلیت واگن ۵ رو چک می‌کردم. به کوپه‌ی ۷ سر نزدم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4a3b5c",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_guest"
    },
    "motive": "طلاق گرفته و مشکل مالی داره.",
    "statement": "ساعت ۲ تا ۲:۳۰ رفتم واگن رستوران چای بخورم. باقری خواب بود.",

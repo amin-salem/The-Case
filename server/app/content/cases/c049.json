@@ -22,7 +22,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_driver"
    },
    "motive": "با ناصر بر سر شراکت دعوا داره.",
    "statement": "ناصر آتش زد.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#1a237e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_merchant"
    },
    "motive": "بدهی بانکی زیاد.",
    "statement": "کار علی نبوده.",
@@ -80,7 +82,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_worker"
    },
    "motive": "جوان و تازه‌کار.",
    "statement": "ابراهیم آتش زد.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#37474f",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_sailor"
    },
    "motive": "قدیمی‌ترین صیاد اسکله.",
    "statement": "علی آتش زد.",
@@ -138,7 +142,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "با مالک سردخانه سر اجاره بحث داشت.",
    "statement": "ناصر راست می‌گه.",

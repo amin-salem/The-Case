@@ -22,7 +22,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#2c3e50",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "وارث اصلیه و با پدرش بحث مالی داشت.",
    "statement": "ساعت ۲۲:۱۰ ملاقات تموم شد و رفتم هتل. ساعت ۳:۳۵ که پرستار زنگ زد برگشتم.",
@@ -55,7 +56,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_doctor"
    },
    "motive": "با افتخاری سر یک شکایت پزشکی درگیر بود.",
    "statement": "تا ساعت ۲:۱۰ توی اتاق عمل بودم، بعدش رفتم اتاق استراحت پزشکان. وقتی خبر دادن، همون‌جا بودم.",
@@ -118,7 +120,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_pharmacist"
    },
    "motive": "از افتخاری وام گرفته و نمی‌تونه پس بده.",
    "statement": "سرم رو طبق نسخه آماده کردم و تحویل فرشته دادم. ساعت ۲۳ هم از بیمارستان رفتم.",

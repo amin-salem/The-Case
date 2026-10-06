@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_chef"
    },
    "motive": "کمالی می‌خواست اخراجش کنه و جاش آشپز جدید بیاره.",
    "statement": "تا ساعت ۲۲ توی آشپزخونه بودم، بعد رفتم اتاقم. توی بیرون نبودم.",
@@ -51,7 +52,8 @@
     "beard": "mustache",
     "glasses": true,
     "outfit": "#3e4a3e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_driver"
    },
    "motive": "وارث پناهگاهه و شب شام با برادرش جر و بحث سختی داشت.",
    "statement": "بعد از شام رفتم اتاقم و دیگه بیرون نیومدم. صدایی نشنیدم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_guest"
    },
    "motive": "کمالی ماه پیش باغ خانوادگی‌اش رو با بدهی‌هاش گرو گرفته.",
    "statement": "رد پاها مال منه. ساعت ۲۱:۳۰ رفتم هیزم بیارم و برگشتم. اون موقع برف بند اومده بود و قشنگ همه‌چی مونده.",
@@ -109,7 +112,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "کمالی ازش بیمه‌ی راهنمایی رو بالا گرفته بود و دعوا داشتن.",
    "statement": "ساعت ۲۲:۳۰ تا ۲۲:۵۰ جلوی ساختمون برف پارو کردم. بعد خوابیدم. هیچ‌وقت پشت ساختمون نرفتم.",
@@ -138,7 +142,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_doctor"
    },
    "motive": "کمالی بیماری قدیمیش رو از او پنهان کرده بود. شاید شکایتی در کار بوده.",
    "statement": "ساعت ۲۳ خوابیدم. ساعت ۲۳:۴۰ صدای در شنیدم و از پنجره دیدم که یه نفر قدکوتاه با چراغ‌قوه کنار هیزم‌خانه‌ست، بعد خوابیدم.",

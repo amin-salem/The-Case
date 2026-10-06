@@ -235,7 +235,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _topBar() {
     final p = Api.i.profile;
-    final det = kDetectives[(p?.avatar ?? 0) % kDetectives.length];
     // a crowded row on a small phone: a very large system font is capped here so nothing overflows
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.15,
@@ -248,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 46,
             height: 46,
             decoration: BoxDecoration(color: K.night3, shape: BoxShape.circle, border: Border.all(color: K.brass, width: 2)),
-            child: ClipOval(child: CustomPaint(painter: CharacterPainter(det))),
+            child: DetectiveFace(p?.avatar ?? 0, size: 42),
           ),
           const SizedBox(width: 8),
           Flexible(

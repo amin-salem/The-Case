@@ -22,7 +22,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "با دبیر فیزیک اختلاف داره و می‌خواد جاش رو بگیره.",
    "statement": "ساعت ۲۰:۰۸ برای کنترل امنیتی پیش‌نویس رو باز کردم، ۴ دقیقه. عکسی نگرفتم.",
@@ -51,7 +52,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_teacher"
    },
    "motive": "درگیر شکایت والدین بود و می‌خواد بازنشسته بشه.",
    "statement": "پیش‌نویس رو ساعت ۱۸ گذاشتم و ساعت ۲۱ جایگزینش کردم. بین اینا دیگه سراغ فایل نرفتم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#33463a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_manager"
    },
    "motive": "پسرخاله‌اش پایه‌ی دوازدهمه، نمره‌هاش افتضاحه و از او کمک خواسته.",
    "statement": "ساعت ۱۹ پیش‌نویس رو برای چاپ باز کردم، ولی نسخه‌ی نهایی رو ساعت ۲۱ چاپ کردم. وقتی باز کردم فقط دو سه دقیقه نگاهش کردم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4e342e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_student"
    },
    "motive": "رتبه‌ی اوله و ادمین گروه تلگرامیه که عکس تو اون منتشر شد.",
    "statement": "من تا ۲۱ کلاس تقویتی بودم. عکس رو یه حساب ناشناس فرستاد، من فقط ادمینم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5d4037",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "دلبسته‌ی مدرسه‌ست و کسی تا حالا ازش بدی ندیده.",
    "statement": "ساعت ۱۹ رفتم خونه. به رایانه‌ها دسترسی ندارم.",

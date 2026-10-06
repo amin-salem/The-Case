@@ -22,7 +22,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#4a3b5c",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_rich"
    },
    "motive": "ماه بعد بازنشسته می‌شه و پیشنهاد کار از یک موزه‌ی خارجی داره.",
    "statement": "تا ساعت ۱۲ تو جلسه‌ی مدیران بودم. فقط ساعت ۱۰:۳۰ تا ۱۰:۴۰ تنفس بود که توی حیاط هوا خوردم. ساعت ۱۰:۴۰ برگشتم و ارائه‌ی گزارش رو شروع کردم.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_teacher"
    },
    "motive": "بدهی‌های کارتی داره و چند بار از همکارها قرض خواسته.",
    "statement": "ساعت ۹:۳۰ رفتم کنار ویترین و با اجازه‌ی دکتر اقبالی از داخل شیشه رو تمیز کردم. بعد از ۹:۵۵ دیگه نرفتم اتاق.",
@@ -84,7 +86,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#2e4a4a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_young_researcher"
    },
    "motive": "از دکتر اقبالی ناراضیه و نظرش درباره‌ی مقاله‌اش رو رد کرده.",
    "statement": "پنجشنبه‌ها ساعت ۸ با دکتر اقبالی نسخه رو مرور می‌کنم و ساعت ۸:۲۵ بیرون می‌رم. بعدش تا ظهر تو سالن مطالعه‌ام.",
@@ -113,7 +116,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#4a3b5c",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_guard"
    },
    "motive": "همسرش بیماره و پول لازم داره.",
    "statement": "پشت در اتاق نسخه‌ها وایساده بودم. غیر از بابک و لیلا کسی نیومد.",
@@ -142,7 +146,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_restorer"
    },
    "motive": "پایان‌نامه‌اش روی همین نسخه بود و دکتر اقبالی اجازه‌ی انتشار عکس‌های تذهیب رو بهش نداده بود.",
    "statement": "ساعت ۱۰:۳۸ رفتم اتاق نسخه‌ها برای کنترل رطوبت. حدود ۱۲ دقیقه اونجا بودم، ویترین رو باز نکردم و از پشت شیشه همه‌چی سالم بود.",

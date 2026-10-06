@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#4e342e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_business"
    },
    "motive": "بدهی دارد و کافه رو برای فروش گذاشته.",
    "statement": "کافه رو ساعت ۱۷ بستم و رفتم. کلید ویترین ندارم و گوشی‌ام تو خونه‌ی خواهرم بود.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4e342e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_student"
    },
    "motive": "دانشجوی تاریخ هنره و از اخراج چند داوطلب ناراحته.",
    "statement": "ساعت ۱۸:۳۰ دفتر داوطلبان رو امضا کردم و رفتم. بعدش به موزه برنگشتم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "موزه بودجه‌ی کمی داره و چند بار برای فروش آثار تحت فشار بوده.",
    "statement": "پنج روز بود برای کنفرانس تو استانبول بودم و فقط صبح روز بعد برگشتم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "از حقوق کم گله داره.",
    "statement": "تمام شب توی اتاق نگهبانی بودم. فقط ساعت ۱ و ۴ گشت می‌زنم و گشت‌هام ثبت می‌شه.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#1a237e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_restorer"
    },
    "motive": "قراردادش داره تموم می‌شه و با مدیر اختلاف داره.",
    "statement": "ساعت ۱۸ از موزه رفتم و تا صبح خونه بودم. گوشی‌ام همیشه همراهمه و تو خونه‌ست.",

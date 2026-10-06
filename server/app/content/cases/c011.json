@@ -22,7 +22,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "هتل بدهی داره و آبروش به امنیت مهمان‌هاش وابسته‌ست.",
    "statement": "ساعت ۲۱:۳۰ تا ۲۲ تو لابی با یه گروه مسافر مشغول جلسه بودم.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#444b57",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_merchant"
    },
    "motive": "طاهری می‌خواست شراکتشون رو بهم بزنه.",
    "statement": "از ساعت ۲۱:۱۵ تا ۲۲:۰۰ توی اتاقم با شعبه‌ی دبی ویدئوکنفرانس داشتم.",
@@ -84,7 +86,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#3e4a3e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_worker"
    },
    "motive": "طاهری چند روز پیش توهینش کرد و تو دفتر شکایت رفته بود.",
    "statement": "ساعت ۱۸ چمدون طاهری رو بردم اتاق. بعدش تا ۲۲ توی لابی و جلوی در بودم و به مسافرها کمک می‌کردم.",
@@ -117,7 +120,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4a3b5c",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_guest"
    },
    "motive": "برای شرکت رقیب طاهری کار می‌کنه و ماه‌ها به‌دنبال این قرارداد بوده.",
    "statement": "ساعت ۲۰:۴۵ تا ۲۲:۱۵ توی رستوران هتل نشسته بودم و به موسیقی گوش می‌دادم. بعد برگشتم اتاق.",
@@ -146,7 +150,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_cleaner"
    },
    "motive": "حقوق کم و یک بار هم به‌خاطر گمشدن یه ساعت بازجویی شده بود.",
    "statement": "شیفت من تا ساعت ۲۰ بود. بعد از ثبت خروج رفتم خونه.",

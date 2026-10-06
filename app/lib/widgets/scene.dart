@@ -36,6 +36,7 @@ class _AnimatedSceneState extends State<AnimatedScene> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    if (kSceneArt.contains(widget.scene)) return _painted();
     return SizedBox(
       height: widget.height,
       width: double.infinity,
@@ -46,6 +47,82 @@ class _AnimatedSceneState extends State<AnimatedScene> with SingleTickerProvider
       ),
     );
   }
+
+  /// A painted background (assets/scenes) with a slow camera drift and a light weather layer on top.
+  Widget _painted() {
+    final image = Image.asset('assets/scenes/${widget.scene}.webp',
+        fit: BoxFit.cover, filterQuality: FilterQuality.medium, gaplessPlayback: true);
+    return SizedBox(
+      height: widget.height,
+      width: double.infinity,
+      child: ClipRect(
+        child: AnimatedBuilder(
+          animation: _c,
+          child: image,
+          builder: (_, child) {
+            final t = widget.animated ? _c.value * 3600 : 0.0;
+            final drift = sin(t / 9);
+            return Stack(fit: StackFit.expand, children: [
+              Transform.scale(
+                scale: 1.08 + 0.03 * sin(t / 13),
+                child: Transform.translate(offset: Offset(drift * 6, cos(t / 11) * 3), child: child),
+              ),
+              if (widget.animated) RepaintBoundary(child: CustomPaint(painter: _WeatherPainter(widget.scene, t))),
+              if (widget.dim > 0) ColoredBox(color: Colors.black.withValues(alpha: widget.dim.clamp(0.0, 1.0) * 0.85)),
+            ]);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/// Scenes that have a painted background in assets/scenes.
+const Set<String> kSceneArt = {
+  'airport', 'bazaar_night', 'desert', 'harbor', 'hospital', 'hotel', 'kitchen', 'lab', 'library', 'museum',
+  'office', 'school', 'snow_lodge', 'subway', 'theater', 'tower', 'train', 'villa_rain', 'warehouse', 'wedding',
+};
+
+/// Rain, snow or floating dust over a painted scene.
+class _WeatherPainter extends CustomPainter {
+  _WeatherPainter(this.scene, this.t);
+  final String scene;
+  final double t;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rnd = Random(7);
+    if (scene == 'villa_rain' || scene == 'harbor') {
+      final p = Paint()
+        ..color = const Color(0x44CFD8E6)
+        ..strokeWidth = 1.1;
+      for (int i = 0; i < 70; i++) {
+        final x0 = rnd.nextDouble() * size.width, sp = 380 + rnd.nextDouble() * 220, ph = rnd.nextDouble();
+        final y = ((t * sp / size.height + ph) % 1) * (size.height + 30) - 15;
+        final x = (x0 - y * 0.18) % size.width;
+        canvas.drawLine(Offset(x, y), Offset(x - 3, y + 12), p);
+      }
+    } else if (scene == 'snow_lodge') {
+      final p = Paint()..color = const Color(0xAAFFFFFF);
+      for (int i = 0; i < 55; i++) {
+        final x0 = rnd.nextDouble() * size.width, sp = 18 + rnd.nextDouble() * 26, ph = rnd.nextDouble();
+        final r = 0.8 + rnd.nextDouble() * 1.6;
+        final y = ((t * sp / size.height + ph) % 1) * (size.height + 10) - 5;
+        canvas.drawCircle(Offset(x0 + sin(t * 0.8 + i) * 8, y), r, p);
+      }
+    } else {
+      // dust in the light
+      for (int i = 0; i < 26; i++) {
+        final x0 = rnd.nextDouble() * size.width, y0 = rnd.nextDouble() * size.height, ph = rnd.nextDouble() * 6;
+        final a = (0.25 + 0.25 * sin(t * 0.7 + ph)).clamp(0.0, 1.0);
+        canvas.drawCircle(Offset(x0 + sin(t * 0.15 + ph) * 14, y0 + cos(t * 0.12 + ph) * 10), 1.1,
+            Paint()..color = const Color(0xFFFFE2A8).withValues(alpha: a * 0.6));
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _WeatherPainter old) => old.t != t;
 }
 
 class ScenePainter extends CustomPainter {

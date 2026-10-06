@@ -22,7 +22,8 @@
     "beard": "full",
     "glasses": true,
     "outfit": "#4a3b5c",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_artist"
    },
    "motive": "بدهی داره و چند بار از همکارا قرض گرفته.",
    "statement": "عکس بریدن کیک رو خودم گرفتم، ساعت ۲۲:۲۵ تا ۲۲:۴۰ کنار سن بودم و اصلاً از جام تکون نخوردم.",
@@ -51,7 +52,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#263238",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "بدهکار قماره و اخیراً از داماد پول خواست.",
    "statement": "ساعت ۲۲ تا ۲۲:۴۰ وسط رقص گروهی بودم. می‌تونید تو فیلم ببینید.",
@@ -80,7 +82,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_athlete"
    },
    "motive": "قرارداد تالار رو از دست می‌ده و شکایت از او زیاده.",
    "statement": "من تمام شب پشت میکسر بودم و برای هر آهنگ یک ثبت داریم. جایی نرفتم.",
@@ -109,7 +112,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_waiter"
    },
    "motive": "از تالار حقوق عقب داره.",
    "statement": "ساعت ۲۲:۱۵ کیک رو با ترالی آوردم. بعدش تو آشپزخونه بودم و فقط کیک‌ها رو برش می‌زدم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_old_grandma"
    },
    "motive": "با پدر عروس سر ارث دعوا داره.",
    "statement": "تمام شب کنار میز اصلی نشسته بودم. فقط ساعت ۲۲:۱۵ رفتم دستشویی و دو دقیقه بعد برگشتم.",

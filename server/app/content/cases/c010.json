@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4e342e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_young_researcher"
    },
    "motive": "اخیراً از کارگردان اخطار گرفته و ممکنه اخراج بشه.",
    "statement": "عصر پشت پنل نور بودم. به سقف دسترسی ندارم، ایمنیش کار ایمانه.",
@@ -55,7 +56,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "تئاتر ورشکسته‌ست و بیمه‌ی نمایش ۴ میلیارد تومنه.",
    "statement": "اون عصر تو تمرین و بعدش تو دفترم بودم. بالای سالن نرفتم. ایمنی با تکنسین‌هاست.",
@@ -84,7 +86,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#33463a",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_manager"
    },
    "motive": "همسر سابق کارگردانه و سر سهم تئاتر دعوا دارن.",
    "statement": "ساعت ۱۸:۴۰ تا ۱۸:۵۰ تو دفتر بودم و چای می‌خوردم. بقیه‌ی وقت پشت صحنه بودم.",
@@ -117,7 +120,8 @@
     "beard": "mustache",
     "glasses": true,
     "outfit": "#33463a",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_artist"
    },
    "motive": "هدف حمله بود. شایعه شده خودش صحنه‌سازی کرده تا بلیط فروش بره.",
    "statement": "من فقط از اتاق گریم تا صحنه رفت‌وآمد داشتم. اون بالا رو هیچ‌وقت ندیدم.",
@@ -146,7 +150,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "جایگاهش با اومدن تکنسین جدید تهدید شده.",
    "statement": "ساعت ۱۶ سقف رو بررسی کردم و گیره‌ها سفت بودن. بعدش از ۱۸:۲۸ تا ۱۹:۰۲ برای نماز و شام بیرون تالار بودم.",

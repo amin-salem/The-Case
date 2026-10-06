@@ -22,7 +22,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#2e4a4a",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_professor"
    },
    "motive": "نسخه موضوع تحقیقشه و به‌خاطر رد صلاحیتش از کتابخانه ناراضیه.",
    "statement": "ساعت ۱۰ تا ۱۲ تو سالن مطالعه بودم و ساعت ۱۲:۰۵ رفتم. هیچ برگه‌ای امضا نکردم و امانت نمی‌گیرم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "badge"
+    "accessory": "badge",
+    "portrait": "m_mid_guard"
    },
    "motive": "حقوق کم و یک بار هم بابت غیبت توبیخ شده.",
    "statement": "همه‌ی ورود و خروج‌ها رو ثبت می‌کنم. فاضلی ساعت ۱۲:۰۵ رفت. بعد از اون هیچ پژوهشگری بیرون نرفت.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#5a2a3a",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_teacher"
    },
    "motive": "قدیمی‌ترین کارمنده و با رئیس درگیری داره.",
    "statement": "از ۱۴:۰۰ تا ۱۵:۰۰ ناهار بودم، تو کافه‌ی کتابخانه.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#6a1b1b",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_young_researcher"
    },
    "motive": "دانشجوی دکتری که چند بار برای دیدن نسخه رد شده.",
    "statement": "ساعت ۱۴ تا ۱۶ تو سالن مطالعه بودم و فقط دو بار از جام بلند شدم.",
@@ -138,7 +142,8 @@
     "beard": "mustache",
     "glasses": true,
     "outfit": "#3e4a3e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_officer"
    },
    "motive": "قرض بالا و شایعه‌ی فروش نسخه‌ها.",
    "statement": "از ۱۳:۰۰ تا ۱۵:۳۰ تو انبار نسخه‌ها داشتم فهرست‌برداری می‌کردم. میز امانت خالی و مهرش تو کشوی قفل بود.",

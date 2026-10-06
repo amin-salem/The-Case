@@ -68,7 +68,7 @@ class _AnimatedSuspectState extends State<AnimatedSuspect> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    if (kPortraits.contains(widget.avatar.portrait)) return _portrait();
+    if (kPortraits.contains(widget.avatar.portrait) || widget.avatar.portrait.startsWith('det_')) return _portrait();
     final blink = _blinkStart >= 0 ? sin((_clock - _blinkStart) / 0.16 * pi) : 0.0;
     return CustomPaint(
       size: Size(widget.size, widget.size * 1.1),
@@ -94,7 +94,7 @@ class _AnimatedSuspectState extends State<AnimatedSuspect> with SingleTickerProv
             offset: Offset(dx, 0),
             child: Transform.scale(
               scale: 1.04 + 0.012 * sin(_t * 2 * pi) + (widget.talking ? 0.006 * sin(_clock * 9) : 0),
-              child: Image.asset('assets/portraits/${widget.avatar.portrait}.webp',
+              child: Image.asset(portraitAsset(widget.avatar.portrait),
                   fit: BoxFit.cover, alignment: const Alignment(0, -0.4), filterQuality: FilterQuality.medium),
             ),
           ),
@@ -108,7 +108,48 @@ class _AnimatedSuspectState extends State<AnimatedSuspect> with SingleTickerProv
 
 /// Painted portraits shipped with the app (assets/portraits). A suspect whose avatar names one of
 /// these is shown with it; everyone else is drawn by CharacterPainter.
-const Set<String> kPortraits = {'m_mid_business', 'm_young_worker', 'f_young_nurse', 'f_old_grandma'};
+const Set<String> kPortraits = {
+  'f_mid_business',
+  'f_mid_chef',
+  'f_mid_cleaner',
+  'f_mid_doctor',
+  'f_mid_guest',
+  'f_mid_lawyer',
+  'f_mid_manager',
+  'f_mid_officer',
+  'f_mid_pharmacist',
+  'f_mid_restorer',
+  'f_mid_teacher',
+  'f_old_grandma',
+  'f_old_rich',
+  'f_old_shopkeeper',
+  'f_young_artist',
+  'f_young_athlete',
+  'f_young_nurse',
+  'f_young_researcher',
+  'f_young_student',
+  'f_young_waitress',
+  'm_mid_artist',
+  'm_mid_business',
+  'm_mid_chef',
+  'm_mid_doctor',
+  'm_mid_driver',
+  'm_mid_guard',
+  'm_mid_lawyer',
+  'm_mid_merchant',
+  'm_mid_officer',
+  'm_mid_sailor',
+  'm_mid_teacher',
+  'm_mid_technician',
+  'm_old_gardener',
+  'm_old_professor',
+  'm_old_rich',
+  'm_young_athlete',
+  'm_young_casual',
+  'm_young_student',
+  'm_young_waiter',
+  'm_young_worker',
+};
 
 /// Draws a character in a 200 x 220 box, scaled to the widget size.
 class CharacterPainter extends CustomPainter {
@@ -443,11 +484,23 @@ class CharacterPainter extends CustomPainter {
 }
 
 /// The player's detective portraits (picked in the profile).
+/// The player's detective portraits (assets/avatars/det_01..det_10).
 final List<AvatarSpec> kDetectives = [
-  AvatarSpec({'gender': 'm', 'age': 'mid', 'skin': 1, 'hair': 'cap', 'hairColor': '#2a2a2a', 'beard': 'stubble', 'outfit': '#5d4037', 'accessory': 'none'}),
-  AvatarSpec({'gender': 'f', 'age': 'young', 'skin': 0, 'hair': 'hijab', 'hairColor': '#263238', 'glasses': true, 'outfit': '#37474f', 'accessory': 'scarf'}),
-  AvatarSpec({'gender': 'm', 'age': 'old', 'skin': 2, 'hair': 'bald', 'hairColor': '#bdbdbd', 'beard': 'mustache', 'glasses': true, 'outfit': '#263238', 'accessory': 'tie'}),
-  AvatarSpec({'gender': 'f', 'age': 'mid', 'skin': 1, 'hair': 'hijab', 'hairColor': '#6d1b1b', 'outfit': '#3e2723', 'accessory': 'scarf'}),
-  AvatarSpec({'gender': 'm', 'age': 'young', 'skin': 0, 'hair': 'curly', 'hairColor': '#1a1a1a', 'glasses': true, 'outfit': '#1b3a4b', 'accessory': 'none'}),
-  AvatarSpec({'gender': 'm', 'age': 'mid', 'skin': 3, 'hair': 'short', 'hairColor': '#111111', 'beard': 'full', 'outfit': '#212121', 'accessory': 'badge'}),
+  for (int i = 1; i <= 10; i++) AvatarSpec({'portrait': 'det_${i.toString().padLeft(2, '0')}'}),
 ];
+
+String portraitAsset(String name) =>
+    name.startsWith('det_') ? 'assets/avatars/$name.webp' : 'assets/portraits/$name.webp';
+
+/// A detective's portrait in a circle (home, leaderboards, the avatar picker).
+class DetectiveFace extends StatelessWidget {
+  const DetectiveFace(this.index, {super.key, this.size = 46});
+  final int index;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => ClipOval(
+        child: Image.asset(portraitAsset(kDetectives[index % kDetectives.length].portrait),
+            width: size, height: size, fit: BoxFit.cover, filterQuality: FilterQuality.medium),
+      );
+}

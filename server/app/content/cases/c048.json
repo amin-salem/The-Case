@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#2e4a4a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_worker"
    },
    "motive": "قراردادش موقتیه و به‌خاطر مبلغ انعام بحث کرده بود.",
    "statement": "چمدان طهرانی رو ۱۳:۵۰ بردم ۶۰۴ و ده دقیقه بعد بیرون اومدم. بعدش تو لابی بودم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5d4037",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_cleaner"
    },
    "motive": "یک بار به‌خاطر چرت‌زدن توی اتاق مهمان توبیخ شده.",
    "statement": "اتاق ۶۰۴ رو ۱۴:۲۰ تا ۱۴:۴۰ تمیز کردم و رفتم سراغ اتاق بعدی. جاهای دیگه نرفتم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#1b3a4b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_manager"
    },
    "motive": "از مدیر هتل ناراضیه و درخواست انتقال داده.",
    "statement": "تمام بعدازظهر پشت میز پذیرش بودم. از میز دور نشدم. فقط ۱۵:۰۰ تا ۱۵:۰۸ با مشتریِ سر میز بودم، با اون حرف می‌زدم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_technician"
    },
    "motive": "حقوق کم و بدهی به همکار.",
    "statement": "کولر ۶۰۶ رو ۱۴:۵۰ تا ۱۵:۳۰ تعمیر کردم و تمام مدت تو اتاق ۶۰۶ بودم.",
@@ -138,7 +142,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#263238",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "ظاهراً برای معامله‌ی جواهر اومده و رقیب طهرانیه.",
    "statement": "از ۱۴:۳۰ تا ۱۶:۳۰ تو استخر هتل بودم. حوله هم تحویل گرفتم.",

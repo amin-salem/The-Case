@@ -120,7 +120,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
           child: Text(fa(r.rank), style: tBody(13, color: r.rank <= 3 ? K.ink : K.text, w: FontWeight.w900)),
         ),
         const SizedBox(width: 10),
-        SizedBox(width: 40, height: 44, child: CustomPaint(painter: CharacterPainter(kDetectives[r.avatar % kDetectives.length]))),
+        DetectiveFace(r.avatar, size: 40),
         const SizedBox(width: 10),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [

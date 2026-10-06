@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#4a3b5c",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_driver"
    },
    "motive": "بدهی قمار داره.",
    "statement": "ساعت ۱۸:۳۰ با گروه توریست رسیدم. شام رو کنار گروه خوردم تا ۲۱:۰۰.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#1b3a4b",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_teacher"
    },
    "motive": "حقوق ناچیزش چند ماهه عقب افتاده.",
    "statement": "ساعت ۲۰:۱۰ برق رفت و کنترل ژنراتور رفتم. ساعت ۲۰:۳۰ برگشتم سالن شام.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5d4037",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_restorer"
    },
    "motive": "مدتیه به بیمه‌ی سکه‌ها شک کرده و شکایت نوشته.",
    "statement": "ساعت ۱۷ رسیدم. از ۱۹:۴۵ تا ۲۱:۰۵ تو سالن غذاخوری بودم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#2c3e50",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_business"
    },
    "motive": "کاروان‌سرا زیر بدهیه و بیمه‌ی سکه‌ها ۳ میلیارده.",
    "statement": "از ساعت ۲۰ تا ۲۰:۵۰ تو سالن غذاخوری شام می‌دادم و جلوی چشم همه بودم.",
@@ -138,7 +142,8 @@
     "beard": "full",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "شنیده می‌شه کارش خرید و فروش عتیقه‌ست.",
    "statement": "ساعت ۱۹:۴۰ به ایست‌بازرسی رسیدم و جاده بسته بود. تا ۲۱:۳۰ اونجا گیر کردم. ساعت ۲۱:۴۰ به کاروان‌سرا رسیدم.",

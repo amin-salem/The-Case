@@ -22,7 +22,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_guard"
    },
    "motive": "احمدی اتهام دزدی بهش زده بود و ازش شکایت کرد.",
    "statement": "شب با دستگاه گشت دور پارک می‌گردم. آخر پارک بودم، نزدیک خیابون پشتی، و صدایی از برج نشنیدم.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#444b57",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_young_student"
    },
    "motive": "احمدی جایزه‌ی مسابقه‌ی ساعت‌سازیش رو به‌خاطر تقلب پس گرفته بود.",
    "statement": "از ساعت ۲۲:۳۰ تا ۲۳:۱۲ پشت تلفن با خواهرم بودم و بعدش خوابیدم. کل مدت خونه‌ی خودم بودم.",
@@ -80,7 +82,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#2c3e50",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_rich"
    },
    "motive": "احمدی می‌خواست مخالفتش با بازسازی برج رو علنی کنه.",
    "statement": "از ساعت ۲۲:۴۵ تا ۲۳:۳۰ توی کافه‌ی روبروی برج با دو همکارم بودم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#5a2a3a",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_officer"
    },
    "motive": "احمدی گزارش تخلف پیمانکار بازسازی رو آماده کرده بود.",
    "statement": "ساعت ۲۲:۵۰ تا ۲۳:۳۰ تو جلسه‌ی شورا بودم و کل جلسه ضبط شده.",
@@ -138,7 +142,8 @@
     "beard": "stubble",
     "glasses": false,
     "outfit": "#1a237e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_driver"
    },
    "motive": "وارث ملک احمدیه و بدهی داره.",
    "statement": "از ساعت ۲۲ تا ۲۴ بیمارستان بودم، همسرم عمل داشت.",

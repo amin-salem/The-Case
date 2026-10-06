@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#212121",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_doctor"
    },
    "motive": "کمالی از او شکایت پزشکی کرده بود.",
    "statement": "من قبل از ندا رسیدم.",
@@ -51,7 +52,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#6a1b1b",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_mid_lawyer"
    },
    "motive": "کمالی وصیتش رو عوض می‌کرد و اون ناراضی بود.",
    "statement": "من بعد از آرمان رسیدم.",
@@ -80,7 +82,8 @@
     "beard": "stubble",
     "glasses": true,
     "outfit": "#5d4037",
-    "accessory": "tie"
+    "accessory": "tie",
+    "portrait": "m_old_rich"
    },
    "motive": "سال‌هاست با کمالی بر سر تابلوها رقابت می‌کنه.",
    "statement": "من درست قبل از آرمان رسیدم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_guest"
    },
    "motive": "کمالی تصمیم داشت طلاقش بده.",
    "statement": "من درست قبل از دکتر فتحی رسیدم.",
@@ -138,7 +142,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#212121",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_manager"
    },
    "motive": "کمالی ازش خواسته بود از حساب‌های مجموعه کنار بره.",
    "statement": "من درست بعد از دکتر فتحی رسیدم.",
@@ -167,7 +172,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_young_casual"
    },
    "motive": "قماربازه و پدرش دیگه پولی بهش نمی‌داد.",
    "statement": "من بعد از ندا رسیدم.",

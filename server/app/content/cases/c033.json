@@ -22,7 +22,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#3e4a3e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_gardener"
    },
    "motive": "با رحمتی بر سر مسیر جدید دعوا داشت.",
    "statement": "دیشب بخاری‌ها رو مرتب کردم و دست‌هام دوده‌ایه. ولی از زیر، نه از بالا.",
@@ -51,7 +52,8 @@
     "beard": "none",
     "glasses": true,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "f_mid_chef"
    },
    "motive": "با رحمتی بر سر قراردادش دعوا داشت.",
    "statement": "بعد از شام تا ۲۳ تو آشپزخونه ظرف شستم و بعد خوابیدم.",
@@ -80,7 +82,8 @@
     "beard": "mustache",
     "glasses": true,
     "outfit": "#7a5c2e",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_mid_merchant"
    },
    "motive": "رحمتی می‌خواست عضویت او رو در هیئت‌مدیره لغو کنه.",
    "statement": "از دیروز غروب تا صبح تو اتاقم بودم. اصلاً از پناهگاه بیرون نرفتم. کار تعمیر نداشتم.",
@@ -109,7 +112,8 @@
     "beard": "none",
     "glasses": false,
     "outfit": "#33463a",
-    "accessory": "scarf"
+    "accessory": "scarf",
+    "portrait": "f_mid_doctor"
    },
    "motive": "رحمتی همسر سابقش بود و بحث مالی داشتن.",
    "statement": "ساعت ۲۲ خوابیدم و صبح با داد و بیداد بیدار شدم.",
@@ -138,7 +142,8 @@
     "beard": "mustache",
     "glasses": false,
     "outfit": "#444b57",
-    "accessory": "none"
+    "accessory": "none",
+    "portrait": "m_old_professor"
    },
    "motive": "وارث اصلی مرحومه و بدهی داره.",
    "statement": "تا ۲ بامداد تو سالن با بهنام و دیگران کارت بازی می‌کردم. بعدش خوابیدم.",
