@@ -53,7 +53,7 @@
     "glasses": true,
     "outfit": "#1a237e",
     "accessory": "none",
-    "portrait": "m_mid_merchant"
+    "portrait": "m_mid_captain"
    },
    "motive": "بدهی بانکی زیاد.",
    "statement": "کار علی نبوده.",
@@ -113,7 +113,7 @@
     "glasses": false,
     "outfit": "#37474f",
     "accessory": "none",
-    "portrait": "m_mid_sailor"
+    "portrait": "m_old_captain"
    },
    "motive": "قدیمی‌ترین صیاد اسکله.",
    "statement": "علی آتش زد.",
