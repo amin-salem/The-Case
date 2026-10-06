@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.13.0 (app build 19, server 1.13.0): crime-scene tape
+
+- Opening a case: two yellow police tapes («صحنه‌ی جرم • وارد نشوید») snap across the screen and are pulled away.
+- A strip of tape stays across the case intro and along the bottom of the case header.
+- Evidence cards carry numbered yellow evidence markers, like the tents at a real scene.
+
 ## 1.12.0 (app build 18, server 1.12.0): "Evidence room" colors
 
 - New palette: neutral charcoal backgrounds (no pure black), warm off-white text, police-tape amber accents, a softer red for stamps and buttons, calmer green. Easier on the eyes at night; portraits and scenes stand out more.

@@ -9,6 +9,7 @@ import '../services/case_clock.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/crime_tape.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
 import '../widgets/offline.dart';
@@ -223,6 +224,8 @@ class _CaseScreenState extends State<CaseScreen> {
     return Scaffold(
       body: Stack(children: [
         Positioned.fill(child: AnimatedScene(scene: c.scene, height: double.infinity, dim: 0.55)),
+        Positioned(left: -20, right: -20, top: MediaQuery.paddingOf(context).top + 52,
+            child: Transform.rotate(angle: -0.05, child: const CrimeTape(height: 22))),
         SafeArea(
           child: LayoutBuilder(
             builder: (context, box) => SingleChildScrollView(
@@ -268,6 +271,7 @@ class _CaseScreenState extends State<CaseScreen> {
             ),
           ),
         ),
+        const Positioned.fill(child: CrimeTapeIntro()),
       ]),
     );
   }
@@ -317,6 +321,7 @@ class _CaseScreenState extends State<CaseScreen> {
       height: 120,
       child: Stack(children: [
         Positioned.fill(child: AnimatedScene(scene: c.scene, height: 120, dim: 0.5)),
+        const Positioned(left: 0, right: 0, bottom: 0, child: CrimeTape(height: 13)),
         Padding(
           padding: const EdgeInsets.fromLTRB(4, 4, 12, 8),
           child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -496,6 +501,7 @@ class _CaseScreenState extends State<CaseScreen> {
               ]),
             ),
             Positioned(top: -8, left: 10, child: PinBadge(on: pinned)),
+            Positioned(top: -10, right: 8, child: EvidenceMarker(i + 1)),
             ]),
           ),
           ),
