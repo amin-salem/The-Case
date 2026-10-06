@@ -1,5 +1,10 @@
 # Changelog
 
+## server 1.13.2: harder case 10, weekend case reviewed
+
+- c010 rewritten under the case-writing rules (difficulty 4, «پرده‌ی دوم», blind-tested).
+- w001 reviewed before it opens: surface-only motives, side secrets with explaining clues for every innocent suspect, spoken Persian answers, a second left-hand ring so chapter 3 is needed (two new clues: e17–e19). Plot, chapters and solution unchanged.
+
 ## server 1.13.1: harder case 9
 
 - c009 rewritten under the case-writing rules (difficulty 4, new plot «لنگرگاه چهار قلاچ», blind-tested).
