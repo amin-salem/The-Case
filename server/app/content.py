@@ -203,6 +203,52 @@ def current_weekly(now: datetime | None = None) -> Case | None:
     return next((c for c in weekly_cases() if opens_at(c) <= now < weekly_closes_at(c)), None)
 
 
+def next_weekly(now: datetime | None = None) -> Case | None:
+    """The next weekend case that is written but not open yet."""
+    now = now or now_local()
+    return next((c for c in weekly_cases() if opens_at(c) > now), None)
+
+
+def next_thursday_at(now: datetime | None = None) -> datetime:
+    """Next Thursday at NEW_CASE_HOUR (when a weekend case would open if none is written yet)."""
+    now = now or now_local()
+    d = now.date() + timedelta(days=(3 - now.weekday()) % 7)
+    t = datetime.combine(d, time(get_settings().new_case_hour), tzinfo=_tz())
+    return t if t > now else t + timedelta(days=7)
+
+
+# ---------------------------------------------------------------- story mode (coming soon)
+# Shown as a countdown in the app until it opens. The run that builds story mode updates this.
+STORY_SEASON = {
+    "season": 1,
+    "title": "کبریت سوخته",
+    "tagline": "هر جا یه کبریت سوخته پیدا شد، یه نفر چیزی رو از دست داده. سرگرد ناصری سه ساله دنبالشه، "
+               "و حالا تو همکارشی.",
+    "partner": "سرگرد ناصری",
+    "opens_at": "2026-10-12T00:00:00",  # Tehran time
+}
+
+
+def story_upcoming(now: datetime | None = None) -> dict:
+    now = now or now_local()
+    at = datetime.fromisoformat(STORY_SEASON["opens_at"]).replace(tzinfo=_tz())
+    return {**{k: v for k, v in STORY_SEASON.items() if k != "opens_at"},
+            "opens_at": int(at.timestamp()), "open": at <= now}
+
+
+def weekend_upcoming(now: datetime | None = None) -> dict:
+    now = now or now_local()
+    cur = current_weekly(now)
+    if cur:
+        return {"open": True, "title": cur.data["title"], "scene": cur.data.get("scene"),
+                "closes_at": int(weekly_closes_at(cur).timestamp())}
+    nxt = next_weekly(now)
+    at = opens_at(nxt) if nxt else next_thursday_at(now)
+    return {"open": False, "opens_at": int(at.timestamp()),
+            "title": nxt.data["title"] if nxt else None, "scene": nxt.data.get("scene") if nxt else None,
+            "location": nxt.data.get("location") if nxt else None}
+
+
 def weekly_public(c: Case, now: datetime | None = None) -> dict:
     """What players may see right now: evidence of chapters not open yet is left out."""
     now = now or now_local()

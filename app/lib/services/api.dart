@@ -191,6 +191,23 @@ class Api extends ChangeNotifier {
     return online;
   }
 
+  /// What the weekend and story tabs show before they open (from /v1/config).
+  Map<String, dynamic> _upcoming(String k) {
+    final u = config['upcoming'];
+    return u is Map && u[k] is Map ? (u[k] as Map).cast<String, dynamic>() : const {};
+  }
+
+  Map<String, dynamic> get upcomingWeekend => _upcoming('weekend');
+  Map<String, dynamic> get upcomingStory => _upcoming('story');
+
+  /// Fetches the config again (e.g. when a countdown ends). Keeps the old one without internet.
+  Future<void> refreshConfig() async {
+    try {
+      await _loadConfig();
+      notifyListeners();
+    } catch (_) {}
+  }
+
   Future<void> _loadConfig() async {
     final j = await _call('GET', '/v1/config', auth: false);
     if (j is! Map) throw const FormatException('config is not an object');

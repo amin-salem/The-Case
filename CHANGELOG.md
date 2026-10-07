@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.15.0 (app build 22, server 1.15.0): weekend and story tabs
+
+- Two new main tabs: «آخر هفته» (this weekend's big case, or a banner with a countdown to the next one, opening Thursday 21:00) and «داستان» (season 1 «کبریت سوخته» with سرگرد ناصری, counting down to Monday 12 Oct 00:00).
+- The shop moved to the coin chip; the bottom bar is now خانه، روزانه، آخر هفته، داستان، برترها، پروفایل.
+- Server: /v1/config has `upcoming.weekend` and `upcoming.story` (title, time, open).
+
 ## 1.14.1 (app build 21, server 1.14.1): permanent signing key
 
 - The APK is now signed with the permanent release key (the same one Myket will use). This is the last version that needs an uninstall; every later version installs over it and keeps the player's data.

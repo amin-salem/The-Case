@@ -34,6 +34,7 @@ async def config(session: AsyncSession = Depends(get_session)):
         "server_time": int(now.timestamp()),
         "today": now.date().isoformat(),
         "next_case_at": int(content.next_case_at(now).timestamp()),
+        "upcoming": {"weekend": content.weekend_upcoming(now), "story": content.story_upcoming(now)},
         "economy": {"hint_costs": eco.HINT_COSTS, "unlock_cost": eco.UNLOCK_COST,
                     "max_attempts": eco.MAX_ATTEMPTS, "ad_reward": eco.AD_REWARD, "ads_per_day": eco.AD_PER_DAY,
                     "secure_reward": eco.SECURE_REWARD, "invite_reward": eco.INVITE_INVITER,

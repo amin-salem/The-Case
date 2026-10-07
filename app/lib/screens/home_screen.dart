@@ -19,6 +19,7 @@ import 'case_screen.dart';
 import 'dialogs.dart';
 import 'inbox_sheet.dart';
 import 'main_shell.dart';
+import 'shop_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -285,7 +286,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
       ]),
       const SizedBox(width: 4),
-      CoinChip(coins: Api.i.coins, onTap: () => MainShell.tab.value = MainShell.shop),
+      CoinChip(
+          coins: Api.i.coins,
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreen()))),
       ]),
     );
   }

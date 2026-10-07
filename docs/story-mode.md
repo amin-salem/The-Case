@@ -3,6 +3,12 @@
 Replaces the planned 7-day big case. An endless career, played at the player's own pace, beside the
 nightly case (daily habit + leaderboard) and the weekend case (weekly event), which stay as they are.
 
+## Season 1 (already shown in the app as «به‌زودی»)
+- Title **«کبریت سوخته»**: a serial thief who leaves a burnt match at every scene; ناصری has chased him
+  for three years. Tagline and opening time live in `STORY_SEASON` in server/app/content.py
+  (opens 2026-10-12 00:00 Tehran). The app's story tab (app/lib/screens/story_screen.dart) shows the
+  banner (assets/banners/story_s01.webp), ناصری's card and a countdown until then.
+
 ## Story
 - The player is a rookie detective. Partner: **سرگرد ناصری**, a sharp, slightly sarcastic veteran.
   He introduces each chapter, reacts to how the player did (stars, wrong accusations), gives the hints

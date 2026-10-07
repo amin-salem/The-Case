@@ -75,3 +75,21 @@ async def test_solving_needs_the_motive(client, clock):
     assert r["streak"] == 0  # the weekend case doesn't touch the nightly streak
     done = (await client.get(f"/v1/cases/{w.id}", headers=h)).json()["case"]
     assert done["solution"]["motive"] == right
+
+
+def test_upcoming_weekend_and_story():
+    w = content.weekly_cases()[0]
+    start = content.opens_at(w)
+    before = content.weekend_upcoming(start - timedelta(hours=1))
+    assert before["open"] is False and before["title"] == w.data["title"]
+    assert before["opens_at"] == int(start.timestamp())
+    during = content.weekend_upcoming(start + timedelta(hours=1))
+    assert during["open"] is True and during["closes_at"] == int(content.weekly_closes_at(w).timestamp())
+    # after the last written weekend case: the next Thursday 21:00, no title yet
+    late = content.weekly_cases()[-1]
+    after = content.weekend_upcoming(content.weekly_closes_at(late) + timedelta(hours=1))
+    assert after["open"] is False and after["title"] is None
+    t = datetime.fromtimestamp(after["opens_at"], start.tzinfo)
+    assert t.weekday() == 3 and t.hour == start.hour
+    s = content.story_upcoming()
+    assert s["title"] and s["opens_at"] > 0 and isinstance(s["open"], bool)

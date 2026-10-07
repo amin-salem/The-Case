@@ -118,6 +118,13 @@ final Map<String, dynamic> _profileJson = {
 };
 
 final Map<String, dynamic> _config = {
+  'upcoming': {
+    'weekend': {'open': false, 'title': 'شب برفی ویلای صدری', 'scene': 'snow_lodge', 'location': 'دره‌ی سپیدار',
+        'opens_at': DateTime.now().add(const Duration(days: 1, hours: 6)).millisecondsSinceEpoch ~/ 1000},
+    'story': {'season': 1, 'title': 'کبریت سوخته', 'open': false, 'partner': 'سرگرد ناصری',
+        'tagline': 'هر جا یه کبریت سوخته پیدا شد، یه نفر چیزی رو از دست داده. سرگرد ناصری سه ساله دنبالشه، و حالا تو همکارشی.',
+        'opens_at': DateTime.now().add(const Duration(days: 4, hours: 8, minutes: 30)).millisecondsSinceEpoch ~/ 1000},
+  },
   'share_url': 'https://cafebazaar.ir/app/ir.aminsalem.the_case',
   'prices': {
     'coins_small': '۴۹٬۰۰۰ تومان',
@@ -842,6 +849,12 @@ void main() {
   shot('shell_home', () => const MainShell(), wait: const Duration(milliseconds: 1600));
   shot('shell_daily', () => const MainShell(), size: const Size(390, 1500), wait: const Duration(milliseconds: 600), then: (t) async {
     await _tap(t, find.text('روزانه'), wait: const Duration(milliseconds: 1500));
+  });
+  shot('shell_weekend', () => const MainShell(), size: const Size(390, 1200), wait: const Duration(milliseconds: 600), then: (t) async {
+    await _tap(t, find.text('آخر هفته'), wait: const Duration(milliseconds: 1500));
+  });
+  shot('shell_story', () => const MainShell(), size: const Size(390, 1400), wait: const Duration(milliseconds: 600), then: (t) async {
+    await _tap(t, find.text('داستان'), wait: const Duration(milliseconds: 1500));
   });
   shot('shell_profile', () => const MainShell(), wait: const Duration(milliseconds: 600), then: (t) async {
     await _tap(t, find.text('پروفایل'), wait: const Duration(milliseconds: 1500));
