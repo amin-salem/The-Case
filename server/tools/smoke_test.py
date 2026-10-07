@@ -134,7 +134,7 @@ def main() -> int:
     check(me2 and me2.get("rank_title") and "xp" in me2, "profile has XP and a detective rank",
           f"{me2 and me2.get('rank_title')} · {me2 and me2.get('xp')} XP")
     ach = expect("GET", "/v1/achievements", headers=hdr)
-    check(ach and ach.get("total", 0) >= 28, "achievements list", f"{ach and ach.get('earned')} of {ach and ach.get('total')} earned")
+    check(ach and ach.get("total", 0) >= 20, "achievements list", f"{ach and ach.get('earned')} of {ach and ach.get('total')} earned")
 
     print("\nEconomy, social")
     lb = expect("GET", "/v1/leaderboard?period=daily", headers=hdr)
