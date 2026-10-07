@@ -1,5 +1,10 @@
 # Changelog
 
+## server 1.15.2: daily missions without riddles
+
+- Every day: «پرونده‌ی امشب رو حل کن», one skill mission (۳ ستاره / بدون سرنخ / بدون اتهام اشتباه) and one investigation mission (بازجویی از همه / حرف زدن با ۳ مظنون / حل ۲ پرونده). Friday and Saturday, while the weekend case is open, the third one is «تو پرونده‌ی آخر هفته از ۲ مظنون بازجویی کن».
+- No mission makes you spend coins any more (buying a hint / unlocking an archive case are out). Riddle achievements are hidden while riddles are off.
+
 ## 1.15.1 (app build 23, server 1.15.1): quieter home, weekend countdown fix
 
 - Quick riddles are hidden for now: no «روزانه» tab and no riddle card on home; daily missions no longer ask for riddles (the missions list opens from the home row).

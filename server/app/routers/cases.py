@@ -307,8 +307,10 @@ async def seen(case_id: str, body: SeenIn, player: Player = Depends(current_play
     gains = None
     if after != before:
         p.seen = sorted(after)
-        if after >= set(ids):
-            gains = await progress.record(session, player, interrogate_all=1)
+        new = len(after - before)
+        gains = await progress.record(session, player, suspect_seen=new,
+                                      weekly_seen=new if content.is_weekly(c.id) else 0,
+                                      interrogate_all=int(after >= set(ids)))
         await session.commit()
     return SeenOut(seen=len(after), total=len(ids), gains=GainsOut(**gains.out()) if gains else GainsOut())
 

@@ -32,8 +32,9 @@ def test_pool_and_daily_pick():
     for d in range(30):
         day = (datetime(2026, 11, 1) + timedelta(days=d)).date().isoformat()
         got = missions.for_day(day)
-        assert len({m.id for m in got}) == 3 and got[0].group == "case"
-        assert not any(m.event.startswith("riddle") for m in got)  # riddles are hidden for now
+        assert [m.group for m in got][:2] == ["core", "case"] and got[2].group in ("extra", "weekend")
+        assert len({m.id for m in got}) == 3
+        assert not any(m.group in ("riddle", "extra_paid") for m in got)  # no riddles, nothing to buy
         assert got == missions.for_day(day)
     assert len({m.id for m in missions.POOL}) == len(missions.POOL)
 
@@ -126,3 +127,13 @@ async def test_spending_missions_count(client, clock, monkeypatch):
     assert r["gains"]["missions_done"] == []
     m = (await client.get("/v1/missions", headers=h)).json()
     assert [x["done"] for x in m["missions"]] == [True, False, True]
+
+
+def test_weekend_mission_on_friday_and_saturday():
+    w = content.weekly_cases()[0]  # opens on a Thursday evening
+    thu = content.opens_at(w).date()
+    fri, sat, sun = (thu + timedelta(days=n) for n in (1, 2, 3))
+    assert missions.for_day(fri.isoformat())[2].id == "weekend_talk"
+    assert missions.for_day(sat.isoformat())[2].id == "weekend_talk"
+    assert missions.for_day(thu.isoformat())[2].id != "weekend_talk"
+    assert missions.for_day(sun.isoformat())[2].id != "weekend_talk"

@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import achievements
+from .. import achievements, missions
 from ..db import get_session
 from ..models import Player, PlayerAchievement
 from ..schemas import AchievementRow, AchievementsOut
@@ -19,5 +19,6 @@ async def list_achievements(player: Player = Depends(current_player), session: A
         PlayerAchievement.player_id == player.id))).all())
     items = [AchievementRow(id=a.id, title=a.title, desc=a.desc, group=a.group, target=a.target,
                             progress=min(a.target, a.value(player)), earned=a.id in earned,
-                            earned_at=ts(earned.get(a.id)), coins=a.coins, xp=a.xp) for a in achievements.ALL]
+                            earned_at=ts(earned.get(a.id)), coins=a.coins, xp=a.xp) for a in achievements.ALL
+                            if missions.RIDDLES_ON or a.group != "riddles"]
     return AchievementsOut(earned=sum(1 for i in items if i.earned), total=len(items), items=items)
