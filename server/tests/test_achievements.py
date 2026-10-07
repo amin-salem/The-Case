@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from app import achievements, content, riddles
+from app import achievements, content, missions, riddles
 from app import economy as eco
 
 from .conftest import new_player
@@ -31,14 +31,15 @@ def test_definitions():
     assert achievements.BY_ID["rank_legend"].target == len(eco.RANKS) - 1
 
 
-async def test_earned_once_with_rewards(client, clock):
+async def test_earned_once_with_rewards(client, clock, monkeypatch):
+    monkeypatch.setattr(missions, "RIDDLES_ON", True)  # this test uses riddles, so they count again
     c = content.by_id("c030")
     publish = datetime(c.publish.year, c.publish.month, c.publish.day, 21, 10, tzinfo=TEHRAN)
     clock(publish)
     p = await new_player(client, "achiever-1")
     h = p["headers"]
     lst = (await client.get("/v1/achievements", headers=h)).json()
-    assert lst["earned"] == 0 and lst["total"] == len([a for a in achievements.ALL if a.group != "riddles"])  # riddles off
+    assert lst["earned"] == 0 and lst["total"] == len(achievements.ALL)
 
     # three right riddles in a row: first riddle + a day without mistakes
     truth = {r.id: r.answer for r in riddles.for_day(content.today_str())}
