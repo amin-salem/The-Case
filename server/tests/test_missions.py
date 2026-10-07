@@ -77,7 +77,7 @@ async def test_missions_chest_and_streak(client, clock, fixed_missions):
 
     r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h,
                            json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})).json()
-    assert r["result"] == "solved" and r["gains"]["missions_done"] == ["پرونده‌ی امروز را حل کن"]
+    assert r["result"] == "solved" and r["gains"]["missions_done"] == ["پرونده‌ی امشب رو حل کن"]
 
     m = (await client.get("/v1/missions", headers=h)).json()
     assert m["all_done"] and all(x["done"] and x["progress"] == x["target"] for x in m["missions"])

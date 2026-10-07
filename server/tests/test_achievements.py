@@ -38,7 +38,7 @@ async def test_earned_once_with_rewards(client, clock):
     p = await new_player(client, "achiever-1")
     h = p["headers"]
     lst = (await client.get("/v1/achievements", headers=h)).json()
-    assert lst["earned"] == 0 and lst["total"] == len(achievements.ALL)
+    assert lst["earned"] == 0 and lst["total"] == len([a for a in achievements.ALL if a.group != "riddles"])  # riddles off
 
     # three right riddles in a row: first riddle + a day without mistakes
     truth = {r.id: r.answer for r in riddles.for_day(content.today_str())}
