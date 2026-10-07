@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.14.1 (app build 21, server 1.14.1): permanent signing key
+
+- The APK is now signed with the permanent release key (the same one Myket will use). This is the last version that needs an uninstall; every later version installs over it and keeps the player's data.
+
 ## 1.14.0 (app build 20, server 1.14.0): font and text size
 
 - Profile → «فونت و اندازه‌ی متن»: choose the font (وزیرمتن، ساحل، شبنم، استعداد) and the text size (کوچک، معمولی، بزرگ، خیلی بزرگ), with a live sample. The choice is saved on the phone and applies to every screen right away.
