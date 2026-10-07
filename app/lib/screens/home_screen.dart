@@ -12,6 +12,7 @@ import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
+import '../widgets/missions_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
@@ -30,7 +31,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   CasesList? _cases;
-  RiddleDay? _riddles;
   MissionsDay? _missions;
   String? _error;
   bool _loading = false;
@@ -121,14 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  /// The smaller daily things on the home page (quick riddles); a failure just hides them.
+  /// The smaller daily things on the home page (missions); a failure just hides them.
+  /// (Quick riddles are hidden for now.)
   Future<void> _loadExtras() async {
-    try {
-      final r = await Api.i.riddles();
-      if (mounted) setState(() => _riddles = r);
-    } catch (e) {
-      debugPrint('riddles: $e');
-    }
     try {
       final m = await Api.i.missions();
       if (mounted) setState(() => _missions = m);
@@ -137,9 +132,31 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _openRiddles() => MainShell.tab.value = MainShell.daily;
+  void _openMissions() {
+    var day = _missions;
+    if (day == null) return;
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: K.night,
+      isScrollControlled: true,
+      builder: (_) => StatefulBuilder(
+        builder: (context, set) => SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: MissionsCard(
+              day: day!,
+              onChanged: (m) {
+                set(() => day = m);
+                if (mounted) setState(() => _missions = m);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-  /// Coming back to the home tab: fresh cases, riddles and missions.
+  /// Coming back to the home tab: fresh cases and missions.
   void _onTab() {
     if (MainShell.tab.value == MainShell.home && mounted) _load();
   }
@@ -206,9 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 12),
                     _nextCase(),
                     const SizedBox(height: 12),
-                    _riddleCard(),
                     if (_missions != null) ...[
-                      const SizedBox(height: 10),
                       _missionsRow(_missions!),
                     ],
                     if (Api.i.profile != null) ...[
@@ -437,72 +452,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// How many of the opened cases the player has solved.
-  Widget _riddleCard() {
-    final r = _riddles;
-    final todo = r?.items.where((x) => !x.answered && !x.locked).length ?? 0;
-    final sub = r == null
-        ? 'چند معمای یک‌دقیقه‌ای، هر روز'
-        : todo > 0
-            ? '${fa(todo)} معمای رایگان منتظرته · هر جواب درست ${fa(r.reward)} سکه'
-            : r.answered == r.items.length
-                ? 'امروز همه رو جواب دادی: ${fa(r.correct)} درست'
-                : 'رایگان‌ها تموم شد؛ بقیه با سکه باز می‌شن';
-    return InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: _openRiddles,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [Color(0xFF2B2414), K.night2]),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: K.brass.withValues(alpha: 0.45)),
-        ),
-        child: Row(children: [
-          Stack(clipBehavior: Clip.none, children: [
-            const Icon(Icons.bolt_rounded, color: K.brass, size: 36),
-            if (todo > 0)
-              Positioned(
-                top: -2,
-                left: -2,
-                child: Container(
-                  width: 16,
-                  height: 16,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(color: K.stamp, shape: BoxShape.circle),
-                  child: Text(fa(todo), style: tBody(10, color: Colors.white, w: FontWeight.w900)),
-                ),
-              ),
-          ]),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('معمای سریع', style: tDisplay(18)),
-              Text(sub, style: tBody(12.5, color: K.textSoft)),
-              if (r != null) ...[
-                const SizedBox(height: 6),
-                Row(children: [
-                  for (final x in r.items)
-                    Container(
-                      width: 18,
-                      height: 6,
-                      margin: const EdgeInsets.only(left: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(3),
-                        color: x.answered ? (x.correct ? K.ok : K.stamp) : (x.locked ? K.night3 : K.brass.withValues(alpha: 0.5)),
-                      ),
-                    ),
-                ]),
-              ],
-            ]),
-          ),
-          const Icon(Icons.chevron_left_rounded, color: K.brass),
-        ]),
-      ),
-    );
-  }
-
-  /// One line for today's missions; the full list is in the "روزانه" tab.
+  /// One line for today's missions; tapping it opens the full list.
   Widget _missionsRow(MissionsDay m) {
     final (String text, Color color) = m.claimed
         ? ('صندوقچه‌ی امروز باز شد', K.ok)
@@ -511,7 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
             : ('${fa(m.done)} از ${fa(m.missions.length)} انجام شد', K.brass);
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: _openRiddles,
+      onTap: _openMissions,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12)),

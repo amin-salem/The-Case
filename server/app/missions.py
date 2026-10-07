@@ -32,6 +32,16 @@ POOL = [
 BY_ID = {m.id: m for m in POOL}
 
 
+# Quick riddles are hidden in the app for now (owner's call, 2026-10-07): no riddle missions.
+RIDDLES_ON = False
+
+
 def for_day(day: str) -> list[Mission]:
     rnd = random.Random(f"missions-{day}")
-    return [rnd.choice([m for m in POOL if m.group == g]) for g in ("riddle", "case", "extra")]
+    if RIDDLES_ON:
+        return [rnd.choice([m for m in POOL if m.group == g]) for g in ("riddle", "case", "extra")]
+    # one case mission, then two more from the case/extra missions that need no riddles
+    pool = [m for m in POOL if m.group != "riddle" and not m.event.startswith("riddle")]
+    first = rnd.choice([m for m in pool if m.group == "case"])
+    rest = rnd.sample([m for m in pool if m is not first], 2)
+    return [first, *rest]

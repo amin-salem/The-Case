@@ -32,7 +32,8 @@ def test_pool_and_daily_pick():
     for d in range(30):
         day = (datetime(2026, 11, 1) + timedelta(days=d)).date().isoformat()
         got = missions.for_day(day)
-        assert [m.group for m in got] == ["riddle", "case", "extra"]
+        assert len({m.id for m in got}) == 3 and got[0].group == "case"
+        assert not any(m.event.startswith("riddle") for m in got)  # riddles are hidden for now
         assert got == missions.for_day(day)
     assert len({m.id for m in missions.POOL}) == len(missions.POOL)
 

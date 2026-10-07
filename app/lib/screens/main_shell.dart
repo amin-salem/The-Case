@@ -5,19 +5,19 @@ import '../theme.dart';
 import 'account_screen.dart';
 import 'home_screen.dart';
 import 'leaderboard_screen.dart';
-import 'riddles_screen.dart';
 import 'story_screen.dart';
 import 'weekend_screen.dart';
 
-/// The app's main frame: six tabs at the bottom (home, daily, weekend, story, leaderboard, profile).
+/// The app's main frame: five tabs at the bottom (home, weekend, story, leaderboard, profile).
+/// Quick riddles (riddles_screen.dart) are hidden for now.
 /// The shop opens from the coin chip.
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
-  /// Any screen can switch tabs: `MainShell.tab.value = MainShell.daily;`
+  /// Any screen can switch tabs: `MainShell.tab.value = MainShell.weekend;`
   static final ValueNotifier<int> tab = ValueNotifier(0);
-  static const home = 0, daily = 1, weekend = 2, story = 3, leaderboard = 4, profile = 5;
-  static const count = 6;
+  static const home = 0, weekend = 1, story = 2, leaderboard = 3, profile = 4;
+  static const count = 5;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -53,7 +53,6 @@ class _MainShellState extends State<MainShell> {
 
   Widget _page(int i) => switch (i) {
         MainShell.home => const HomeScreen(),
-        MainShell.daily => RiddlesScreen(key: ValueKey('daily${_visits[i]}'), embedded: true),
         MainShell.weekend => WeekendScreen(key: ValueKey('wk${_visits[i]}')),
         MainShell.story => StoryScreen(key: ValueKey('st${_visits[i]}')),
         MainShell.leaderboard => LeaderboardScreen(key: ValueKey('lb${_visits[i]}')),
@@ -76,7 +75,7 @@ class _MainShellState extends State<MainShell> {
             data: NavigationBarThemeData(
               backgroundColor: K.night2,
               indicatorColor: K.stamp.withValues(alpha: 0.22),
-              labelTextStyle: WidgetStateProperty.resolveWith((s) => tBody(10.5,
+              labelTextStyle: WidgetStateProperty.resolveWith((s) => tBody(11.5,
                   w: FontWeight.w700, color: s.contains(WidgetState.selected) ? K.text : K.textSoft)),
               iconTheme: WidgetStateProperty.resolveWith(
                   (s) => IconThemeData(color: s.contains(WidgetState.selected) ? K.brass : K.textSoft, size: 24)),
@@ -90,7 +89,6 @@ class _MainShellState extends State<MainShell> {
               },
               destinations: const [
                 NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'خانه'),
-                NavigationDestination(icon: Icon(Icons.bolt_outlined), selectedIcon: Icon(Icons.bolt_rounded), label: 'روزانه'),
                 NavigationDestination(
                     icon: Icon(Icons.nightlight_outlined), selectedIcon: Icon(Icons.nightlight_round), label: 'آخر هفته'),
                 NavigationDestination(

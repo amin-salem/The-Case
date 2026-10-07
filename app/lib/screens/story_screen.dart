@@ -27,7 +27,8 @@ class _StoryScreenState extends State<StoryScreen> {
   @override
   Widget build(BuildContext context) {
     final s = Api.i.upcomingStory;
-    final at = _time(s['opens_at']);
+    // the planned start (Mon 12 Oct 00:00 Tehran) if the server doesn't say
+    final at = _time(s['opens_at']) ?? DateTime.utc(2026, 10, 11, 20, 30).toLocal();
     final open = _reached || s['open'] == true || (at != null && !at.isAfter(DateTime.now()));
     final season = (s['season'] as num?)?.toInt() ?? 1;
     return Scaffold(

@@ -847,9 +847,6 @@ void main() {
   // home
   shot('home', () => const HomeScreen(), wait: const Duration(milliseconds: 1600));
   shot('shell_home', () => const MainShell(), wait: const Duration(milliseconds: 1600));
-  shot('shell_daily', () => const MainShell(), size: const Size(390, 1500), wait: const Duration(milliseconds: 600), then: (t) async {
-    await _tap(t, find.text('روزانه'), wait: const Duration(milliseconds: 1500));
-  });
   shot('shell_weekend', () => const MainShell(), size: const Size(390, 1200), wait: const Duration(milliseconds: 600), then: (t) async {
     await _tap(t, find.text('آخر هفته'), wait: const Duration(milliseconds: 1500));
   });

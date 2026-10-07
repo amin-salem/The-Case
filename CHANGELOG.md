@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.15.1 (app build 23, server 1.15.1): quieter home, weekend countdown fix
+
+- Quick riddles are hidden for now: no «روزانه» tab and no riddle card on home; daily missions no longer ask for riddles (the missions list opens from the home row).
+- Weekend countdown: when the server does not send the next opening time it now counts to the next Thursday 21:00 (it wrongly showed tonight's 21:00). The rules card says the case stays open until the end of Saturday.
+- Story countdown falls back to Mon 12 Oct 00:00.
+
 ## 1.15.0 (app build 22, server 1.15.0): weekend and story tabs
 
 - Two new main tabs: «آخر هفته» (this weekend's big case, or a banner with a countdown to the next one, opening Thursday 21:00) and «داستان» (season 1 «کبریت سوخته» with سرگرد ناصری, counting down to Monday 12 Oct 00:00).
