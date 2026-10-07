@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.15.3: harder cases 13–16
+
+- c013 «جام برف‌چال» (staged scene), c014 «اسطرلاب ریگ‌سفید» (hidden relationship), c015 «خروجیِ بسته» (guilty knowledge) and c016 «آزمایشگاه ۲۰۴» (not what it seemed) rewritten under the case-writing rules: difficulty 4, new plots, painted portraits, blind-tested. Case log updated.
+
 ## server 1.15.2: daily missions without riddles
 
 - Every day: «پرونده‌ی امشب رو حل کن», one skill mission (۳ ستاره / بدون سرنخ / بدون اتهام اشتباه) and one investigation mission (بازجویی از همه / حرف زدن با ۳ مظنون / حل ۲ پرونده). Friday and Saturday, while the weekend case is open, the third one is «تو پرونده‌ی آخر هفته از ۲ مظنون بازجویی کن».
