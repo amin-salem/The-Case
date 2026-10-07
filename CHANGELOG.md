@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.14.0 (app build 20, server 1.14.0): font and text size
+
+- Profile → «فونت و اندازه‌ی متن»: choose the font (وزیرمتن، ساحل، شبنم، استعداد) and the text size (کوچک، معمولی، بزرگ، خیلی بزرگ), with a live sample. The choice is saved on the phone and applies to every screen right away.
+
 ## server 1.13.3: harder cases 11 and 12
 
 - c011 «مرواریدهای اتاق ۲۱۴» and c012 «سیصد پرس» rewritten under the case-writing rules (difficulty 4, blind-tested). Case log updated.

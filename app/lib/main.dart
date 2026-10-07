@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'screens/main_shell.dart';
 import 'services/api.dart';
 import 'services/billing.dart';
+import 'services/font_pref.dart';
 import 'services/reminders.dart';
 import 'services/sound.dart';
 import 'theme.dart';
@@ -21,6 +22,7 @@ Future<void> main() async {
       statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light));
   await Api.i.init();
   await Sfx.i.init();
+  await FontPref.init();
   await Reminders.i.init();
   unawaited(Billing.i.init());
   runApp(const TheCaseApp());
@@ -71,13 +73,18 @@ class _TheCaseAppState extends State<TheCaseApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: _nav,
-      title: 'پرونده',
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
-      builder: (context, child) => Directionality(textDirection: TextDirection.rtl, child: child!),
-      home: const StartScreen(),
+    // the theme's default font follows the player's choice
+    return ValueListenableBuilder<String>(
+      valueListenable: FontPref.family,
+      builder: (context, _, __) => MaterialApp(
+        navigatorKey: _nav,
+        title: 'پرونده',
+        debugShowCheckedModeBanner: false,
+        theme: buildTheme(),
+        builder: (context, child) =>
+            Directionality(textDirection: TextDirection.rtl, child: FontScope(child: child!)),
+        home: const StartScreen(),
+      ),
     );
   }
 }

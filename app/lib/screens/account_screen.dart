@@ -5,7 +5,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../main.dart' show StartScreen;
 
 import '../services/api.dart';
+import '../services/font_pref.dart';
 import '../services/reminders.dart';
+import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
@@ -190,6 +192,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                 ]),
               ),
+              const SizedBox(height: 14),
+              _fontBox(),
               const SizedBox(height: 18),
               if (!p.secured) _secureBox() else _passwordHint(),
               const SizedBox(height: 14),
@@ -217,6 +221,51 @@ class _AccountScreenState extends State<AccountScreen> {
             Text(value, style: tDisplay(18, color: K.brass)),
             Text(label, textAlign: TextAlign.center, style: tBody(11, color: K.textSoft)),
           ]),
+        ),
+      );
+
+  Widget _fontBox() => ListenableBuilder(
+        listenable: Listenable.merge([FontPref.family, FontPref.scale]),
+        builder: (_, __) => _box('فونت و اندازه‌ی متن', 'هر فونت و اندازه‌ای که چشمت باهاش راحت‌تره.', [
+          Wrap(spacing: 8, runSpacing: 8, children: [
+            for (final f in FontPref.fonts.entries)
+              _choice(f.value, FontPref.family.value == f.key, () => FontPref.setFamily(f.key), font: f.key),
+          ]),
+          const SizedBox(height: 12),
+          Text('اندازه‌ی متن', style: tBody(13, w: FontWeight.w700)),
+          const SizedBox(height: 6),
+          Wrap(spacing: 8, runSpacing: 8, children: [
+            for (int i = 0; i < FontPref.sizes.length; i++)
+              _choice(FontPref.sizeNames[i], FontPref.scale.value == FontPref.sizes[i],
+                  () => FontPref.setScale(FontPref.sizes[i])),
+          ]),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(color: K.paper, borderRadius: BorderRadius.circular(10)),
+            child: Text('نمونه: «در اتاق کار از داخل قفل بود. ساعت ۲۳:۴۰ چراغ‌ها خاموش شد و فقط یک نفر کلید داشت.»',
+                style: tBody(14.5, color: K.ink)),
+          ),
+        ]),
+      );
+
+  Widget _choice(String label, bool selected, VoidCallback onTap, {String? font}) => InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          Sfx.i.play('tap', volume: 0.4);
+          onTap();
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          decoration: BoxDecoration(
+            color: selected ? K.brass.withValues(alpha: 0.18) : K.night3,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: selected ? K.brass : Colors.transparent, width: 1.5),
+          ),
+          child: Text(label,
+              style: tBody(14, color: selected ? K.text : K.textSoft, w: FontWeight.w700)
+                  .copyWith(fontFamily: font ?? kFont)),
         ),
       );
 

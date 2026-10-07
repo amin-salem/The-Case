@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'services/font_pref.dart';
 import 'services/sound.dart';
 import 'widgets/fx.dart';
 
@@ -26,7 +27,8 @@ class K {
   static const clue = Color(0xFFFFE08A);
 }
 
-const String kFont = 'Vazirmatn';
+/// The font the player chose in the profile (Vazirmatn by default).
+String get kFont => FontPref.family.value;
 
 TextStyle tDisplay(double size, {Color color = K.text}) =>
     TextStyle(fontFamily: kFont, fontWeight: FontWeight.w900, fontSize: size, color: color, height: 1.25);
@@ -65,7 +67,7 @@ ThemeData buildTheme() => ThemeData(
         TargetPlatform.macOS: NoirTransitions(),
         TargetPlatform.windows: NoirTransitions(),
       }),
-      snackBarTheme: const SnackBarThemeData(
+      snackBarTheme: SnackBarThemeData(
         backgroundColor: K.paper,
         contentTextStyle: TextStyle(fontFamily: kFont, color: K.ink, fontWeight: FontWeight.w700),
         behavior: SnackBarBehavior.floating,

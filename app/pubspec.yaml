@@ -1,7 +1,7 @@
 name: the_case
 description: "پرونده - a daily Persian crime-mystery game."
 publish_to: 'none'
-version: 1.13.0+19
+version: 1.14.0+20
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -39,4 +39,23 @@ flutter:
         - asset: assets/fonts/Vazirmatn-Bold.ttf
           weight: 700
         - asset: assets/fonts/Vazirmatn-Black.ttf
+          weight: 900
+    - family: Sahel
+      fonts:
+        - asset: assets/fonts/Sahel.ttf
+        - asset: assets/fonts/Sahel-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Sahel-Black.ttf
+          weight: 900
+    - family: Shabnam
+      fonts:
+        - asset: assets/fonts/Shabnam.ttf
+        - asset: assets/fonts/Shabnam-Bold.ttf
+          weight: 700
+    - family: Estedad
+      fonts:
+        - asset: assets/fonts/Estedad-Regular.ttf
+        - asset: assets/fonts/Estedad-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Estedad-Black.ttf
           weight: 900
