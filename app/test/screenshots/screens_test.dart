@@ -429,12 +429,21 @@ File? _materialIconsFile() {
 }
 
 Future<void> _loadFonts() async {
-  final vazir = FontLoader(kFont);
-  for (final w in ['Regular', 'Bold', 'Black']) {
-    final f = File('assets/fonts/Vazirmatn-$w.ttf');
-    if (f.existsSync()) vazir.addFont(f.readAsBytes().then((b) => b.buffer.asByteData(b.offsetInBytes, b.lengthInBytes)));
+  // every font the player can pick in the profile
+  const files = {
+    'Vazirmatn': ['Vazirmatn-Regular', 'Vazirmatn-Bold', 'Vazirmatn-Black'],
+    'Sahel': ['Sahel', 'Sahel-Bold', 'Sahel-Black'],
+    'Shabnam': ['Shabnam', 'Shabnam-Bold'],
+    'Estedad': ['Estedad-Regular', 'Estedad-Bold', 'Estedad-Black'],
+  };
+  for (final fam in files.entries) {
+    final loader = FontLoader(fam.key);
+    for (final n in fam.value) {
+      final f = File('assets/fonts/$n.ttf');
+      if (f.existsSync()) loader.addFont(f.readAsBytes().then((b) => b.buffer.asByteData(b.offsetInBytes, b.lengthInBytes)));
+    }
+    await loader.load();
   }
-  await vazir.load();
   final icons = _materialIconsFile();
   if (icons == null) {
     stdout.writeln('screens: MaterialIcons font not found, icons will be boxes');
