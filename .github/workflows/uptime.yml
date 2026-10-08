@@ -1,0 +1,48 @@
+name: Server watch
+# Every 30 minutes: is the game server answering? If not, this run fails and GitHub sends
+# the repo owner an email / GitHub-app notification ("Server watch failed").
+# Optional: add the secret LIARA_API_TOKEN (Liara panel → API) and the variable
+# LIARA_MIN_BALANCE (toman, e.g. 100000) to also warn when the Liara wallet runs low.
+on:
+  schedule:
+    - cron: "7,37 * * * *"
+  workflow_dispatch:
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Server answers
+        run: |
+          ok=0
+          for url in https://gammly.ir https://thecase.liara.run; do
+            body=$(curl -sS -m 25 "$url/health" 2>&1 || true)
+            echo "$url → $body"
+            if echo "$body" | grep -q '"ok":true'; then ok=1; echo "::notice title=$url::$body"; fi
+          done
+          if [ "$ok" != 1 ]; then
+            echo "::error title=Server down::Neither gammly.ir nor thecase.liara.run answered /health. Check the Liara panel (app stopped? wallet empty?)."
+            exit 1
+          fi
+      - name: Liara wallet (only if LIARA_API_TOKEN is set)
+        env:
+          TOKEN: ${{ secrets.LIARA_API_TOKEN }}
+          MIN: ${{ vars.LIARA_MIN_BALANCE }}
+        run: |
+          if [ -z "$TOKEN" ]; then echo "no LIARA_API_TOKEN, skipped"; exit 0; fi
+          me=$(curl -sS -m 25 -H "Authorization: Bearer $TOKEN" https://api.iran.liara.ir/v1/me || true)
+          bal=$(echo "$me" | python3 -c "import json,sys
+          def find(o):
+              if isinstance(o,dict):
+                  for k,v in o.items():
+                      if k.lower()=='balance' and isinstance(v,(int,float)): return v
+                      r=find(v)
+                      if r is not None: return r
+              return None
+          try: print(find(json.load(sys.stdin)) or '')
+          except Exception: print('')")
+          echo "balance: ${bal:-unknown}"
+          if [ -n "$bal" ] && [ -n "$MIN" ] && python3 -c "import sys; sys.exit(0 if float('$bal') < float('$MIN') else 1)"; then
+            echo "::error title=Liara wallet low::Balance $bal is below $MIN. Top up the Liara wallet before the app stops."
+            exit 1
+          fi

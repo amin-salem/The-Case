@@ -12,7 +12,10 @@ import 'case_clock.dart';
 
 /// Server address (Liara). Another server for testing:
 ///   flutter run --dart-define=API_URL=http://192.168.1.5:8000
-const String kApiUrl = String.fromEnvironment('API_URL', defaultValue: 'https://thecase.liara.run');
+/// A build can point at one server with --dart-define=API_URL=…; otherwise the app knows two
+/// addresses for the same server and uses whichever answers (the last one that worked first).
+const String kApiUrl = String.fromEnvironment('API_URL', defaultValue: '');
+const List<String> kApiUrls = kApiUrl == '' ? ['https://gammly.ir', 'https://thecase.liara.run'] : [kApiUrl];
 const int kAppBuild = int.fromEnvironment('APP_BUILD', defaultValue: 1);
 
 class ApiException implements Exception {
@@ -51,6 +54,10 @@ class Api extends ChangeNotifier {
   static final Api i = Api._();
 
   late SharedPreferences _p;
+  int _baseIx = 0;
+
+  /// The server address in use right now.
+  String get apiBase => kApiUrls[_baseIx];
   http.Client _http = http.Client();
   String? _playerId, _secret, _token;
   int _tokenExp = 0;
@@ -146,6 +153,9 @@ class Api extends ChangeNotifier {
 
   Future<void> init() async {
     _p = await SharedPreferences.getInstance();
+    try {
+      _baseIx = (_p.getInt('api_base') ?? 0).clamp(0, kApiUrls.length - 1);
+    } catch (_) {}
     _playerId = _p.getString('player');
     _secret = _p.getString('secret');
     _token = _p.getString('token');
@@ -288,8 +298,8 @@ class Api extends ChangeNotifier {
   String? get playerId => _playerId;
 
   bool get adsEnabled => config['ads_enabled'] == true;
-  String get privacyUrl => config['privacy_url'] is String ? config['privacy_url'] as String : '$kApiUrl/privacy';
-  String get termsUrl => config['terms_url'] is String ? config['terms_url'] as String : '$kApiUrl/terms';
+  String get privacyUrl => config['privacy_url'] is String ? config['privacy_url'] as String : '$apiBase/privacy';
+  String get termsUrl => config['terms_url'] is String ? config['terms_url'] as String : '$apiBase/terms';
 
   /// Contact links from the server config; null when the server does not send one (the row is hidden).
   String? get supportUrl => _nonEmpty(config['support_url']);
@@ -425,32 +435,52 @@ class Api extends ChangeNotifier {
 
   // ---------------------------------------------------------------- http
 
-  Future<http.Response> _send(String method, Uri uri, Map<String, String> headers, String? data) async {
+  Future<http.Response> _send(String method, Uri uri, Map<String, String> headers, String? data) {
     const t = Duration(seconds: 15);
-    try {
-      switch (method) {
-        case 'GET':
-          return await _http.get(uri, headers: headers).timeout(t);
-        case 'PATCH':
-          return await _http.patch(uri, headers: headers, body: data).timeout(t);
-        default:
-          return await _http.post(uri, headers: headers, body: data).timeout(t);
-      }
-    } catch (e) {
-      _wentOffline(e);
-      rethrow;
+    switch (method) {
+      case 'GET':
+        return _http.get(uri, headers: headers).timeout(t);
+      case 'PATCH':
+        return _http.patch(uri, headers: headers, body: data).timeout(t);
+      default:
+        return _http.post(uri, headers: headers, body: data).timeout(t);
     }
   }
 
+  /// Tries the address that worked last, then the other one. A request that timed out is not
+  /// sent again (the server may have done it already); one that could not connect is.
+  Future<http.Response> _sendAny(String method, String path, Map<String, String> headers, String? data) async {
+    Object? first;
+    StackTrace? stack;
+    for (var n = 0; n < kApiUrls.length; n++) {
+      final ix = (_baseIx + n) % kApiUrls.length;
+      try {
+        final r = await _send(method, Uri.parse('${kApiUrls[ix]}$path'), headers, data);
+        if (ix != _baseIx) {
+          _baseIx = ix;
+          try {
+            await _p.setInt('api_base', ix);
+          } catch (_) {}
+        }
+        return r;
+      } catch (e, st) {
+        first ??= e;
+        stack ??= st;
+        if (e is TimeoutException) break;
+      }
+    }
+    _wentOffline(first!);
+    Error.throwWithStackTrace(first, stack!);
+  }
+
   Future<Object?> _call(String method, String path, {Object? body, bool auth = true, bool retried = false}) async {
-    final uri = Uri.parse('$kApiUrl$path');
     final headers = {'Content-Type': 'application/json'};
     if (auth) {
       await _ensureLogin();
       headers['Authorization'] = 'Bearer $_token';
     }
     final data = body == null ? null : jsonEncode(body);
-    final r = await _send(method, uri, headers, data);
+    final r = await _sendAny(method, path, headers, data);
     Object? decoded;
     try {
       final text = utf8.decode(r.bodyBytes);

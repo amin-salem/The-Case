@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.17.1 (app build 26): two server addresses, server watch
+
+- The app knows both server addresses, https://gammly.ir and https://thecase.liara.run, and uses whichever answers (it remembers the last one that worked). A request that could not connect is tried on the other address; one that timed out is not sent twice.
+- New GitHub workflow «Server watch»: every 30 minutes it checks /health on both addresses and fails (GitHub notifies the owner) when neither answers. Optional Liara wallet check with the LIARA_API_TOKEN secret and LIARA_MIN_BALANCE variable.
+- Release notes also show gammly.ir health.
+
 ## 1.17.0 (app build 25): redesigned home, archive, accuse, result, shop and leaderboard
 
 - Home: a top bar with portrait, name and rank (tap: profile), a red 🔥 streak chip (tap: the streak card with insurance in a small sheet), coins (tap: shop) and the inbox. One big card for tonight's case (scene, crime tape, «پرونده‌ی امشب · شماره‌ی N», title, place · how many solved it, «شروع تحقیقات» or how it went) with «پرونده‌ی بعدی: hh:mm:ss» inside it. Under it only one-line rows: «مأموریت‌های امروز» with three progress pills, «آخر هفته: …» with the time left or «به‌زودی», «بایگانی پرونده‌ها» (N پرونده · M تا حل کردی), and for guests «حسابت رو امن کن». The separate next-case card, the big streak card, the weekend card and the inline archive list are gone from home.

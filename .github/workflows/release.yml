@@ -77,6 +77,8 @@ jobs:
             echo '```'
             curl -sS -m 25 https://thecase.liara.run/health || echo "(health failed)"
             echo
+            echo "gammly.ir: $(curl -sS -m 25 https://gammly.ir/health 2>&1 | head -c 200)"
+            echo
             python tools/smoke_test.py https://thecase.liara.run 2>&1 && echo "RESULT: ALL OK" || echo "RESULT: FAILED"
             echo '```'
           } | tee ../app/release/server_check.md
