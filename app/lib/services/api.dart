@@ -802,6 +802,7 @@ class Api extends ChangeNotifier {
         'not_enough_coins' => 'سکه‌ات کافی نیست',
         'locked' => 'این پرونده قفله',
         'case_finished' => 'این پرونده تموم شده',
+        'wait_last_chapter' => 'مدرک اصلی تو فصل آخره؛ وقتی فصل آخر باز شد متهم کن',
         'no_more_hints' => 'سرنخ دیگه‌ای نمونده',
         'bad_email' => 'ایمیل درست نیست',
         'bad_password' => 'رمز باید حداقل ۶ حرف باشه',

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.17.2 (app build 27, server 1.15.4): no accusing before the last chapter
+
+- Weekend case: the server refuses an accusation until the last chapter is out (the proof cards are in it), so no try is wasted; the app shows «متهم کردن از فصل آخر» instead of the button until then.
+- Everyone who accused «شب برفی ویلای صدری» (w001) on the first night gets their tries back (database migration 0009); nobody could have solved it yet.
+
 ## 1.17.1 (app build 26): two server addresses, server watch
 
 - The app knows both server addresses, https://gammly.ir and https://thecase.liara.run, and uses whichever answers (it remembers the last one that worked). A request that could not connect is tried on the other address; one that timed out is not sent twice.

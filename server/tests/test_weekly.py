@@ -77,6 +77,20 @@ async def test_solving_needs_the_motive(client, clock):
     assert done["solution"]["motive"] == right
 
 
+async def test_no_accusing_before_the_last_chapter(client, clock):
+    w = content.weekly_cases()[0]
+    clock(content.opens_at(w) + timedelta(hours=1))  # first night: the proof cards aren't out yet
+    p = await new_player(client, "weekender-early")
+    h = p["headers"]
+    await client.get(f"/v1/cases/{w.id}", headers=h)
+    body = {"suspect": w.culprit, "evidence": sorted(w.proof)[0], "motive": w.data["solution"]["motive"]}
+    r = await client.post(f"/v1/cases/{w.id}/accuse", headers=h, json=body)
+    assert r.status_code == 409 and r.json()["detail"] == "wait_last_chapter"
+    clock(content.weekly_all_open_at(w))  # the last chapter is out: now it counts, no try was lost
+    r = (await client.post(f"/v1/cases/{w.id}/accuse", headers=h, json=body)).json()
+    assert r["result"] == "solved" and r["stars"] == 3
+
+
 def test_upcoming_weekend_and_story():
     w = content.weekly_cases()[0]
     start = content.opens_at(w)

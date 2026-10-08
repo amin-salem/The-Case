@@ -678,7 +678,15 @@ class _CaseScreenState extends State<CaseScreen> {
               const SizedBox(width: 10),
               Expanded(
                 flex: 3,
-                child: KeyedSubtree(key: _accuseKey, child: StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
+                child: KeyedSubtree(
+                    key: _accuseKey,
+                    child: _case!.weekly && _case!.chapters.length < _case!.chaptersTotal
+                        // the proof cards come with the last chapter: accusing earlier only wastes a try
+                        ? GhostButton(
+                            label: 'متهم کردن از فصل آخر',
+                            icon: Icons.lock_clock_rounded,
+                            onTap: () => toast(context, 'مدرک اصلی تو فصل آخره. فصل ${fa(_case!.chaptersTotal)} که باز شد، متهم کن.'))
+                        : StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
               ),
           ]),
         ),

@@ -249,6 +249,12 @@ def weekend_upcoming(now: datetime | None = None) -> dict:
             "location": nxt.data.get("location") if nxt else None}
 
 
+def weekly_all_open_at(c: Case) -> datetime:
+    """When the last chapter of a weekend case opens (accusing is allowed from then on)."""
+    last = max((ch.get("at_hours", 0) for ch in c.data.get("chapters") or [{}]), default=0)
+    return opens_at(c) + timedelta(hours=last)
+
+
 def weekly_public(c: Case, now: datetime | None = None) -> dict:
     """What players may see right now: evidence of chapters not open yet is left out."""
     now = now or now_local()

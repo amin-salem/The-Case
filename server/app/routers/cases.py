@@ -181,6 +181,9 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         raise HTTPException(409, "open_case_first")
     if p.solved or p.failed:
         raise HTTPException(409, "case_finished")
+    if content.is_weekly(c.id) and content.now_local() < content.weekly_all_open_at(c):
+        # the proof is in the last chapter: an accusation before it would only waste a try
+        raise HTTPException(409, "wait_last_chapter")
 
     explanation = c.data["solution"]["explanation"]
     today_case = _is_today(c)
