@@ -338,7 +338,9 @@ class _AccountScreenState extends State<AccountScreen> {
         Row(children: [
           const Icon(Icons.military_tech_rounded, color: K.brass, size: 22),
           const SizedBox(width: 6),
-          Expanded(child: Text('دستاوردها · $count', style: tDisplay(16.5))),
+          Text('دستاوردها', style: tDisplay(16.5)),
+          const SizedBox(width: 10),
+          Expanded(child: Text(count, style: tBody(13.5, color: K.textSoft, w: FontWeight.w700))),
           TextButton(
             onPressed: openAll,
             child: Row(mainAxisSize: MainAxisSize.min, children: [

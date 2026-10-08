@@ -99,7 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Icons.shield_outlined,
                       iconColor: K.brass,
                       title: 'امن کردن حساب',
-                      sub: 'با ایمیل و رمز · ${fa(Api.i.secureReward)} سکه هدیه',
+                      sub: 'با ایمیل و رمز  •  ${fa(Api.i.secureReward)} سکه هدیه',
                       end: const _Tag('مهمان', color: K.brass),
                       onTap: () => openAccountSheet(context, showSecureSheet),
                     )
@@ -127,7 +127,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   SettingsRow(
                     icon: Icons.text_fields_rounded,
                     title: 'فونت و اندازه‌ی متن',
-                    endText: '${FontPref.fonts[FontPref.family.value] ?? ''} · '
+                    endText: '${FontPref.fonts[FontPref.family.value] ?? ''}  •  '
                         '${FontPref.sizeNames[FontPref.sizes.indexOf(FontPref.scale.value).clamp(0, FontPref.sizeNames.length - 1)]}',
                     onTap: () => showFontSheet(context),
                   ),
