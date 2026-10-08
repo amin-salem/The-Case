@@ -1,6 +1,18 @@
+from datetime import datetime, timedelta
+
+import pytest
+
 from app import content, economy
 
 from .conftest import ADMIN, new_player
+
+
+@pytest.fixture
+def clock(monkeypatch):
+    def set_to(dt: datetime):
+        monkeypatch.setattr(content, "now_local", lambda: dt)
+        return dt
+    return set_to
 
 
 def test_cases_load_and_hide_solutions():
@@ -27,7 +39,9 @@ async def test_welcome_coins_and_login_reward(client):
     assert again["login_reward"] == 0
 
 
-async def test_today_case_flow_solve(client):
+async def test_today_case_flow_solve(client, clock):
+    # a fixed night whose case no other test solves (the real "today" can clash with other tests)
+    clock(content.opens_at(content.by_id("c040")) + timedelta(hours=1))
     p = await new_player(client, "solver-1")
     h = p["headers"]
     lst = (await client.get("/v1/cases", headers=h)).json()
