@@ -9,6 +9,7 @@ import '../services/case_clock.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/coach_marks.dart';
 import '../widgets/crime_tape.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
@@ -60,6 +61,15 @@ class _CaseScreenState extends State<CaseScreen> {
   bool _intro = true;
   final Map<String, SuspectMark> _marks = {};
   final Set<String> _pins = {}; // evidence the player has pinned to the board
+  final Set<String> _seen = {}; // evidence cards the player has tapped (read)
+
+  // the first-case tutorial: null = not showing, else the step (0..2)
+  int? _coach;
+  bool _coachChecked = false;
+  TabController? _tabs;
+  final _evidenceTabKey = GlobalKey();
+  final _suspectsTabKey = GlobalKey();
+  final _accuseKey = GlobalKey();
 
   @override
   void initState() {
@@ -90,6 +100,8 @@ class _CaseScreenState extends State<CaseScreen> {
       }
       final pins = n['pins'];
       if (pins is List) _pins.addAll([for (final p in pins) '$p']);
+      final seen = n['seen'];
+      if (seen is List) _seen.addAll([for (final p in seen) '$p']);
     } catch (e) {
       debugPrint('notes: $e');
     }
@@ -99,6 +111,7 @@ class _CaseScreenState extends State<CaseScreen> {
     Api.i.saveNotes(widget.caseId, {
       'marks': {for (final e in _marks.entries) if (e.value != SuspectMark.none) e.key: e.value.name},
       'pins': _pins.toList(),
+      'seen': _seen.toList(),
     });
   }
 
@@ -278,11 +291,56 @@ class _CaseScreenState extends State<CaseScreen> {
 
   // ---------------------------------------------------------------- investigation
 
+  /// The first time a player ever opens a case: three coach marks (evidence, suspects, accuse).
+  /// Players who already solved cases before this version never see it.
+  void _maybeTutorial() {
+    final p = _progress;
+    if (!mounted || p == null || p.finished || Api.i.flag('tutorial_done')) return;
+    unawaited(Api.i.setFlag('tutorial_done'));
+    if ((Api.i.profile?.casesSolved ?? 0) > 0) return;
+    setState(() => _coach = 0);
+    _tabs?.animateTo(1);
+  }
+
+  void _coachTo(int? step) {
+    setState(() => _coach = step);
+    if (step == 0) _tabs?.animateTo(1);
+    if (step == 1) _tabs?.animateTo(2);
+  }
+
   Widget _investigation(CaseData c) {
     final p = _progress!;
+    if (!_coachChecked) {
+      _coachChecked = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _maybeTutorial());
+    }
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
+      child: Builder(builder: (context) {
+        _tabs = DefaultTabController.of(context);
+        return Stack(children: [
+          _investigationScaffold(c, p),
+          if (_coach != null)
+            Positioned.fill(
+              child: CoachMarks(
+                step: _coach!,
+                targets: [_evidenceTabKey, _suspectsTabKey, _accuseKey],
+                steps: const [
+                  ('مدارک رو بخون', 'هر مدرکی رو که خوندی بزن تا نشانش کنی. دروغ مقصر لای همین‌هاست.'),
+                  ('از مظنون‌ها سؤال کن', 'روی هر مظنون بزن، حرفش رو بخون و ازش بازجویی کن.'),
+                  ('با مدرک متهم کن', 'وقتی دروغ رو پیدا کردی، مقصر رو انتخاب کن و مدرکی رو نشون بده که دروغش رو ثابت می‌کنه.'),
+                ],
+                onNext: () => _coachTo(_coach! + 1 < 3 ? _coach! + 1 : null),
+                onSkip: () => _coachTo(null),
+              ),
+            ),
+        ]);
+      }),
+    );
+  }
+
+  Widget _investigationScaffold(CaseData c, Progress p) {
+    return Scaffold(
         // a real bottom bar: the body ends above it, and it keeps clear of the
         // phone's navigation / gesture bar
         bottomNavigationBar: p.finished ? null : _bottomBar(p),
@@ -299,8 +357,8 @@ class _CaseScreenState extends State<CaseScreen> {
                 dividerColor: Colors.transparent,
                 tabs: [
                   const Tab(text: 'پرونده'),
-                  Tab(text: 'مدارک (${fa(c.evidence.length)})'),
-                  Tab(text: 'مظنون‌ها (${fa(c.suspects.length)})'),
+                  Tab(key: _evidenceTabKey, text: 'مدارک (${fa(c.evidence.length)})'),
+                  Tab(key: _suspectsTabKey, text: 'مظنون‌ها (${fa(c.suspects.length)})'),
                 ],
               ),
               Expanded(
@@ -309,7 +367,6 @@ class _CaseScreenState extends State<CaseScreen> {
             ]),
           ),
         ),
-      ),
     );
   }
 
@@ -452,11 +509,40 @@ class _CaseScreenState extends State<CaseScreen> {
     );
   }
 
+  /// "X of Y evidence seen": the cards tapped or pinned (kept with the notes).
+  Widget _evidenceHeader(CaseData c) {
+    final ids = {for (final e in c.evidence) e.id};
+    final seen = {..._seen, ..._pins}.where(ids.contains).length;
+    final total = c.evidence.length;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Row(children: [
+        Icon(seen >= total ? Icons.task_alt_rounded : Icons.visibility_rounded, size: 18, color: K.brass),
+        const SizedBox(width: 6),
+        Text('${fa(seen)} از ${fa(total)} مدرک دیده شده', style: tBody(13, w: FontWeight.w700)),
+        const SizedBox(width: 10),
+        Expanded(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(99),
+            child: LinearProgressIndicator(
+              value: total == 0 ? 0 : seen / total,
+              minHeight: 6,
+              color: K.brass,
+              backgroundColor: K.night3,
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
   Widget _evidenceTab(CaseData c) {
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      itemCount: c.evidence.length,
-      itemBuilder: (_, i) {
+      itemCount: c.evidence.length + 1,
+      itemBuilder: (_, j) {
+        if (j == 0) return _evidenceHeader(c);
+        final i = j - 1;
         final e = c.evidence[i];
         final key = (_progress?.finished ?? false) && c.proof.contains(e.id);
         final pinned = _pins.contains(e.id);
@@ -465,7 +551,10 @@ class _CaseScreenState extends State<CaseScreen> {
           child: GestureDetector(
             onTap: () {
               Sfx.i.play('paper', volume: 0.4);
-              setState(() => pinned ? _pins.remove(e.id) : _pins.add(e.id));
+              setState(() {
+                pinned ? _pins.remove(e.id) : _pins.add(e.id);
+                _seen.add(e.id);
+              });
               _saveNotes();
             },
             child: AnimatedRotation(
@@ -587,7 +676,10 @@ class _CaseScreenState extends State<CaseScreen> {
                 ),
               ),
               const SizedBox(width: 10),
-              Expanded(flex: 3, child: StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
+              Expanded(
+                flex: 3,
+                child: KeyedSubtree(key: _accuseKey, child: StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
+              ),
           ]),
         ),
       ),

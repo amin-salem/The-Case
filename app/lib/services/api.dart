@@ -408,6 +408,21 @@ class Api extends ChangeNotifier {
 
   Future<void> saveNotes(String caseId, Map<String, dynamic> notes) => _writeCache('$_kNotesPrefix$caseId', notes);
 
+  /// One-time flags kept on the phone (e.g. the first-case tutorial was shown).
+  bool flag(String key) {
+    try {
+      return _p.getBool('flag_$key') ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> setFlag(String key, [bool on = true]) async {
+    try {
+      await _p.setBool('flag_$key', on);
+    } catch (_) {}
+  }
+
   // ---------------------------------------------------------------- http
 
   Future<http.Response> _send(String method, Uri uri, Map<String, String> headers, String? data) async {

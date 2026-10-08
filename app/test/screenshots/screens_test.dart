@@ -26,6 +26,7 @@ import 'package:the_case/models/models.dart';
 import 'package:the_case/models/progress.dart';
 import 'package:the_case/screens/accuse_screen.dart';
 import 'package:the_case/screens/achievements_screen.dart';
+import 'package:the_case/screens/archive_screen.dart';
 import 'package:the_case/screens/account_screen.dart';
 import 'package:the_case/screens/account_sheets.dart';
 import 'package:the_case/screens/case_screen.dart';
@@ -188,6 +189,7 @@ Map<String, dynamic> _freshProgress() =>
 /// Per-case progress the fake server answers with (tests change it before rendering).
 final Map<String, Map<String, dynamic>> _progress = {};
 bool _offline = false;
+bool _todaySolved = false;
 Duration _configDelay = Duration.zero;
 
 Map<String, dynamic> _row(String id, {bool today = false, bool locked = false, bool solved = false, bool failed = false, int stars = 0}) {
@@ -238,7 +240,7 @@ Map<String, dynamic> _casesList() {
     (solved: false, failed: false, locked: true, stars: 0),
   ];
   return {
-    'today': _row(today, today: true),
+    'today': _row(today, today: true, solved: _todaySolved, stars: _todaySolved ? 3 : 0),
     'weekly': {
       ..._row(today),
       'id': 'w001',
@@ -544,6 +546,7 @@ void shot(
   Widget Function() screen, {
   Size size = _phone,
   Size Function()? sizeOf,
+  double textScale = 1,
   Duration wait = const Duration(milliseconds: 800),
   void Function()? before,
   Future<void> Function(WidgetTester tester)? then,
@@ -559,6 +562,7 @@ void shot(
     try {
       tester.view.physicalSize = (sizeOf?.call() ?? size) * _dpr;
       tester.view.devicePixelRatio = _dpr;
+      if (textScale != 1) tester.platformDispatcher.textScaleFactorTestValue = textScale;
       before?.call();
       await tester.pumpWidget(RepaintBoundary(key: key, child: _app(screen())));
       await _frames(tester, wait);
@@ -580,7 +584,9 @@ void shot(
       debugDisableShadows = true;
       tester.view.resetPhysicalSize();
       tester.view.resetDevicePixelRatio();
+      tester.platformDispatcher.clearTextScaleFactorTestValue();
       _offline = false;
+      _todaySolved = false;
       _configDelay = Duration.zero;
       Api.i.profile = Profile(_profileJson);
     }
@@ -829,7 +835,7 @@ void main() {
     if (!kShots) return;
     await _loadFonts();
     PackageInfo.setMockInitialValues(
-        appName: 'پرونده', packageName: 'ir.aminsalem.the_case', version: '1.16.0', buildNumber: '24', buildSignature: '');
+        appName: 'پرونده', packageName: 'ir.aminsalem.the_case', version: '1.17.0', buildNumber: '25', buildSignature: '');
     SharedPreferences.setMockInitialValues({
       'player': 'p_demo',
       'secret': 'secret',
@@ -870,7 +876,21 @@ void main() {
   shot('shell_profile', () => const MainShell(), wait: const Duration(milliseconds: 600), then: (t) async {
     await _tap(t, find.text('پروفایل'), wait: const Duration(milliseconds: 1500));
   });
-  shot('home_full', () => const HomeScreen(), size: const Size(390, 2400), wait: const Duration(milliseconds: 1800));
+  shot('home_full', () => const HomeScreen(), size: const Size(390, 1100), wait: const Duration(milliseconds: 1800));
+  shot('home_today_solved', () => const HomeScreen(), before: () => _todaySolved = true, wait: const Duration(milliseconds: 1600));
+  shot('home_streak_sheet', () => const HomeScreen(), wait: const Duration(milliseconds: 1200), then: (t) async {
+    await _tap(t, find.byIcon(Icons.local_fire_department_rounded), wait: const Duration(milliseconds: 900));
+  });
+  shot('home_360', () => const HomeScreen(), size: const Size(360, 780), wait: const Duration(milliseconds: 1600));
+  shot('home_360_large', () => const HomeScreen(), size: const Size(360, 780), textScale: 1.3, wait: const Duration(milliseconds: 1600));
+
+  // archive
+  shot('archive', () => const ArchiveScreen(), wait: const Duration(milliseconds: 1200));
+  shot('archive_unsolved', () => const ArchiveScreen(), wait: const Duration(milliseconds: 1000), then: (t) async {
+    await _tap(t, find.text('حل‌نشده'), wait: const Duration(milliseconds: 600));
+  });
+  shot('archive_360_large', () => const ArchiveScreen(), size: const Size(360, 780), textScale: 1.3,
+      wait: const Duration(milliseconds: 1200));
   shot('home_login_calendar', () => const HomeScreen(),
       before: () => Api.i.profile = Profile({..._profileJson, 'login_reward': 50, 'login_day': 4}),
       wait: const Duration(milliseconds: 1600));
@@ -892,6 +912,25 @@ void main() {
       before: midCase, then: (t) => _tap(t, find.byType(Tab).at(1)));
   shot('case_evidence_full', () => const CaseScreen(caseId: 'c027'),
       size: const Size(390, 1900), before: midCase, then: (t) => _tap(t, find.byType(Tab).at(1)));
+  shot('case_evidence_360_large', () => const CaseScreen(caseId: 'c027'),
+      size: const Size(360, 780), textScale: 1.3, before: midCase, then: (t) => _tap(t, find.byType(Tab).at(1)));
+  // the first-case tutorial (a brand-new player, the flag not set yet)
+  void newPlayer() {
+    midCase();
+    Api.i.profile = Profile({..._profileJson, 'cases_solved': 0});
+    Api.i.setFlag('tutorial_done', false);
+  }
+
+  shot('tutorial_step1', () => const CaseScreen(caseId: 'c027'), before: newPlayer, wait: const Duration(milliseconds: 1600));
+  shot('tutorial_step2', () => const CaseScreen(caseId: 'c027'), before: newPlayer, wait: const Duration(milliseconds: 1600),
+      then: (t) => _tap(t, find.text('بعدی'), wait: const Duration(milliseconds: 1200)));
+  shot('tutorial_step3', () => const CaseScreen(caseId: 'c027'), before: newPlayer, wait: const Duration(milliseconds: 1600),
+      then: (t) async {
+    await _tap(t, find.text('بعدی'), wait: const Duration(milliseconds: 1000));
+    await _tap(t, find.text('بعدی'), wait: const Duration(milliseconds: 1200));
+  });
+  shot('tutorial_360_large', () => const CaseScreen(caseId: 'c027'),
+      size: const Size(360, 780), textScale: 1.3, before: newPlayer, wait: const Duration(milliseconds: 1600));
   shot('case_suspects', () => const CaseScreen(caseId: 'c027'),
       before: midCase, then: (t) => _tap(t, find.byType(Tab).at(2), wait: const Duration(milliseconds: 1200)));
   shot('case_hint_confirm', () => const CaseScreen(caseId: 'c027'),
@@ -933,26 +972,39 @@ void main() {
         progress: Progress({'attempts': 1, 'attempts_left': 2}),
         marks: {suspect(0).id: SuspectMark.innocent, suspect(2).id: SuspectMark.suspicious},
       );
-  Future<void> pick(WidgetTester t) async {
-    final c = _full('c027');
+  Future<void> next(WidgetTester t) => _tap(t, find.text('ادامه'), wait: const Duration(milliseconds: 600));
+  Future<void> toProof(WidgetTester t) async {
     await _tap(t, find.text(suspect(2).name), wait: const Duration(milliseconds: 400));
-    await _tap(t, find.text(c.evidence[min(1, c.evidence.length - 1)].title), wait: const Duration(milliseconds: 400));
+    await next(t);
   }
 
-  shot('accuse', accuse);
+  Future<void> ready(WidgetTester t) async {
+    final c = _full('c027');
+    await toProof(t);
+    await _tap(t, find.text(c.evidence[min(1, c.evidence.length - 1)].title), wait: const Duration(milliseconds: 500));
+  }
+
+  shot('accuse_step1', accuse);
+  shot('accuse_step1_picked', accuse, then: (t) => _tap(t, find.text(suspect(2).name), wait: const Duration(milliseconds: 500)));
+  shot('accuse_step2', accuse, then: toProof);
+  shot('accuse_ready', accuse, then: ready);
+  shot('accuse_wrong', accuse, before: midCase, then: (t) async {
+    await ready(t);
+    await _tap(t, find.textContaining('متهم می‌کنم'), wait: const Duration(milliseconds: 1200));
+  });
+  shot('accuse_360_large', accuse, size: const Size(360, 780), textScale: 1.3, then: ready);
   shot('weekly_story', () => const CaseScreen(caseId: 'w001'),
       size: const Size(390, 1600), before: () => _progress.remove('w001'), wait: const Duration(milliseconds: 600),
       then: (t) => _tap(t, find.text('شروع تحقیقات'), wait: const Duration(milliseconds: 1200)));
-  shot('weekly_accuse', () => AccuseScreen(caseData: CaseData(_weeklyPublic()), progress: Progress({'attempts': 0, 'attempts_left': 3}), marks: const {}),
-      size: const Size(390, 3200), then: (t) async {
+  shot('weekly_accuse_motive',
+      () => AccuseScreen(caseData: CaseData(_weeklyPublic()), progress: Progress({'attempts': 0, 'attempts_left': 3}), marks: const {}),
+      then: (t) async {
+    final ev = (_weeklyPublic()['evidence'] as List).cast<Map<String, dynamic>>();
     await _tap(t, find.text('هوشنگ راد'), wait: const Duration(milliseconds: 300));
+    await next(t);
+    await _tap(t, find.text('${ev[min(2, ev.length - 1)]['title']}'), wait: const Duration(milliseconds: 300));
+    await next(t);
     await _tap(t, find.textContaining('پنهان کردن دزدی'), wait: const Duration(milliseconds: 600));
-  });
-  shot('accuse_selected', accuse, size: const Size(390, 1900), then: pick);
-  shot('accuse_wrong', accuse,
-      size: const Size(390, 1900), before: midCase, then: (t) async {
-    await pick(t);
-    await _tap(t, find.byIcon(Icons.gavel_rounded), wait: const Duration(milliseconds: 1200));
   });
 
   // achievements
@@ -986,11 +1038,17 @@ void main() {
   shot('result_solved', () => ResultScreen(caseData: _full('c027'), result: _solvedResult('c027')),
       wait: const Duration(milliseconds: 2600));
   shot('result_solved_full', () => ResultScreen(caseData: _full('c027'), result: _solvedResult('c027')),
-      size: const Size(390, 2200), wait: const Duration(milliseconds: 2600));
+      size: const Size(390, 1700), wait: const Duration(milliseconds: 2600));
   shot('result_failed', () => ResultScreen(caseData: _full('c005'), result: _failedResult('c005')),
       wait: const Duration(milliseconds: 2600));
   shot('result_failed_full', () => ResultScreen(caseData: _full('c005'), result: _failedResult('c005')),
-      size: const Size(390, 2000), wait: const Duration(milliseconds: 2600));
+      size: const Size(390, 1700), wait: const Duration(milliseconds: 2600));
+  shot('result_solved_more', () => ResultScreen(caseData: _full('c027'), result: _solvedResult('c027')),
+      size: const Size(390, 2000), wait: const Duration(milliseconds: 2600), then: (t) async {
+    await _tap(t, find.text('ادامه‌ی توضیح ▾'), wait: const Duration(milliseconds: 600));
+  });
+  shot('result_360_large', () => ResultScreen(caseData: _full('c027'), result: _solvedResult('c027')),
+      size: const Size(360, 780), textScale: 1.3, wait: const Duration(milliseconds: 2600));
 
   // art
   shot('scenes_grid', _scenesGrid, sizeOf: () => _scenesGridSize, wait: const Duration(milliseconds: 2400));
@@ -1006,7 +1064,8 @@ void main() {
   shot('need_coins', () => _Host(open: (c) => showNeedCoins(c, 150)));
   shot('streak_insurance_confirm', () => _Host(open: buyStreakInsurance));
   shot('shop', () => const ShopScreen());
-  shot('shop_full', () => const ShopScreen(), size: const Size(390, 1400));
+  shot('shop_full', () => const ShopScreen(), size: const Size(390, 1100));
+  shot('shop_360_large', () => const ShopScreen(), size: const Size(360, 780), textScale: 1.3);
   // profile, settings and the account sheets
   void secured() => Api.i.profile = Profile(_securedProfile);
   shot('profile_guest', () => const AccountScreen(), wait: const Duration(milliseconds: 1200));
@@ -1026,5 +1085,10 @@ void main() {
   shot('account_login_sheet_email', () => _Host(open: (c) => showLoginSheet(c)));
   shot('account_login_sheet_code', () => _Host(open: (c) => showLoginSheet(c, tab: 1)));
   shot('leaderboard', () => const LeaderboardScreen(), wait: const Duration(milliseconds: 1200));
+  shot('leaderboard_weekly', () => const LeaderboardScreen(), wait: const Duration(milliseconds: 1000), then: (t) async {
+    await _tap(t, find.text('این هفته'), wait: const Duration(milliseconds: 1200));
+  });
+  shot('leaderboard_360_large', () => const LeaderboardScreen(),
+      size: const Size(360, 780), textScale: 1.3, wait: const Duration(milliseconds: 1200));
   shot('inbox', () => _Host(open: showInbox), wait: const Duration(milliseconds: 1200));
 }

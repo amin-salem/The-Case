@@ -47,6 +47,17 @@ String shareText(CaseData c, AccuseResult r) {
   ].join('\n');
 }
 
+/// The short brag for the result screen's «پز بده»: case number, stars and the app link.
+String shortShareText(CaseData c, AccuseResult r) {
+  final solved = r.result == 'solved';
+  return [
+    solved
+        ? '🕵️ پرونده‌ی شماره‌ی ${fa(c.number)} «پرونده» رو با ${'⭐' * r.stars}${'☆' * (3 - r.stars)} حل کردم! تو هم می‌تونی؟'
+        : '🕵️ پرونده‌ی شماره‌ی ${fa(c.number)} «پرونده» من رو شکست داد! تو می‌تونی حلش کنی؟',
+    Api.i.shareUrl,
+  ].join('\n');
+}
+
 /// A preview of the share text on a paper card, with the share button.
 class ShareCard extends StatelessWidget {
   const ShareCard({super.key, required this.caseData, required this.result});
@@ -73,7 +84,6 @@ class ShareCard extends StatelessWidget {
       StampButton(
         label: 'برای دوستات بفرست',
         icon: Icons.share_rounded,
-        color: K.ok,
         onTap: () => SharePlus.instance.share(ShareParams(text: shareText(caseData, result))),
       ),
     ]);
@@ -382,20 +392,24 @@ class BadgeBanner extends StatelessWidget {
   Widget build(BuildContext context) => StampIn(
         delay: const Duration(milliseconds: 1500),
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             color: const Color(0xFF2B2414),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: K.brass, width: 2),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: K.brass, width: 1.5),
           ),
           child: Row(children: [
-            const Icon(Icons.military_tech_rounded, color: K.brass, size: 44),
-            const SizedBox(width: 10),
+            const Icon(Icons.military_tech_rounded, color: K.brass, size: 28),
+            const SizedBox(width: 8),
             Expanded(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('نشان تازه: «${kBadgeNames[badge] ?? ''}»', style: tDisplay(17, color: K.brass)),
-                Text('${fa(badge)} شب پشت سر هم پرونده حل کردی!', style: tBody(13, color: K.text)),
-              ]),
+              child: Text.rich(
+                TextSpan(children: [
+                  TextSpan(text: 'نشان تازه: «${kBadgeNames[badge] ?? ''}»', style: tBody(14, color: K.brass, w: FontWeight.w900)),
+                  TextSpan(text: '  ${fa(badge)} شب پشت سر هم!', style: tBody(12.5, color: K.text)),
+                ]),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ]),
         ),

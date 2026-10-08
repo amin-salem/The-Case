@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.17.0 (app build 25): redesigned home, archive, accuse, result, shop and leaderboard
+
+- Home: a top bar with portrait, name and rank (tap: profile), a red 🔥 streak chip (tap: the streak card with insurance in a small sheet), coins (tap: shop) and the inbox. One big card for tonight's case (scene, crime tape, «پرونده‌ی امشب · شماره‌ی N», title, place · how many solved it, «شروع تحقیقات» or how it went) with «پرونده‌ی بعدی: hh:mm:ss» inside it. Under it only one-line rows: «مأموریت‌های امروز» with three progress pills, «آخر هفته: …» with the time left or «به‌زودی», «بایگانی پرونده‌ها» (N پرونده · M تا حل کردی), and for guests «حسابت رو امن کن». The separate next-case card, the big streak card, the weekend card and the inline archive list are gone from home.
+- New archive page: «بایگانی» with «X از Y حل شده», filters همه / حل‌نشده / رایگان / ۳ ستاره, a two-column grid (locked cases dimmed with a lock and the coin price), pull to refresh. Tapping opens or unlocks a case exactly as before.
+- Accusing is now a stepper with «مرحله‌ی N از M» and a bar: the suspect, then the proof card, then (weekend case) the motive, with «ادامه» / «قبلی». Above the final button an amber card «اتهام تو: … · با …». A wrong try goes back to the step that was wrong. Same API call and messages.
+- Result: the big stamp and stars, one small row of rewards (coins, nights in a row, rank; tap the rank for the leaderboard), a slim new-badge banner, the culprit with the explanation folded to three lines («ادامه‌ی توضیح ▾»), «بقیه چی فکر می‌کردن؟», then a red «پز بده» (a short text with the case number, the stars and the app link) and «برگشت به خانه».
+- Shop: the 30-day VIP on top as a brass «پیشنهاد ویژه» card with a red «بخر»; three equal coin packs (محبوب / بهترین ارزش), the starter pack, then «با سکه» (streak insurance). No green buttons anywhere (green only means correct).
+- Leaderboard: a podium for the top three (2 – 1 – 3, a crown on the first, brass / silver / bronze rings), the list from 4, and your own row pinned at the bottom: «تو · N رتبه تا ۱۰ نفر اول» or «تو تو ۱۰ نفر اولی!».
+- Case: the evidence tab shows «X از Y مدرک دیده شده» (cards you tapped or pinned, kept with your notes).
+- First case ever: three short coach marks over the case (مدارک رو بخون → از مظنون‌ها سؤال کن → با مدرک متهم کن), skippable with «رد کن», shown once. Players who already solved cases don't see it.
+
 ## 1.16.0 (app build 24): profile and settings
 
 - The profile is now just the detective: a header card (portrait with a pencil to change it, name with a pencil to rename, rank, XP and how many points to the next rank; tap it for the rank ladder), three numbers (پرونده‌ی حل‌شده، زنجیره، بهترین زنجیره), the four latest badges with «همه» for every achievement, and the invite card with «بفرست» and «کد دوستت رو داری؟». Guests see one amber line «حسابت هنوز امن نیست…» with «امنش کن». The streak badges moved out (they are achievements already).

@@ -1,7 +1,7 @@
 name: the_case
 description: "پرونده - a daily Persian crime-mystery game."
 publish_to: 'none'
-version: 1.16.0+24
+version: 1.17.0+25
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

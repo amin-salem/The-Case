@@ -63,33 +63,44 @@ class _ShopScreenState extends State<ShopScreen> {
       body: GrainBackground(
         child: AbsorbPointer(
           absorbing: _busy,
-          // SafeArea: the last button must not end up under the phone's navigation bar
+          // SafeArea: the last row must not end up under the phone's navigation bar
           child: SafeArea(
             top: false,
             child: ListView(padding: const EdgeInsets.all(16), children: [
-            const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
-            Text('با سکه سرنخ بگیر و پرونده‌های قدیمی رو باز کن.', style: tBody(14, color: K.textSoft)),
-            const SizedBox(height: 12),
-            Row(children: [
-              Expanded(child: _pack('coins_small', 'کیسه‌ی کوچیک', 1)),
-              const SizedBox(width: 10),
-              Expanded(child: _pack('coins_medium', 'کیف کارآگاه', 2, tag: 'محبوب‌ترین')),
-              const SizedBox(width: 10),
-              Expanded(child: _pack('coins_large', 'گاوصندوق', 3, tag: 'بهترین ارزش')),
-            ]),
-            const SizedBox(height: 14),
-            _row('starter_pack', 'بسته‌ی شروع', '${fa(api.productCoins('starter_pack'))} سکه با تخفیف · فقط یک بار',
-                Icons.card_giftcard_rounded, K.stamp),
-            _row('vip_monthly', 'کارآگاه ویژه · ۳۰ روز', 'همه‌ی پرونده‌های بایگانی رایگان و اولین سرنخ هر پرونده رایگان',
-                Icons.workspace_premium_rounded, K.brass),
-            ListenableBuilder(listenable: Api.i, builder: (_, __) => _insuranceRow()),
-            const SizedBox(height: 10),
-            if (api.adsEnabled)
-              StampButton(label: 'دیدن تبلیغ و گرفتن سکه رایگان', icon: Icons.play_circle_fill_rounded, color: K.ok,
-                  onTap: () => watchAd(context)),
-            const SizedBox(height: 14),
-            Text('پرداخت از طریق مایکت انجام می‌شه. اگه پرداخت کردی و خریدت نرسید، دفعه‌ی بعد که بازی وصل بشه خودش اضافه می‌شه.',
-                style: tBody(12.5, color: K.textSoft)),
+              const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
+              ListenableBuilder(listenable: api, builder: (_, __) => _vipHero()),
+              const SizedBox(height: 22),
+              _heading('سکه', 'برای سرنخ و پرونده‌های قدیمی'),
+              const SizedBox(height: 14),
+              IntrinsicHeight(
+                child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                  Expanded(child: _pack('coins_small', 'کیسه‌ی کوچیک', 1)),
+                  const SizedBox(width: 10),
+                  Expanded(child: _pack('coins_medium', 'کیف کارآگاه', 2, tag: 'محبوب')),
+                  const SizedBox(width: 10),
+                  Expanded(child: _pack('coins_large', 'گاوصندوق', 3, tag: 'بهترین ارزش')),
+                ]),
+              ),
+              const SizedBox(height: 10),
+              _row(
+                icon: Icons.card_giftcard_rounded,
+                title: 'بسته‌ی شروع',
+                sub: '${fa(api.productCoins('starter_pack'))} سکه با تخفیف · فقط یک بار',
+                trailing: _price(Billing.i.price('starter_pack') ?? api.price('starter_pack')),
+                onTap: () => _buy('starter_pack', 'بسته‌ی شروع'),
+              ),
+              const SizedBox(height: 14),
+              _heading('با سکه', null),
+              const SizedBox(height: 8),
+              ListenableBuilder(listenable: api, builder: (_, __) => _insuranceRow()),
+              if (api.adsEnabled) ...[
+                const SizedBox(height: 4),
+                GhostButton(label: 'دیدن تبلیغ و گرفتن سکه رایگان', icon: Icons.play_circle_fill_rounded, color: K.brass,
+                    onTap: () => watchAd(context)),
+              ],
+              const SizedBox(height: 16),
+              Text('پرداخت از طریق مایکت انجام می‌شه. اگه پرداخت کردی و خریدت نرسید، دفعه‌ی بعد که بازی وصل بشه خودش اضافه می‌شه.',
+                  style: tBody(12.5, color: K.textSoft)),
             ]),
           ),
         ),
@@ -97,25 +108,98 @@ class _ShopScreenState extends State<ShopScreen> {
     );
   }
 
+  Widget _heading(String title, String? sub) => Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+        Text(title, style: tDisplay(18)),
+        if (sub != null) ...[
+          const SizedBox(width: 8),
+          Expanded(child: Text(sub, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.textSoft))),
+        ],
+      ]);
+
+  /// The 30-day VIP: the one big card at the top.
+  Widget _vipHero() {
+    const id = 'vip_monthly';
+    final vip = Api.i.profile?.vip ?? false;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Color(0xFF2E2416), K.night2],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: K.brass, width: 1.5),
+        boxShadow: [BoxShadow(color: K.brass.withValues(alpha: 0.16), blurRadius: 20)],
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(999)),
+            child: Text('پیشنهاد ویژه', style: tBody(11.5, color: K.ink, w: FontWeight.w900)),
+          ),
+          const Spacer(),
+          const Icon(Icons.workspace_premium_rounded, color: K.brass, size: 30),
+        ]),
+        const SizedBox(height: 8),
+        Text('کارآگاه ویژه · ۳۰ روز', style: tDisplay(22)),
+        const SizedBox(height: 4),
+        Text('همه‌ی پرونده‌های بایگانی رایگان · اولین سرنخ هر پرونده رایگان',
+            style: tBody(13.5, color: K.text.withValues(alpha: 0.85))),
+        if (vip)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text('الان کارآگاه ویژه‌ای؛ با خرید دوباره ۳۰ روز اضافه می‌شه.',
+                style: tBody(12.5, color: K.brass, w: FontWeight.w700)),
+          ),
+        const SizedBox(height: 14),
+        Row(children: [
+          Expanded(
+            child: Text(Billing.i.price(id) ?? Api.i.price(id),
+                maxLines: 1, overflow: TextOverflow.ellipsis, style: tDisplay(18, color: K.brass)),
+          ),
+          const SizedBox(width: 10),
+          StampButton(label: 'بخر', icon: Icons.shopping_bag_rounded, height: 46, onTap: () => _buy(id, 'کارآگاه ویژه')),
+        ]),
+      ]),
+    );
+  }
+
+  Widget _price(String text) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: K.brass.withValues(alpha: 0.6))),
+        child: Text(text, maxLines: 1, textAlign: TextAlign.center, style: tBody(12, color: K.brass, w: FontWeight.w900)),
+      );
+
   Widget _pack(String id, String title, int size, {String? tag}) {
     final api = Api.i;
     return GestureDetector(
       onTap: () => _buy(id, title),
       child: Stack(clipBehavior: Clip.none, children: [
         Container(
-          padding: const EdgeInsets.fromLTRB(8, 16, 8, 12),
-          decoration: BoxDecoration(color: K.paper, borderRadius: BorderRadius.circular(14)),
+          padding: const EdgeInsets.fromLTRB(6, 16, 6, 10),
+          decoration: BoxDecoration(
+            color: K.night2,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: tag != null ? K.brass.withValues(alpha: 0.7) : K.night3),
+          ),
           child: Column(children: [
-            Wrap(alignment: WrapAlignment.center, children: [for (int i = 0; i < size; i++) const CoinIcon(size: 24)]),
+            SizedBox(
+              height: 26,
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                for (int i = 0; i < size; i++)
+                  const Padding(padding: EdgeInsets.symmetric(horizontal: 1), child: CoinIcon(size: 22)),
+              ]),
+            ),
+            const SizedBox(height: 4),
+            FittedBox(fit: BoxFit.scaleDown, child: Text(fa(api.productCoins(id)), maxLines: 1, style: tDisplay(20))),
+            Text(title, textAlign: TextAlign.center, maxLines: 2, style: tBody(11.5, color: K.textSoft)),
+            const Spacer(),
             const SizedBox(height: 6),
-            Text(fa(api.productCoins(id)), maxLines: 1, style: tDisplay(20, color: K.ink)),
-            Text(title, textAlign: TextAlign.center, style: tBody(12, color: K.inkSoft)),
-            const SizedBox(height: 6),
-            Container(
+            SizedBox(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              decoration: BoxDecoration(color: K.ok, borderRadius: BorderRadius.circular(8)),
-              child: Text(Billing.i.price(id) ?? api.price(id), textAlign: TextAlign.center, style: tBody(12, color: Colors.white, w: FontWeight.w900)),
+              child: FittedBox(fit: BoxFit.scaleDown, child: _price(Billing.i.price(id) ?? api.price(id))),
             ),
           ]),
         ),
@@ -127,8 +211,8 @@ class _ShopScreenState extends State<ShopScreen> {
             child: Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                decoration: BoxDecoration(color: K.stamp, borderRadius: BorderRadius.circular(99)),
-                child: Text(tag, style: tBody(10, color: Colors.white, w: FontWeight.w900)),
+                decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(99)),
+                child: Text(tag, maxLines: 1, style: tBody(10, color: K.ink, w: FontWeight.w900)),
               ),
             ),
           ),
@@ -140,49 +224,37 @@ class _ShopScreenState extends State<ShopScreen> {
   Widget _insuranceRow() {
     final api = Api.i;
     final held = api.profile?.streakFreezes ?? 0;
-    return GestureDetector(
+    return _row(
+      icon: Icons.shield_rounded,
+      title: 'بیمه‌ی زنجیره',
+      sub: 'یه شب جا بمونی، زنجیره‌ات نمی‌شکنه · داری: ${fa(held)} از ${fa(api.maxFreezes)}',
+      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+        const CoinIcon(size: 18),
+        const SizedBox(width: 4),
+        Text(fa(api.freezeCost), style: tBody(13, color: K.brass, w: FontWeight.w900)),
+      ]),
       onTap: () => buyStreakInsurance(context),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(14), border: Border.all(color: K.ok.withValues(alpha: 0.5))),
-        child: Row(children: [
-          const Icon(Icons.shield_rounded, color: K.ok, size: 32),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('بیمه‌ی زنجیره', style: tBody(16, w: FontWeight.w900)),
-              Text('یه شب جا بمونی، زنجیره‌ات نمی‌شکنه · داری: ${fa(held)} از ${fa(api.maxFreezes)}',
-                  style: tBody(12.5, color: K.textSoft)),
-            ]),
-          ),
-          const SizedBox(width: 6),
-          const CoinIcon(size: 18),
-          const SizedBox(width: 4),
-          Text(fa(api.freezeCost), style: tBody(13, color: K.brass, w: FontWeight.w900)),
-        ]),
-      ),
     );
   }
 
-  Widget _row(String id, String title, String sub, IconData icon, Color color) {
+  Widget _row({required IconData icon, required String title, required String sub, required Widget trailing, required VoidCallback onTap}) {
     return GestureDetector(
-      onTap: () => _buy(id, title),
+      onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(14), border: Border.all(color: color.withValues(alpha: 0.5))),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(14), border: Border.all(color: K.night3)),
         child: Row(children: [
-          Icon(icon, color: color, size: 32),
+          Icon(icon, color: K.brass, size: 28),
           const SizedBox(width: 12),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(title, style: tBody(16, w: FontWeight.w900)),
-              Text(sub, style: tBody(12.5, color: K.textSoft)),
+              Text(title, style: tBody(15, w: FontWeight.w900)),
+              Text(sub, style: tBody(12, color: K.textSoft)),
             ]),
           ),
-          const SizedBox(width: 6),
-          Text(Billing.i.price(id) ?? Api.i.price(id), style: tBody(13, color: K.brass, w: FontWeight.w900)),
+          const SizedBox(width: 8),
+          trailing,
         ]),
       ),
     );
