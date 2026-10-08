@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.15.5: weekend case w001 rewritten harder
+
+- «شب برفی ویلای صدری»: chapters 2 and 3 rewritten so the answer can't be guessed, only proven by combining cards from all three chapters. Chapter 1 (intro, suspects, first cards) is unchanged; a few suspects got extra answers. Blind-tested; case log updated.
+
 ## 1.17.2 (app build 27, server 1.15.4): no accusing before the last chapter
 
 - Weekend case: the server refuses an accusation until the last chapter is out (the proof cards are in it), so no try is wasted; the app shows «متهم کردن از فصل آخر» instead of the button until then.
