@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +27,7 @@ import 'package:the_case/models/progress.dart';
 import 'package:the_case/screens/accuse_screen.dart';
 import 'package:the_case/screens/achievements_screen.dart';
 import 'package:the_case/screens/account_screen.dart';
+import 'package:the_case/screens/account_sheets.dart';
 import 'package:the_case/screens/case_screen.dart';
 import 'package:the_case/screens/dialogs.dart';
 import 'package:the_case/screens/home_screen.dart';
@@ -34,6 +36,7 @@ import 'package:the_case/screens/leaderboard_screen.dart';
 import 'package:the_case/screens/main_shell.dart';
 import 'package:the_case/screens/result_screen.dart';
 import 'package:the_case/screens/riddles_screen.dart';
+import 'package:the_case/screens/settings_screen.dart';
 import 'package:the_case/screens/shop_screen.dart';
 import 'package:the_case/screens/suspect_sheet.dart';
 import 'package:the_case/services/api.dart';
@@ -117,6 +120,14 @@ final Map<String, dynamic> _profileJson = {
   'achievements': 4,
 };
 
+final Map<String, dynamic> _securedProfile = {
+  ..._profileJson,
+  'secured': true,
+  'email': 'amin.detective@gmail.com',
+  'vip_until': _farFuture,
+  'referred': true,
+};
+
 final Map<String, dynamic> _config = {
   'upcoming': {
     'weekend': {'open': false, 'title': 'شب برفی ویلای صدری', 'scene': 'snow_lodge', 'location': 'دره‌ی سپیدار',
@@ -126,6 +137,7 @@ final Map<String, dynamic> _config = {
         'opens_at': DateTime.now().add(const Duration(days: 4, hours: 8, minutes: 30)).millisecondsSinceEpoch ~/ 1000},
   },
   'share_url': 'https://cafebazaar.ir/app/ir.aminsalem.the_case',
+  'support_email': 'support@example.com',
   'prices': {
     'coins_small': '۴۹٬۰۰۰ تومان',
     'coins_medium': '۱۲۹٬۰۰۰ تومان',
@@ -816,6 +828,8 @@ void main() {
   setUpAll(() async {
     if (!kShots) return;
     await _loadFonts();
+    PackageInfo.setMockInitialValues(
+        appName: 'پرونده', packageName: 'ir.aminsalem.the_case', version: '1.16.0', buildNumber: '24', buildSignature: '');
     SharedPreferences.setMockInitialValues({
       'player': 'p_demo',
       'secret': 'secret',
@@ -993,8 +1007,24 @@ void main() {
   shot('streak_insurance_confirm', () => _Host(open: buyStreakInsurance));
   shot('shop', () => const ShopScreen());
   shot('shop_full', () => const ShopScreen(), size: const Size(390, 1400));
-  shot('account', () => const AccountScreen());
-  shot('account_full', () => const AccountScreen(), size: const Size(390, 2000));
+  // profile, settings and the account sheets
+  void secured() => Api.i.profile = Profile(_securedProfile);
+  shot('profile_guest', () => const AccountScreen(), wait: const Duration(milliseconds: 1200));
+  shot('profile_secured', () => const AccountScreen(), before: secured, wait: const Duration(milliseconds: 1200));
+  shot('profile_avatar_sheet', () => const AccountScreen(), then: (t) async {
+    await _tap(t, find.byIcon(Icons.edit_rounded));
+  });
+  shot('profile_rank_sheet', () => const AccountScreen(), size: const Size(390, 1000), then: (t) async {
+    await _tap(t, find.text('کارآگاه ارشد'));
+  });
+  shot('profile_invite_code_sheet', () => _Host(open: showInviteCodeSheet));
+  shot('settings_guest', () => const SettingsScreen());
+  shot('settings_secured', () => const SettingsScreen(), before: secured);
+  shot('settings_font_sheet', () => _Host(open: showFontSheet));
+  shot('account_secure_sheet', () => _Host(open: showSecureSheet));
+  shot('account_password_sheet', () => _Host(open: showSecureSheet), before: secured);
+  shot('account_login_sheet_email', () => _Host(open: (c) => showLoginSheet(c)));
+  shot('account_login_sheet_code', () => _Host(open: (c) => showLoginSheet(c, tab: 1)));
   shot('leaderboard', () => const LeaderboardScreen(), wait: const Duration(milliseconds: 1200));
   shot('inbox', () => _Host(open: showInbox), wait: const Duration(milliseconds: 1200));
 }

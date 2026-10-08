@@ -291,6 +291,11 @@ class Api extends ChangeNotifier {
   String get privacyUrl => config['privacy_url'] is String ? config['privacy_url'] as String : '$kApiUrl/privacy';
   String get termsUrl => config['terms_url'] is String ? config['terms_url'] as String : '$kApiUrl/terms';
 
+  /// Contact links from the server config; null when the server does not send one (the row is hidden).
+  String? get supportUrl => _nonEmpty(config['support_url']);
+  String? get supportEmail => _nonEmpty(config['support_email']);
+  static String? _nonEmpty(Object? v) => v is String && v.trim().isNotEmpty ? v.trim() : null;
+
   /// Deletes this account on the server for good; the next connect starts a fresh guest account.
   /// Returns an error text, or null when done.
   Future<String?> deleteAccount() async {
@@ -578,6 +583,9 @@ class Api extends ChangeNotifier {
   int get weeklyReward => _economy['weekly_reward'] as int? ?? 300;
   int get freezeCost => _economy['freeze_cost'] as int? ?? 150;
   int get maxFreezes => _economy['max_freezes'] as int? ?? 2;
+  int get secureReward => (_economy['secure_reward'] as num?)?.toInt() ?? 200;
+  int get inviteReward => (_economy['invite_reward'] as num?)?.toInt() ?? 300;
+  int get inviteNewPlayer => (_economy['invite_new_player'] as num?)?.toInt() ?? 150;
   List<int> get loginCalendar =>
       [for (final v in (_economy['login_calendar'] as List? ?? const [20, 30, 40, 50, 60, 80])) (v as num).toInt()];
   List<int> get streakBadges => [for (final v in (_economy['streak_badges'] as List? ?? const [7, 30, 100])) (v as num).toInt()];

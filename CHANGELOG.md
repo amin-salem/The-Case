@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.16.0 (app build 24): profile and settings
+
+- The profile is now just the detective: a header card (portrait with a pencil to change it, name with a pencil to rename, rank, XP and how many points to the next rank; tap it for the rank ladder), three numbers (پرونده‌ی حل‌شده، زنجیره، بهترین زنجیره), the four latest badges with «همه» for every achievement, and the invite card with «بفرست» and «کد دوستت رو داری؟». Guests see one amber line «حسابت هنوز امن نیست…» with «امنش کن». The streak badges moved out (they are achievements already).
+- New Settings page behind the ⚙ at the top of the profile: حساب (امن کردن حساب / عوض کردن رمز, ورود یا انتقال از گوشی دیگر), ظاهر (فونت و اندازه‌ی متن), صدا و اعلان (صدا و موسیقی, یادآوری پرونده‌ی هر شب), پشتیبانی و قوانین (تماس با ما when the server config has `support_url` or `support_email`, حریم خصوصی, قوانین), then «حذف حساب» and the app version.
+- Every account form opens in a bottom sheet. Signing in from another phone is one sheet with two tabs, «با ایمیل» and «با کد انتقال», and a warning that this phone's progress is replaced. Same API calls as before.
+
 ## server 1.15.3: harder cases 13–16
 
 - c013 «جام برف‌چال» (staged scene), c014 «اسطرلاب ریگ‌سفید» (hidden relationship), c015 «خروجیِ بسته» (guilty knowledge) and c016 «آزمایشگاه ۲۰۴» (not what it seemed) rewritten under the case-writing rules: difficulty 4, new plots, painted portraits, blind-tested. Case log updated.
