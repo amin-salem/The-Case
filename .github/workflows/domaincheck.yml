@@ -1,0 +1,16 @@
+name: Domain check
+on:
+  push:
+    branches: [domaincheck]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          for h in gammly.ir www.gammly.ir api.gammly.ir thecase.liara.run; do
+            echo "== $h"
+            dig +short $h || true
+            curl -sS -m 20 -o /dev/null -w "https status %{http_code} ssl_verify %{ssl_verify_result}\n" https://$h/health || echo "https failed"
+            curl -sS -m 20 https://$h/health || true; echo
+            echo "::notice title=$h::$(curl -sS -m 20 https://$h/health 2>&1 | head -c 150) | dns $(dig +short $h | tr '\n' ' ')"
+          done
