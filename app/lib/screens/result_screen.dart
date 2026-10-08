@@ -109,7 +109,10 @@ class _ResultScreenState extends State<ResultScreen> {
                     child: TextButton(
                       onPressed: () => setState(() => _more = !_more),
                       style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 4), foregroundColor: K.stamp),
-                      child: Text(_more ? 'بستن توضیح ▴' : 'ادامه‌ی توضیح ▾', style: tBody(13.5, color: K.stamp, w: FontWeight.w900)),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text(_more ? 'بستن توضیح' : 'ادامه‌ی توضیح', style: tBody(13.5, color: K.stamp, w: FontWeight.w900)),
+                        Icon(_more ? Icons.expand_less_rounded : Icons.expand_more_rounded, color: K.stamp, size: 20),
+                      ]),
                     ),
                   ),
                 ]),

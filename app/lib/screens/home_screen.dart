@@ -504,7 +504,7 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(99)),
             alignment: Alignment.centerRight,
             child: FractionallySizedBox(
-              widthFactor: x.done ? 1 : (x.target <= 0 ? 0 : (x.progress / x.target).clamp(0.0, 1.0)),
+              widthFactor: x.done ? 1.0 : (x.target <= 0 ? 0.0 : (x.progress / x.target).clamp(0.0, 1.0).toDouble()),
               child: Container(
                 decoration: BoxDecoration(color: x.done ? K.ok : K.brass, borderRadius: BorderRadius.circular(99)),
               ),
@@ -527,7 +527,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ? ('حلش کردی!', K.brass)
           : w.failed
               ? ('این بار نشد', K.stamp)
-              : (left == null || left.isNegative ? 'باز است' : 'تا پایان: ${faClock(left)}', K.brass);
+              : (left == null || left.isNegative
+                      ? 'باز است'
+                      : left.inHours >= 24
+                          ? 'تا پایان: ${fa(left.inDays)} روز و ${fa(left.inHours % 24)} ساعت'
+                          : 'تا پایان: ${faClock(left)}',
+                  K.brass);
     } else {
       final t = Api.i.upcomingWeekend['title'];
       title = t is String && t.isNotEmpty ? 'آخر هفته: $t' : 'آخر هفته';

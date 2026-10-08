@@ -218,7 +218,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
       label: _busy
           ? '...'
           : ready
-              ? 'متهم می‌کنم: ${c.suspect(_suspect!).name}'
+              ? 'متهم می‌کنم!'
               : (c.weekly ? 'انگیزه رو انتخاب کن' : 'یه مدرک انتخاب کن'),
       icon: Icons.gavel_rounded,
       onTap: _busy || !ready ? null : _submit,

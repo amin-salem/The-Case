@@ -108,7 +108,7 @@ class _CoachMarksState extends State<CoachMarks> {
             left: 16,
             right: 16,
             top: below ? (hole == null ? box.maxHeight * 0.3 : hole.bottom + 14) : null,
-            bottom: below ? null : box.maxHeight - hole!.top + 14,
+            bottom: below ? null : box.maxHeight - hole.top + 14,
             child: note,
           ),
         ]);

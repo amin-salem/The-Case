@@ -1045,7 +1045,7 @@ void main() {
       size: const Size(390, 1700), wait: const Duration(milliseconds: 2600));
   shot('result_solved_more', () => ResultScreen(caseData: _full('c027'), result: _solvedResult('c027')),
       size: const Size(390, 2000), wait: const Duration(milliseconds: 2600), then: (t) async {
-    await _tap(t, find.text('ادامه‌ی توضیح ▾'), wait: const Duration(milliseconds: 600));
+    await _tap(t, find.text('ادامه‌ی توضیح'), wait: const Duration(milliseconds: 600));
   });
   shot('result_360_large', () => ResultScreen(caseData: _full('c027'), result: _solvedResult('c027')),
       size: const Size(360, 780), textScale: 1.3, wait: const Duration(milliseconds: 2600));

@@ -172,7 +172,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
       );
     }
     // the card grows with the system font, so the text never overflows
-    final extent = 98 + 20 + MediaQuery.textScalerOf(context).scale(76);
+    final extent = 98 + 20 + MediaQuery.textScalerOf(context).scale(102);
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
       sliver: SliverGrid(
@@ -231,7 +231,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text('شماره‌ی ${fa(c.number)}', maxLines: 1, style: tBody(11, color: K.textSoft)),
                 Text(c.title,
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: tBody(15, w: FontWeight.w900, color: c.locked ? K.textSoft : K.text)),
                 const Spacer(),
