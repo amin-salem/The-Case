@@ -34,7 +34,7 @@ Future<void> openCaseRow(BuildContext context, CaseRow row) async {
   }
   if (!context.mounted) return;
   await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: row.id)));
-  Sfx.i.ambient('amb_home', volume: 0.28);
+  Sfx.i.ambient('amb_home', volume: Sfx.homeVolume);
 }
 
 enum _Filter { all, unsolved, free, three }

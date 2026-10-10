@@ -88,7 +88,7 @@ class _RiddlesScreenState extends State<RiddlesScreen> {
     }
     if (!mounted) return;
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => RiddlePlayScreen(item: item, day: _day!)));
-    Sfx.i.ambient('amb_home', volume: 0.28);
+    Sfx.i.ambient('amb_home', volume: Sfx.homeVolume);
     _load();
   }
   Future<void> _loadMissions() async {

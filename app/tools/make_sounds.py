@@ -583,7 +583,9 @@ def main():
         to_ogg(f"amb_{scene}", fn(), gain=0.8)
         to_ogg(f"sting_{scene}", sting(scene), gain=0.9, fade=0.02)
         print("scene", scene)
-    to_ogg("amb_home", a_home(), gain=0.7)
+    # amb_home.ogg, music_story, music_weekend, music_result are real recordings: never overwrite them
+    if not (OUT / "music_story.ogg").exists():
+        to_ogg("amb_home", a_home(), gain=0.7)
     for name, x in ui_sounds().items():
         to_ogg(name, x, gain=0.9, fade=0.005)
         print("ui", name)

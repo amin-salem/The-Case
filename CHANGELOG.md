@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.17.4 (app build 29): real music
+
+- New recorded sounds, converted to real Ogg Vorbis (the files were MP3 data with an .ogg name, which some phones refuse), loudness-matched, and the 60 s loops cross-faded so they repeat without a click: `amb_home` (home and other tabs), `music_weekend` (آخر هفته tab), `music_story` (داستان tab), `music_result` (a short ending after a solved case).
+- Each main tab fades into its own music. Total size about 2.3 MB.
+
 ## server 1.15.7: nightly cases c020–c024 rewritten harder
 
 - Five nights (18–22 October) get new, harder stories under the case-writing rules: «ساعتِ ایستاده‌ی برج» (two people, one plan), «صندوق آهنی سرای گلشن» (motive inversion), «پالتوی شتری» (one coat through five hands), «کوپه‌ی شماره‌ی هفت» (a timetable alibi) and «عطردانِ شاه‌نشین» (a hidden marriage). Same ids, numbers, dates and scenes; new portraits; all blind-tested; case log updated.

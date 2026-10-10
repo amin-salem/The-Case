@@ -48,7 +48,16 @@ class _MainShellState extends State<MainShell> {
       _visits[i]++;
       _seen.add(i);
     });
-    if (i == MainShell.home) Sfx.i.ambient('amb_home', volume: 0.28);
+    // each main tab has its own music; the beds cross-fade
+    if (i == MainShell.home) {
+      Sfx.i.ambient('amb_home', volume: Sfx.homeVolume);
+    } else if (i == MainShell.weekend) {
+      Sfx.i.ambient('music_weekend', volume: Sfx.musicVolume);
+    } else if (i == MainShell.story) {
+      Sfx.i.ambient('music_story', volume: Sfx.musicVolume);
+    } else {
+      Sfx.i.ambient('amb_home', volume: Sfx.homeVolume);
+    }
   }
 
   Widget _page(int i) => switch (i) {

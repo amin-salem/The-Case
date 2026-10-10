@@ -33,6 +33,7 @@ class _ResultScreenState extends State<ResultScreen> {
     Sfx.i.duck();
     Future<void>.delayed(const Duration(milliseconds: 200), () => Sfx.i.play('stamp', volume: 0.8));
     Future<void>.delayed(const Duration(milliseconds: 700), () => Sfx.i.play(solved ? 'win' : 'lose'));
+    if (solved) Future<void>.delayed(const Duration(milliseconds: 1800), () => Sfx.i.play('music_result', volume: 0.55));
     Future<void>.delayed(const Duration(milliseconds: 4500), Sfx.i.unduck);
     if (result.badge != null) {
       Future<void>.delayed(const Duration(milliseconds: 2600), () => Sfx.i.play('clue', volume: 0.7));

@@ -14,6 +14,9 @@ class Sfx extends ChangeNotifier {
   static final Sfx i = Sfx._();
 
   static const _ambientVolume = 0.42;
+  /// The real recorded beds are quieter than the old synthesised ones, so they play louder.
+  static const homeVolume = 0.65;
+  static const musicVolume = 0.6;
   bool _muted = false;
   bool get muted => _muted;
   bool _ready = false;

@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Api.i.addListener(_onApi);
     MainShell.tab.addListener(_onTab);
     _load();
-    Sfx.i.ambient('amb_home', volume: 0.28);
+    Sfx.i.ambient('amb_home', volume: Sfx.homeVolume);
     _tick = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) setState(() {});
       final next = _cases?.nextCaseAt;
