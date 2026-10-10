@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.16.1: weekend case w002
+
+- New weekend case w002 «فانوسِ نارنجستان» (Thursday 2026-10-15): opens 09:00 (`open_hour` 9), chapters Thursday/Friday/Saturday 09:00 (`at_hours` 0/24/48), closes Sunday 21:00 (`closes_hours` 84); with its notification teaser.
+
 ## 1.19.0 (app build 35, server 1.16.0): story mode
 
 - The «داستان» tab is now the real story mode (it opens by itself once the opening time has passed AND chapters exist; until then the banner and countdown stay). A career map shows the season's chapters as a path: finished ones with stars, the open one, and locked ones with a countdown, «با یک حکم باز کن» or «رد شدن با سکه». A warrant chip («N حکم») shows what the player holds.
