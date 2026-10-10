@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import economy as eco
+from .. import rewards
 from ..db import get_session
 from ..models import Broadcast, BroadcastClaim, InboxItem, Player, utcnow
 from ..schemas import ClaimOut, InboxRow, RedeemIn
@@ -28,6 +29,10 @@ def apply_grants(session: AsyncSession, player: Player, grants: list[dict], reas
 
 @router.get("/inbox", response_model=list[InboxRow])
 async def inbox(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    try:
+        await rewards.settle_last_week(session)  # pays last week's top players once
+    except Exception:
+        await session.rollback()
     now = utcnow()
     personal = (await session.execute(select(InboxItem).where(
         InboxItem.player_id == player.id, InboxItem.claimed_at.is_(None),

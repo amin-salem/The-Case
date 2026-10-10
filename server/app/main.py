@@ -3,12 +3,13 @@
 Run locally:   uvicorn app.main:app --reload
 API docs:      http://127.0.0.1:8000/docs
 """
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import content, db, riddles
+from . import content, db, rewards, riddles
 from .config import get_settings
 from .version import VERSION
 from .routers import admin, auth, cases, inbox, leaderboard, meta, pages, profile, purchases
@@ -27,7 +28,18 @@ async def lifespan(app: FastAPI):
     content.weekly_cases()
     if s.auto_create_tables:
         await db.create_tables()
+    async def weekly_prizes():
+        while True:
+            try:
+                async with db.SessionLocal() as ses:
+                    await rewards.settle_last_week(ses)
+            except Exception:
+                pass
+            await asyncio.sleep(3600)
+
+    task = asyncio.create_task(weekly_prizes())
     yield
+    task.cancel()
     await db.engine.dispose()
 
 

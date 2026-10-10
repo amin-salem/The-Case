@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/models.dart';
 import '../models/progress.dart';
 import 'case_clock.dart';
+import 'reminders.dart';
 
 /// Server address (Liara). Another server for testing:
 ///   flutter run --dart-define=API_URL=http://192.168.1.5:8000
@@ -777,6 +778,11 @@ class Api extends ChangeNotifier {
     final list = await _call('GET', '/v1/inbox') as List;
     final gifts = [for (final g in list) InboxGift((g as Map).cast<String, dynamic>())];
     inboxCount = gifts.length;
+    for (final g in gifts) {
+      if (g.title.startsWith('جایزه‌ی هفته')) {
+        unawaited(Reminders.i.prizeNotice(g.id, g.title, g.message));
+      }
+    }
     notifyListeners();
     return gifts;
   }
