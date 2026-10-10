@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.15.6: nightly cases c020–c024 rewritten harder
+
+- Five nights (18–22 October) get new, harder stories under the case-writing rules: «ساعتِ ایستاده‌ی برج» (two people, one plan), «صندوق آهنی سرای گلشن» (motive inversion), «پالتوی شتری» (one coat through five hands), «کوپه‌ی شماره‌ی هفت» (a timetable alibi) and «عطردانِ شاه‌نشین» (a hidden marriage). Same ids, numbers, dates and scenes; new portraits; all blind-tested; case log updated.
+
 ## server 1.15.5: weekend case w001 rewritten harder
 
 - «شب برفی ویلای صدری»: chapters 2 and 3 rewritten so the answer can't be guessed, only proven by combining cards from all three chapters. Chapter 1 (intro, suspects, first cards) is unchanged; a few suspects got extra answers. Blind-tested; case log updated.
