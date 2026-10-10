@@ -99,12 +99,12 @@ def test_upcoming_weekend_and_story():
     assert before["opens_at"] == int(start.timestamp())
     during = content.weekend_upcoming(start + timedelta(hours=1))
     assert during["open"] is True and during["closes_at"] == int(content.weekly_closes_at(w).timestamp())
-    # after the last written weekend case: the next Thursday 21:00, no title yet
+    # after the last written weekend case: the next Thursday at WEEKEND_OPEN_HOUR (09:00), no title yet
     late = content.weekly_cases()[-1]
     after = content.weekend_upcoming(content.weekly_closes_at(late) + timedelta(hours=1))
     assert after["open"] is False and after["title"] is None
     t = datetime.fromtimestamp(after["opens_at"], start.tzinfo)
-    assert t.weekday() == 3 and t.hour == start.hour
+    assert t.weekday() == 3 and t.hour == content.WEEKEND_OPEN_HOUR
     s = content.story_upcoming()
     assert s["title"] and s["opens_at"] > 0 and isinstance(s["open"], bool)
 
