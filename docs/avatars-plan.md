@@ -39,3 +39,30 @@ Prices are constants in economy.py so Amin can tune them. Coins are a sink here:
 ## App
 - Profile avatar picker: tabs «همه / باز‌شده / قفل‌دار»; owned = normal; locked-by-goal = dimmed with a lock, goal text and progress bar; shop = price chip in coins; legendary has a brass frame. Buying asks to confirm. Placeholders (a code-drawn silhouette) until the images arrive; images go to app/assets/avatars/ex_*.webp.
 - Home-screen and leaderboard avatar widgets must load any id.
+
+## Avatar frames (added 10 Oct; part of the same build run)
+A frame is a decorative border around the avatar, chosen separately from the avatar. Frames are **drawn in code** (CustomPaint, no image files needed), so no AI images are required and they stay sharp at every size.
+- Data: `Player.avatar_frame` (str, default `frame_brass`; a column added by the migration) and the same ownership table with a `kind` column (`avatar` | `frame`; existing rows default to `avatar`). `GET /v1/avatars` returns both lists; `POST /v1/avatars/{id}/buy` works for frames; `POST /profile` accepts `avatar_frame` only if owned (422 `not_owned`). Leaderboard rows and profile show the player's frame, so other players see it (the social reason to buy).
+- **Free (everyone):** `frame_brass` (thin brass ring).
+- **Earned by a challenge:**
+  | id | look | goal |
+  |---|---|---|
+  | frame_bronze | bronze ring | reach detective rank 3 |
+  | frame_silver | silver ring | reach rank 6 |
+  | frame_gold | gold ring | reach rank 9 |
+  | frame_ember | ring with slow drifting embers | 14-day streak |
+  | frame_tape | yellow crime-tape wrapped diagonally | solve 50 cases |
+  | frame_laurel | golden laurel leaves | top 3 of a weekly leaderboard |
+  (Use the real rank numbering in the code; adjust the numbers if ranks differ.)
+- **Shop (coins):**
+  | id | look | price |
+  |---|---|---|
+  | frame_fingerprint | glowing fingerprint swirl ring | 300 |
+  | frame_rain | blue-grey ring with rain drops sliding down | 400 |
+  | frame_gears | brass clockwork gears turning slowly | 600 |
+  | frame_wax | red wax seal edge with stamped notches | 600 |
+  | frame_neon | neon-noir double ring, soft pulse | 900 |
+  | frame_royal | animated gold shimmer sweeping around | 1500 |
+- Performance and taste: animations only on the profile and leaderboard top rows; the whole list is drawn static when the system reduces motion or the phone is low-end. One shared widget `AvatarWithFrame(avatar, frame, size)` used everywhere an avatar appears.
+- Picker: a second tab «قاب‌ها» in the same screen, with the same locked/earned/price states and a live preview on the player's avatar.
+- Tests: ownership, buy, not enough coins, locked frame refused, challenge unlock.
