@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.17.8 (app build 33): suspect marks are kept
+
+- Fix: tapping «مشکوک» / «بی‌گناه» on a suspect was only kept if the sheet was closed with «بستن». Swiping the sheet down, tapping outside it or pressing back lost the mark. Now the mark is saved the moment it is tapped.
+
 ## 1.17.7 (app build 32): store name in the shop texts
 
 - The shop texts say «مایکت» or «کافه‌بازار» depending on the build's STORE setting (default stays Myket). Real Cafe Bazaar payments still need the Bazaar billing code in the app (not built yet).

@@ -8,20 +8,23 @@ import 'case_screen.dart';
 
 /// Interrogation: the suspect talks (animated), the player asks questions
 /// and marks them as suspicious / innocent. Returns the new mark.
-Future<SuspectMark?> showSuspect(BuildContext context, Suspect s, SuspectMark mark) {
+Future<SuspectMark?> showSuspect(BuildContext context, Suspect s, SuspectMark mark,
+    {void Function(SuspectMark)? onMark}) {
   return showModalBottomSheet<SuspectMark>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true, // keeps the top below the status bar; the sheet pads its own bottom
     backgroundColor: Colors.transparent,
-    builder: (_) => _SuspectSheet(s: s, mark: mark),
+    builder: (_) => _SuspectSheet(s: s, mark: mark, onMark: onMark),
   );
 }
 
 class _SuspectSheet extends StatefulWidget {
-  const _SuspectSheet({required this.s, required this.mark});
+  const _SuspectSheet({required this.s, required this.mark, this.onMark});
   final Suspect s;
   final SuspectMark mark;
+  /// Called at once on every tap, so the mark is kept even if the sheet is swiped away.
+  final void Function(SuspectMark)? onMark;
 
   @override
   State<_SuspectSheet> createState() => _SuspectSheetState();
@@ -151,7 +154,10 @@ class _SuspectSheetState extends State<_SuspectSheet> {
       SuspectMark.innocent => ('بی‌گناه', K.ok),
     };
     return GestureDetector(
-      onTap: () => setState(() => _mark = SuspectMark.values[(_mark.index + 1) % SuspectMark.values.length]),
+      onTap: () {
+        setState(() => _mark = SuspectMark.values[(_mark.index + 1) % SuspectMark.values.length]);
+        widget.onMark?.call(_mark);
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(99), border: Border.all(color: color)),

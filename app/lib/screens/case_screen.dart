@@ -613,11 +613,13 @@ class _CaseScreenState extends State<CaseScreen> {
           child: GestureDetector(
             onTap: () async {
               unawaited(Api.i.markSeen(widget.caseId, s.id));
-              final m = await showSuspect(context, s, mark);
-              if (m != null && mounted) {
-                setState(() => _marks[s.id] = m);
+              void keep(SuspectMark m) {
+                _marks[s.id] = m; // saved at once: closing the sheet any way must not lose it
                 _saveNotes();
+                if (mounted) setState(() {});
               }
+              final m = await showSuspect(context, s, mark, onMark: keep);
+              if (m != null && mounted) keep(m);
             },
             child: Container(
               margin: const EdgeInsets.only(bottom: 10),
