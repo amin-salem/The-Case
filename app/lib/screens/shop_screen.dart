@@ -22,7 +22,7 @@ class _ShopScreenState extends State<ShopScreen> {
   Future<void> _buy(String productId, String title) async {
     if (!needOnline(context)) return;
     if (!Billing.i.available) {
-      toast(context, 'برای خرید، اپ مایکت باید روی گوشی نصب و به‌روز باشه.');
+      toast(context, 'برای خرید، اپ $kStoreName باید روی گوشی نصب و به‌روز باشه.');
       return;
     }
     setState(() => _busy = true);
@@ -37,7 +37,7 @@ class _ShopScreenState extends State<ShopScreen> {
         case BuyResult.cancelled:
           break;
         case BuyResult.unavailable:
-          toast(context, 'برای خرید، اپ مایکت باید روی گوشی نصب و به‌روز باشه.');
+          toast(context, 'برای خرید، اپ $kStoreName باید روی گوشی نصب و به‌روز باشه.');
         case BuyResult.failed:
           toast(context, 'خرید انجام نشد. اگه پولی کم شده، نگران نباش؛ برمی‌گرده یا خریدت اضافه می‌شه.');
       }
@@ -99,7 +99,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     onTap: () => watchAd(context)),
               ],
               const SizedBox(height: 16),
-              Text('پرداخت از طریق مایکت انجام می‌شه. اگه پول کم شد ولی سکه‌ها نرسید، دفعه‌ی بعد که بازی به اینترنت وصل بشه خودبه‌خود اضافه می‌شن.',
+              Text('پرداخت از طریق $kStoreName انجام می‌شه. اگه پول کم شد ولی سکه‌ها نرسید، دفعه‌ی بعد که بازی به اینترنت وصل بشه خودبه‌خود اضافه می‌شن.',
                   style: tBody(12.5, color: K.textSoft)),
             ]),
           ),

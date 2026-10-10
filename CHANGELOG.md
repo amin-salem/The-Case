@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.17.7 (app build 32): store name in the shop texts
+
+- The shop texts say «مایکت» or «کافه‌بازار» depending on the build's STORE setting (default stays Myket). Real Cafe Bazaar payments still need the Bazaar billing code in the app (not built yet).
+- Checked all case, weekend and story files for typing slips (Arabic letters, doubled words, «تو تو», spacing): nothing to fix.
+
 ## 1.17.6 (app build 31): wording clean-up
 
 - Fixed awkward or wrong Persian in the app: «تو تو ۱۰ نفر اولی» is now «جزو ۱۰ نفر اولی!», the archive line reads «۳ از ۱۰ پرونده رو حل کردی», and about 20 more texts were smoothed (countdown labels, the weekend tab, story how-it-works, invite rewards, error messages, the quick-riddle mention removed from the rank text).

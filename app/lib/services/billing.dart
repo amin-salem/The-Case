@@ -13,6 +13,9 @@ import 'api.dart';
 /// only (no money, the dev server accepts "test-" tokens). Set with --dart-define=STORE=...
 const String kStore = String.fromEnvironment('STORE', defaultValue: 'myket');
 
+/// The store's name as players read it in the shop texts (follows the STORE build setting).
+String get kStoreName => kStore == 'bazaar' ? 'کافه‌بازار' : 'مایکت';
+
 /// The RSA public key from the Myket developer panel (--dart-define=MYKET_RSA_KEY=...).
 const String kMyketRsa = String.fromEnvironment('MYKET_RSA_KEY');
 
