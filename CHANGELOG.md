@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.17.6 (app build 31): wording clean-up
+
+- Fixed awkward or wrong Persian in the app: «تو تو ۱۰ نفر اولی» is now «جزو ۱۰ نفر اولی!», the archive line reads «۳ از ۱۰ پرونده رو حل کردی», and about 20 more texts were smoothed (countdown labels, the weekend tab, story how-it-works, invite rewards, error messages, the quick-riddle mention removed from the rank text).
+
 ## 1.17.5 (app build 30, server 1.15.8): weekend case moves to the mornings
 
 - New weekend cases open **Thursday 09:00**, chapter 2 on **Friday 09:00**, chapter 3 on **Saturday 09:00**; accusing is possible from chapter 3 until **Sunday 21:00**. They no longer collide with the 21:00 nightly case. A weekend case file may set `open_hour` and `closes_hours`; without them (like w001) the old timing (21:00, closes Sunday 00:00) is kept.

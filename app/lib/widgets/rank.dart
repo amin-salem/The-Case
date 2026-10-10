@@ -87,7 +87,7 @@ class RankLadder extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Text('درجه‌ی کارآگاهی', style: tDisplay(18)),
         const SizedBox(height: 2),
-        Text('امتیاز تجربه از حل پرونده (بیشتر با ستاره‌ی بیشتر)، معمای سریع، صندوقچه‌ی مأموریت‌ها و دستاوردها می‌آد.',
+        Text('امتیاز تجربه از حل پرونده‌ها (با ستاره‌ی بیشتر، بیشتر)، صندوقچه‌ی مأموریت‌ها و دستاوردها به دست می‌آد.',
             style: tBody(12.5, color: K.textSoft)),
         const SizedBox(height: 10),
         RankBar(profile: profile),

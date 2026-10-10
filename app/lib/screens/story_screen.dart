@@ -42,7 +42,7 @@ class _StoryScreenState extends State<StoryScreen> {
             chip: open ? 'فصل ${fa(season)} · شروع شد' : 'فصل ${fa(season)} · به‌زودی',
             title: (s['title'] as String?) ?? 'کبریت سوخته',
             subtitle: s['tagline'] as String?,
-            countdownLabel: open ? null : 'شروع داستان تا',
+            countdownLabel: open ? null : 'تا شروع داستان',
             at: open ? null : at,
             onCountdownDone: _done,
             button: open
@@ -58,9 +58,9 @@ class _StoryScreenState extends State<StoryScreen> {
           _partner(),
           const SizedBox(height: 14),
           const InfoCard(title: 'چطوری کار می‌کنه؟', lines: [
-            (Icons.route_rounded, 'هر فصل ده پرونده داره و پشت همه‌شون یه راز بزرگه که تو پرونده‌ی آخر رو می‌شه.'),
-            (Icons.lock_open_rounded, 'سه پرونده‌ی اول رایگان و همون اول باز.'),
-            (Icons.gavel_rounded, 'بعدش هر پرونده با یه «حکم بازرسی» باز می‌شه، یا خودش ۱۲ ساعت بعد.'),
+            (Icons.route_rounded, 'هر فصل ده پرونده داره و پشت همه‌شون یه راز بزرگه که توی پرونده‌ی آخر معلوم می‌شه.'),
+            (Icons.lock_open_rounded, 'سه پرونده‌ی اول رایگانه و از همون اول بازه.'),
+            (Icons.gavel_rounded, 'بعدش هر پرونده با یه «حکم بازرسی» باز می‌شه، یا ۱۲ ساعت بعد خودبه‌خود.'),
             (Icons.verified_rounded, 'حکم رو با حل پرونده‌ی هر شب، مأموریت‌های روزانه، زنجیره و پرونده‌ی آخر هفته می‌گیری.'),
             (Icons.all_inclusive_rounded, 'فصل که تموم بشه، فصل بعدی شروع می‌شه. داستان تموم نمی‌شه.'),
           ]),

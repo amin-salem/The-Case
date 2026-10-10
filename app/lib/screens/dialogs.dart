@@ -24,7 +24,7 @@ Future<void> showNeedCoins(BuildContext context, int need) async {
       child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Text('سکه کم داری!', style: tDisplay(24, color: K.ink)),
         const SizedBox(height: 4),
-        Text('برای این کار ${fa(need)} سکه لازمه. تو ${fa(Api.i.coins)} سکه داری.', style: tBody(14, color: K.inkSoft)),
+        Text('برای این کار ${fa(need)} سکه لازمه. الان ${fa(Api.i.coins)} سکه داری.', style: tBody(14, color: K.inkSoft)),
         const SizedBox(height: 16),
         StampButton(
           label: 'خرید سکه',

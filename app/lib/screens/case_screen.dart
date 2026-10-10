@@ -685,7 +685,7 @@ class _CaseScreenState extends State<CaseScreen> {
                         ? GhostButton(
                             label: 'متهم کردن از فصل آخر',
                             icon: Icons.lock_clock_rounded,
-                            onTap: () => toast(context, 'مدرک اصلی تو فصل آخره. فصل ${fa(_case!.chaptersTotal)} که باز شد، متهم کن.'))
+                            onTap: () => toast(context, 'مدرک اصلی توی فصل آخره. بعد از باز شدن فصل ${fa(_case!.chaptersTotal)} می‌تونی متهم کنی.'))
                         : StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
               ),
           ]),

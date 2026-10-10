@@ -184,7 +184,7 @@ class _ResultScreenState extends State<ResultScreen> {
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             const Icon(Icons.shield_rounded, size: 16, color: K.brass),
             const SizedBox(width: 4),
-            Flexible(child: Text('بیمه زنجیره‌ات رو نجات داد', style: tBody(12.5, color: K.textSoft, w: FontWeight.w700))),
+            Flexible(child: Text('بیمه‌ی زنجیره، زنجیره‌ات رو نجات داد', style: tBody(12.5, color: K.textSoft, w: FontWeight.w700))),
           ]),
         ),
     ]);

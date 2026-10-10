@@ -318,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(children: [
         Icon(offline ? Icons.wifi_off_rounded : Icons.cloud_off_rounded, color: K.inkSoft, size: 36),
         const SizedBox(height: 6),
-        Text(offline ? 'هنوز پرونده‌ای روی گوشیت نیست' : 'پرونده‌ها الان باز نشد',
+        Text(offline ? 'هنوز پرونده‌ای روی گوشیت نیست' : 'پرونده‌ها بارگذاری نشد',
             textAlign: TextAlign.center, style: tDisplay(18, color: K.ink)),
         const SizedBox(height: 4),
         Text(
@@ -528,7 +528,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : w.failed
               ? ('این بار نشد', K.stamp)
               : (left == null || left.isNegative
-                      ? 'باز است'
+                      ? 'بازه'
                       : left.inHours >= 24
                           ? 'تا پایان: ${fa(left.inDays)} روز و ${fa(left.inHours % 24)} ساعت'
                           : 'تا پایان: ${faClock(left)}',
@@ -554,7 +554,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return _line(
       icon: Icons.inventory_2_outlined,
       title: 'بایگانی پرونده‌ها',
-      sub: '${fa(a.length)} پرونده · ${fa(solved)} تا حل کردی',
+      sub: '${fa(solved)} از ${fa(a.length)} پرونده رو حل کردی',
       onTap: _openArchive,
     );
   }

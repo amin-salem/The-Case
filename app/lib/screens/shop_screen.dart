@@ -99,7 +99,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     onTap: () => watchAd(context)),
               ],
               const SizedBox(height: 16),
-              Text('پرداخت از طریق مایکت انجام می‌شه. اگه پرداخت کردی و خریدت نرسید، دفعه‌ی بعد که بازی وصل بشه خودش اضافه می‌شه.',
+              Text('پرداخت از طریق مایکت انجام می‌شه. اگه پول کم شد ولی سکه‌ها نرسید، دفعه‌ی بعد که بازی به اینترنت وصل بشه خودبه‌خود اضافه می‌شن.',
                   style: tBody(12.5, color: K.textSoft)),
             ]),
           ),

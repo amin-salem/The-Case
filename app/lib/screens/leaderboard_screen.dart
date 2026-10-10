@@ -175,7 +175,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
   /// The player's own row, always at the bottom.
   Widget _pinned(LeaderRow me) {
     final inTop = me.rank >= 1 && me.rank <= 10;
-    final line = inTop ? 'تو تو ۱۰ نفر اولی!' : 'تو · ${fa(me.rank - 10)} رتبه تا ۱۰ نفر اول';
+    final line = inTop ? 'جزو ۱۰ نفر اولی! 🏆' : '${fa(me.rank - 10)} رتبه مونده تا ۱۰ نفر اول';
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
       decoration: const BoxDecoration(color: K.night2, border: Border(top: BorderSide(color: K.night3))),

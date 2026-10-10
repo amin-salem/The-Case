@@ -134,8 +134,8 @@ class _GuessStatsCardState extends State<GuessStatsCard> {
               const SizedBox(height: 2),
               Text(
                 top.$2 == 0
-                    ? 'هنوز کسی کسی رو متهم نکرده.'
-                    : '${fa(top.$2)}٪ اول به ${top.$1.name} شک کردن${topRight ? ' و درست زدن!' : '، ولی اشتباه بود!'}',
+                    ? 'هنوز کسی متهمی انتخاب نکرده.'
+                    : '${fa(top.$2)}٪ از بازیکن‌ها اول به ${top.$1.name} شک کردن${topRight ? ' و درست زدن!' : '، ولی اشتباه بود!'}',
                 style: tBody(14, color: K.inkSoft, w: FontWeight.w700),
               ),
               const SizedBox(height: 10),
@@ -210,7 +210,7 @@ class _CalendarDialog extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Text('جایزه‌ی ورود روزانه', textAlign: TextAlign.center, style: tDisplay(22, color: K.ink)),
-          Text('هر روز بیای، جایزه بزرگ‌تر می‌شه. روز هفتم یه پاکت مهروموم‌شده! یه روز جا بمونی، از اول شروع می‌شه.',
+          Text('هر روز که بیای، جایزه بزرگ‌تر می‌شه و روز هفتم یه پاکت مهروموم‌شده منتظرته! اگه یه روز نیای، دوباره از روز اول شروع می‌شه.',
               textAlign: TextAlign.center, style: tBody(13, color: K.inkSoft)),
           const SizedBox(height: 14),
           Wrap(

@@ -109,7 +109,7 @@ class Api extends ChangeNotifier {
 
   // ---------------------------------------------------------------- friendly texts
 
-  static const offlineText = 'اینترنت وصل نیست';
+  static const offlineText = 'به اینترنت وصل نیستی';
   static const serverDownText = 'الان به سرور دسترسی نداریم، چند دقیقه دیگه دوباره امتحان کن';
   static const genericText = 'یه مشکلی پیش اومد، دوباره امتحان کن';
   static const needOnlineText = 'برای این کار باید به اینترنت وصل باشی';
@@ -808,7 +808,7 @@ class Api extends ChangeNotifier {
         'not_enough_coins' => 'سکه‌ات کافی نیست',
         'locked' => 'این پرونده قفله',
         'case_finished' => 'این پرونده تموم شده',
-        'wait_last_chapter' => 'مدرک اصلی تو فصل آخره؛ وقتی فصل آخر باز شد متهم کن',
+        'wait_last_chapter' => 'مدرک اصلی توی فصل آخره؛ بعد از باز شدنش می‌تونی متهم کنی',
         'no_more_hints' => 'سرنخ دیگه‌ای نمونده',
         'bad_email' => 'ایمیل درست نیست',
         'bad_password' => 'رمز باید حداقل ۶ حرف باشه',
@@ -818,7 +818,7 @@ class Api extends ChangeNotifier {
         'bad_code' => 'کد اشتباهه یا تاریخش گذشته',
         'already_redeemed' => 'قبلاً کد دعوت وارد کردی',
         'only_for_new_players' => 'کد دعوت فقط برای بازیکن‌های تازه است',
-        'same_device' => 'نمی‌شه با گوشی خودت خودت رو دعوت کنی!',
+        'same_device' => 'کد دعوت باید از گوشی یه نفر دیگه باشه',
         'ad_limit' => 'امروز سهم تبلیغت تموم شد، فردا دوباره بیا',
         'bad_nickname' => 'این اسم قابل قبول نیست',
         'banned' => 'این حساب مسدود شده',

@@ -406,7 +406,7 @@ class _AccountScreenState extends State<AccountScreen> {
           Expanded(child: Text('دوستات رو دعوت کن', style: tDisplay(16.5))),
         ]),
         const SizedBox(height: 2),
-        Text('هر دوستی که با کد تو بیاد: تو ${fa(Api.i.inviteReward)} سکه، اون ${fa(Api.i.inviteNewPlayer)} سکه.',
+        Text('هر دوستی که با کد تو بیاد، ${fa(Api.i.inviteReward)} سکه می‌گیری و دوستت ${fa(Api.i.inviteNewPlayer)} سکه.',
             style: tBody(12.5, color: K.textSoft)),
         const SizedBox(height: 10),
         Row(children: [

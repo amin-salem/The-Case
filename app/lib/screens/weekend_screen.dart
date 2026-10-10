@@ -63,15 +63,15 @@ class _WeekendScreenState extends State<WeekendScreen> {
           onRefresh: _opened,
           child: ListView(padding: const EdgeInsets.fromLTRB(16, 16, 16, 24), children: [
             Text('آخر هفته', style: tDisplay(26)),
-            Text('پرونده‌ی بزرگ و خیلی سخت هر پنجشنبه شب', style: tBody(13, color: K.textSoft)),
+            Text('یه پرونده‌ی بزرگ و خیلی سخت، هر پنجشنبه صبح', style: tBody(13, color: K.textSoft)),
             const SizedBox(height: 14),
             if (weekly != null)
               SectionBanner(
                 background: AnimatedScene(scene: weekly.scene, height: double.infinity, dim: 0.2),
-                chip: weekly.solved ? 'حلش کردی!' : 'پرونده‌ی این هفته · باز است',
+                chip: weekly.solved ? 'حلش کردی!' : 'پرونده‌ی این هفته · بازه',
                 title: weekly.title,
                 subtitle: 'سه فصل، هشت مظنون · جایزه‌ی ${fa(Api.i.weeklyReward)} سکه',
-                countdownLabel: 'تا پایان',
+                countdownLabel: 'تا پایان پرونده',
                 at: _cases?.weeklyClosesAt,
                 onCountdownDone: _opened,
                 onTap: () => _play(weekly),
@@ -88,7 +88,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
                 chip: 'به‌زودی · خیلی سخت',
                 title: (up['title'] as String?) ?? 'پرونده‌ی بعدی در راهه',
                 subtitle: up['location'] as String?,
-                countdownLabel: 'باز می‌شه تا',
+                countdownLabel: 'تا باز شدن پرونده',
                 at: _time(up['opens_at']) ?? nextThursdayNine(),
                 onCountdownDone: _opened,
               ),
