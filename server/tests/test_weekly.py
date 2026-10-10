@@ -107,3 +107,18 @@ def test_upcoming_weekend_and_story():
     assert t.weekday() == 3 and t.hour == start.hour
     s = content.story_upcoming()
     assert s["title"] and s["opens_at"] > 0 and isinstance(s["open"], bool)
+
+
+def test_weekend_case_own_open_hour_and_close():
+    from datetime import date, datetime
+
+    from app import content
+
+    base = content.weekly_cases()[0]
+    d = {**base.data, "open_hour": 9, "closes_hours": 84, "chapters": [
+        {**ch, "at_hours": h} for ch, h in zip(base.data["chapters"], (0, 24, 48))]}
+    c = content.Case(id=base.id, number=base.number, publish=date(2026, 10, 15), data=d)
+    content.validate_weekly(d)
+    assert content.opens_at(c).hour == 9 and content.opens_at(c).weekday() == 3
+    assert content.weekly_closes_at(c) == content.opens_at(c) + (datetime(2026, 10, 18, 21) - datetime(2026, 10, 15, 9))
+    assert content.weekly_all_open_at(c) == content.opens_at(c) + (datetime(2026, 10, 17, 9) - datetime(2026, 10, 15, 9))

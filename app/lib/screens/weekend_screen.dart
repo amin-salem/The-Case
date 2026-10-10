@@ -9,11 +9,11 @@ import 'case_screen.dart';
 
 DateTime? _time(Object? v) => v is num ? DateTime.fromMillisecondsSinceEpoch(v.toInt() * 1000) : null;
 
-/// Next Thursday 21:00 in Tehran (UTC+3:30), used when the server doesn't say when the next one opens.
+/// Next Thursday 09:00 in Tehran (UTC+3:30), used when the server doesn't say when the next one opens.
 DateTime nextThursdayNine([DateTime? now]) {
   const offset = Duration(hours: 3, minutes: 30);
   final local = (now ?? DateTime.now()).toUtc().add(offset); // Tehran wall clock, kept in a UTC DateTime
-  var day = DateTime.utc(local.year, local.month, local.day, 21);
+  var day = DateTime.utc(local.year, local.month, local.day, 9);
   day = day.add(Duration(days: (DateTime.thursday - day.weekday) % 7));
   if (!day.isAfter(local)) day = day.add(const Duration(days: 7));
   return day.subtract(offset).toLocal();
@@ -94,8 +94,8 @@ class _WeekendScreenState extends State<WeekendScreen> {
               ),
             const SizedBox(height: 14),
             InfoCard(title: 'چطوری کار می‌کنه؟', lines: [
-              (Icons.event_rounded, 'هر پنجشنبه ساعت ۹ شب باز می‌شه و تا آخر شنبه وقت داری.'),
-              (Icons.auto_stories_rounded, 'سه فصل داره: هر چند ساعت، مدارک تازه‌ای رو می‌شه.'),
+              (Icons.event_rounded, 'هر پنجشنبه ساعت ۹ صبح باز می‌شه و تا یکشنبه‌شب ساعت ۹ وقت داری. پرونده‌ی شبانه سر جاشه.'),
+              (Icons.auto_stories_rounded, 'سه فصل داره: پنجشنبه، جمعه و شنبه صبح ساعت ۹ فصل تازه و مدارک تازه می‌رسه.'),
               (Icons.groups_rounded, 'هشت مظنون؛ باید هم مقصر رو پیدا کنی، هم انگیزه‌ی واقعیش رو.'),
               (Icons.emoji_events_rounded, 'جایزه: تا ${fa(Api.i.weeklyReward)} سکه و کلی امتیاز رتبه. زنجیره‌ی شبانه‌ت هم دست نمی‌خوره.'),
             ]),

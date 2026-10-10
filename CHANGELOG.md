@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.17.5 (app build 30, server 1.15.8): weekend case moves to the mornings
+
+- New weekend cases open **Thursday 09:00**, chapter 2 on **Friday 09:00**, chapter 3 on **Saturday 09:00**; accusing is possible from chapter 3 until **Sunday 21:00**. They no longer collide with the 21:00 nightly case. A weekend case file may set `open_hour` and `closes_hours`; without them (like w001) the old timing (21:00, closes Sunday 00:00) is kept.
+- The weekend tab texts and the "next opening" fallback countdown follow the new schedule.
+
 ## 1.17.4 (app build 29): real music
 
 - New recorded sounds, converted to real Ogg Vorbis (the files were MP3 data with an .ogg name, which some phones refuse), loudness-matched, and the 60 s loops cross-faded so they repeat without a click: `amb_home` (home and other tabs), `music_weekend` (آخر هفته tab), `music_story` (داستان tab), `music_result` (a short ending after a solved case).

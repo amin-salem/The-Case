@@ -123,7 +123,11 @@ def today_str() -> str:
 
 
 def opens_at(c: Case) -> datetime:
-    return datetime.combine(c.publish, time(get_settings().new_case_hour), tzinfo=_tz())
+    # a weekend case may set its own `open_hour` (new ones open at 09:00, away from the 21:00 nightly case)
+    hour = c.data.get("open_hour") if isinstance(c.data, dict) else None
+    if not isinstance(hour, int) or not 0 <= hour <= 23:
+        hour = get_settings().new_case_hour
+    return datetime.combine(c.publish, time(hour), tzinfo=_tz())
 
 
 def opened(now: datetime | None = None) -> list[Case]:
@@ -170,6 +174,10 @@ def validate_weekly(d: dict) -> None:
     for c in chapters:
         if not set(c.get("evidence", [])) <= eids:
             raise CaseError(f"{d['id']}: chapter lists unknown evidence")
+    if "open_hour" in d and not (isinstance(d["open_hour"], int) and 0 <= d["open_hour"] <= 23):
+        raise CaseError(f"{d['id']}: open_hour must be 0..23")
+    if "closes_hours" in d and not (isinstance(d["closes_hours"], int) and d["closes_hours"] > max(hours)):
+        raise CaseError(f"{d['id']}: closes_hours must be after the last chapter")
     motives = {m["id"] for m in d.get("motives", [])}
     if len(motives) < 2 or d["solution"].get("motive") not in motives:
         raise CaseError(f"{d['id']}: needs motives and the right one in the solution")
@@ -194,7 +202,13 @@ def weekly_by_id(case_id: str) -> Case | None:
     return next((c for c in weekly_cases() if c.id == case_id), None)
 
 
+WEEKEND_OPEN_HOUR = 9  # when a new weekend case opens (Thursday), see weekly files with open_hour
+
+
 def weekly_closes_at(c: Case) -> datetime:
+    hours = c.data.get("closes_hours")
+    if isinstance(hours, int) and hours > 0:
+        return opens_at(c) + timedelta(hours=hours)
     return opens_at(c) + timedelta(days=WEEKLY_DAYS) - timedelta(hours=get_settings().new_case_hour)
 
 
@@ -213,7 +227,7 @@ def next_thursday_at(now: datetime | None = None) -> datetime:
     """Next Thursday at NEW_CASE_HOUR (when a weekend case would open if none is written yet)."""
     now = now or now_local()
     d = now.date() + timedelta(days=(3 - now.weekday()) % 7)
-    t = datetime.combine(d, time(get_settings().new_case_hour), tzinfo=_tz())
+    t = datetime.combine(d, time(WEEKEND_OPEN_HOUR), tzinfo=_tz())
     return t if t > now else t + timedelta(days=7)
 
 
