@@ -1,0 +1,315 @@
+Flutter 3.47.7 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision abaf9c5237 (2 days ago) • 2026-10-08 09:51:21 -0700
+Engine • hash d8a2d6c768c334d53e16277f837970ffa1e2de81 (revision deb287481e) (3 days ago) • 2026-10-07 17:09:12.000Z
+Tools • Dart 3.13.5 • DevTools 2.60.0
+00:00 +0: loading /home/runner/work/The-Case/The-Case/app/test/screenshots/screens_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: start_loading
+Shell: screens: OK    start_loading
+00:00 +1: start_offline
+Api: server not reachable: SocketException: Failed host lookup: thecase.liara.run
+Api error: SocketException: Failed host lookup: thecase.liara.run
+Api: server not reachable: SocketException: Failed host lookup: thecase.liara.run
+Api error: SocketException: Failed host lookup: thecase.liara.run
+Api: server not reachable: SocketException: Failed host lookup: thecase.liara.run
+Api error: SocketException: Failed host lookup: thecase.liara.run
+Shell: screens: OK    start_offline
+Pending timers:
+Timer (duration: 0:00:20.000000, periodic: true), created:
+#0      new FakeTimer._ (package:fake_async/fake_async.dart:342:62)
+#1      FakeAsync._createTimer (package:fake_async/fake_async.dart:260:29)
+#2      FakeAsync.run.<anonymous closure> (package:fake_async/fake_async.dart:187:15)
+#5      Api._wentOffline (package:the_case/services/api.dart:250:22)
+#6      Api._sendAny (package:the_case/services/api.dart:485:5)
+<asynchronous suspension>
+#7      Api._call (package:the_case/services/api.dart:496:15)
+<asynchronous suspension>
+#8      Api._loadConfig (package:the_case/services/api.dart:235:15)
+<asynchronous suspension>
+#9      Api.connect (package:the_case/services/api.dart:178:7)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async)
+
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+A Timer is still pending even after the widget tree was disposed.
+'package:flutter_test/src/binding.dart':
+Failed assertion: line 2543 pos 12: '!timersPending'
+
+When the exception was thrown, this was the stack:
+#2      AutomatedTestWidgetsFlutterBinding._verifyInvariants (package:flutter_test/src/binding.dart:2543:12)
+#3      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1974:7)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from class _AssertionError and package:stack_trace)
+
+The test description was:
+  start_offline
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +1 -1: start_offline [E]
+  Test failed. See exception logs above.
+  The test description was: start_offline
+  
+00:01 +1 -1: home
+Shell: screens: OK    home
+00:01 +2 -1: shell_home
+Shell: screens: OK    shell_home
+00:01 +3 -1: shell_weekend
+Shell: screens: OK    shell_weekend
+00:02 +4 -1: shell_story
+Shell: screens: OK    shell_story
+00:02 +5 -1: shell_story_map
+Shell: screens: OK    shell_story_map
+00:02 +6 -1: story_chapter_intro
+Shell: screens: OK    story_chapter_intro
+00:03 +7 -1: story_chapter_result
+Shell: screens: OK    story_chapter_result
+00:03 +8 -1: shell_profile
+Shell: screens: OK    shell_profile
+00:03 +9 -1: home_full
+Shell: screens: OK    home_full
+00:03 +10 -1: home_today_solved
+Shell: screens: OK    home_today_solved
+00:04 +11 -1: home_streak_sheet
+Shell: screens: OK    home_streak_sheet
+00:04 +12 -1: home_360
+Shell: screens: OK    home_360
+00:04 +13 -1: home_360_large
+Shell: screens: OK    home_360_large
+00:04 +14 -1: archive
+Shell: screens: OK    archive
+00:05 +15 -1: archive_unsolved
+Shell: screens: OK    archive_unsolved
+00:05 +16 -1: archive_360_large
+Shell: screens: OK    archive_360_large
+00:05 +17 -1: home_login_calendar
+Shell: screens: OK    home_login_calendar
+00:05 +18 -1: login_calendar_day7
+Shell: screens: OK    login_calendar_day7
+00:06 +19 -1: case_intro
+Shell: screens: OK    case_intro
+00:06 +20 -1: case_story
+Shell: screens: OK    case_story
+00:06 +21 -1: case_evidence
+Shell: screens: OK    case_evidence
+00:06 +22 -1: case_evidence_full
+Shell: screens: OK    case_evidence_full
+00:07 +23 -1: case_evidence_360_large
+Shell: screens: OK    case_evidence_360_large
+00:07 +24 -1: tutorial_step1
+Shell: screens: OK    tutorial_step1
+00:07 +25 -1: tutorial_step2
+Shell: screens: OK    tutorial_step2
+00:07 +26 -1: tutorial_step3
+Shell: screens: OK    tutorial_step3
+00:08 +27 -1: tutorial_360_large
+Shell: screens: OK    tutorial_360_large
+00:08 +28 -1: case_suspects
+Shell: screens: OK    case_suspects
+00:08 +29 -1: case_hint_confirm
+Shell: screens: OK    case_hint_confirm
+00:08 +30 -1: case_hint
+Shell: screens: OK    case_hint
+00:08 +31 -1: case_solved
+Shell: screens: OK    case_solved
+00:08 +32 -1: case_solved_full
+Shell: screens: OK    case_solved_full
+00:09 +33 -1: case_solved_suspects
+Shell: screens: OK    case_solved_suspects
+00:09 +34 -1: portrait_sheet
+Shell: screens: OK    portrait_sheet
+00:09 +35 -1: portrait_case_suspects
+Shell: screens: OK    portrait_case_suspects
+00:09 +36 -1: suspect_sheet
+Shell: screens: OK    suspect_sheet
+00:09 +37 -1: suspect_sheet_question
+Shell: screens: OK    suspect_sheet_question
+00:10 +38 -1: accuse_step1
+Shell: screens: OK    accuse_step1
+00:10 +39 -1: accuse_step1_picked
+Shell: screens: OK    accuse_step1_picked
+00:10 +40 -1: accuse_step2
+Shell: screens: OK    accuse_step2
+00:10 +41 -1: accuse_ready
+Shell: screens: OK    accuse_ready
+00:10 +42 -1: accuse_wrong
+Shell: screens: OK    accuse_wrong
+00:10 +43 -1: accuse_360_large
+Shell: screens: OK    accuse_360_large
+00:11 +44 -1: weekly_story
+Shell: screens: OK    weekly_story
+00:11 +45 -1: weekly_accuse_motive
+Shell: screens: OK    weekly_accuse_motive
+00:11 +46 -1: achievements
+Shell: screens: OK    achievements
+00:11 +47 -1: missions_done
+Shell: screens: OK    missions_done
+00:11 +48 -1: chest
+Shell: screens: OK    chest
+00:12 +49 -1: riddles
+Shell: screens: OK    riddles
+00:12 +50 -1: riddle_play
+Shell: screens: OK    riddle_play
+00:12 +51 -1: riddle_answered
+Shell: screens: OK    riddle_answered
+00:12 +52 -1: result_solved
+Shell: screens: OK    result_solved
+00:12 +53 -1: result_solved_full
+Shell: screens: OK    result_solved_full
+00:13 +54 -1: result_failed
+Shell: screens: OK    result_failed
+00:13 +55 -1: result_failed_full
+Shell: screens: OK    result_failed_full
+00:13 +56 -1: result_solved_more
+Shell: screens: OK    result_solved_more
+00:13 +57 -1: result_360_large
+Shell: screens: OK    result_360_large
+00:14 +58 -1: scenes_grid
+Shell: screens: OK    scenes_grid
+00:14 +59 -1: scenes_large_1
+Shell: screens: OK    scenes_large_1
+00:15 +60 -1: scenes_large_2
+Shell: screens: OK    scenes_large_2
+00:16 +61 -1: suspects_sheet
+Shell: screens: OK    suspects_sheet
+00:17 +62 -1: suspect_moods
+Shell: screens: OK    suspect_moods
+00:17 +63 -1: engagement_widgets
+Shell: screens: OK    engagement_widgets
+00:17 +64 -1: need_coins
+Shell: screens: OK    need_coins
+00:17 +65 -1: streak_insurance_confirm
+Shell: screens: OK    streak_insurance_confirm
+00:17 +66 -1: shop
+Shell: screens: OK    shop
+00:17 +67 -1: shop_full
+Shell: screens: OK    shop_full
+00:17 +68 -1: shop_360_large
+Shell: screens: OK    shop_360_large
+00:18 +69 -1: profile_guest
+Shell: screens: OK    profile_guest
+00:18 +70 -1: profile_secured
+Shell: screens: OK    profile_secured
+00:18 +71 -1: profile_avatar_sheet
+Shell: screens: OK    profile_avatar_sheet
+00:18 +72 -1: profile_rank_sheet
+Shell: screens: OK    profile_rank_sheet
+00:18 +73 -1: profile_invite_code_sheet
+Shell: screens: OK    profile_invite_code_sheet
+00:18 +74 -1: settings_guest
+Shell: screens: OK    settings_guest
+00:18 +75 -1: settings_secured
+Shell: screens: OK    settings_secured
+00:19 +76 -1: settings_font_sheet
+Shell: screens: OK    settings_font_sheet
+00:19 +77 -1: account_secure_sheet
+Shell: screens: OK    account_secure_sheet
+00:19 +78 -1: account_password_sheet
+Shell: screens: OK    account_password_sheet
+00:19 +79 -1: account_login_sheet_email
+Shell: screens: OK    account_login_sheet_email
+00:19 +80 -1: account_login_sheet_code
+Shell: screens: OK    account_login_sheet_code
+00:19 +81 -1: leaderboard
+Shell: screens: OK    leaderboard
+00:19 +82 -1: leaderboard_weekly
+Shell: screens: OK    leaderboard_weekly
+00:19 +83 -1: leaderboard_360_large
+Shell: screens: OK    leaderboard_360_large
+00:20 +84 -1: inbox
+Shell: screens: OK    inbox
+00:20 +85 -1: (tearDownAll)
+Shell: 
+Shell: ===== screenshots: 86 ok, 0 failed
+Shell: OK    start_loading
+Shell: OK    start_offline
+Shell: OK    home
+Shell: OK    shell_home
+Shell: OK    shell_weekend
+Shell: OK    shell_story
+Shell: OK    shell_story_map
+Shell: OK    story_chapter_intro
+Shell: OK    story_chapter_result
+Shell: OK    shell_profile
+Shell: OK    home_full
+Shell: OK    home_today_solved
+Shell: OK    home_streak_sheet
+Shell: OK    home_360
+Shell: OK    home_360_large
+Shell: OK    archive
+Shell: OK    archive_unsolved
+Shell: OK    archive_360_large
+Shell: OK    home_login_calendar
+Shell: OK    login_calendar_day7
+Shell: OK    case_intro
+Shell: OK    case_story
+Shell: OK    case_evidence
+Shell: OK    case_evidence_full
+Shell: OK    case_evidence_360_large
+Shell: OK    tutorial_step1
+Shell: OK    tutorial_step2
+Shell: OK    tutorial_step3
+Shell: OK    tutorial_360_large
+Shell: OK    case_suspects
+Shell: OK    case_hint_confirm
+Shell: OK    case_hint
+Shell:         warning: nothing to tap: Found 0 widgets with type "FilledButton": []
+Shell: OK    case_solved
+Shell: OK    case_solved_full
+Shell: OK    case_solved_suspects
+Shell: OK    portrait_sheet
+Shell: OK    portrait_case_suspects
+Shell: OK    suspect_sheet
+Shell: OK    suspect_sheet_question
+Shell: OK    accuse_step1
+Shell: OK    accuse_step1_picked
+Shell: OK    accuse_step2
+Shell: OK    accuse_ready
+Shell: OK    accuse_wrong
+Shell: OK    accuse_360_large
+Shell: OK    weekly_story
+Shell: OK    weekly_accuse_motive
+Shell: OK    achievements
+Shell: OK    missions_done
+Shell: OK    chest
+Shell: OK    riddles
+Shell: OK    riddle_play
+Shell: OK    riddle_answered
+Shell: OK    result_solved
+Shell: OK    result_solved_full
+Shell: OK    result_failed
+Shell: OK    result_failed_full
+Shell: OK    result_solved_more
+Shell: OK    result_360_large
+Shell: OK    scenes_grid
+Shell: OK    scenes_large_1
+Shell: OK    scenes_large_2
+Shell: OK    suspects_sheet
+Shell: OK    suspect_moods
+Shell: OK    engagement_widgets
+Shell: OK    need_coins
+Shell: OK    streak_insurance_confirm
+Shell: OK    shop
+Shell: OK    shop_full
+Shell: OK    shop_360_large
+Shell: OK    profile_guest
+Shell: OK    profile_secured
+Shell: OK    profile_avatar_sheet
+Shell: OK    profile_rank_sheet
+Shell: OK    profile_invite_code_sheet
+Shell: OK    settings_guest
+Shell: OK    settings_secured
+Shell: OK    settings_font_sheet
+Shell: OK    account_secure_sheet
+Shell: OK    account_password_sheet
+Shell: OK    account_login_sheet_email
+Shell: OK    account_login_sheet_code
+Shell: OK    leaderboard
+Shell: OK    leaderboard_weekly
+Shell: OK    leaderboard_360_large
+Shell: OK    inbox
+00:20 +85 -1: Some tests failed.
+
+Failing tests:
+  /home/runner/work/The-Case/The-Case/app/test/screenshots/screens_test.dart: start_offline
