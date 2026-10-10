@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.17.3 (app build 28, server 1.15.6): weekly ranking prizes
+
+- When a week (Saturday to Friday) ends, the top 10 on the weekly leaderboard get coins in their inbox with a message: 1st 300, 2nd 200, 3rd 150, 4th to 10th 75. Paid once per week, automatically (hourly check + when the inbox opens). The week that ended on Fri 9 Oct is paid right after this deploy.
+- The phone shows a notification when a prize arrives, and a weekly Saturday 10:00 reminder to look at the result.
+
 ## server 1.15.5: weekend case w001 rewritten harder
 
 - «شب برفی ویلای صدری»: chapters 2 and 3 rewritten so the answer can't be guessed, only proven by combining cards from all three chapters. Chapter 1 (intro, suspects, first cards) is unchanged; a few suspects got extra answers. Blind-tested; case log updated.

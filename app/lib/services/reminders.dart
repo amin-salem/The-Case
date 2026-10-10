@@ -90,6 +90,16 @@ class Reminders extends ChangeNotifier {
         await _at(100 + d, nextCaseAt.add(Duration(days: d)), 'پرونده‌ی امشب باز شد 🕵️',
             'یه جنایت تازه منتظرته. ببین می‌تونی زودتر از بقیه حلش کنی؟');
       }
+      // Saturday 10:00 (Tehran = UTC+3:30): last week's ranking prizes are in the inbox
+      var sat = DateTime.now().toUtc();
+      sat = DateTime.utc(sat.year, sat.month, sat.day, 6, 30);
+      while (sat.weekday != DateTime.saturday || !sat.isAfter(DateTime.now().toUtc())) {
+        sat = sat.add(const Duration(days: 1));
+      }
+      for (int w = 0; w < 4; w++) {
+        await _at(400 + w, sat.add(Duration(days: 7 * w)), 'نتیجه‌ی هفته اعلام شد 🏆',
+            'جدول برترهای هفته بسته شد. شاید جایزه گرفته باشی؛ صندوق هدیه‌ها رو ببین!');
+      }
       // tonight's case opened one day before the next one; remind 90 minutes after it opens
       final tonight = nextCaseAt.subtract(const Duration(days: 1));
       if (streak > 0 && !tonightSolved) {
@@ -103,6 +113,19 @@ class Reminders extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('reminders plan: $e');
+    }
+  }
+
+  /// A weekly prize reached the inbox: tell the player right away (once per prize).
+  Future<void> prizeNotice(String id, String title, String body) async {
+    if (!_ready || !enabled) return;
+    try {
+      final seen = _prefs?.getStringList('prize_seen') ?? <String>[];
+      if (seen.contains(id)) return;
+      await _prefs?.setStringList('prize_seen', [...seen.take(30), id]);
+      await _plugin.show(id: 300, title: title, body: body, notificationDetails: _details);
+    } catch (e) {
+      debugPrint('reminders prize: $e');
     }
   }
 
