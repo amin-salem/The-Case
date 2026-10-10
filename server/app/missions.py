@@ -34,7 +34,7 @@ POOL = [
     Mission("talk3", "با ۳ مظنون حرف بزن", "suspect_seen", 3, "extra"),
     Mission("case_solve2", "۲ پرونده حل کن (امشب یا بایگانی)", "case_solved", 2, "extra"),
     # Friday and Saturday, while a weekend case is open
-    Mission("weekend_talk", "تو پرونده‌ی آخر هفته از ۲ مظنون بازجویی کن", "weekly_seen", 2, "weekend"),
+    Mission("weekend_talk", "توی پرونده‌ی آخر هفته با ۲ مظنون صحبت کن", "weekly_seen", 2, "weekend"),
     # only when quick riddles are on (these cost coins or need riddles)
     Mission("hint_use", "یک سرنخ بخر", "hint", 1, "extra_paid"),
     Mission("archive_open", "یک پرونده‌ی بایگانی را باز کن", "case_unlock", 1, "extra_paid"),

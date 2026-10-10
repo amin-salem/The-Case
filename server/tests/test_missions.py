@@ -137,3 +137,29 @@ def test_weekend_mission_on_friday_and_saturday():
     assert missions.for_day(sat.isoformat())[2].id == "weekend_talk"
     assert missions.for_day(thu.isoformat())[2].id != "weekend_talk"
     assert missions.for_day(sun.isoformat())[2].id != "weekend_talk"
+
+
+async def test_weekend_talk_counts_again_the_next_day(client, clock, monkeypatch):
+    """A player who already met the suspects (or solved the case) can still finish the weekend mission."""
+    picked = [missions.BY_ID["daily_case"], missions.BY_ID["case_no_hint"], missions.BY_ID["weekend_talk"]]
+    monkeypatch.setattr(missions, "for_day", lambda day: picked)
+    w = content.weekly_cases()[0]
+    friday = w.publish + timedelta(days=1)
+    p = await new_player(client, "weekend-talker")
+    h = p["headers"]
+    clock(datetime(friday.year, friday.month, friday.day, 12, 0, tzinfo=TEHRAN))
+    assert (await client.get(f"/v1/cases/{w.id}", headers=h)).status_code == 200
+    ids = [s["id"] for s in w.data["suspects"]]
+    done = []
+    for s in ids[:2]:
+        done += (await client.post(f"/v1/cases/{w.id}/seen", headers=h, json={"suspect": s})).json()["gains"]["missions_done"]
+    assert len(done) == 1
+    # the next day the same two suspects count again for that day's mission
+    sat = friday + timedelta(days=1)
+    clock(datetime(sat.year, sat.month, sat.day, 12, 0, tzinfo=TEHRAN))
+    done = []
+    for s in ids[:2]:
+        done += (await client.post(f"/v1/cases/{w.id}/seen", headers=h, json={"suspect": s})).json()["gains"]["missions_done"]
+        again = (await client.post(f"/v1/cases/{w.id}/seen", headers=h, json={"suspect": s})).json()
+        assert again["gains"]["missions_done"] == []  # the same suspect twice in one day counts once
+    assert len(done) == 1

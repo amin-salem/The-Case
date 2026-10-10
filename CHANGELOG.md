@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.15.9: weekend mission can always be finished
+
+- The mission «توی پرونده‌ی آخر هفته با ۲ مظنون صحبت کن» only counted suspects a player had never opened before, so someone who had already talked to the suspects (or solved the case) on an earlier day could not finish it, which also blocked that day's chest. Now each suspect counts once per day, even if met before. Lifetime counters (achievements) are unchanged. The mission text lost the confusing «تو».
+
 ## 1.17.8 (app build 33): suspect marks are kept
 
 - Fix: tapping «مشکوک» / «بی‌گناه» on a suspect was only kept if the sheet was closed with «بستن». Swiping the sheet down, tapping outside it or pressing back lost the mark. Now the mark is saved the moment it is tapped.

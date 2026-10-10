@@ -307,13 +307,26 @@ async def seen(case_id: str, body: SeenIn, player: Player = Depends(current_play
         raise HTTPException(404, "no_suspect")
     before = set(p.seen or [])
     after = before | {body.suspect}
+    # The weekend mission counts the suspects a player talks to *today*, even ones already met on an
+    # earlier day (a player who solved the case still has to be able to finish it).
+    daily_new = 0
+    if content.is_weekly(c.id):
+        day = content.today_str()
+        stats = dict(player.stats or {})
+        wk = stats.get("wk_seen") or {}
+        today_ids = set(wk.get("ids", [])) if wk.get("day") == day else set()
+        key = f"{c.id}:{body.suspect}"
+        if key not in today_ids:
+            daily_new = 1
+            stats["wk_seen"] = {"day": day, "ids": sorted(today_ids | {key})}
+            player.stats = stats
     gains = None
-    if after != before:
-        p.seen = sorted(after)
+    if after != before or daily_new:
         new = len(after - before)
-        gains = await progress.record(session, player, suspect_seen=new,
-                                      weekly_seen=new if content.is_weekly(c.id) else 0,
-                                      interrogate_all=int(after >= set(ids)))
+        if new:
+            p.seen = sorted(after)
+        gains = await progress.record(session, player, suspect_seen=new, weekly_seen=daily_new,
+                                      interrogate_all=int(bool(new) and after >= set(ids)))
         await session.commit()
     return SeenOut(seen=len(after), total=len(ids), gains=GainsOut(**gains.out()) if gains else GainsOut())
 
