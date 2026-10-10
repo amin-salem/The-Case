@@ -10,6 +10,7 @@ class Gains {
   Gains(Map<String, dynamic>? j)
       : xp = _i(j?['xp']),
         rankUp = j?['rank_up'] is String ? j!['rank_up'] as String : null,
+        warrants = _i(j?['warrants']),
         missionsDone = [for (final m in (j?['missions_done'] as List? ?? const [])) '$m'],
         achievements = [
           for (final a in (j?['achievements'] as List? ?? const []))
@@ -17,11 +18,12 @@ class Gains {
         ];
 
   final int xp;
+  final int warrants; // story warrants «حکم بازرسی» earned right now
   final String? rankUp;
   final List<String> missionsDone;
   final List<EarnedAchievement> achievements;
 
-  bool get isEmpty => rankUp == null && missionsDone.isEmpty && achievements.isEmpty;
+  bool get isEmpty => rankUp == null && warrants == 0 && missionsDone.isEmpty && achievements.isEmpty;
 }
 
 class EarnedAchievement {

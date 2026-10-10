@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/models.dart';
 import '../models/progress.dart';
+import '../models/story.dart';
 import 'case_clock.dart';
 import 'reminders.dart';
 
@@ -91,7 +92,7 @@ class Api extends ChangeNotifier {
     if (j is! Map) return;
     final g = Gains(j.cast<String, dynamic>());
     if (!g.isEmpty) gains.value = g;
-    if (g.xp > 0 || g.achievements.isNotEmpty) unawaited(_refreshProfileQuietly()); // new XP / rank / coins
+    if (g.xp > 0 || g.warrants > 0 || g.achievements.isNotEmpty) unawaited(_refreshProfileQuietly()); // new XP / rank / coins
   }
 
   /// The detective ranks (XP needed, title), from the server's config.
@@ -584,6 +585,25 @@ class Api extends ChangeNotifier {
     await _refreshProfileQuietly();
   }
 
+  // ---------------------------------------------------------------- story
+
+  /// The career map (needs the server: it depends on the clock and the player's warrants).
+  Future<StoryMap> story() async => StoryMap((await _call('GET', '/v1/story') as Map).cast<String, dynamic>());
+
+  /// Opens a chapter that is ready, or a waiting one with a warrant. Throws ApiException (wait / no_warrant ...).
+  Future<StoryMap> openStoryChapter(int chapter, {bool warrant = false}) async {
+    final j = await _call('POST', '/v1/story/$chapter/open', body: {'warrant': warrant}) as Map;
+    await _refreshProfileQuietly();
+    return StoryMap(j.cast<String, dynamic>());
+  }
+
+  /// Pays coins to skip the wait. Throws ApiException (not_enough_coins ...).
+  Future<StoryMap> skipStoryWait(int chapter) async {
+    final j = await _call('POST', '/v1/story/$chapter/skip') as Map;
+    await _refreshProfileQuietly();
+    return StoryMap(j.cast<String, dynamic>());
+  }
+
   /// Returns (hint text, progress).
   Future<(String, Progress)> buyHint(String id) async {
     final j = (await _call('POST', '/v1/cases/$id/hint') as Map).cast<String, dynamic>();
@@ -820,6 +840,12 @@ class Api extends ChangeNotifier {
         'locked' => 'این پرونده قفله',
         'case_finished' => 'این پرونده تموم شده',
         'wait_last_chapter' => 'مدرک اصلی توی فصل آخره؛ بعد از باز شدنش می‌تونی متهم کنی',
+        'wait' => 'این پرونده هنوز بازنشده؛ صبر کن، حکم بازرسی بده یا با سکه ردش کن',
+        'no_warrant' => 'حکم بازرسی نداری',
+        'wrong_order' => 'اول پرونده‌ی قبلی رو تموم کن',
+        'chapter_locked' => 'این پرونده هنوز برات باز نشده',
+        'story_not_open' => 'داستان هنوز شروع نشده',
+        'no_chapter' => 'این پرونده هنوز نوشته نشده',
         'no_more_hints' => 'سرنخ دیگه‌ای نمونده',
         'bad_email' => 'ایمیل درست نیست',
         'bad_password' => 'رمز باید حداقل ۶ حرف باشه',

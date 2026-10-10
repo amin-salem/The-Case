@@ -7,6 +7,7 @@ The phone never gets the solution or the hints: they stay on the server.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 from functools import lru_cache
@@ -46,7 +47,8 @@ class Case:
 
     @property
     def hints(self) -> list[str]:
-        return self.data["hints"]
+        # story chapters may word the hints in the partner's voice (`partner_hints`, same count)
+        return self.data.get("partner_hints") or self.data["hints"]
 
     def public(self) -> dict:
         """Everything except the hints and the solution."""
@@ -231,8 +233,12 @@ def next_thursday_at(now: datetime | None = None) -> datetime:
     return t if t > now else t + timedelta(days=7)
 
 
-# ---------------------------------------------------------------- story mode (coming soon)
-# Shown as a countdown in the app until it opens. The run that builds story mode updates this.
+# ---------------------------------------------------------------- story mode
+# Chapters live in content/story/sNN/chNN.json: the same case JSON as nightly cases plus the partner's
+# lines (see validate_story). A missing or empty folder means "coming soon": the app shows the banner.
+STORY_DIR = Path(__file__).parent / "content" / "story"
+STORY_FIELDS = ("partner_intro", "partner_outro_win", "partner_outro_lose", "thread")
+STORY_ID = re.compile(r"^s(\d{2})ch(\d{2})$")
 STORY_SEASON = {
     "season": 1,
     "title": "کبریت سوخته",
@@ -243,11 +249,78 @@ STORY_SEASON = {
 }
 
 
+def story_case_id(season: int, chapter: int) -> str:
+    return f"s{season:02d}ch{chapter:02d}"
+
+
+def is_story(case_id: str) -> bool:
+    return bool(STORY_ID.match(case_id))
+
+
+def validate_story(d: dict, season: int, chapter: int) -> None:
+    d.setdefault("publish", "2026-10-12")  # story chapters have no publish day; the field is for the case schema
+    if d.get("id") != story_case_id(season, chapter):
+        raise CaseError(f"{d.get('id', '?')}: id must be {story_case_id(season, chapter)}")
+    validate(d)
+    if d.get("season") != season or d.get("chapter") != chapter or d.get("number") != chapter:
+        raise CaseError(f"{d['id']}: season/chapter/number must match the file name")
+    for key in STORY_FIELDS:
+        if not isinstance(d.get(key), str) or not d[key].strip():
+            raise CaseError(f"{d['id']}: missing {key}")
+    ph = d.get("partner_hints")
+    if ph is not None and (not isinstance(ph, list) or len(ph) != 3 or not all(isinstance(x, str) and x for x in ph)):
+        raise CaseError(f"{d['id']}: partner_hints must be 3 texts")
+
+
+@lru_cache
+def _story_load(folder: str) -> dict[int, tuple[Case, ...]]:
+    out: dict[int, list[Case]] = {}
+    root = Path(folder)
+    if not root.is_dir():
+        return {}
+    for sdir in sorted(root.glob("s[0-9][0-9]")):
+        season = int(sdir.name[1:])
+        cases = []
+        for path in sorted(sdir.glob("ch[0-9][0-9].json")):
+            chapter = int(path.stem[2:])
+            d = json.loads(path.read_text(encoding="utf-8"))
+            validate_story(d, season, chapter)
+            cases.append(Case(id=d["id"], number=chapter, publish=date.fromisoformat(d["publish"]), data=d))
+        if cases:
+            if [c.number for c in cases] != list(range(1, len(cases) + 1)):
+                raise CaseError(f"season {season}: chapters must be numbered 1..N without gaps")
+            out[season] = tuple(cases)
+    return {k: tuple(v) for k, v in out.items()}
+
+
+def story_chapters(season: int | None = None) -> tuple[Case, ...]:
+    """The written chapters of a season (default: the current one), in order."""
+    return _story_load(str(STORY_DIR)).get(season or STORY_SEASON["season"], ())
+
+
+def story_by_id(case_id: str) -> Case | None:
+    m = STORY_ID.match(case_id)
+    if not m:
+        return None
+    chapters = story_chapters(int(m.group(1)))
+    n = int(m.group(2))
+    return chapters[n - 1] if 1 <= n <= len(chapters) else None
+
+
+def story_opens_at() -> datetime:
+    return datetime.fromisoformat(STORY_SEASON["opens_at"]).replace(tzinfo=_tz())
+
+
+def story_open(now: datetime | None = None) -> bool:
+    """Story mode is playable: its opening time has passed AND chapters are written."""
+    return story_opens_at() <= (now or now_local()) and bool(story_chapters())
+
+
 def story_upcoming(now: datetime | None = None) -> dict:
     now = now or now_local()
-    at = datetime.fromisoformat(STORY_SEASON["opens_at"]).replace(tzinfo=_tz())
     return {**{k: v for k, v in STORY_SEASON.items() if k != "opens_at"},
-            "opens_at": int(at.timestamp()), "open": at <= now}
+            "opens_at": int(story_opens_at().timestamp()), "open": story_open(now),
+            "chapters": len(story_chapters())}
 
 
 def weekend_upcoming(now: datetime | None = None) -> dict:
@@ -309,7 +382,7 @@ def notify_plan(now: datetime | None = None, days: int = 10) -> list[dict]:
                 body = ("مدارک تازه رسید؛ فصل آخره و می‌تونی متهم کنی." if n == total
                         else "مدارک تازه رسید؛ شاید دروغ مقصر لای همین‌هاست.")
             out.append({"kind": "weekend", "at": int(at.timestamp()), "head": head, "body": body})
-    at = datetime.fromisoformat(STORY_SEASON["opens_at"]).replace(tzinfo=_tz())
+    at = story_opens_at()
     if now < at <= end:
         out.append({"kind": "story", "at": int(at.timestamp()),
                     "head": f"داستان «{STORY_SEASON['title']}» شروع شد 🔥", "body": STORY_SEASON["tagline"]})

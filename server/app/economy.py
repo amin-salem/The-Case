@@ -125,3 +125,20 @@ RANKS = [                        # (XP needed, title)
 def rank_of(xp: int) -> int:
     """Index into RANKS for this much XP."""
     return max(i for i, (need, _) in enumerate(RANKS) if xp >= need)
+
+
+# story mode: chapters 1-3 of a season are free; later ones need a warrant «حکم بازرسی», 12 hours of waiting,
+# or coins to skip the wait (the price falls as the wait runs down)
+STORY_FREE_CHAPTERS = 3
+STORY_WAIT_HOURS = 12
+STORY_SKIP_COST = 120
+STORY_SKIP_MIN = 10
+STREAK_WARRANTS = (3, 7, 14, 30)   # streak lengths that give a warrant
+
+
+def story_skip_cost(remaining_seconds: float) -> int:
+    """Coins to skip what is left of the wait: full price at 12 h, down to STORY_SKIP_MIN near the end."""
+    if remaining_seconds <= 0:
+        return 0
+    frac = min(1.0, remaining_seconds / (STORY_WAIT_HOURS * 3600))
+    return max(STORY_SKIP_MIN, round(STORY_SKIP_COST * frac))

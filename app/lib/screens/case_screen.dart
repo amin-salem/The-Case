@@ -14,6 +14,7 @@ import '../widgets/crime_tape.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
 import '../widgets/offline.dart';
+import '../widgets/partner_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'accuse_screen.dart';
@@ -255,7 +256,7 @@ class _CaseScreenState extends State<CaseScreen> {
                         ]),
                       ),
                       const Spacer(),
-                      StampIn(child: Align(alignment: Alignment.centerRight, child: StampMark('پرونده‌ی شماره‌ی ${fa(c.number)}', size: 22))),
+                      StampIn(child: Align(alignment: Alignment.centerRight, child: StampMark(c.story != null ? 'فصل ${fa(c.number)}' : 'پرونده‌ی شماره‌ی ${fa(c.number)}', size: 22))),
                       const SizedBox(height: 14),
                       FadeSlideIn(delay: const Duration(milliseconds: 300), child: Text(c.title, style: tDisplay(32))),
                       FadeSlideIn(
@@ -268,6 +269,10 @@ class _CaseScreenState extends State<CaseScreen> {
                         ]),
                       ),
                       const SizedBox(height: 16),
+                      if (c.story != null) ...[
+                        FadeSlideIn(delay: const Duration(milliseconds: 600), child: PartnerCard(text: c.story!.intro, dark: false)),
+                        const SizedBox(height: 12),
+                      ],
                       FadeSlideIn(
                         delay: const Duration(milliseconds: 800),
                         child: Container(

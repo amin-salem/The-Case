@@ -37,8 +37,9 @@ jobs:
                      ("case_progress", "first_accused"), ("case_progress", "proof_misses"),
                      ("players", "last_chest_day"), ("players", "chest_streak"), ("players", "chests"),
                      ("case_progress", "seen"), ("players", "xp"),
-                     ("players", "stats"), ("case_progress", "active_seconds"), ("case_progress", "last_tick_at")]
-          TABLES = ["riddle_answers", "mission_days", "player_achievements"]
+                     ("players", "stats"), ("case_progress", "active_seconds"), ("case_progress", "last_tick_at"),
+                     ("players", "warrants")]
+          TABLES = ["riddle_answers", "mission_days", "player_achievements", "story_progress"]
           EOF
           python - <<'EOF'
           import sqlite3, sys

@@ -16,6 +16,7 @@ from .routers import admin, auth, cases, inbox, leaderboard, meta, pages, profil
 from .routers import achievements as achievement_routes
 from .routers import missions as mission_routes
 from .routers import riddles as riddle_routes
+from .routers import story as story_routes
 from .services.ratelimit import RateLimitMiddleware
 
 
@@ -51,7 +52,7 @@ def create_app() -> FastAPI:
     app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in s.cors_origins.split(",")],
                        allow_methods=["*"], allow_headers=["*"])
     for r in (meta.router, pages.router, auth.router, profile.router, cases.router, leaderboard.router,
-              purchases.router, riddle_routes.router, mission_routes.router, achievement_routes.router, inbox.router, admin.router):
+              purchases.router, riddle_routes.router, mission_routes.router, achievement_routes.router, story_routes.router, inbox.router, admin.router):
         app.include_router(r)
     return app
 

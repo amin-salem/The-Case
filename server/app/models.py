@@ -61,6 +61,7 @@ class Player(Base):
     last_chest_day: Mapped[str] = mapped_column(String(10), default="", server_default="")
     chest_streak: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # days in a row, all done
     chests: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    warrants: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # story mode «حکم بازرسی»
 
     banned: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
@@ -227,3 +228,19 @@ class PlayerAchievement(Base):
     player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
     achievement_id: Mapped[str] = mapped_column(String(32))
     at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class StoryProgress(Base):
+    """One player and one story chapter: opened (free, by warrant, by waiting or for coins) and finished."""
+
+    __tablename__ = "story_progress"
+    __table_args__ = (UniqueConstraint("player_id", "season", "chapter", name="uq_story_progress"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    season: Mapped[int] = mapped_column(Integer)
+    chapter: Mapped[int] = mapped_column(Integer)
+    opened_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    solved: Mapped[bool] = mapped_column(Boolean, default=False)
+    stars: Mapped[int] = mapped_column(Integer, default=0)

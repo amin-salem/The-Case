@@ -15,6 +15,8 @@ void celebrate(BuildContext context, Gains g) {
 
 void celebrateOn(OverlayState overlay, Gains g) {
   final items = <(IconData, String, String)>[
+    if (g.warrants > 0)
+      (Icons.gavel_rounded, 'حکم بازرسی گرفتی', 'برای باز کردن پرونده‌ی بعدیِ داستان (${fa(g.warrants)}+)'),
     for (final m in g.missionsDone) (Icons.task_alt_rounded, 'مأموریت انجام شد', m),
     for (final a in g.achievements)
       (Icons.military_tech_rounded, 'دستاورد تازه: «${a.title}»', a.coins > 0 ? '${fa(a.coins)} سکه جایزه' : ''),

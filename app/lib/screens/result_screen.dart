@@ -7,6 +7,7 @@ import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
+import '../widgets/partner_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'leaderboard_screen.dart';
@@ -68,9 +69,23 @@ class _ResultScreenState extends State<ResultScreen> {
               ],
             ] else
               Center(
-                child: Text('این بار مقصر از دستت در رفت. فردا شب یه پرونده‌ی تازه منتظرته.',
+                child: Text(
+                    result.story != null
+                        ? 'این بار مقصر از دستت در رفت. پرونده‌ی بعدی داستان منتظرته.'
+                        : 'این بار مقصر از دستت در رفت. فردا شب یه پرونده‌ی تازه منتظرته.',
                     textAlign: TextAlign.center, style: tBody(14, color: K.text.withValues(alpha: 0.85))),
               ),
+            if (result.gains.warrants > 0) ...[
+              const SizedBox(height: 10),
+              Center(child: _warrantNote(result.gains.warrants)),
+            ],
+            if (result.story?.outro != null) ...[
+              const SizedBox(height: 14),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 1100),
+                child: PartnerCard(text: result.story!.outro!, thread: result.story!.thread, dark: false),
+              ),
+            ],
             const SizedBox(height: 18),
             FadeSlideIn(
               delay: const Duration(milliseconds: 1200),
@@ -132,8 +147,8 @@ class _ResultScreenState extends State<ResultScreen> {
             ),
             const SizedBox(height: 10),
             GhostButton(
-              label: 'برگشت به خانه',
-              icon: Icons.home_rounded,
+              label: result.story != null ? 'برگشت به نقشه‌ی داستان' : 'برگشت به خانه',
+              icon: result.story != null ? Icons.route_rounded : Icons.home_rounded,
               onTap: () => Navigator.of(context).popUntil((r) => r.isFirst),
             ),
           ]),
@@ -141,6 +156,20 @@ class _ResultScreenState extends State<ResultScreen> {
       ]),
     );
   }
+
+  Widget _warrantNote(int n) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: K.brass.withValues(alpha: 0.18),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(color: K.brass.withValues(alpha: 0.6)),
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          const Icon(Icons.gavel_rounded, size: 16, color: K.brass),
+          const SizedBox(width: 6),
+          Text('+${fa(n)} حکم بازرسی', style: tBody(13, color: K.brass, w: FontWeight.w900)),
+        ]),
+      );
 
   /// One small row: coins, nights in a row, today's rank (tap: the leaderboard).
   Widget _rewards() {
@@ -152,7 +181,7 @@ class _ResultScreenState extends State<ResultScreen> {
     final style = tBody(13.5, w: FontWeight.w900);
     final items = <Widget>[
       item(Icons.monetization_on_rounded, K.brass, AnimatedCount(value: result.reward, prefix: '+', suffix: ' سکه', style: style)),
-      item(Icons.local_fire_department_rounded, K.stamp, Text('${fa(result.streak)} شب', style: style)),
+      if (result.story == null) item(Icons.local_fire_department_rounded, K.stamp, Text('${fa(result.streak)} شب', style: style)),
       if (result.rank != null)
         GestureDetector(
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LeaderboardScreen())),

@@ -2,6 +2,7 @@
 library;
 
 import 'progress.dart';
+import 'story.dart';
 
 export 'progress.dart' show Gains;
 
@@ -86,7 +87,11 @@ class CaseData {
             ? DateTime.fromMillisecondsSinceEpoch((j['next_chapter_at'] as num).toInt() * 1000)
             : null,
         motives = [for (final m in _maps(j['motives'])) (id: _s(m['id']), text: _s(m['text']))],
-        motive = (j['solution'] as Map?)?['motive'] as String?;
+        motive = (j['solution'] as Map?)?['motive'] as String?,
+        story = j['story'] is Map ? StoryLines((j['story'] as Map).cast<String, dynamic>()) : null;
+
+  /// A story chapter: ناصری's intro (and, once finished, outro and the season thread). Null for other cases.
+  final StoryLines? story;
 
   /// The weekend case: chapters opened so far (and how many there are), and when the next one opens.
   final List<({String title, String text})> chapters;
@@ -188,6 +193,7 @@ class AccuseResult {
         hintsUsed = _i(j['hints_used']),
         freezesUsed = _i(j['freezes_used']),
         badge = j['badge'] is int ? j['badge'] as int : null,
+        story = j['story'] is Map ? StoryLines((j['story'] as Map).cast<String, dynamic>()) : null,
         gains = Gains((j['gains'] as Map?)?.cast<String, dynamic>());
 
   final String result; // solved | wrong_suspect | wrong_proof | failed
@@ -198,6 +204,7 @@ class AccuseResult {
   final List<String> proof;
   final int? rank;
   final Progress? progress;
+  final StoryLines? story; // a story chapter: ناصری's outro
   final Gains gains;
 }
 
@@ -226,9 +233,11 @@ class Profile {
         rankXp = _i(j['rank_xp']),
         nextRankXp = j['next_rank_xp'] is num ? (j['next_rank_xp'] as num).toInt() : null,
         nextRankTitle = j['next_rank_title'] as String?,
-        achievements = _i(j['achievements']);
+        achievements = _i(j['achievements']),
+        warrants = _i(j['warrants']);
 
   final int achievements; // earned so far
+  final int warrants; // story warrants held
 
   final int xp, rank, rankXp; // detective rank (index) and the XP where it starts
   final int? nextRankXp; // null at the top rank

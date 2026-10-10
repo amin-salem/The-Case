@@ -119,6 +119,7 @@ final Map<String, dynamic> _profileJson = {
   'next_rank_xp': 2500,
   'next_rank_title': 'بازرس',
   'achievements': 4,
+  'warrants': 2,
 };
 
 final Map<String, dynamic> _securedProfile = {
@@ -181,6 +182,52 @@ final Map<String, dynamic> _config = {
       'vip_monthly': {'coins': 0, 'no_ads': false, 'kind': 'subscription'},
     },
   },
+};
+
+/// Story mode on or off in the config the app already holds (the tab shows the map or the countdown).
+void _setStoryOpen(bool open) {
+  final up = (Api.i.config['upcoming'] as Map?)?.cast<String, dynamic>() ?? const {};
+  final story = (up['story'] as Map?)?.cast<String, dynamic>() ?? const {};
+  Api.i.config = {...Api.i.config, 'upcoming': {...up, 'story': {...story, 'open': open, 'chapters': 5}}};
+}
+
+/// The career map as the server sends it: three chapters played (the last one lost), the fourth waiting
+/// (the player holds two warrants), the fifth locked.
+Map<String, dynamic> _storyMap() {
+  const titles = ['c003', 'c007', 'c012', 'c020', 'c027'];
+  Map<String, dynamic> ch(int n, String state, {bool solved = false, int stars = 0, Map<String, dynamic> extra = const {}}) {
+    final j = _raw(titles[n - 1]);
+    final locked = state == 'locked';
+    return {
+      'chapter': n, 'id': 's01ch0$n', 'state': state, 'solved': solved, 'stars': stars,
+      'title': locked ? null : j['title'], 'location': locked ? null : j['location'], 'scene': locked ? null : j['scene'],
+      ...extra,
+    };
+  }
+
+  return {
+    'open': true, 'opens_at': 1, 'season': 1, 'title': 'کبریت سوخته', 'partner': 'سرگرد ناصری',
+    'tagline': 'هر جا یه کبریت سوخته پیدا شد، یه نفر چیزی رو از دست داده. سرگرد ناصری سه ساله دنبالشه، و حالا تو همکارشی.',
+    'warrants': 2, 'coins': 840, 'free_chapters': 3, 'wait_hours': 12,
+    'next_open_at': DateTime.now().add(const Duration(hours: 7, minutes: 42)).millisecondsSinceEpoch ~/ 1000,
+    'chapters': [
+      ch(1, 'done', solved: true, stars: 3),
+      ch(2, 'done', solved: true, stars: 2),
+      ch(3, 'done'),
+      ch(4, 'waiting', extra: {
+        'unlock_at': DateTime.now().add(const Duration(hours: 7, minutes: 42)).millisecondsSinceEpoch ~/ 1000,
+        'skip_cost': 77, 'can_warrant': true,
+      }),
+      ch(5, 'locked'),
+    ],
+  };
+}
+
+const Map<String, dynamic> _storyLines = {
+  'season': 1,
+  'chapter': 4,
+  'intro': 'ساعت سه شب زنگ زدن. انبار شیشه‌ای ته بازار، یه کیف‌فروش، یه کبریت سوخته روی پیشخون. '
+      'این بار نذار زود برم، همکار. هر مدرک رو دو بار بخون.',
 };
 
 Map<String, dynamic> _freshProgress() =>
@@ -375,6 +422,8 @@ Future<http.Response> _serve(http.Request req) async {
     body = _config;
   } else if (path == '/v1/auth/register' || path == '/v1/auth/login') {
     body = {'player_id': 'p_demo', 'secret': 'secret', 'token': 'token', 'expires_at': _farFuture};
+  } else if (path == '/v1/story') {
+    body = _storyMap();
   } else if (path == '/v1/me') {
     body = _profileJson;
   } else if (path == '/v1/inbox') {
@@ -422,7 +471,17 @@ Future<http.Response> _serve(http.Request req) async {
         body = {'result': 'wrong_suspect', 'attempts_left': next['attempts_left'], 'coins': 840, 'progress': next};
       default:
         final finished = p['solved'] == true || p['failed'] == true;
-        body = {'case': _public(id, finished: finished), 'progress': p, 'today': id == _caseIds.last};
+        final story = id.startsWith('s01ch');
+        body = {
+          'case': {
+            ..._public(story ? 'c012' : id, finished: finished),
+            if (story) 'id': id,
+            if (story) 'title': 'کیف‌فروش و کبریت سوخته',
+            if (story) 'story': _storyLines,
+          },
+          'progress': p,
+          'today': id == _caseIds.last,
+        };
     }
   } else {
     return http.Response.bytes(utf8.encode(jsonEncode({'detail': 'not_found'})), 404);
@@ -586,6 +645,7 @@ void shot(
       tester.view.resetDevicePixelRatio();
       tester.platformDispatcher.clearTextScaleFactorTestValue();
       _offline = false;
+      _setStoryOpen(false);
       _todaySolved = false;
       _configDelay = Duration.zero;
       Api.i.profile = Profile(_profileJson);
@@ -784,6 +844,28 @@ AccuseResult _solvedResult(String id) {
   });
 }
 
+/// A solved story chapter: no streak, a warrant earned, ناصری's outro and the season thread.
+AccuseResult _storyResult(String id) {
+  final sol = _solution(id);
+  return AccuseResult({
+    'result': 'solved',
+    'stars': 2,
+    'reward': 40,
+    'coins': 880,
+    'explanation': sol['explanation'],
+    'culprit': sol['culprit'],
+    'proof': sol['proof'],
+    'seconds': 410,
+    'progress': {'attempts': 1, 'attempts_left': 2, 'solved': true, 'stars': 2},
+    'gains': {'warrants': 1},
+    'story': {
+      ..._storyLines,
+      'outro': 'بد نبود، همکار. یه غلط داشتی ولی آخرش مدرک رو درست خوندی. حالا اون کبریت رو ببین؛ مارکش با دفعه‌ی قبل یکیه.',
+      'thread': 'کبریت‌ها از یه جعبه‌ی قدیمیِ «سیمرغ» اومدن.',
+    },
+  });
+}
+
 AccuseResult _failedResult(String id) {
   final sol = _solution(id);
   return AccuseResult({
@@ -873,6 +955,15 @@ void main() {
   shot('shell_story', () => const MainShell(), size: const Size(390, 1400), wait: const Duration(milliseconds: 600), then: (t) async {
     await _tap(t, find.text('داستان'), wait: const Duration(milliseconds: 1500));
   });
+  shot('shell_story_map', () => const MainShell(), size: const Size(390, 1900), before: () => _setStoryOpen(true),
+      wait: const Duration(milliseconds: 600), then: (t) async {
+    await _tap(t, find.text('داستان'), wait: const Duration(milliseconds: 1800));
+  });
+  shot('story_chapter_intro', () => const CaseScreen(caseId: 's01ch04'),
+      before: () => _progress['s01ch04'] = _freshProgress(), size: const Size(390, 1000),
+      wait: const Duration(milliseconds: 3800));
+  shot('story_chapter_result', () => ResultScreen(caseData: _full('c027'), result: _storyResult('c027')),
+      size: const Size(390, 1900), wait: const Duration(milliseconds: 2600));
   shot('shell_profile', () => const MainShell(), wait: const Duration(milliseconds: 600), then: (t) async {
     await _tap(t, find.text('پروفایل'), wait: const Duration(milliseconds: 1500));
   });

@@ -14,6 +14,7 @@ from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut
 from ..security import current_player
 from ..util import add_coins
 from .common import vip_active
+from .story import finish as story_finish, story_extra
 
 router = APIRouter(prefix="/v1/cases", tags=["cases"])
 
@@ -33,6 +34,11 @@ async def _progress(session: AsyncSession, player_id: str, case_id: str) -> Case
 
 
 def _opened_case(case_id: str) -> Case:
+    if content.is_story(case_id):
+        c = content.story_by_id(case_id)
+        if c is None or not content.story_open():
+            raise HTTPException(404, "no_case")
+        return c
     if content.is_weekly(case_id):
         c = content.weekly_by_id(case_id)
         if c is None or content.opens_at(c) > content.now_local():
@@ -71,6 +77,8 @@ def _is_today(c: Case) -> bool:
 
 
 def _can_open(c: Case, p: CaseProgress | None, player: Player) -> bool:
+    if content.is_story(c.id):
+        return p is not None  # a story chapter is opened on /v1/story, never bought here
     if content.is_weekly(c.id):
         return True  # the weekend case is free for everyone
     return _is_today(c) or vip_active(player) or bool(p and (p.unlocked or p.solved or p.failed))
@@ -108,6 +116,8 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
     c = _opened_case(case_id)
     p = await _progress(session, player.id, c.id)
     if not _can_open(c, p, player):
+        if content.is_story(c.id):
+            raise HTTPException(409, "chapter_locked")
         raise HTTPException(402, {"error": "locked", "cost": eco.UNLOCK_COST})
     if p is None:
         p = CaseProgress(player_id=player.id, case_id=c.id, opened_at=utcnow())
@@ -118,6 +128,10 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
             await session.rollback()
             p = await _progress(session, player.id, c.id)
     data = content.weekly_public(c) if content.is_weekly(c.id) else c.public()
+    if content.is_story(c.id):
+        for k in (*content.STORY_FIELDS, "partner_hints"):
+            data.pop(k, None)
+        data["story"] = story_extra(c, p)
     if p is not None and (p.solved or p.failed):
         data["solution"] = c.data["solution"]  # finished: show how it was solved
     return CaseOut(case=data, progress=_progress_out(c, p), today=_is_today(c))
@@ -128,6 +142,8 @@ async def unlock(case_id: str, player: Player = Depends(current_player),
                  session: AsyncSession = Depends(get_session)):
     c = _opened_case(case_id)
     p = await _progress(session, player.id, c.id)
+    if content.is_story(c.id) and p is None:
+        raise HTTPException(409, "chapter_locked")
     if not _can_open(c, p, player):
         if player.coins < eco.UNLOCK_COST:
             raise HTTPException(402, {"error": "not_enough_coins", "need": eco.UNLOCK_COST})
@@ -201,7 +217,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         p.seconds = max(1, p.active_seconds) if p.active_seconds else max(1, int((now - p.opened_at).total_seconds()))
         p.stars = eco.stars_for(p.hints, p.attempts, p.proof_misses or 0)
         reward = (eco.WEEKLY_REWARD if weekly else eco.SOLVE_REWARD)[p.stars]
-        freezes_used, badge = 0, None
+        freezes_used, badge, streak_up = 0, None, False
         if today_case:
             reward += eco.DAILY_BONUS
             # the streak counts daily cases in a row (by case, not by calendar day,
@@ -221,10 +237,13 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
                     player.streak = 1
                 player.best_streak = max(player.best_streak, player.streak)
                 player.last_daily_solved = mine
+                streak_up = True
                 if player.streak % eco.STREAK_BONUS_EVERY == 0:
                     reward += eco.STREAK_BONUS
                 if player.streak in eco.STREAK_BADGES:
                     badge = player.streak
+        # story warrants: tonight's case, a streak milestone, the weekend case
+        warrants = int(today_case) + int(streak_up and player.streak in eco.STREAK_WARRANTS) + int(weekly)
         player.cases_solved += 1
         player.stars_total += p.stars
         add_coins(session, player, reward, f"solve:{c.id}")
@@ -234,14 +253,15 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
             session, player, xp=xp, case_solved=1, daily_solved=int(today_case),
             case_3stars=int(p.stars == 3), case_no_hint=int(p.hints == 0),
             first_try=int(p.attempts == 0 and not p.proof_misses), fast5=int(p.seconds <= 300),
-            fast2=int(p.seconds <= 120 and not weekly), early_daily=int(early), weekly_solved=int(weekly))
+            fast2=int(p.seconds <= 120 and not weekly), early_daily=int(early), weekly_solved=int(weekly), warrants=warrants)
+        await story_finish(session, player.id, c.id, p)
         await session.commit()
         rank = await _daily_rank(session, c.id, p.stars, p.seconds) if today_case else None
         return AccuseOut(result="solved", attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,
                          reward=reward, coins=player.coins, streak=player.streak, explanation=explanation,
                          culprit=c.culprit, proof=sorted(c.proof), rank=rank, progress=_progress_out(c, p),
                          seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge,
-                         gains=GainsOut(**gains.out()))
+                         gains=GainsOut(**gains.out()), story=story_extra(c, p) if content.is_story(c.id) else None)
 
     # right person but not the evidence that proves it (or, in the weekly case, the wrong motive):
     # the first few times it costs a star, not a try
@@ -256,10 +276,12 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     if p.attempts >= eco.MAX_ATTEMPTS:
         p.failed, p.finished_at, p.day = True, utcnow(), today
         gains = await progress.record(session, player, xp=eco.XP_CASE_FAILED, case_failed=1)
+        await story_finish(session, player.id, c.id, p)
         await session.commit()
         return AccuseOut(result="failed", attempts_left=0, coins=player.coins, streak=player.streak,
                          explanation=explanation, culprit=c.culprit, proof=sorted(c.proof),
-                         progress=_progress_out(c, p), hints_used=p.hints, gains=GainsOut(**gains.out()))
+                         progress=_progress_out(c, p), hints_used=p.hints, gains=GainsOut(**gains.out()),
+                         story=story_extra(c, p) if content.is_story(c.id) else None)
     await session.commit()
     return AccuseOut(result=result, attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
                      streak=player.streak, progress=_progress_out(c, p))

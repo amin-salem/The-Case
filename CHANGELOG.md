@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.19.0 (app build 35, server 1.16.0): story mode
+
+- The «داستان» tab is now the real story mode (it opens by itself once the opening time has passed AND chapters exist; until then the banner and countdown stay). A career map shows the season's chapters as a path: finished ones with stars, the open one, and locked ones with a countdown, «با یک حکم باز کن» or «رد شدن با سکه». A warrant chip («N حکم») shows what the player holds.
+- Each chapter is a full case played on the normal case screen. Before it, سرگرد ناصری introduces it in a speech card with his portrait; after the accusation he reacts (win or lose) and leaves the chapter's season thread. His own wording of the hints is supported (`partner_hints`).
+- Rules (server, `/v1/story`): chapters 1–3 are free and open one after another; from chapter 4 the next one opens when the previous is finished AND the player spends 1 warrant, or 12 hours have passed, or coins skip the wait (120 coins at the start of the wait, falling to 10 as it runs out). Wrong order is refused. The story tab asks the phone to announce when the wait ends.
+- Warrants «حکم بازرسی»: +1 for solving tonight's case, +1 when all the day's missions are done (once a day), +1 at streaks of 3, 7, 14 and 30 nights, +1 for the weekend case. They appear in the profile and in `gains` (a banner and a «+۱ حکم بازرسی» note on the result screen).
+- New: table `story_progress`, column `players.warrants` (migration 0010, no data changes). Chapter files live in `server/app/content/story/sNN/chNN.json` (see docs/story-seasons.md); no folder or no files means «به‌زودی». No chapters are written yet.
+
 ## 1.18.0 (app build 34, server 1.15.10): notifications written for each case
 
 - Every night's notification now carries that case's own teaser (all 50 cases have a hand-written, spoiler-free title and line in `server/app/content/notify.json`, all different), the evening streak reminder names tonight's case, the weekend case announces itself on Thursday 09:00 and again when chapters 2 and 3 open, and the story announces its opening. The server sends the plan in `/v1/config` (`notify`); if a teaser is missing it builds a text from the case's title and place. `Reminders.storyReady` is ready for the story chapter wait (the story build wires it).

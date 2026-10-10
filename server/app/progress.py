@@ -24,14 +24,15 @@ from .util import add_coins
 class Gains:
     xp: int = 0
     rank_up: str | None = None
+    warrants: int = 0
     missions_done: list[str] = field(default_factory=list)
     achievements: list[dict] = field(default_factory=list)
 
     def is_empty(self) -> bool:
-        return not (self.rank_up or self.missions_done or self.achievements)
+        return not (self.rank_up or self.warrants or self.missions_done or self.achievements)
 
     def out(self) -> dict:
-        return {"xp": self.xp, "rank_up": self.rank_up, "missions_done": self.missions_done,
+        return {"xp": self.xp, "rank_up": self.rank_up, "warrants": self.warrants, "missions_done": self.missions_done,
                 "achievements": self.achievements}
 
 
@@ -60,10 +61,19 @@ async def mission_day(session: AsyncSession, player: Player, day: str | None = N
     return md
 
 
-async def record(session: AsyncSession, player: Player, xp: int = 0, **events: int) -> Gains:
-    """xp: experience earned by this action (ranks). events: counters for missions and achievements."""
+def add_warrants(player: Player, n: int, gains: Gains) -> None:
+    """Story-mode warrants «حکم بازرسی»: the caller commits."""
+    if n > 0:
+        player.warrants = (player.warrants or 0) + n
+        gains.warrants += n
+
+
+async def record(session: AsyncSession, player: Player, xp: int = 0, warrants: int = 0, **events: int) -> Gains:
+    """xp: experience earned by this action (ranks). warrants: story warrants earned. events: counters for
+    missions and achievements."""
     gains = Gains()
     add_xp(player, xp, gains)
+    add_warrants(player, warrants, gains)
     events = {k: v for k, v in events.items() if v}
     if events:
         stats = dict(player.stats or {})
@@ -111,3 +121,9 @@ async def _missions(session: AsyncSession, player: Player, events: dict[str, int
     for m in missions.for_day(md.day):
         if before.get(m.event, 0) < m.target <= after.get(m.event, 0):
             gains.missions_done.append(m.title)
+    todays = missions.for_day(md.day)
+    if md.day == content.today_str() and not before.get("_warrant") and all(
+            after.get(m.event, 0) >= m.target for m in todays):
+        after["_warrant"] = 1  # all of the day's missions done: one warrant, once a day
+        md.counts = after
+        add_warrants(player, 1, gains)

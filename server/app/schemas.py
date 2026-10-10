@@ -73,6 +73,7 @@ class ProfileOut(BaseModel):
     next_rank_xp: int | None = None   # None at the top rank
     next_rank_title: str | None = None
     achievements: int = 0             # earned so far
+    warrants: int = 0                 # story warrants held
     gains: "GainsOut | None" = None   # earned right now (on /me: login-calendar week, late achievements)
 
 
@@ -172,6 +173,7 @@ class AccuseOut(BaseModel):
     freezes_used: int = 0    # streak insurance spent to keep the streak
     badge: int | None = None  # a streak badge (7, 30, 100) reached right now
     gains: "GainsOut | None" = None
+    story: dict[str, Any] | None = None  # story chapter finished: {season, chapter, outro, thread}
 
 
 class SuspectStat(BaseModel):
@@ -266,6 +268,7 @@ class ConfigIn(BaseModel):
 class GainsOut(BaseModel):
     xp: int = 0
     rank_up: str | None = None          # the new rank's title, when the player just went up
+    warrants: int = 0                   # story warrants «حکم بازرسی» earned right now
     missions_done: list[str] = []       # titles of daily missions finished right now
     achievements: list[dict] = []       # {id, title, coins} earned right now
 
@@ -378,3 +381,38 @@ class AchievementsOut(BaseModel):
     earned: int
     total: int
     items: list[AchievementRow]
+
+
+# --- story mode ---------------------------------------------------------------------------
+class StoryOpenIn(BaseModel):
+    warrant: bool = False   # spend a warrant to open a chapter that is still waiting
+
+
+class StoryChapterOut(BaseModel):
+    chapter: int
+    id: str
+    title: str | None = None       # hidden while the chapter is locked
+    location: str | None = None
+    scene: str | None = None
+    state: str                     # done | open | ready | waiting | locked
+    solved: bool = False
+    stars: int = 0
+    unlock_at: int | None = None   # waiting: when it opens by itself
+    skip_cost: int | None = None   # waiting: coins to open it now
+    can_warrant: bool = False      # waiting and the player holds a warrant
+
+
+class StoryOut(BaseModel):
+    open: bool
+    opens_at: int
+    season: int
+    title: str
+    tagline: str
+    partner: str
+    warrants: int
+    coins: int
+    free_chapters: int
+    wait_hours: int
+    next_open_at: int | None = None
+    chapters: list[StoryChapterOut]
+    case_id: str | None = None     # set by open/skip: the chapter's case id
