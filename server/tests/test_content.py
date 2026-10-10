@@ -60,3 +60,22 @@ def test_portraits_exist_in_the_app():
             name = s["avatar"].get("portrait")
             if name:
                 assert (folder / f"{name}.webp").exists(), f"{c.id}/{s['id']}: no portrait {name}"
+
+
+def test_notify_plan_and_texts():
+    import json
+    from datetime import timedelta
+
+    from app import content
+
+    texts = json.loads((content.Path(content.__file__).parent / "content" / "notify.json").read_text(encoding="utf-8"))
+    ids = {c.id for c in content.all_cases()}
+    assert ids <= set(texts), "every nightly case needs a notification teaser in content/notify.json"
+    heads = [t["head"] for t in texts.values()]
+    assert len(set(heads)) == len(heads), "teaser titles must all be different"
+    c = content.all_cases()[20]
+    now = content.opens_at(c) - timedelta(hours=2)
+    plan = content.notify_plan(now, days=3)
+    first = next(x for x in plan if x["kind"] == "nightly")
+    assert first["at"] == int(content.opens_at(c).timestamp()) and first["head"] and first["body"] and first["late"]
+    assert [x["at"] for x in plan] == sorted(x["at"] for x in plan)

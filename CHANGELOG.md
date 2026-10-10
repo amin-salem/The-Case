@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.18.0 (app build 34, server 1.15.10): notifications written for each case
+
+- Every night's notification now carries that case's own teaser (all 50 cases have a hand-written, spoiler-free title and line in `server/app/content/notify.json`, all different), the evening streak reminder names tonight's case, the weekend case announces itself on Thursday 09:00 and again when chapters 2 and 3 open, and the story announces its opening. The server sends the plan in `/v1/config` (`notify`); if a teaser is missing it builds a text from the case's title and place. `Reminders.storyReady` is ready for the story chapter wait (the story build wires it).
+- The case-writing rules now require a teaser entry for every new or rewritten case.
+
 ## server 1.15.9: weekend mission can always be finished
 
 - The mission «توی پرونده‌ی آخر هفته با ۲ مظنون صحبت کن» only counted suspects a player had never opened before, so someone who had already talked to the suspects (or solved the case) on an earlier day could not finish it, which also blocked that day's chest. Now each suspect counts once per day, even if met before. Lifetime counters (achievements) are unchanged. The mission text lost the confusing «تو».

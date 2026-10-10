@@ -263,6 +263,60 @@ def weekend_upcoming(now: datetime | None = None) -> dict:
             "location": nxt.data.get("location") if nxt else None}
 
 
+@lru_cache
+def _notify_texts() -> dict:
+    try:
+        return json.loads((Path(__file__).parent / "content" / "notify.json").read_text(encoding="utf-8"))
+    except Exception:  # a missing or broken teaser file must never break the app's config
+        return {}
+
+
+def notify_plan(now: datetime | None = None, days: int = 10) -> list[dict]:
+    """What the phone should announce in the next days: each night's case, the weekend case and its
+    chapters, and the story opening. Texts come from content/notify.json (one hand-written teaser per
+    case, used only while the case title still matches), otherwise they are made from the case itself."""
+    now = now or now_local()
+    end = now + timedelta(days=days)
+    out: list[dict] = []
+    texts = _notify_texts()
+    for c in all_cases():
+        at = opens_at(c)
+        if not (now < at <= end):
+            continue
+        t = texts.get(c.id) or {}
+        title = c.data.get("title", "")
+        if t.get("title") == title and t.get("head"):
+            head, body = t["head"], t.get("body", "")
+        else:
+            head = f"«{title}» باز شد 🕵️"
+            body = f"{c.data.get('location') or 'یه صحنه‌ی تازه'}؛ یه جنایت تازه منتظرته."
+        out.append({"kind": "nightly", "at": int(at.timestamp()), "head": head, "body": body,
+                    "late": f"«{title}» هنوز حل نشده؛ زنجیره‌ات منتظره."})
+    for c in weekly_cases():
+        title = c.data.get("title", "")
+        for n, ch in enumerate(c.data.get("chapters") or [], start=1):
+            at = opens_at(c) + timedelta(hours=ch.get("at_hours", 0))
+            if not (now < at <= end):
+                continue
+            if n == 1:
+                t = texts.get(c.id) or {}
+                ok = t.get("title") == title and t.get("head")
+                head = t["head"] if ok else f"پرونده‌ی آخر هفته باز شد: «{title}» 🌙"
+                body = t.get("body", "") if ok else f"{c.data.get('location') or ''} · سه فصل، هشت مظنون.".strip(" ·")
+            else:
+                total = len(c.data["chapters"])
+                head = f"فصل {n} از {total} باز شد: «{title}»"
+                body = ("مدارک تازه رسید؛ فصل آخره و می‌تونی متهم کنی." if n == total
+                        else "مدارک تازه رسید؛ شاید دروغ مقصر لای همین‌هاست.")
+            out.append({"kind": "weekend", "at": int(at.timestamp()), "head": head, "body": body})
+    at = datetime.fromisoformat(STORY_SEASON["opens_at"]).replace(tzinfo=_tz())
+    if now < at <= end:
+        out.append({"kind": "story", "at": int(at.timestamp()),
+                    "head": f"داستان «{STORY_SEASON['title']}» شروع شد 🔥", "body": STORY_SEASON["tagline"]})
+    out.sort(key=lambda x: x["at"])
+    return out
+
+
 def weekly_all_open_at(c: Case) -> datetime:
     """When the last chapter of a weekend case opens (accusing is allowed from then on)."""
     last = max((ch.get("at_hours", 0) for ch in c.data.get("chapters") or [{}]), default=0)

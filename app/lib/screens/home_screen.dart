@@ -109,7 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       unawaited(_loadExtras());
       await Reminders.i.plan(
-          nextCaseAt: c.nextCaseAt, tonightSolved: c.today?.solved ?? false, streak: Api.i.profile?.streak ?? 0);
+          nextCaseAt: c.nextCaseAt, tonightSolved: c.today?.solved ?? false, streak: Api.i.profile?.streak ?? 0,
+          plan: Api.i.notifyPlan, tonightTitle: c.today?.title);
       // a purchase paid earlier but not credited yet (app closed, no internet) is credited now
       final recovered = await Billing.i.recover();
       if (recovered > 0 && mounted) toast(context, 'خریدت اضافه شد: ${fa(recovered)} سکه');

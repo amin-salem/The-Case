@@ -81,14 +81,38 @@ class Reminders extends ChangeNotifier {
   }
 
   /// Plans the next week. Call it whenever the case list or the streak changes.
-  Future<void> plan({required DateTime nextCaseAt, required bool tonightSolved, required int streak}) async {
+  /// [plan] is the server's list of what to announce (content-based texts); without it the texts are generic.
+  Future<void> plan({
+    required DateTime nextCaseAt,
+    required bool tonightSolved,
+    required int streak,
+    List<Map<String, dynamic>> plan = const [],
+    String? tonightTitle,
+  }) async {
     if (!_ready) return;
     try {
       await _plugin.cancelAll();
       if (!enabled) return;
+      DateTime when(Map<String, dynamic> e) => DateTime.fromMillisecondsSinceEpoch((e['at'] as num).toInt() * 1000);
+      Map<String, dynamic>? nightlyAt(DateTime t) {
+        for (final e in plan) {
+          if (e['kind'] == 'nightly' && when(e).difference(t).abs() < const Duration(hours: 1)) return e;
+        }
+        return null;
+      }
+
       for (int d = 0; d < 7; d++) {
-        await _at(100 + d, nextCaseAt.add(Duration(days: d)), 'پرونده‌ی امشب باز شد 🕵️',
-            'یه جنایت تازه منتظرته. ببین می‌تونی زودتر از بقیه حلش کنی؟');
+        final t = nextCaseAt.add(Duration(days: d));
+        final e = nightlyAt(t);
+        await _at(100 + d, t, (e?['head'] as String?) ?? 'پرونده‌ی امشب باز شد 🕵️',
+            (e?['body'] as String?) ?? 'یه جنایت تازه منتظرته. ببین می‌تونی زودتر از بقیه حلش کنی؟');
+      }
+      // weekend case, its chapters and the story opening
+      var extra = 0;
+      for (final e in plan) {
+        if (e['kind'] == 'nightly' || extra >= 8) continue;
+        await _at(500 + extra, when(e), e['head'] as String, (e['body'] as String?) ?? '');
+        extra++;
       }
       // Saturday 10:00 (Tehran = UTC+3:30): last week's ranking prizes are in the inbox
       var sat = DateTime.now().toUtc();
@@ -100,19 +124,41 @@ class Reminders extends ChangeNotifier {
         await _at(400 + w, sat.add(Duration(days: 7 * w)), 'نتیجه‌ی هفته اعلام شد 🏆',
             'جدول برترهای هفته بسته شد. شاید جایزه گرفته باشی؛ صندوق هدیه‌ها رو ببین!');
       }
+      final sr = (_prefs?.getString('story_ready') ?? '').split('|');
+      if (sr.length >= 2) {
+        final ms = int.tryParse(sr[0]);
+        if (ms != null) await _at(600, DateTime.fromMillisecondsSinceEpoch(ms), 'فصل بعدی داستان آماده‌ست 🔥', 'ناصری منتظره: «${sr.sublist(1).join('|')}» رو باز کن.');
+      }
       // tonight's case opened one day before the next one; remind 90 minutes after it opens
       final tonight = nextCaseAt.subtract(const Duration(days: 1));
       if (streak > 0 && !tonightSolved) {
         await _at(200, tonight.add(const Duration(minutes: 90)), 'زنجیره‌ات در خطره! 🔥',
-            'زنجیره‌ی ${fa(streak)} شبه‌ات منتظر پرونده‌ی امشبه. نذار بشکنه!');
+            tonightTitle == null || tonightTitle.isEmpty
+                ? 'زنجیره‌ی ${fa(streak)} شبه‌ات منتظر پرونده‌ی امشبه. نذار بشکنه!'
+                : 'زنجیره‌ی ${fa(streak)} شبه‌ات منتظر «$tonightTitle» ـه. نذار بشکنه!');
       }
       // later nights: if the app isn't opened (= the case isn't solved), these still go off
       for (int d = 1; d < 4 && streak > 0; d++) {
-        await _at(200 + d, tonight.add(Duration(days: d, minutes: 90)), 'پرونده‌ی امشب رو حل نکردی 🔥',
-            'زنجیره‌ات رو از دست نده؛ هنوز وقت داری.');
+        final t = tonight.add(Duration(days: d));
+        final e = nightlyAt(t);
+        final late = e?['late'] as String?;
+        await _at(200 + d, t.add(const Duration(minutes: 90)), 'پرونده‌ی امشب رو حل نکردی 🔥',
+            late ?? 'زنجیره‌ات رو از دست نده؛ هنوز وقت داری.');
       }
     } catch (e) {
       debugPrint('reminders plan: $e');
+    }
+  }
+
+  /// A story chapter becomes ready (the 12-hour wait ends): call this when the chapter list says when.
+  Future<void> storyReady(DateTime at, String chapterTitle) async {
+    if (!_ready || !enabled) return;
+    try {
+      // kept on the phone too, because plan() clears everything and then puts it back
+      await _prefs?.setString('story_ready', '${at.millisecondsSinceEpoch}|$chapterTitle');
+      await _at(600, at, 'فصل بعدی داستان آماده‌ست 🔥', 'ناصری منتظره: «$chapterTitle» رو باز کن.');
+    } catch (e) {
+      debugPrint('reminders story: $e');
     }
   }
 

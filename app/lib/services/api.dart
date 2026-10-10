@@ -208,6 +208,17 @@ class Api extends ChangeNotifier {
     return u is Map && u[k] is Map ? (u[k] as Map).cast<String, dynamic>() : const {};
   }
 
+  /// What the phone should announce in the next days (from /v1/config `notify`): each night's case,
+  /// the weekend case and its chapters, the story opening. Bad entries are skipped.
+  List<Map<String, dynamic>> get notifyPlan {
+    final n = config['notify'];
+    if (n is! List) return const [];
+    return [
+      for (final e in n)
+        if (e is Map && e['at'] is num && e['head'] is String) Map<String, dynamic>.from(e)
+    ];
+  }
+
   Map<String, dynamic> get upcomingWeekend => _upcoming('weekend');
   Map<String, dynamic> get upcomingStory => _upcoming('story');
 

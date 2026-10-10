@@ -32,3 +32,7 @@ nightly case (daily habit + leaderboard) and the weekend case (weekly event), wh
 ## Content
 Chapters live on the server like other cases (no app build for new chapters). Written about one chapter
 per scheduled run, alongside the nightly cases.
+
+## Notifications for story chapters (added 10 Oct)
+- When the chapter list says the next chapter opens later (the 12-hour wait, `next_open_at`), call `Reminders.i.storyReady(openAt, nextChapterTitle)` from the story screen after every list load (it is safe to call repeatedly: it replaces the old one). When a chapter is opened or skipped, call it with the new time or nothing.
+- The story opening itself and the weekend chapters already come from the server's `notify` list in `/v1/config` (content.notify_plan).

@@ -84,3 +84,9 @@ why. Then judge:
 - Fictional people and places only; no real religious or political places or figures; nothing gory.
 - At least 5 evidence cards (nightly cases usually 7–9; weekend cases about 16, in chapters).
 - After editing, run the content checks (JSON loads, `server/app/content.py` validation); CI must be green.
+
+## Notification teaser (every nightly case and every weekend case)
+Every case needs an entry in `server/app/content/notify.json`: `{"<case id>": {"title": "<the case's exact title>", "head": "...", "body": "..."}}`.
+- `head` is the notification title (max ~35 characters, may end with one emoji) and must be different from every other case's head; `body` is one or two spoken-Persian sentences (max ~90 characters).
+- It must tease the situation from the case's intro (place, time, object, the central question) without revealing the culprit, motive, or any proof, and without inventing facts that are not in the case.
+- When a case is rewritten or its title changes, update its entry (the app falls back to an automatic text while the title does not match). A server test checks that every nightly case has an entry with a unique head.
