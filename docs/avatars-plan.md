@@ -66,3 +66,7 @@ A frame is a decorative border around the avatar, chosen separately from the ava
 - Performance and taste: animations only on the profile and leaderboard top rows; the whole list is drawn static when the system reduces motion or the phone is low-end. One shared widget `AvatarWithFrame(avatar, frame, size)` used everywhere an avatar appears.
 - Picker: a second tab «قاب‌ها» in the same screen, with the same locked/earned/price states and a live preview on the player's avatar.
 - Tests: ownership, buy, not enough coins, locked frame refused, challenge unlock.
+
+## Images delivered (10 Oct)
+All 16 `app/assets/avatars/ex_<id>.webp` (384px) are in the repo — use them, no placeholders.
+Mapping: rookie=young w/ badge, nightowl=lamp+rain, ironstreak=chain, threestar=3 stars on shoulder, nohint=magnifier on eye, weekend=coffee+case board, partner=man with shadow figure behind, champion=laurel+trophy, alchemist=old man+lab, journalist=camera+notebook, qajar=fez+moustache, cat=woman+black cat, chef=knife, shadow=silhouette fedora, diva=headscarf+spotlight, gold=ornate navy coat. Frames are still drawn in code (spec above).
