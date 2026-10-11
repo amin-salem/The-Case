@@ -1,5 +1,9 @@
 # Changelog
 
+## app 1.20.3 / server 1.17.2: dead address removed
+
+- Removed the dead thecase.liara.run address; the only server address is https://gaamly.ir. Players on old APKs that only know the old address stay offline until they update. The uptime watch, release smoke test, docs and tests now use gaamly.ir only; the one-off probe workflow is deleted.
+
 ## content: story season 1 chapter 1
 
 - Story mode season 1 «کبریت سوخته» has its bible (`server/app/content/story/s01/bible.md`) and chapter 1 «هفت‌ستاره» (`s01/ch01.json`). From 2026-10-12 00:00 Tehran `/v1/config` shows `upcoming.story.open = true`. Chapters 2–3 follow on the next nightly runs.

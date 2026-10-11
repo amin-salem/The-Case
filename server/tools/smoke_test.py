@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Checks that a running server answers every call the app makes.
 
-    python tools/smoke_test.py                                   # https://thecase.liara.run
+    python tools/smoke_test.py                                   # https://gaamly.ir
     python tools/smoke_test.py http://127.0.0.1:8000 --solve     # a local server: also solves today's case
     ADMIN_API_KEY=... python tools/smoke_test.py URL             # also checks the admin calls
 
@@ -29,7 +29,7 @@ def check(ok: bool, name: str, detail: str = ""):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("base", nargs="?", default=os.environ.get("API_URL", "https://thecase.liara.run"))
+    ap.add_argument("base", nargs="?", default=os.environ.get("API_URL", "https://gaamly.ir"))
     ap.add_argument("--solve", action="store_true", help="solve today's case using the local case files (local servers only)")
     ap.add_argument("--timeout", type=float, default=25)
     a = ap.parse_args()

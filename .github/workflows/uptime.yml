@@ -14,12 +14,12 @@ jobs:
       - name: Server answers
         run: |
           ok=0
-          for url in https://gaamly.ir https://thecase.liara.run; do
+          for url in https://gaamly.ir; do
             body=$(curl -sS -m 25 "$url/health" 2>&1 || true)
             echo "$url → $body"
             if echo "$body" | grep -q '"ok":true'; then ok=1; echo "::notice title=$url::$body"; fi
           done
           if [ "$ok" != 1 ]; then
-            echo "::error title=Server down::Neither gaamly.ir nor thecase.liara.run answered /health. Check the Liara panel (app stopped? wallet empty?)."
+            echo "::error title=Server down::gaamly.ir did not answer /health. Check the Liara panel (app stopped? wallet empty?)."
             exit 1
           fi
