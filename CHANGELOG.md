@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.20.0 (app build 36): intro and full guide
+
+- New `GuideScreen`: an 8-page intro (welcome, nightly case, investigating, accusing and stars, weekend case, story, coins/rank/prizes, reminders) shown once to new players before the home screen (players who already solved a case never see it), followed by the existing in-case coach marks.
+- Settings → «راهنمای کامل بازی» opens the same guide any time.
+
 ## server 1.16.1: weekend case w002
 
 - New weekend case w002 «فانوسِ نارنجستان» (Thursday 2026-10-15): opens 09:00 (`open_hour` 9), chapters Thursday/Friday/Saturday 09:00 (`at_hours` 0/24/48), closes Sunday 21:00 (`closes_hours` 84); with its notification teaser.

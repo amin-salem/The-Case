@@ -11,6 +11,7 @@ import '../theme.dart';
 import '../widgets/offline.dart';
 import 'account_sheets.dart';
 import 'dialogs.dart';
+import 'guide_screen.dart';
 
 /// Settings: account, looks, sound and reminders, support. Every row is one tap; forms open in sheets.
 class SettingsScreen extends StatefulWidget {
@@ -148,6 +149,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ]),
                 _group('پشتیبانی و قوانین', [
+                  SettingsRow(
+                    icon: Icons.menu_book_rounded,
+                    title: 'راهنمای کامل بازی',
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GuideScreen())),
+                  ),
                   if (hasSupport) SettingsRow(icon: Icons.support_agent_rounded, title: 'تماس با ما', onTap: _contact),
                   SettingsRow(
                       icon: Icons.privacy_tip_rounded, title: 'حریم خصوصی', onTap: () => _open(Uri.parse(Api.i.privacyUrl))),

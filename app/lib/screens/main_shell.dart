@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../services/sound.dart';
 import '../theme.dart';
+import '../services/api.dart';
 import 'account_screen.dart';
+import 'guide_screen.dart';
 import 'home_screen.dart';
 import 'leaderboard_screen.dart';
 import 'story_screen.dart';
@@ -33,6 +35,14 @@ class _MainShellState extends State<MainShell> {
     super.initState();
     MainShell.tab.value = MainShell.home;
     MainShell.tab.addListener(_onTab);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if ((Api.i.profile?.casesSolved ?? 0) > 0) {
+        Api.i.setFlag('intro_done');
+        return;
+      }
+      GuideScreen.maybeShowFirstRun(context);
+    });
   }
 
   @override
