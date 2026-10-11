@@ -38,6 +38,10 @@ dialog{background:var(--bg2);color:var(--text);border:1px solid var(--line);bord
 dialog::backdrop{background:#000a}
 dialog input,dialog textarea{width:100%;margin:4px 0 10px}
 .scroll{overflow-x:auto}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.hcard{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;overflow-x:auto}.hcard h3{margin:0 0 6px;font-size:14px;color:var(--brass)}
+.hcard table{background:none}.hcard .big{display:block;font-size:24px;color:var(--brass)}.hcard small{font-size:12px;color:var(--soft)}
+.st{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--soft);vertical-align:middle}.st.ok{background:var(--ok)}.st.warn{background:#e0a526}.st.bad{background:var(--bad)}
 </style>
 </head>
 <body>
@@ -63,6 +67,8 @@ dialog input,dialog textarea{width:100%;margin:4px 0 10px}
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let KEY = ''; try { KEY = sessionStorage.getItem('adminKey') || ''; } catch (e) {}
+// The admin app opens /admin/ui#k=<key>: read it once and remove it from the address bar (a fragment is never sent to the server).
+try { const m = /^#k=(.+)$/.exec(location.hash); if (m) { KEY = decodeURIComponent(m[1]).trim(); try { sessionStorage.setItem('adminKey', KEY); } catch (e) {} history.replaceState(null, '', location.pathname + location.search); } } catch (e) {}
 const fmtT = t => t ? new Date(t * 1000).toLocaleString('fa-IR', {hour12: false}) : '—';
 const ago = t => { if (!t) return '—'; const s = Date.now()/1000 - t; if (s < 90) return 'همین الان'; if (s < 5400) return Math.round(s/60) + ' دقیقه پیش'; if (s < 129600) return Math.round(s/3600) + ' ساعت پیش'; return Math.round(s/86400) + ' روز پیش'; };
 const num = n => (n ?? 0).toLocaleString('fa-IR');
@@ -91,6 +97,33 @@ function chart(title, rows, key, color) {
   return `<div class="chart"><div class="row" style="margin:0"><b>${title}</b><span class="muted">جمع: ${num(total)} · امروز: ${num(rows[rows.length-1][key])}</span></div>${bars(rows, key, color)}</div>`;
 }
 const card = (v, l) => `<div class="card"><b>${num(v)}</b><span>${l}</span></div>`;
+const LV = {ok: 'سالم', warn: 'هشدار', bad: 'خطا'};
+const dot = st => `<span class="st ${esc(st || 'warn')}" title="${esc(LV[st] || '')}"></span>`;
+const dur = s => s == null ? '—' : s < 3600 ? Math.round(s/60) + ' دقیقه' : s < 172800 ? (s/3600).toFixed(1) + ' ساعت' : Math.round(s/86400) + ' روز';
+const hk = (k, v) => `<tr><th>${k}</th><td>${v}</td></tr>`;
+const yn = v => v ? 'بله' : 'خیر';
+function liaraHtml(l) {
+  let body;
+  if (l.state === 'no_token') body = `<p>${esc(l.message)}</p><p class="muted">${esc(l.hint)}</p>`;
+  else if (l.state === 'ok') body = `<b class="big">${num(l.balance)} <small>تومان</small></b><span class="muted">حد هشدار: ${num(l.limit)} تومان${l.cached ? ' · از حافظه (' + dur(l.age_s) + ' پیش)' : ''}${l.throttled ? ' · چند ثانیه صبر کن' : ''}</span>`;
+  else body = `<p class="err">دریافت موجودی نشد: <span class="ltr">${esc(l.kind || 'error')}</span></p>`;
+  return `<div class="hcard" id="lcard"><h3>${dot(l.status)} موجودی لیارا</h3>${body}<div class="row"><button id="lbtn">بررسی موجودی</button></div></div>`;
+}
+function healthHtml(h, lb) {
+  const s = h.server || {}, d = h.domains || {}, c = h.content || {}, p = h.players || {}, x = h.security || {};
+  const rows = s.rows ? Object.entries(s.rows).map(([k, v]) => `${esc(k)}: ${v == null ? '—' : num(v)}`).join(' · ') : '';
+  const dom = (d.items || []).map(i => `<tr><td class="ltr">${esc(i.host)}</td><td>${dot(i.status)} ${i.days == null ? 'بررسی نشد (' + esc(i.error || '') + ')' : num(i.days) + ' روز تا پایان گواهی TLS'}</td></tr>`).join('');
+  const vers = (p.app_versions || []).map(v => `<tr><td>${num(v.version)}</td><td>${num(v.players)}</td></tr>`).join('');
+  const wn = c.weekend_next ? `${esc(c.weekend_next.id)} — ${fmtT(Date.parse(c.weekend_next.opens_at) / 1000)}` : 'هنوز نوشته نشده';
+  return `<h2>${dot(h.overall)} وضعیت کلی: ${esc(LV[h.overall] || '')}</h2><div class="hgrid">
+  <div class="hcard"><h3>${dot(s.status)} سرور</h3><table>${hk('نسخه', `<span class="ltr">${esc(s.version)}</span>`)}${hk('روشن‌بودن این پردازه', dur(s.uptime_s))}${hk('پردازه‌ها', s.workers == null ? 'نامشخص' : num(s.workers))}${hk('دیتابیس', s.db_ok ? 'در دسترس · ' + esc(s.db_ms) + ' میلی‌ثانیه' : 'در دسترس نیست')}${hk('حجم دیتابیس', s.db_size_mb == null ? '—' : esc(s.db_size_mb) + ' مگابایت')}${hk('ردیف‌ها', `<span class="ltr">${rows}</span>`)}</table></div>
+  <div class="hcard"><h3>${dot(d.status)} آدرس‌ها</h3><table>${dom}</table></div>
+  <div class="hcard"><h3>${dot(c.status)} محتوا</h3><table>${hk('پرونده‌ی شبانه‌ی آماده', `${dot(c.days_ahead_status)} ${num(c.days_ahead)} روز جلوتر (${num(c.nightly_total)} پرونده)`)}${hk('آخرین پرونده‌ی شبانه', c.last_nightly_opened ? fmtT(Date.parse(c.last_nightly_opened) / 1000) : '—')}${hk('پرونده‌ی آخر هفته‌ی بعدی', wn)}${hk('داستان', c.story ? `فصل ${num(c.story.season)} «${esc(c.story.title)}» · ${num(c.story.chapters)} قسمت نوشته‌شده · قسمت بعدی: ${num(c.story.next_missing)}` : '—')}${hk('اعتبارسنجی محتوا', c.validation === 'ok' ? 'سالم' : '<span class="err">ناموفق: ' + esc((c.problems || []).join('، ')) + '</span>')}</table></div>
+  <div class="hcard"><h3>${dot(p.status)} بازیکن‌ها</h3><table>${hk('کل بازیکن‌ها', num(p.total))}${hk('فعال امروز', num(p.active_today))}${hk('حل‌شده امروز', num(p.solves_today))}${hk('خطای ۵xx در ساعت اخیر', p.errors_1h == null ? 'شمرده نمی‌شود' : num(p.errors_1h))}</table>${vers ? '<table><tr><th>نسخه‌ی برنامه</th><th>بازیکن</th></tr>' + vers + '</table>' : ''}</div>
+  <div class="hcard"><h3>${dot(x.status)} امنیت و محدودیت‌ها</h3><table>${hk('ADMIN_API_KEY واقعی', yn(x.admin_key_real))}${hk('JWT_SECRET واقعی', yn(x.jwt_secret_real))}${hk('محدودکننده‌ی نرخ', x.rate_limit ? 'روشن' : 'خاموش')}${hk('مسدودشده در ساعت اخیر', x.rate_limit_blocked_1h == null ? 'شمرده نمی‌شود' : num(x.rate_limit_blocked_1h))}${hk('تبلیغات پاداشی', x.ads_enabled ? 'روشن' : 'خاموش')}${hk('BAZAAR_MODE', `<span class="ltr">${esc(x.bazaar_mode)}</span>`)}${hk('ENV', `<span class="ltr">${esc(x.env)}</span>`)}</table></div>
+  ${liaraHtml(lb)}
+  <div class="hcard"><h3>GitHub watch</h3><p class="muted">نتیجه‌ی این‌ها برای سرور در دسترس نیست؛ در GitHub → Actions ببین:</p><table>${(h.watch || []).map(w => `<tr><td class="ltr">${esc(w.name)}</td><td>${esc(w.schedule)}</td></tr>`).join('')}</table></div></div>`;
+}
 const VIEWS = {
   async overview(m) {
     const d = await api('/admin/api/overview?days=14'), t = d.totals;
@@ -146,8 +179,15 @@ const VIEWS = {
     m.innerHTML = `<h2>خرید موفق ۳۰ روز اخیر به تفکیک محصول</h2>${tbl(d.purchases_by_product)}<h2>سکه‌ی دریافتی (دلیل)</h2>${tbl(d.coins_earned_by_reason)}<h2>سکه‌ی خرج‌شده (دلیل)</h2>${tbl(d.coins_spent_by_reason)}<h2>خرید در روز</h2>${tbl(Object.fromEntries(Object.entries(d.purchases_by_day).map(([k, v]) => [k, Object.values(v).reduce((a, b) => a + b, 0)])))}`;
   },
   async health(m) {
-    const h = await api('/admin/api/health');
-    m.innerHTML = `<div class="cards">${card(h.db_ok ? 1 : 0, 'دیتابیس (۱ = سالم)')}<div class="card"><b class="ltr">${esc(h.server_version)}</b><span>نسخه‌ی سرور</span></div>${card(h.nightly_cases, 'پرونده‌ی شبانه')}${card(h.weekly_cases, 'پرونده‌ی آخر هفته')}<div class="card"><b class="ltr" style="font-size:15px">${esc(h.today_case || '—')}</b><span>پرونده‌ی امشب</span></div></div><p class="muted">ساعت سرور: <span class="ltr">${esc(h.now)}</span></p><p class="muted">موجودی لیارا هر روز ساعت ۸ صبح در GitHub بررسی می‌شود (گردش‌کار «Liara balance»).</p>`;
+    m.innerHTML = '<div class="row"><button id="hre">بررسی دوباره</button><span class="muted" id="hat"></span></div><div id="hbody"><p class="muted">در حال بررسی…</p></div>';
+    const load = async () => {
+      const [h, lb] = await Promise.all([api('/admin/api/health2'), api('/admin/api/liara').catch(e => ({state: 'error', kind: 'request', status: 'bad'}))]);
+      $('#hat').textContent = 'آخرین بررسی: ' + fmtT(h.checked_at);
+      $('#hbody').innerHTML = healthHtml(h, lb);
+      const b = $('#lbtn'); if (b) b.onclick = async () => { b.disabled = true; try { const r = await api('/admin/api/liara?refresh=true'); $('#lcard').outerHTML = liaraHtml(r); $('#lbtn').onclick = b.onclick; } finally { b.disabled = false; } };
+    };
+    $('#hre').onclick = () => { $('#hre').disabled = true; load().catch(e => { $('#hbody').innerHTML = '<p class="err">' + esc(e.message) + '</p>'; }).finally(() => { $('#hre').disabled = false; }); };
+    await load();
   },
   async actions(m) {
     const log = await api('/admin/api/log');
@@ -179,6 +219,10 @@ async function enter() {
 }
 $('#enter').onclick = enter; $('#key').onkeydown = e => { if (e.key === 'Enter') enter(); };
 $('#refresh').onclick = () => render(); $('#logout').onclick = logout;
+// pull down at the top of the page to refresh (touch screens, also in the admin app)
+(() => { let y0 = null; const top = () => (window.scrollY || document.documentElement.scrollTop) <= 0;
+  addEventListener('touchstart', e => { y0 = top() && e.touches.length === 1 ? e.touches[0].clientY : null; }, {passive: true});
+  addEventListener('touchend', e => { if (y0 !== null && e.changedTouches[0].clientY - y0 > 120 && !$('#app').hidden && !$('#dlg').open) render(); y0 = null; }, {passive: true}); })();
 if (KEY) enter();
 </script>
 </body>

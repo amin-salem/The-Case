@@ -1,0 +1,80 @@
+name: Release admin APK
+
+# Builds the small ADMIN app (admin_app/): a full-screen wrapper of the web panel /admin/ui, for Amin's own phone.
+# Run it from the Actions tab, or:  git push -f origin <branch>:release-admin
+# It publishes the GitHub release `admin-latest` (the APK is replaced every time).
+# It never touches `main` and never deploys the server. No admin key is in the build: the app asks for it on the phone.
+on:
+  workflow_dispatch:
+  push:
+    branches: [release-admin]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-admin
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Android project (created here, it is not kept in git)
+        working-directory: admin_app
+        run: |
+          flutter create --org app.parvandeh --project-name admin_panel --platforms android .
+          rm -f test/widget_test.dart
+      - name: Signing key (same secrets as the main release; without them the debug key is used)
+        working-directory: admin_app
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > android/app/release.jks
+            printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=%s\nstoreFile=release.jks\n' \
+              "$KEYSTORE_PASSWORD" "$KEYSTORE_PASSWORD" "$KEY_ALIAS" > android/key.properties
+          fi
+      - name: Patch (application id, permissions, label, icon, signing)
+        working-directory: admin_app
+        run: python3 tools/patch_android.py
+      - name: Analyze and test
+        working-directory: admin_app
+        run: |
+          flutter pub get
+          flutter analyze --no-fatal-infos
+          flutter test
+      - name: Build
+        working-directory: admin_app
+        run: |
+          flutter build apk --release
+          mkdir -p release
+          cp build/app/outputs/flutter-apk/app-release.apk release/parvandeh-admin.apk
+          sha256sum release/parvandeh-admin.apk
+      - name: Publish the release admin-latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V=$(grep '^version:' admin_app/pubspec.yaml | awk '{print $2}')
+          {
+            echo "Admin app $V, commit ${GITHUB_SHA::7}. Shows exactly what /admin/ui shows, so new panel features need no new APK."
+            if [ -f admin_app/android/key.properties ]; then echo "Signed with the permanent release key."; else echo "Signed with a temporary test key."; fi
+            echo
+            echo "For Amin's own phone only: do not share this APK or the admin key."
+            echo
+            (cd admin_app/release && sha256sum parvandeh-admin.apk)
+          } > notes.md
+          gh release delete admin-latest --cleanup-tag --yes || true
+          gh release create admin-latest admin_app/release/parvandeh-admin.apk \
+            --title "پنل پرونده (admin app)" --notes-file notes.md --target "$GITHUB_SHA" --latest=false

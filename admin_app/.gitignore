@@ -1,0 +1,9 @@
+# flutter create makes these in CI; they are not kept in git
+android/
+ios/
+.dart_tool/
+build/
+.flutter-plugins*
+.packages
+pubspec.lock
+release/

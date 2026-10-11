@@ -1,5 +1,10 @@
 # Changelog
 
+## server 1.18.0 + admin app 1.0
+
+- New small **admin app** (`admin_app/`, Flutter): a full-screen wrapper of the web panel `/admin/ui` for Amin's own phone. The admin key is typed once on the phone and kept in the Android Keystore (never in the APK or repo); the app opens `/admin/ui#k=<key>` and the page signs in from the URL fragment, then removes it from the address bar. Device-lock gate and screenshot block are switchable in the app. APK: workflow `release-admin.yml`, branch `release-admin`, GitHub release `admin-latest`. See `docs/operations.md`.
+- Panel «سلامت» (Health) screen rebuilt: server (version, uptime, workers, DB latency and size), TLS days left for gaamly.ir and thecase.liara.run, content ahead / next weekend case / story chapters / validation, players today, app versions, security flags, Liara balance card. New admin endpoints `GET /admin/api/health2` and `GET /admin/api/liara` (token `LIARA_API_TOKEN` read on the server only; 5 min cache, one real call per 30 s). Panel also refreshes on pull-down on touch screens. No migrations.
+
 ## content: story season 1 chapter 1
 
 - Story mode season 1 «کبریت سوخته» has its bible (`server/app/content/story/s01/bible.md`) and chapter 1 «هفت‌ستاره» (`s01/ch01.json`). From 2026-10-12 00:00 Tehran `/v1/config` shows `upcoming.story.open = true`. Chapters 2–3 follow on the next nightly runs.
