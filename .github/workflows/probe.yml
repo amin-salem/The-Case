@@ -6,14 +6,21 @@ jobs:
   p:
     runs-on: ubuntu-latest
     steps:
-      - name: gammly health
-        run: curl -sS -m 25 --fail https://gammly.ir/health
-      - name: liara health
+      - name: code
+        run: |
+          code=$(curl -s -m 25 -o /tmp/b -w '%{http_code}' https://thecase.liara.run/health || true)
+          echo "code=$code"
+          [ "$code" = 200 ] && exit 0
+          [ "$code" = 503 ] && exit 3
+          [ "$code" = 502 ] && exit 4
+          [ "$code" = 404 ] && exit 5
+          [ "$code" = 000 ] && exit 6
+          exit 7
+      - name: whois
         if: always()
-        run: curl -sS -m 25 --fail https://thecase.liara.run/health
-      - name: gammly dns
-        if: always()
-        run: getent hosts gammly.ir
-      - name: liara dns
-        if: always()
-        run: getent hosts thecase.liara.run
+        run: |
+          getent hosts thecase.liara.run
+          dig +short NS gammly.ir || true
+          dig +short A gammly.ir @8.8.8.8 || true
+          dig +short SOA gammly.ir @8.8.8.8 || true
+          exit 9
