@@ -10,10 +10,8 @@ jobs:
         run: |
           h=$(curl -s -m 25 -w ' http=%{http_code}' https://gaamly.ir/health | head -c 300)
           echo "::notice title=health::$h"
-          c=$(curl -s -m 25 https://gaamly.ir/v1/config | python3 -c "import sys,json
-d=json.load(sys.stdin)
-print('server=',d.get('server_version') or d.get('version'),'| upcoming=',json.dumps(d.get('upcoming'),ensure_ascii=False)[:500],'| keys=',','.join(list(d)[:25]))" 2>&1 | head -c 900)
+          c=$(curl -s -m 25 https://gaamly.ir/v1/config | head -c 1500 | tr '\n' ' ')
           echo "::notice title=config::$c"
-          s=$(curl -s -m 25 -o /tmp/s -w 'http=%{http_code}' https://gaamly.ir/v1/story; head -c 300 /tmp/s)
+          s=$(curl -s -m 25 -o /tmp/s -w 'http=%{http_code} ' https://gaamly.ir/v1/story; head -c 300 /tmp/s | tr '\n' ' ')
           echo "::notice title=story::$s"
-          for p in privacy; do echo "::notice title=$p::$(curl -s -m 25 -o /dev/null -w '%{http_code}' https://gaamly.ir/$p)"; done
+          echo "::notice title=privacy::$(curl -s -m 25 -o /dev/null -w '%{http_code}' https://gaamly.ir/privacy)"
