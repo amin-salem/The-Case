@@ -1,5 +1,9 @@
 # Changelog
 
+## content: story season 1 chapter 1
+
+- Story mode season 1 «کبریت سوخته» has its bible (`server/app/content/story/s01/bible.md`) and chapter 1 «هفت‌ستاره» (`s01/ch01.json`). From 2026-10-12 00:00 Tehran `/v1/config` shows `upcoming.story.open = true`. Chapters 2–3 follow on the next nightly runs.
+
 ## app 1.20.2: new domain gaamly.ir
 
 - The app now tries `https://gaamly.ir` first and falls back to `https://thecase.liara.run`. The uptime watch and release check use the same two addresses. The package name `ir.gammly.parvandeh` is unchanged. Players on older builds only reach the server through thecase.liara.run, so they need this update if that address stays down.
