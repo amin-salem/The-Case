@@ -6,14 +6,17 @@ from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import HTMLResponse
+from pydantic import BaseModel, Field
 from sqlalchemy import case, func, or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import content
+from ..config import get_settings
 from ..db import get_session
 from ..models import (AdminLog, CaseProgress, CoinLog, Event, InboxItem, MissionDay, Player, PlayerAchievement,
                       Purchase, StoryProgress, utcnow)
 from ..security import require_admin
+from ..services.ratelimit import limiter
 from ..util import ts
 from ..version import VERSION
 
@@ -104,7 +107,10 @@ async def overview(days: int = Query(14, ge=1, le=60), session: AsyncSession = D
         "cases_solved": await count(select(func.count()).select_from(CaseProgress).where(CaseProgress.solved.is_(True))),
         "coins_in_circulation": int(await session.scalar(select(func.coalesce(func.sum(Player.coins), 0))) or 0),
     }
-    return {"days": out, "totals": totals}
+    versions = [{"version": v or "؟", "build": int(b or 0), "players": int(n)} for v, b, n in (await session.execute(
+        select(Player.client_version, Player.client_build, func.count()).group_by(Player.client_version, Player.client_build)
+        .order_by(func.count().desc()).limit(30))).all()]
+    return {"days": out, "totals": totals, "versions": versions}
 
 
 @router.get("/feed")
@@ -194,7 +200,10 @@ async def player(player_id: str, session: AsyncSession = Depends(get_session)):
                    "xp": p.xp, "streak": p.streak, "best_streak": p.best_streak, "solved": p.cases_solved,
                    "stars": p.stars_total, "warrants": p.warrants, "no_ads": p.no_ads, "vip_until": ts(p.vip_until),
                    "banned": p.banned, "app_version": p.app_version, "invite_code": p.invite_code,
-                   "referred_by": p.referred_by, "created": ts(p.created_at), "last_seen": ts(p.last_seen),
+                   "referred_by": p.referred_by, "client": {
+                       "version": p.client_version, "build": p.client_build, "platform": p.platform,
+                       "os_version": p.os_version, "device_model": p.device_model, "reported": ts(p.client_at)},
+                   "created": ts(p.created_at), "last_seen": ts(p.last_seen),
                    "stats": p.stats or {}},
         "same_device": [{"id": i, "nickname": n, "created": ts(c)} for i, n, c in same_device],
         "cases": [{"case": x.case_id, "title": _title(x.case_id), "solved": x.solved, "failed": x.failed, "stars": x.stars,
@@ -266,7 +275,21 @@ async def health(session: AsyncSession = Depends(get_session)):
     today = content.todays_case()
     return {"server_version": VERSION, "db_ok": db_ok, "now": content.now_local().isoformat(),
             "today_case": today.id if today else None, "nightly_cases": len(content.all_cases()),
-            "weekly_cases": len(content.weekly_cases())}
+            "weekly_cases": len(content.weekly_cases()),
+            "rate_limit": await limiter.admin_summary() if get_settings().rate_limit else {"enabled": False}}
+
+
+class ClearLockIn(BaseModel):
+    id: str = Field(min_length=4, max_length=32, pattern=r"^[0-9a-f]+$")
+
+
+@router.post("/rate-limit/clear")
+async def clear_lockout(body: ClearLockIn, session: AsyncSession = Depends(get_session)):
+    """Lift one admin lockout (the id is shown on the Health screen); recorded in the admin log."""
+    existed = await limiter.clear_lockout(body.id)
+    session.add(AdminLog(action="rl_clear", target=body.id[:12], detail={"existed": existed}))
+    await session.commit()
+    return {"cleared": existed}
 
 
 @router.get("/log")

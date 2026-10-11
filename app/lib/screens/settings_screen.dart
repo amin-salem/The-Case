@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart' show StartScreen;
+import '../services/about.dart';
 import '../services/api.dart';
+import '../services/billing.dart' show kStoreName;
 import '../services/font_pref.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
@@ -22,28 +25,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  String? _version;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadVersion();
-  }
-
-  Future<void> _loadVersion() async {
-    try {
-      final info = await PackageInfo.fromPlatform();
-      if (!mounted) return;
-      final build = info.buildNumber.isEmpty ? '' : ' (${_faDigits(info.buildNumber)})';
-      setState(() => _version = '${_faDigits(info.version)}$build');
-    } catch (_) {
-      // no platform (tests): the line is simply left out
-    }
-  }
-
-  static String _faDigits(String s) =>
-      s.replaceAllMapped(RegExp(r'[0-9]'), (m) => '۰۱۲۳۴۵۶۷۸۹'[m[0]!.codeUnitAt(0) - 48]);
-
   Future<void> _open(Uri uri) async {
     try {
       final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -167,8 +148,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     label: Text('حذف حساب', style: tBody(14, color: K.stamp, w: FontWeight.w700)),
                   ),
                 ),
-                if (_version != null)
-                  Center(child: Text('نسخه‌ی $_version', style: tBody(12, color: K.textSoft))),
+                const SizedBox(height: 6),
+                const AboutCard(),
               ]),
             );
           },
@@ -350,4 +331,105 @@ class FontSettings extends StatelessWidget {
                   .copyWith(fontFamily: font ?? kFont)),
         ),
       );
+}
+
+
+/// «درباره‌ی برنامه»: version, store, server, player id. Tap = copy a plain-text block for support.
+class AboutCard extends StatefulWidget {
+  const AboutCard({super.key});
+
+  @override
+  State<AboutCard> createState() => _AboutCardState();
+}
+
+class _AboutCardState extends State<AboutCard> {
+  AboutInfo? _info;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    var version = '', build = '', pkg = '';
+    try {
+      final i = await PackageInfo.fromPlatform();
+      version = i.version;
+      build = i.buildNumber;
+      pkg = i.packageName;
+    } catch (_) {
+      // no platform (tests): those lines show a dash
+    }
+    final server = await Api.i.serverStatus();
+    if (!mounted) return;
+    setState(() => _info = AboutInfo(
+          appName: 'پرونده',
+          version: version,
+          build: build,
+          store: kStoreName,
+          packageName: pkg,
+          serverVersion: server.version,
+          serverOk: server.ok,
+          playerShortId: AboutInfo.shortId(Api.i.playerId),
+          inviteCode: Api.i.profile?.inviteCode ?? '',
+          language: WidgetsBinding.instance.platformDispatcher.locale.toLanguageTag(),
+        ));
+  }
+
+  Future<void> _copy() async {
+    final info = _info;
+    if (info == null) return;
+    await Clipboard.setData(ClipboardData(text: info.supportText()));
+    if (mounted) toast(context, 'اطلاعات برای پشتیبانی کپی شد؛ برای پشتیبانی بفرستش');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final i = _info;
+    Widget row(String k, String v, {bool ltr = false, Color? color}) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Row(children: [
+            Text(k, style: tBody(13, color: K.textSoft)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(v.isEmpty ? '—' : v,
+                  textAlign: TextAlign.end,
+                  textDirection: ltr ? TextDirection.ltr : null,
+                  style: tBody(13, color: color ?? K.text, w: FontWeight.w700)),
+            ),
+          ]),
+        );
+    return Material(
+      color: K.night2,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: i == null ? null : _copy,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: i == null
+              ? Text('درباره‌ی برنامه…', style: tBody(13, color: K.textSoft))
+              : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                  Row(children: [
+                    Expanded(child: Text('درباره‌ی برنامه', style: tBody(14, color: K.brass, w: FontWeight.w900))),
+                    const Icon(Icons.copy_rounded, size: 16, color: K.textSoft),
+                  ]),
+                  const SizedBox(height: 6),
+                  row('برنامه', i.appName),
+                  row('نسخه', i.version.isEmpty ? '' : '${i.version} (${i.build})', ltr: true),
+                  row('نصب‌شده از', i.store),
+                  row('بسته', i.packageName, ltr: true),
+                  row('سرور', i.serverOk ? 'متصل  •  ${i.serverVersion}' : 'در دسترس نیست',
+                      color: i.serverOk ? K.ok : K.stamp),
+                  row('شناسه‌ی بازیکن', i.playerShortId, ltr: true),
+                  row('کد دعوت', i.inviteCode, ltr: true),
+                  row('زبان دستگاه', i.language, ltr: true),
+                  const SizedBox(height: 6),
+                  Text('برای کپی اطلاعات پشتیبانی روی کارت بزن', style: tBody(11.5, color: K.textSoft)),
+                ]),
+        ),
+      ),
+    );
+  }
 }

@@ -82,6 +82,19 @@ class ProfileIn(BaseModel):
     avatar: int | None = Field(default=None, ge=0, le=11)
 
 
+_SAFE = r"^[A-Za-z0-9 ._+,()/-]*$"
+
+
+class ClientInfoIn(BaseModel):
+    """What the app says about itself. Every string is bounded and limited to plain characters."""
+
+    app_version: str = Field(max_length=24, pattern=r"^[0-9][0-9A-Za-z.+-]*$")
+    build: int = Field(ge=0, le=10_000_000)
+    platform: str = Field(default="android", max_length=16, pattern=r"^[a-z]+$")
+    os_version: str = Field(default="", max_length=32, pattern=_SAFE)
+    device_model: str = Field(default="", max_length=48, pattern=_SAFE)
+
+
 class CoinsOut(BaseModel):
     coins: int
     added: int = 0

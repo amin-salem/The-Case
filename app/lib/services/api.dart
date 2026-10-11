@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/models.dart';
@@ -27,6 +28,10 @@ class ApiException implements Exception {
 
   /// The machine-readable reason ("not_enough_coins", "locked", ...).
   String get code => detail is Map ? '${(detail as Map)['error']}' : '$detail';
+
+  /// Seconds the server asked us to wait (HTTP 429), 0 when unknown.
+  int get retryAfter => detail is Map ? ((detail as Map)['retry_after'] as num?)?.toInt() ?? 0 : 0;
+  bool get rateLimited => status == 429;
   int get need => detail is Map ? ((detail as Map)['need'] as int? ?? (detail as Map)['cost'] as int? ?? 0) : 0;
 
   @override
@@ -73,6 +78,21 @@ class Api extends ChangeNotifier {
   String lastError = '';
   bool ready = false;
 
+  /// Set when the server said «too many requests» (429): until when to wait. The banner counts down to it.
+  final ValueNotifier<DateTime?> rateLimitedUntil = ValueNotifier(null);
+
+  /// Waits between retries of a rate-limited GET (tests replace it so nothing really sleeps).
+  @visibleForTesting
+  Future<void> Function(Duration) sleep = (d) => Future<void>.delayed(d);
+
+  /// How long to wait before retry number [attempt] (0 = first retry) of a rate-limited GET: exponential
+  /// (the server's Retry-After, doubling each time) plus up to half a second of jitter, never more than 10 s.
+  static Duration backoffDelay(int attempt, int retryAfter, [Random? rng]) {
+    final base = (retryAfter < 1 ? 1 : retryAfter) * 1000 * (1 << attempt);
+    final jitter = (rng ?? Random()).nextInt(500);
+    return Duration(milliseconds: (base + jitter).clamp(0, 10000).toInt());
+  }
+
   /// False while the server can't be reached. Screens rebuild when it changes.
   bool online = true;
 
@@ -113,6 +133,13 @@ class Api extends ChangeNotifier {
   static const offlineText = 'به اینترنت وصل نیستی';
   static const serverDownText = 'الان به سرور دسترسی نداریم، چند دقیقه دیگه دوباره امتحان کن';
   static const genericText = 'یه مشکلی پیش اومد، دوباره امتحان کن';
+  static String rateLimitedText(int seconds) => seconds > 0
+      ? 'کمی صبر کن؛ ${_faDigits('$seconds')} ثانیه‌ی دیگه دوباره امتحان کن'
+      : 'خیلی سریع پیش رفتی، کمی صبر کن و دوباره امتحان کن';
+
+  static String _faDigits(String s) =>
+      s.replaceAllMapped(RegExp(r'[0-9]'), (m) => '۰۱۲۳۴۵۶۷۸۹'[m[0]!.codeUnitAt(0) - 48]);
+
   static const needOnlineText = 'برای این کار باید به اینترنت وصل باشی';
   static const offlineBannerText = 'آفلاینی؛ بعضی کارها به اینترنت نیاز داره';
   static const notSavedText = 'این پرونده هنوز روی گوشیت ذخیره نشده. برای باز کردنش یه بار به اینترنت وصل شو.';
@@ -143,6 +170,7 @@ class Api extends ChangeNotifier {
   /// A short Persian message for the player. Technical details only go to the debug log.
   static String friendly(Object e) {
     debugPrint('Api error: $e');
+    if (e is ApiException && e.rateLimited) return rateLimitedText(e.retryAfter);
     return switch (failKind(e)) {
       FailKind.offline => offlineText,
       FailKind.server => serverDownText,
@@ -243,7 +271,37 @@ class Api extends ChangeNotifier {
     await _ensureLogin();
     await refreshProfile();
     unawaited(refreshInbox());
+    unawaited(_reportClient());
   }
+
+  bool _clientReported = false;
+
+  /// Tells the server which app version this is (once per app start; it shows in the admin panel). Failure is fine.
+  Future<void> _reportClient() async {
+    if (_clientReported) return;
+    _clientReported = true;
+    try {
+      final info = await PackageInfo.fromPlatform();
+      await _call('POST', '/v1/me/client', body: {
+        'app_version': info.version,
+        'build': int.tryParse(info.buildNumber) ?? kAppBuild,
+        'platform': defaultTargetPlatform == TargetPlatform.iOS ? 'ios' : 'android',
+      });
+    } catch (e) {
+      debugPrint('report client: $e');
+    }
+  }
+
+  /// For the About card in Settings: does the server answer, and which version is it.
+  Future<({bool ok, String version})> serverStatus() async {
+    try {
+      final r = await _sendAny('GET', '/health', const {}, null);
+      final j = jsonDecode(utf8.decode(r.bodyBytes));
+      if (r.statusCode == 200 && j is Map) return (ok: true, version: '${j['version'] ?? ''}');
+    } catch (_) {}
+    return (ok: false, version: '');
+  }
+
 
   void _wentOffline(Object e) {
     debugPrint('Api: server not reachable: $e');
@@ -344,6 +402,7 @@ class Api extends ChangeNotifier {
   Future<void> _storeLogin(Map<String, dynamic> j) async {
     final newId = j['player_id'] as String;
     final switched = _p.getString('player') != null && _p.getString('player') != newId;
+    _clientReported = false; // the new account reports the app again
     _playerId = newId;
     _secret = j['secret'] as String;
     _token = j['token'] as String;
@@ -407,7 +466,8 @@ class Api extends ChangeNotifier {
       await _writeCache(key, m);
       return m;
     } catch (e) {
-      if (!isNetworkFail(e)) rethrow;
+      // no internet, server trouble or «too many requests»: show what is saved on the phone
+      if (!isNetworkFail(e) && !(e is ApiException && e.rateLimited)) rethrow;
       final saved = _readCache(key);
       if (saved is Map) return Map<String, dynamic>.from(saved);
       rethrow;
@@ -486,7 +546,8 @@ class Api extends ChangeNotifier {
     Error.throwWithStackTrace(first, stack!);
   }
 
-  Future<Object?> _call(String method, String path, {Object? body, bool auth = true, bool retried = false}) async {
+  Future<Object?> _call(String method, String path,
+      {Object? body, bool auth = true, bool retried = false, int attempt = 0}) async {
     final headers = {'Content-Type': 'application/json'};
     if (auth) {
       await _ensureLogin();
@@ -512,6 +573,19 @@ class Api extends ChangeNotifier {
       throw err;
     }
     _cameOnline();
+    if (r.statusCode == 429) {
+      final fromHeader = int.tryParse(r.headers['retry-after'] ?? '') ?? 0;
+      final err = ApiException(
+          429, decoded is Map ? decoded : {'error': 'rate_limited', 'retry_after': fromHeader});
+      final wait = err.retryAfter > 0 ? err.retryAfter : fromHeader;
+      rateLimitedUntil.value = DateTime.now().add(Duration(seconds: wait < 1 ? 1 : wait));
+      // Only a GET (safe to repeat), only a short wait, at most twice, with growing pauses: never a tight loop.
+      if (method == 'GET' && attempt < 2 && wait <= 8) {
+        await sleep(backoffDelay(attempt, wait));
+        return _call(method, path, body: body, auth: auth, retried: retried, attempt: attempt + 1);
+      }
+      throw err;
+    }
     if (r.statusCode == 401 && auth && !retried) {
       _token = null;
       _tokenExp = 0;
@@ -859,6 +933,7 @@ class Api extends ChangeNotifier {
         'ad_limit' => 'امروز سهم تبلیغت تموم شد، فردا دوباره بیا',
         'bad_nickname' => 'این اسم قابل قبول نیست',
         'banned' => 'این حساب مسدود شده',
+        'rate_limited' => 'خیلی سریع پیش رفتی، کمی صبر کن و دوباره امتحان کن',
         'too_many_requests' => 'خیلی سریع امتحان کردی، کمی صبر کن',
         'max_freezes' => 'بیشتر از این نمی‌شه بیمه نگه داشت',
         'finish_first' => 'اول پرونده رو تموم کن',

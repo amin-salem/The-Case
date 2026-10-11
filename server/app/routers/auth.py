@@ -18,6 +18,7 @@ from ..models import Player, TransferCode, utcnow
 from ..schemas import (EmailIn, EmailLoginIn, LoginIn, RegisterIn, RegisterOut, SecureOut, TokenOut,
                        TransferCodeOut, TransferIn)
 from ..security import current_player, hash_secret, make_token, new_secret, random_code, secret_matches
+from ..services.ratelimit import enforce
 from ..util import add_coins, default_nickname, ts, unique_invite_code
 from .common import profile_out
 
@@ -39,6 +40,7 @@ async def _login_as(session: AsyncSession, player: Player, device_id: str) -> Re
 
 @router.post("/register", response_model=RegisterOut)
 async def register(body: RegisterIn, session: AsyncSession = Depends(get_session)):
+    await enforce("register_device", body.device_id)
     secret = new_secret()
     player = Player(secret_hash=hash_secret(secret), device_id=body.device_id, app_version=body.app_version,
                     nickname=default_nickname(), invite_code=await unique_invite_code(session),
@@ -53,6 +55,7 @@ async def register(body: RegisterIn, session: AsyncSession = Depends(get_session
 
 @router.post("/login", response_model=TokenOut)
 async def login(body: LoginIn, session: AsyncSession = Depends(get_session)):
+    await enforce("login_target", body.player_id)
     player = await session.get(Player, body.player_id)
     if player is None or not secret_matches(body.secret, player.secret_hash):
         raise HTTPException(401, "wrong_login")
@@ -98,6 +101,7 @@ async def set_email(body: EmailIn, player: Player = Depends(current_player),
 @router.post("/login/email", response_model=RegisterOut)
 async def login_email(body: EmailLoginIn, session: AsyncSession = Depends(get_session)):
     email = acc.normalize_email(body.email)
+    await enforce("login_target", "email:" + (email or body.email.strip().lower())[:120])
     player = await session.scalar(select(Player).where(Player.email == email)) if email else None
     if player is None or not acc.check_password(body.password, player.password_hash):
         raise HTTPException(401, "wrong_login")
@@ -116,6 +120,7 @@ async def make_transfer_code(player: Player = Depends(current_player),
 
 @router.post("/transfer", response_model=RegisterOut)
 async def use_transfer_code(body: TransferIn, session: AsyncSession = Depends(get_session)):
+    await enforce("login_target", "code:" + body.code.strip().upper()[:32])
     row = await session.scalar(select(TransferCode).where(TransferCode.code == body.code.strip().upper()))
     if row is None or row.used or row.expires_at < utcnow():
         raise HTTPException(404, "bad_code")

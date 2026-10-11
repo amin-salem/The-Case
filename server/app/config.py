@@ -42,7 +42,11 @@ class Settings(BaseSettings):
     new_case_hour: int = 21
 
     cors_origins: str = "*"
-    rate_limit: bool = True
+    rate_limit: bool = True  # RATE_LIMIT=false is the kill switch (policies: RL_<NAME>, see docs/operations.md)
+    redis_url: str = ""  # optional: shared counters for the strict limits (else the database is used)
+    rate_trusted_hops: int = 1  # proxies in front of the server; the client IP is the Nth X-Forwarded-For entry from the right
+    rate_trusted_proxies: str = ""  # optional CIDR list of proxies allowed to set X-Forwarded-For (default: private addresses)
+    rate_admin_allow_ips: str = ""  # comma list of IPs that are never locked out of /admin
 
     @field_validator("database_url")
     @classmethod

@@ -41,6 +41,11 @@ def main() -> int:
         t = time.time()
         try:
             r = c.request(method, path, **kw)
+            for _ in range(3):  # the rate limiter says "wait": do what the app does and retry politely
+                if r.status_code != 429:
+                    break
+                time.sleep(min(float(r.headers.get("retry-after", "1")), 10) + 0.2)
+                r = c.request(method, path, **kw)
         except Exception as e:  # noqa: BLE001
             check(False, f"{method} {path}", f"no connection: {type(e).__name__}: {e}")
             return None

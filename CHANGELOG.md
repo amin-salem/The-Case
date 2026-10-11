@@ -1,5 +1,19 @@
 # Changelog
 
+## server 1.18.0, app 1.20.3 (build 39): rate limiter + «درباره‌ی برنامه»
+
+- **Rate limiter** rewritten: a policy table (burst + sustained tiers, every value overridable with `RL_<NAME>`), shared counters
+  for the strict limits (`rate_hits` table, or Redis when `REDIS_URL` is set), bounded in-memory counters for the generous ones,
+  player-or-IP keys, spoof-proof client IP, fail-open/closed rules, `429` JSON with `Retry-After` and `X-RateLimit-*`,
+  admin lockout (5 wrong keys → IP locked 15 min). See `docs/operations.md` «Rate limits». `start.sh` now runs uvicorn with
+  `--no-proxy-headers` (the IP is worked out by the limiter).
+- Admin panel: Health shows blocked requests, top blocked keys and active lockouts, with a button to clear a lockout (admin log);
+  Overview shows how many players use each app version; the player page shows version, platform, OS and device model.
+- Migrations 0012 (`rate_hits`) and 0013 (player client columns).
+- App: handles `429` (message with countdown, a retried GET at most twice with exponential backoff + jitter, saved copy shown),
+  reports its version once per start (`POST /v1/me/client`), and Settings has the new «درباره‌ی برنامه» card (tap = copy support info).
+  Not released yet (the avatars task ships the APK).
+
 ## content: story season 1 chapter 1
 
 - Story mode season 1 «کبریت سوخته» has its bible (`server/app/content/story/s01/bible.md`) and chapter 1 «هفت‌ستاره» (`s01/ch01.json`). From 2026-10-12 00:00 Tehran `/v1/config` shows `upcoming.story.open = true`. Chapters 2–3 follow on the next nightly runs.

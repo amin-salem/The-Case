@@ -17,7 +17,8 @@ from .routers import achievements as achievement_routes
 from .routers import missions as mission_routes
 from .routers import riddles as riddle_routes
 from .routers import story as story_routes
-from .services.ratelimit import RateLimitMiddleware
+from .services import ratelimit
+from .services.ratelimit import RateLimitMiddleware, RateLimited
 
 
 @asynccontextmanager
@@ -39,8 +40,10 @@ async def lifespan(app: FastAPI):
             await asyncio.sleep(3600)
 
     task = asyncio.create_task(weekly_prizes())
+    rl_task = asyncio.create_task(ratelimit.cleanup_loop())
     yield
     task.cancel()
+    rl_task.cancel()
     await db.engine.dispose()
 
 
@@ -49,6 +52,7 @@ def create_app() -> FastAPI:
     app = FastAPI(title="The Case API", version=VERSION, lifespan=lifespan,
                   docs_url="/docs" if s.env != "prod" else None, redoc_url=None)
     app.add_middleware(RateLimitMiddleware)
+    app.add_exception_handler(RateLimited, lambda request, exc: ratelimit.rate_limited_response(exc))
     app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in s.cors_origins.split(",")],
                        allow_methods=["*"], allow_headers=["*"])
     for r in (meta.router, pages.router, auth.router, profile.router, cases.router, leaderboard.router,

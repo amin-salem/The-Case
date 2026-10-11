@@ -8,8 +8,8 @@ from .. import content, progress
 from .. import economy as eco
 from ..config import get_settings
 from ..db import get_session
-from ..models import Player
-from ..schemas import CoinsOut, GainsOut, ProfileIn, ProfileOut
+from ..models import Player, utcnow
+from ..schemas import ClientInfoIn, CoinsOut, GainsOut, ProfileIn, ProfileOut
 from ..security import current_player
 from ..util import add_coins, clean_nickname
 from .common import profile_out
@@ -75,6 +75,20 @@ async def update_me(body: ProfileIn, player: Player = Depends(current_player),
         player.avatar = body.avatar
     await session.commit()
     return profile_out(player)
+
+
+@router.post("/me/client")
+async def report_client(body: ClientInfoIn, player: Player = Depends(current_player),
+                        session: AsyncSession = Depends(get_session)):
+    """The app reports its version and device once per start (rate limited by the «client_info» policy)."""
+    player.client_version = body.app_version.strip()
+    player.client_build = body.build
+    player.platform = body.platform
+    player.os_version = body.os_version.strip()
+    player.device_model = body.device_model.strip()
+    player.client_at = utcnow()
+    await session.commit()
+    return {"ok": True}
 
 
 @router.post("/wallet/ad-reward", response_model=CoinsOut)

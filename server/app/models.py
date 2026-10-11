@@ -63,6 +63,14 @@ class Player(Base):
     chests: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     warrants: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # story mode «حکم بازرسی»
 
+    # what the app reports about itself (POST /v1/me/client); validated and bounded by ClientInfoIn
+    client_version: Mapped[str] = mapped_column(String(24), default="", server_default="")
+    client_build: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    platform: Mapped[str] = mapped_column(String(16), default="", server_default="")
+    os_version: Mapped[str] = mapped_column(String(32), default="", server_default="")
+    device_model: Mapped[str] = mapped_column(String(48), default="", server_default="")
+    client_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
     banned: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     last_seen: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
@@ -256,3 +264,15 @@ class AdminLog(Base):
     action: Mapped[str] = mapped_column(String(32))
     target: Mapped[str] = mapped_column(String(48), default="")
     detail: Mapped[dict] = mapped_column(JSON, default=dict)
+
+
+class RateHit(Base):
+    """Rate limiter counters shared by all workers (strict limits). One row per bucket key and window start; lock rows
+    ("lock:...") use window_start as the unlock time. Old rows are deleted hourly (services/ratelimit.py)."""
+
+    __tablename__ = "rate_hits"
+    __table_args__ = (Index("ix_rate_hits_window_start", "window_start"),)
+
+    key: Mapped[str] = mapped_column(String(160), primary_key=True)
+    window_start: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
+    count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
