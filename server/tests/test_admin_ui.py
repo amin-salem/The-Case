@@ -1,4 +1,4 @@
-from conftest import ADMIN, new_player
+from .conftest import ADMIN, new_player
 
 
 async def test_admin_page_and_api_need_the_key(client):
