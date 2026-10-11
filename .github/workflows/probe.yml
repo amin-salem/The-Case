@@ -10,7 +10,7 @@ jobs:
         run: |
           h=$(curl -s -m 25 -w ' http=%{http_code}' https://gaamly.ir/health | head -c 300)
           echo "::notice title=health::$h"
-          c=$(curl -s -m 25 https://gaamly.ir/v1/config | head -c 1500 | tr '\n' ' ')
+          c=$(curl -s -m 25 https://gaamly.ir/v1/config | grep -o '"upcoming".*' | head -c 900)
           echo "::notice title=config::$c"
           s=$(curl -s -m 25 -o /tmp/s -w 'http=%{http_code} ' https://gaamly.ir/v1/story; head -c 300 /tmp/s | tr '\n' ' ')
           echo "::notice title=story::$s"
