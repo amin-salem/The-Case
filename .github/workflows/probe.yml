@@ -1,0 +1,17 @@
+name: Probe
+on: workflow_dispatch
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - name: gammly health
+        run: curl -sS -m 25 --fail https://gammly.ir/health
+      - name: liara health
+        if: always()
+        run: curl -sS -m 25 --fail https://thecase.liara.run/health
+      - name: gammly dns
+        if: always()
+        run: getent hosts gammly.ir
+      - name: liara dns
+        if: always()
+        run: getent hosts thecase.liara.run
