@@ -1,0 +1,58 @@
+name: Liara balance
+# Every day at 08:00 Tehran: read the Liara wallet (https://api.liara.ir/v1/billing). When the balance is at or
+# below the limit, this run FAILS and GitHub emails the repo owner («Liara balance» failed): time to charge it.
+# Needs the repository secret LIARA_API_TOKEN (never commit it). Optional variable LIARA_MIN_BALANCE (default 300000).
+on:
+  schedule:
+    - cron: "30 4 * * *"
+  workflow_dispatch:
+jobs:
+  balance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Wallet
+        env:
+          TOKEN: ${{ secrets.LIARA_API_TOKEN }}
+          MIN: ${{ vars.LIARA_MIN_BALANCE }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error title=No token::Add the repository secret LIARA_API_TOKEN (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+          code=$(curl -sS -m 25 -o resp.json -w '%{http_code}' -H "Authorization: Bearer $TOKEN" https://api.liara.ir/v1/billing || echo 000)
+          echo "HTTP $code"
+          python3 - "$code" "${MIN:-300000}" <<'PY'
+          import json, sys
+          code, limit = sys.argv[1], float(sys.argv[2])
+          if code != "200":
+              print(f"::error title=Liara API::billing answered HTTP {code}. The token may be wrong or expired.")
+              sys.exit(1)
+          data = json.load(open("resp.json"))
+
+          def find(o):
+              if isinstance(o, dict):
+                  for k, v in o.items():
+                      if k.lower() in ("balance", "credit", "credits") and isinstance(v, (int, float)):
+                          return v
+                  for v in o.values():
+                      r = find(v)
+                      if r is not None:
+                          return r
+              elif isinstance(o, list):
+                  for v in o:
+                      r = find(v)
+                      if r is not None:
+                          return r
+              return None
+
+          bal = find(data)
+          if bal is None:
+              keys = list(data) if isinstance(data, dict) else type(data).__name__
+              print(f"::error title=Balance not found::The billing answer has no balance field; top-level keys: {keys}")
+              sys.exit(1)
+          print(f"balance: {bal:,.0f}  limit: {limit:,.0f}")
+          if bal <= limit:
+              print(f"::error title=Charge Liara::Balance {bal:,.0f} is at or below {limit:,.0f}. Charge the Liara wallet before the app stops.")
+              sys.exit(1)
+          PY
