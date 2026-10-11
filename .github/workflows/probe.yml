@@ -1,26 +1,18 @@
 name: Probe
 on:
   push:
-    branches: [domain-gammly]
+    branches: [domain-gaamly]
 jobs:
   p:
     runs-on: ubuntu-latest
     steps:
-      - name: code
+      - name: gaamly.ir health
         run: |
-          code=$(curl -s -m 25 -o /tmp/b -w '%{http_code}' https://thecase.liara.run/health || true)
-          echo "code=$code"
-          [ "$code" = 200 ] && exit 0
-          [ "$code" = 503 ] && exit 3
-          [ "$code" = 502 ] && exit 4
-          [ "$code" = 404 ] && exit 5
-          [ "$code" = 000 ] && exit 6
-          exit 7
-      - name: whois
-        if: always()
-        run: |
-          getent hosts thecase.liara.run
-          dig +short NS gammly.ir || true
-          dig +short A gammly.ir @8.8.8.8 || true
-          dig +short SOA gammly.ir @8.8.8.8 || true
-          exit 9
+          for host in gaamly.ir thecase.liara.run; do
+            echo "== $host"
+            getent hosts $host || echo "no DNS"
+            curl -sS -m 25 -i https://$host/health 2>&1 | head -12 || true
+          done
+          echo "== cert"
+          echo | openssl s_client -servername gaamly.ir -connect gaamly.ir:443 2>/dev/null | openssl x509 -noout -subject -enddate 2>&1 || echo "no cert"
+          curl -s -m 25 https://gaamly.ir/health | grep -q '"ok":true'

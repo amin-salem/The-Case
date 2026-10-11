@@ -1,5 +1,9 @@
 # Changelog
 
+## app 1.20.2: new domain gaamly.ir
+
+- The app now tries `https://gaamly.ir` first and falls back to `https://thecase.liara.run`. The uptime watch and release check use the same two addresses. The package name `ir.gammly.parvandeh` is unchanged. Players on older builds only reach the server through thecase.liara.run, so they need this update if that address stays down.
+
 ## server 1.17.1: admin disabled without a real key
 
 - The admin API and panel now refuse every request while `ADMIN_API_KEY` is still the built-in dev value, whatever `ENV` is (that value is public in the repo). Set a long random `ADMIN_API_KEY` on Liara to use them.

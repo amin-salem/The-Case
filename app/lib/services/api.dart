@@ -17,7 +17,7 @@ import 'reminders.dart';
 /// A build can point at one server with --dart-define=API_URL=…; otherwise the app knows two
 /// addresses for the same server and uses whichever answers (the last one that worked first).
 const String kApiUrl = String.fromEnvironment('API_URL', defaultValue: '');
-const List<String> kApiUrls = kApiUrl == '' ? ['https://gammly.ir', 'https://thecase.liara.run'] : [kApiUrl];
+const List<String> kApiUrls = kApiUrl == '' ? ['https://gaamly.ir', 'https://thecase.liara.run'] : [kApiUrl];
 const int kAppBuild = int.fromEnvironment('APP_BUILD', defaultValue: 1);
 
 class ApiException implements Exception {
