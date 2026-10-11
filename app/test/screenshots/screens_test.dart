@@ -413,7 +413,7 @@ Map<String, dynamic> _riddleDay() => {
     };
 
 Future<http.Response> _serve(http.Request req) async {
-  if (_offline) throw const SocketException('Failed host lookup: thecase.liara.run');
+  if (_offline) throw const SocketException('Failed host lookup: gaamly.ir');
   final path = req.url.path;
   final parts = path.split('/'); // ['', 'v1', 'cases', id, action]
   Object? body;

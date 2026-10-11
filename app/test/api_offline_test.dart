@@ -18,7 +18,7 @@ void main() {
 
   group('friendly messages (no technical text for the player)', () {
     test('no internet', () {
-      expect(Api.friendly(http.ClientException('Failed host lookup: thecase.liara.run')), Api.offlineText);
+      expect(Api.friendly(http.ClientException('Failed host lookup: gaamly.ir')), Api.offlineText);
       expect(Api.friendly(Exception('SocketException: Network is unreachable')), Api.offlineText);
     });
 
@@ -105,7 +105,7 @@ void main() {
       SharedPreferences.setMockInitialValues({'player': 'p1', 'secret': 's1', 'token': 't1', 'token_exp': exp});
       await Api.i.init();
       Api.i.httpClient = MockClient((req) async {
-        if (net == _Net.offline) throw http.ClientException('Failed host lookup: thecase.liara.run');
+        if (net == _Net.offline) throw http.ClientException('Failed host lookup: gaamly.ir');
         if (net == _Net.down) return http.Response('<html>502 Bad Gateway</html>', 502);
         switch ('${req.method} ${req.url.path}') {
           case 'GET /v1/config':

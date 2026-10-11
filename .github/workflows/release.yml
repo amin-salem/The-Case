@@ -21,12 +21,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Smoke test against https://thecase.liara.run
+      - name: Smoke test against https://gaamly.ir
         working-directory: server
         run: |
           pip install httpx==0.28.1
-          curl -sS -m 25 https://thecase.liara.run/health; echo
-          python tools/smoke_test.py https://thecase.liara.run
+          curl -sS -m 25 https://gaamly.ir/health; echo
+          python tools/smoke_test.py https://gaamly.ir
 
   apk:
     runs-on: ubuntu-latest
@@ -73,13 +73,13 @@ jobs:
         run: |
           cd server
           {
-            echo "## Live server check: https://thecase.liara.run"
+            echo "## Live server check: https://gaamly.ir"
             echo '```'
-            curl -sS -m 25 https://thecase.liara.run/health || echo "(health failed)"
+            curl -sS -m 25 https://gaamly.ir/health || echo "(health failed)"
             echo
             echo "gaamly.ir: $(curl -sS -m 25 https://gaamly.ir/health 2>&1 | head -c 200)"
             echo
-            python tools/smoke_test.py https://thecase.liara.run 2>&1 && echo "RESULT: ALL OK" || echo "RESULT: FAILED"
+            python tools/smoke_test.py https://gaamly.ir 2>&1 && echo "RESULT: ALL OK" || echo "RESULT: FAILED"
             echo '```'
           } | tee ../app/release/server_check.md
       - name: Release notes
