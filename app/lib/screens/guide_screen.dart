@@ -120,7 +120,7 @@ class _GuideScreenState extends State<GuideScreen> {
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: K.night3,
-                            border: Border.all(color: K.brass.withOpacity(0.6), width: 2)),
+                            border: Border.all(color: K.brass.withValues(alpha: 0.6), width: 2)),
                         child: Icon(p.icon, size: 46, color: K.brass),
                       ),
                       const SizedBox(height: 22),
