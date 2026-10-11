@@ -172,7 +172,7 @@ class GhostButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: onTap,
-      icon: Icon(icon ?? Icons.chevron_left_rounded, color: color, size: 20),
+      icon: Icon(icon ?? Icons.chevron_right_rounded, color: color, size: 20),
       label: Text(label, style: tBody(14, color: color, w: FontWeight.w700)),
       style: OutlinedButton.styleFrom(
         side: BorderSide(color: color.withValues(alpha: 0.4)),

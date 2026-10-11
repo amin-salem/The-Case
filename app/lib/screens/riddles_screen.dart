@@ -346,7 +346,7 @@ class _RiddlePlayScreenState extends State<RiddlePlayScreen> {
                 if (_next != null)
                   StampButton(
                     label: 'معمای بعدی',
-                    icon: Icons.chevron_left_rounded,
+                    icon: Icons.chevron_right_rounded,
                     onTap: () => Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (_) => RiddlePlayScreen(item: _next!, day: widget.day))),
                   )

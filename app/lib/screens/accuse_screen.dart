@@ -192,7 +192,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
                 if (_last && _picked) ...[_summary(c), const SizedBox(height: 10)],
                 Row(children: [
                   if (_step > 0) ...[
-                    GhostButton(label: 'قبلی', icon: Icons.chevron_right_rounded, onTap: _busy ? null : () => _go(_step - 1)),
+                    GhostButton(label: 'قبلی', icon: Icons.chevron_left_rounded, onTap: _busy ? null : () => _go(_step - 1)),
                     const SizedBox(width: 10),
                   ],
                   Expanded(child: _mainButton(c)),
@@ -209,7 +209,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
     if (!_last) {
       return StampButton(
         label: _picked ? 'ادامه' : (_step == 0 ? 'یه مظنون انتخاب کن' : 'یه مدرک انتخاب کن'),
-        icon: Icons.chevron_left_rounded,
+        icon: Icons.chevron_right_rounded,
         onTap: _picked && !_busy ? () => _go(_step + 1) : null,
       );
     }

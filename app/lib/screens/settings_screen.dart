@@ -264,7 +264,7 @@ class SettingsRow extends StatelessWidget {
             if (end != null) ...[const SizedBox(width: 8), end!],
             if (onTap != null && end == null) ...[
               const SizedBox(width: 4),
-              const Icon(Icons.chevron_left_rounded, color: K.textSoft, size: 22),
+              const Icon(Icons.chevron_right_rounded, color: K.textSoft, size: 22),
             ],
           ]),
         ),

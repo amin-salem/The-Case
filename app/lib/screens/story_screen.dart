@@ -292,7 +292,7 @@ class _StoryScreenState extends State<StoryScreen> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
             Expanded(child: Text(title, style: tBody(15, w: FontWeight.w900, color: locked ? K.textSoft : K.text))),
-            if (tappable) const Icon(Icons.chevron_left_rounded, color: K.textSoft),
+            if (tappable) const Icon(Icons.chevron_right_rounded, color: K.textSoft),
           ]),
           if (c.location != null && !locked) Text(c.location!, style: tBody(12, color: K.textSoft)),
           const SizedBox(height: 6),

@@ -32,7 +32,8 @@ POOL = [
     # investigation: the work around it
     Mission("interrogate_all", "از همه‌ی مظنون‌های یک پرونده بازجویی کن", "interrogate_all", 1, "extra"),
     Mission("talk3", "با ۳ مظنون حرف بزن", "suspect_seen", 3, "extra"),
-    Mission("case_solve2", "۲ پرونده حل کن (امشب یا بایگانی)", "case_solved", 2, "extra"),
+    # never picked: a free player has ONE new case a day (archive cases cost coins), so 2 solves can't be guaranteed
+    Mission("case_solve2", "۲ پرونده حل کن (امشب یا بایگانی)", "case_solved", 2, "extra_paid"),
     # Friday and Saturday, while a weekend case is open
     Mission("weekend_talk", "توی پرونده‌ی آخر هفته با ۲ مظنون صحبت کن", "weekly_seen", 2, "weekend"),
     # only when quick riddles are on (these cost coins or need riddles)

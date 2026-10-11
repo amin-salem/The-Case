@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.20.1 (app build 37, server 1.16.2): missions and arrows
+
+- The mission «۲ پرونده حل کن» is no longer picked: a free player gets one new case a day (archive cases cost coins), so it could not be finished by everyone. Every daily mission can now be completed for free.
+- Chevron arrows (›) in lists and buttons were showing as `>` in the right-to-left layout; they now point `<` for «go in» and `>` for «previous» everywhere.
+
 ## 1.20.0 (app build 36): intro and full guide
 
 - New `GuideScreen`: an 8-page intro (welcome, nightly case, investigating, accusing and stars, weekend case, story, coins/rank/prizes, reminders) shown once to new players before the home screen (players who already solved a case never see it), followed by the existing in-case coach marks.

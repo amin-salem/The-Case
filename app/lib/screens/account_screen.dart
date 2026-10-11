@@ -234,7 +234,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900, color: K.brass)),
                       ),
                       Text('${fa(p.xp)} امتیاز', style: tBody(12, color: K.textSoft)),
-                      const Icon(Icons.chevron_left_rounded, size: 18, color: K.textSoft),
+                      const Icon(Icons.chevron_right_rounded, size: 18, color: K.textSoft),
                     ]),
                     const SizedBox(height: 6),
                     ClipRRect(
@@ -345,7 +345,7 @@ class _AccountScreenState extends State<AccountScreen> {
             onPressed: openAll,
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               Text('همه', style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
-              const Icon(Icons.chevron_left_rounded, color: K.brass, size: 20),
+              const Icon(Icons.chevron_right_rounded, color: K.brass, size: 20),
             ]),
           ),
         ]),
