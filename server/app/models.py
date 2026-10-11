@@ -244,3 +244,15 @@ class StoryProgress(Base):
     finished_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     solved: Mapped[bool] = mapped_column(Boolean, default=False)
     stars: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class AdminLog(Base):
+    """What the admin did from the panel (gifts, bans), for the record."""
+
+    __tablename__ = "admin_log"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    action: Mapped[str] = mapped_column(String(32))
+    target: Mapped[str] = mapped_column(String(48), default="")
+    detail: Mapped[dict] = mapped_column(JSON, default=dict)

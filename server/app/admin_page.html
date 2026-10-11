@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>پنل مدیریت پرونده</title>
+<style>
+:root{--bg:#17181a;--bg2:#202124;--bg3:#2b2d31;--text:#e6e2da;--soft:#9a9890;--brass:#e0a526;--ok:#5dae7e;--bad:#d0543f;--line:#34363b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 Tahoma,Vazirmatn,system-ui,sans-serif}
+header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header h1{font-size:16px;margin:0 0 0 10px;color:var(--brass)}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+button,input,select,textarea{font:inherit;color:var(--text);background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--brass)}
+nav button.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
+button.danger{border-color:var(--bad);color:var(--bad)}
+main{padding:14px;max-width:1200px;margin:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.card b{display:block;font-size:22px;color:var(--brass)}.card span{color:var(--soft);font-size:12px}
+table{width:100%;border-collapse:collapse;background:var(--bg2);border-radius:10px;overflow:hidden}
+th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{color:var(--soft);font-weight:normal;font-size:12px;background:var(--bg3)}
+tr.click{cursor:pointer}tr.click:hover td{background:var(--bg3)}
+.tag{display:inline-block;padding:0 7px;border-radius:9px;font-size:11px;background:var(--bg3);color:var(--soft)}
+.tag.solved{color:var(--ok)}.tag.failed,.tag.banned{color:var(--bad)}.tag.purchase{color:var(--brass)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+h2{font-size:15px;margin:18px 0 8px;color:var(--brass)}
+.chart{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:12px}
+.chart svg{width:100%;height:120px;display:block}
+.muted{color:var(--soft)}.ltr{direction:ltr;unicode-bidi:embed;display:inline-block}
+#login{max-width:340px;margin:18vh auto;text-align:center}
+#login input{width:100%;margin:10px 0}
+.err{color:var(--bad)}
+dialog{background:var(--bg2);color:var(--text);border:1px solid var(--line);border-radius:12px;max-width:440px;width:92%}
+dialog::backdrop{background:#000a}
+dialog input,dialog textarea{width:100%;margin:4px 0 10px}
+.scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+<div id="login">
+  <h1>پنل مدیریت «پرونده»</h1>
+  <p class="muted">کلید ادمین را وارد کن (فقط تا بستن این تب نگه داشته می‌شود).</p>
+  <input id="key" type="password" autocomplete="off" placeholder="X-Admin-Key" class="ltr">
+  <button id="enter">ورود</button>
+  <p class="err" id="loginerr"></p>
+</div>
+<div id="app" hidden>
+<header>
+  <h1>پنل «پرونده»</h1>
+  <nav id="nav"></nav>
+  <span style="flex:1"></span>
+  <button id="refresh">به‌روزرسانی</button>
+  <button id="logout">خروج</button>
+</header>
+<main id="main"></main>
+</div>
+<dialog id="dlg"><form method="dialog" id="dform"></form></dialog>
+<script>
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let KEY = ''; try { KEY = sessionStorage.getItem('adminKey') || ''; } catch (e) {}
+const fmtT = t => t ? new Date(t * 1000).toLocaleString('fa-IR', {hour12: false}) : '—';
+const ago = t => { if (!t) return '—'; const s = Date.now()/1000 - t; if (s < 90) return 'همین الان'; if (s < 5400) return Math.round(s/60) + ' دقیقه پیش'; if (s < 129600) return Math.round(s/3600) + ' ساعت پیش'; return Math.round(s/86400) + ' روز پیش'; };
+const num = n => (n ?? 0).toLocaleString('fa-IR');
+async function api(path, opts = {}) {
+  const r = await fetch(path, {...opts, headers: {'X-Admin-Key': KEY, 'Content-Type': 'application/json', ...(opts.headers || {})}});
+  if (r.status === 403) { logout(); throw new Error('کلید اشتباه است'); }
+  if (!r.ok) throw new Error('خطا ' + r.status + ': ' + (await r.text()).slice(0, 200));
+  return r.json();
+}
+const TABS = [['overview','نمای کلی'],['feed','فعالیت زنده'],['players','بازیکن‌ها'],['cases','پرونده‌ها'],['money','پول و سکه'],['health','سلامت'],['actions','اقدام‌ها']];
+let tab = 'overview', timer = null;
+function buildNav() { $('#nav').innerHTML = TABS.map(([k, n]) => `<button data-k="${k}" class="${k===tab?'on':''}">${n}</button>`).join(''); }
+$('#nav').onclick = e => { const k = e.target.dataset.k; if (k) { go(k); } };
+function go(k, arg) { tab = k; buildNav(); clearInterval(timer); timer = null; render(arg); }
+async function render(arg) {
+  const m = $('#main'); m.innerHTML = '<p class="muted">در حال بارگذاری…</p>';
+  try { await VIEWS[tab](m, arg); } catch (e) { m.innerHTML = '<p class="err">' + esc(e.message) + '</p>'; }
+}
+function bars(rows, key, color) {
+  const max = Math.max(1, ...rows.map(r => r[key])); const w = 100 / rows.length;
+  return '<svg viewBox="0 0 100 40" preserveAspectRatio="none">' + rows.map((r, i) => {
+    const h = 36 * r[key] / max; return `<rect x="${i*w+0.6}" y="${38-h}" width="${w-1.2}" height="${h}" fill="${color}"><title>${esc(r.day)}: ${r[key]}</title></rect>`; }).join('') + '</svg>';
+}
+function chart(title, rows, key, color) {
+  const total = rows.reduce((a, r) => a + r[key], 0);
+  return `<div class="chart"><div class="row" style="margin:0"><b>${title}</b><span class="muted">جمع: ${num(total)} · امروز: ${num(rows[rows.length-1][key])}</span></div>${bars(rows, key, color)}</div>`;
+}
+const card = (v, l) => `<div class="card"><b>${num(v)}</b><span>${l}</span></div>`;
+const VIEWS = {
+  async overview(m) {
+    const d = await api('/admin/api/overview?days=14'), t = d.totals;
+    m.innerHTML = `<div class="cards">${card(t.players,'کل بازیکن‌ها')}${card(t.active_24h,'فعال ۲۴ ساعت')}${card(t.active_7d,'فعال ۷ روز')}${card(t.secured,'حساب امن‌شده (ایمیل)')}${card(t.cases_solved,'پرونده‌ی حل‌شده')}${card(t.coins_in_circulation,'سکه‌ی در گردش')}${card(t.banned,'بن‌شده')}</div>` +
+      chart('بازیکن‌های فعال در روز', d.days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', d.days, 'new', '#e0a526') +
+      chart('پرونده‌ی باز شده', d.days, 'opened', '#8ab4f8') + chart('حل‌شده', d.days, 'solved', '#5dae7e') + chart('شکست', d.days, 'failed', '#d0543f') +
+      chart('خرید موفق', d.days, 'purchases', '#e0a526') + chart('سکه‌ی دریافتی', d.days, 'coins_in', '#5dae7e') + chart('سکه‌ی خرج‌شده', d.days, 'coins_out', '#d0543f');
+  },
+  async feed(m) {
+    const draw = async () => {
+      const f = await api('/admin/api/feed?limit=80');
+      m.innerHTML = '<p class="muted">هر ۱۰ ثانیه خودکار تازه می‌شود. روی ردیف بزن تا بازیکن را ببینی.</p><div class="scroll"><table><tr><th>زمان</th><th>بازیکن</th><th>نوع</th><th>چی شد</th></tr>' +
+        f.map(i => `<tr class="click" data-p="${esc(i.pid)}"><td>${ago(i.t)}</td><td>${esc(i.nick || i.pid.slice(0,6))}</td><td><span class="tag ${esc(i.kind)}">${esc(i.kind)}</span></td><td>${esc(i.text)}</td></tr>`).join('') + '</table></div>';
+      m.querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
+    };
+    await draw(); timer = setInterval(() => draw().catch(() => {}), 10000);
+  },
+  async players(m, arg) {
+    if (arg && arg.id) return VIEWS.player(m, arg.id);
+    const st = VIEWS._pq || (VIEWS._pq = {q: '', sort: 'last_seen', banned: false});
+    const load = async () => {
+      const d = await api(`/admin/api/players?q=${encodeURIComponent(st.q)}&sort=${st.sort}&only_banned=${st.banned}&limit=100`);
+      $('#plist').innerHTML = `<p class="muted">${num(d.total)} بازیکن</p><div class="scroll"><table><tr><th>نام</th><th>سکه</th><th>حل</th><th>ستاره</th><th>استریک</th><th>حساب</th><th>نسخه</th><th>ثبت‌نام</th><th>آخرین فعالیت</th></tr>` +
+        d.items.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.id.slice(0,6))} ${p.banned ? '<span class="tag banned">بن</span>' : ''}</td><td>${num(p.coins)}</td><td>${num(p.solved)}</td><td>${num(p.stars)}</td><td>${num(p.streak)}</td><td>${p.secured ? 'امن' : 'مهمان'}</td><td>${num(p.app_version)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('') + '</table></div>';
+      $('#plist').querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
+    };
+    m.innerHTML = `<div class="row"><input id="pq" placeholder="نام، ایمیل، کد دعوت، شناسه یا دستگاه" value="${esc(st.q)}" style="flex:1;min-width:200px"><select id="ps">${[['last_seen','آخرین فعالیت'],['created','جدیدترین'],['coins','سکه'],['solved','حل‌شده'],['stars','ستاره'],['streak','استریک']].map(([k,n]) => `<option value="${k}" ${st.sort===k?'selected':''}>${n}</option>`).join('')}</select><label><input type="checkbox" id="pb" ${st.banned?'checked':''}> فقط بن‌شده‌ها</label></div><div id="plist"></div>`;
+    $('#pq').onchange = e => { st.q = e.target.value.trim(); load(); }; $('#ps').onchange = e => { st.sort = e.target.value; load(); }; $('#pb').onchange = e => { st.banned = e.target.checked; load(); };
+    await load();
+  },
+  async player(m, id) {
+    const d = await api('/admin/api/players/' + encodeURIComponent(id)), p = d.player;
+    const kv = (k, v) => `<tr><th>${k}</th><td>${v}</td></tr>`;
+    m.innerHTML = `<div class="row"><button id="back">← فهرست</button><h2 style="margin:0">${esc(p.nickname || p.id)} ${p.banned ? '<span class="tag banned">بن‌شده</span>' : ''}</h2><span style="flex:1"></span><button id="gift">هدیه / پیام</button><button id="ban" class="danger">${p.banned ? 'رفع بن' : 'بن کردن'}</button></div>
+    <div class="scroll"><table>${kv('شناسه', `<span class="ltr">${esc(p.id)}</span>`)}${kv('ایمیل', esc(p.email || 'مهمان (امن نشده)'))}${kv('دستگاه', `<span class="ltr">${esc(p.device_id)}</span>`)}${kv('کد دعوت', `<span class="ltr">${esc(p.invite_code)}</span> ${p.referred_by ? '· دعوت‌شده توسط ' + esc(p.referred_by.slice(0,6)) : ''}`)}${kv('سکه / XP / حکم', `${num(p.coins)} / ${num(p.xp)} / ${num(p.warrants)}`)}${kv('حل‌شده / ستاره', `${num(p.solved)} / ${num(p.stars)}`)}${kv('استریک (بهترین)', `${num(p.streak)} (${num(p.best_streak)})`)}${kv('VIP تا', fmtT(p.vip_until))}${kv('نسخه‌ی برنامه', num(p.app_version))}${kv('ثبت‌نام', fmtT(p.created))}${kv('آخرین فعالیت', fmtT(p.last_seen))}</table></div>
+    ${d.same_device.length ? `<h2>حساب‌های دیگر روی همین دستگاه (${d.same_device.length})</h2><div class="scroll"><table>${d.same_device.map(x => `<tr class="click" data-p="${esc(x.id)}"><td>${esc(x.nickname || x.id.slice(0,6))}</td><td>${ago(x.created)}</td></tr>`).join('')}</table></div>` : ''}
+    <h2>پرونده‌ها</h2><div class="scroll"><table><tr><th>پرونده</th><th>نتیجه</th><th>ستاره</th><th>سرنخ</th><th>اتهام اشتباه</th><th>زمان فعال</th><th>مظنون دیده</th><th>باز شد</th></tr>${d.cases.map(c => `<tr><td>${esc(c.title)}</td><td>${c.solved ? '<span class="tag solved">حل</span>' : c.failed ? '<span class="tag failed">شکست</span>' : 'در جریان'}</td><td>${c.stars}</td><td>${c.hints}</td><td>${c.attempts}</td><td>${c.active_seconds}ث</td><td>${c.seen}</td><td>${ago(c.opened)}</td></tr>`).join('')}</table></div>
+    ${d.story.length ? `<h2>داستان</h2><p>${d.story.map(s => `فصل ${s.season}/قسمت ${s.chapter} ${s.solved ? '✓' + s.stars + '★' : '…'}`).map(esc).join(' · ')}</p>` : ''}
+    <h2>ماموریت‌های ۱۴ روز اخیر</h2><div class="scroll"><table>${d.missions.map(x => `<tr><td>${esc(x.day)}</td><td class="ltr">${esc(JSON.stringify(x.counts))}</td><td>${x.chest ? 'صندوق باز شد' : ''}</td></tr>`).join('')}</table></div>
+    <h2>خط زمانی</h2><div class="scroll"><table>${d.timeline.map(i => `<tr><td>${fmtT(i.t)}</td><td><span class="tag ${esc(i.kind)}">${esc(i.kind)}</span></td><td>${esc(i.text)}</td></tr>`).join('')}</table></div>`;
+    $('#back').onclick = () => go('players'); m.querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
+    $('#gift').onclick = () => giftDialog(p.id, p.nickname);
+    $('#ban').onclick = async () => { if (confirm((p.banned ? 'رفع بن' : 'بن') + ' «' + (p.nickname || p.id) + '»؟')) { await api(`/admin/players/${p.id}/ban`, {method: 'POST', body: JSON.stringify({banned: !p.banned})}); go('players', {id: p.id}); } };
+  },
+  async cases(m) {
+    const d = await api('/admin/api/cases');
+    m.innerHTML = '<p class="muted">برای دیدن سختی: «حل‌شده» کم و «اتهام اشتباه» زیاد یعنی سخت؛ اگر بیشتر بازیکن‌ها اول به مجرم شک کنند یعنی قابل حدس است.</p><div class="scroll"><table><tr><th>پرونده</th><th>باز شد</th><th>حل</th><th>شکست</th><th>میانگین ستاره</th><th>زمان</th><th>سرنخ</th><th>اتهام اشتباه</th><th>اولین حدس‌ها</th></tr>' +
+      d.map(c => `<tr><td>${esc(c.title)}</td><td>${num(c.opened)}</td><td>${num(c.solved)}</td><td>${num(c.failed)}</td><td>${c.avg_stars ?? '—'}</td><td>${c.avg_seconds ?? '—'}ث</td><td>${c.avg_hints ?? '—'}</td><td>${c.avg_wrong ?? '—'}</td><td>${c.first_guess.map(g => esc(g.suspect) + ' ×' + g.n + (g.culprit ? ' ✔' : '')).join('، ')}</td></tr>`).join('') + '</table></div>';
+  },
+  async money(m) {
+    const d = await api('/admin/api/money?days=30');
+    const tbl = o => '<table>' + Object.entries(o).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${num(v)}</td></tr>`).join('') + '</table>';
+    m.innerHTML = `<h2>خرید موفق ۳۰ روز اخیر به تفکیک محصول</h2>${tbl(d.purchases_by_product)}<h2>سکه‌ی دریافتی (دلیل)</h2>${tbl(d.coins_earned_by_reason)}<h2>سکه‌ی خرج‌شده (دلیل)</h2>${tbl(d.coins_spent_by_reason)}<h2>خرید در روز</h2>${tbl(Object.fromEntries(Object.entries(d.purchases_by_day).map(([k, v]) => [k, Object.values(v).reduce((a, b) => a + b, 0)])))}`;
+  },
+  async health(m) {
+    const h = await api('/admin/api/health');
+    m.innerHTML = `<div class="cards">${card(h.db_ok ? 1 : 0, 'دیتابیس (۱ = سالم)')}<div class="card"><b class="ltr">${esc(h.server_version)}</b><span>نسخه‌ی سرور</span></div>${card(h.nightly_cases, 'پرونده‌ی شبانه')}${card(h.weekly_cases, 'پرونده‌ی آخر هفته')}<div class="card"><b class="ltr" style="font-size:15px">${esc(h.today_case || '—')}</b><span>پرونده‌ی امشب</span></div></div><p class="muted">ساعت سرور: <span class="ltr">${esc(h.now)}</span></p><p class="muted">موجودی لیارا هر روز ساعت ۸ صبح در GitHub بررسی می‌شود (گردش‌کار «Liara balance»).</p>`;
+  },
+  async actions(m) {
+    const log = await api('/admin/api/log');
+    m.innerHTML = `<div class="row"><button id="bc">ارسال پیام/هدیه به همه</button></div><h2>سابقه‌ی اقدام‌های ادمین</h2><div class="scroll"><table><tr><th>زمان</th><th>اقدام</th><th>هدف</th><th>جزئیات</th></tr>${log.map(r => `<tr><td>${fmtT(r.t)}</td><td>${esc(r.action)}</td><td class="ltr">${esc(r.target)}</td><td>${esc(JSON.stringify(r.detail))}</td></tr>`).join('')}</table></div>`;
+    $('#bc').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها');
+  },
+};
+function giftDialog(pid, name) {
+  const f = $('#dform');
+  f.innerHTML = `<h3 style="margin-top:0">${pid ? 'هدیه/پیام برای ' + esc(name || pid) : 'پیام برای همه‌ی بازیکن‌ها'}</h3><label>عنوان</label><input id="gt" maxlength="80"><label>متن</label><textarea id="gm" rows="3" maxlength="400"></textarea><label>سکه (۰ یعنی فقط پیام)</label><input id="gc" type="number" min="0" value="0"><label>اعتبار (روز، اختیاری)</label><input id="ge" type="number" min="0" value="0"><div class="row"><button value="send" id="gs">ارسال</button><button value="cancel" formnovalidate>لغو</button></div><p class="err" id="gerr"></p>`;
+  $('#dlg').showModal();
+  $('#gs').onclick = async ev => {
+    ev.preventDefault();
+    const title = $('#gt').value.trim(), coins = parseInt($('#gc').value || '0', 10), days = parseInt($('#ge').value || '0', 10);
+    if (!title) { $('#gerr').textContent = 'عنوان لازم است'; return; }
+    if (!confirm((pid ? 'ارسال برای این بازیکن' : 'ارسال برای همه') + (coins ? ' با ' + coins + ' سکه' : '') + '؟')) return;
+    try {
+      const body = {title, message: $('#gm').value.trim(), grants: coins > 0 ? [{type: 'coins', amount: coins}] : [], expires_in_days: days > 0 ? days : null};
+      if (pid) body.player_id = pid;
+      await api('/admin/gifts', {method: 'POST', body: JSON.stringify(body)}); $('#dlg').close(); alert('ارسال شد'); if (tab === 'actions') render();
+    } catch (e) { $('#gerr').textContent = e.message; }
+  };
+}
+function logout() { try { sessionStorage.removeItem('adminKey'); } catch (e) {} KEY = ''; clearInterval(timer); $('#app').hidden = true; $('#login').hidden = false; }
+async function enter() {
+  KEY = $('#key').value.trim() || KEY;
+  try { await api('/admin/api/health'); try { sessionStorage.setItem('adminKey', KEY); } catch (e) {} $('#login').hidden = true; $('#app').hidden = false; $('#loginerr').textContent = ''; buildNav(); render(); }
+  catch (e) { $('#loginerr').textContent = e.message; }
+}
+$('#enter').onclick = enter; $('#key').onkeydown = e => { if (e.key === 'Enter') enter(); };
+$('#refresh').onclick = () => render(); $('#logout').onclick = logout;
+if (KEY) enter();
+</script>
+</body>
+</html>

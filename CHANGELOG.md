@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.17.0: admin panel
+
+- Admin panel at `/admin/ui` (asks for the admin key; nothing is stored on the page): overview charts, live activity feed, player search and full player timelines (cases, coins, purchases, missions, same-device accounts), per-case difficulty stats, money, health, gift / broadcast / ban buttons. JSON under `/admin/api/*`, all behind `X-Admin-Key`. New table `admin_log` records gifts, broadcasts and bans.
+
 ## Package name: ir.gammly.parvandeh
 
 - The store package name changes from the placeholder `ir.aminsalem.the_case` to `ir.gammly.parvandeh` (reverse of the gammly.ir domain + the game), set in `app/tools/patch_android.py`. Server defaults for Myket/Bazaar package names and store links follow. It must never change again after publishing. This build is a NEW app for Android: older test installs do not update to it.

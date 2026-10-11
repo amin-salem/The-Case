@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .. import content
 from .. import economy as eco
 from ..db import get_session
-from ..models import Broadcast, CaseProgress, CoinLog, ConfigValue, InboxItem, Player, Purchase, utcnow
+from ..models import AdminLog, Broadcast, CaseProgress, CoinLog, ConfigValue, InboxItem, Player, Purchase, utcnow
 from ..schemas import ConfigIn, GiftIn
 from ..security import require_admin
 from ..services.remote_config import DEFAULTS, load_config
@@ -99,6 +99,7 @@ async def ban(player_id: str, body: BanIn, session: AsyncSession = Depends(get_s
     if p is None:
         raise HTTPException(404, "no_player")
     p.banned = body.banned
+    session.add(AdminLog(action="ban" if body.banned else "unban", target=p.id, detail={"nickname": p.nickname}))
     await session.commit()
     return {"id": p.id, "banned": p.banned}
 
@@ -143,9 +144,11 @@ async def send_gift(body: GiftIn, session: AsyncSession = Depends(get_session)):
         item = InboxItem(player_id=body.player_id, title=body.title, message=body.message, grants=grants,
                          expires_at=exp)
         session.add(item)
+        session.add(AdminLog(action="gift", target=body.player_id, detail={"title": body.title, "grants": grants}))
         await session.commit()
         return {"sent_to": body.player_id, "id": f"p{item.id}"}
     b = Broadcast(title=body.title, message=body.message, grants=grants, expires_at=exp)
     session.add(b)
+    session.add(AdminLog(action="broadcast", target="everyone", detail={"title": body.title, "grants": grants}))
     await session.commit()
     return {"sent_to": "everyone", "id": f"b{b.id}"}
