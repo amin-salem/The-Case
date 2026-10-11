@@ -1,5 +1,7 @@
 name: Probe
-on: workflow_dispatch
+on:
+  push:
+    branches: [domain-gammly]
 jobs:
   p:
     runs-on: ubuntu-latest
