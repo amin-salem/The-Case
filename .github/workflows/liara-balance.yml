@@ -1,7 +1,8 @@
 name: Liara balance
 # Every day at 08:00 Tehran: read the Liara wallet (https://api.liara.ir/v1/billing). When the balance is at or
 # below the limit, this run FAILS and GitHub emails the repo owner («Liara balance» failed): time to charge it.
-# Needs the repository secret LIARA_API_TOKEN (never commit it). Optional variable LIARA_MIN_BALANCE (default 300000).
+# Needs the repository secret LIARA_API_TOKEN (never commit it). Optional variable LIARA_MIN_BALANCE in toman (default 300000): change it any time in
+# Settings > Secrets and variables > Actions > Variables.
 on:
   schedule:
     - cron: "30 4 * * *"
@@ -46,7 +47,9 @@ jobs:
                           return r
               return None
 
-          bal = find(data)
+          bal = data.get("user", {}).get("balance") if isinstance(data, dict) else None
+          if not isinstance(bal, (int, float)):
+              bal = find(data)
           if bal is None:
               keys = list(data) if isinstance(data, dict) else type(data).__name__
               print(f"::error title=Balance not found::The billing answer has no balance field; top-level keys: {keys}")
