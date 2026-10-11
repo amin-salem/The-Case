@@ -75,5 +75,8 @@ async def current_player(
 
 
 async def require_admin(x_admin_key: str = Header(default="")) -> None:
+    # the built-in dev key is public (it is in the repo): never accept it, whatever ENV says
+    if get_settings().admin_api_key == "change-me-admin-dev-only":
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "admin_disabled")
     if not hmac.compare_digest(x_admin_key, get_settings().admin_api_key):
         raise HTTPException(status.HTTP_403_FORBIDDEN, "not_admin")

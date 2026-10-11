@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.17.1: admin disabled without a real key
+
+- The admin API and panel now refuse every request while `ADMIN_API_KEY` is still the built-in dev value, whatever `ENV` is (that value is public in the repo). Set a long random `ADMIN_API_KEY` on Liara to use them.
+
 ## server 1.17.0: admin panel
 
 - Admin panel at `/admin/ui` (asks for the admin key; nothing is stored on the page): overview charts, live activity feed, player search and full player timelines (cases, coins, purchases, missions, same-device accounts), per-case difficulty stats, money, health, gift / broadcast / ban buttons. JSON under `/admin/api/*`, all behind `X-Admin-Key`. New table `admin_log` records gifts, broadcasts and bans.
