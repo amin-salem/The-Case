@@ -46,7 +46,7 @@ jobs:
           pytest -q
       - name: Android project (created once, it is not kept in git)
         working-directory: app
-        run: flutter create --org ir.aminsalem --project-name the_case --platforms android .
+        run: flutter create --org ir.gammly --project-name the_case --platforms android .
       - name: Signing key (optional; without it the APK is signed with the debug key)
         working-directory: app
         env:

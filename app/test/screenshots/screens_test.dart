@@ -138,7 +138,7 @@ final Map<String, dynamic> _config = {
         'tagline': 'هر جا یه کبریت سوخته پیدا شد، یه نفر چیزی رو از دست داده. سرگرد ناصری سه ساله دنبالشه، و حالا تو همکارشی.',
         'opens_at': DateTime.now().add(const Duration(days: 4, hours: 8, minutes: 30)).millisecondsSinceEpoch ~/ 1000},
   },
-  'share_url': 'https://cafebazaar.ir/app/ir.aminsalem.the_case',
+  'share_url': 'https://cafebazaar.ir/app/ir.gammly.parvandeh',
   'support_email': 'support@example.com',
   'prices': {
     'coins_small': '۴۹٬۰۰۰ تومان',
@@ -917,7 +917,7 @@ void main() {
     if (!kShots) return;
     await _loadFonts();
     PackageInfo.setMockInitialValues(
-        appName: 'پرونده', packageName: 'ir.aminsalem.the_case', version: '1.17.0', buildNumber: '25', buildSignature: '');
+        appName: 'پرونده', packageName: 'ir.gammly.parvandeh', version: '1.17.0', buildNumber: '25', buildSignature: '');
     SharedPreferences.setMockInitialValues({
       'player': 'p_demo',
       'secret': 'secret',

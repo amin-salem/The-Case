@@ -668,7 +668,7 @@ class Api extends ChangeNotifier {
   List<int> get streakBadges => [for (final v in (_economy['streak_badges'] as List? ?? const [7, 30, 100])) (v as num).toInt()];
   String get shareUrl => config['share_url'] is String
       ? config['share_url'] as String
-      : (config['update_url'] is String ? config['update_url'] as String : 'https://cafebazaar.ir/app/ir.aminsalem.the_case');
+      : (config['update_url'] is String ? config['update_url'] as String : 'https://cafebazaar.ir/app/ir.gammly.parvandeh');
 
   Future<Leaderboard> leaderboard(String period) async =>
       Leaderboard((await _call('GET', '/v1/leaderboard?period=$period') as Map).cast<String, dynamic>());

@@ -1,5 +1,9 @@
 # Changelog
 
+## Package name: ir.gammly.parvandeh
+
+- The store package name changes from the placeholder `ir.aminsalem.the_case` to `ir.gammly.parvandeh` (reverse of the gammly.ir domain + the game), set in `app/tools/patch_android.py`. Server defaults for Myket/Bazaar package names and store links follow. It must never change again after publishing. This build is a NEW app for Android: older test installs do not update to it.
+
 ## 1.20.1 (app build 37, server 1.16.2): missions and arrows
 
 - The mission «۲ پرونده حل کن» is no longer picked: a free player gets one new case a day (archive cases cost coins), so it could not be finished by everyone. Every daily mission can now be completed for free.

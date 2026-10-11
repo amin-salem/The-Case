@@ -3,12 +3,12 @@
 ## First time
 ```bash
 cd app
-flutter create --org ir.aminsalem --project-name the_case --platforms android .
+flutter create --org ir.gammly --project-name the_case --platforms android .
 flutter pub get
 flutter run -d R5CRC0PR5WT
 ```
 `flutter create .` only adds the missing `android/` folder. It doesn't touch `lib/`.
-The package name becomes `ir.aminsalem.the_case`.
+The package name becomes `ir.gammly.parvandeh` (set by tools/patch_android.py; the code namespace stays ir.gammly.the_case).
 
 The app talks to `https://thecase.liara.run`. To use another server:
 ```bash

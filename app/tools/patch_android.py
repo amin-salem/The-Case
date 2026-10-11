@@ -57,6 +57,10 @@ PROGUARD = """# Myket in-app billing (the plugin reads purchases with Gson; keep
 """
 
 
+# the permanent store package name: reverse of gammly.ir + the game. Never change it after publishing.
+APPLICATION_ID = "ir.gammly.parvandeh"
+
+
 def patch_manifest() -> None:
     s = MANIFEST.read_text(encoding="utf-8")
     for perm in PERMISSIONS:
@@ -95,6 +99,11 @@ def patch_gradle() -> None:
         else:
             s = s.rstrip() + f"\n\ndependencies {{\n    {dep}\n}}\n"
         print(f"  {path.name}: + {DESUGAR_LIB}")
+    # the store package name (applicationId); `namespace` stays what flutter create made (code only)
+    new_id = re.sub(r'(applicationId\s*=?\s*)"[^"]*"', r'\1"' + APPLICATION_ID + '"', s, count=1)
+    if new_id != s:
+        s = new_id
+        print(f"  {path.name}: applicationId = {APPLICATION_ID}")
     # Myket billing: the plugin's manifest uses these placeholders
     if "marketApplicationId" not in s:
         if is_kts:
@@ -167,7 +176,7 @@ def copy_icons() -> None:
 
 def main() -> None:
     if not MANIFEST.exists():
-        sys.exit("Android project missing - run first:  flutter create --org ir.aminsalem --project-name the_case --platforms android .")
+        sys.exit("Android project missing - run first:  flutter create --org ir.gammly --project-name the_case --platforms android .")
     patch_manifest()
     patch_gradle()
     copy_icons()

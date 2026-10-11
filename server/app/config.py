@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 
     # Cafe Bazaar
     bazaar_mode: str = "fake"  # fake | api_secret | oauth
-    bazaar_package_name: str = "ir.aminsalem.the_case"
+    bazaar_package_name: str = "ir.gammly.parvandeh"
     bazaar_base_url: str = "https://pardakht.cafebazaar.ir/devapi/v2"
     bazaar_api_secret: str = ""
     bazaar_client_id: str = ""
@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     # Myket (the store we publish on first). The access token is in the Myket developer panel, under the
     # app's in-app products. Empty in production = Myket purchases are refused.
     myket_access_token: str = ""
-    myket_package_name: str = "ir.aminsalem.the_case"
+    myket_package_name: str = "ir.gammly.parvandeh"
     myket_base_url: str = "https://developer.myket.ir/api/partners/applications"
 
     # Rewarded ads pay coins only when a real ad network is in the app.

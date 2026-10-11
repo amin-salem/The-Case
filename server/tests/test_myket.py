@@ -28,7 +28,7 @@ async def test_myket_purchase_is_verified_with_myket(client):
         assert r["status"] == "granted" and r["added"] == 400 and r["consume"] is True
         req = seen[0]
         assert req.headers["X-Access-Token"] == "tok-123"
-        assert req.url.path.endswith("/ir.aminsalem.the_case/purchases/products/coins_small/verify")
+        assert req.url.path.endswith("/ir.gammly.parvandeh/purchases/products/coins_small/verify")
         # the same token can't be used twice
         r = (await client.post("/v1/purchases/verify", headers=p["headers"],
                                json={"product_id": "coins_small", "purchase_token": "mk-real-1", "store": "myket"})).json()

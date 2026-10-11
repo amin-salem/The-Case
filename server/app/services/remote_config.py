@@ -12,8 +12,8 @@ from ..models import ConfigValue
 DEFAULTS: dict[str, Any] = {
     "min_version": 1,
     "latest_version": 1,
-    "update_url": "https://myket.ir/app/ir.aminsalem.the_case",
-    "share_url": "https://myket.ir/app/ir.aminsalem.the_case",
+    "update_url": "https://myket.ir/app/ir.gammly.parvandeh",
+    "share_url": "https://myket.ir/app/ir.gammly.parvandeh",
     "privacy_url": "https://thecase.liara.run/privacy",
     "terms_url": "https://thecase.liara.run/terms",
     "support_email": "aminsaalem@gmail.com",
