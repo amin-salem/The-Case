@@ -10,7 +10,7 @@ flutter run -d R5CRC0PR5WT
 `flutter create .` only adds the missing `android/` folder. It doesn't touch `lib/`.
 The package name becomes `ir.gammly.parvandeh` (set by tools/patch_android.py; the code namespace stays ir.gammly.the_case).
 
-The app talks to `https://thecase.liara.run`. To use another server:
+The app talks to `https://gaamly.ir`. To use another server:
 ```bash
 flutter run --dart-define=API_URL=http://192.168.1.5:8000
 ```

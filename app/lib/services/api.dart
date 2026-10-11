@@ -15,10 +15,10 @@ import 'reminders.dart';
 
 /// Server address (Liara). Another server for testing:
 ///   flutter run --dart-define=API_URL=http://192.168.1.5:8000
-/// A build can point at one server with --dart-define=API_URL=…; otherwise the app knows two
-/// addresses for the same server and uses whichever answers (the last one that worked first).
+/// A build can point at one server with --dart-define=API_URL=…; otherwise the app uses
+/// https://gaamly.ir (the list is kept so another address can be added later; a saved index is clamped).
 const String kApiUrl = String.fromEnvironment('API_URL', defaultValue: '');
-const List<String> kApiUrls = kApiUrl == '' ? ['https://gaamly.ir', 'https://thecase.liara.run'] : [kApiUrl];
+const List<String> kApiUrls = kApiUrl == '' ? ['https://gaamly.ir'] : [kApiUrl];
 const int kAppBuild = int.fromEnvironment('APP_BUILD', defaultValue: 1);
 
 class ApiException implements Exception {
@@ -520,7 +520,7 @@ class Api extends ChangeNotifier {
     }
   }
 
-  /// Tries the address that worked last, then the other one. A request that timed out is not
+  /// Tries the address that worked last, then the others (today there is only one). A request that timed out is not
   /// sent again (the server may have done it already); one that could not connect is.
   Future<http.Response> _sendAny(String method, String path, Map<String, String> headers, String? data) async {
     Object? first;

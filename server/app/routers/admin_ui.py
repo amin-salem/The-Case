@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import content
 from ..config import get_settings
+from ..services import health as health_service
 from ..db import get_session
 from ..models import (AdminLog, CaseProgress, CoinLog, Event, InboxItem, MissionDay, Player, PlayerAchievement,
                       Purchase, StoryProgress, utcnow)
@@ -290,6 +291,18 @@ async def clear_lockout(body: ClearLockIn, session: AsyncSession = Depends(get_s
     session.add(AdminLog(action="rl_clear", target=body.id[:12], detail={"existed": existed}))
     await session.commit()
     return {"cleared": existed}
+
+
+@router.get("/health2")
+async def health2(session: AsyncSession = Depends(get_session)):
+    """The Health screen: server, both addresses, content, players, security. Never fails as a whole."""
+    return await health_service.build(session)
+
+
+@router.get("/liara")
+async def liara(refresh: bool = False):
+    """Liara wallet balance (the token stays on the server; cached 5 min, one real call per 30 s)."""
+    return await health_service.liara_balance(refresh)
 
 
 @router.get("/log")

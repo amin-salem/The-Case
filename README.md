@@ -28,7 +28,7 @@ AUTO_CREATE_TABLES=false
 BAZAAR_MODE=fake             # api_secret + BAZAAR_API_SECRET for real payments
 BAZAAR_PACKAGE_NAME=ir.gammly.parvandeh
 ```
-To check that it's running, open `https://thecase.liara.run/health`. It shows how many cases are loaded.
+To check that it's running, open `https://gaamly.ir/health`. It shows how many cases are loaded.
 
 ## Run the server locally
 
@@ -61,7 +61,7 @@ home screen and in a case mutes everything.
 
 ```bash
 cd server
-python tools/smoke_test.py https://thecase.liara.run            # the live server
+python tools/smoke_test.py https://gaamly.ir            # the live server
 python tools/smoke_test.py http://127.0.0.1:8000 --solve        # a local one, also solves today's case
 ```
 It lists every call the app makes with the status and time, and ends with a pass/fail count.

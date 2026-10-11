@@ -1,6 +1,6 @@
 # Changelog
 
-## server 1.18.0, app 1.20.3 (build 39): rate limiter + «درباره‌ی برنامه»
+## server 1.19.0, app 1.20.4 (build 40): rate limiter + «درباره‌ی برنامه»
 
 - **Rate limiter** rewritten: a policy table (burst + sustained tiers, every value overridable with `RL_<NAME>`), shared counters
   for the strict limits (`rate_hits` table, or Redis when `REDIS_URL` is set), bounded in-memory counters for the generous ones,
@@ -13,6 +13,15 @@
 - App: handles `429` (message with countdown, a retried GET at most twice with exponential backoff + jitter, saved copy shown),
   reports its version once per start (`POST /v1/me/client`), and Settings has the new «درباره‌ی برنامه» card (tap = copy support info).
   Not released yet (the avatars task ships the APK).
+
+## server 1.18.0 + admin app 1.0
+
+- New small **admin app** (`admin_app/`, Flutter): a full-screen wrapper of the web panel `/admin/ui` for Amin's own phone. The admin key is typed once on the phone and kept in the Android Keystore (never in the APK or repo); the app opens `/admin/ui#k=<key>` and the page signs in from the URL fragment, then removes it from the address bar. Device-lock gate and screenshot block are switchable in the app. APK: workflow `release-admin.yml`, branch `release-admin`, GitHub release `admin-latest`. See `docs/operations.md`.
+- Panel «سلامت» (Health) screen rebuilt: server (version, uptime, workers, DB latency and size), TLS days left for gaamly.ir and thecase.liara.run, content ahead / next weekend case / story chapters / validation, players today, app versions, security flags, Liara balance card. New admin endpoints `GET /admin/api/health2` and `GET /admin/api/liara` (token `LIARA_API_TOKEN` read on the server only; 5 min cache, one real call per 30 s). Panel also refreshes on pull-down on touch screens. No migrations.
+
+## app 1.20.3 / server 1.17.2: dead address removed
+
+- Removed the dead thecase.liara.run address; the only server address is https://gaamly.ir. Players on old APKs that only know the old address stay offline until they update. The uptime watch, release smoke test, docs and tests now use gaamly.ir only; the one-off probe workflow is deleted.
 
 ## content: story season 1 chapter 1
 

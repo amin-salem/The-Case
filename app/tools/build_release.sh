@@ -13,7 +13,7 @@ if [ ! -f android/key.properties ]; then
 fi
 BUILD=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
 NAME=$(grep '^version:' pubspec.yaml | sed 's/version: *//; s/+.*//')
-API=${API_URL:-https://thecase.liara.run}
+API=${API_URL:-https://gaamly.ir}
 STORE=${STORE:-myket}
 if [ "$STORE" = "myket" ] && [ -z "${MYKET_RSA_KEY:-}" ]; then
   echo "NOTE: MYKET_RSA_KEY is empty, so purchases won't work in this APK (fine for testing, not for Myket)."
