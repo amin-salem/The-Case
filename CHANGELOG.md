@@ -4,6 +4,9 @@
 
 - All tabs are visible on a phone (they wrap into rows instead of hiding to the right), so players, comments and actions are easy to find. New quick buttons on the first screen: pending comments, message/gift to everyone, players (ban, coins).
 - The panel uses the game's font (Vazirmatn, served from `/static/fonts/`, three fixed files) with bigger, tabular numbers.
+## admin app 1.0.1 (build 2): panel questions work
+
+- The admin app now shows the panel's confirm / notice boxes as normal dialogs, so ban, gift / message to everyone, unlock IP and delete comment work even with an older panel (server 1.20.0). Build with `release-admin`.
 
 ## app 1.21.1 (build 44): comments button on every finished case
 

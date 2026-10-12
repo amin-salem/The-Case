@@ -351,6 +351,10 @@ class _PanelScreenState extends State<PanelScreen> {
     _web = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(_bg)
+      // The web view shows no browser pop-ups by itself (confirm() would answer "no"), so ban / gift / delete in the
+      // panel did nothing. Show them as normal dialogs.
+      ..setOnJavaScriptAlertDialog((r) => _popup(r.message))
+      ..setOnJavaScriptConfirmDialog((r) => _popup(r.message, ask: true))
       ..setNavigationDelegate(NavigationDelegate(
         onNavigationRequest: (req) => isAllowedUrl(req.url, widget.server)
             ? NavigationDecision.navigate
@@ -374,6 +378,25 @@ class _PanelScreenState extends State<PanelScreen> {
         },
       ));
     _load();
+  }
+
+  Future<bool> _popup(String message, {bool ask = false}) async {
+    if (!mounted) return false;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          backgroundColor: const Color(0xFF202124),
+          content: Text(message, style: const TextStyle(color: Color(0xFFE6E2DA), fontSize: 15, height: 1.7)),
+          actions: [
+            if (ask) TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('انصراف')),
+            TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(ask ? 'تأیید' : 'باشه', style: const TextStyle(color: _brass))),
+          ],
+        ),
+      ),
+    );
+    return ok ?? false;
   }
 
   void _load() {
