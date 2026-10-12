@@ -3,6 +3,9 @@
 ## app 1.21.1 (build 44): comments button on every finished case
 
 - The case screen of a solved or failed case (daily, archive, weekend) now has the «نظر کارآگاه‌ها» button under the statistics, not only the result screen.
+## server 1.20.1: admin panel works in the admin app again
+
+- Ban, gift / message to everyone, unlock IP and delete comment did nothing inside the admin app: its web view shows no browser pop-ups, so `confirm()` answered «no». The panel now asks in the page itself (`ask()`) and shows a small notice instead of `alert()`. No admin APK rebuild is needed.
 
 ## server 1.20.0, app 1.21.0 (build 43): case comments, stars and replies
 

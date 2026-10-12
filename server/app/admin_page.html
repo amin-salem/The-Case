@@ -98,6 +98,7 @@ h2{border-right:3px solid var(--brass);padding-right:8px}
 </header>
 <main id="main"></main>
 </div>
+<dialog id="cdlg"><form method="dialog"><p id="cmsg" style="margin-top:0"></p><div class="row"><button id="cok" class="on">تأیید</button><button id="cno">انصراف</button></div></form></dialog>
 <dialog id="dlg"><form method="dialog" id="dform"></form></dialog>
 <script>
 const $ = s => document.querySelector(s);
@@ -108,6 +109,22 @@ try { const m = /^#k=(.+)$/.exec(location.hash); if (m) { KEY = decodeURICompone
 const fmtT = t => t ? new Date(t * 1000).toLocaleString('fa-IR', {hour12: false}) : '—';
 const ago = t => { if (!t) return '—'; const s = Date.now()/1000 - t; if (s < 90) return 'همین الان'; if (s < 5400) return Math.round(s/60) + ' دقیقه پیش'; if (s < 129600) return Math.round(s/3600) + ' ساعت پیش'; return Math.round(s/86400) + ' روز پیش'; };
 const num = n => (n ?? 0).toLocaleString('fa-IR');
+// The admin app's web view shows no browser pop-ups (the built-in question box answers "no" there), so questions are asked in the page itself.
+function ask(msg) {
+  return new Promise(res => {
+    const d = $('#cdlg'); $('#cmsg').textContent = msg;
+    const done = v => { try { d.close(); } catch (e) {} res(v); };
+    $('#cok').onclick = e => { e.preventDefault(); done(true); };
+    $('#cno').onclick = e => { e.preventDefault(); done(false); };
+    d.oncancel = () => res(false);
+    d.showModal();
+  });
+}
+function note(msg) {
+  const n = document.createElement('div'); n.textContent = msg;
+  n.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99;background:var(--brass);color:#1a1a1a;padding:8px 16px;border-radius:12px;font-weight:bold;max-width:90vw';
+  document.body.appendChild(n); setTimeout(() => n.remove(), 3500);
+}
 async function api(path, opts = {}) {
   const r = await fetch(path, {...opts, headers: {'X-Admin-Key': KEY, 'Content-Type': 'application/json', ...(opts.headers || {})}});
   if (r.status === 403) { logout(); throw new Error('کلید اشتباه است'); }
@@ -219,7 +236,7 @@ const VIEWS = {
     <h2>خط زمانی</h2><div class="scroll"><table>${d.timeline.map(i => `<tr><td>${fmtT(i.t)}</td><td><span class="tag ${esc(i.kind)}">${esc(i.kind)}</span></td><td>${esc(i.text)}</td></tr>`).join('')}</table></div>`;
     $('#back').onclick = () => go('players'); m.querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
     $('#gift').onclick = () => giftDialog(p.id, p.nickname);
-    $('#ban').onclick = async () => { if (confirm((p.banned ? 'رفع بن' : 'بن') + ' «' + (p.nickname || p.id) + '»؟')) { await api(`/admin/players/${p.id}/ban`, {method: 'POST', body: JSON.stringify({banned: !p.banned})}); go('players', {id: p.id}); } };
+    $('#ban').onclick = async () => { if (await ask((p.banned ? 'رفع بن' : 'بن') + ' «' + (p.nickname || p.id) + '»؟')) { await api(`/admin/players/${p.id}/ban`, {method: 'POST', body: JSON.stringify({banned: !p.banned})}); go('players', {id: p.id}); } };
   },
   async cases(m) {
     const d = await api('/admin/api/cases');
@@ -243,9 +260,9 @@ const VIEWS = {
     m.querySelectorAll('button[data-st]').forEach(b => b.onclick = () => { st.status = b.dataset.st; render(); });
     $('#cmcase').onchange = e => { st.case_id = e.target.value; render(); };
     m.querySelectorAll('button[data-a]').forEach(b => b.onclick = async () => {
-      if (b.dataset.a === 'delete' && !confirm('این نظر برای همیشه حذف شود؟')) return;
+      if (b.dataset.a === 'delete' && !(await ask('این نظر برای همیشه حذف شود؟'))) return;
       b.disabled = true;
-      try { await api('/admin/api/comments/' + b.dataset.id, {method: 'POST', body: JSON.stringify({action: b.dataset.a})}); render(); } catch (e) { alert(e.message); b.disabled = false; }
+      try { await api('/admin/api/comments/' + b.dataset.id, {method: 'POST', body: JSON.stringify({action: b.dataset.a})}); render(); } catch (e) { note(e.message); b.disabled = false; }
     });
   },
   async money(m) {
@@ -264,7 +281,7 @@ const VIEWS = {
         api('/admin/api/health').then(x => x.rate_limit).catch(() => null)]);
       $('#hat').textContent = 'آخرین بررسی: ' + fmtT(h.checked_at);
       $('#hbody').innerHTML = healthHtml(h, lb) + rlHtml(rl);
-      $('#hbody').querySelectorAll('button[data-clear]').forEach(b => b.onclick = async () => { if (confirm('قفل این آی‌پی برداشته شود؟')) { await api('/admin/api/rate-limit/clear', {method: 'POST', body: JSON.stringify({id: b.dataset.clear})}); load(); } });
+      $('#hbody').querySelectorAll('button[data-clear]').forEach(b => b.onclick = async () => { if (await ask('قفل این آی‌پی برداشته شود؟')) { await api('/admin/api/rate-limit/clear', {method: 'POST', body: JSON.stringify({id: b.dataset.clear})}); load(); } });
       const b = $('#lbtn'); if (b) b.onclick = async () => { b.disabled = true; try { const r = await api('/admin/api/liara?refresh=true'); $('#lcard').outerHTML = liaraHtml(r); $('#lbtn').onclick = b.onclick; } finally { b.disabled = false; } };
     };
     $('#hre').onclick = () => { $('#hre').disabled = true; load().catch(e => { $('#hbody').innerHTML = '<p class="err">' + esc(e.message) + '</p>'; }).finally(() => { $('#hre').disabled = false; }); };
@@ -284,11 +301,11 @@ function giftDialog(pid, name) {
     ev.preventDefault();
     const title = $('#gt').value.trim(), coins = parseInt($('#gc').value || '0', 10), days = parseInt($('#ge').value || '0', 10);
     if (!title) { $('#gerr').textContent = 'عنوان لازم است'; return; }
-    if (!confirm((pid ? 'ارسال برای این بازیکن' : 'ارسال برای همه') + (coins ? ' با ' + coins + ' سکه' : '') + '؟')) return;
+    if (!(await ask((pid ? 'ارسال برای این بازیکن' : 'ارسال برای همه') + (coins ? ' با ' + coins + ' سکه' : '') + '؟'))) return;
     try {
       const body = {title, message: $('#gm').value.trim(), grants: coins > 0 ? [{type: 'coins', amount: coins}] : [], expires_in_days: days > 0 ? days : null};
       if (pid) body.player_id = pid;
-      await api('/admin/gifts', {method: 'POST', body: JSON.stringify(body)}); $('#dlg').close(); alert('ارسال شد'); if (tab === 'actions') render();
+      await api('/admin/gifts', {method: 'POST', body: JSON.stringify(body)}); $('#dlg').close(); note('ارسال شد'); if (tab === 'actions') render();
     } catch (e) { $('#gerr').textContent = e.message; }
   };
 }

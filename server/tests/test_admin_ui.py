@@ -208,3 +208,10 @@ async def test_admin_page_keeps_the_open_tab_and_charts_show_values(client):
     assert "adminTab" in page  # the open tab survives a reload
     assert "class=\"plink\"" in page and 'tr class="click" data-p="${esc(i.pid)}"><td>${ago(i.t)}' not in page  # feed rows no longer jump to a player
     assert "ch-tip" in page and "compact(" in page  # charts print their values and show a tapped day
+
+
+async def test_admin_page_asks_questions_in_the_page(client):
+    # the admin app's web view shows no browser pop-ups: confirm() answers "no" and alert() shows nothing
+    html = (await client.get("/admin/ui")).text
+    assert "alert(" not in html and "!confirm(" not in html and "(confirm(" not in html
+    assert "await ask(" in html and 'id="cdlg"' in html
