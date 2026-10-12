@@ -67,7 +67,12 @@ jobs:
         run: |
           flutter analyze
           flutter test
-          ./tools/build_release.sh
+          set -o pipefail
+          ./tools/build_release.sh 2>&1 | tee ../build.log
+      - name: Show build errors
+        if: failure()
+        run: |
+          tail -45 build.log | cut -c1-300 | tr -d "%" | while IFS= read -r l; do echo "::error::$l"; done
       - name: Live server check (the result goes into the release notes)
         continue-on-error: true
         run: |

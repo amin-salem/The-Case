@@ -16,7 +16,8 @@ dependencies:
   # local reminders at 21:00 / 22:30 (v20 needs Flutter 3.32+; v21+ would need 3.38+)
   flutter_local_notifications: ^20.1.0
   timezone: ^0.10.0
-  flutter_poolakey: ^2.2.0
+  flutter_poolakey:
+    path: third_party/flutter_poolakey
   url_launcher: ^6.3.1
   # the «درباره‌ی برنامه» card in Settings, and the version the app reports to the server
   package_info_plus: ^10.2.2

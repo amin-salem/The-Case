@@ -1,0 +1,47 @@
+// Vendored from cafebazaar/flutter_poolakey 2.2.0 (Apache 2.0). Changed: the old buildscript block and jcenter()
+// (removed in Gradle 9) are gone, so it builds with the Gradle/AGP/Kotlin that the Flutter project provides.
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+}
+
+group 'ir.cafebazaar.flutter_poolakey'
+version '2.2.0+1.0.0'
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+android {
+    namespace 'ir.cafebazaar.flutter_poolakey'
+    compileSdk 34
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        minSdkVersion 21
+    }
+
+    dependencies {
+        implementation "com.github.cafebazaar.Poolakey:poolakey:2.2.0"
+    }
+}
