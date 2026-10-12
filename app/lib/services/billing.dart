@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -43,10 +44,21 @@ class Billing extends ChangeNotifier {
   Future<void> init() async {
     if (testStore || kBazaarRsa.isEmpty) return;
     try {
-      _ready = await FlutterPoolakey.connect(kBazaarRsa, onDisconnected: () {
-        _ready = false;
-        notifyListeners();
-      });
+      final done = Completer<bool>();
+      await FlutterPoolakey.connect(
+        kBazaarRsa,
+        onSucceed: () {
+          if (!done.isCompleted) done.complete(true);
+        },
+        onFailed: () {
+          if (!done.isCompleted) done.complete(false);
+        },
+        onDisconnected: () {
+          _ready = false;
+          notifyListeners();
+        },
+      );
+      _ready = await done.future.timeout(const Duration(seconds: 10), onTimeout: () => false);
       if (_ready) await _loadInventory();
     } catch (e) {
       debugPrint('billing init: $e');
@@ -107,7 +119,7 @@ class Billing extends ChangeNotifier {
     if (!_ready) return (BuyResult.unavailable, 0);
     final PurchaseInfo p;
     try {
-      p = await FlutterPoolakey.purchase(productId);
+      p = await FlutterPoolakey.purchase(productId, payload: Api.i.playerId);
     } catch (e) {
       final text = '$e'.toLowerCase();
       debugPrint('billing launch: $e');
