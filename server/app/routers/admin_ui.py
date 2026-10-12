@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import case, func, or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -31,6 +31,18 @@ _PAGE = Path(__file__).resolve().parent.parent / "admin_page.html"
 async def page() -> HTMLResponse:
     # the page holds no data: it asks for the admin key and then calls /admin/api
     return HTMLResponse(_PAGE.read_text(encoding="utf-8"), headers={"Cache-Control": "no-store"})
+
+
+_FONTS = Path(__file__).resolve().parent.parent / "fonts"
+_FONT_NAMES = {"Vazirmatn-Regular.ttf", "Vazirmatn-Bold.ttf", "Vazirmatn-Black.ttf"}
+
+
+@page_router.get("/static/fonts/{name}", include_in_schema=False)
+async def font(name: str):
+    """The panel uses the same font as the game (a fixed list of three files, nothing else is served)."""
+    if name not in _FONT_NAMES:
+        raise HTTPException(404, "no_font")
+    return FileResponse(_FONTS / name, media_type="font/ttf", headers={"Cache-Control": "public, max-age=604800"})
 
 
 def _day(dt: datetime) -> str:

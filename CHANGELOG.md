@@ -1,5 +1,10 @@
 # Changelog
 
+## server 1.20.2: admin panel look
+
+- All tabs are visible on a phone (they wrap into rows instead of hiding to the right), so players, comments and actions are easy to find. New quick buttons on the first screen: pending comments, message/gift to everyone, players (ban, coins).
+- The panel uses the game's font (Vazirmatn, served from `/static/fonts/`, three fixed files) with bigger, tabular numbers.
+
 ## app 1.21.1 (build 44): comments button on every finished case
 
 - The case screen of a solved or failed case (daily, archive, weekend) now has the «نظر کارآگاه‌ها» button under the statistics, not only the result screen.

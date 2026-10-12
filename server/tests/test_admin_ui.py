@@ -215,3 +215,12 @@ async def test_admin_page_asks_questions_in_the_page(client):
     html = (await client.get("/admin/ui")).text
     assert "alert(" not in html and "!confirm(" not in html and "(confirm(" not in html
     assert "await ask(" in html and 'id="cdlg"' in html
+
+
+async def test_admin_panel_font_and_tabs(client):
+    r = await client.get("/static/fonts/Vazirmatn-Bold.ttf")
+    assert r.status_code == 200 and len(r.content) > 50000
+    assert (await client.get("/static/fonts/../app/config.py")).status_code in (404, 400)
+    assert (await client.get("/static/fonts/Other.ttf")).status_code == 404
+    html = (await client.get("/admin/ui")).text
+    assert "/static/fonts/Vazirmatn-Regular.ttf" in html and 'id="qm"' in html

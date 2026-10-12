@@ -78,6 +78,28 @@ h2{border-right:3px solid var(--brass);padding-right:8px}
 .avgline{position:absolute;left:0;right:0;border-top:1px dashed #ffffff55;pointer-events:none}
 .avgline small{position:absolute;right:0;top:-14px;font-size:9px;color:#ffffffaa;background:#1d1e21cc;padding:0 3px}
 @media(max-width:600px){main{padding:10px}.cols{height:120px}.col .v{font-size:9px}}
+
+/* ---- look & feel v3: app font, readable numbers, all tabs visible ---- */
+@font-face{font-family:Vazirmatn;font-weight:400;font-display:swap;src:url(/static/fonts/Vazirmatn-Regular.ttf)}
+@font-face{font-family:Vazirmatn;font-weight:700;font-display:swap;src:url(/static/fonts/Vazirmatn-Bold.ttf)}
+@font-face{font-family:Vazirmatn;font-weight:900;font-display:swap;src:url(/static/fonts/Vazirmatn-Black.ttf)}
+body,button,input,select,textarea{font-family:Vazirmatn,Tahoma,system-ui,sans-serif}
+body{font-size:14.5px;line-height:1.75;font-variant-numeric:tabular-nums}
+.card b,.hcard .big,.ch-head b,td,th,.col .v{font-variant-numeric:tabular-nums}
+.card b{font-size:32px;font-weight:900;line-height:1.3;display:block;letter-spacing:0}
+.card span{font-size:13px;color:var(--soft)}
+th{font-weight:700;white-space:nowrap}
+.cards{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+h2{font-weight:900}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
+.quick button{flex:1 1 140px;padding:11px 12px;border-radius:14px;font-weight:700;background:#25262a}
+.quick button.hot{background:linear-gradient(135deg,#f0bd45,#d99a1c);color:#1a1a1a;border-color:transparent;font-weight:900}
+@media(max-width:700px){
+  header{flex-wrap:wrap}
+  header h1{flex:1}
+  nav{order:3;flex:1 0 100%;flex-wrap:wrap;overflow:visible;gap:6px}
+  nav button{flex:1 1 calc(33.3% - 6px);padding:8px 6px;font-size:13px;text-align:center}
+}
 </style>
 </head>
 <body>
@@ -196,11 +218,14 @@ function healthHtml(h, lb) {
 const VIEWS = {
   async overview(m) {
     const d = await api('/admin/api/overview?days=14'), t = d.totals;
-    m.innerHTML = `<div class="cards">${card(t.players,'کل بازیکن‌ها','👥','#e0a526')}${card(t.active_24h,'فعال ۲۴ ساعت','⚡','#5dae7e')}${card(t.active_7d,'فعال ۷ روز','📅','#8ab4f8')}${card(t.secured,'حساب امن‌شده (ایمیل)','🔒','#b48ead')}${card(t.cases_solved,'پرونده‌ی حل‌شده','✅','#5dae7e')}${card(t.coins_in_circulation,'سکه‌ی در گردش','🪙','#e0a526')}${card(t.banned,'بن‌شده','⛔','#d0543f')}</div>` +
+    const pend = await api('/admin/api/comments/cases').then(x => x.pending).catch(() => 0);
+    m.innerHTML = `<div class="quick"><button class="${pend ? 'hot' : ''}" id="qc">💬 نظرهای در انتظار (${num(pend)})</button><button id="qm">✉ پیام / هدیه به همه</button><button id="qp">👥 بازیکن‌ها (بن، سکه)</button></div><div class="cards">${card(t.players,'کل بازیکن‌ها','👥','#e0a526')}${card(t.active_24h,'فعال ۲۴ ساعت','⚡','#5dae7e')}${card(t.active_7d,'فعال ۷ روز','📅','#8ab4f8')}${card(t.secured,'حساب امن‌شده (ایمیل)','🔒','#b48ead')}${card(t.cases_solved,'پرونده‌ی حل‌شده','✅','#5dae7e')}${card(t.coins_in_circulation,'سکه‌ی در گردش','🪙','#e0a526')}${card(t.banned,'بن‌شده','⛔','#d0543f')}</div>` +
       chart('بازیکن‌های فعال در روز', d.days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', d.days, 'new', '#e0a526') +
       chart('پرونده‌ی باز شده', d.days, 'opened', '#8ab4f8') + chart('حل‌شده', d.days, 'solved', '#5dae7e') + chart('شکست', d.days, 'failed', '#d0543f') +
       chart('خرید موفق', d.days, 'purchases', '#e0a526') + chart('سکه‌ی دریافتی', d.days, 'coins_in', '#5dae7e') + chart('سکه‌ی خرج‌شده', d.days, 'coins_out', '#d0543f') +
       '<h2>نسخه‌ی برنامه‌ی بازیکن‌ها</h2><div class="scroll"><table><tr><th>نسخه</th><th>بیلد</th><th>تعداد بازیکن</th></tr>' + (d.versions || []).map(v => `<tr><td class="ltr">${esc(v.version)}</td><td>${num(v.build)}</td><td>${num(v.players)}</td></tr>`).join('') + '</table></div><p class="muted">«؟» یعنی هنوز نسخه‌اش را گزارش نکرده (نسخه‌ی قدیمی برنامه).</p>';
+
+    $('#qc').onclick = () => go('comments'); $('#qm').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها'); $('#qp').onclick = () => go('players');
   },
   async feed(m) {
     const draw = async () => {
