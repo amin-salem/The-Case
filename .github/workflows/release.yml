@@ -72,7 +72,7 @@ jobs:
       - name: Show build errors
         if: failure()
         run: |
-          grep -v -E "Unzipping|^\[=" build.log | tail -9 | cut -c1-300 | tr -d "%" | while IFS= read -r l; do echo "::error::$l"; done
+          grep -A8 "What went wrong" build.log | head -9 | cut -c1-300 | tr -d "%" | while IFS= read -r l; do echo "::error::$l"; done
       - name: Live server check (the result goes into the release notes)
         continue-on-error: true
         run: |
