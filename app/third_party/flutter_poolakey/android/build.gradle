@@ -39,6 +39,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
+        buildConfigField "String", "POOLAKEY_VERSION", '"2.2.0"'
     }
 
     dependencies {
