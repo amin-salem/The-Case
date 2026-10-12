@@ -386,17 +386,29 @@ class _PanelScreenState extends State<PanelScreen> {
     _web.loadRequest(panelUri(widget.server, key: widget.adminKey));
   }
 
-  /// If the panel still shows its own key form two seconds after loading, the stored key was refused.
+  /// Two seconds after loading: is the panel still showing its own key form?
+  ///  - the page understands the `#k=` sign-in and still shows the form -> the stored key was refused: ask for a new one;
+  ///  - the page is an OLD server version (no `#k=` support, e.g. the new server is not deployed yet) -> do NOT ask for
+  ///    the key again (it is already saved); tell the user to type it once in the page or wait for the deploy.
   Future<void> _checkSignedIn() async {
     final id = _loadId;
     await Future<void>.delayed(const Duration(seconds: 2));
     if (!mounted || id != _loadId || _offline || _rejected) return;
     try {
       final r = await _web.runJavaScriptReturningResult(
-          "(function(){var l=document.getElementById('login');return !!l && !l.hidden;})()");
-      if ('$r' == 'true' && mounted) {
+          "(function(){var l=document.getElementById('login');if(!l||l.hidden)return 'ok';"
+          "var n=false;for(var i=0;i<document.scripts.length;i++){if(document.scripts[i].text.indexOf('#k=')>=0)n=true;}"
+          "return n?'rejected':'old';})()");
+      final v = '$r';
+      if (!mounted) return;
+      if (v.contains('rejected')) {
         _rejected = true;
         _askNewKey('کلید ذخیره‌شده را سرور قبول نکرد. کلید تازه را وارد کن.');
+      } else if (v.contains('old')) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          duration: Duration(seconds: 8),
+          content: Text('نسخه‌ی جدید سرور هنوز روی لیارا نیامده؛ کلید در برنامه ذخیره است. فعلاً یک بار کلید را در همین صفحه وارد کن.'),
+        ));
       }
     } catch (_) {}
   }

@@ -62,6 +62,12 @@ def patch_manifest() -> None:
             s = s.replace("<application", f'<uses-permission android:name="{perm}"/>\n    <application', 1)
             print(f"  manifest: + {perm}")
     s = re.sub(r'android:label="[^"]*"', f'android:label="{APP_LABEL}"', s, count=1)
+    # Auto Backup would restore the encrypted key file on a new/reinstalled phone WITHOUT its Keystore key
+    # (undecryptable), which makes the app ask for the key again; the key must never be backed up anyway.
+    if "android:allowBackup" in s:
+        s = re.sub(r'android:allowBackup="[^"]*"', 'android:allowBackup="false"', s)
+    else:
+        s = s.replace("<application", '<application android:allowBackup="false"', 1)
     if "usesCleartextTraffic" not in s:
         s = s.replace("<application", '<application android:usesCleartextTraffic="false"', 1)
     MANIFEST.write_text(s, encoding="utf-8")
