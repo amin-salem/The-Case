@@ -62,8 +62,8 @@ jobs:
       - name: Build
         working-directory: app
         env:
-          MYKET_RSA_KEY: ${{ secrets.MYKET_RSA_KEY }}
-          STORE: myket
+          BAZAAR_RSA_KEY: ${{ secrets.BAZAAR_RSA_KEY }}
+          STORE: bazaar
         run: |
           flutter analyze
           flutter test
@@ -92,7 +92,7 @@ jobs:
             echo "App $V, commit ${GITHUB_SHA::7}."
             echo
             if [ -f app/android/key.properties ]; then echo "Signed with the permanent release key (ready for Myket)."; else echo "**Signed with a temporary test key: not for Myket.** Add the ANDROID_KEYSTORE_* secrets."; fi
-            if [ "${{ secrets.MYKET_RSA_KEY != '' }}" = "true" ]; then echo "Myket payments: on."; else echo "**Myket payments: off** (add the MYKET_RSA_KEY secret)."; fi
+            if [ "${{ secrets.BAZAAR_RSA_KEY != '' }}" = "true" ]; then echo "Cafe Bazaar payments: on."; else echo "**Cafe Bazaar payments: off** (add the BAZAAR_RSA_KEY secret: the RSA public key from the Bazaar developer panel)."; fi
             echo
             echo "APK files:"
             (cd app/release && sha256sum *.apk && ls -l *.apk)

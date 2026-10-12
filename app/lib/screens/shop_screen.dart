@@ -7,8 +7,8 @@ import '../widgets/engagement.dart';
 import '../widgets/offline.dart';
 import 'dialogs.dart';
 
-/// Coin packs and perks, paid through Myket. Every purchase is checked by our server with Myket
-/// before coins are added; the price shown is Myket's own when it can tell us.
+/// Coin packs and perks, paid through Cafe Bazaar. Every purchase is checked by our server with Bazaar
+/// before coins are added; the price shown is Bazaar's own when it can tell us.
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
 

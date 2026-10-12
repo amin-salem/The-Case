@@ -230,7 +230,7 @@ async def _security() -> dict:
     status = "ok"
     if not admin_ok or not jwt_ok:
         status = "bad" if prod else "warn"
-    if prod and s.bazaar_mode == "fake" and not s.myket_access_token:
+    if prod and s.bazaar_mode == "fake":  # Myket is off for now (12 Oct 2026): Bazaar is the only store
         status = "bad"
     blocked = None
     if s.rate_limit:

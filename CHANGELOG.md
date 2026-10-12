@@ -1,5 +1,10 @@
 # Changelog
 
+## server 1.19.2, app 1.20.5 (build 41): Cafe Bazaar billing + detective icon
+
+- **Payments now go through Cafe Bazaar** (Poolakey plugin) instead of Myket; Myket is switched off for now (the server still understands `store: myket`, nothing sends it). The app needs the secret `BAZAAR_RSA_KEY` (GitHub secret, the RSA public key from the Bazaar developer panel) at build time; the server needs `BAZAAR_MODE` (`api_secret` or `oauth`) and its credentials on Liara (see docs/operations.md). Share/update links point to the Bazaar page; the health screen flags `BAZAAR_MODE=fake` in production.
+- **New app icon**: the detective with magnifier and case file (launcher, adaptive icon, in-app logo, 512 px store icon `app/tools/launcher/store/icon_512.png`).
+
 ## server 1.19.1: admin panel look, tab fix, readable charts
 
 - Panel: new look (gradient header, pill tabs that scroll sideways, coloured KPI cards); the open tab is remembered, and a slow answer from a previous tab can no longer overwrite the current one. «فعالیت زنده» rows no longer jump to «بازیکن‌ها» when tapped by accident: only the player name is a link.

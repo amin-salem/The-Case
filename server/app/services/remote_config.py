@@ -12,8 +12,8 @@ from ..models import ConfigValue
 DEFAULTS: dict[str, Any] = {
     "min_version": 1,
     "latest_version": 1,
-    "update_url": "https://myket.ir/app/ir.gammly.parvandeh",
-    "share_url": "https://myket.ir/app/ir.gammly.parvandeh",
+    "update_url": "https://cafebazaar.ir/app/ir.gammly.parvandeh",
+    "share_url": "https://cafebazaar.ir/app/ir.gammly.parvandeh",
     "privacy_url": "https://gaamly.ir/privacy",
     "terms_url": "https://gaamly.ir/terms",
     "support_email": "aminsaalem@gmail.com",
@@ -21,7 +21,7 @@ DEFAULTS: dict[str, Any] = {
     "maintenance": False,
     "maintenance_message": "در حال تعمیر سرور هستیم، چند دقیقه دیگه برگرد!",
     # Price labels shown in the shop when the store can't tell the app its own price.
-    # The real price is the one set for each product in the Myket panel; keep these the same.
+    # The real price is the one set for each product in the Bazaar panel; keep these the same.
     "prices": {
         "coins_small": "۳۹٬۰۰۰ تومان",
         "coins_medium": "۹۹٬۰۰۰ تومان",

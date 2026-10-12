@@ -14,9 +14,9 @@ fi
 BUILD=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
 NAME=$(grep '^version:' pubspec.yaml | sed 's/version: *//; s/+.*//')
 API=${API_URL:-https://gaamly.ir}
-STORE=${STORE:-myket}
-if [ "$STORE" = "myket" ] && [ -z "${MYKET_RSA_KEY:-}" ]; then
-  echo "NOTE: MYKET_RSA_KEY is empty, so purchases won't work in this APK (fine for testing, not for Myket)."
+STORE=${STORE:-bazaar}
+if [ "$STORE" = "bazaar" ] && [ -z "${BAZAAR_RSA_KEY:-}" ]; then
+  echo "NOTE: BAZAAR_RSA_KEY is empty, so purchases won't work in this APK (fine for testing, not for Cafe Bazaar)."
 fi
 echo "Building version $NAME (build $BUILD) for $API ..."
 
@@ -26,7 +26,7 @@ flutter analyze
 flutter test
 flutter build apk --release --obfuscate --split-debug-info=build/symbols \
   --dart-define=APP_BUILD="$BUILD" --dart-define=API_URL="$API" \
-  --dart-define=STORE="$STORE" --dart-define=MYKET_RSA_KEY="${MYKET_RSA_KEY:-}"
+  --dart-define=STORE="$STORE" --dart-define=BAZAAR_RSA_KEY="${BAZAAR_RSA_KEY:-}"
 
 mkdir -p release
 cp build/app/outputs/flutter-apk/app-release.apk "release/the_case-$NAME-$BUILD.apk"

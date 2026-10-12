@@ -763,7 +763,7 @@ class Api extends ChangeNotifier {
   }
 
   /// Returns (status, coins added).
-  Future<(String, int)> verifyPurchase(String productId, String token, {String store = 'myket'}) async {
+  Future<(String, int)> verifyPurchase(String productId, String token, {String store = 'bazaar'}) async {
     final j = (await _call('POST', '/v1/purchases/verify',
             body: {'product_id': productId, 'purchase_token': token, 'store': store}) as Map)
         .cast<String, dynamic>();

@@ -18,7 +18,8 @@ HERE = Path(__file__).resolve().parent
 SRC, RES = HERE / "src", HERE / "res"
 APP = HERE.parent.parent
 DENSITIES = {"mdpi": 1, "hdpi": 1.5, "xhdpi": 2, "xxhdpi": 3, "xxxhdpi": 4}
-BACKGROUND = "#EFE6D6"  # the cream paper behind the fingerprint
+BACKGROUND = "#06141A"  # the dark night behind the detective art (its corners are near black)
+ART = SRC / "icon_art.jpg"  # the detective illustration (1024 px, from the AI image Amin approved 12 Oct 2026)
 
 
 def chrome() -> str:
@@ -46,12 +47,26 @@ def render(svg: Path, size: int, out: Path) -> None:
     img.resize((size, size), Image.LANCZOS).save(out, optimize=True)
 
 
+def art(size: int, out: Path, inset: float = 1.0) -> None:
+    """The detective art scaled to `inset` of a square canvas of `size` px (dark background around it)."""
+    from PIL import Image
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img = Image.open(ART).convert("RGB")
+    side = round(size * inset)
+    img = img.resize((side, side), Image.LANCZOS)
+    canvas = Image.new("RGBA", (size, size), BACKGROUND)
+    canvas.paste(img, ((size - side) // 2, (size - side) // 2))
+    canvas.save(out, optimize=True)
+
+
 def main() -> None:
     if RES.exists():
         shutil.rmtree(RES)
     for name, f in DENSITIES.items():
-        render(SRC / "icon_legacy.svg", round(48 * f), RES / f"mipmap-{name}" / "ic_launcher.png")
-        render(SRC / "icon_foreground.svg", round(108 * f), RES / f"mipmap-{name}" / "ic_launcher_foreground.png")
+        art(round(48 * f), RES / f"mipmap-{name}" / "ic_launcher.png")
+        # adaptive icon: the launcher shows only the middle 72 of 108 dp, so the art fills exactly that
+        art(round(108 * f), RES / f"mipmap-{name}" / "ic_launcher_foreground.png", inset=72 / 108)
         render(SRC / "icon_monochrome.svg", round(108 * f), RES / f"mipmap-{name}" / "ic_launcher_monochrome.png")
         render(SRC / "icon_notification.svg", round(24 * f), RES / f"drawable-{name}" / "ic_stat_case.png")
     (RES / "mipmap-anydpi-v26").mkdir(parents=True, exist_ok=True)
@@ -73,8 +88,8 @@ def main() -> None:
         '<?xml version="1.0" encoding="utf-8"?>\n'
         '<resources xmlns:tools="http://schemas.android.com/tools"\n'
         '    tools:keep="@drawable/ic_stat_case,@mipmap/ic_launcher_foreground,@mipmap/ic_launcher_monochrome" />\n')
-    render(SRC / "icon_full.svg", 512, HERE / "store" / "icon_512.png")  # Cafe Bazaar listing
-    render(SRC / "icon_legacy.svg", 512, APP / "assets" / "icon" / "logo.png")  # in-app logo
+    art(512, HERE / "store" / "icon_512.png")  # Cafe Bazaar listing
+    art(512, APP / "assets" / "icon" / "logo.png")  # in-app logo
     print("rendered into", RES)
 
 

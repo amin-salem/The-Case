@@ -1,23 +1,20 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:myket_iap/myket_iap.dart';
-import 'package:myket_iap/util/constants.dart';
-import 'package:myket_iap/util/iab_result.dart';
-import 'package:myket_iap/util/inventory.dart';
-import 'package:myket_iap/util/purchase.dart';
+import 'package:flutter_poolakey/flutter_poolakey.dart';
 
 import 'api.dart';
 
-/// Which store this build is for. `myket` (the default) pays through Myket; `test` is for development
+/// Which store this build is for. `bazaar` (the default) pays through Cafe Bazaar; `test` is for development
 /// only (no money, the dev server accepts "test-" tokens). Set with --dart-define=STORE=...
-const String kStore = String.fromEnvironment('STORE', defaultValue: 'myket');
+/// (Myket billing was switched off on 12 Oct 2026: Bazaar is the only store for now.)
+const String kStore = String.fromEnvironment('STORE', defaultValue: 'bazaar');
 
-/// The store's name as players read it in the shop texts (follows the STORE build setting).
-String get kStoreName => kStore == 'bazaar' ? 'کافه‌بازار' : 'مایکت';
+/// The store's name as players read it in the shop texts.
+String get kStoreName => 'کافه‌بازار';
 
-/// The RSA public key from the Myket developer panel (--dart-define=MYKET_RSA_KEY=...).
-const String kMyketRsa = String.fromEnvironment('MYKET_RSA_KEY');
+/// The RSA public key from the Cafe Bazaar developer panel (--dart-define=BAZAAR_RSA_KEY=...).
+const String kBazaarRsa = String.fromEnvironment('BAZAAR_RSA_KEY');
 
 const List<String> kProductIds = ['coins_small', 'coins_medium', 'coins_large', 'starter_pack', 'vip_monthly'];
 const Set<String> _consumable = {'coins_small', 'coins_medium', 'coins_large', 'vip_monthly'};
@@ -25,7 +22,7 @@ const Set<String> _consumable = {'coins_small', 'coins_medium', 'coins_large', '
 enum BuyResult { granted, cancelled, pending, unavailable, failed }
 
 /// In-app purchases. The phone never decides anything: every purchase token goes to our server,
-/// which checks it with Myket and only then adds coins. Consumables are consumed in Myket after that.
+/// which checks it with Cafe Bazaar and only then adds coins. Consumables are consumed in Bazaar after that.
 class Billing extends ChangeNotifier {
   Billing._();
   static final Billing i = Billing._();
@@ -33,21 +30,23 @@ class Billing extends ChangeNotifier {
   bool _ready = false;
   bool _busy = false;
   final Map<String, String> _prices = {};
-  final List<Purchase> _unfinished = [];
+  final List<PurchaseInfo> _unfinished = [];
 
   bool get testStore => kStore == 'test';
 
-  /// True when purchases can be made (Myket is installed and the key is set, or the test store).
+  /// True when purchases can be made (Cafe Bazaar is installed and the key is set, or the test store).
   bool get available => testStore || _ready;
 
-  /// The price Myket shows for a product (its own currency text), if known.
+  /// The price Bazaar shows for a product (its own currency text), if known.
   String? price(String productId) => _prices[productId];
 
   Future<void> init() async {
-    if (testStore || kMyketRsa.isEmpty) return;
+    if (testStore || kBazaarRsa.isEmpty) return;
     try {
-      final r = await MyketIAP.init(rsaKey: kMyketRsa, enableDebugLogging: kDebugMode);
-      _ready = r?.isSuccess() ?? false;
+      _ready = await FlutterPoolakey.connect(kBazaarRsa, onDisconnected: () {
+        _ready = false;
+        notifyListeners();
+      });
       if (_ready) await _loadInventory();
     } catch (e) {
       debugPrint('billing init: $e');
@@ -58,22 +57,24 @@ class Billing extends ChangeNotifier {
 
   Future<void> _loadInventory() async {
     try {
-      final m = await MyketIAP.queryInventory(querySkuDetails: true, skus: kProductIds);
-      final res = m[MyketIAP.RESULT] as IabResult?;
-      final inv = m[MyketIAP.INVENTORY] as Inventory?;
-      if (res == null || res.isFailure() || inv == null) return;
+      final details = await FlutterPoolakey.getInAppSkuDetails(kProductIds);
       _prices
         ..clear()
-        ..addAll({for (final e in inv.mSkuMap.entries) e.key: e.value.mPrice});
+        ..addAll({for (final d in details) d.sku: d.price});
+    } catch (e) {
+      debugPrint('billing sku details: $e');
+    }
+    try {
+      final owned = await FlutterPoolakey.getAllPurchasedProducts();
       _unfinished
         ..clear()
-        ..addAll(inv.mPurchaseMap.values);
+        ..addAll(owned);
     } catch (e) {
       debugPrint('billing inventory: $e');
     }
   }
 
-  /// Purchases paid in Myket but not yet credited (the app closed, no internet...): credit them now.
+  /// Purchases paid in Bazaar but not yet credited (the app closed, no internet...): credit them now.
   /// Safe to call often; the server never credits the same token twice.
   Future<int> recover() async {
     if (!_ready || _busy || !Api.i.online) return 0;
@@ -81,16 +82,16 @@ class Billing extends ChangeNotifier {
     var added = 0;
     try {
       await _loadInventory();
-      for (final p in List<Purchase>.of(_unfinished)) {
+      for (final p in List<PurchaseInfo>.of(_unfinished)) {
         try {
-          final (status, coins) = await Api.i.verifyPurchase(p.mSku, p.mToken);
+          final (status, coins) = await Api.i.verifyPurchase(p.productId, p.purchaseToken, store: 'bazaar');
           if (status == 'granted' || status == 'already_granted') {
             added += coins;
-            if (_consumable.contains(p.mSku)) await MyketIAP.consume(purchase: p);
+            if (_consumable.contains(p.productId)) await FlutterPoolakey.consume(p.purchaseToken);
             _unfinished.remove(p);
           }
         } catch (e) {
-          debugPrint('billing recover ${p.mSku}: $e');
+          debugPrint('billing recover ${p.productId}: $e');
         }
       }
     } finally {
@@ -104,32 +105,25 @@ class Billing extends ChangeNotifier {
   Future<(BuyResult, int)> buy(String productId) async {
     if (testStore) return _buyTest(productId);
     if (!_ready) return (BuyResult.unavailable, 0);
-    final Map<dynamic, dynamic> m;
+    final PurchaseInfo p;
     try {
-      m = await MyketIAP.launchPurchaseFlow(sku: productId, payload: Api.i.playerId);
+      p = await FlutterPoolakey.purchase(productId);
     } catch (e) {
+      final text = '$e'.toLowerCase();
       debugPrint('billing launch: $e');
-      return (BuyResult.failed, 0);
-    }
-    final res = m[MyketIAP.RESULT] as IabResult?;
-    final p = m[MyketIAP.PURCHASE] as Purchase?;
-    if (res == null || res.isFailure() || p == null) {
-      final code = res?.mResponse;
-      if (code == Constants.BILLING_RESPONSE_RESULT_USER_CANCELED || code == Constants.IABHELPER_USER_CANCELLED) {
-        return (BuyResult.cancelled, 0);
-      }
-      if (code == Constants.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
+      if (text.contains('cancel')) return (BuyResult.cancelled, 0);
+      if (text.contains('owned')) {
         final added = await recover();
         return (BuyResult.granted, added);
       }
       return (BuyResult.failed, 0);
     }
     try {
-      final (status, added) = await Api.i.verifyPurchase(productId, p.mToken);
+      final (status, added) = await Api.i.verifyPurchase(productId, p.purchaseToken, store: 'bazaar');
       if (status != 'granted' && status != 'already_granted') return (BuyResult.failed, 0);
       if (_consumable.contains(productId)) {
         try {
-          await MyketIAP.consume(purchase: p);
+          await FlutterPoolakey.consume(p.purchaseToken);
         } catch (e) {
           debugPrint('billing consume: $e'); // recover() consumes it later; the server won't credit twice
         }
@@ -146,7 +140,7 @@ class Billing extends ChangeNotifier {
   Future<(BuyResult, int)> _buyTest(String productId) async {
     try {
       final token = 'test-${DateTime.now().millisecondsSinceEpoch}-${Random().nextInt(1 << 30)}';
-      final (status, added) = await Api.i.verifyPurchase(productId, token);
+      final (status, added) = await Api.i.verifyPurchase(productId, token, store: 'bazaar');
       return (status == 'granted' ? BuyResult.granted : BuyResult.failed, added);
     } catch (e) {
       debugPrint('billing test: $e');

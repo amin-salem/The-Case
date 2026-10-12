@@ -1,7 +1,7 @@
 name: the_case
 description: "پرونده - a daily Persian crime-mystery game."
 publish_to: 'none'
-version: 1.20.4+40
+version: 1.20.5+41
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -16,7 +16,7 @@ dependencies:
   # local reminders at 21:00 / 22:30 (v20 needs Flutter 3.32+; v21+ would need 3.38+)
   flutter_local_notifications: ^20.1.0
   timezone: ^0.10.0
-  myket_iap: ^1.1.11
+  flutter_poolakey: ^2.2.0
   url_launcher: ^6.3.1
   # the «درباره‌ی برنامه» card in Settings, and the version the app reports to the server
   package_info_plus: ^10.2.2

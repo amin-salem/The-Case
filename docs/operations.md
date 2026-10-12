@@ -138,3 +138,12 @@ from app.services.ratelimit import enforce, limiter, RateLimited   # RateLimited
 await enforce("accuse", f"{player.id}")                              # any named policy; key = anything you want limited
 ```
 Add a new policy by adding one line to `DEFAULTS` (and a route to `ROUTES` if it is path-based). Log decisions with one line, no personal data.
+
+## Cafe Bazaar billing (12 Oct 2026; Myket is off for now)
+
+The app pays through Cafe Bazaar (Poolakey) and sends the purchase token to `POST /v1/purchases/verify` (`store: bazaar`); the server checks it with Bazaar and only then adds coins. To go live Amin must:
+
+1. In the Bazaar developer panel create the in-app products with EXACTLY these ids: `coins_small`, `coins_medium`, `coins_large`, `starter_pack`, `vip_monthly` (prices as in the shop).
+2. Add the GitHub secret `BAZAAR_RSA_KEY` (the RSA public key from the panel), then build the APK (`git push -f origin <branch>:release`).
+3. On Liara set `BAZAAR_MODE` to `api_secret` (plus `BAZAAR_API_SECRET`) or `oauth` (plus `BAZAAR_CLIENT_ID`, `BAZAAR_CLIENT_SECRET`, `BAZAAR_REFRESH_TOKEN`). `fake` is refused in production (`store_not_configured`) and shown as bad on the Health page.
+4. Test one real purchase on a test device before publishing.
