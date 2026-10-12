@@ -276,3 +276,28 @@ class RateHit(Base):
     key: Mapped[str] = mapped_column(String(160), primary_key=True)
     window_start: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
     count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+
+
+class CaseComment(Base):
+    """A detective's comment (with 1-5 stars) on a case, or a reply to one. Nothing is public until the admin approves it.
+    status: pending -> approved | rejected; an approved one can later be hidden. `slot` is "root" for the one comment a
+    player may write per case (the unique constraint makes that atomic) and a fresh id for each reply."""
+
+    __tablename__ = "case_comments"
+    __table_args__ = (
+        UniqueConstraint("case_id", "player_id", "slot", name="uq_comment_slot"),
+        Index("ix_comments_case_status", "case_id", "status", "id"),
+        Index("ix_comments_status", "status", "id"),
+        Index("ix_comments_parent", "parent_id"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    case_id: Mapped[str] = mapped_column(String(16))
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    parent_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    slot: Mapped[str] = mapped_column(String(32), default="root")
+    rating: Mapped[int] = mapped_column(Integer, default=0)  # 1..5 for a comment, 0 for a reply
+    body: Mapped[str] = mapped_column(String(400), default="")
+    status: Mapped[str] = mapped_column(String(10), default="pending")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

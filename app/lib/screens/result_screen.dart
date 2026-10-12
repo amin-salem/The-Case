@@ -10,6 +10,7 @@ import '../widgets/fx.dart';
 import '../widgets/partner_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
+import 'comments_screen.dart';
 import 'leaderboard_screen.dart';
 
 /// The big moment: stamp, stars, one row of rewards, the culprit, what others thought, share.
@@ -144,6 +145,13 @@ class _ResultScreenState extends State<ResultScreen> {
                 icon: Icons.share_rounded,
                 onTap: () => SharePlus.instance.share(ShareParams(text: shortShareText(caseData, result))),
               ),
+            ),
+            const SizedBox(height: 10),
+            GhostButton(
+              label: 'نظر کارآگاه‌ها',
+              icon: Icons.chat_bubble_outline_rounded,
+              onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
+                  builder: (_) => CommentsScreen(caseId: caseData.id, title: caseData.title))),
             ),
             const SizedBox(height: 10),
             GhostButton(

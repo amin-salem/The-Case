@@ -720,6 +720,14 @@ class Api extends ChangeNotifier {
   }
 
   /// What everyone else guessed (only after the player finished the case).
+  Future<Map<String, dynamic>> caseComments(String id, {int before = 0}) async =>
+      ((await _call('GET', '/v1/cases/$id/comments${before > 0 ? '?before=$before' : ''}')) as Map).cast<String, dynamic>();
+
+  Future<void> sendComment(String id, String body, {int rating = 0, int? parentId}) async {
+    await _call('POST', '/v1/cases/$id/comments',
+        body: {'body': body, 'rating': rating, if (parentId != null) 'parent_id': parentId});
+  }
+
   Future<CaseStats> caseStats(String id) async =>
       CaseStats((await _call('GET', '/v1/cases/$id/stats') as Map).cast<String, dynamic>());
 
@@ -911,6 +919,14 @@ class Api extends ChangeNotifier {
 
   static String errorText(String code) => switch (code) {
         'not_enough_coins' => 'سکه‌ات کافی نیست',
+        'finish_case_first' => 'اول پرونده رو تموم کن، بعد نظر بده',
+        'already_commented' => 'تو قبلاً برای این پرونده نظر دادی',
+        'comment_too_short' => 'نظرت خیلی کوتاهه',
+        'comment_too_long' => 'نظرت خیلی بلنده',
+        'no_links' => 'توی نظر لینک یا آیدی نذار',
+        'rating_needed' => 'اول چند ستاره بده',
+        'too_many_replies' => 'پاسخ‌های زیادی فرستادی؛ بعد از تأیید مدیر ادامه بده',
+        'comments_off' => 'نظرها فعلاً بسته‌ست',
         'locked' => 'این پرونده قفله',
         'case_finished' => 'این پرونده تموم شده',
         'wait_last_chapter' => 'مدرک اصلی توی فصل آخره؛ بعد از باز شدنش می‌تونی متهم کنی',

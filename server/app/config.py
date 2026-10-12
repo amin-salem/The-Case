@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     myket_package_name: str = "ir.gammly.parvandeh"
     myket_base_url: str = "https://developer.myket.ir/api/partners/applications"
 
+    comments_enabled: bool = True  # COMMENTS_ENABLED=false hides and refuses case comments (kill switch)
+
     # Rewarded ads pay coins only when a real ad network is in the app.
     ads_enabled: bool = False
 

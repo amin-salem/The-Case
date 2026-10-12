@@ -147,3 +147,8 @@ The app pays through Cafe Bazaar (Poolakey) and sends the purchase token to `POS
 2. Add the GitHub secret `BAZAAR_RSA_KEY` (the RSA public key from the panel), then build the APK (`git push -f origin <branch>:release`).
 3. On Liara set `BAZAAR_MODE` to `api_secret` (plus `BAZAAR_API_SECRET`) or `oauth` (plus `BAZAAR_CLIENT_ID`, `BAZAAR_CLIENT_SECRET`, `BAZAAR_REFRESH_TOKEN`). `fake` is refused in production (`store_not_configured`) and shown as bad on the Health page.
 4. Test one real purchase on a test device before publishing.
+
+## Case comments (12 Oct 2026)
+- Players write comments + 1-5 stars after finishing a case; admin approves in the panel tab «💬 نظرها» (also in the admin app). Nothing is public before approval.
+- Kill switch: `COMMENTS_ENABLED=false` (reads and writes answer 503 `comments_off`). Limit: `RL_COMMENT` (default `2/20,10/3600`).
+- Table `case_comments` is created by migration 0014 (additive). Hidden or rejected comments stay in the table; delete removes the comment and its replies.

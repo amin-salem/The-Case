@@ -1,5 +1,11 @@
 # Changelog
 
+## server 1.20.0, app 1.21.0 (build 43): case comments, stars and replies
+
+- A detective who **finished a case** can leave 1-5 stars and a comment (3-300 characters, no links or @ids), once per case; others can reply (2-200 characters) to approved comments. Everything waits for the admin: the writer sees their own comment marked «در انتظار تأیید», nobody else does. A rejected comment can be rewritten. Entry point: «نظر کارآگاه‌ها» button on the result screen.
+- **Admin panel**: new tab «💬 نظرها» (pending / approved / rejected / hidden, filter by case with pending count and average stars). Actions: approve, reject, hide, delete (logged in `admin_log`). The admin app shows the panel, so no admin APK rebuild is needed.
+- Server: table `case_comments` (migration 0014, listed in CI), routes `GET/POST /v1/cases/{id}/comments`, `/admin/api/comments*`, rate limit policy `comment` (2/20 s, 10/h per player), kill switch `COMMENTS_ENABLED=false`. Also carries the «کارآگاه» wording build (app 1.20.6).
+
 ## app 1.20.6 (build 42): «کارآگاه» instead of «نفر»
 
 - Everywhere the app counts players it now says «کارآگاه» («۱۰ کارآگاه حلش کردن», «۱۰ کارآگاه اول», «اولین کارآگاه باش!», invite-code message, guide). Story text of the cases still says «نفر» for people in the story; suspects are counted as «مظنون» in the new cast strip.

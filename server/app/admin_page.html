@@ -15,6 +15,7 @@ nav{display:flex;gap:4px;flex-wrap:wrap}
 button,input,select,textarea{font:inherit;color:var(--text);background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
 button{cursor:pointer}button:hover{border-color:var(--brass)}
 nav button.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
+.row button.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
 button.danger{border-color:var(--bad);color:var(--bad)}
 main{padding:14px;max-width:1200px;margin:auto}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
@@ -113,7 +114,7 @@ async function api(path, opts = {}) {
   if (!r.ok) throw new Error('خطا ' + r.status + ': ' + (await r.text()).slice(0, 200));
   return r.json();
 }
-const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت زنده'],['players','👥 بازیکن‌ها'],['cases','🗂 پرونده‌ها'],['money','💰 پول و سکه'],['health','🩺 سلامت'],['actions','⚙ اقدام‌ها']];
+const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت زنده'],['players','👥 بازیکن‌ها'],['cases','🗂 پرونده‌ها'],['comments','💬 نظرها'],['money','💰 پول و سکه'],['health','🩺 سلامت'],['actions','⚙ اقدام‌ها']];
 // remember the open tab (per browser tab / app session) so a reload or a refresh never jumps elsewhere
 let tab = 'overview', timer = null;
 try { const t = sessionStorage.getItem('adminTab'); if (TABS.some(x => x[0] === t)) tab = t; } catch (e) {}
@@ -224,6 +225,28 @@ const VIEWS = {
     const d = await api('/admin/api/cases');
     m.innerHTML = '<p class="muted">برای دیدن سختی: «حل‌شده» کم و «اتهام اشتباه» زیاد یعنی سخت؛ اگر بیشتر بازیکن‌ها اول به مجرم شک کنند یعنی قابل حدس است.</p><div class="scroll"><table><tr><th>پرونده</th><th>باز شد</th><th>حل</th><th>شکست</th><th>میانگین ستاره</th><th>زمان</th><th>سرنخ</th><th>اتهام اشتباه</th><th>اولین حدس‌ها</th></tr>' +
       d.map(c => `<tr><td>${esc(c.title)}</td><td>${num(c.opened)}</td><td>${num(c.solved)}</td><td>${num(c.failed)}</td><td>${c.avg_stars ?? '—'}</td><td>${c.avg_seconds ?? '—'}ث</td><td>${c.avg_hints ?? '—'}</td><td>${c.avg_wrong ?? '—'}</td><td>${c.first_guess.map(g => esc(g.suspect) + ' ×' + g.n + (g.culprit ? ' ✔' : '')).join('، ')}</td></tr>`).join('') + '</table></div>';
+  },
+  async comments(m) {
+    const st = VIEWS._cm || (VIEWS._cm = {status: 'pending', case_id: ''});
+    const [cs, d] = await Promise.all([api('/admin/api/comments/cases'),
+      api('/admin/api/comments?status=' + st.status + (st.case_id ? '&case_id=' + encodeURIComponent(st.case_id) : ''))]);
+    const stars = n => n ? '★'.repeat(n) + '☆'.repeat(5 - n) : 'پاسخ';
+    const names = {pending: 'در انتظار', approved: 'تأییدشده', rejected: 'ردشده', hidden: 'پنهان'};
+    const btn = (id, a, t, cls) => `<button class="${cls || ''}" data-id="${id}" data-a="${a}">${t}</button>`;
+    const acts = c => c.status === 'pending' ? btn(c.id, 'approve', 'تأیید') + btn(c.id, 'reject', 'رد', 'danger')
+      : c.status === 'approved' ? btn(c.id, 'hide', 'پنهان') + btn(c.id, 'delete', 'حذف', 'danger')
+      : btn(c.id, 'approve', 'تأیید') + btn(c.id, 'delete', 'حذف', 'danger');
+    m.innerHTML = `<div class="row">${Object.entries(names).map(([k, n]) => `<button data-st="${k}" class="${k === st.status ? 'on' : ''}">${n}${k === 'pending' ? ' (' + num(cs.pending) + ')' : ''}</button>`).join('')}
+      <select id="cmcase"><option value="">همه‌ی پرونده‌ها</option>${cs.items.map(c => `<option value="${esc(c.case_id)}" ${c.case_id === st.case_id ? 'selected' : ''}>${esc(c.title || c.case_id)}${c.pending ? ' · ' + num(c.pending) + ' در انتظار' : ''} · ★${c.average || '—'}</option>`).join('')}</select></div>` +
+      (d.items.length ? d.items.map(c => `<div class="card" style="text-align:right;padding:12px;margin:8px 0"><div class="row"><b style="font-size:14px">${esc(c.nickname || 'کارآگاه')}</b><span class="tag">${esc(c.case_title || c.case_id)}</span><span style="color:var(--brass)">${stars(c.rating)}</span><span class="muted">${ago(c.created_at)}</span></div>${c.reply_to ? '<div class="muted" style="font-size:12px">در پاسخ به: ' + esc(c.reply_to) + '</div>' : ''}<p style="margin:8px 0;white-space:pre-wrap">${esc(c.body)}</p><div class="row">${acts(c)}</div></div>`).join('') : '<p class="muted">موردی نیست.</p>') +
+      (d.more ? '<p class="muted">فقط ۳۰ مورد آخر نشان داده شد؛ بعد از بررسی، بقیه می‌آید.</p>' : '');
+    m.querySelectorAll('button[data-st]').forEach(b => b.onclick = () => { st.status = b.dataset.st; render(); });
+    $('#cmcase').onchange = e => { st.case_id = e.target.value; render(); };
+    m.querySelectorAll('button[data-a]').forEach(b => b.onclick = async () => {
+      if (b.dataset.a === 'delete' && !confirm('این نظر برای همیشه حذف شود؟')) return;
+      b.disabled = true;
+      try { await api('/admin/api/comments/' + b.dataset.id, {method: 'POST', body: JSON.stringify({action: b.dataset.a})}); render(); } catch (e) { alert(e.message); b.disabled = false; }
+    });
   },
   async money(m) {
     const d = await api('/admin/api/money?days=30');
