@@ -229,14 +229,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
 }
 
 class _Stars extends StatelessWidget {
-  const _Stars(this.n, {this.size = 14});
+  const _Stars(this.n);
   final int n;
-  final double size;
 
   @override
   Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, textDirection: TextDirection.ltr, children: [
         for (int i = 1; i <= 5; i++)
-          Icon(i <= n ? Icons.star_rounded : Icons.star_border_rounded, color: K.brass, size: size + 2),
+          Icon(i <= n ? Icons.star_rounded : Icons.star_border_rounded, color: K.brass, size: 16),
       ]);
 }
 
