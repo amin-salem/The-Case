@@ -119,7 +119,7 @@ class Billing extends ChangeNotifier {
     if (!_ready) return (BuyResult.unavailable, 0);
     final PurchaseInfo p;
     try {
-      p = await FlutterPoolakey.purchase(productId, payload: Api.i.playerId);
+      p = await FlutterPoolakey.purchase(productId, payload: Api.i.playerId ?? '');
     } catch (e) {
       final text = '$e'.toLowerCase();
       debugPrint('billing launch: $e');
