@@ -12,6 +12,18 @@ the server on the OLD version, so the newest code is not live.
 - `git push -f origin main:release` builds the APK and does NOT deploy the server; it does not count.
 - If a run sees the deployment error, stop pushing to `main` for that day and tell Amin.
 
+## Three builds, one deploy (Amin, 12 Oct 2026)
+There are three separate things: the **game APK** (`app/`, built by pushing a branch to `release`), the **admin APK**
+(`admin_app/`, built by pushing a branch to `release-admin`) and the **server** (`server/`, deployed by Liara on every
+push to `main`). Only server changes may use a Liara deployment.
+
+- If a task changes ONLY `app/`, `admin_app/`, docs, workflows or tests (nothing under `server/`), do NOT push to `main`.
+  Check CI on the branch, then build with `git push -f origin <branch>:release` (game) or `:release-admin` (admin).
+  The change reaches `main` later, inside the next push that really changes `server/` (content, endpoints, admin panel).
+- If a task changes both, do one push to `main` for the server part and build the APK from the same commit.
+- Content (cases, story chapters, weekend cases) lives under `server/`, so it counts as a server change.
+- Before pushing to `main`, run `git diff --stat origin/main` and confirm something under `server/` changed.
+
 ## Owner's workflow rules (Amin, 11 Oct 2026)
 - When Amin asks for a new feature or change during the day, first ask its priority:
   **Urgent** (do it now), **Important** (next scheduled run today/tonight), **Normal** (the next suitable scheduled slot),
