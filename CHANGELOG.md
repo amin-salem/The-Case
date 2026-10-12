@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.20.2: all panel tabs visible on a phone
+
+- On a phone the tab row scrolled sideways and only «نمای کلی» showed, so the panel looked read-only. The tabs now wrap under the title so every tab (بازیکن‌ها, نظرها, اقدام‌ها, …) is visible.
+
 ## app 1.21.1 (build 44): comments button on every finished case
 
 - The case screen of a solved or failed case (daily, archive, weekend) now has the «نظر کارآگاه‌ها» button under the statistics, not only the result screen.

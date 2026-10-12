@@ -215,3 +215,9 @@ async def test_admin_page_asks_questions_in_the_page(client):
     html = (await client.get("/admin/ui")).text
     assert "alert(" not in html and "!confirm(" not in html and "(confirm(" not in html
     assert "await ask(" in html and 'id="cdlg"' in html
+
+
+async def test_admin_tabs_wrap_on_a_phone(client):
+    # on a phone every tab must be visible (a sideways-scrolling row hid «بازیکن‌ها», «نظرها» and «اقدام‌ها»)
+    html = (await client.get("/admin/ui")).text
+    assert "nav{order:3;flex:0 0 100%;flex-wrap:wrap" in html
