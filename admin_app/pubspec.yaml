@@ -1,7 +1,7 @@
 name: admin_panel
 description: Thin full-screen wrapper of the «پرونده» admin web panel (/admin/ui). Sideloaded on the owner's phone only.
 publish_to: none
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ">=3.3.0 <4.0.0"

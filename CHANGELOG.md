@@ -1,5 +1,9 @@
 # Changelog
 
+## admin app 1.0.1 (build 2): panel questions work
+
+- The admin app now shows the panel's confirm / notice boxes as normal dialogs, so ban, gift / message to everyone, unlock IP and delete comment work even with an older panel (server 1.20.0). Build with `release-admin`.
+
 ## app 1.21.1 (build 44): comments button on every finished case
 
 - The case screen of a solved or failed case (daily, archive, weekend) now has the «نظر کارآگاه‌ها» button under the statistics, not only the result screen.
