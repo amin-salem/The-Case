@@ -43,9 +43,9 @@ class _Backdrop extends StatelessWidget {
 
 /// The brass magnifier in a glowing round badge.
 class _Badge extends StatelessWidget {
-  const _Badge({this.icon = Icons.search, this.size = 92});
+  const _Badge({this.icon = Icons.search});
   final IconData icon;
-  final double size;
+  final double size = 92;
 
   @override
   Widget build(BuildContext context) {
