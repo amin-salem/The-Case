@@ -245,7 +245,7 @@ STORY_SEASON = {
     "tagline": "هر جا یه کبریت سوخته پیدا شد، یه نفر چیزی رو از دست داده. سرگرد ناصری سه ساله دنبالشه، "
                "و حالا تو همکارشی.",
     "partner": "سرگرد ناصری",
-    "opens_at": "2026-10-12T00:00:00",  # Tehran time
+    "opens_at": "2099-01-01T00:00:00",  # Tehran time. PAUSED 12 Oct 2026 (Amin): story is being rebuilt with choices; set the real date when it is ready
 }
 
 
