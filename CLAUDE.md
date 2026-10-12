@@ -66,3 +66,7 @@ So a failed health check from a workflow is NOT proof that the server is down.
   the problem is only the route from abroad and he redeploys by hand from the Liara panel if he wants the newest version.
 - Amin deploys the server manually from the Liara panel when needed. Pushing to `main` still starts a Liara build
   (see the deploy budget above), so keep to one push per task.
+
+## Wording (Amin, 12 Oct 2026)
+Players are «کارآگاه», never «نفر»: «۱۰ کارآگاه حلش کردن», «۱۰ کارآگاه اول». Suspects are counted as «مظنون» («۸ مظنون»).
+This is about app/UI texts. People inside a case's story text may still be «نفر».

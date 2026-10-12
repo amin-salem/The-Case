@@ -89,7 +89,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
         return Column(children: [
           Expanded(
             child: lb.top.isEmpty
-                ? Center(child: Text('هنوز کسی حل نکرده. اولین نفر باش!', textAlign: TextAlign.center, style: tBody(15)))
+                ? Center(child: Text('هنوز کسی حل نکرده. اولین کارآگاه باش!', textAlign: TextAlign.center, style: tBody(15)))
                 : ListView(
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                     children: [
@@ -175,7 +175,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
   /// The player's own row, always at the bottom.
   Widget _pinned(LeaderRow me) {
     final inTop = me.rank >= 1 && me.rank <= 10;
-    final line = inTop ? 'جزو ۱۰ نفر اولی! 🏆' : '${fa(me.rank - 10)} رتبه مونده تا ۱۰ نفر اول';
+    final line = inTop ? 'جزو ۱۰ کارآگاه اول! 🏆' : '${fa(me.rank - 10)} رتبه مونده تا ۱۰ کارآگاه اول';
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
       decoration: const BoxDecoration(color: K.night2, border: Border(top: BorderSide(color: K.night3))),

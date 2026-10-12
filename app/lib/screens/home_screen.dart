@@ -389,7 +389,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Icon(Icons.place_rounded, size: 15, color: K.brass),
           const SizedBox(width: 3),
           Expanded(
-            child: Text('${c.location} · ${fa(c.solvers)} نفر حلش کردن',
+            child: Text('${c.location} · ${fa(c.solvers)} کارآگاه حلش کردن',
                 maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(12.5, color: K.textSoft)),
           ),
         ]),

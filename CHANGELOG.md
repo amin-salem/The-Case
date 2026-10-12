@@ -1,5 +1,9 @@
 # Changelog
 
+## app 1.20.6 (build 42): «کارآگاه» instead of «نفر»
+
+- Everywhere the app counts players it now says «کارآگاه» («۱۰ کارآگاه حلش کردن», «۱۰ کارآگاه اول», «اولین کارآگاه باش!», invite-code message, guide). Story text of the cases still says «نفر» for people in the story; suspects are counted as «مظنون» in the new cast strip.
+
 ## server 1.19.2, app 1.20.5 (build 41): Cafe Bazaar billing + detective icon
 
 - **Payments now go through Cafe Bazaar** (Poolakey plugin) instead of Myket; Myket is switched off for now (the server still understands `store: myket`, nothing sends it). The app needs the secret `BAZAAR_RSA_KEY` (GitHub secret, the RSA public key from the Bazaar developer panel) at build time; the server needs `BAZAAR_MODE` (`api_secret` or `oauth`) and its credentials on Liara (see docs/operations.md). Share/update links point to the Bazaar page; the health screen flags `BAZAAR_MODE=fake` in production.
