@@ -1,5 +1,11 @@
 # Changelog
 
+## server 1.19.1: admin panel look, tab fix, readable charts
+
+- Panel: new look (gradient header, pill tabs that scroll sideways, coloured KPI cards); the open tab is remembered, and a slow answer from a previous tab can no longer overwrite the current one. «فعالیت زنده» rows no longer jump to «بازیکن‌ها» when tapped by accident: only the player name is a link.
+- «نمای کلی» charts now print the value on every bar, show today / total / daily average / best day (and the change since yesterday), an average line, and tapping a bar shows that day's date and number.
+- Admin app: branded splash, lock and key screens, gradient app bar (rebuild with `release-admin`).
+
 ## server 1.19.0, app 1.20.4 (build 40): rate limiter + «درباره‌ی برنامه»
 
 - **Rate limiter** rewritten: a policy table (burst + sustained tiers, every value overridable with `RL_<NAME>`), shared counters

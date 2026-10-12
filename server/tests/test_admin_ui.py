@@ -201,3 +201,10 @@ async def test_admin_page_reads_the_key_fragment_once(client):
     page = (await client.get("/admin/ui")).text
     assert "#k=" in page or "/^#k=(.+)$/" in page and "history.replaceState" in page
     assert 'id="key"' in page  # the manual key form for browsers stays
+
+
+async def test_admin_page_keeps_the_open_tab_and_charts_show_values(client):
+    page = (await client.get("/admin/ui")).text
+    assert "adminTab" in page  # the open tab survives a reload
+    assert "class=\"plink\"" in page and 'tr class="click" data-p="${esc(i.pid)}"><td>${ago(i.t)}' not in page  # feed rows no longer jump to a player
+    assert "ch-tip" in page and "compact(" in page  # charts print their values and show a tapped day

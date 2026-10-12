@@ -30,6 +30,7 @@ tr.click{cursor:pointer}tr.click:hover td{background:var(--bg3)}
 h2{font-size:15px;margin:18px 0 8px;color:var(--brass)}
 .chart{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:12px}
 .chart svg{width:100%;height:120px;display:block}
+.plink{color:var(--brass);text-decoration:none;border-bottom:1px dotted var(--brass)}
 .muted{color:var(--soft)}.ltr{direction:ltr;unicode-bidi:embed;display:inline-block}
 #login{max-width:340px;margin:18vh auto;text-align:center}
 #login input{width:100%;margin:10px 0}
@@ -42,6 +43,40 @@ dialog input,dialog textarea{width:100%;margin:4px 0 10px}
 .hcard{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;overflow-x:auto}.hcard h3{margin:0 0 6px;font-size:14px;color:var(--brass)}
 .hcard table{background:none}.hcard .big{display:block;font-size:24px;color:var(--brass)}.hcard small{font-size:12px;color:var(--soft)}
 .st{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--soft);vertical-align:middle}.st.ok{background:var(--ok)}.st.warn{background:#e0a526}.st.bad{background:var(--bad)}
+
+/* ---- look & feel v2 ---- */
+body{background:radial-gradient(1200px 500px at 85% -10%,#2a2412 0,transparent 60%),var(--bg);min-height:100vh}
+header{background:linear-gradient(180deg,#26241c,#1d1e20);border-bottom:1px solid #3d3a2c;box-shadow:0 4px 18px #0006;flex-wrap:nowrap;gap:6px;padding:8px 12px}
+header h1{white-space:nowrap;font-size:17px;letter-spacing:.2px;margin:0 0 0 6px;background:linear-gradient(90deg,#f3c964,#e0a526 60%,#b9801a);-webkit-background-clip:text;background-clip:text;color:transparent}
+nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;flex:1;gap:6px;padding:2px 0}nav::-webkit-scrollbar{display:none}
+nav button{white-space:nowrap;border-radius:999px;padding:6px 13px;background:#25262a;transition:.15s}
+nav button.on{background:linear-gradient(135deg,#f0bd45,#d99a1c);box-shadow:0 2px 10px #e0a52655;font-weight:bold}
+header .hbtn{padding:6px 10px;border-radius:999px;white-space:nowrap}
+main{animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card,.hcard,.chart{border-radius:14px;background:linear-gradient(180deg,#232427,#1d1e21);border-color:#33353a;box-shadow:0 2px 10px #0004}
+.cards{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.card{position:relative;overflow:hidden;padding:12px 14px}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--ac,var(--brass))}
+.card b{font-size:26px;color:var(--ac,var(--brass))}
+.card i{position:absolute;left:10px;top:8px;font-style:normal;font-size:20px;opacity:.55}
+button:active{transform:scale(.97)}
+table{border-radius:14px}tr:nth-child(even) td{background:#ffffff05}
+h2{border-right:3px solid var(--brass);padding-right:8px}
+/* charts */
+.chart{padding:12px 12px 8px}
+.ch-head{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:4px}.ch-head b{font-size:15px}
+.ch-stats{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--soft);font-size:12px}.ch-stats em{font-style:normal;color:var(--text)}
+.ch-tip{min-height:22px;font-size:13px;color:var(--text);margin:2px 0 4px}
+.cols{display:flex;gap:3px;align-items:flex-end;height:130px;direction:ltr;position:relative}
+.col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.col .v{font-size:10px;line-height:1.2;color:var(--soft);height:14px;white-space:nowrap}
+.col .bar{width:100%;border-radius:5px 5px 2px 2px;background:var(--c);opacity:.6;min-height:2px;transition:opacity .15s}
+.col.today .bar,.col.sel .bar{opacity:1}.col.today .v,.col.sel .v{color:var(--text);font-weight:bold}
+.col.zero .bar{opacity:.25}
+.axis{display:flex;gap:3px;direction:ltr;margin-top:3px}.axis span{flex:1;text-align:center;font-size:10px;color:var(--soft);min-width:0}
+.avgline{position:absolute;left:0;right:0;border-top:1px dashed #ffffff55;pointer-events:none}
+.avgline small{position:absolute;right:0;top:-14px;font-size:9px;color:#ffffffaa;background:#1d1e21cc;padding:0 3px}
+@media(max-width:600px){main{padding:10px}.cols{height:120px}.col .v{font-size:9px}}
 </style>
 </head>
 <body>
@@ -57,8 +92,8 @@ dialog input,dialog textarea{width:100%;margin:4px 0 10px}
   <h1>پنل «پرونده»</h1>
   <nav id="nav"></nav>
   <span style="flex:1"></span>
-  <button id="refresh">به‌روزرسانی</button>
-  <button id="logout">خروج</button>
+  <button id="refresh" class="hbtn">⟳ تازه</button>
+  <button id="logout" class="hbtn">خروج</button>
 </header>
 <main id="main"></main>
 </div>
@@ -78,25 +113,41 @@ async function api(path, opts = {}) {
   if (!r.ok) throw new Error('خطا ' + r.status + ': ' + (await r.text()).slice(0, 200));
   return r.json();
 }
-const TABS = [['overview','نمای کلی'],['feed','فعالیت زنده'],['players','بازیکن‌ها'],['cases','پرونده‌ها'],['money','پول و سکه'],['health','سلامت'],['actions','اقدام‌ها']];
+const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت زنده'],['players','👥 بازیکن‌ها'],['cases','🗂 پرونده‌ها'],['money','💰 پول و سکه'],['health','🩺 سلامت'],['actions','⚙ اقدام‌ها']];
+// remember the open tab (per browser tab / app session) so a reload or a refresh never jumps elsewhere
 let tab = 'overview', timer = null;
-function buildNav() { $('#nav').innerHTML = TABS.map(([k, n]) => `<button data-k="${k}" class="${k===tab?'on':''}">${n}</button>`).join(''); }
-$('#nav').onclick = e => { const k = e.target.dataset.k; if (k) { go(k); } };
+try { const t = sessionStorage.getItem('adminTab'); if (TABS.some(x => x[0] === t)) tab = t; } catch (e) {}
+function buildNav() { try { sessionStorage.setItem('adminTab', tab); } catch (e) {} $('#nav').innerHTML = TABS.map(([k, n]) => `<button data-k="${k}" class="${k===tab?'on':''}">${n}</button>`).join(''); }
+$('#nav').onclick = e => { const b = e.target.closest('button[data-k]'); if (b) { go(b.dataset.k); b.scrollIntoView({inline: 'center', block: 'nearest'}); } };
 function go(k, arg) { tab = k; buildNav(); clearInterval(timer); timer = null; render(arg); }
 async function render(arg) {
-  const m = $('#main'); m.innerHTML = '<p class="muted">در حال بارگذاری…</p>';
+  const m = document.createElement('div'); $('#main').replaceChildren(m); // a fresh box per render: a late answer of an old tab writes into a detached box
+  m.innerHTML = '<p class="muted">در حال بارگذاری…</p>';
   try { await VIEWS[tab](m, arg); } catch (e) { m.innerHTML = '<p class="err">' + esc(e.message) + '</p>'; }
 }
-function bars(rows, key, color) {
-  const max = Math.max(1, ...rows.map(r => r[key])); const w = 100 / rows.length;
-  return '<svg viewBox="0 0 100 40" preserveAspectRatio="none">' + rows.map((r, i) => {
-    const h = 36 * r[key] / max; return `<rect x="${i*w+0.6}" y="${38-h}" width="${w-1.2}" height="${h}" fill="${color}"><title>${esc(r.day)}: ${r[key]}</title></rect>`; }).join('') + '</svg>';
-}
+const compact = n => n >= 10000 ? (n/1000).toLocaleString('fa-IR', {maximumFractionDigits: 0}) + 'k' : n >= 1000 ? (n/1000).toLocaleString('fa-IR', {maximumFractionDigits: 1}) + 'k' : num(n);
+const dayName = d => { try { return new Date(d + 'T12:00:00').toLocaleDateString('fa-IR', {weekday: 'long', month: 'long', day: 'numeric'}); } catch (e) { return d; } };
+const dayNum = d => { try { return new Date(d + 'T12:00:00').toLocaleDateString('fa-IR', {day: 'numeric'}); } catch (e) { return d.slice(8); } };
+let chartSeq = 0;
 function chart(title, rows, key, color) {
-  const total = rows.reduce((a, r) => a + r[key], 0);
-  return `<div class="chart"><div class="row" style="margin:0"><b>${title}</b><span class="muted">جمع: ${num(total)} · امروز: ${num(rows[rows.length-1][key])}</span></div>${bars(rows, key, color)}</div>`;
+  const id = 'c' + (++chartSeq), vals = rows.map(r => r[key]), max = Math.max(1, ...vals);
+  const total = vals.reduce((a, v) => a + v, 0), avg = total / Math.max(1, vals.length), last = vals[vals.length - 1], prev = vals.length > 1 ? vals[vals.length - 2] : 0;
+  const delta = last - prev, dtxt = delta === 0 ? 'بدون تغییر' : (delta > 0 ? '▲ ' : '▼ ') + num(Math.abs(delta));
+  const H = 96, cols = rows.map((r, i) => `<div class="col${i === rows.length - 1 ? ' today' : ''}${vals[i] === 0 ? ' zero' : ''}" data-i="${i}" style="--c:${color}"><span class="v">${vals[i] ? compact(vals[i]) : '·'}</span><div class="bar" style="height:${Math.max(2, Math.round(H * vals[i] / max))}px"></div></div>`).join('');
+  const avgTop = Math.round(H * avg / max);
+  setTimeout(() => {
+    const box = document.getElementById(id); if (!box) return; const tip = box.querySelector('.ch-tip');
+    const show = i => { box.querySelectorAll('.col').forEach(c => c.classList.toggle('sel', +c.dataset.i === i)); tip.innerHTML = `<b>${esc(dayName(rows[i].day))}</b>: ${num(vals[i])}`; };
+    box.querySelector('.cols').onclick = e => { const c = e.target.closest('.col'); if (c) show(+c.dataset.i); };
+    show(rows.length - 1);
+  }, 0);
+  return `<div class="chart" id="${id}"><div class="ch-head"><b>${title}</b></div>
+  <div class="ch-stats"><span>امروز: <em>${num(last)}</em> (${dtxt})</span><span>جمع: <em>${num(total)}</em></span><span>میانگین روزانه: <em>${num(Math.round(avg * 10) / 10)}</em></span><span>بیشترین: <em>${num(max === 1 && total === 0 ? 0 : max)}</em></span></div>
+  <div class="ch-tip"></div>
+  <div class="cols">${cols}${avg > 0 ? `<div class="avgline" style="bottom:${avgTop}px"><small>میانگین</small></div>` : ''}</div>
+  <div class="axis">${rows.map(r => `<span>${dayNum(r.day)}</span>`).join('')}</div></div>`;
 }
-const card = (v, l) => `<div class="card"><b>${num(v)}</b><span>${l}</span></div>`;
+const card = (v, l, ic, ac) => `<div class="card" style="${ac ? '--ac:' + ac : ''}">${ic ? '<i>' + ic + '</i>' : ''}<b>${num(v)}</b><span>${l}</span></div>`;
 const LV = {ok: 'سالم', warn: 'هشدار', bad: 'خطا'};
 const dot = st => `<span class="st ${esc(st || 'warn')}" title="${esc(LV[st] || '')}"></span>`;
 const dur = s => s == null ? '—' : s < 3600 ? Math.round(s/60) + ' دقیقه' : s < 172800 ? (s/3600).toFixed(1) + ' ساعت' : Math.round(s/86400) + ' روز';
@@ -127,7 +178,7 @@ function healthHtml(h, lb) {
 const VIEWS = {
   async overview(m) {
     const d = await api('/admin/api/overview?days=14'), t = d.totals;
-    m.innerHTML = `<div class="cards">${card(t.players,'کل بازیکن‌ها')}${card(t.active_24h,'فعال ۲۴ ساعت')}${card(t.active_7d,'فعال ۷ روز')}${card(t.secured,'حساب امن‌شده (ایمیل)')}${card(t.cases_solved,'پرونده‌ی حل‌شده')}${card(t.coins_in_circulation,'سکه‌ی در گردش')}${card(t.banned,'بن‌شده')}</div>` +
+    m.innerHTML = `<div class="cards">${card(t.players,'کل بازیکن‌ها','👥','#e0a526')}${card(t.active_24h,'فعال ۲۴ ساعت','⚡','#5dae7e')}${card(t.active_7d,'فعال ۷ روز','📅','#8ab4f8')}${card(t.secured,'حساب امن‌شده (ایمیل)','🔒','#b48ead')}${card(t.cases_solved,'پرونده‌ی حل‌شده','✅','#5dae7e')}${card(t.coins_in_circulation,'سکه‌ی در گردش','🪙','#e0a526')}${card(t.banned,'بن‌شده','⛔','#d0543f')}</div>` +
       chart('بازیکن‌های فعال در روز', d.days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', d.days, 'new', '#e0a526') +
       chart('پرونده‌ی باز شده', d.days, 'opened', '#8ab4f8') + chart('حل‌شده', d.days, 'solved', '#5dae7e') + chart('شکست', d.days, 'failed', '#d0543f') +
       chart('خرید موفق', d.days, 'purchases', '#e0a526') + chart('سکه‌ی دریافتی', d.days, 'coins_in', '#5dae7e') + chart('سکه‌ی خرج‌شده', d.days, 'coins_out', '#d0543f') +
@@ -136,11 +187,11 @@ const VIEWS = {
   async feed(m) {
     const draw = async () => {
       const f = await api('/admin/api/feed?limit=80');
-      m.innerHTML = '<p class="muted">هر ۱۰ ثانیه خودکار تازه می‌شود. روی ردیف بزن تا بازیکن را ببینی.</p><div class="scroll"><table><tr><th>زمان</th><th>بازیکن</th><th>نوع</th><th>چی شد</th></tr>' +
-        f.map(i => `<tr class="click" data-p="${esc(i.pid)}"><td>${ago(i.t)}</td><td>${esc(i.nick || i.pid.slice(0,6))}</td><td><span class="tag ${esc(i.kind)}">${esc(i.kind)}</span></td><td>${esc(i.text)}</td></tr>`).join('') + '</table></div>';
-      m.querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
+      m.innerHTML = '<p class="muted">هر ۱۰ ثانیه خودکار تازه می‌شود. روی نام بازیکن بزن تا پرونده‌اش باز شود.</p><div class="scroll"><table><tr><th>زمان</th><th>بازیکن</th><th>نوع</th><th>چی شد</th></tr>' +
+        f.map(i => `<tr><td>${ago(i.t)}</td><td><a href="#" class="plink" data-p="${esc(i.pid)}">${esc(i.nick || i.pid.slice(0,6))}</a></td><td><span class="tag ${esc(i.kind)}">${esc(i.kind)}</span></td><td>${esc(i.text)}</td></tr>`).join('') + '</table></div>';
+      m.querySelectorAll('a.plink').forEach(a => a.onclick = e => { e.preventDefault(); go('players', {id: a.dataset.p}); });
     };
-    await draw(); timer = setInterval(() => draw().catch(() => {}), 10000);
+    await draw(); timer = setInterval(() => { if (!m.isConnected) { clearInterval(timer); return; } draw().catch(() => {}); }, 10000);
   },
   async players(m, arg) {
     if (arg && arg.id) return VIEWS.player(m, arg.id);

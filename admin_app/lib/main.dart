@@ -12,7 +12,54 @@ const _window = MethodChannel('app.parvandeh.admin/window');
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+    systemNavigationBarColor: _bg,
+    systemNavigationBarIconBrightness: Brightness.light,
+  ));
   runApp(const AdminApp());
+}
+
+/// Dark background with a warm brass glow, used by the lock, key and offline screens.
+class _Backdrop extends StatelessWidget {
+  const _Backdrop({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: RadialGradient(
+          center: Alignment(0.7, -0.9),
+          radius: 1.3,
+          colors: [Color(0xFF3A2F12), _bg],
+        ),
+      ),
+      child: SafeArea(child: Center(child: child)),
+    );
+  }
+}
+
+/// The brass magnifier in a glowing round badge.
+class _Badge extends StatelessWidget {
+  const _Badge({this.icon = Icons.search, this.size = 92});
+  final IconData icon;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: const LinearGradient(colors: [Color(0xFFF3C964), Color(0xFFB9801A)], begin: Alignment.topRight, end: Alignment.bottomLeft),
+        boxShadow: [BoxShadow(color: _brass.withValues(alpha: 0.35), blurRadius: 28, spreadRadius: 2)],
+      ),
+      child: Icon(icon, size: size * 0.5, color: _bg),
+    );
+  }
 }
 
 class AdminApp extends StatelessWidget {
@@ -148,13 +195,20 @@ class _GateState extends State<Gate> with WidgetsBindingObserver {
     if (!_ready) return const Scaffold(body: Center(child: CircularProgressIndicator()));
     if (!_unlocked) {
       return Scaffold(
-        body: Center(
+        body: _Backdrop(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const Icon(Icons.lock_outline, size: 56, color: _brass),
-            const SizedBox(height: 16),
-            const Text('پنل پرونده قفل است'),
-            const SizedBox(height: 16),
-            FilledButton(onPressed: _unlock, child: const Text('باز کردن قفل')),
+            const _Badge(icon: Icons.lock_outline),
+            const SizedBox(height: 22),
+            const Text('پنل پرونده', style: TextStyle(fontSize: 24, color: _brass, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 6),
+            const Text('قفل است', style: TextStyle(color: Colors.white60)),
+            const SizedBox(height: 22),
+            FilledButton.icon(
+              style: FilledButton.styleFrom(backgroundColor: _brass, foregroundColor: _bg, padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12)),
+              onPressed: _unlock,
+              icon: const Icon(Icons.fingerprint),
+              label: const Text('باز کردن قفل'),
+            ),
           ]),
         ),
       );
@@ -208,18 +262,17 @@ class _KeyScreenState extends State<KeyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
+      body: _Backdrop(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-              const Icon(Icons.search, size: 56, color: _brass),
-              const SizedBox(height: 12),
-              const Text('پنل پرونده', textAlign: TextAlign.center, style: TextStyle(fontSize: 22, color: _brass)),
+              const Center(child: _Badge()),
+              const SizedBox(height: 18),
+              const Text('پنل پرونده', textAlign: TextAlign.center, style: TextStyle(fontSize: 26, color: _brass, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               Text(widget.message ?? 'کلید ادمین را یک بار وارد کن. فقط روی همین گوشی و در حافظه‌ی امن (Keystore) نگه داشته می‌شود.',
-                  textAlign: TextAlign.center),
-              const SizedBox(height: 16),
+                  textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70)),
+              const SizedBox(height: 18),
               TextField(
                 controller: _c,
                 obscureText: _hide,
@@ -237,10 +290,13 @@ class _KeyScreenState extends State<KeyScreen> {
                 onSubmitted: (_) => _go(),
               ),
               const SizedBox(height: 16),
-              FilledButton(onPressed: _go, child: const Text('ذخیره و ورود')),
+              FilledButton(
+                style: FilledButton.styleFrom(backgroundColor: _brass, foregroundColor: _bg, padding: const EdgeInsets.symmetric(vertical: 14)),
+                onPressed: _go,
+                child: const Text('ذخیره و ورود', style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
             ]),
           ),
-        ),
       ),
     );
   }
@@ -284,6 +340,7 @@ class _PanelScreenState extends State<PanelScreen> {
   late final WebViewController _web;
   bool _offline = false;
   bool _loading = true;
+  bool _shown = false; // the first page has appeared: the splash is gone for good
   bool _rejected = false;
   int _loadId = 0;
 
@@ -302,7 +359,12 @@ class _PanelScreenState extends State<PanelScreen> {
           if (mounted) setState(() => _loading = true);
         },
         onPageFinished: (_) {
-          if (mounted) setState(() => _loading = false);
+          if (mounted) {
+            setState(() {
+              _loading = false;
+              _shown = true;
+            });
+          }
           _checkSignedIn();
         },
         onWebResourceError: (e) {
@@ -395,9 +457,15 @@ class _PanelScreenState extends State<PanelScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('پنل پرونده', style: TextStyle(color: _brass, fontSize: 18)),
+          title: const Text('پنل پرونده', style: TextStyle(color: _brass, fontSize: 18, fontWeight: FontWeight.bold)),
           toolbarHeight: 44,
-          backgroundColor: const Color(0xFF202124),
+          backgroundColor: Colors.transparent,
+          flexibleSpace: const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [Color(0xFF2A2514), Color(0xFF1D1E20)]),
+              border: Border(bottom: BorderSide(color: Color(0xFF3D3A2C))),
+            ),
+          ),
           actions: [
             IconButton(tooltip: 'تازه‌سازی', icon: const Icon(Icons.refresh), onPressed: _load),
             IconButton(tooltip: 'تنظیمات', icon: const Icon(Icons.settings), onPressed: _settings),
@@ -409,7 +477,24 @@ class _PanelScreenState extends State<PanelScreen> {
         body: SafeArea(
           child: _offline
               ? _Offline(onRetry: _load)
-              : WebViewWidget(controller: _web),
+              : Stack(children: [
+                  WebViewWidget(controller: _web),
+                  // branded splash until the first page is ready
+                  IgnorePointer(
+                    ignoring: _shown,
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 350),
+                      opacity: _shown ? 0 : 1,
+                      child: const _Backdrop(
+                        child: Column(mainAxisSize: MainAxisSize.min, children: [
+                          _Badge(),
+                          SizedBox(height: 22),
+                          Text('در حال باز کردن پنل…', style: TextStyle(color: Colors.white70)),
+                        ]),
+                      ),
+                    ),
+                  ),
+                ]),
         ),
       ),
     );
@@ -422,10 +507,10 @@ class _Offline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return _Backdrop(
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        const Icon(Icons.wifi_off, size: 56, color: _brass),
-        const SizedBox(height: 16),
+        const _Badge(icon: Icons.wifi_off),
+        const SizedBox(height: 20),
         const Text('اتصال برقرار نیست', style: TextStyle(fontSize: 20)),
         const SizedBox(height: 8),
         const Text('اینترنت یا سرور در دسترس نیست.'),
