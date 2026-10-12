@@ -18,6 +18,7 @@ import '../widgets/partner_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'accuse_screen.dart';
+import 'comments_screen.dart';
 import 'dialogs.dart';
 import 'result_screen.dart';
 import 'suspect_sheet.dart';
@@ -483,6 +484,13 @@ class _CaseScreenState extends State<CaseScreen> {
         _solutionBox(c),
         const SizedBox(height: 14),
         GuessStatsCard(key: ValueKey('stats-${c.id}'), caseData: c),
+        const SizedBox(height: 12),
+        GhostButton(
+          label: 'نظر کارآگاه‌ها',
+          icon: Icons.chat_bubble_outline_rounded,
+          onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => CommentsScreen(caseId: c.id, title: c.title))),
+        ),
       ] else ...[
         const SizedBox(height: 14),
         Text('چطور حل کنم؟', style: tDisplay(16)),
