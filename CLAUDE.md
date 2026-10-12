@@ -56,3 +56,13 @@ push to `main`). Only server changes may use a Liara deployment.
 - **Small, reversible steps.** Feature flags/kill switches for risky behaviour, one push to `main` per task
   (see the deploy budget above), and a short note in `CHANGELOG.md` and `docs/operations.md` for anything an operator
   must know or set.
+
+## Server unreachable from GitHub (Amin, 12 Oct 2026)
+The server watch, the live check in the release notes and the smoke tests run from GitHub's servers OUTSIDE Iran, and
+`gaamly.ir` is often unreachable from abroad while it works fine inside Iran (Amin sees the same with a VPN on).
+So a failed health check from a workflow is NOT proof that the server is down.
+- When you see "did not answer /health" / `(health failed)`: do not try to fix it by pushing or redeploying.
+  Tell Amin to open `https://gaamly.ir/health` WITHOUT a VPN (and the Liara Deployments tab). If it works there,
+  the problem is only the route from abroad and he redeploys by hand from the Liara panel if he wants the newest version.
+- Amin deploys the server manually from the Liara panel when needed. Pushing to `main` still starts a Liara build
+  (see the deploy budget above), so keep to one push per task.
