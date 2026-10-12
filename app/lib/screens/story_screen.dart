@@ -11,6 +11,8 @@ import '../widgets/offline.dart';
 import '../widgets/partner_card.dart';
 import 'case_screen.dart';
 import 'dialogs.dart';
+import 'story_board_screen.dart';
+import 'story_scene_screen.dart';
 
 DateTime? _time(Object? v) => v is num ? DateTime.fromMillisecondsSinceEpoch(v.toInt() * 1000) : null;
 
@@ -91,7 +93,9 @@ class _StoryScreenState extends State<StoryScreen> {
         _remind(m);
       }
       if (!mounted) return;
-      await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: c.id)));
+      // a finished chapter opens as the case again; otherwise the scenes come first, then the case
+      await Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => c.state == 'done' ? CaseScreen(caseId: c.id) : StorySceneScreen(chapterId: c.id, chapter: c.chapter)));
       if (mounted) await _load();
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -103,6 +107,16 @@ class _StoryScreenState extends State<StoryScreen> {
     } catch (e) {
       if (mounted) toast(context, Api.friendly(e));
     }
+  }
+
+  void _openBoard() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => StoryBoardScreen(onContinue: (n) {
+        Navigator.pop(context);
+        final c = _map?.chapters.where((x) => x.chapter == n).firstOrNull;
+        if (c != null) _play(c);
+      }),
+    ));
   }
 
   Future<void> _skip(StoryChapter c) async {
@@ -187,6 +201,8 @@ class _StoryScreenState extends State<StoryScreen> {
           child: ListView(padding: const EdgeInsets.fromLTRB(16, 16, 16, 24), children: [
             Row(children: [
               Expanded(child: Text('داستان', style: tDisplay(26))),
+              _boardChip(),
+              const SizedBox(width: 8),
               _warrantChip(m.warrants),
             ]),
             Text('پرونده‌های ${m.partner} · فصل ${fa(m.season)}', style: tBody(13, color: K.textSoft)),
@@ -211,6 +227,20 @@ class _StoryScreenState extends State<StoryScreen> {
       ),
     );
   }
+
+  Widget _boardChip() => InkWell(
+        borderRadius: BorderRadius.circular(999),
+        onTap: _openBoard,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(999)),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            const Icon(Icons.dashboard_outlined, size: 16, color: K.brass),
+            const SizedBox(width: 5),
+            Text('تابلو', style: tBody(13, color: K.brass, w: FontWeight.w900)),
+          ]),
+        ),
+      );
 
   Widget _warrantChip(int n) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

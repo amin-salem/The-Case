@@ -1,5 +1,11 @@
 # Changelog
 
+## server 1.21.0, app 1.22.0 (build 45): story chapters with choices
+
+- **Story mode becomes interactive** (Bandersnatch style): a chapter is a few short scenes, each with 2-3 options; a choice can lock or open paths and relationships, an option can be locked until a clue from earlier is held, and nothing blocks finishing the chapter. After the last scene the normal interrogation and accusation continue unchanged. New **season case board** («تابلوی پرونده»): people with a relationship state, clues held, locked or skipped clues in gray.
+- Server: `scenes` / `ending` / `board` in the chapter JSON, validated by `validate_story` (reachable, no dead ends or loops, locked clues obtainable earlier); endpoints `GET /v1/story/chapter/{id}/state`, `POST /v1/story/chapter/{id}/choose`, `GET /v1/story/board`; table `story_state` (migration 0015, listed in CI). Chapters in the old format still play (one scene, one «شروع» option); chapter 1 is only wrapped in the new structure. Format and authoring rules: `docs/story-mode.md` (`FORMAT_READY: choices-v1`).
+- **Story is still paused** on production (opens_at 2099); it is reactivated after the new app is installed and tested.
+
 ## server 1.20.2: admin panel look
 
 - All tabs are visible on a phone (they wrap into rows instead of hiding to the right), so players, comments and actions are easy to find. New quick buttons on the first screen: pending comments, message/gift to everyone, players (ban, coins).

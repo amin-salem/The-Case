@@ -129,7 +129,7 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
             p = await _progress(session, player.id, c.id)
     data = content.weekly_public(c) if content.is_weekly(c.id) else c.public()
     if content.is_story(c.id):
-        for k in (*content.STORY_FIELDS, "partner_hints"):
+        for k in (*content.STORY_FIELDS, "partner_hints", "scenes", "ending", "board"):
             data.pop(k, None)
         data["story"] = story_extra(c, p)
     if p is not None and (p.solved or p.failed):

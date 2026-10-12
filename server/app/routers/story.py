@@ -2,21 +2,26 @@
 this router decides which chapter a player may open: free, by warrant, by waiting 12 hours, or for coins."""
 from __future__ import annotations
 
+import logging
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from pydantic import BaseModel, Field
+from sqlalchemy import select, update
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import content
 from .. import economy as eco
+from .. import storyflow
 from ..db import get_session
-from ..models import CaseProgress, Player, StoryProgress, utcnow
+from ..models import CaseProgress, Player, StoryProgress, StoryState, utcnow
 from ..schemas import StoryChapterOut, StoryOpenIn, StoryOut
 from ..security import current_player
 from ..util import add_coins, ts
 
 router = APIRouter(prefix="/v1/story", tags=["story"])
+log = logging.getLogger("story")
 WAIT = timedelta(hours=eco.STORY_WAIT_HOURS)
 
 
@@ -146,3 +151,108 @@ async def skip_wait(chapter: int, player: Player = Depends(current_player),
         await _begin(session, player, c)
         await session.commit()
     return await _out(session, player, c.id)
+
+
+# ---------------------------------------------------------------- choices (scenes, board)
+class ChooseIn(BaseModel):
+    scene: str = Field(min_length=1, max_length=24)
+    option: str = Field(min_length=1, max_length=24)
+
+
+def _flow_case(chapter_id: str) -> content.Case:
+    if not content.story_open():
+        raise HTTPException(409, "story_not_open")
+    c = content.story_by_id(chapter_id)
+    if c is None:
+        raise HTTPException(404, "no_chapter")
+    return c
+
+
+def _to_state(row: StoryState) -> dict:
+    return {"scene": row.scene, "chosen": list(row.chosen or []), "clues": list(row.clues or []),
+            "relations": dict(row.relations or {}), "done": bool(row.done)}
+
+
+async def _row(session: AsyncSession, player: Player, c: content.Case, create: bool) -> StoryState | None:
+    """The player's state row of a chapter. It exists only for a chapter the player has opened."""
+    row = await session.scalar(select(StoryState).where(StoryState.player_id == player.id, StoryState.chapter_id == c.id))
+    if row is not None or not create:
+        return row
+    opened = await session.scalar(select(StoryProgress.id).where(
+        StoryProgress.player_id == player.id, StoryProgress.season == c.data["season"], StoryProgress.chapter == c.number))
+    if opened is None:
+        raise HTTPException(409, "chapter_locked")
+    first = storyflow.story_scenes(c.data)["scenes"][0]["id"]
+    session.add(StoryState(player_id=player.id, chapter_id=c.id, scene=first, chosen=[], clues=[], relations={},
+                           done=False, updated_at=utcnow()))
+    try:
+        await session.commit()
+    except IntegrityError:  # two requests created it at the same moment
+        await session.rollback()
+    return await session.scalar(select(StoryState).where(StoryState.player_id == player.id, StoryState.chapter_id == c.id))
+
+
+@router.get("/chapter/{chapter_id}/state")
+async def chapter_state(chapter_id: str, player: Player = Depends(current_player),
+                        session: AsyncSession = Depends(get_session)):
+    """The scene the player is in, its options (locked ones marked) and the chapter's board. Own state only."""
+    c = _flow_case(chapter_id)
+    row = await _row(session, player, c, create=True)
+    return storyflow.state_out(c, _to_state(row))
+
+
+@router.post("/chapter/{chapter_id}/choose")
+async def choose(chapter_id: str, body: ChooseIn, player: Player = Depends(current_player),
+                 session: AsyncSession = Depends(get_session)):
+    """Picks an option of the current scene. Repeating the same pick (double tap, retry) returns the state again."""
+    c = _flow_case(chapter_id)
+    row = await _row(session, player, c, create=True)
+    state = _to_state(row)
+    pick = [body.scene, body.option]
+    if pick in state["chosen"]:  # already done: idempotent
+        return storyflow.state_out(c, state)
+    new, err = storyflow.apply_choice(c, state, body.scene, body.option)
+    if err:
+        log.info("story_choose_refused chapter=%s code=%s", c.id, err)
+        raise HTTPException(409 if err in ("wrong_scene", "locked", "too_many_choices") else 404, err)
+    # compare-and-set on the scene and the number of choices, so two simultaneous picks cannot both win
+    res = await session.execute(update(StoryState).where(
+        StoryState.id == row.id, StoryState.scene == state["scene"], StoryState.done == state["done"],
+        StoryState.updated_at == row.updated_at).values(
+        scene=new["scene"], chosen=new["chosen"], clues=new["clues"], relations=new["relations"],
+        done=new["done"], updated_at=utcnow()))
+    await session.commit()
+    if res.rowcount == 0:  # lost the race: show what the winner stored
+        await session.refresh(row)
+        state = _to_state(row)
+        if pick not in state["chosen"]:
+            raise HTTPException(409, "wrong_scene")
+        return storyflow.state_out(c, state)
+    log.info("story_choose chapter=%s scene=%s option=%s done=%s", c.id, body.scene, body.option, new["done"])
+    return storyflow.state_out(c, new)
+
+
+@router.get("/board")
+async def board(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """The season case board: people met, clues held/open/missed, over every chapter the player has started."""
+    if not content.story_open():
+        raise HTTPException(409, "story_not_open")
+    chapters = {c.id: c for c in content.story_chapters()}
+    rows = (await session.execute(select(StoryState).where(
+        StoryState.player_id == player.id, StoryState.chapter_id.in_(list(chapters))))).scalars().all()
+    people: dict[str, dict] = {}
+    clues: list[dict] = []
+    current = None
+    for row in sorted(rows, key=lambda r: chapters[r.chapter_id].number):
+        c = chapters[row.chapter_id]
+        view = storyflow.state_out(c, _to_state(row))["board"]
+        for p in view["people"]:
+            old = people.get(p["id"])
+            if old is None or p["state"] != "unmet":
+                people[p["id"]] = {**p, "chapter": c.number}
+        clues += [{**x, "chapter": c.number} for x in view["clues"]]
+        if not row.done:
+            current = c.number
+    held = sum(1 for x in clues if x["status"] == "held")
+    return {"people": list(people.values()), "clues": clues, "held": held, "total": len(clues),
+            "continue_chapter": current}

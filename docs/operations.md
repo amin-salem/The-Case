@@ -152,3 +152,11 @@ The app pays through Cafe Bazaar (Poolakey) and sends the purchase token to `POS
 - Players write comments + 1-5 stars after finishing a case; admin approves in the panel tab «💬 نظرها» (also in the admin app). Nothing is public before approval.
 - Kill switch: `COMMENTS_ENABLED=false` (reads and writes answer 503 `comments_off`). Limit: `RL_COMMENT` (default `2/20,10/3600`).
 - Table `case_comments` is created by migration 0014 (additive). Hidden or rejected comments stay in the table; delete removes the comment and its replies.
+
+## Story choices (12 Oct 2026)
+- New endpoints (all need login; they use the existing `read` / `write` rate-limit policies): `GET /v1/story/chapter/{id}/state`,
+  `POST /v1/story/chapter/{id}/choose {scene, option}`, `GET /v1/story/board`. Table `story_state` (migration 0015, listed in CI).
+  Refusals are 409 `wrong_scene` / `locked` / `too_many_choices`, 404 `no_option`, 409 `chapter_locked` (chapter not opened) and
+  `story_not_open`. Log lines `story_choose` / `story_choose_refused` carry no personal data.
+- **Story mode is still paused** (`STORY_SEASON.opens_at` = 2099 in `server/app/content.py`): the endpoints answer `story_not_open`
+  until it is set to the real date. Reactivate only after the new app (1.22.0) is installed and tested. Format: `docs/story-mode.md`.

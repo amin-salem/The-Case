@@ -254,6 +254,24 @@ class StoryProgress(Base):
     stars: Mapped[int] = mapped_column(Integer, default=0)
 
 
+class StoryState(Base):
+    """Where a player is inside a story chapter's scenes (choices format): current scene, the choices made,
+    the clues held and the relationship states. One row per player and chapter; sizes are bounded by the chapter."""
+
+    __tablename__ = "story_state"
+    __table_args__ = (UniqueConstraint("player_id", "chapter_id", name="uq_story_state"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    chapter_id: Mapped[str] = mapped_column(String(8))
+    scene: Mapped[str] = mapped_column(String(24), default="")
+    chosen: Mapped[list] = mapped_column(JSON, default=list)
+    clues: Mapped[list] = mapped_column(JSON, default=list)
+    relations: Mapped[dict] = mapped_column(JSON, default=dict)
+    done: Mapped[bool] = mapped_column(Boolean, default=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
 class AdminLog(Base):
     """What the admin did from the panel (gifts, bans), for the record."""
 

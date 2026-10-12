@@ -270,6 +270,132 @@ def validate_story(d: dict, season: int, chapter: int) -> None:
     ph = d.get("partner_hints")
     if ph is not None and (not isinstance(ph, list) or len(ph) != 3 or not all(isinstance(x, str) and x for x in ph)):
         raise CaseError(f"{d['id']}: partner_hints must be 3 texts")
+    if "scenes" in d:
+        validate_scenes(d)
+
+
+# ---- choices format (docs/story-mode.md): `scenes` + `ending` + `board`. A chapter without `scenes` (the old
+# format) plays as one scene with a single «شروع» option, see story_scenes().
+RELATION_STATES = ("unmet", "neutral", "friendly", "suspicious")
+MAX_SCENES, MAX_OPTIONS, MAX_SCENE_CHARS, MAX_TITLE_CHARS = 8, 3, 1400, 120
+MAX_CHOICES = 40  # hard cap on the choices one player can store for one chapter
+_ID = re.compile(r"^[A-Za-z0-9_]{1,24}$")
+
+
+def _text(x, limit: int) -> bool:
+    return isinstance(x, str) and 0 < len(x.strip()) <= limit
+
+
+def story_scenes(d: dict) -> dict:
+    """{"scenes": [...], "ending": {...}, "board": {...}} of a chapter, old or new format. The first scene starts."""
+    if "scenes" in d:
+        return {"scenes": d["scenes"], "ending": d["ending"], "board": d.get("board") or {"people": [], "clues": []}}
+    return {
+        "scenes": [{"id": "start", "text": d["partner_intro"], "speaker": "partner",
+                    "options": [{"id": "go", "title": "شروع", "sub": "", "goes_to": "ending"}]}],
+        "ending": {"id": "ending", "text": "پرونده را بخوان، با مظنون‌ها حرف بزن و متهم را مشخص کن.", "speaker": "partner"},
+        "board": {"people": [], "clues": []},
+    }
+
+
+def validate_scenes(d: dict) -> None:
+    cid = d["id"]
+    scenes, ending = d["scenes"], d.get("ending")
+    board = d.get("board") or {}
+    if not isinstance(scenes, list) or not 1 <= len(scenes) <= MAX_SCENES:
+        raise CaseError(f"{cid}: scenes must be a list of 1-{MAX_SCENES}")
+    if not isinstance(ending, dict) or not _text(ending.get("text"), MAX_SCENE_CHARS) or not _ID.match(str(ending.get("id", ""))):
+        raise CaseError(f"{cid}: ending needs id and text")
+    people = board.get("people", [])
+    clues = board.get("clues", [])
+    pids = [p.get("id") for p in people]
+    if len(set(pids)) != len(pids) or not all(isinstance(i, str) and _ID.match(i) and _text(p.get("name"), 40)
+                                              for i, p in zip(pids, people)):
+        raise CaseError(f"{cid}: board people need unique ids and names")
+    cl_ids = [c.get("id") for c in clues]
+    eids = {e["id"] for e in d["evidence"]}
+    if len(set(cl_ids)) != len(cl_ids) or not all(isinstance(i, str) and _ID.match(i) and _text(c.get("title"), MAX_TITLE_CHARS)
+                                                  for i, c in zip(cl_ids, clues)):
+        raise CaseError(f"{cid}: board clues need unique ids and titles")
+    valid_clues = set(cl_ids) | eids
+    ids = [s.get("id") for s in scenes]
+    if len(set(ids)) != len(ids) or ending["id"] in ids or not all(isinstance(i, str) and _ID.match(i) for i in ids):
+        raise CaseError(f"{cid}: scene ids must be unique ([A-Za-z0-9_])")
+    by_id = {s["id"]: s for s in scenes}
+    for s in scenes:
+        if not _text(s.get("text"), MAX_SCENE_CHARS):
+            raise CaseError(f"{cid}/{s['id']}: scene text is empty or longer than {MAX_SCENE_CHARS} characters")
+        opts = s.get("options")
+        if not isinstance(opts, list) or not 1 <= len(opts) <= MAX_OPTIONS:
+            raise CaseError(f"{cid}/{s['id']}: needs 1-{MAX_OPTIONS} options (dead end)")
+        oids = [o.get("id") for o in opts]
+        if len(set(oids)) != len(oids) or not all(isinstance(i, str) and _ID.match(i) for i in oids):
+            raise CaseError(f"{cid}/{s['id']}: option ids must be unique")
+        for o in opts:
+            if not _text(o.get("title"), MAX_TITLE_CHARS) or not isinstance(o.get("sub", ""), str) or len(o.get("sub", "")) > MAX_TITLE_CHARS * 2:
+                raise CaseError(f"{cid}/{s['id']}/{o['id']}: option needs a title (and a short sub)")
+            if o.get("goes_to") not in by_id and o.get("goes_to") != ending["id"]:
+                raise CaseError(f"{cid}/{s['id']}/{o['id']}: goes_to is not a scene")
+            for key in ("gives_clue", "needs_clue"):
+                v = o.get(key, [] if key == "gives_clue" else None)
+                for c in ([v] if isinstance(v, str) else (v or [])):
+                    if c not in valid_clues:
+                        raise CaseError(f"{cid}/{s['id']}/{o['id']}: unknown clue {c!r}")
+            for p, st in (o.get("relations") or {}).items():
+                if p not in pids or st not in RELATION_STATES:
+                    raise CaseError(f"{cid}/{s['id']}/{o['id']}: bad relation {p!r}: {st!r}")
+        if not any(not o.get("needs_clue") for o in opts):
+            raise CaseError(f"{cid}/{s['id']}: needs at least one option that is never locked")
+    # graph: acyclic, everything reachable from the first scene, every scene reaches the ending
+    nxt = {s["id"]: {o["goes_to"] for o in s["options"]} for s in scenes}
+    reach: dict[str, set[str]] = {}
+    state: dict[str, int] = {}
+
+    def walk(n: str) -> set[str]:
+        if n == ending["id"]:
+            return set()
+        if state.get(n) == 1:
+            raise CaseError(f"{cid}: scenes loop back at {n!r}")
+        if n in reach:
+            return reach[n]
+        state[n] = 1
+        out: set[str] = set()
+        for m in nxt[n]:
+            out.add(m)
+            out |= walk(m)
+        state[n] = 2
+        reach[n] = out
+        return out
+
+    first = scenes[0]["id"]
+    below = walk(first)
+    missing = set(by_id) - below - {first}
+    if missing:
+        raise CaseError(f"{cid}: scenes never reached: {sorted(missing)}")
+    for sid in by_id:
+        if ending["id"] not in reach[sid] | nxt[sid]:
+            raise CaseError(f"{cid}: scene {sid!r} cannot reach the ending")
+    # a locked option's clue must be obtainable on a path that reaches the option's scene
+    for s in scenes:
+        for o in s["options"]:
+            need = o.get("needs_clue")
+            if not need:
+                continue
+            need = [need] if isinstance(need, str) else list(need)
+            for c in need:
+                ok = False
+                for t in scenes:
+                    if t["id"] == s["id"] or s["id"] not in reach[t["id"]]:
+                        continue  # only scenes that come before this one
+                    for o2 in t["options"]:
+                        if c in _as_list(o2.get("gives_clue")) and (o2["goes_to"] == s["id"] or s["id"] in reach.get(o2["goes_to"], set())):
+                            ok = True
+                if not ok:
+                    raise CaseError(f"{cid}/{s['id']}/{o['id']}: clue {c!r} cannot be obtained before this option")
+
+
+def _as_list(v) -> list:
+    return [v] if isinstance(v, str) else list(v or [])
 
 
 @lru_cache

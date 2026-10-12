@@ -428,6 +428,8 @@ class Api extends ChangeNotifier {
   static const _kAchievements = 'c_achievements';
   static const _kCasePrefix = 'c_case_';
   static const _kNotesPrefix = 'notes_';
+  static const _kStoryStatePrefix = 'c_story_state_';
+  static const _kStoryBoard = 'c_story_board';
 
   Object? _readCache(String key) {
     final s = _p.getString(key);
@@ -451,7 +453,7 @@ class Api extends ChangeNotifier {
   /// Another account's data must not show up after a login on this phone.
   Future<void> _clearCache() async {
     for (final k in _p.getKeys().toList()) {
-      if (k == _kMe || k == _kCases || k == _kRiddles || k == _kMissions || k == _kAchievements || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix)) {
+      if (k == _kMe || k == _kCases || k == _kRiddles || k == _kMissions || k == _kAchievements || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix) || k.startsWith(_kStoryStatePrefix) || k == _kStoryBoard) {
         await _p.remove(k);
       }
     }
@@ -663,6 +665,21 @@ class Api extends ChangeNotifier {
 
   /// The career map (needs the server: it depends on the clock and the player's warrants).
   Future<StoryMap> story() async => StoryMap((await _call('GET', '/v1/story') as Map).cast<String, dynamic>());
+
+  /// The scene the player is in (offline: the last saved one).
+  Future<ChapterState> chapterState(String chapterId) async =>
+      ChapterState(await _cachedGet('/v1/story/chapter/$chapterId/state', '$_kStoryStatePrefix$chapterId'));
+
+  /// Picks an option. Needs the server (ApiException locked / wrong_scene ...). Saves the new state.
+  Future<ChapterState> chooseOption(String chapterId, String scene, String option) async {
+    final j = await _call('POST', '/v1/story/chapter/$chapterId/choose', body: {'scene': scene, 'option': option}) as Map;
+    final m = Map<String, dynamic>.from(j);
+    await _writeCache('$_kStoryStatePrefix$chapterId', m);
+    return ChapterState(m);
+  }
+
+  /// The season case board (offline: the last saved one).
+  Future<SeasonBoard> storyBoard() async => SeasonBoard(await _cachedGet('/v1/story/board', _kStoryBoard));
 
   /// Opens a chapter that is ready, or a waiting one with a warrant. Throws ApiException (wait / no_warrant ...).
   Future<StoryMap> openStoryChapter(int chapter, {bool warrant = false}) async {
@@ -935,6 +952,9 @@ class Api extends ChangeNotifier {
         'wrong_order' => 'اول پرونده‌ی قبلی رو تموم کن',
         'chapter_locked' => 'این پرونده هنوز برات باز نشده',
         'story_not_open' => 'داستان هنوز شروع نشده',
+        'wrong_scene' => 'این صحنه عوض شده؛ دوباره باز کن',
+        'no_option' => 'این انتخاب وجود نداره',
+        'too_many_choices' => 'تعداد انتخاب‌ها از حد گذشته',
         'no_chapter' => 'این پرونده هنوز نوشته نشده',
         'no_more_hints' => 'سرنخ دیگه‌ای نمونده',
         'bad_email' => 'ایمیل درست نیست',
