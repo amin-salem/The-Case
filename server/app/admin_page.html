@@ -300,7 +300,12 @@ const VIEWS = {
       `<h2>محدودیت درخواست (ساعت اخیر)</h2><div class="cards">${card(r.blocked_1h, 'درخواست مسدودشده')}${card((r.lockouts || []).length, 'قفل فعال ادمین')}<div class="card"><b class="ltr" style="font-size:15px">${esc(r.store)}</b><span>ذخیره‌گاه</span></div></div>` +
       (r.top_blocked && r.top_blocked.length ? '<div class="scroll"><table><tr><th>قانون</th><th>کلید (کوتاه‌شده)</th><th>تعداد</th></tr>' + r.top_blocked.map(t => `<tr><td class="ltr">${esc(t.policy)}</td><td class="ltr">${esc(t.who)}</td><td>${num(t.count)}</td></tr>`).join('') + '</table></div>' : '<p class="muted">چیزی مسدود نشده.</p>') +
       (r.lockouts && r.lockouts.length ? '<h2>قفل‌های فعال</h2><div class="scroll"><table>' + r.lockouts.map(l => `<tr><td class="ltr">${esc(l.who)}</td><td>${num(Math.ceil(l.seconds_left / 60))} دقیقه‌ی دیگر</td><td><button data-clear="${esc(l.id)}">برداشتن قفل</button></td></tr>`).join('') + '</table></div>' : '') + (r.error ? '<p class="err">خطای ذخیره‌گاه: ' + esc(r.error) + '</p>' : '');
-    m.innerHTML = '<div class="row"><button id="hre">بررسی دوباره</button><span class="muted" id="hat"></span></div><div id="hbody"><p class="muted">در حال بررسی…</p></div>';
+    m.innerHTML = '<div class="row"><button id="hre">بررسی دوباره</button><span class="muted" id="hat"></span></div><div class="hcard"><h3>📱 پیامک تست</h3><p class="muted">یک کد واقعی به شماره‌ی خودت می‌فرستد (چیزی ذخیره نمی‌شود). حداکثر هر شماره یک بار در دقیقه.</p><div class="row"><input id="smsph" class="ltr" inputmode="tel" placeholder="09123456789" style="flex:1 1 160px"><button id="smsgo">ارسال</button></div><p id="smsres" class="muted"></p></div><div id="hbody"><p class="muted">در حال بررسی…</p></div>';
+    $('#smsgo').onclick = async () => {
+      const b = $('#smsgo'), out = $('#smsres'); b.disabled = true; out.textContent = 'در حال ارسال…';
+      try { const r = await api('/admin/api/sms-test', {method: 'POST', body: JSON.stringify({phone: $('#smsph').value})}); out.textContent = (r.ok ? '✅ ' : '❌ ') + r.detail + (r.error ? ' (' + r.error + ')' : ''); }
+      catch (e) { out.textContent = '❌ ' + e.message; } finally { b.disabled = false; }
+    };
     const load = async () => {
       const [h, lb, rl] = await Promise.all([api('/admin/api/health2'), api('/admin/api/liara').catch(e => ({state: 'error', kind: 'request', status: 'bad'})),
         api('/admin/api/health').then(x => x.rate_limit).catch(() => null)]);

@@ -321,3 +321,25 @@ async def liara(refresh: bool = False):
 async def log(limit: int = Query(100, ge=1, le=300), session: AsyncSession = Depends(get_session)):
     rows = (await session.execute(select(AdminLog).order_by(AdminLog.id.desc()).limit(limit))).scalars().all()
     return [{"t": ts(r.at), "action": r.action, "target": r.target, "detail": r.detail} for r in rows]
+
+
+class SmsTestIn(BaseModel):
+    phone: str = Field(min_length=10, max_length=20)
+
+
+@router.post("/sms-test")
+async def sms_test(body: SmsTestIn):
+    """Sends one real code SMS to this number (nothing is stored) so the operator can check Ghasedak."""
+    from ..services import sms
+    from ..services.ratelimit import enforce
+    phone = sms.normalize_phone(body.phone)
+    if phone is None:
+        return {"ok": False, "error": "bad_phone", "detail": "شماره باید موبایل ایران باشد (مثل 0912...)"}
+    await enforce("sms_phone", sms.phone_hash(phone))
+    await enforce("sms_daily", "all")
+    try:
+        await sms.send_code(phone, sms.new_code())
+    except sms.SmsError as e:
+        return {"ok": False, "error": e.code, "detail": e.detail or ("حالت: " + get_settings().sms_mode)}
+    return {"ok": True, "mode": get_settings().sms_mode,
+            "detail": "ارسال شد" if get_settings().sms_mode == "ghasedak" else "حالت fake است: پیامک واقعی نمی‌رود"}

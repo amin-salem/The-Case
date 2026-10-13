@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.22.1: «پیامک تست» in the admin panel
+
+- Health tab: type a mobile number and send one real code SMS to check Ghasedak (key, template, plan). Shows what the provider answered when it fails. Limits as for players (1 a minute per number, daily ceiling). `POST /admin/api/sms-test`.
+
 ## server 1.22.0: phone-secured accounts (SMS code, Ghasedak)
 
 - New endpoints: `POST /v1/auth/phone/send` + `/verify` (a logged-in player adds a phone number; one number per account; the one-time `SECURE_REWARD` is paid like for email), `POST /v1/auth/phone/login/send` + `/login` (new device: code to the number, logs the old device out). `secured` in the profile is now true for email OR phone; new field `phone` (masked, last 4 digits).

@@ -24,9 +24,10 @@ MAX_TRIES = 5
 
 
 class SmsError(Exception):
-    def __init__(self, code: str):
+    def __init__(self, code: str, detail: str = ""):
         super().__init__(code)
         self.code = code  # "sms_unavailable" | "sms_failed"
+        self.detail = detail  # what the provider said (short, never the key); only the admin test shows it
 
 
 def normalize_phone(raw: str) -> str | None:
@@ -80,11 +81,13 @@ async def send_code(phone: str, code: str) -> None:
     try:
         async with httpx.AsyncClient(timeout=8.0) as c:
             r = await c.post(s.sms_url, json=body, headers={"apikey": s.sms_api_key})
-        ok = r.status_code == 200 and bool((r.json() or {}).get("isSuccess", False))
+        data = r.json() if r.content else {}
+        ok = r.status_code == 200 and bool((data or {}).get("isSuccess", False))
     except Exception as e:  # network, bad JSON...
         log.warning("sms: provider error %s", type(e).__name__)
-        raise SmsError("sms_failed")
+        raise SmsError("sms_failed", "no valid answer from the provider: " + type(e).__name__)
     if not ok:
         log.warning("sms: provider refused (http %s)", r.status_code)
-        raise SmsError("sms_failed")
+        msg = str((data or {}).get("message", "")) if isinstance(data, dict) else ""
+        raise SmsError("sms_failed", f"http {r.status_code} {msg}"[:160])
     log.info("sms: sent")

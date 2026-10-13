@@ -217,3 +217,19 @@ async def test_wrong_code_guessing_is_limited(clock, client):  # noqa: F811
             r = await c.post("/v1/auth/phone/verify", headers=p["headers"], json={"phone": "09128888888", "code": "00000"})
             codes.append(r.status_code)
         assert 429 in codes
+
+
+async def test_admin_sms_test_button(client, monkeypatch):
+    from .conftest import ADMIN
+    r = await client.post("/admin/api/sms-test", json={"phone": "0912"})
+    assert r.status_code in (401, 403)  # needs the admin key
+    r = await client.post("/admin/api/sms-test", headers=ADMIN, json={"phone": "abcdefghijk"})
+    assert r.json()["ok"] is False and r.json()["error"] == "bad_phone"
+    r = await client.post("/admin/api/sms-test", headers=ADMIN, json={"phone": "09128000001"})
+    assert r.json()["ok"] is True and len(sms.FAKE_OUTBOX) == 1  # fake mode: no real SMS
+
+    async def boom(phone, code):
+        raise sms.SmsError("sms_failed", "http 400 template not approved")
+    monkeypatch.setattr(sms, "send_code", boom)
+    r = await client.post("/admin/api/sms-test", headers=ADMIN, json={"phone": "09128000002"})
+    assert r.json() == {"ok": False, "error": "sms_failed", "detail": "http 400 template not approved"}
