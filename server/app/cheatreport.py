@@ -40,7 +40,7 @@ async def build(session: AsyncSession, days: int = 7) -> dict:
                 select(CaseProgress, Player).join(Player, Player.id == CaseProgress.player_id)
                 .where(CaseProgress.solved.is_(True), CaseProgress.finished_at >= since,
                        CaseProgress.active_seconds < FAST_SOLVE_SECONDS)
-                .order_by(CaseProgress.active_seconds.asc()).limit(LIST_LIMIT))).all()]
+                .order_by(CaseProgress.active_seconds.asc(), CaseProgress.finished_at.desc()).limit(LIST_LIMIT))).all()]
 
     # 3. many new accounts giving the same first answer within minutes
     cutoff = timedelta(hours=eco.HIDE_NEW_ACCOUNT_HOURS)
