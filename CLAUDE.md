@@ -70,3 +70,20 @@ So a failed health check from a workflow is NOT proof that the server is down.
 ## Wording (Amin, 12 Oct 2026)
 Players are «کارآگاه», never «نفر»: «۱۰ کارآگاه حلش کردن», «۱۰ کارآگاه اول». Suspects are counted as «مظنون» («۸ مظنون»).
 This is about app/UI texts. People inside a case's story text may still be «نفر».
+
+## Business priority (Amin, 13 Oct 2026)
+Amin's livelihood depends on this game: when you decide or build anything, weigh **his earnings** first, without hurting
+players (no dark patterns, the daily case is never blocked by coins, every offer closes in one tap).
+- Prefer the option that increases coin-pack purchases, first purchases, starter-pack conversion, retention and invites,
+  as long as it is fair to players. Say in one line what a choice does for revenue when it matters.
+- Never give away what could be sold: coins, warrants, avatars, archive cases. Keep the free economy scarce (see the
+  coin rebalance), and keep coin sinks attractive (archive, story warrants/skips, avatars, frames, streak freeze).
+- Before adding free rewards, ask: does this reduce the reason to buy coins?
+
+## Story opening gate (Amin, 13 Oct 2026)
+Story mode opens for players only when BOTH are true (AND, not OR):
+1. **Season 1 is completely written**: all 10 chapters (s01ch01-s01ch10) exist in the choices format and passed the blind test.
+2. **The game app has been published on Cafe Bazaar** (Amin confirms it himself).
+Until then `STORY_SEASON["opens_at"]` stays `2099-01-01T00:00:00`. Only Amin (or Claude after he says so) sets the real date.
+Reason: a story that gets one chapter a night would never make players buy warrants/skips; a finished season does
+(chapters 1-3 free, later ones need a warrant, the 12 h wait or coins).
