@@ -362,7 +362,7 @@ async def seen(case_id: str, body: SeenIn, player: Player = Depends(current_play
     # earlier day (a player who solved the case still has to be able to finish it).
     daily_new = 0
     if content.is_weekly(c.id):
-        day = content.today_str()
+        day = content.mission_day_str()
         stats = dict(player.stats or {})
         wk = stats.get("wk_seen") or {}
         today_ids = set(wk.get("ids", [])) if wk.get("day") == day else set()

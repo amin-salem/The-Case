@@ -160,7 +160,7 @@ MissionTarget missionTarget(String id) => switch (id) {
     };
 
 /// The prominent «مأموریت‌های امروز» card under tonight's case: three missions, the chest, one button, and the
-/// time left until the missions change at midnight.
+/// time left until the missions change at 21:00, with the new case.
 class HomeMissionsCard extends StatefulWidget {
   const HomeMissionsCard({super.key, required this.day, required this.onChanged, required this.onGo, required this.onOpenSheet, this.now});
   final MissionsDay day;

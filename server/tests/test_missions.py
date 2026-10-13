@@ -163,3 +163,37 @@ async def test_weekend_talk_counts_again_the_next_day(client, clock, monkeypatch
         again = (await client.post(f"/v1/cases/{w.id}/seen", headers=h, json={"suspect": s})).json()
         assert again["gains"]["missions_done"] == []  # the same suspect twice in one day counts once
     assert len(done) == 1
+
+
+def test_mission_day_runs_from_21_to_21(monkeypatch):
+    def at(h, m, day=14):
+        return datetime(2026, 11, day, h, m, tzinfo=TEHRAN)
+
+    assert content.mission_day_str(at(20, 59)) == "2026-11-14"
+    assert content.mission_day_str(at(21, 0)) == "2026-11-15"      # the new case opens, the missions change
+    assert content.mission_day_str(at(23, 59)) == "2026-11-15"
+    assert content.mission_day_str(at(0, 30, 15)) == "2026-11-15"  # past midnight: still the same mission day
+    assert content.mission_day_str(at(8, 0, 15)) == "2026-11-15"
+    assert content.mission_day_str(at(20, 59, 15)) == "2026-11-15"
+    assert content.mission_day_str(at(21, 0, 15)) == "2026-11-16"
+    # when the missions change next: always the next 21:00
+    assert content.mission_next_at(at(20, 59)) == at(21, 0)
+    assert content.mission_next_at(at(21, 0)) == at(21, 0, 15)
+    assert content.mission_next_at(at(0, 30, 15)) == at(21, 0, 15)
+
+
+async def test_one_chest_per_mission_window(client, clock, fixed_missions):
+    c = content.by_id("c020")
+    d = c.publish
+    clock(datetime(d.year, d.month, d.day, 21, 30, tzinfo=TEHRAN))
+    h = (await new_player(client, "window-1"))["headers"]
+    m1 = (await client.get("/v1/missions", headers=h)).json()
+    assert m1["next_at"] == int(datetime(d.year, d.month, d.day, 21, 0, tzinfo=TEHRAN).timestamp()) + 86400
+    assert (await client.post("/v1/missions/claim", headers=h)).status_code == 409  # nothing done yet
+    # after midnight it is still the same mission window and the same counters
+    n = d + timedelta(days=1)
+    clock(datetime(n.year, n.month, n.day, 0, 30, tzinfo=TEHRAN))
+    assert (await client.get("/v1/missions", headers=h)).json()["day"] == m1["day"]
+    # at the next 21:00 a new window starts
+    clock(datetime(n.year, n.month, n.day, 21, 5, tzinfo=TEHRAN))
+    assert (await client.get("/v1/missions", headers=h)).json()["day"] != m1["day"]

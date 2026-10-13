@@ -130,6 +130,20 @@ def today_str() -> str:
     return now_local().date().isoformat()
 
 
+def mission_day_str(now: datetime | None = None) -> str:
+    """The daily-missions day runs from the new case's hour (21:00) to the same hour next evening:
+    after 21:00 it is already tomorrow's date, so missions change together with the new case."""
+    now = now or now_local()
+    return (now + timedelta(hours=24 - get_settings().new_case_hour)).date().isoformat()
+
+
+def mission_next_at(now: datetime | None = None) -> datetime:
+    """When the missions change next: the next time the clock shows the new case's hour."""
+    now = now or now_local()
+    t = datetime.combine(now.date(), time(get_settings().new_case_hour), tzinfo=_tz())
+    return t if t > now else t + timedelta(days=1)
+
+
 def opens_at(c: Case) -> datetime:
     # a weekend case may set its own `open_hour` (new ones open at 09:00, away from the 21:00 nightly case)
     hour = c.data.get("open_hour") if isinstance(c.data, dict) else None

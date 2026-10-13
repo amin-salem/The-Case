@@ -48,7 +48,7 @@ def add_xp(player: Player, xp: int, gains: Gains) -> None:
 
 
 async def mission_day(session: AsyncSession, player: Player, day: str | None = None, create: bool = True) -> MissionDay | None:
-    day = day or content.today_str()
+    day = day or content.mission_day_str()
     q = select(MissionDay).where(MissionDay.player_id == player.id, MissionDay.day == day)
     md = await session.scalar(q)
     if md is None and create:
@@ -122,7 +122,7 @@ async def _missions(session: AsyncSession, player: Player, events: dict[str, int
         if before.get(m.event, 0) < m.target <= after.get(m.event, 0):
             gains.missions_done.append(m.title)
     todays = missions.for_day(md.day)
-    if md.day == content.today_str() and not before.get("_warrant") and all(
+    if md.day == content.mission_day_str() and not before.get("_warrant") and all(
             after.get(m.event, 0) >= m.target for m in todays):
         after["_warrant"] = 1  # all of the day's missions done: one warrant, once a day
         md.counts = after

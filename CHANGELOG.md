@@ -1,5 +1,11 @@
 # Changelog
 
+## server 1.25.0: coins are scarcer, missions change at 21:00
+
+- Economy (numbers only, existing players keep their coins): solving a case pays 30/20/10 for 3/2/1 stars (was 60/40/20); daily bonus 15; streak bonus 60; login calendar 10,10,15,15,20,25 and envelope 40-80; mission chest 30 (+60 every 7th day); archive case 150 coins (was 120); invites pay 150 to the inviter and 100 to the new player. Start coins and the secure-account reward stay 100.
+- Achievements pay about 60% less (total about 3,410 coins instead of 8,570). «حساب امن» now says phone number and pays 10 (the 100-coin secure reward is paid separately).
+- Daily missions now run from 21:00 to 21:00 (`content.mission_day_str`), the same moment the new case opens, instead of resetting at midnight; the countdown in the app reads `next_at` from the server. One-time effect of the switch: a player who already claimed the chest earlier tonight may be able to claim one more.
+
 ## server 1.24.5: case c018 rewritten, story chapter 1 in the choices format
 
 - Content: nightly case c018 «سؤال هفتم» (opens 16 Oct) rewritten under the case-writing rules: difficulty 4, type 8 (the helpful witness is the culprit), people-first clues, side secrets for every suspect; blind-tested. Its notification body is updated.

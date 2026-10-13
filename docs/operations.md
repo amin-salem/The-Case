@@ -192,3 +192,8 @@ Provider: Ghasedak (OTP template). Liara environment (never in the repo, chat or
 
 - `GET /v1/feed` (auth, the normal `read` rate policy) returns the merged feed for the app's «پیام‌ها و نشان‌ها» screen: at most 40 items from the last 14 days, newest first (gifts, badges, nightly/weekend openings after the player joined, `news` announcements from the remote config as `{title, body, at?}`; story openings only once `STORY_SEASON.opens_at` has passed). `POST /v1/feed/seen` sets `players.feed_seen_at` (idempotent); an item is unread when newer than that. `GET /v1/me` also returns `unread` (the bell number). Gifts are still claimed with `POST /v1/inbox/{id}/claim` (pays once). Migration 0018 adds `feed_seen_at`.
 - **Intro rule:** every suspect (nightly, weekend, story) must have `intro` (20–90 characters, neutral: who they are, never motive/alibi/lie/secret). The server refuses to start content without it (`content.validate`); the writing rules are in `docs/case-writing-rules.md`.
+
+## Coins and mission day (13 Oct 2026, server 1.25.0)
+
+- All reward numbers live in `server/app/economy.py` and `server/app/achievements.py`; the app reads prices from `/v1/meta`. Existing balances are never changed.
+- The daily-missions day runs from `NEW_CASE_HOUR` (21:00 Tehran) to the same hour next evening: use `content.mission_day_str()` for anything stored per mission day (not `today_str()`, which is the calendar date and still drives riddles, the weekly leaderboard and cases).

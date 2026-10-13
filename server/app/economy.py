@@ -5,14 +5,14 @@ from dataclasses import dataclass
 
 START_COINS = 100                # was 150: a throwaway account should not start rich
 HINT_COSTS = [30, 50, 80]        # hint 1, 2, 3 of a case
-UNLOCK_COST = 120                # open an old case from the archive
+UNLOCK_COST = 150                # open an old case from the archive
 MAX_ATTEMPTS = 3                 # wrong accusations allowed before the case is lost
-SOLVE_REWARD = {3: 60, 2: 40, 1: 20}
-DAILY_BONUS = 30                 # extra for solving the case on its own day
+SOLVE_REWARD = {3: 30, 2: 20, 1: 10}
+DAILY_BONUS = 15                 # extra for solving the case on its own day
 STREAK_BONUS_EVERY = 7           # every 7 days in a row ...
-STREAK_BONUS = 150               # ... this many coins
-LOGIN_CALENDAR = [20, 30, 40, 50, 60, 80]  # daily login reward, days 1-6 in a row
-LOGIN_ENVELOPE = [100, 150, 200, 250]      # day 7: a sealed envelope with one of these
+STREAK_BONUS = 60                # ... this many coins
+LOGIN_CALENDAR = [10, 10, 15, 15, 20, 25]  # daily login reward, days 1-6 in a row
+LOGIN_ENVELOPE = [40, 50, 60, 80]      # day 7: a sealed envelope with one of these
 LOGIN_REWARD = LOGIN_CALENDAR[0]           # first day (and after a missed day)
 FREEZE_COST = 150                # "streak insurance": saves the streak for one missed case
 MAX_FREEZES = 2                  # how many a player can hold
@@ -20,8 +20,8 @@ STREAK_BADGES = (7, 30, 100)     # badges for daily cases solved in a row
 AD_REWARD = 25
 AD_PER_DAY = 5
 SECURE_REWARD = 100              # first time an email is added
-INVITE_NEW_PLAYER = 150
-INVITE_INVITER = 300
+INVITE_NEW_PLAYER = 100
+INVITE_INVITER = 150
 MAX_REWARDED_INVITES = 20        # lifetime cap of paid invites per inviter
 INVITE_MIN_DAYS = 3              # the inviter is paid after the invited player solved cases on this many different days
 INVITE_PAID_PER_WEEK = 5         # paid invites per inviter per week (Saturday to Friday); also 1 paid invite per device
@@ -101,9 +101,9 @@ RIDDLE_SECONDS = 60              # the timer in the app (an answer after it runs
 
 
 # daily missions: three a day, a chest when all three are done
-CHEST_COINS = 80
+CHEST_COINS = 30
 CHEST_BONUS_EVERY = 7            # every 7 days in a row with all missions done ...
-CHEST_BONUS = 150                # ... this many extra coins
+CHEST_BONUS = 60                 # ... this many extra coins
 RIDDLE_FAST_SECONDS = 20
 TICK_MAX = 120
 WEEKLY_REWARD = {3: 300, 2: 200, 1: 120}   # the weekend's big case pays more ...

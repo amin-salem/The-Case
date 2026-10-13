@@ -1,5 +1,5 @@
 """Daily missions: today's three, and the chest when all are done."""
-from datetime import date, datetime, time, timedelta
+from datetime import date, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -33,7 +33,7 @@ def missions_out(player: Player, md: MissionDay | None, day: str) -> MissionsOut
     rows = [MissionRow(id=m.id, title=m.title, target=m.target, progress=min(m.target, int(counts.get(m.event, 0))),
                        done=int(counts.get(m.event, 0)) >= m.target) for m in missions.for_day(day)]
     now = content.now_local()
-    next_at = int(datetime.combine(now.date() + timedelta(days=1), time(0), tzinfo=now.tzinfo).timestamp())
+    next_at = int(content.mission_next_at(now).timestamp())
     shown_streak = player.chest_streak if player.last_chest_day in (
         day, (date.fromisoformat(day) - timedelta(days=1)).isoformat()) else 0
     return MissionsOut(day=day, missions=rows, all_done=all(r.done for r in rows), claimed=bool(md and md.claimed),
@@ -43,14 +43,14 @@ def missions_out(player: Player, md: MissionDay | None, day: str) -> MissionsOut
 
 @router.get("", response_model=MissionsOut)
 async def today(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
-    day = content.today_str()
+    day = content.mission_day_str()
     md = await progress.mission_day(session, player, day, create=False)
     return missions_out(player, md, day)
 
 
 @router.post("/claim", response_model=ChestOut)
 async def claim(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
-    day = content.today_str()
+    day = content.mission_day_str()
     md = await progress.mission_day(session, player, day, create=False)
     out = missions_out(player, md, day)
     if md is None or not out.all_done:

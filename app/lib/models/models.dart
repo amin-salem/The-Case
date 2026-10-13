@@ -156,7 +156,7 @@ class CaseRow {
         publish = _s(j['publish']),
         today = _b(j['today']),
         locked = _b(j['locked']),
-        unlockCost = _i(j['unlock_cost'], 120),
+        unlockCost = _i(j['unlock_cost'], 150),
         solved = _b(j['solved']),
         failed = _b(j['failed']),
         stars = _i(j['stars']),
