@@ -347,6 +347,7 @@ async def sms_test(body: SmsTestIn):
 
 class LinkPhoneIn(BaseModel):
     phone: str = Field(min_length=10, max_length=20)
+    take_over: bool = False  # the number is on another account: take it from there (that account stays, as a guest)
 
 
 @router.post("/players/{player_id}/phone")
@@ -362,11 +363,20 @@ async def link_phone(player_id: str, body: LinkPhoneIn, session: AsyncSession = 
         raise HTTPException(422, "bad_phone")
     phash = sms.phone_hash(phone)
     other = await session.scalar(select(Player.id).where(Player.phone_hash == phash))
+    released = None
     if other is not None and other != p.id:
-        raise HTTPException(409, "phone_taken")
+        if not body.take_over:
+            raise HTTPException(409, "phone_taken")
+        old = await session.get(Player, other)
+        old.phone_hash = None
+        old.phone_last4 = None
+        old.phone_verified_at = None
+        await session.flush()  # free the unique number before it is used again
+        released = {"id": old.id, "nickname": old.nickname}
+        session.add(AdminLog(action="release_phone", target=old.id, detail={"last4": phone[-4:], "to": p.id}))
     p.phone_hash = phash
     p.phone_last4 = phone[-4:]
     p.phone_verified_at = datetime.now(timezone.utc).replace(tzinfo=None)
     session.add(AdminLog(action="link_phone", target=p.id, detail={"last4": phone[-4:]}))
     await session.commit()
-    return {"ok": True, "phone_last4": phone[-4:]}
+    return {"ok": True, "phone_last4": phone[-4:], "released_from": released}

@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.24.4: take a phone number over from another account
+
+- «وصل کردن شماره» has a checkbox «اگر این شماره به حساب دیگری وصل است، از آن بگیر»: the number is removed from the other account (it stays, as a guest, nothing deleted) and linked to this one. Logged as `release_phone` (last 4 digits only). Without the checkbox it is still refused with 409.
+
 ## server 1.24.3: admin can link a phone number to a player
 
 - Admin panel, player page: «📱 وصل کردن شماره» attaches (or replaces) the phone of an account, so its owner signs in with that number. No SMS, no coins; refused if the number belongs to another account (409 `phone_taken`). Logged as `link_phone` with the last 4 digits only. `POST /admin/api/players/{id}/phone`. The player page also shows the masked number.

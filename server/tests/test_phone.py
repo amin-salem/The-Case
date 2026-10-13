@@ -278,3 +278,18 @@ async def test_admin_links_a_phone_to_a_player(client):
     await client.post("/v1/auth/phone/login/send", json={"phone": "09127000015", "device_id": "dev-phone-15-new"})
     r = await client.post("/v1/auth/phone/login", json={"phone": "09127000015", "code": last_code(), "device_id": "dev-phone-15-new"})
     assert r.status_code == 200 and r.json()["player_id"] == p["player_id"]
+
+
+async def test_admin_take_over_a_phone_number(client):
+    from .conftest import ADMIN
+    a = await new_player(client, "dev-phone-17a")
+    b = await new_player(client, "dev-phone-17b")
+    ph = "09127000017"
+    assert (await client.post(f"/admin/api/players/{a['player_id']}/phone", headers=ADMIN, json={"phone": ph})).status_code == 200
+    r = await client.post(f"/admin/api/players/{b['player_id']}/phone", headers=ADMIN, json={"phone": ph})
+    assert r.status_code == 409  # not without take_over
+    r = await client.post(f"/admin/api/players/{b['player_id']}/phone", headers=ADMIN, json={"phone": ph, "take_over": True})
+    assert r.status_code == 200 and r.json()["released_from"]["id"] == a["player_id"]
+    assert (await client.get("/v1/me", headers=b["headers"])).json()["phone"].endswith("0017")
+    me_a = (await client.get("/v1/me", headers=a["headers"])).json()
+    assert me_a["phone"] is None and me_a["secured"] is False  # the old account stays, as a guest

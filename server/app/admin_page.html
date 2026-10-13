@@ -326,14 +326,14 @@ const VIEWS = {
 };
 function phoneDialog(pid, name) {
   const f = $('#dform');
-  f.innerHTML = `<h3 style="margin-top:0">وصل کردن شماره به «${esc(name || pid)}»</h3><p class="muted">صاحب این حساب با همین شماره (و کد پیامکی) وارد می‌شود. پیامکی فرستاده نمی‌شود و سکه‌ای داده نمی‌شود. اگر حساب شماره‌ی دیگری داشت، جایگزین می‌شود.</p><label>شماره‌ی موبایل</label><input id="lpn" class="ltr" inputmode="tel" placeholder="09123456789"><div class="row"><button value="send" id="lps">وصل کن</button><button value="cancel" formnovalidate>لغو</button></div><p class="err" id="lperr"></p>`;
+  f.innerHTML = `<h3 style="margin-top:0">وصل کردن شماره به «${esc(name || pid)}»</h3><p class="muted">صاحب این حساب با همین شماره (و کد پیامکی) وارد می‌شود. پیامکی فرستاده نمی‌شود و سکه‌ای داده نمی‌شود. اگر حساب شماره‌ی دیگری داشت، جایگزین می‌شود.</p><label>شماره‌ی موبایل</label><input id="lpn" class="ltr" inputmode="tel" placeholder="09123456789"><label><input type="checkbox" id="lpt"> اگر این شماره به حساب دیگری وصل است، از آن بگیر (آن حساب می‌ماند، فقط شماره‌اش برداشته می‌شود)</label><div class="row"><button value="send" id="lps">وصل کن</button><button value="cancel" formnovalidate>لغو</button></div><p class="err" id="lperr"></p>`;
   $('#dlg').showModal();
   $('#lps').onclick = async ev => {
     ev.preventDefault();
     const phone = $('#lpn').value.trim();
     if (!phone) { $('#lperr').textContent = 'شماره را وارد کن'; return; }
     if (!(await ask('این شماره به «' + (name || pid) + '» وصل شود؟'))) return;
-    try { await api(`/admin/api/players/${pid}/phone`, {method: 'POST', body: JSON.stringify({phone})}); $('#dlg').close(); note('شماره وصل شد'); go('players', {id: pid}); }
+    try { const r = await api(`/admin/api/players/${pid}/phone`, {method: 'POST', body: JSON.stringify({phone, take_over: $('#lpt').checked})}); $('#dlg').close(); note(r.released_from ? 'وصل شد؛ شماره از «' + (r.released_from.nickname || r.released_from.id) + '» برداشته شد' : 'شماره وصل شد'); go('players', {id: pid}); }
     catch (e) { $('#lperr').textContent = e.message; }
   };
 }
