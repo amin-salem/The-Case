@@ -209,7 +209,7 @@ async def player(player_id: str, session: AsyncSession = Depends(get_session)):
         timeline.append({"t": ts(e.ts), "kind": "event", "text": f"رویداد {e.name}"})
     timeline.sort(key=lambda i: i["t"] or 0, reverse=True)
     return {
-        "player": {"id": p.id, "nickname": p.nickname, "email": p.email, "device_id": p.device_id, "coins": p.coins,
+        "player": {"id": p.id, "nickname": p.nickname, "email": p.email, "phone_last4": p.phone_last4 if p.phone_hash else None, "device_id": p.device_id, "coins": p.coins,
                    "xp": p.xp, "streak": p.streak, "best_streak": p.best_streak, "solved": p.cases_solved,
                    "stars": p.stars_total, "warrants": p.warrants, "no_ads": p.no_ads, "vip_until": ts(p.vip_until),
                    "banned": p.banned, "app_version": p.app_version, "invite_code": p.invite_code,
@@ -343,3 +343,30 @@ async def sms_test(body: SmsTestIn):
         return {"ok": False, "error": e.code, "detail": e.detail or ("حالت: " + get_settings().sms_mode)}
     return {"ok": True, "mode": get_settings().sms_mode,
             "detail": "ارسال شد" if get_settings().sms_mode == "ghasedak" else "حالت fake است: پیامک واقعی نمی‌رود"}
+
+
+class LinkPhoneIn(BaseModel):
+    phone: str = Field(min_length=10, max_length=20)
+
+
+@router.post("/players/{player_id}/phone")
+async def link_phone(player_id: str, body: LinkPhoneIn, session: AsyncSession = Depends(get_session)):
+    """Support: attach (or replace) the phone number of an account, so its owner can sign in with that number.
+    Nothing is sent and no coins are paid. The log keeps only the last 4 digits."""
+    from ..services import sms
+    p = await session.get(Player, player_id)
+    if p is None:
+        raise HTTPException(404, "no_player")
+    phone = sms.normalize_phone(body.phone)
+    if phone is None:
+        raise HTTPException(422, "bad_phone")
+    phash = sms.phone_hash(phone)
+    other = await session.scalar(select(Player.id).where(Player.phone_hash == phash))
+    if other is not None and other != p.id:
+        raise HTTPException(409, "phone_taken")
+    p.phone_hash = phash
+    p.phone_last4 = phone[-4:]
+    p.phone_verified_at = datetime.now(timezone.utc).replace(tzinfo=None)
+    session.add(AdminLog(action="link_phone", target=p.id, detail={"last4": phone[-4:]}))
+    await session.commit()
+    return {"ok": True, "phone_last4": phone[-4:]}

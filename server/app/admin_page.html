@@ -252,8 +252,8 @@ const VIEWS = {
   async player(m, id) {
     const d = await api('/admin/api/players/' + encodeURIComponent(id)), p = d.player;
     const kv = (k, v) => `<tr><th>${k}</th><td>${v}</td></tr>`;
-    m.innerHTML = `<div class="row"><button id="back">← فهرست</button><h2 style="margin:0">${esc(p.nickname || p.id)} ${p.banned ? '<span class="tag banned">بن‌شده</span>' : ''}</h2><span style="flex:1"></span><button id="gift">هدیه / پیام</button><button id="ban" class="danger">${p.banned ? 'رفع بن' : 'بن کردن'}</button></div>
-    <div class="scroll"><table>${kv('شناسه', `<span class="ltr">${esc(p.id)}</span>`)}${kv('ایمیل', esc(p.email || 'مهمان (امن نشده)'))}${kv('دستگاه', `<span class="ltr">${esc(p.device_id)}</span>`)}${kv('کد دعوت', `<span class="ltr">${esc(p.invite_code)}</span> ${p.referred_by ? '· دعوت‌شده توسط ' + esc(p.referred_by.slice(0,6)) : ''}`)}${kv('سکه / XP / حکم', `${num(p.coins)} / ${num(p.xp)} / ${num(p.warrants)}`)}${kv('حل‌شده / ستاره', `${num(p.solved)} / ${num(p.stars)}`)}${kv('استریک (بهترین)', `${num(p.streak)} (${num(p.best_streak)})`)}${kv('VIP تا', fmtT(p.vip_until))}${kv('نسخه‌ی برنامه', `<span class="ltr">${esc(p.client.version || '؟')} (${num(p.client.build)})</span> · ${esc(p.client.platform || '—')}`)}${kv('سیستم‌عامل / دستگاه', `<span class="ltr">${esc(p.client.os_version || '—')} / ${esc(p.client.device_model || '—')}</span> · گزارش: ${ago(p.client.reported)}`)}${kv('ثبت‌نام', fmtT(p.created))}${kv('آخرین فعالیت', fmtT(p.last_seen))}</table></div>
+    m.innerHTML = `<div class="row"><button id="back">← فهرست</button><h2 style="margin:0">${esc(p.nickname || p.id)} ${p.banned ? '<span class="tag banned">بن‌شده</span>' : ''}</h2><span style="flex:1"></span><button id="gift">هدیه / پیام</button><button id="lph">📱 وصل کردن شماره</button><button id="ban" class="danger">${p.banned ? 'رفع بن' : 'بن کردن'}</button></div>
+    <div class="scroll"><table>${kv('شناسه', `<span class="ltr">${esc(p.id)}</span>`)}${kv('ایمیل', esc(p.email || '—'))}${kv('شماره', p.phone_last4 ? `<span class="ltr">•••• ••• ${esc(p.phone_last4)}</span>` : '—')}${kv('دستگاه', `<span class="ltr">${esc(p.device_id)}</span>`)}${kv('کد دعوت', `<span class="ltr">${esc(p.invite_code)}</span> ${p.referred_by ? '· دعوت‌شده توسط ' + esc(p.referred_by.slice(0,6)) : ''}`)}${kv('سکه / XP / حکم', `${num(p.coins)} / ${num(p.xp)} / ${num(p.warrants)}`)}${kv('حل‌شده / ستاره', `${num(p.solved)} / ${num(p.stars)}`)}${kv('استریک (بهترین)', `${num(p.streak)} (${num(p.best_streak)})`)}${kv('VIP تا', fmtT(p.vip_until))}${kv('نسخه‌ی برنامه', `<span class="ltr">${esc(p.client.version || '؟')} (${num(p.client.build)})</span> · ${esc(p.client.platform || '—')}`)}${kv('سیستم‌عامل / دستگاه', `<span class="ltr">${esc(p.client.os_version || '—')} / ${esc(p.client.device_model || '—')}</span> · گزارش: ${ago(p.client.reported)}`)}${kv('ثبت‌نام', fmtT(p.created))}${kv('آخرین فعالیت', fmtT(p.last_seen))}</table></div>
     ${d.same_device.length ? `<h2>حساب‌های دیگر روی همین دستگاه (${d.same_device.length})</h2><div class="scroll"><table>${d.same_device.map(x => `<tr class="click" data-p="${esc(x.id)}"><td>${esc(x.nickname || x.id.slice(0,6))}</td><td>${ago(x.created)}</td></tr>`).join('')}</table></div>` : ''}
     <h2>پرونده‌ها</h2><div class="scroll"><table><tr><th>پرونده</th><th>نتیجه</th><th>ستاره</th><th>سرنخ</th><th>اتهام اشتباه</th><th>زمان فعال</th><th>مظنون دیده</th><th>باز شد</th></tr>${d.cases.map(c => `<tr><td>${esc(c.title)}</td><td>${c.solved ? '<span class="tag solved">حل</span>' : c.failed ? '<span class="tag failed">شکست</span>' : 'در جریان'}</td><td>${c.stars}</td><td>${c.hints}</td><td>${c.attempts}</td><td>${c.active_seconds}ث</td><td>${c.seen}</td><td>${ago(c.opened)}</td></tr>`).join('')}</table></div>
     ${d.story.length ? `<h2>داستان</h2><p>${d.story.map(s => `فصل ${s.season}/قسمت ${s.chapter} ${s.solved ? '✓' + s.stars + '★' : '…'}`).map(esc).join(' · ')}</p>` : ''}
@@ -261,6 +261,7 @@ const VIEWS = {
     <h2>خط زمانی</h2><div class="scroll"><table>${d.timeline.map(i => `<tr><td>${fmtT(i.t)}</td><td><span class="tag ${esc(i.kind)}">${esc(i.kind)}</span></td><td>${esc(i.text)}</td></tr>`).join('')}</table></div>`;
     $('#back').onclick = () => go('players'); m.querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
     $('#gift').onclick = () => giftDialog(p.id, p.nickname);
+    $('#lph').onclick = () => phoneDialog(p.id, p.nickname);
     $('#ban').onclick = async () => { if (await ask((p.banned ? 'رفع بن' : 'بن') + ' «' + (p.nickname || p.id) + '»؟')) { await api(`/admin/players/${p.id}/ban`, {method: 'POST', body: JSON.stringify({banned: !p.banned})}); go('players', {id: p.id}); } };
   },
   async cases(m) {
@@ -323,6 +324,19 @@ const VIEWS = {
     $('#bc').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها');
   },
 };
+function phoneDialog(pid, name) {
+  const f = $('#dform');
+  f.innerHTML = `<h3 style="margin-top:0">وصل کردن شماره به «${esc(name || pid)}»</h3><p class="muted">صاحب این حساب با همین شماره (و کد پیامکی) وارد می‌شود. پیامکی فرستاده نمی‌شود و سکه‌ای داده نمی‌شود. اگر حساب شماره‌ی دیگری داشت، جایگزین می‌شود.</p><label>شماره‌ی موبایل</label><input id="lpn" class="ltr" inputmode="tel" placeholder="09123456789"><div class="row"><button value="send" id="lps">وصل کن</button><button value="cancel" formnovalidate>لغو</button></div><p class="err" id="lperr"></p>`;
+  $('#dlg').showModal();
+  $('#lps').onclick = async ev => {
+    ev.preventDefault();
+    const phone = $('#lpn').value.trim();
+    if (!phone) { $('#lperr').textContent = 'شماره را وارد کن'; return; }
+    if (!(await ask('این شماره به «' + (name || pid) + '» وصل شود؟'))) return;
+    try { await api(`/admin/api/players/${pid}/phone`, {method: 'POST', body: JSON.stringify({phone})}); $('#dlg').close(); note('شماره وصل شد'); go('players', {id: pid}); }
+    catch (e) { $('#lperr').textContent = e.message; }
+  };
+}
 function giftDialog(pid, name) {
   const f = $('#dform');
   f.innerHTML = `<h3 style="margin-top:0">${pid ? 'هدیه/پیام برای ' + esc(name || pid) : 'پیام برای همه‌ی بازیکن‌ها'}</h3><label>عنوان</label><input id="gt" maxlength="80"><label>متن</label><textarea id="gm" rows="3" maxlength="400"></textarea><label>سکه (۰ یعنی فقط پیام)</label><input id="gc" type="number" min="0" value="0"><label>اعتبار (روز، اختیاری)</label><input id="ge" type="number" min="0" value="0"><div class="row"><button value="send" id="gs">ارسال</button><button value="cancel" formnovalidate>لغو</button></div><p class="err" id="gerr"></p>`;

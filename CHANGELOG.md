@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.24.3: admin can link a phone number to a player
+
+- Admin panel, player page: «📱 وصل کردن شماره» attaches (or replaces) the phone of an account, so its owner signs in with that number. No SMS, no coins; refused if the number belongs to another account (409 `phone_taken`). Logged as `link_phone` with the last 4 digits only. `POST /admin/api/players/{id}/phone`. The player page also shows the masked number.
+
 ## server 1.24.2, app 1.24.2 (build 50): email sign-up removed
 
 - The app no longer offers email + password (it was never verified). Securing an account is phone-only. Existing email accounts keep working: the sign-in sheet has a small «ایمیل قدیمی» tab and the phone gate asks them to link a number. The change-password row is gone.

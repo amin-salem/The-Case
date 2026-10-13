@@ -258,3 +258,23 @@ async def test_new_email_accounts_are_closed_by_default(client, monkeypatch):
     r = await client.post("/v1/auth/email", headers=p["headers"], json={"email": "closed14@example.com", "password": "secret12"})
     assert r.status_code == 403 and r.json()["detail"] == "email_closed"
     assert (await client.get("/v1/me", headers=p["headers"])).json()["secured"] is False
+
+
+async def test_admin_links_a_phone_to_a_player(client):
+    from .conftest import ADMIN
+    p = await new_player(client, "dev-phone-15")
+    r = await client.post(f"/admin/api/players/{p['player_id']}/phone", json={"phone": "09127000015"})
+    assert r.status_code in (401, 403)  # admin key needed
+    r = await client.post(f"/admin/api/players/{p['player_id']}/phone", headers=ADMIN, json={"phone": "bad"})
+    assert r.status_code == 422
+    r = await client.post(f"/admin/api/players/{p['player_id']}/phone", headers=ADMIN, json={"phone": "09127000015"})
+    assert r.status_code == 200 and r.json()["phone_last4"] == "0015"
+    me = (await client.get("/v1/me", headers=p["headers"])).json()
+    assert me["secured"] is True and me["phone"].endswith("0015")
+    other = await new_player(client, "dev-phone-16")
+    r = await client.post(f"/admin/api/players/{other['player_id']}/phone", headers=ADMIN, json={"phone": "09127000015"})
+    assert r.status_code == 409  # one number, one account
+    # the owner can now sign in on a new device with that number
+    await client.post("/v1/auth/phone/login/send", json={"phone": "09127000015", "device_id": "dev-phone-15-new"})
+    r = await client.post("/v1/auth/phone/login", json={"phone": "09127000015", "code": last_code(), "device_id": "dev-phone-15-new"})
+    assert r.status_code == 200 and r.json()["player_id"] == p["player_id"]
