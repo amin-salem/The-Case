@@ -81,7 +81,10 @@ async def send_code(phone: str, code: str) -> None:
     try:
         async with httpx.AsyncClient(timeout=8.0) as c:
             r = await c.post(s.sms_url, json=body, headers={"apikey": s.sms_api_key})
-        data = r.json() if r.content else {}
+        try:
+            data = r.json()
+        except ValueError:
+            data = {}
         ok = r.status_code == 200 and bool((data or {}).get("isSuccess", False))
     except Exception as e:  # network, bad JSON...
         log.warning("sms: provider error %s", type(e).__name__)
