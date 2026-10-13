@@ -1,3 +1,4 @@
+import 'account_sheets.dart';
 import 'package:flutter/material.dart';
 
 import '../services/api.dart';
@@ -21,6 +22,8 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Future<void> _buy(String productId, String title) async {
     if (!needOnline(context)) return;
+    if (!await offerSecure(context, afterSolve: false)) return;
+    if (!mounted) return;
     if (!Billing.i.available) {
       toast(context, 'برای خرید، اپ $kStoreName باید روی گوشی نصب و به‌روز باشه.');
       return;

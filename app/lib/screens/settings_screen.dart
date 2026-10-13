@@ -81,7 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Icons.shield_outlined,
                       iconColor: K.brass,
                       title: 'امن کردن حساب',
-                      sub: 'با ایمیل و رمز  •  ${fa(Api.i.secureReward)} سکه هدیه',
+                      sub: 'با شماره‌ی موبایل  •  ${fa(Api.i.secureReward)} سکه هدیه',
                       end: const _Tag('مهمان', color: K.brass),
                       onTap: () => openAccountSheet(context, showSecureSheet),
                     )
@@ -89,15 +89,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     SettingsRow(
                       icon: Icons.verified_user_rounded,
                       iconColor: K.ok,
-                      title: p?.email ?? '',
+                      title: p?.email ?? p?.phone ?? 'حساب امن',
                       ltrTitle: true,
                       end: const _Tag('امن', color: K.ok),
                     ),
-                    SettingsRow(
-                      icon: Icons.password_rounded,
-                      title: 'عوض کردن رمز',
-                      onTap: () => openAccountSheet(context, showSecureSheet),
-                    ),
+                    if (p?.email != null)
+                      SettingsRow(
+                        icon: Icons.password_rounded,
+                        title: 'عوض کردن رمز',
+                        onTap: () => openAccountSheet(context, showSecureSheet),
+                      ),
                   ],
                   SettingsRow(
                     icon: Icons.phonelink_setup_rounded,

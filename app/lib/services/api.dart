@@ -776,7 +776,7 @@ class Api extends ChangeNotifier {
   int get weeklyReward => _economy['weekly_reward'] as int? ?? 300;
   int get freezeCost => _economy['freeze_cost'] as int? ?? 150;
   int get maxFreezes => _economy['max_freezes'] as int? ?? 2;
-  int get secureReward => (_economy['secure_reward'] as num?)?.toInt() ?? 200;
+  int get secureReward => (_economy['secure_reward'] as num?)?.toInt() ?? 100;
   int get inviteReward => (_economy['invite_reward'] as num?)?.toInt() ?? 300;
   int get inviteNewPlayer => (_economy['invite_new_player'] as num?)?.toInt() ?? 150;
   List<int> get loginCalendar =>
@@ -826,6 +826,40 @@ class Api extends ChangeNotifier {
       return (0, friendly(e));
     }
   }
+
+  /// Phone-secured accounts (SMS code). Each returns an error text, or null when it worked.
+  Future<String?> phoneSend(String phone) async {
+    try {
+      await _call('POST', '/v1/auth/phone/send', body: {'phone': phone});
+      return null;
+    } catch (e) {
+      return friendly(e);
+    }
+  }
+
+  /// Returns (reward coins, error text).
+  Future<(int, String?)> phoneVerify(String phone, String code) async {
+    try {
+      final j = (await _call('POST', '/v1/auth/phone/verify', body: {'phone': phone, 'code': code}) as Map)
+          .cast<String, dynamic>();
+      _setProfile(Map<String, dynamic>.from(j['profile'] as Map));
+      return (j['reward'] as int? ?? 0, null);
+    } catch (e) {
+      return (0, friendly(e));
+    }
+  }
+
+  Future<String?> phoneLoginSend(String phone) async {
+    try {
+      await _call('POST', '/v1/auth/phone/login/send', auth: false, body: {'phone': phone, 'device_id': _deviceId()});
+      return null;
+    } catch (e) {
+      return friendly(e);
+    }
+  }
+
+  Future<String?> phoneLogin(String phone, String code) =>
+      _loginWith('/v1/auth/phone/login', {'phone': phone, 'code': code});
 
   Future<String?> loginWithEmail(String email, String password) =>
       _loginWith('/v1/auth/login/email', {'email': email, 'password': password});
@@ -974,6 +1008,12 @@ class Api extends ChangeNotifier {
         'too_many_choices' => 'تعداد انتخاب‌ها از حد گذشته',
         'no_chapter' => 'این پرونده هنوز نوشته نشده',
         'no_more_hints' => 'سرنخ دیگه‌ای نمونده',
+        'bad_phone' => 'شماره‌ی موبایل درست نیست (مثل ۰۹۱۲۳۴۵۶۷۸۹)',
+        'phone_taken' => 'این شماره قبلاً به یه حساب دیگه وصل شده؛ با «ورود با شماره» وارد شو',
+        'phone_already_set' => 'حساب تو قبلاً با شماره امن شده',
+        'code_expired' => 'کد منقضی شده؛ یه کد تازه بگیر',
+        'sms_unavailable' => 'الان نمی‌تونیم پیامک بفرستیم؛ کمی بعد دوباره امتحان کن',
+        'sms_failed' => 'پیامک نرسید؛ کمی بعد دوباره امتحان کن',
         'bad_email' => 'ایمیل درست نیست',
         'bad_password' => 'رمز باید حداقل ۶ حرف باشه',
         'email_taken' => 'این ایمیل قبلاً برای یه حساب دیگه ثبت شده',

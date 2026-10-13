@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../services/api.dart';
 import '../theme.dart';
 import 'dialogs.dart';
@@ -102,7 +104,202 @@ mixin _SheetJob<T extends StatefulWidget> on State<T> {
 
 // ------------------------------------------------------------------ secure / change password
 
-Future<String?> showSecureSheet(BuildContext context) {
+/// Not secured yet: the phone-number sheet (email is a link inside it). Secured with email: change the password.
+Future<String?> showSecureSheet(BuildContext context) async {
+  final secured = Api.i.profile?.secured ?? false;
+  if (!secured) {
+    final r = await showNoirSheet<String>(
+      context,
+      title: 'امن کردن حساب با شماره',
+      sub: 'با شماره‌ی موبایلت روی هر گوشی وارد می‌شی و چیزی گم نمی‌شه. ${fa(Api.i.secureReward)} سکه هدیه!',
+      child: const _PhoneForm(login: false),
+    );
+    if (r == _useEmail && context.mounted) return _showEmailSecureSheet(context);
+    return r;
+  }
+  return _showEmailSecureSheet(context);
+}
+
+const _useEmail = '__email__';
+
+Future<String?> showPhoneLoginSheet(BuildContext context) => showNoirSheet<String>(
+      context,
+      title: 'ورود با شماره‌ی موبایل',
+      sub: 'گوشی جدید داری یا برنامه رو دوباره نصب کردی؟ با شماره‌ای که حساب رو امن کردی وارد شو. گوشی قبلی از حساب خارج می‌شه.',
+      child: const _PhoneForm(login: true),
+    );
+
+/// The two-step phone form: number, then the 5-digit SMS code.
+class _PhoneForm extends StatefulWidget {
+  const _PhoneForm({required this.login});
+  final bool login;
+
+  @override
+  State<_PhoneForm> createState() => _PhoneFormState();
+}
+
+class _PhoneFormState extends State<_PhoneForm> with _SheetJob {
+  final _phone = TextEditingController();
+  final _code = TextEditingController();
+  bool _sent = false;
+  int _wait = 0;
+  Timer? _tick;
+
+  @override
+  void dispose() {
+    _tick?.cancel();
+    _phone.dispose();
+    _code.dispose();
+    super.dispose();
+  }
+
+  void _countdown() {
+    _tick?.cancel();
+    setState(() => _wait = 60);
+    _tick = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted) return t.cancel();
+      setState(() => _wait = _wait > 0 ? _wait - 1 : 0);
+      if (_wait == 0) t.cancel();
+    });
+  }
+
+  Future<void> _send() => run(() async {
+        final phone = _phone.text.trim();
+        final err = widget.login ? await Api.i.phoneLoginSend(phone) : await Api.i.phoneSend(phone);
+        if (err != null) {
+          fail(err);
+          return;
+        }
+        if (mounted) setState(() => _sent = true);
+        _countdown();
+      });
+
+  Future<void> _verify() => run(() async {
+        final phone = _phone.text.trim();
+        final code = _code.text.trim();
+        if (widget.login) {
+          final err = await Api.i.phoneLogin(phone, code);
+          if (err != null) {
+            fail(err);
+            return;
+          }
+          done('خوش برگشتی، کارآگاه!');
+          return;
+        }
+        final (reward, err) = await Api.i.phoneVerify(phone, code);
+        if (err != null) {
+          fail(err);
+          return;
+        }
+        done(reward > 0 ? 'حسابت امن شد! ${fa(reward)} سکه گرفتی' : 'حسابت امن شد');
+      });
+
+  @override
+  Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        TextField(
+          controller: _phone,
+          enabled: !_sent,
+          keyboardType: TextInputType.phone,
+          textDirection: TextDirection.ltr,
+          style: tBody(20, w: FontWeight.w700),
+          decoration: noirField('شماره‌ی موبایل (۰۹۱۲…)', Icons.phone_android_rounded),
+        ),
+        if (_sent) ...[
+          const SizedBox(height: 10),
+          Text('کد ۵ رقمی پیامک شد.', style: tBody(12.5, color: K.textSoft)),
+          const SizedBox(height: 6),
+          TextField(
+            controller: _code,
+            autofocus: true,
+            keyboardType: TextInputType.number,
+            maxLength: 5,
+            textDirection: TextDirection.ltr,
+            textAlign: TextAlign.center,
+            style: tDisplay(26),
+            decoration: noirField('کد پیامکی', Icons.sms_rounded).copyWith(counterText: ''),
+          ),
+        ],
+        errorLine(),
+        const SizedBox(height: 12),
+        StampButton(
+          label: _sent ? 'تأیید' : 'ارسال کد',
+          color: K.brass,
+          onTap: busy ? null : (_sent ? _verify : _send),
+        ),
+        if (_sent)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: TextButton(
+              onPressed: busy || _wait > 0 ? null : _send,
+              child: Text(_wait > 0 ? 'ارسال دوباره‌ی کد تا ${fa(_wait)} ثانیه' : 'ارسال دوباره‌ی کد',
+                  style: tBody(13.5, color: K.textSoft, w: FontWeight.w700)),
+            ),
+          ),
+        if (!widget.login) ...[
+          const SizedBox(height: 6),
+          Text('شماره‌ات فقط برای ورود و بازیابی حساب استفاده می‌شه و روی سرور خودِ شماره ذخیره نمی‌شه، فقط یه اثر رمزشده از اون.',
+              style: tBody(12, color: K.textSoft)),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(_useEmail),
+            child: Text('ترجیح می‌دم با ایمیل و رمز امن کنم', style: tBody(13, color: K.brass, w: FontWeight.w700)),
+          ),
+        ],
+      ]);
+}
+
+/// A friendly reminder to secure the account. [afterSolve]: after the first solved case (once ever);
+/// otherwise before a purchase (once per app start). Returns true when the caller may go on
+/// (skipped, or nothing to offer); false when the player went to secure the account.
+bool _askedThisRun = false;
+
+Future<bool> offerSecure(BuildContext context, {required bool afterSolve}) async {
+  final p = Api.i.profile;
+  if (p == null || p.secured || !Api.i.online) return true;
+  final prefs = await SharedPreferences.getInstance();
+  if (afterSolve) {
+    if (prefs.getBool('secure_offer_solve') ?? false) return true;
+    await prefs.setBool('secure_offer_solve', true);
+  } else {
+    if (_askedThisRun) return true;
+    _askedThisRun = true;
+  }
+  if (!context.mounted) return true;
+  final r = await showNoirSheet<String>(
+    context,
+    child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      const Center(child: Icon(Icons.shield_rounded, color: K.brass, size: 44)),
+      const SizedBox(height: 8),
+      Text(afterSolve ? 'اولین پرونده‌ات رو حل کردی!\nحسابت رو امن کن' : 'قبل از خرید، حسابت رو امن کن',
+          textAlign: TextAlign.center, style: tDisplay(20)),
+      const SizedBox(height: 8),
+      Text(
+          afterSolve
+              ? 'با شماره‌ی موبایلت، پیشرفت و سکه‌هات حتی با عوض کردن گوشی هم می‌مونه. یه کد پیامکی کافیه.'
+              : 'سکه‌هایی که می‌خری روی حساب امن می‌مونه. اگه گوشی عوض بشه یا برنامه پاک بشه، با شماره‌ات همه‌چیز برمی‌گرده.',
+          textAlign: TextAlign.center,
+          style: tBody(13.5, color: K.textSoft)),
+      const SizedBox(height: 10),
+      Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(99)),
+          child: Text('${fa(Api.i.secureReward)} سکه هدیه بعد از امن شدن', style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
+        ),
+      ),
+      const SizedBox(height: 14),
+      StampButton(label: 'امن کردن حساب با شماره‌ام', color: K.brass, onTap: () => Navigator.of(context).pop('secure')),
+      TextButton(
+        onPressed: () => Navigator.of(context).pop('skip'),
+        child: Text(afterSolve ? 'بعداً' : 'ادامه‌ی خرید بدون امن کردن', style: tBody(14.5, color: K.textSoft, w: FontWeight.w700)),
+      ),
+    ]),
+  );
+  if (r != 'secure') return true;
+  if (context.mounted) await openAccountSheet(context, showSecureSheet);
+  return false;
+}
+
+Future<String?> _showEmailSecureSheet(BuildContext context) {
   final secured = Api.i.profile?.secured ?? false;
   return showNoirSheet<String>(
     context,
@@ -165,11 +362,26 @@ class _SecureFormState extends State<_SecureForm> with _SheetJob {
 
 // ------------------------------------------------------------------ sign in / move from another phone
 
-Future<String?> showLoginSheet(BuildContext context, {int tab = 0}) => showNoirSheet<String>(
-      context,
-      title: 'ورود یا انتقال از گوشی دیگر',
-      child: LoginTransferForm(initialTab: tab),
-    );
+const _phoneLogin = '__phone__';
+
+Future<String?> showLoginSheet(BuildContext context, {int tab = 0}) async {
+  final r = await showNoirSheet<String>(
+    context,
+    title: 'ورود یا انتقال از گوشی دیگر',
+    child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      StampButton(
+        label: 'ورود با شماره‌ی موبایل',
+        color: K.brass,
+        icon: Icons.phone_android_rounded,
+        onTap: () => Navigator.of(context).pop(_phoneLogin),
+      ),
+      const SizedBox(height: 12),
+      LoginTransferForm(initialTab: tab),
+    ]),
+  );
+  if (r == _phoneLogin && context.mounted) return showPhoneLoginSheet(context);
+  return r;
+}
 
 class LoginTransferForm extends StatefulWidget {
   const LoginTransferForm({super.key, this.initialTab = 0});

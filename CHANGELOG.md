@@ -1,5 +1,11 @@
 # Changelog
 
+## server 1.23.0, app 1.23.0 (build 47): secure the account with a phone number
+
+- App: «امن کردن حساب» is now phone-first (number, 5-digit SMS code, resend countdown; email stays as a link). Offers: a sheet after the first solved case (once), a sheet before the first coin purchase (once per app start, «ادامه‌ی خرید بدون امن کردن» closes it and the purchase goes on), a bold card on Home until secured, a red dot on the Profile tab, «ورود با شماره‌ی موبایل» in the sign-in sheet. Profile/Settings show the masked number.
+- `SECURE_REWARD` 200 → 100 (coin rebalance). Privacy and delete-account pages mention the phone number.
+- Needs on Liara: `SMS_MODE=ghasedak`, `SMS_API_KEY`, `SMS_TEMPLATE`, `PHONE_PEPPER` (see 1.22.0).
+
 ## server 1.22.1: «پیامک تست» in the admin panel
 
 - Health tab: type a mobile number and send one real code SMS to check Ghasedak (key, template, plan). Shows what the provider answered when it fails. Limits as for players (1 a minute per number, daily ceiling). `POST /admin/api/sms-test`.

@@ -1,3 +1,4 @@
+import 'account_sheets.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -563,13 +564,39 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Guests who solved something: one line asking to secure the account.
   Widget _secureRow() {
     final p = Api.i.profile;
-    if (p == null || p.secured || p.casesSolved < 1) return const SizedBox.shrink();
-    return _line(
-      icon: Icons.shield_rounded,
-      title: 'حسابت رو امن کن تا سکه‌هات گم نشن',
-      sub: 'با ایمیل · ${fa(Api.i.secureReward)} سکه هدیه',
-      subColor: K.brass,
-      onTap: () => MainShell.tab.value = MainShell.profile,
+    if (p == null || p.secured) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Material(
+        color: K.night2,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => openAccountSheet(context, showSecureSheet),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), border: Border.all(color: K.brass, width: 1.5)),
+            child: Row(children: [
+              Container(
+                width: 46,
+                height: 46,
+                decoration: const BoxDecoration(color: K.night3, shape: BoxShape.circle),
+                child: const Icon(Icons.shield_rounded, color: K.brass, size: 26),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                  Text('حسابت هنوز امن نیست', style: tBody(15.5, w: FontWeight.w900)),
+                  Text('با شماره‌ات امنش کن و ${fa(Api.i.secureReward)} سکه بگیر',
+                      style: tBody(12.5, color: K.textSoft).copyWith(height: 1.6)),
+                ]),
+              ),
+              const SizedBox(width: 8),
+              const Icon(Icons.chevron_left_rounded, color: K.brass),
+            ]),
+          ),
+        ),
+      ),
     );
   }
 }

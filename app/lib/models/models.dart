@@ -226,6 +226,7 @@ class Profile {
         inviteCode = _s(j['invite_code']),
         referred = _b(j['referred']),
         email = j['email'] as String?,
+        phone = j['phone'] as String?,
         secured = _b(j['secured']),
         coins = _i(j['coins']),
         noAds = _b(j['no_ads']),
@@ -265,7 +266,7 @@ class Profile {
   final int avatar, coins, streak, bestStreak, casesSolved, starsTotal, loginReward;
   final int loginDay, streakFreezes; // 1..7 in the login calendar; streak insurance held
   final bool referred, secured, noAds;
-  final String? email;
+  final String? email, phone;
   final int? vipUntil;
 
   bool get vip => vipUntil != null && vipUntil! * 1000 > DateTime.now().millisecondsSinceEpoch;

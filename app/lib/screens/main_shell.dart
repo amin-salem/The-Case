@@ -106,7 +106,7 @@ class _MainShellState extends State<MainShell> {
                 Sfx.i.play('tap', volume: 0.4);
                 MainShell.tab.value = i;
               },
-              destinations: const [
+              destinations: [
                 NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'خانه'),
                 NavigationDestination(
                     icon: Icon(Icons.nightlight_outlined), selectedIcon: Icon(Icons.nightlight_round), label: 'آخر هفته'),
@@ -114,7 +114,16 @@ class _MainShellState extends State<MainShell> {
                     icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book_rounded), label: 'داستان'),
                 NavigationDestination(
                     icon: Icon(Icons.emoji_events_outlined), selectedIcon: Icon(Icons.emoji_events_rounded), label: 'برترها'),
-                NavigationDestination(icon: Icon(Icons.person_outline_rounded), selectedIcon: Icon(Icons.person_rounded), label: 'پروفایل'),
+                NavigationDestination(
+                    icon: ListenableBuilder(
+                        listenable: Api.i,
+                        builder: (_, __) => Badge(
+                            isLabelVisible: !(Api.i.profile?.secured ?? true) && (Api.i.profile?.casesSolved ?? 0) >= 1,
+                            backgroundColor: K.stamp,
+                            smallSize: 9,
+                            child: const Icon(Icons.person_outline_rounded))),
+                    selectedIcon: const Icon(Icons.person_rounded),
+                    label: 'پروفایل'),
               ],
             ),
           ),
