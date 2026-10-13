@@ -1,5 +1,11 @@
 # Changelog
 
+## server 1.24.5: case c018 rewritten, story chapter 1 in the choices format
+
+- Content: nightly case c018 «سؤال هفتم» (opens 16 Oct) rewritten under the case-writing rules: difficulty 4, type 8 (the helpful witness is the culprit), people-first clues, side secrets for every suspect; blind-tested. Its notification body is updated.
+- Story: s01ch01 «هفت‌ستاره» now plays as a real choices chapter (5 scenes, two real branches, a locked option, board people and clues); the case itself is unchanged. Story stays paused (`opens_at` 2099).
+- Rules: CLAUDE.md gets «Business priority» and «Story opening gate».
+
 ## server 1.24.4: take a phone number over from another account
 
 - «وصل کردن شماره» has a checkbox «اگر این شماره به حساب دیگری وصل است، از آن بگیر»: the number is removed from the other account (it stays, as a guest, nothing deleted) and linked to this one. Logged as `release_phone` (last 4 digits only). Without the checkbox it is still refused with 409.
