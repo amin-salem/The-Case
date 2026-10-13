@@ -49,7 +49,7 @@ def case(n, scene, difficulty, title, location, intro, suspects, evidence, hints
     rng = random.Random(n * 7919)
     sus = []
     for i, s in enumerate(suspects, 1):
-        sus.append({"id": f"s{i}", "name": s["name"], "role": s["role"], "age": s["age"],
+        sus.append({"id": f"s{i}", "name": s["name"], "role": s["role"], "intro": s["intro"], "age": s["age"],
                     "avatar": _avatar(rng, s), "motive": s["motive"], "statement": s["statement"],
                     "questions": s["questions"]})
     ev = [{"id": f"e{i}", **e} for i, e in enumerate(evidence, 1)]

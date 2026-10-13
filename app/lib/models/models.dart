@@ -46,6 +46,7 @@ class Suspect {
       : id = _s(j['id']),
         name = _s(j['name']),
         role = _s(j['role']),
+        intro = _s(j['intro']),
         age = _i(j['age']),
         avatar = AvatarSpec((j['avatar'] as Map?)?.cast<String, dynamic>() ?? const {}),
         motive = _s(j['motive']),
@@ -53,6 +54,7 @@ class Suspect {
         questions = [for (final q in _maps(j['questions'])) QA(q)];
 
   final String id, name, role, motive, statement;
+  final String intro; // one neutral line: who this is (empty in an old cached case)
   final int age;
   final AvatarSpec avatar;
   final List<QA> questions;
@@ -245,8 +247,10 @@ class Profile {
         nextRankXp = j['next_rank_xp'] is num ? (j['next_rank_xp'] as num).toInt() : null,
         nextRankTitle = j['next_rank_title'] as String?,
         achievements = _i(j['achievements']),
-        warrants = _i(j['warrants']);
+        warrants = _i(j['warrants']),
+        unread = _i(j['unread']);
 
+  final int unread; // unread items in the messages hub (the bell)
   final int achievements; // earned so far
   final int warrants; // story warrants held
 

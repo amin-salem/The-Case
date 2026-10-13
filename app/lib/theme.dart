@@ -27,6 +27,12 @@ class K {
   static const clue = Color(0xFFFFE08A);
 }
 
+/// Badge wall (messages hub): the gold ring of an earned badge, and the grey of a locked one.
+const Color kBadgeGold = Color(0xFFF0C14B);
+const Color kBadgeLockedBorder = Color(0xFF45464A);
+const Color kBadgeLockedIcon = Color(0xFF5B5C60);
+const Color kBadgeLockedText = Color(0xFF6C6D71);
+
 /// The font the player chose in the profile (Vazirmatn by default).
 String get kFont => FontPref.family.value;
 

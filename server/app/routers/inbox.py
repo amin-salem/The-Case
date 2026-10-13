@@ -5,10 +5,11 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import economy as eco
+from .. import feed as feedmod
 from .. import rewards
 from ..db import get_session
 from ..models import Broadcast, BroadcastClaim, InboxItem, Player, utcnow
-from ..schemas import ClaimOut, InboxRow, RedeemIn
+from ..schemas import ClaimOut, FeedOut, InboxRow, RedeemIn
 from ..security import current_player
 from ..util import add_coins, from_ts, ts
 
@@ -25,6 +26,22 @@ def apply_grants(session: AsyncSession, player: Player, grants: list[dict], reas
             until = from_ts(int(g["ts"]))
             if player.vip_until is None or until > player.vip_until:
                 player.vip_until = until
+
+
+@router.get("/feed", response_model=FeedOut)
+async def feed(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """One merged list for the messages hub: at most 40 items from the last 14 days, newest first."""
+    items = await feedmod.build_feed(session, player)
+    return FeedOut(items=items, unread=sum(1 for i in items if i["unread"]), seen_at=ts(player.feed_seen_at))
+
+
+@router.post("/feed/seen", response_model=FeedOut)
+async def feed_seen(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """Marks everything up to now as read. Safe to repeat."""
+    player.feed_seen_at = utcnow()
+    await session.commit()
+    items = await feedmod.build_feed(session, player)
+    return FeedOut(items=items, unread=sum(1 for i in items if i["unread"]), seen_at=ts(player.feed_seen_at))
 
 
 @router.get("/inbox", response_model=list[InboxRow])

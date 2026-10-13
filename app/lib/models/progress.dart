@@ -156,3 +156,34 @@ class AchievementsList {
   final int earned, total;
   final List<AchievementRow> items;
 }
+
+/// One line of the messages hub (gift, badge, opening, announcement).
+class FeedItem {
+  FeedItem(Map<String, dynamic> j)
+      : id = _s(j['id']),
+        kind = _s(j['kind'], 'system'),
+        title = _s(j['title']),
+        body = _s(j['body']),
+        at = DateTime.fromMillisecondsSinceEpoch(_i(j['at']) * 1000),
+        unread = _b(j['unread']),
+        giftId = j['gift_id'] is String ? j['gift_id'] as String : null,
+        reward = _i(j['reward']);
+
+  final String id, kind, title, body;
+  final DateTime at;
+  final bool unread;
+  final String? giftId; // set while the gift can still be claimed
+  final int reward;
+
+  bool get isGift => kind == 'gift';
+  bool get claimable => isGift && giftId != null;
+}
+
+class Feed {
+  Feed(Map<String, dynamic> j)
+      : items = [for (final x in (j['items'] as List? ?? const [])) if (x is Map) FeedItem(x.cast<String, dynamic>())],
+        unread = _i(j['unread']);
+
+  final List<FeedItem> items;
+  final int unread;
+}

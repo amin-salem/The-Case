@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import content, progress
+from .. import content, feed, progress
 from .. import economy as eco
 from ..config import get_settings
 from ..db import get_session
@@ -38,6 +38,10 @@ async def me(player: Player = Depends(current_player), session: AsyncSession = D
         if gains.achievements:
             await session.commit()
     out = profile_out(player, login_reward=reward)
+    try:
+        out.unread = await feed.unread_count(session, player)
+    except Exception:  # the bell must never break the profile
+        await session.rollback()
     out.gains = GainsOut(**gains.out()) if not gains.is_empty() else None
     return out
 

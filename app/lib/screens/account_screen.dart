@@ -5,6 +5,7 @@ import '../models/models.dart';
 import '../models/progress.dart';
 import '../services/api.dart';
 import '../theme.dart';
+import '../widgets/profile_bell.dart';
 import '../widgets/character.dart';
 import '../widgets/crime_tape.dart';
 import '../widgets/offline.dart';
@@ -112,6 +113,8 @@ class _AccountScreenState extends State<AccountScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: K.night,
+        leadingWidth: 64,
+        leading: const Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: Center(child: ProfileBell(size: 34))),
         title: Text('پرونده‌ی شخصی', style: tDisplay(20)),
         actions: [
           IconButton(

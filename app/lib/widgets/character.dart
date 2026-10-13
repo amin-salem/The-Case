@@ -512,3 +512,32 @@ class DetectiveFace extends StatelessWidget {
             width: size, height: size, fit: BoxFit.cover, filterQuality: FilterQuality.medium),
       );
 }
+
+/// A still, square portrait of a suspect (no animation): the painted portrait when there is one, else the
+/// drawn character. Used by the cast strip and the small suspect chips.
+class SuspectPortrait extends StatelessWidget {
+  const SuspectPortrait(this.avatar, {super.key, this.size = 100, this.circle = false});
+  final AvatarSpec avatar;
+  final double size;
+  final bool circle;
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget art = kPortraits.contains(avatar.portrait)
+        ? Image.asset(portraitAsset(avatar.portrait),
+            width: size, height: size, fit: BoxFit.cover, alignment: const Alignment(0, -0.4), filterQuality: FilterQuality.medium)
+        : SizedBox(
+            width: size,
+            height: size,
+            child: FittedBox(
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+              clipBehavior: Clip.hardEdge,
+              child: CustomPaint(size: Size(size, size * 1.1), painter: CharacterPainter(avatar)),
+            ),
+          );
+    return circle
+        ? ClipOval(child: art)
+        : ClipRRect(borderRadius: BorderRadius.circular(size * 0.1), child: art);
+  }
+}

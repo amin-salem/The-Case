@@ -95,6 +95,7 @@ class ProfileOut(BaseModel):
     next_rank_title: str | None = None
     achievements: int = 0             # earned so far
     warrants: int = 0                 # story warrants held
+    unread: int = 0                   # unread items in the messages hub (the bell)
     gains: "GainsOut | None" = None   # earned right now (on /me: login-calendar week, late achievements)
 
 
@@ -454,3 +455,20 @@ class StoryOut(BaseModel):
     next_open_at: int | None = None
     chapters: list[StoryChapterOut]
     case_id: str | None = None     # set by open/skip: the chapter's case id
+
+
+class FeedItem(BaseModel):
+    id: str
+    kind: str  # gift | case | story | weekend | badge | streak | system
+    title: str
+    body: str = ""
+    at: int
+    unread: bool
+    gift_id: str | None = None  # claimable gift: POST /v1/inbox/{gift_id}/claim
+    reward: int = 0
+
+
+class FeedOut(BaseModel):
+    items: list[FeedItem]
+    unread: int
+    seen_at: int | None = None

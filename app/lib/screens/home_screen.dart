@@ -10,15 +10,14 @@ import '../services/billing.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
 import '../theme.dart';
-import '../widgets/character.dart';
 import '../widgets/crime_tape.dart';
 import '../widgets/engagement.dart';
 import '../widgets/missions_card.dart';
 import '../widgets/offline.dart';
+import '../widgets/profile_bell.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'archive_screen.dart';
-import 'inbox_sheet.dart';
 import 'main_shell.dart';
 import 'shop_screen.dart';
 
@@ -157,6 +156,25 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// The «ادامه» button of the missions card: take the player to where the mission can be done.
+  void _goMission(MissionRow m) {
+    switch (missionTarget(m.id)) {
+      case MissionTarget.tonight:
+        final c = _cases?.today;
+        if (c != null) {
+          _open(c);
+        } else {
+          _openMissions();
+        }
+      case MissionTarget.weekend:
+        MainShell.tab.value = MainShell.weekend;
+      case MissionTarget.archive:
+        _openArchive();
+      case MissionTarget.sheet:
+        _openMissions();
+    }
+  }
+
   /// The streak chip: the streak, the insurance held and the next badge, in a small sheet.
   void _openStreak() {
     if (Api.i.profile == null) return;
@@ -220,7 +238,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (_cases != null) ...[
                     FadeSlideIn(child: _hero(_cases!.today)),
                     const SizedBox(height: 14),
-                    if (_missions != null) _missionsRow(_missions!),
+                    if (_missions != null)
+                      HomeMissionsCard(
+                        day: _missions!,
+                        onChanged: (m) {
+                          if (mounted) setState(() => _missions = m);
+                        },
+                        onGo: _goMission,
+                        onOpenSheet: _openMissions,
+                      ),
                     _weekendRow(),
                     _archiveRow(),
                     _secureRow(),
@@ -242,25 +268,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.15,
       child: Row(children: [
+        const ProfileBell(),
+        const SizedBox(width: 6),
         Expanded(
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () => MainShell.tab.value = MainShell.profile,
-            child: Row(children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(color: K.night3, shape: BoxShape.circle, border: Border.all(color: K.brass, width: 2)),
-                child: DetectiveFace(p?.avatar ?? 0, size: 42),
-              ),
-              const SizedBox(width: 8),
-              Flexible(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                  Text(p?.nickname ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900)),
-                  Text(p?.rankTitle ?? '',
-                      maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.brass, w: FontWeight.w700)),
-                ]),
-              ),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+              Text(p?.nickname ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900)),
+              Text(p?.rankTitle ?? '',
+                  maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.brass, w: FontWeight.w700)),
             ]),
           ),
         ),
@@ -270,28 +287,6 @@ class _HomeScreenState extends State<HomeScreen> {
         CoinChip(
             coins: Api.i.coins,
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreen()))),
-        Stack(clipBehavior: Clip.none, children: [
-          IconButton(
-            onPressed: () {
-              if (needOnline(context)) showInbox(context);
-            },
-            icon: const Icon(Icons.mail_rounded, color: K.text),
-            visualDensity: VisualDensity.compact,
-            tooltip: 'صندوق پیام',
-          ),
-          if (Api.i.inboxCount > 0)
-            Positioned(
-              top: 2,
-              right: 2,
-              child: Container(
-                constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 3),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(color: K.stamp, borderRadius: BorderRadius.circular(99)),
-                child: Text(fa(Api.i.inboxCount), style: tBody(9, w: FontWeight.w900).copyWith(height: 1.3)),
-              ),
-            ),
-        ]),
       ]),
     );
   }
@@ -484,35 +479,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  /// Today's missions: one pill per mission, filled as far as it got.
-  Widget _missionsRow(MissionsDay m) {
-    return _line(
-      icon: Icons.assignment_turned_in_rounded,
-      title: 'مأموریت‌های امروز',
-      onTap: _openMissions,
-      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-        if (m.allDone && !m.claimed) ...[
-          const Icon(Icons.inventory_2_rounded, size: 18, color: K.brass),
-          const SizedBox(width: 6),
-        ],
-        for (final x in m.missions)
-          Container(
-            width: 22,
-            height: 8,
-            margin: const EdgeInsets.symmetric(horizontal: 2),
-            decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(99)),
-            alignment: Alignment.centerRight,
-            child: FractionallySizedBox(
-              widthFactor: x.done ? 1.0 : (x.target <= 0 ? 0.0 : (x.progress / x.target).clamp(0.0, 1.0).toDouble()),
-              child: Container(
-                decoration: BoxDecoration(color: x.done ? K.ok : K.brass, borderRadius: BorderRadius.circular(99)),
-              ),
-            ),
-          ),
-      ]),
     );
   }
 

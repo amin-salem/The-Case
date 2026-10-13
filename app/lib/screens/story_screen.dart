@@ -6,6 +6,7 @@ import '../models/story.dart';
 import '../services/api.dart';
 import '../services/reminders.dart';
 import '../theme.dart';
+import '../widgets/profile_bell.dart';
 import '../widgets/coming_soon.dart';
 import '../widgets/offline.dart';
 import '../widgets/partner_card.dart';
@@ -149,8 +150,16 @@ class _StoryScreenState extends State<StoryScreen> {
     return Scaffold(
       body: SafeArea(
         child: ListView(padding: const EdgeInsets.fromLTRB(16, 16, 16, 24), children: [
-          Text('داستان', style: tDisplay(26)),
-          Text('پرونده‌های سرگرد ناصری · یه مسیر بی‌پایان', style: tBody(13, color: K.textSoft)),
+          Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            const ProfileBell(size: 40),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text('داستان', style: tDisplay(26)),
+                Text('پرونده‌های سرگرد ناصری · یه مسیر بی‌پایان', style: tBody(13, color: K.textSoft)),
+              ]),
+            ),
+          ]),
           const SizedBox(height: 14),
           SectionBanner(
             background: Image.asset('assets/banners/story_s01.webp', fit: BoxFit.cover),
@@ -200,6 +209,8 @@ class _StoryScreenState extends State<StoryScreen> {
           onRefresh: _load,
           child: ListView(padding: const EdgeInsets.fromLTRB(16, 16, 16, 24), children: [
             Row(children: [
+              const ProfileBell(size: 40),
+              const SizedBox(width: 8),
               Expanded(child: Text('داستان', style: tDisplay(26))),
               _boardChip(),
               const SizedBox(width: 8),

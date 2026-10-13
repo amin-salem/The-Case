@@ -83,6 +83,9 @@ class Api extends ChangeNotifier {
   Map<String, dynamic> _profileJson = const {};
   int inboxCount = 0;
 
+  /// Unread items in the messages hub: one shared number for every bell (updated with the profile).
+  final ValueNotifier<int> unread = ValueNotifier(0);
+
   /// The last connection problem, already in friendly Persian ('' when fine).
   String lastError = '';
   bool ready = false;
@@ -205,6 +208,7 @@ class Api extends ChangeNotifier {
     if (me is Map) {
       _profileJson = Map<String, dynamic>.from(me);
       profile = Profile(_profileJson);
+      unread.value = profile!.unread;
     }
   }
 
@@ -443,6 +447,7 @@ class Api extends ChangeNotifier {
   static const _kRiddles = 'c_riddles';
   static const _kMissions = 'c_missions';
   static const _kAchievements = 'c_achievements';
+  static const _kFeed = 'c_feed';
   static const _kCasePrefix = 'c_case_';
   static const _kNotesPrefix = 'notes_';
   static const _kStoryStatePrefix = 'c_story_state_';
@@ -470,7 +475,7 @@ class Api extends ChangeNotifier {
   /// Another account's data must not show up after a login on this phone.
   Future<void> _clearCache() async {
     for (final k in _p.getKeys().toList()) {
-      if (k == _kMe || k == _kCases || k == _kRiddles || k == _kMissions || k == _kAchievements || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix) || k.startsWith(_kStoryStatePrefix) || k == _kStoryBoard) {
+      if (k == _kMe || k == _kCases || k == _kRiddles || k == _kMissions || k == _kAchievements || k == _kFeed || k.startsWith(_kCasePrefix) || k.startsWith(_kNotesPrefix) || k.startsWith(_kStoryStatePrefix) || k == _kStoryBoard) {
         await _p.remove(k);
       }
     }
@@ -616,7 +621,14 @@ class Api extends ChangeNotifier {
 
   // ---------------------------------------------------------------- profile
 
-  void _setProfile(Map<String, dynamic> j) {
+  /// [fromMe]: the answer of GET /v1/me, the only one that knows the bell number (other answers say 0).
+  void _setProfile(Map<String, dynamic> j, {bool fromMe = false}) {
+    if (fromMe) {
+      final n = j['unread'];
+      if (n is int && unread.value != n) unread.value = n;
+    } else {
+      j = Map<String, dynamic>.of(j)..['unread'] = unread.value;
+    }
     _profileJson = j;
     profile = Profile(j);
     // the daily login reward is shown once; the saved copy must not show it again
@@ -633,7 +645,7 @@ class Api extends ChangeNotifier {
 
   Future<Profile?> refreshProfile() async {
     final j = await _call('GET', '/v1/me') as Map;
-    _setProfile(Map<String, dynamic>.from(j));
+    _setProfile(Map<String, dynamic>.from(j), fromMe: true);
     _emitGains(j['gains']);
     return profile;
   }
@@ -976,11 +988,44 @@ class Api extends ChangeNotifier {
     }
   }
 
-  Future<int> claim(InboxGift g) async {
-    final j = await _call('POST', '/v1/inbox/${g.id}/claim') as Map;
+  Future<int> claim(InboxGift g) => claimGift(g.id, g.coins);
+
+  /// Claims a gift by its inbox id («p12» / «b3»); the server pays once. Returns the coins it was worth.
+  Future<int> claimGift(String id, int coins) async {
+    final j = await _call('POST', '/v1/inbox/$id/claim') as Map;
     inboxCount = max(0, inboxCount - 1);
     _setCoins(j['coins'] as int);
-    return g.coins;
+    return coins;
+  }
+
+  // ---------------------------------------------------------------- messages hub
+
+  /// The merged feed; offline, the last saved one.
+  Future<Feed> feed() async {
+    final f = Feed(await _cachedGet('/v1/feed', _kFeed));
+    if (online) _setUnread(f.unread);
+    return f;
+  }
+
+  /// Marks everything read (the server keeps one timestamp). Quiet: offline or failing, nothing happens.
+  Future<void> feedSeen() async {
+    if (!online) return;
+    try {
+      final j = await _call('POST', '/v1/feed/seen');
+      if (j is Map) {
+        final m = Map<String, dynamic>.from(j);
+        await _writeCache(_kFeed, m);
+      }
+      _setUnread(0);
+    } catch (e) {
+      debugPrint('feed seen: $e');
+    }
+  }
+
+  /// The bell number; also kept in the saved profile so a later coin update does not bring the old number back.
+  void _setUnread(int n) {
+    _profileJson = Map<String, dynamic>.of(_profileJson)..['unread'] = n;
+    if (unread.value != n) unread.value = n;
   }
 
   // ---------------------------------------------------------------- errors

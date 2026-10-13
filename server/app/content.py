@@ -60,6 +60,9 @@ class Case:
                 "scene": d["scene"], "difficulty": d["difficulty"], "publish": self.publish.isoformat()}
 
 
+INTRO_MIN, INTRO_MAX = 20, 90  # every suspect has a short neutral intro (docs/case-writing-rules.md)
+
+
 def validate(d: dict, max_suspects: int = 6) -> None:
     for key in ("id", "number", "publish", "title", "location", "scene", "difficulty", "intro",
                 "suspects", "evidence", "hints", "solution"):
@@ -88,6 +91,9 @@ def validate(d: dict, max_suspects: int = 6) -> None:
         for key in ("name", "role", "avatar", "statement", "questions"):
             if key not in s:
                 raise CaseError(f"{d['id']}/{s['id']}: missing {key}")
+        intro = s.get("intro")
+        if not isinstance(intro, str) or not INTRO_MIN <= len(intro.strip()) <= INTRO_MAX:
+            raise CaseError(f"{d['id']}/{s['id']}: intro must be {INTRO_MIN}-{INTRO_MAX} characters")
         if len(s["questions"]) < 2:
             raise CaseError(f"{d['id']}/{s['id']}: needs at least 2 questions")
     for e in d["evidence"]:

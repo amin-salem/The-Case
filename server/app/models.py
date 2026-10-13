@@ -42,6 +42,7 @@ class Player(Base):
     phone_hash: Mapped[str | None] = mapped_column(String(64), unique=True, nullable=True)
     phone_last4: Mapped[str | None] = mapped_column(String(4), nullable=True)
     phone_verified_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    feed_seen_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)  # messages hub: everything older is read
 
     # wallet & perks (the server is the boss of coins: nothing to cheat on the phone)
     coins: Mapped[int] = mapped_column(Integer, default=0)

@@ -81,6 +81,13 @@ why. Then judge:
 - Every suspect's `avatar` has a `portrait` from `app/assets/portraits/*.webp` (file name without
   `.webp`) that fits gender, age and job; no repeated portrait inside a case (twins may share).
   Women always have `"hair": "hijab"`.
+- Every suspect needs an `intro` (required; 20–90 characters, spoken-friendly Persian, one line). It is shown on the
+  case's «آدم‌های پرونده» strip and on the portrait chips, **before** the player has read any statement, so it says only
+  WHO the person is relative to the case: role, relationship to the victim/place, what they were doing there at a
+  neutral level («حسابدار طلافروشی زرین؛ حساب‌وکتاب مغازه دست اونه.»). HARD RULES: never mention motive, alibi, a lie, a
+  secret, money trouble, suspicious behaviour, or anything that helps decide guilt; nothing that only the statements
+  or evidence reveal later; do not contradict `role`, `name`, `age` or `statement`; same vocabulary level as the
+  case. If you cannot write a neutral line, use "role + relation" only. Server validation refuses a suspect without it.
 - Fictional people and places only; no real religious or political places or figures; nothing gory.
 - At least 5 evidence cards (nightly cases usually 7–9; weekend cases about 16, in chapters).
 - After editing, run the content checks (JSON loads, `server/app/content.py` validation); CI must be green.

@@ -8,6 +8,8 @@ import '../services/api.dart';
 import '../services/case_clock.dart';
 import '../services/sound.dart';
 import '../theme.dart';
+import '../widgets/cast_strip.dart';
+import '../widgets/profile_bell.dart';
 import '../widgets/character.dart';
 import '../widgets/coach_marks.dart';
 import '../widgets/crime_tape.dart';
@@ -418,6 +420,7 @@ class _CaseScreenState extends State<CaseScreen> {
                   ]),
               ]),
             ),
+            const ProfileBell(size: 32),
             const SoundButton(),
             ListenableBuilder(listenable: Api.i, builder: (_, __) => CoinChip(coins: Api.i.coins)),
           ]),
@@ -465,6 +468,8 @@ class _CaseScreenState extends State<CaseScreen> {
           ]),
         ),
       ],
+      const SizedBox(height: 18),
+      CastStrip(suspects: c.suspects, onOpen: _openSuspect),
       if (p.hints.isNotEmpty) ...[
         const SizedBox(height: 14),
         for (int i = 0; i < p.hints.length; i++)
@@ -559,6 +564,20 @@ class _CaseScreenState extends State<CaseScreen> {
     );
   }
 
+  /// Small portrait chips for the suspects an evidence card names; a tap opens a quick peek.
+  List<Widget> _namedChips(CaseData c, Evidence e) {
+    final named = suspectsNamedIn('${e.title} ${e.text}', c.suspects);
+    if (named.isEmpty) return const [];
+    return [
+      const SizedBox(height: 8),
+      Wrap(spacing: 6, runSpacing: 6, children: [
+        for (final s in named)
+          SuspectChip(suspect: s, onTap: () => showSuspectPeek(context, s, onFull: () => _openSuspect(s))),
+      ]),
+      const SizedBox(height: 4),
+    ];
+  }
+
   Widget _evidenceTab(CaseData c) {
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -606,6 +625,7 @@ class _CaseScreenState extends State<CaseScreen> {
                     ]),
                     const SizedBox(height: 4),
                     Text(e.text, style: tBody(14.5, color: K.ink)),
+                    ..._namedChips(c, e),
                     if (key) Text('مدرک کلیدی', style: tBody(12, color: K.stamp, w: FontWeight.w900)),
                     if (pinned && !key) Text('نشان‌شده', style: tBody(11, color: K.stamp, w: FontWeight.w900)),
                   ]),
@@ -623,6 +643,19 @@ class _CaseScreenState extends State<CaseScreen> {
     );
   }
 
+  /// The full suspect sheet (interrogation); used by the Suspects tab, the cast strip and the chips.
+  Future<void> _openSuspect(Suspect s) async {
+    unawaited(Api.i.markSeen(widget.caseId, s.id));
+    void keep(SuspectMark m) {
+      _marks[s.id] = m; // saved at once: closing the sheet any way must not lose it
+      _saveNotes();
+      if (mounted) setState(() {});
+    }
+
+    final m = await showSuspect(context, s, _marks[s.id] ?? SuspectMark.none, onMark: keep);
+    if (m != null && mounted) keep(m);
+  }
+
   Widget _suspectsTab(CaseData c) {
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -634,16 +667,7 @@ class _CaseScreenState extends State<CaseScreen> {
         return FadeSlideIn(
           delay: Duration(milliseconds: 60 * i),
           child: GestureDetector(
-            onTap: () async {
-              unawaited(Api.i.markSeen(widget.caseId, s.id));
-              void keep(SuspectMark m) {
-                _marks[s.id] = m; // saved at once: closing the sheet any way must not lose it
-                _saveNotes();
-                if (mounted) setState(() {});
-              }
-              final m = await showSuspect(context, s, mark, onMark: keep);
-              if (m != null && mounted) keep(m);
-            },
+            onTap: () => _openSuspect(s),
             child: Container(
               margin: const EdgeInsets.only(bottom: 10),
               padding: const EdgeInsets.all(10),
@@ -668,6 +692,7 @@ class _CaseScreenState extends State<CaseScreen> {
                       else if (mark == SuspectMark.innocent) Text('بی‌گناه', style: tBody(12, color: K.ok, w: FontWeight.w900)),
                     ]),
                     Text('${s.role} · ${fa(s.age)} ساله', style: tBody(12, color: K.textSoft)),
+                    if (s.intro.isNotEmpty) Text(s.intro, style: tBody(12, color: K.text.withValues(alpha: 0.85)).copyWith(height: 1.5)),
                     const SizedBox(height: 4),
                     Text('«${s.statement}»', maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(13.5)),
                     Text('برای بازجویی بزن', style: tBody(11, color: K.brass)),

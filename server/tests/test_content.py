@@ -79,3 +79,31 @@ def test_notify_plan_and_texts():
     first = next(x for x in plan if x["kind"] == "nightly")
     assert first["at"] == int(content.opens_at(c).timestamp()) and first["head"] and first["body"] and first["late"]
     assert [x["at"] for x in plan] == sorted(x["at"] for x in plan)
+
+
+def test_every_suspect_has_a_valid_neutral_intro():
+    banned = ("انگیزه", "دروغ", "بدهی", "قاتل", "مجرم", "مشکوک", "راز ")
+    groups = [content.all_cases(), content.weekly_cases(), content.story_chapters()]
+    n = 0
+    for cases in groups:
+        for c in cases:
+            for s in c.data["suspects"]:
+                intro = s["intro"]
+                assert content.INTRO_MIN <= len(intro) <= content.INTRO_MAX, f"{c.id}/{s['id']}: {len(intro)}"
+                assert not any(w in intro for w in banned), f"{c.id}/{s['id']}: {intro}"
+                assert "intro" in c.public()["suspects"][0]
+                n += 1
+    assert n >= 260
+
+
+def test_a_suspect_without_intro_is_refused():
+    import copy
+
+    import pytest
+    d = copy.deepcopy(content.all_cases()[0].data)
+    del d["suspects"][0]["intro"]
+    with pytest.raises(content.CaseError):
+        content.validate(d)
+    d["suspects"][0]["intro"] = "کوتاه"
+    with pytest.raises(content.CaseError):
+        content.validate(d)

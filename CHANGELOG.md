@@ -1,5 +1,14 @@
 # Changelog
 
+## server 1.24.0, app 1.24.0 (build 48): messages hub, missions card, suspect intros
+
+- App Home: the mail icon is gone. The avatar (top right) now has a small bell and a red unread pill; tapping it opens the new «پیام‌ها و نشان‌ها» screen (profile card, messages/notifications with filters and «خواندن همه», gifts with «دریافت N سکه», and the badge wall: gold for earned, grey dashed for locked, tap a badge for how to earn it). The same bell sits at the top of the weekend, story, leaderboard and profile screens and in the case header; the number is one shared value, so all bells change together.
+- App Home: «مأموریت‌های امروز» is now a big card right under tonight's case (chest, progress ring, three missions with bars, a button to the right place «ادامه: …» or «باز کردن صندوقچه», chest streak, countdown to midnight). The case hero card is unchanged.
+- App case screens: «آدم‌های پرونده» snap rail under the case text (portrait, name, role, intro), small portrait chips on evidence cards that name a suspect (tap = quick peek, then the full suspect sheet), intro line in the Suspects tab. Old cached cases without intros show nothing extra.
+- Server: `GET /v1/feed` (merged feed: gifts, badges, nightly/weekend openings, announcements; max 40, last 14 days), `POST /v1/feed/seen`, `unread` in `GET /v1/me`. New `players.feed_seen_at` (migration 0018, additive, listed in CI). Gifts are still claimed with the existing inbox claim (pays once).
+- Content: every suspect of all 50 nightly cases, w001, w002 and s01ch01 has a neutral `intro` (20–90 characters, 270 in all). The validators now require it; `docs/case-writing-rules.md` tells the writing tasks to add it to new content.
+- Deploy: needs the server to be deployed (new endpoint and intros); the app works with the old server (no bell number, no intros) until then.
+
 ## server 1.23.0, app 1.23.0 (build 47): secure the account with a phone number
 
 - App: «امن کردن حساب» is now phone-first (number, 5-digit SMS code, resend countdown; email stays as a link). Offers: a sheet after the first solved case (once), a sheet before the first coin purchase (once per app start, «ادامه‌ی خرید بدون امن کردن» closes it and the purchase goes on), a bold card on Home until secured, a red dot on the Profile tab, «ورود با شماره‌ی موبایل» in the sign-in sheet. Profile/Settings show the masked number.

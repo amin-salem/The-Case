@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/api.dart';
 import '../theme.dart';
+import '../widgets/profile_bell.dart';
 import '../widgets/coming_soon.dart';
 import '../widgets/scene.dart';
 import 'case_screen.dart';
@@ -62,8 +63,16 @@ class _WeekendScreenState extends State<WeekendScreen> {
         child: RefreshIndicator(
           onRefresh: _opened,
           child: ListView(padding: const EdgeInsets.fromLTRB(16, 16, 16, 24), children: [
-            Text('آخر هفته', style: tDisplay(26)),
-            Text('یه پرونده‌ی بزرگ و خیلی سخت، هر پنجشنبه صبح', style: tBody(13, color: K.textSoft)),
+            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              const ProfileBell(size: 40),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('آخر هفته', style: tDisplay(26)),
+                  Text('یه پرونده‌ی بزرگ و خیلی سخت، هر پنجشنبه صبح', style: tBody(13, color: K.textSoft)),
+                ]),
+              ),
+            ]),
             const SizedBox(height: 14),
             if (weekly != null)
               SectionBanner(

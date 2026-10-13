@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/api.dart';
 import '../theme.dart';
+import '../widgets/profile_bell.dart';
 import '../widgets/character.dart';
 
 class LeaderboardScreen extends StatelessWidget {
@@ -15,6 +16,8 @@ class LeaderboardScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: K.night,
+          leadingWidth: 64,
+          leading: const Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: Center(child: ProfileBell(size: 34))),
           title: Text('کارآگاه‌های برتر', style: tDisplay(20)),
           bottom: TabBar(
             indicatorColor: K.stamp,
