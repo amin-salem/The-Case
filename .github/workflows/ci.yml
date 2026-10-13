@@ -39,9 +39,10 @@ jobs:
                      ("case_progress", "seen"), ("players", "xp"),
                      ("players", "stats"), ("case_progress", "active_seconds"), ("case_progress", "last_tick_at"),
                      ("players", "warrants"),
+                     ("players", "referral_paid"), ("case_progress", "ranked"), ("case_progress", "reveal_at"),
                      ("players", "client_version"), ("players", "client_build"), ("players", "platform"),
                      ("players", "os_version"), ("players", "device_model"), ("players", "client_at")]
-          TABLES = ["riddle_answers", "mission_days", "player_achievements", "story_progress", "story_state", "admin_log", "rate_hits", "case_comments"]
+          TABLES = ["riddle_answers", "mission_days", "player_achievements", "story_progress", "story_state", "admin_log", "rate_hits", "case_comments", "referral_payouts"]
           EOF
           python - <<'EOF'
           import sqlite3, sys

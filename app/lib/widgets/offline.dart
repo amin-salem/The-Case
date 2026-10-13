@@ -55,7 +55,7 @@ class _OfflineBannerState extends State<OfflineBanner> {
             child: Row(children: [
               const Icon(Icons.wifi_off_rounded, size: 18, color: K.brass),
               const SizedBox(width: 8),
-              Expanded(child: Text(Api.offlineBannerText, style: tBody(12.5, color: K.text))),
+              Expanded(child: Text(Api.i.registerBlocked ?? Api.offlineBannerText, style: tBody(12.5, color: K.text))),
               if (_busy)
                 const Padding(
                   padding: EdgeInsets.all(12),

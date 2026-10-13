@@ -32,7 +32,7 @@ log = logging.getLogger("ratelimit")
 
 MESSAGE = "تعداد درخواست‌ها زیاد بود. چند لحظه صبر کن و دوباره امتحان کن."
 UNAVAILABLE_MESSAGE = "الان نمی‌شود. کمی بعد دوباره امتحان کن."
-RETENTION = 7200  # seconds a counter row is kept (longest window is 3600, plus the previous window)
+RETENTION = 2 * 86400 + 3600  # seconds a counter row is kept (longest window is one day, plus the previous window)
 DEV_ADMIN_KEY = "change-me-admin-dev-only"
 
 EXEMPT_PATHS = {"/health", "/privacy", "/terms", "/delete-account", "/admin/ui", "/docs", "/openapi.json",
@@ -58,8 +58,8 @@ def _p(name, tiers, scope="player", store="mem", fail="open", note=""):
 DEFAULTS: dict[str, Policy] = {p.name: p for p in [
     _p("global_ip", [(100, 5), (600, 60)], "ip", note="every request, per IP"),
     # accounts: very strict
-    _p("register", [(3, 60), (20, 3600)], "ip", "strict", "closed", "new account, per IP"),
-    _p("register_device", [(3, 3600)], "key", "strict", "closed", "new account, per device_id (extra, client-supplied)"),
+    _p("register", [(3, 60), (10, 86400)], "ip", "strict", "closed", "new account, per IP: 3 a minute, 10 a day"),
+    _p("register_device", [(3, 86400)], "key", "strict", "closed", "new account, per device_id: 3 a day (extra, client-supplied)"),
     _p("login", [(20, 60), (60, 600)], "ip", "strict", note="login / email login, per IP"),
     _p("login_target", [(20, 600)], "key", "strict", note="login attempts against one account / email / code"),
     _p("transfer", [(5, 300)], "ip", "strict", note="use a transfer code, per IP"),
@@ -419,9 +419,16 @@ class RateLimited(Exception):
         self.retry_after, self.status, self.verdict = retry_after, status, verdict
 
 
-def body_for(status: int, retry_after: int) -> dict:
+REGISTER_MESSAGE = "امروز از این دستگاه یا شبکه چند حساب ساخته شده. فردا دوباره امتحان کن، یا با حساب قبلی‌ات وارد شو."
+
+
+def body_for(status: int, retry_after: int, policy: str = "") -> dict:
     if status == 429:
-        return {"error": "rate_limited", "message": MESSAGE, "retry_after": retry_after}
+        msg = REGISTER_MESSAGE if policy in ("register", "register_device") else MESSAGE
+        out = {"error": "rate_limited", "message": msg, "retry_after": retry_after}
+        if msg is REGISTER_MESSAGE:
+            out["policy"] = policy  # the app shows this message as it is (a refused registration)
+        return out
     return {"error": "try_later", "message": UNAVAILABLE_MESSAGE, "retry_after": retry_after}
 
 
@@ -654,7 +661,7 @@ def rate_limited_response(exc: RateLimited):
     h = {"Retry-After": str(exc.retry_after)}
     if exc.verdict is not None:
         h.update({k.decode(): v.decode() for k, v in exc.verdict.headers() if k != b"retry-after"})
-    return JSONResponse(body_for(exc.status, exc.retry_after), status_code=exc.status, headers=h)
+    return JSONResponse(body_for(exc.status, exc.retry_after, exc.verdict.policy if exc.verdict else ""), status_code=exc.status, headers=h)
 
 
 class RateLimitMiddleware:

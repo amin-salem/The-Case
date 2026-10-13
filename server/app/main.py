@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import content, db, rewards, riddles
+from . import cheatreport, content, db, rewards, riddles
 from .config import get_settings
 from .version import VERSION
 from .routers import admin, admin_ui, auth, cases, comments, inbox, leaderboard, meta, pages, profile, purchases
@@ -35,6 +35,7 @@ async def lifespan(app: FastAPI):
             try:
                 async with db.SessionLocal() as ses:
                     await rewards.settle_last_week(ses)
+                    await cheatreport.store_weekly(ses)
             except Exception:
                 pass
             await asyncio.sleep(3600)

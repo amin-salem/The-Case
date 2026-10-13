@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import content
+from . import anticheat, content
 from .models import CaseProgress, InboxItem, Player
 
 PRIZES = {1: 300, 2: 200, 3: 150}   # ranks 4..10 get PRIZE_REST
@@ -35,7 +35,7 @@ async def settle_last_week(session: AsyncSession) -> int:
         total = func.sum(CaseProgress.stars).label("total")
         q = (select(Player, total).join(CaseProgress, CaseProgress.player_id == Player.id)
              .where(CaseProgress.solved.is_(True), CaseProgress.day >= prev.isoformat(),
-                    CaseProgress.day < this_week.isoformat(), Player.banned.is_(False))
+                    CaseProgress.day < this_week.isoformat(), CaseProgress.ranked.is_(True), anticheat.visible_player())
              .group_by(Player.id).order_by(total.desc(), Player.created_at.asc()).limit(TOP_N))
         rows = (await session.execute(q)).all()
         for i, (pl, stars) in enumerate(rows, start=1):

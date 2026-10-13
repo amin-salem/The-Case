@@ -93,12 +93,7 @@ async def redeem(body: RedeemIn, player: Player = Depends(current_player), sessi
         raise HTTPException(404, "bad_code")
     if inviter.device_id == player.device_id or inviter.referred_by == player.id:
         raise HTTPException(409, "same_device")
-    player.referred_by = inviter.id
-    if inviter.invites_rewarded < eco.MAX_REWARDED_INVITES:
-        inviter.invites_rewarded += 1
-        session.add(InboxItem(player_id=inviter.id, title="یه کارآگاه تازه با کد تو اومد!",
-                              message=f"{player.nickname} با کد دعوت تو وارد شد.",
-                              grants=[{"type": "coins", "amount": eco.INVITE_INVITER}], source="referral"))
+    player.referred_by = inviter.id  # the inviter is paid later, see anticheat.maybe_pay_referral
     grants = [{"type": "coins", "amount": eco.INVITE_NEW_PLAYER}]
     apply_grants(session, player, grants, "invited")
     await session.commit()

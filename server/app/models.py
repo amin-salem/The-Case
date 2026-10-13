@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any
 
-from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Index, Integer, String, UniqueConstraint
+from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Index, Integer, String, UniqueConstraint, false, true
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .db import Base
@@ -31,6 +31,8 @@ class Player(Base):
     invite_code: Mapped[str] = mapped_column(String(12), unique=True, index=True)
     referred_by: Mapped[str | None] = mapped_column(String(32), nullable=True)
     invites_rewarded: Mapped[int] = mapped_column(Integer, default=0)
+    # set once the inviter has been paid (or refused) for this player's invitation (see anticheat.maybe_pay_referral)
+    referral_paid: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
 
     # permanent account (optional)
     email: Mapped[str | None] = mapped_column(String(120), unique=True, nullable=True)
@@ -105,6 +107,10 @@ class CaseProgress(Base):
     # solving time = only the time the case screen was really open (the app reports it in ticks)
     active_seconds: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     last_tick_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    # anti-cheat: False = solved without enough investigation (1 star, no leaderboard place)
+    ranked: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
+    # a lost case shows its answer only from this time (UTC); None = at once
+    reveal_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 
 class Purchase(Base):
@@ -319,3 +325,19 @@ class CaseComment(Base):
     status: Mapped[str] = mapped_column(String(10), default="pending")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     reviewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+
+class ReferralPayout(Base):
+    """One paid invitation. The unique constraints make the limits atomic: an invited player is paid for once,
+    one device pays out once, and an inviter has at most INVITE_PAID_PER_WEEK slots per week."""
+
+    __tablename__ = "referral_payouts"
+    __table_args__ = (UniqueConstraint("inviter_id", "week", "slot", name="uq_referral_slot"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    inviter_id: Mapped[str] = mapped_column(String(32), index=True)
+    invitee_id: Mapped[str] = mapped_column(String(32), unique=True)
+    device_id: Mapped[str] = mapped_column(String(128), unique=True)
+    week: Mapped[str] = mapped_column(String(10))
+    slot: Mapped[int] = mapped_column(Integer)
+    paid_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

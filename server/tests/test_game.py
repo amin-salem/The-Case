@@ -84,7 +84,9 @@ async def test_wrong_proof_and_fail(client):
     # after that, wrong proofs use up tries
     for _ in range(3):
         r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": c.culprit, "evidence": bad_ev})).json()
-    assert r["result"] == "failed" and r["culprit"] == c.culprit and r["explanation"]
+    # the answer of tonight's case stays secret until the next case opens (docs/operations.md, anti-cheat)
+    assert r["result"] == "failed" and r["culprit"] is None and r["explanation"] is None and r["proof"] == []
+    assert r["answer_at"] == int(content.next_case_at().timestamp())
 
 
 async def test_wrong_proof_costs_a_star(client):

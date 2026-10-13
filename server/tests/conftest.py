@@ -35,10 +35,29 @@ async def client():
         yield c
 
 
-async def new_player(client, device="device-1234"):
+@pytest.fixture(autouse=True)
+def _no_proof_requirement(monkeypatch):
+    """Most tests solve a case at once: switch the proof-of-investigation rule off here.
+    tests/test_anticheat.py turns it back on for the tests about it."""
+    from app import economy
+    monkeypatch.setattr(economy, "MIN_ACTIVE_SECONDS", 0)
+    monkeypatch.setattr(economy, "MIN_SUSPECTS_SEEN", 0)
+
+
+async def new_player(client, device="device-1234", aged=True):
+    """Registers a player. By default the account is made 100 hours old, so it is not hidden from the leaderboards
+    (new unsecured accounts are hidden for 48 hours); pass aged=False for a really new account."""
     r = await client.post("/v1/auth/register", json={"device_id": device, "app_version": 1})
     assert r.status_code == 200, r.text
     body = r.json()
+    if aged:
+        from datetime import timedelta
+        from sqlalchemy import update
+        from app.models import Player, utcnow
+        async with db.SessionLocal() as s:
+            await s.execute(update(Player).where(Player.id == body["player_id"]).values(
+                created_at=utcnow() - timedelta(hours=100)))
+            await s.commit()
     body["headers"] = {"Authorization": f"Bearer {body['token']}"}
     return body
 

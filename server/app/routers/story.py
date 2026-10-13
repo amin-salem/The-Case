@@ -11,6 +11,7 @@ from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from .. import anticheat as ac
 from .. import content
 from .. import economy as eco
 from .. import storyflow
@@ -41,7 +42,7 @@ def story_extra(c: content.Case, p: CaseProgress | None) -> dict:
     """The partner's lines of a chapter: the intro always, the outro and the season thread once it is finished."""
     d = c.data
     out = {"season": d["season"], "chapter": d["chapter"], "intro": d["partner_intro"]}
-    if p is not None and (p.solved or p.failed):
+    if ac.answer_visible(p):  # a lost chapter's outro and thread give the answer away: they wait like the answer
         out["outro"] = d["partner_outro_win"] if p.solved else d["partner_outro_lose"]
         out["thread"] = d["thread"]
     return out

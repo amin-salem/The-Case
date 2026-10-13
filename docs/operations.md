@@ -89,8 +89,8 @@ One limiter protects the whole API (`server/app/services/ratelimit.py`). The Tue
 | Policy | Applies to | Key | Limits | Store | Broken store |
 |---|---|---|---|---|---|
 | `global_ip` | every request | IP | 100/5 s, 600/60 s | memory | open |
-| `register` | POST /v1/auth/register | IP | 3/60 s, 20/h | shared | closed |
-| `register_device` | same, by `device_id` | device_id | 3/h | shared | closed |
+| `register` | POST /v1/auth/register | IP | 3/60 s, 10/day | shared | closed |
+| `register_device` | same, by `device_id` | device_id | 3/day | shared | closed |
 | `login` | /v1/auth/login, /login/email | IP | 20/60 s, 60/10 min | shared | open |
 | `login_target` | same, by player id / email / code | target | 20/10 min | shared | open |
 | `transfer` | POST /v1/auth/transfer | IP | 5/5 min | shared | open |
@@ -160,3 +160,17 @@ The app pays through Cafe Bazaar (Poolakey) and sends the purchase token to `POS
   `story_not_open`. Log lines `story_choose` / `story_choose_refused` carry no personal data.
 - **Story mode is still paused** (`STORY_SEASON.opens_at` = 2099 in `server/app/content.py`): the endpoints answer `story_not_open`
   until it is set to the real date. Reactivate only after the new app (1.22.0) is installed and tested. Format: `docs/story-mode.md`.
+
+## Anti-cheat (13 Oct 2026)
+
+Threat: every case has one answer, so a throwaway account can lose a case, read the answer and hand it to the main account; many accounts can also farm coins. The rules (numbers in `server/app/economy.py`, logic in `server/app/anticheat.py`):
+
+- **Delayed answer.** A lost case hides culprit, proof and explanation until the case is closed: nightly case → the next case opening (21:00 Tehran), weekend case → its closing, story chapter → 24 h after the failure (`STORY_ANSWER_DELAY_HOURS`), archive case → at once. The time is stored in `case_progress.reveal_at`; the API gives `answer_at` and the app shows a countdown. People who solved the case see the explanation at once.
+- **Proof of investigation.** 3 stars and a leaderboard place need `MIN_ACTIVE_SECONDS` (180) of active time and `MIN_SUSPECTS_SEEN` (2) interrogated suspects. Otherwise: solved, 1 star, normal 1-star coins, `ranked = false` (not in the daily/weekly boards or prizes). Active time is measured by the app's ticks and bounded by real elapsed time on the server. To tune, change the two numbers.
+- **Throwaway accounts.** `START_COINS` is 100. The inviter's 300 coins arrive after the invited player solved cases on 3 different days (`INVITE_MIN_DAYS`), max 5 paid invites a week (`INVITE_PAID_PER_WEEK`) and 1 per device (`referral_payouts` unique rows). Registration: 3 per device and 10 per IP per day (`register` and `register_device` policies, override with `RL_REGISTER` / `RL_REGISTER_DEVICE`; many players share one mobile-network IP, so watch the blocks counter on the admin health screen and raise the IP number if real players are blocked). Accounts under 48 h without email are hidden from the leaderboards and the weekly prizes (`HIDE_NEW_ACCOUNT_HOURS`); they still play and earn.
+- **Shuffle.** Suspects and evidence come in a per-player order (same ids), so "pick the third one" does not work between friends.
+- **Scripts.** `accuse` 1 request / 3 s and 20 / h per player (the shared rate limiter), `register` as above. Store purchases are verified with Myket/Bazaar from the server and the purchase token is unique, so a token can be redeemed once.
+- **Cheat report.** `GET /admin/cheat-report?days=7` with the admin key (curl, or the admin panel's API): devices with 3+ accounts, solves under 60 s of active time, 4+ new accounts giving the same first answer within 10 minutes. A short weekly summary is also written to the admin log (action `cheat_report`; `POST /admin/cheat-report/weekly` writes it now). To ban someone: `POST /admin/players/{id}/ban` or the Players tab (`Player.banned`). The report only reports; you decide.
+
+**Reminder for Amin:** turn on **daily database backups** in the Liara panel (the database page → Backups) if it is not on yet.
+

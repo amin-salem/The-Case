@@ -139,6 +139,7 @@ class ProgressOut(BaseModel):
     failed: bool
     stars: int
     hint_costs: list[int]
+    answer_at: int | None = None  # a lost case: unix time when the answer becomes public (None = public / not lost)
 
 
 class CaseOut(BaseModel):
@@ -186,6 +187,9 @@ class AccuseOut(BaseModel):
     freezes_used: int = 0    # streak insurance spent to keep the streak
     badge: int | None = None  # a streak badge (7, 30, 100) reached right now
     gains: "GainsOut | None" = None
+    answer_at: int | None = None   # lost case: the answer (culprit, proof, explanation) is public from this time
+    unranked: bool = False         # solved without enough investigation: 1 star, no leaderboard place
+    stars_capped: bool = False     # ... and it would have had more stars
     story: dict[str, Any] | None = None  # story chapter finished: {season, chapter, outro, thread}
 
 

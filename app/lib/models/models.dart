@@ -127,7 +127,12 @@ class Progress {
         solved = _b(j['solved']),
         failed = _b(j['failed']),
         stars = _i(j['stars']),
-        hintCosts = [for (final c in (j['hint_costs'] as List? ?? const [30, 50, 80])) _i(c)];
+        hintCosts = [for (final c in (j['hint_costs'] as List? ?? const [30, 50, 80])) _i(c)],
+        answerAt = j['answer_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['answer_at'] as num).toInt() * 1000) : null;
+
+  /// A lost case: when its answer becomes public (anti-cheat: nobody reads the answer early). Null = public.
+  final DateTime? answerAt;
+  bool get answerPending => failed && answerAt != null && answerAt!.isAfter(DateTime.now());
 
   final List<String> hints;
   final int attempts, attemptsLeft, stars;
@@ -193,6 +198,9 @@ class AccuseResult {
         hintsUsed = _i(j['hints_used']),
         freezesUsed = _i(j['freezes_used']),
         badge = j['badge'] is int ? j['badge'] as int : null,
+        answerAt = j['answer_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['answer_at'] as num).toInt() * 1000) : null,
+        unranked = _b(j['unranked']),
+        starsCapped = _b(j['stars_capped']),
         story = j['story'] is Map ? StoryLines((j['story'] as Map).cast<String, dynamic>()) : null,
         gains = Gains((j['gains'] as Map?)?.cast<String, dynamic>());
 
@@ -200,6 +208,8 @@ class AccuseResult {
   final int attemptsLeft, stars, reward, coins, streak;
   final int seconds, hintsUsed, freezesUsed;
   final int? badge; // a streak badge (7, 30, 100) reached right now
+  final DateTime? answerAt; // lost: the answer (culprit, proof, explanation) is public from this time
+  final bool unranked, starsCapped; // solved without enough investigation: 1 star, no leaderboard place
   final String? explanation, culprit;
   final List<String> proof;
   final int? rank;

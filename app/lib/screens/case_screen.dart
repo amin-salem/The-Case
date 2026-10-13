@@ -491,6 +491,16 @@ class _CaseScreenState extends State<CaseScreen> {
           onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => CommentsScreen(caseId: c.id, title: c.title))),
         ),
+      ] else if (p.failed && c.explanation == null) ...[
+        // lost, and the answer is still secret (anti-cheat): wait for it, it shows here by itself
+        const SizedBox(height: 14),
+        Paper(
+          child: Center(
+            child: p.answerAt != null
+                ? AnswerCountdown(at: p.answerAt!, onDone: _load)
+                : Text('پاسخ به‌زودی منتشر می‌شه', style: tBody(15, color: K.ink, w: FontWeight.w900)),
+          ),
+        ),
       ] else ...[
         const SizedBox(height: 14),
         Text('چطور حل کنم؟', style: tDisplay(16)),

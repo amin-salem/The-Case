@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from .. import anticheat as ac
 from .. import content
 from ..db import get_session
 from ..models import CaseProgress, Player
@@ -20,7 +21,7 @@ async def leaderboard(period: str = Query("daily", pattern="^(daily|weekly|all)$
                       limit: int = Query(50, ge=1, le=100),
                       player: Player = Depends(current_player),
                       session: AsyncSession = Depends(get_session)):
-    visible = Player.banned.is_(False)
+    visible = ac.visible_player()
     if period == "daily":
         c = content.todays_case()
         if c is None:
@@ -28,7 +29,7 @@ async def leaderboard(period: str = Query("daily", pattern="^(daily|weekly|all)$
         q = (select(Player, CaseProgress.stars, CaseProgress.seconds)
              .join(CaseProgress, CaseProgress.player_id == Player.id)
              .where(CaseProgress.case_id == c.id, CaseProgress.solved.is_(True),
-                    CaseProgress.was_daily.is_(True), visible)
+                    CaseProgress.was_daily.is_(True), CaseProgress.ranked.is_(True), visible)
              .order_by(CaseProgress.stars.desc(), CaseProgress.seconds.asc()))
         rows = (await session.execute(q)).all()
         out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, value=secs, stars=st,
@@ -38,7 +39,7 @@ async def leaderboard(period: str = Query("daily", pattern="^(daily|weekly|all)$
         start = content.week_start(date.fromisoformat(content.today_str())).isoformat()
         total = func.sum(CaseProgress.stars).label("total")
         q = (select(Player, total).join(CaseProgress, CaseProgress.player_id == Player.id)
-             .where(CaseProgress.solved.is_(True), CaseProgress.day >= start, visible)
+             .where(CaseProgress.solved.is_(True), CaseProgress.day >= start, CaseProgress.ranked.is_(True), visible)
              .group_by(Player.id).order_by(total.desc()))
         rows = (await session.execute(q)).all()
         out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, value=int(t), stars=int(t),

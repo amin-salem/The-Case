@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -414,4 +416,70 @@ class BadgeBanner extends StatelessWidget {
           ]),
         ),
       );
+}
+
+
+// ------------------------------------------------------------------ delayed answer (anti-cheat)
+
+/// «پاسخ فردا ساعت ۲۱:۰۰ منتشر می‌شه» with a countdown. Lost cases keep their answer secret until the case is
+/// closed, so a throwaway account cannot read it for the main account. [onDone] runs when the time comes.
+class AnswerCountdown extends StatefulWidget {
+  const AnswerCountdown({super.key, required this.at, this.onDone, this.dark = true});
+  final DateTime at;
+  final VoidCallback? onDone;
+  final bool dark;
+
+  @override
+  State<AnswerCountdown> createState() => _AnswerCountdownState();
+}
+
+class _AnswerCountdownState extends State<AnswerCountdown> {
+  Timer? _t;
+  bool _fired = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _t = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      if (_left() <= 0 && !_fired) {
+        _fired = true;
+        widget.onDone?.call();
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _t?.cancel();
+    super.dispose();
+  }
+
+  int _left() => widget.at.difference(DateTime.now()).inSeconds;
+
+  String _when() {
+    final a = widget.at.toLocal(), n = DateTime.now();
+    String two(int v) => fa(v).padLeft(2, '۰');
+    final clock = '${two(a.hour)}:${two(a.minute)}';
+    final days = DateTime(a.year, a.month, a.day).difference(DateTime(n.year, n.month, n.day)).inDays;
+    if (days <= 0) return 'امروز ساعت $clock';
+    if (days == 1) return 'فردا ساعت $clock';
+    return '${fa(days)} روز دیگه، ساعت $clock';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final left = _left();
+    final ink = widget.dark ? K.ink : K.text;
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      Row(mainAxisSize: MainAxisSize.min, children: [
+        Icon(Icons.hourglass_top_rounded, color: K.brass, size: 20),
+        const SizedBox(width: 6),
+        Flexible(child: Text('پاسخ ${_when()} منتشر می‌شه', textAlign: TextAlign.center, style: tBody(15, color: ink, w: FontWeight.w900))),
+      ]),
+      const SizedBox(height: 4),
+      Text(left > 0 ? '${faDuration(left)} مونده' : 'الان منتشر می‌شه…', style: tBody(13, color: widget.dark ? K.inkSoft : K.textSoft, w: FontWeight.w700)),
+    ]);
+  }
 }

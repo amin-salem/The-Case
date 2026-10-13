@@ -162,7 +162,7 @@ async def test_db_store_is_atomic_under_concurrency(clock):
 
 async def test_cleanup_deletes_old_rows(clock):
     st = DBStore()
-    await st.hit("old:key", 60, BASE - 3 * 3600)
+    await st.hit("old:key", 60, BASE - 3 * 86400)
     await st.hit("new:key", 60, BASE)
     assert await st.cleanup(BASE) >= 1
     async with db.SessionLocal() as s:

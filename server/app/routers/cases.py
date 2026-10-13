@@ -1,9 +1,12 @@
 """Cases: today's case (free), the archive (bought with coins), hints and accusations."""
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import and_, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from .. import anticheat as ac
 from .. import content, progress
 from .. import economy as eco
 from ..content import Case
@@ -17,6 +20,7 @@ from .common import vip_active
 from .story import finish as story_finish, story_extra
 
 router = APIRouter(prefix="/v1/cases", tags=["cases"])
+log = logging.getLogger("cases")
 
 
 def _progress_out(c: Case, p: CaseProgress | None) -> ProgressOut:
@@ -25,7 +29,7 @@ def _progress_out(c: Case, p: CaseProgress | None) -> ProgressOut:
     return ProgressOut(hints=c.hints[:hints], attempts=attempts,
                        attempts_left=max(0, eco.MAX_ATTEMPTS - attempts),
                        solved=bool(p and p.solved), failed=bool(p and p.failed), stars=p.stars if p else 0,
-                       hint_costs=eco.HINT_COSTS)
+                       hint_costs=eco.HINT_COSTS, answer_at=ac.answer_at_ts(p))
 
 
 async def _progress(session: AsyncSession, player_id: str, case_id: str) -> CaseProgress | None:
@@ -132,8 +136,13 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
         for k in (*content.STORY_FIELDS, "partner_hints", "scenes", "ending", "board"):
             data.pop(k, None)
         data["story"] = story_extra(c, p)
-    if p is not None and (p.solved or p.failed):
-        data["solution"] = c.data["solution"]  # finished: show how it was solved
+    if ac.answer_visible(p):
+        data["solution"] = c.data["solution"]  # solved, or lost and the answer is public now
+    # every player sees suspects and evidence in their own order (ids unchanged)
+    seed = f"{player.id}:{c.id}"
+    for k in ("suspects", "evidence"):
+        if isinstance(data.get(k), list):
+            data[k] = ac.shuffled(data[k], f"{seed}:{k}")
     return CaseOut(case=data, progress=_progress_out(c, p), today=_is_today(c))
 
 
@@ -182,8 +191,10 @@ async def buy_hint(case_id: str, player: Player = Depends(current_player),
 
 
 async def _daily_rank(session: AsyncSession, case_id: str, stars: int, seconds: int) -> int:
-    better = await session.scalar(select(func.count()).select_from(CaseProgress).where(
+    better = await session.scalar(select(func.count()).select_from(CaseProgress)
+                                  .join(Player, Player.id == CaseProgress.player_id).where(
         CaseProgress.case_id == case_id, CaseProgress.solved.is_(True), CaseProgress.was_daily.is_(True),
+        CaseProgress.ranked.is_(True), ac.visible_player(),
         or_(CaseProgress.stars > stars, and_(CaseProgress.stars == stars, CaseProgress.seconds < seconds))))
     return int(better or 0) + 1
 
@@ -215,7 +226,13 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         add_active_time(p, body.extra_seconds, now)
         # apps that report their open time are timed by it; older apps by the clock since opening
         p.seconds = max(1, p.active_seconds) if p.active_seconds else max(1, int((now - p.opened_at).total_seconds()))
-        p.stars = eco.stars_for(p.hints, p.attempts, p.proof_misses or 0)
+        natural = eco.stars_for(p.hints, p.attempts, p.proof_misses or 0)
+        # proof of investigation: without enough time and interrogations it is still solved, but 1 star, no place
+        proven = ac.proof_ok(p)
+        p.stars, p.ranked = (natural if proven else 1), proven
+        if not proven:
+            log.info("anticheat unproven_solve case=%s active=%s seen=%d capped=%s", c.id, p.active_seconds,
+                     len(p.seen or []), natural > 1)
         reward = (eco.WEEKLY_REWARD if weekly else eco.SOLVE_REWARD)[p.stars]
         freezes_used, badge, streak_up = 0, None, False
         if today_case:
@@ -256,8 +273,11 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
             fast2=int(p.seconds <= 120 and not weekly), early_daily=int(early), weekly_solved=int(weekly), warrants=warrants)
         await story_finish(session, player.id, c.id, p)
         await session.commit()
-        rank = await _daily_rank(session, c.id, p.stars, p.seconds) if today_case else None
-        return AccuseOut(result="solved", attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,
+        await ac.maybe_pay_referral(player.id)
+        rank = (await _daily_rank(session, c.id, p.stars, p.seconds)
+                if today_case and p.ranked and ac.is_visible(player) else None)
+        return AccuseOut(result="solved", unranked=not p.ranked, stars_capped=natural > p.stars,
+                         attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,
                          reward=reward, coins=player.coins, streak=player.streak, explanation=explanation,
                          culprit=c.culprit, proof=sorted(c.proof), rank=rank, progress=_progress_out(c, p),
                          seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge,
@@ -275,11 +295,14 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     result = near if body.suspect == c.culprit else "wrong_suspect"
     if p.attempts >= eco.MAX_ATTEMPTS:
         p.failed, p.finished_at, p.day = True, utcnow(), today
+        p.reveal_at = ac.reveal_time(c, ac.now_utc())  # the answer stays secret until then
         gains = await progress.record(session, player, xp=eco.XP_CASE_FAILED, case_failed=1)
         await story_finish(session, player.id, c.id, p)
         await session.commit()
+        shown = ac.answer_visible(p)
         return AccuseOut(result="failed", attempts_left=0, coins=player.coins, streak=player.streak,
-                         explanation=explanation, culprit=c.culprit, proof=sorted(c.proof),
+                         explanation=explanation if shown else None, culprit=c.culprit if shown else None,
+                         proof=sorted(c.proof) if shown else [], answer_at=ac.answer_at_ts(p),
                          progress=_progress_out(c, p), hints_used=p.hints, gains=GainsOut(**gains.out()),
                          story=story_extra(c, p) if content.is_story(c.id) else None)
     await session.commit()
@@ -311,7 +334,7 @@ async def stats(case_id: str, player: Player = Depends(current_player), session:
         return round(100 * n / of) if of else 0
 
     return StatsOut(players=finished, solved_pct=pct(solved, finished), first_try_pct=pct(first_try, finished),
-                    culprit=c.culprit,
+                    culprit="" if ac.answer_pending(p) else c.culprit,
                     suspects=[SuspectStat(id=s["id"], pct=pct(int(firsts.get(s["id"], 0)), guessed))
                               for s in c.data["suspects"]])
 

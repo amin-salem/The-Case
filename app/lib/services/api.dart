@@ -32,6 +32,15 @@ class ApiException implements Exception {
   /// Seconds the server asked us to wait (HTTP 429), 0 when unknown.
   int get retryAfter => detail is Map ? ((detail as Map)['retry_after'] as num?)?.toInt() ?? 0 : 0;
   bool get rateLimited => status == 429;
+
+  /// The server's own friendly sentence for a refused registration (too many accounts on this phone / network today).
+  String? get registerLimitMessage {
+    final d = detail;
+    if (d is Map && d['policy'] != null && '${d['policy']}'.startsWith('register') && d['message'] is String) {
+      return d['message'] as String;
+    }
+    return null;
+  }
   int get need => detail is Map ? ((detail as Map)['need'] as int? ?? (detail as Map)['cost'] as int? ?? 0) : 0;
 
   @override
@@ -170,7 +179,7 @@ class Api extends ChangeNotifier {
   /// A short Persian message for the player. Technical details only go to the debug log.
   static String friendly(Object e) {
     debugPrint('Api error: $e');
-    if (e is ApiException && e.rateLimited) return rateLimitedText(e.retryAfter);
+    if (e is ApiException && e.rateLimited) return e.registerLimitMessage ?? rateLimitedText(e.retryAfter);
     return switch (failKind(e)) {
       FailKind.offline => offlineText,
       FailKind.server => serverDownText,
@@ -201,13 +210,19 @@ class Api extends ChangeNotifier {
 
   /// Connects (register / login) and loads profile + config. Never throws:
   /// without internet the app goes on with what is saved on the phone.
+  /// Set when the server refused to make a new account (too many accounts on this phone or network today):
+  /// the offline banner shows this friendly sentence instead of the «no internet» text.
+  String? registerBlocked;
+
   Future<void> connect() async {
     try {
       await _loadConfig();
       await _connectRest();
       lastError = '';
+      registerBlocked = null;
     } catch (e) {
       lastError = friendly(e);
+      registerBlocked = e is ApiException ? e.registerLimitMessage : null;
     }
     ready = true;
     notifyListeners();
@@ -222,8 +237,10 @@ class Api extends ChangeNotifier {
       if (!_configFromServer) await _loadConfig();
       await _connectRest();
       lastError = '';
+      registerBlocked = null;
     } catch (e) {
       lastError = friendly(e);
+      registerBlocked = e is ApiException ? e.registerLimitMessage : null;
     } finally {
       _reconnecting = false;
     }

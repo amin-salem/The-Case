@@ -64,6 +64,10 @@ class _ResultScreenState extends State<ResultScreen> {
               Center(child: StampIn(delay: const Duration(milliseconds: 700), child: Stars(count: result.stars, size: 44))),
               const SizedBox(height: 12),
               FadeSlideIn(delay: const Duration(milliseconds: 1000), child: _rewards()),
+              if (result.unranked) ...[
+                const SizedBox(height: 10),
+                _proofNote(),
+              ],
               if (result.badge != null) ...[
                 const SizedBox(height: 10),
                 BadgeBanner(badge: result.badge!),
@@ -88,6 +92,12 @@ class _ResultScreenState extends State<ResultScreen> {
               ),
             ],
             const SizedBox(height: 18),
+            if (!solved && result.culprit == null && result.answerAt != null)
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 1200),
+                child: Paper(child: Center(child: AnswerCountdown(at: result.answerAt!))),
+              )
+            else
             FadeSlideIn(
               delay: const Duration(milliseconds: 1200),
               child: Paper(
@@ -135,8 +145,10 @@ class _ResultScreenState extends State<ResultScreen> {
                 ]),
               ),
             ),
-            const SizedBox(height: 14),
-            GuessStatsCard(caseData: caseData),
+            if (solved || result.culprit != null) ...[
+              const SizedBox(height: 14),
+              GuessStatsCard(caseData: caseData),
+            ],
             const SizedBox(height: 18),
             FadeSlideIn(
               delay: const Duration(milliseconds: 1500),
@@ -164,6 +176,22 @@ class _ResultScreenState extends State<ResultScreen> {
       ]),
     );
   }
+
+  /// Solved, but without enough investigation: 1 star and no leaderboard place (anti-cheat).
+  Widget _proofNote() => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: K.brass.withValues(alpha: 0.14),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: K.brass.withValues(alpha: 0.5)),
+        ),
+        child: Column(children: [
+          Text('برای ۳ ستاره، پرونده رو کامل بررسی کن', textAlign: TextAlign.center, style: tBody(14, color: K.brass, w: FontWeight.w900)),
+          const SizedBox(height: 2),
+          Text('از چند مظنون سؤال بپرس و کمی وقت بذار؛ بعدش ستاره و جایگاه جدول مال توئه.',
+              textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
+        ]),
+      );
 
   Widget _warrantNote(int n) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

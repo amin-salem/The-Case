@@ -1,5 +1,17 @@
 # Changelog
 
+## server 1.21.1, app 1.22.1 (build 46): anti-cheat
+
+Every case has one answer, so the threats are a throwaway account that loses a case and reads the answer for the main account, and farming coins with many accounts. Rules (details in `docs/operations.md`, section Anti-cheat):
+
+- **Delayed answer.** A lost case no longer returns the culprit, proof or explanation until the case closes: nightly case, the next case opening; weekend case, its closing; story chapter, 24 h after the failure; archive cases, at once. The result screen shows «پاسخ ‹وقت› منتشر می‌شه» with a countdown and the case page shows the solution by itself once it is public. Solvers still see the explanation. `/stats`, the case detail and the story outro/thread are closed the same way (new `case_progress.reveal_at`, `answer_at` in the API).
+- **Proof of investigation.** 3 stars and a leaderboard place (daily, weekly) need `MIN_ACTIVE_SECONDS` = 180 s of active time and 2 interrogated suspects; otherwise the case is still solved but with 1 star, the normal 1-star reward, no leaderboard entry. The result screen says «برای ۳ ستاره، پرونده رو کامل بررسی کن». Old apps that send no active time can only get 1 star. (`case_progress.ranked`)
+- **Throwaway accounts earn little.** `START_COINS` 150 → **100**. The inviter's reward is paid only after the invited player solved cases on **3 different days**, at most **5 paid invites a week** per inviter and **1 per device** (table `referral_payouts`, unique rows, `players.referral_paid`); the invited player still gets his 150 at once. New registrations: **3 per device and 10 per IP per day** (HTTP 429 with a friendly message the app shows). Accounts younger than **48 h** without email are hidden from all leaderboards and weekly prizes (they still play).
+- **Per-player shuffle** of suspects and evidence (deterministic from player id + case id, ids unchanged).
+- **Scripts.** `accuse` was already 1 request / 3 s and 20 / h per player; registration limits above; Myket/Bazaar tokens were already verified with the store and unique (`purchases.purchase_token`), nothing to change.
+- **Cheat report.** `GET /admin/cheat-report?days=7` (admin key): devices with 3+ accounts, solves under 60 s of active time, 4+ new accounts with the same first answer within 10 minutes. A short weekly summary is written to the admin log (`cheat_report`). Ban with `POST /admin/players/{id}/ban`.
+- Migration 0016 (columns `players.referral_paid`, `case_progress.ranked`, `case_progress.reveal_at`, table `referral_payouts`), listed in CI. Rate-limit counter rows are now kept 49 h (daily windows).
+
 ## server 1.21.0, app 1.22.0 (build 45): story chapters with choices
 
 - **Story mode becomes interactive** (Bandersnatch style): a chapter is a few short scenes, each with 2-3 options; a choice can lock or open paths and relationships, an option can be locked until a clue from earlier is held, and nothing blocks finishing the chapter. After the last scene the normal interrogation and accusation continue unchanged. New **season case board** («تابلوی پرونده»): people with a relationship state, clues held, locked or skipped clues in gray.

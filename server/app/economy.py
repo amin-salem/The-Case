@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-START_COINS = 150
+START_COINS = 100                # was 150: a throwaway account should not start rich
 HINT_COSTS = [30, 50, 80]        # hint 1, 2, 3 of a case
 UNLOCK_COST = 120                # open an old case from the archive
 MAX_ATTEMPTS = 3                 # wrong accusations allowed before the case is lost
@@ -22,7 +22,15 @@ AD_PER_DAY = 5
 SECURE_REWARD = 200              # first time an email is added
 INVITE_NEW_PLAYER = 150
 INVITE_INVITER = 300
-MAX_REWARDED_INVITES = 20
+MAX_REWARDED_INVITES = 20        # lifetime cap of paid invites per inviter
+INVITE_MIN_DAYS = 3              # the inviter is paid after the invited player solved cases on this many different days
+INVITE_PAID_PER_WEEK = 5         # paid invites per inviter per week (Saturday to Friday); also 1 paid invite per device
+
+# anti-cheat (docs/operations.md): proof of investigation and delayed answers
+MIN_ACTIVE_SECONDS = 180         # 3 stars and a leaderboard place need this much active time on the case ...
+MIN_SUSPECTS_SEEN = 2            # ... and at least this many suspects interrogated
+STORY_ANSWER_DELAY_HOURS = 24    # a failed story chapter shows its answer this long after the failure
+HIDE_NEW_ACCOUNT_HOURS = 48      # accounts younger than this and without email are hidden from the leaderboards
 
 
 def login_reward(day: int, pick=None) -> int:

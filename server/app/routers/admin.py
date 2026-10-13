@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import case, delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import content
+from .. import cheatreport, content
 from .. import economy as eco
 from ..db import get_session
 from ..models import AdminLog, Broadcast, CaseProgress, CoinLog, ConfigValue, InboxItem, Player, Purchase, utcnow
@@ -102,6 +102,19 @@ async def ban(player_id: str, body: BanIn, session: AsyncSession = Depends(get_s
     session.add(AdminLog(action="ban" if body.banned else "unban", target=p.id, detail={"nickname": p.nickname}))
     await session.commit()
     return {"id": p.id, "banned": p.banned}
+
+
+@router.get("/cheat-report")
+async def cheat_report(days: int = Query(7, ge=1, le=60), session: AsyncSession = Depends(get_session)):
+    """Devices with many accounts, solves under 60 s of active time, new accounts giving the same answer within
+    minutes. Ban a player with POST /admin/players/{id}/ban."""
+    return await cheatreport.build(session, days)
+
+
+@router.post("/cheat-report/weekly")
+async def cheat_report_weekly(session: AsyncSession = Depends(get_session)):
+    """Writes this week's summary into the admin log now (it also happens by itself once a week)."""
+    return {"stored": await cheatreport.store_weekly(session)}
 
 
 @router.get("/config")
