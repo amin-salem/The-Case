@@ -213,6 +213,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         raise HTTPException(409, "wait_last_chapter")
 
     explanation = c.data["solution"]["explanation"]
+    add_active_time(p, body.extra_seconds, utcnow())  # once per accusation, before the judging below
     today_case = _is_today(c)
     today = content.today_str()
     if p.first_accused is None and body.suspect in {s["id"] for s in c.data["suspects"]}:
@@ -223,7 +224,6 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     if body.suspect == c.culprit and body.evidence in c.proof and right_motive:
         now = utcnow()
         p.solved, p.finished_at, p.day, p.was_daily = True, now, today, today_case
-        add_active_time(p, body.extra_seconds, now)
         # apps that report their open time are timed by it; older apps by the clock since opening
         p.seconds = max(1, p.active_seconds) if p.active_seconds else max(1, int((now - p.opened_at).total_seconds()))
         natural = eco.stars_for(p.hints, p.attempts, p.proof_misses or 0)
@@ -286,7 +286,13 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     # right person but not the evidence that proves it (or, in the weekly case, the wrong motive):
     # the first few times it costs a star, not a try
     near = "wrong_motive" if body.evidence in c.proof else "wrong_proof"
-    if body.suspect == c.culprit and (p.proof_misses or 0) < eco.FREE_PROOF_MISSES:
+    if body.suspect == c.culprit and not ac.proof_ok(p):
+        # anti-cheat: "right person, wrong proof" tells a probing throwaway account who the culprit is. Only a player
+        # who has really investigated (the same bar as 3 stars) gets this hint; a hasty accusation gets the plain
+        # «wrong» answer and loses a try. Fair players investigate first, so for them nothing changes.
+        near = "wrong_suspect"
+        log.info("anticheat plain_wrong case=%s active=%s seen=%d", c.id, p.active_seconds, len(p.seen or []))
+    elif body.suspect == c.culprit and (p.proof_misses or 0) < eco.FREE_PROOF_MISSES:
         p.proof_misses = (p.proof_misses or 0) + 1
         await session.commit()
         return AccuseOut(result=near, attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,

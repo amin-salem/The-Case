@@ -407,3 +407,21 @@ async def test_cheat_report_lists_devices_fast_solves_and_bursts(client, clock):
 
 def test_start_coins_are_modest():
     assert eco.START_COINS <= 100
+
+
+async def test_hasty_accusation_does_not_reveal_the_culprit(client, clock, strict_rules):
+    c = content.by_id("c049")
+    clock(night("c049"))
+    bad_ev = next(e["id"] for e in c.data["evidence"] if e["id"] not in c.proof)
+    ids = [s["id"] for s in c.data["suspects"]][:2]
+    hasty = await new_player(client, "nudge-hasty")
+    careful = await new_player(client, "nudge-careful")
+    for pl in (hasty, careful):
+        await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
+    await set_progress(careful["player_id"], c.id, active_seconds=eco.MIN_ACTIVE_SECONDS, seen=ids)
+    # right person, wrong proof: the hasty one gets the same answer as for an innocent person and loses a try
+    r = await accuse(client, hasty["headers"], c, c.culprit, bad_ev)
+    assert r["result"] == "wrong_suspect" and r["attempts_left"] == eco.MAX_ATTEMPTS - 1
+    # a player who investigated gets the usual nudge, free of tries
+    r = await accuse(client, careful["headers"], c, c.culprit, bad_ev)
+    assert r["result"] == "wrong_proof" and r["attempts_left"] == eco.MAX_ATTEMPTS

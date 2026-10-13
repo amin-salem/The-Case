@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.21.2: no culprit hint for hasty accusations
+
+- «Right person, wrong proof» told a probing throwaway account who the culprit is. Now only a player who investigated (180 s active, 2 suspects interrogated: the same bar as 3 stars) gets that nudge and the free proof misses; a hasty accusation of the culprit with wrong proof gets the plain «wrong_suspect» answer and costs a try. Players who read the case first see no difference. Server only, no app build.
+
 ## server 1.21.1, app 1.22.1 (build 46): anti-cheat
 
 Every case has one answer, so the threats are a throwaway account that loses a case and reads the answer for the main account, and farming coins with many accounts. Rules (details in `docs/operations.md`, section Anti-cheat):
