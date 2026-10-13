@@ -89,16 +89,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     SettingsRow(
                       icon: Icons.verified_user_rounded,
                       iconColor: K.ok,
-                      title: p?.email ?? p?.phone ?? 'حساب امن',
+                      title: p?.phone ?? p?.email ?? 'حساب امن',
                       ltrTitle: true,
                       end: const _Tag('امن', color: K.ok),
                     ),
-                    if (p?.email != null)
-                      SettingsRow(
-                        icon: Icons.password_rounded,
-                        title: 'عوض کردن رمز',
-                        onTap: () => openAccountSheet(context, showSecureSheet),
-                      ),
                   ],
                   SettingsRow(
                     icon: Icons.phonelink_setup_rounded,

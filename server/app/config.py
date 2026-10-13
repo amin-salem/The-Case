@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     sms_url: str = "https://gateway.ghasedak.me/rest/api/v1/WebService/SendOtpWithParams"
     phone_pepper: str = ""  # secret for hashing phone numbers; empty = derived from JWT_SECRET
 
+    email_signup_enabled: bool = False  # EMAIL_SIGNUP_ENABLED=true re-opens securing a NEW account with email (never verified)
     require_phone_for_email: bool = True  # REQUIRE_PHONE_FOR_EMAIL=false: email accounts are not asked to link a phone
 
     comments_enabled: bool = True  # COMMENTS_ENABLED=false hides and refuses case comments (kill switch)

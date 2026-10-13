@@ -1,5 +1,10 @@
 # Changelog
 
+## server 1.24.2, app 1.24.2 (build 50): email sign-up removed
+
+- The app no longer offers email + password (it was never verified). Securing an account is phone-only. Existing email accounts keep working: the sign-in sheet has a small «ایمیل قدیمی» tab and the phone gate asks them to link a number. The change-password row is gone.
+- Server: `POST /v1/auth/email` answers 403 `email_closed` for an account without an email unless `EMAIL_SIGNUP_ENABLED=true` (default false), so old app builds can't create new email accounts. Google login is postponed until we know it works for players in Iran.
+
 ## server 1.24.1, app 1.24.1 (build 49): email accounts must link a phone
 
 - Profile has `needs_phone` (email-secured, no phone yet). The app then shows a full-screen, non-closable «حسابت رو به شماره‌ات وصل کن» until the phone is verified; everything stays on the account and no second reward is paid. Guests are never forced; new installs keep the soft prompts. Kill switch: `REQUIRE_PHONE_FOR_EMAIL=false`. Email login still works as a backup. Old app versions do not show the screen.

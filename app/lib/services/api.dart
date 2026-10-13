@@ -827,18 +827,6 @@ class Api extends ChangeNotifier {
 
   // ---------------------------------------------------------------- account
 
-  /// Returns (reward coins, error text).
-  Future<(int, String?)> secureWithEmail(String email, String password) async {
-    try {
-      final j = (await _call('POST', '/v1/auth/email', body: {'email': email, 'password': password}) as Map)
-          .cast<String, dynamic>();
-      _setProfile(Map<String, dynamic>.from(j['profile'] as Map));
-      return (j['reward'] as int? ?? 0, null);
-    } catch (e) {
-      return (0, friendly(e));
-    }
-  }
-
   /// Phone-secured accounts (SMS code). Each returns an error text, or null when it worked.
   Future<String?> phoneSend(String phone) async {
     try {
@@ -1059,6 +1047,7 @@ class Api extends ChangeNotifier {
         'code_expired' => 'کد منقضی شده؛ یه کد تازه بگیر',
         'sms_unavailable' => 'الان نمی‌تونیم پیامک بفرستیم؛ کمی بعد دوباره امتحان کن',
         'sms_failed' => 'پیامک نرسید؛ کمی بعد دوباره امتحان کن',
+        'email_closed' => 'امن کردن با ایمیل بسته شده؛ از شماره‌ی موبایل استفاده کن',
         'bad_email' => 'ایمیل درست نیست',
         'bad_password' => 'رمز باید حداقل ۶ حرف باشه',
         'email_taken' => 'این ایمیل قبلاً برای یه حساب دیگه ثبت شده',

@@ -12,6 +12,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import accounts as acc
+from ..config import get_settings
 from .. import economy as eco
 from ..db import get_session
 from ..models import Player, TransferCode, utcnow
@@ -73,6 +74,8 @@ async def login(body: LoginIn, session: AsyncSession = Depends(get_session)):
 async def set_email(body: EmailIn, player: Player = Depends(current_player),
                     session: AsyncSession = Depends(get_session)):
     """Add email + password to this account (or change the password)."""
+    if not player.email and not get_settings().email_signup_enabled:
+        raise HTTPException(403, "email_closed")  # new accounts secure with a phone number
     email = acc.normalize_email(body.email)
     if email is None:
         raise HTTPException(422, "bad_email")

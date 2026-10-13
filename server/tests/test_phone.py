@@ -250,3 +250,11 @@ async def test_email_account_needs_phone_until_linked(client, monkeypatch):
     await client.post("/v1/auth/email", headers=q["headers"], json={"email": "gate13@example.com", "password": "secret12"})
     monkeypatch.setattr(get_settings(), "require_phone_for_email", False)
     assert (await client.get("/v1/me", headers=q["headers"])).json()["needs_phone"] is False  # switch off
+
+
+async def test_new_email_accounts_are_closed_by_default(client, monkeypatch):
+    p = await new_player(client, "dev-phone-14")
+    monkeypatch.setattr(get_settings(), "email_signup_enabled", False)
+    r = await client.post("/v1/auth/email", headers=p["headers"], json={"email": "closed14@example.com", "password": "secret12"})
+    assert r.status_code == 403 and r.json()["detail"] == "email_closed"
+    assert (await client.get("/v1/me", headers=p["headers"])).json()["secured"] is False

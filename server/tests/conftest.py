@@ -6,6 +6,7 @@ os.environ.update({
     "ENV": "dev",
     "DATABASE_URL": f"sqlite+aiosqlite:///{_tmp}/test.db",
     "BAZAAR_MODE": "fake",
+    "EMAIL_SIGNUP_ENABLED": "true",  # old tests secure accounts with email; test_phone.py checks the closed switch
     "RATE_LIMIT": "false",
     "ADS_ENABLED": "true",
     "ADMIN_API_KEY": "test-admin-key",

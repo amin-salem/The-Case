@@ -102,25 +102,18 @@ mixin _SheetJob<T extends StatefulWidget> on State<T> {
         );
 }
 
-// ------------------------------------------------------------------ secure / change password
+// ------------------------------------------------------------------ secure with a phone number
 
-/// Not secured yet: the phone-number sheet (email is a link inside it). Secured with email: change the password.
+/// Not secured yet: the phone-number sheet. (Email + password is gone: it was never verified.)
 Future<String?> showSecureSheet(BuildContext context) async {
-  final secured = Api.i.profile?.secured ?? false;
-  if (!secured) {
-    final r = await showNoirSheet<String>(
-      context,
-      title: 'امن کردن حساب با شماره',
-      sub: 'با شماره‌ی موبایلت روی هر گوشی وارد می‌شی و چیزی گم نمی‌شه. ${fa(Api.i.secureReward)} سکه هدیه!',
-      child: const _PhoneForm(login: false),
-    );
-    if (r == _useEmail && context.mounted) return _showEmailSecureSheet(context);
-    return r;
-  }
-  return _showEmailSecureSheet(context);
+  if (Api.i.profile?.secured ?? false) return null;
+  return showNoirSheet<String>(
+    context,
+    title: 'امن کردن حساب با شماره',
+    sub: 'با شماره‌ی موبایلت روی هر گوشی وارد می‌شی و چیزی گم نمی‌شه. ${fa(Api.i.secureReward)} سکه هدیه!',
+    child: const _PhoneForm(login: false),
+  );
 }
-
-const _useEmail = '__email__';
 
 Future<String?> showPhoneLoginSheet(BuildContext context) => showNoirSheet<String>(
       context,
@@ -240,10 +233,6 @@ class _PhoneFormState extends State<_PhoneForm> with _SheetJob {
           const SizedBox(height: 6),
           Text('شماره‌ات فقط برای ورود و بازیابی حساب استفاده می‌شه و روی سرور خودِ شماره ذخیره نمی‌شه، فقط یه اثر رمزشده از اون.',
               style: tBody(12, color: K.textSoft)),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(_useEmail),
-            child: Text('ترجیح می‌دم با ایمیل و رمز امن کنم', style: tBody(13, color: K.brass, w: FontWeight.w700)),
-          ),
         ],
       ]);
 }
@@ -298,67 +287,6 @@ Future<bool> offerSecure(BuildContext context, {required bool afterSolve}) async
   if (r != 'secure') return true;
   if (context.mounted) await openAccountSheet(context, showSecureSheet);
   return false;
-}
-
-Future<String?> _showEmailSecureSheet(BuildContext context) {
-  final secured = Api.i.profile?.secured ?? false;
-  return showNoirSheet<String>(
-    context,
-    title: secured ? 'عوض کردن رمز' : 'امن کردن حساب',
-    sub: secured
-        ? 'ایمیلت رو کامل بنویس و رمز جدید بذار.'
-        : 'با ایمیل و رمز، روی هر گوشی وارد حسابت می‌شی و چیزی گم نمی‌شه. ${fa(Api.i.secureReward)} سکه هدیه!',
-    child: _SecureForm(secured: secured),
-  );
-}
-
-class _SecureForm extends StatefulWidget {
-  const _SecureForm({required this.secured});
-  final bool secured;
-
-  @override
-  State<_SecureForm> createState() => _SecureFormState();
-}
-
-class _SecureFormState extends State<_SecureForm> with _SheetJob {
-  final _email = TextEditingController();
-  final _pass = TextEditingController();
-
-  @override
-  void dispose() {
-    _email.dispose();
-    _pass.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        TextField(controller: _email, keyboardType: TextInputType.emailAddress, textDirection: TextDirection.ltr,
-            decoration: noirField('ایمیل', Icons.email_rounded)),
-        const SizedBox(height: 8),
-        TextField(controller: _pass, obscureText: true, textDirection: TextDirection.ltr,
-            decoration: noirField(widget.secured ? 'رمز جدید' : 'رمز (حداقل ۶ حرف)', Icons.lock_rounded)),
-        errorLine(),
-        const SizedBox(height: 12),
-        StampButton(
-          label: widget.secured ? 'عوض کردن رمز' : 'ثبت',
-          color: widget.secured ? K.night3 : K.ok,
-          onTap: busy
-              ? null
-              : () => run(() async {
-                    final (reward, err) = await Api.i.secureWithEmail(_email.text.trim(), _pass.text);
-                    if (err != null) {
-                      fail(err);
-                      return;
-                    }
-                    if (widget.secured) {
-                      done('رمز عوض شد');
-                      return;
-                    }
-                    done(reward > 0 ? 'حسابت امن شد! ${fa(reward)} سکه گرفتی' : 'ذخیره شد');
-                  }),
-        ),
-      ]);
 }
 
 // ------------------------------------------------------------------ sign in / move from another phone
@@ -438,7 +366,7 @@ class _LoginTransferFormState extends State<LoginTransferForm> with SingleTicker
             unselectedLabelStyle: tBody(14, w: FontWeight.w700),
             labelColor: K.text,
             unselectedLabelColor: K.textSoft,
-            tabs: const [Tab(text: 'با ایمیل', height: 42), Tab(text: 'با کد انتقال', height: 42)],
+            tabs: const [Tab(text: 'ایمیل قدیمی', height: 42), Tab(text: 'با کد انتقال', height: 42)],
           ),
         ),
         const SizedBox(height: 14),
@@ -447,7 +375,7 @@ class _LoginTransferFormState extends State<LoginTransferForm> with SingleTicker
       ]);
 
   Widget _emailTab() => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Text('قبلاً روی گوشی دیگه‌ای بازی کردی؟ با ایمیل و رمزت وارد شو.', style: tBody(12.5, color: K.textSoft)),
+        Text('فقط برای حساب‌هایی که قبلاً با ایمیل امن شدن. بعد از ورود، شماره‌ات رو وصل کن.', style: tBody(12.5, color: K.textSoft)),
         const SizedBox(height: 8),
         TextField(controller: _loginEmail, keyboardType: TextInputType.emailAddress, textDirection: TextDirection.ltr,
             decoration: noirField('ایمیل', Icons.email_rounded)),
