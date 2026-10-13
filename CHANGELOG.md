@@ -1,6 +1,6 @@
 # Changelog
 
-## server 1.23.1, app 1.23.1 (build 48): email accounts must link a phone
+## server 1.24.1, app 1.24.1 (build 49): email accounts must link a phone
 
 - Profile has `needs_phone` (email-secured, no phone yet). The app then shows a full-screen, non-closable «حسابت رو به شماره‌ات وصل کن» until the phone is verified; everything stays on the account and no second reward is paid. Guests are never forced; new installs keep the soft prompts. Kill switch: `REQUIRE_PHONE_FOR_EMAIL=false`. Email login still works as a backup. Old app versions do not show the screen.
 

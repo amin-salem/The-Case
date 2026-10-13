@@ -131,8 +131,9 @@ Future<String?> showPhoneLoginSheet(BuildContext context) => showNoirSheet<Strin
 
 /// The two-step phone form: number, then the 5-digit SMS code.
 class _PhoneForm extends StatefulWidget {
-  const _PhoneForm({required this.login});
+  const _PhoneForm({required this.login, this.gate = false});
   final bool login;
+  final bool gate; // email account asked to link a phone: no email link, no way out
 
   @override
   State<_PhoneForm> createState() => _PhoneFormState();
@@ -191,7 +192,7 @@ class _PhoneFormState extends State<_PhoneForm> with _SheetJob {
           fail(err);
           return;
         }
-        done(reward > 0 ? 'حسابت امن شد! ${fa(reward)} سکه گرفتی' : 'حسابت امن شد');
+        done(widget.gate ? 'شماره به حسابت وصل شد' : reward > 0 ? 'حسابت امن شد! ${fa(reward)} سکه گرفتی' : 'حسابت امن شد');
       });
 
   @override
@@ -235,7 +236,7 @@ class _PhoneFormState extends State<_PhoneForm> with _SheetJob {
                   style: tBody(13.5, color: K.textSoft, w: FontWeight.w700)),
             ),
           ),
-        if (!widget.login) ...[
+        if (!widget.login && !widget.gate) ...[
           const SizedBox(height: 6),
           Text('شماره‌ات فقط برای ورود و بازیابی حساب استفاده می‌شه و روی سرور خودِ شماره ذخیره نمی‌شه، فقط یه اثر رمزشده از اون.',
               style: tBody(12, color: K.textSoft)),
@@ -585,4 +586,47 @@ class _InviteCodeFormState extends State<_InviteCodeForm> with _SheetJob {
         ]),
         errorLine(),
       ]);
+}
+
+
+/// Full screen, cannot be closed: an email-secured account links a phone number (all progress stays).
+bool _gateOpen = false;
+
+Future<void> showPhoneGate(BuildContext context) async {
+  if (_gateOpen) return;
+  _gateOpen = true;
+  try {
+    final msg = await Navigator.of(context).push<String>(MaterialPageRoute(
+      fullscreenDialog: true,
+      builder: (_) => PopScope(
+        canPop: false,
+        child: Scaffold(
+          backgroundColor: K.night,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 56, 24, 24),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                const Center(child: Icon(Icons.phone_android_rounded, color: K.brass, size: 52)),
+                const SizedBox(height: 16),
+                Text('حسابت رو به شماره‌ات وصل کن', textAlign: TextAlign.center, style: tDisplay(22)),
+                const SizedBox(height: 10),
+                Text(
+                    'از این به بعد ورود با شماره‌ی موبایله. همه‌ی پرونده‌های حل‌شده، دستاوردها و سکه‌هات همین‌جا سر جاشون می‌مونن.',
+                    textAlign: TextAlign.center,
+                    style: tBody(14, color: K.textSoft)),
+                const SizedBox(height: 10),
+                Text('حساب فعلی: ${Api.i.profile?.email ?? ''}',
+                    textAlign: TextAlign.center, textDirection: TextDirection.ltr, style: tBody(13, w: FontWeight.w700)),
+                const SizedBox(height: 18),
+                const _PhoneForm(login: false, gate: true),
+              ]),
+            ),
+          ),
+        ),
+      ),
+    ));
+    if (msg != null && context.mounted) toast(context, msg);
+  } finally {
+    _gateOpen = false;
+  }
 }

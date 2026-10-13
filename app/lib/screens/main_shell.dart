@@ -35,8 +35,10 @@ class _MainShellState extends State<MainShell> {
     super.initState();
     MainShell.tab.value = MainShell.home;
     MainShell.tab.addListener(_onTab);
+    Api.i.addListener(_checkGate);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
+      _checkGate();
       if ((Api.i.profile?.casesSolved ?? 0) > 0) {
         Api.i.setFlag('intro_done');
         return;
@@ -48,7 +50,16 @@ class _MainShellState extends State<MainShell> {
   @override
   void dispose() {
     MainShell.tab.removeListener(_onTab);
+    Api.i.removeListener(_checkGate);
     super.dispose();
+  }
+
+  /// Email-secured accounts must link a phone number (full screen, no way out until it is done).
+  void _checkGate() {
+    if (!mounted || !(Api.i.profile?.needsPhone ?? false) || !Api.i.online) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && (Api.i.profile?.needsPhone ?? false)) showPhoneGate(context);
+    });
   }
 
   void _onTab() {

@@ -230,6 +230,7 @@ class Profile {
         email = j['email'] as String?,
         phone = j['phone'] as String?,
         secured = _b(j['secured']),
+        needsPhone = _b(j['needs_phone']),
         coins = _i(j['coins']),
         noAds = _b(j['no_ads']),
         vipUntil = j['vip_until'] is int ? j['vip_until'] as int : null,
@@ -269,7 +270,7 @@ class Profile {
   final String playerId, nickname, inviteCode;
   final int avatar, coins, streak, bestStreak, casesSolved, starsTotal, loginReward;
   final int loginDay, streakFreezes; // 1..7 in the login calendar; streak insurance held
-  final bool referred, secured, noAds;
+  final bool referred, secured, noAds, needsPhone;
   final String? email, phone;
   final int? vipUntil;
 
