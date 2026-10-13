@@ -100,7 +100,9 @@ async def test_wrong_proof_costs_a_star(client):
     assert r["result"] == "solved" and r["stars"] == 2
 
 
-async def test_archive_unlock_costs_coins(client):
+async def test_archive_unlock_costs_coins(client, monkeypatch):
+    # a new player (100 coins + the first login reward) cannot afford the full price on day 1: that is intended
+    monkeypatch.setattr(economy, "UNLOCK_COST", 100)
     p = await new_player(client, "archivist")
     h = p["headers"]
     lst = (await client.get("/v1/cases", headers=h)).json()

@@ -77,7 +77,7 @@ ALL = [
     Achievement("full_week", "هفت روز سر زدن", "تقویم ورود را تا روز هفتم کامل کن", "account", "full_week", 1, 20, 30),
     Achievement("secured", "حساب امن", "حسابت را با شماره‌ی موبایل امن کن", "account", "secured", 1, 10, 20),
     Achievement("invite_1", "دعوت‌کننده", "یک دوست را به بازی دعوت کن", "account", "invites", 1, 20, 30),
-    Achievement("rank_inspector", "نشان بازرسی", "به درجه‌ی «بازرس» برس", "rank", "rank", 80, 200),
-    Achievement("rank_legend", "افسانه‌ی پرونده", "به درجه‌ی «افسانه» برس", "rank", "rank", 400, 1000),
+    Achievement("rank_inspector", "نشان بازرسی", "به درجه‌ی «بازرس» برس", "rank", "rank", 4, 80),
+    Achievement("rank_legend", "افسانه‌ی پرونده", "به درجه‌ی «افسانه» برس", "rank", "rank", 8, 400),
 ]
 BY_ID = {a.id: a for a in ALL}
