@@ -130,14 +130,14 @@ async def test_bad_phone_and_kill_switch(client, monkeypatch):
     r = await client.post("/v1/auth/phone/send", headers=p["headers"], json={"phone": "12345678901"})
     assert r.status_code == 422 and r.json()["detail"] == "bad_phone"
     monkeypatch.setattr(get_settings(), "sms_enabled", False)
-    r = await client.post("/v1/auth/phone/send", headers=p["headers"], json={"phone": PHONE})
+    r = await client.post("/v1/auth/phone/send", headers=p["headers"], json={"phone": "09127000001"})
     assert r.status_code == 503 and r.json()["detail"] == "sms_unavailable"
 
 
 async def test_fake_provider_refused_in_production(client, monkeypatch):
     p = await new_player(client, "dev-phone-8")
     monkeypatch.setattr(get_settings(), "env", "prod")
-    r = await client.post("/v1/auth/phone/send", headers=p["headers"], json={"phone": PHONE})
+    r = await client.post("/v1/auth/phone/send", headers=p["headers"], json={"phone": "09127000002"})
     assert r.status_code == 503 and sms.FAKE_OUTBOX == []
 
 
