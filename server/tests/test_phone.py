@@ -233,3 +233,20 @@ async def test_admin_sms_test_button(client, monkeypatch):
     monkeypatch.setattr(sms, "send_code", boom)
     r = await client.post("/admin/api/sms-test", headers=ADMIN, json={"phone": "09128000002"})
     assert r.json() == {"ok": False, "error": "sms_failed", "detail": "http 400 template not approved"}
+
+
+async def test_email_account_needs_phone_until_linked(client, monkeypatch):
+    p = await new_player(client, "dev-phone-12")
+    me = (await client.get("/v1/me", headers=p["headers"])).json()
+    assert me["needs_phone"] is False  # a guest is never forced
+    r = await client.post("/v1/auth/email", headers=p["headers"], json={"email": "gate12@example.com", "password": "secret12"})
+    assert r.status_code == 200
+    assert (await client.get("/v1/me", headers=p["headers"])).json()["needs_phone"] is True
+    r = await secure(client, p, "09129000012")  # linking the phone keeps the account and pays no second reward
+    assert r.status_code == 200 and r.json()["reward"] == 0
+    me = (await client.get("/v1/me", headers=p["headers"])).json()
+    assert me["needs_phone"] is False and me["secured"] is True and me["phone"].endswith("0012")
+    q = await new_player(client, "dev-phone-13")
+    await client.post("/v1/auth/email", headers=q["headers"], json={"email": "gate13@example.com", "password": "secret12"})
+    monkeypatch.setattr(get_settings(), "require_phone_for_email", False)
+    assert (await client.get("/v1/me", headers=q["headers"])).json()["needs_phone"] is False  # switch off

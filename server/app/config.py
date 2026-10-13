@@ -42,6 +42,8 @@ class Settings(BaseSettings):
     sms_url: str = "https://gateway.ghasedak.me/rest/api/v1/WebService/SendOtpWithParams"
     phone_pepper: str = ""  # secret for hashing phone numbers; empty = derived from JWT_SECRET
 
+    require_phone_for_email: bool = True  # REQUIRE_PHONE_FOR_EMAIL=false: email accounts are not asked to link a phone
+
     comments_enabled: bool = True  # COMMENTS_ENABLED=false hides and refuses case comments (kill switch)
 
     # Rewarded ads pay coins only when a real ad network is in the app.

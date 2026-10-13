@@ -76,6 +76,7 @@ class ProfileOut(BaseModel):
     referred: bool
     email: str | None  # masked
     secured: bool
+    needs_phone: bool = False  # email-secured account without a phone yet: the app asks to link one
     phone: str | None = None  # masked, only the last 4 digits are known
     coins: int
     no_ads: bool

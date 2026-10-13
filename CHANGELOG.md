@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.23.1, app 1.23.1 (build 48): email accounts must link a phone
+
+- Profile has `needs_phone` (email-secured, no phone yet). The app then shows a full-screen, non-closable «حسابت رو به شماره‌ات وصل کن» until the phone is verified; everything stays on the account and no second reward is paid. Guests are never forced; new installs keep the soft prompts. Kill switch: `REQUIRE_PHONE_FOR_EMAIL=false`. Email login still works as a backup. Old app versions do not show the screen.
+
 ## server 1.24.0, app 1.24.0 (build 48): messages hub, missions card, suspect intros
 
 - App Home: the mail icon is gone. The avatar (top right) now has a small bell and a red unread pill; tapping it opens the new «پیام‌ها و نشان‌ها» screen (profile card, messages/notifications with filters and «خواندن همه», gifts with «دریافت N سکه», and the badge wall: gold for earned, grey dashed for locked, tap a badge for how to earn it). The same bell sits at the top of the weekend, story, leaderboard and profile screens and in the case header; the number is one shared value, so all bells change together.
