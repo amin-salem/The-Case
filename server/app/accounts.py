@@ -38,3 +38,8 @@ def check_password(pw: str, stored: str | None) -> bool:
     _, salt_b64, h_b64 = stored.split("$")
     h = hashlib.scrypt(pw.encode(), salt=base64.b64decode(salt_b64), n=2**14, r=8, p=1, dklen=32)
     return hmac.compare_digest(h, base64.b64decode(h_b64))
+
+
+def mask_phone(player) -> str | None:
+    """Shown to the player: 0912 *** ab34 -> only the last 4 digits are known to the server."""
+    return ("•••• ••• " + player.phone_last4) if getattr(player, "phone_hash", None) and player.phone_last4 else None

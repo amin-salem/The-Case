@@ -47,6 +47,26 @@ class EmailLoginIn(EmailIn):
     device_id: str = Field(min_length=4, max_length=128)
 
 
+class PhoneSendIn(BaseModel):
+    phone: str = Field(min_length=10, max_length=20)
+    device_id: str = Field(default="", max_length=128)  # needed for the new-device login
+
+
+class PhoneVerifyIn(BaseModel):
+    phone: str = Field(min_length=10, max_length=20)
+    code: str = Field(min_length=4, max_length=8)
+
+
+class PhoneLoginIn(PhoneVerifyIn):
+    device_id: str = Field(min_length=4, max_length=128)
+
+
+class PhoneSentOut(BaseModel):
+    ok: bool = True
+    resend_after: int = 60   # seconds before another code can be asked
+    expires_in: int = 300
+
+
 # ---- profile & wallet
 class ProfileOut(BaseModel):
     player_id: str
@@ -56,6 +76,7 @@ class ProfileOut(BaseModel):
     referred: bool
     email: str | None  # masked
     secured: bool
+    phone: str | None = None  # masked, only the last 4 digits are known
     coins: int
     no_ads: bool
     vip_until: int | None

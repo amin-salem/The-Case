@@ -230,6 +230,9 @@ async def _security() -> dict:
     status = "ok"
     if not admin_ok or not jwt_ok:
         status = "bad" if prod else "warn"
+    sms_ok = (not s.sms_enabled) or (s.sms_mode == "ghasedak" and bool(s.sms_api_key and s.sms_template))
+    if prod and not sms_ok:
+        status = "warn" if status == "ok" else status
     if prod and s.bazaar_mode == "fake":  # Myket is off for now (12 Oct 2026): Bazaar is the only store
         status = "bad"
     blocked = None
@@ -242,7 +245,8 @@ async def _security() -> dict:
     return {"status": status, "env": s.env, "admin_key_real": admin_ok, "jwt_secret_real": jwt_ok,
             "rate_limit": bool(s.rate_limit), "rate_limit_blocked_1h": blocked,
             "ads_enabled": bool(s.ads_enabled), "bazaar_mode": s.bazaar_mode,
-            "myket_token_set": bool(s.myket_access_token)}
+            "myket_token_set": bool(s.myket_access_token),
+            "sms_enabled": bool(s.sms_enabled), "sms_mode": s.sms_mode, "sms_ready": sms_ok}
 
 
 # ---------------------------------------------------------------- the endpoint payload

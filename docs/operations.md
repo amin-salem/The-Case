@@ -175,3 +175,14 @@ Threat: every case has one answer, so a throwaway account can lose a case, read 
 
 **Reminder for Amin:** turn on **daily database backups** in the Liara panel (the database page → Backups) if it is not on yet.
 
+
+
+## Phone-secured accounts, SMS (13 Oct 2026)
+
+Provider: Ghasedak (OTP template). Liara environment (never in the repo, chat or logs):
+
+- `SMS_MODE=ghasedak`, `SMS_API_KEY=<key from the Ghasedak panel>`, `SMS_TEMPLATE=<approved OTP template name; one parameter, the code>`.
+- Optional: `SMS_ENABLED=false` (kill switch, every code request answers 503 `sms_unavailable`), `PHONE_PEPPER=<random 32+ chars>` (secret for hashing phone numbers; if empty it is derived from `JWT_SECRET`; do not change it later or old numbers stop matching), `SMS_URL` (the OTP endpoint if Ghasedak changes it), `RL_SMS_DAILY=5000/86400` (daily ceiling for all codes).
+- The health screen shows `sms_mode` and `sms_ready`. `SMS_MODE=fake` never sends and is refused in production.
+- Watch the cost: the admin rate-limit blocks counter shows SMS-pumping attempts (`sms_*` policies).
+- Privacy: the privacy page and the store listing must say the phone number is used only to secure the account (stored as a hash).

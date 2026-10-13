@@ -1,5 +1,12 @@
 # Changelog
 
+## server 1.22.0: phone-secured accounts (SMS code, Ghasedak)
+
+- New endpoints: `POST /v1/auth/phone/send` + `/verify` (a logged-in player adds a phone number; one number per account; the one-time `SECURE_REWARD` is paid like for email), `POST /v1/auth/phone/login/send` + `/login` (new device: code to the number, logs the old device out). `secured` in the profile is now true for email OR phone; new field `phone` (masked, last 4 digits).
+- Only a keyed HMAC of the number is stored (`players.phone_hash`, unique) plus the last 4 digits; codes are 5 digits, hashed, valid 5 minutes, 5 wrong tries burn them. Migration 0017 (+ table `phone_codes`), listed in CI.
+- SMS costs money, so everything is strict and fail-closed: `sms_send` (per IP 3/10 min, 10/day), `sms_phone` (1/min, 3/h, 6/day per number), `sms_device` (6/day), `sms_daily` (3000/day for all, `RL_SMS_DAILY`), `sms_verify` (10/10 min per number). A number that is already taken, or unknown at login, costs no SMS. `SMS_ENABLED=false` is the kill switch. Setup in `docs/operations.md`.
+- Error codes: `bad_phone`, `phone_taken`, `phone_already_set`, `bad_code`, `code_expired`, `sms_unavailable`, `sms_failed`.
+
 ## server 1.21.2: no culprit hint for hasty accusations
 
 - «Right person, wrong proof» told a probing throwaway account who the culprit is. Now only a player who investigated (180 s active, 2 suspects interrogated: the same bar as 3 stars) gets that nudge and the free proof misses; a hasty accusation of the culprit with wrong proof gets the plain «wrong_suspect» answer and costs a try. Players who read the case first see no difference. Server only, no app build.

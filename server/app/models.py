@@ -38,6 +38,10 @@ class Player(Base):
     email: Mapped[str | None] = mapped_column(String(120), unique=True, nullable=True)
     password_hash: Mapped[str | None] = mapped_column(String(200), nullable=True)
     secure_rewarded: Mapped[bool] = mapped_column(Boolean, default=False)
+    # phone-secured account: only a keyed hash of the number is stored, plus the last 4 digits to show the player
+    phone_hash: Mapped[str | None] = mapped_column(String(64), unique=True, nullable=True)
+    phone_last4: Mapped[str | None] = mapped_column(String(4), nullable=True)
+    phone_verified_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     # wallet & perks (the server is the boss of coins: nothing to cheat on the phone)
     coins: Mapped[int] = mapped_column(Integer, default=0)
@@ -341,3 +345,19 @@ class ReferralPayout(Base):
     week: Mapped[str] = mapped_column(String(10))
     slot: Mapped[int] = mapped_column(Integer)
     paid_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class PhoneCode(Base):
+    """One SMS code sent to a phone (stored as a keyed hash). Short-lived; a few wrong tries burn it."""
+
+    __tablename__ = "phone_codes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    phone_hash: Mapped[str] = mapped_column(String(64), index=True)
+    purpose: Mapped[str] = mapped_column(String(8))  # "secure" (add to this account) | "login" (new device)
+    player_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    code_hash: Mapped[str] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    expires_at: Mapped[datetime] = mapped_column(DateTime)
+    attempts: Mapped[int] = mapped_column(Integer, default=0)
+    used: Mapped[bool] = mapped_column(Boolean, default=False)

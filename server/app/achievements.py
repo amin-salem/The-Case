@@ -21,7 +21,7 @@ METRICS: dict[str, Callable[[Player], int]] = {
     "best_streak": lambda p: p.best_streak or 0,
     "chests": lambda p: p.chests or 0,
     "rank": lambda p: eco.rank_of(p.xp or 0),
-    "secured": lambda p: 1 if p.email else 0,
+    "secured": lambda p: 1 if (p.email or p.phone_hash) else 0,
     "invites": lambda p: p.invites_rewarded or 0,
     # lifetime counters (progress.record adds every event to Player.stats)
     **{k: stat(k) for k in ("case_3stars", "case_no_hint", "first_try", "fast5", "fast2", "early_daily",

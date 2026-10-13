@@ -115,7 +115,7 @@ async def overview(days: int = Query(14, ge=1, le=60), session: AsyncSession = D
         "players": await count(select(func.count()).select_from(Player)),
         "active_24h": await count(select(func.count()).select_from(Player).where(Player.last_seen >= now - timedelta(days=1))),
         "active_7d": await count(select(func.count()).select_from(Player).where(Player.last_seen >= now - timedelta(days=7))),
-        "secured": await count(select(func.count()).select_from(Player).where(Player.email.is_not(None))),
+        "secured": await count(select(func.count()).select_from(Player).where(or_(Player.email.is_not(None), Player.phone_hash.is_not(None)))),
         "banned": await count(select(func.count()).select_from(Player).where(Player.banned.is_(True))),
         "cases_solved": await count(select(func.count()).select_from(CaseProgress).where(CaseProgress.solved.is_(True))),
         "coins_in_circulation": int(await session.scalar(select(func.coalesce(func.sum(Player.coins), 0))) or 0),
@@ -174,7 +174,7 @@ async def players(q: str = Query("", max_length=60), sort: str = "last_seen", li
     rows = (await session.execute(stmt.order_by(col.desc(), Player.id).limit(limit).offset(offset))).scalars().all()
     return {"total": total, "items": [{
         "id": p.id, "nickname": p.nickname, "coins": p.coins, "solved": p.cases_solved, "stars": p.stars_total,
-        "streak": p.streak, "secured": bool(p.email), "banned": p.banned, "app_version": p.app_version,
+        "streak": p.streak, "secured": bool(p.email or p.phone_hash), "banned": p.banned, "app_version": p.app_version,
         "created": ts(p.created_at), "last_seen": ts(p.last_seen)} for p in rows]}
 
 

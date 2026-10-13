@@ -34,6 +34,14 @@ class Settings(BaseSettings):
     myket_package_name: str = "ir.gammly.parvandeh"
     myket_base_url: str = "https://developer.myket.ir/api/partners/applications"
 
+    # Phone-secured accounts (SMS code). SMS costs money: kill switch + strict limits. The key lives ONLY in the environment.
+    sms_enabled: bool = True  # SMS_ENABLED=false refuses every SMS (kill switch)
+    sms_mode: str = "fake"  # fake (tests, never sends) | ghasedak
+    sms_api_key: str = ""
+    sms_template: str = ""  # the approved OTP template name in the Ghasedak panel; it has one parameter: the code
+    sms_url: str = "https://gateway.ghasedak.me/rest/api/v1/WebService/SendOtpWithParams"
+    phone_pepper: str = ""  # secret for hashing phone numbers; empty = derived from JWT_SECRET
+
     comments_enabled: bool = True  # COMMENTS_ENABLED=false hides and refuses case comments (kill switch)
 
     # Rewarded ads pay coins only when a real ad network is in the app.
@@ -69,6 +77,8 @@ class Settings(BaseSettings):
                 problems.append("ADMIN_API_KEY")
             if self.bazaar_mode == "fake" and not self.myket_access_token:
                 problems.append("MYKET_ACCESS_TOKEN (or a real BAZAAR_MODE): no store can verify purchases")
+            if self.sms_enabled and self.sms_mode == "ghasedak" and not (self.sms_api_key and self.sms_template):
+                problems.append("SMS_API_KEY and SMS_TEMPLATE (or SMS_ENABLED=false)")
             if problems:
                 raise RuntimeError("Set safe values for: " + ", ".join(problems))
 

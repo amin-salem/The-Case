@@ -78,13 +78,13 @@ def visible_player():
     """SQL condition: players who may appear on the leaderboards and win weekly prizes. Banned players and accounts
     younger than 48 hours that are not secured with an email are hidden (they still play)."""
     cutoff = utcnow() - timedelta(hours=eco.HIDE_NEW_ACCOUNT_HOURS)
-    return and_(Player.banned.is_(False), or_(Player.email.is_not(None), Player.created_at <= cutoff))
+    return and_(Player.banned.is_(False), or_(Player.email.is_not(None), Player.phone_hash.is_not(None), Player.created_at <= cutoff))
 
 
 def is_visible(pl: Player) -> bool:
     if pl.banned:
         return False
-    return bool(pl.email) or pl.created_at <= utcnow() - timedelta(hours=eco.HIDE_NEW_ACCOUNT_HOURS)
+    return bool(pl.email or pl.phone_hash) or pl.created_at <= utcnow() - timedelta(hours=eco.HIDE_NEW_ACCOUNT_HOURS)
 
 
 async def maybe_pay_referral(player_id: str) -> bool:
