@@ -176,6 +176,7 @@ async def test_expired_weekend_case_is_an_archive_case_with_a_higher_price(clien
 
     # after it closed: archive card, locked, with the weekend price
     clock(content.weekly_closes_at(wk) + timedelta(minutes=1))
+    coins = (await client.get("/v1/me", headers=late["headers"])).json()["coins"]  # a new day: its login reward is in already
     lst = (await client.get("/v1/cases", headers=late["headers"])).json()
     row = next(r for r in lst["archive"] if r["id"] == "w099")
     assert row["weekend"] is True and row["locked"] is True and row["unlock_cost"] == 100 and lst["weekly"] is None
