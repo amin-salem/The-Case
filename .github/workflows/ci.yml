@@ -42,7 +42,7 @@ jobs:
                      ("players", "referral_paid"), ("case_progress", "ranked"), ("case_progress", "reveal_at"),
                      ("players", "client_version"), ("players", "client_build"), ("players", "platform"),
                      ("players", "os_version"), ("players", "device_model"), ("players", "client_at"),
-                     ("players", "phone_last4"), ("players", "phone_verified_at"), ("players", "feed_seen_at"), ("case_progress", "wrong_tries"),
+                     ("players", "phone_last4"), ("players", "phone_verified_at"), ("players", "feed_seen_at"), ("case_progress", "wrong_tries"), ("case_progress", "shows"),
                      ("players", "avatar_id"), ("players", "avatar_frame")]
           TABLES = ["riddle_answers", "mission_days", "player_achievements", "story_progress", "story_state", "admin_log", "rate_hits", "case_comments", "referral_payouts", "phone_codes", "player_avatars"]
           EOF

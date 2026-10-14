@@ -181,7 +181,8 @@ def week_start(d: date) -> date:
 # Opens on its publish day (a Thursday) at NEW_CASE_HOUR and stays "this weekend's case" until
 # WEEKLY_DAYS later. It comes in chapters: evidence listed in a later chapter is hidden until
 # that chapter opens (at_hours after the start). Solving it also asks for the motive.
-WEEKLY_DAYS = 3
+WEEKLY_DAYS = 3  # old cases (w001) without closes_hours; kept for reference
+WEEKLY_HOURS = 48  # new weekend cases: Wednesday 21:00 to Friday 21:00 unless the file says closes_hours
 
 
 def validate_weekly(d: dict) -> None:
@@ -200,6 +201,14 @@ def validate_weekly(d: dict) -> None:
         raise CaseError(f"{d['id']}: open_hour must be 0..23")
     if "closes_hours" in d and not (isinstance(d["closes_hours"], int) and d["closes_hours"] > max(hours)):
         raise CaseError(f"{d['id']}: closes_hours must be after the last chapter")
+    if d.get("format") == 2:
+        for s in d["suspects"]:
+            r = s.get("reactions")
+            if not isinstance(r, dict) or not r or not set(r) <= eids or not all(isinstance(v, str) and v.strip() for v in r.values()):
+                raise CaseError(f"{d['id']}/{s['id']}: format 2 needs `reactions` (evidence id -> what the suspect says)")
+        culprit_r = next(s for s in d["suspects"] if s["id"] == d["solution"]["culprit"])["reactions"]
+        if not set(culprit_r) & set(d["solution"]["proof"]):
+            raise CaseError(f"{d['id']}: the culprit must react to at least one proof card")
     motives = {m["id"] for m in d.get("motives", [])}
     if len(motives) < 2 or d["solution"].get("motive") not in motives:
         raise CaseError(f"{d['id']}: needs motives and the right one in the solution")
@@ -224,14 +233,14 @@ def weekly_by_id(case_id: str) -> Case | None:
     return next((c for c in weekly_cases() if c.id == case_id), None)
 
 
-WEEKEND_OPEN_HOUR = 9  # when a new weekend case opens (Thursday), see weekly files with open_hour
+WEEKEND_OPEN_HOUR = 21  # when a new weekend case opens (Wednesday, with the nightly case); a file may set open_hour
 
 
 def weekly_closes_at(c: Case) -> datetime:
     hours = c.data.get("closes_hours")
     if isinstance(hours, int) and hours > 0:
         return opens_at(c) + timedelta(hours=hours)
-    return opens_at(c) + timedelta(days=WEEKLY_DAYS) - timedelta(hours=get_settings().new_case_hour)
+    return opens_at(c) + timedelta(hours=WEEKLY_HOURS)
 
 
 def current_weekly(now: datetime | None = None) -> Case | None:
@@ -248,7 +257,7 @@ def next_weekly(now: datetime | None = None) -> Case | None:
 def next_thursday_at(now: datetime | None = None) -> datetime:
     """Next Thursday at NEW_CASE_HOUR (when a weekend case would open if none is written yet)."""
     now = now or now_local()
-    d = now.date() + timedelta(days=(3 - now.weekday()) % 7)
+    d = now.date() + timedelta(days=(2 - now.weekday()) % 7)
     t = datetime.combine(d, time(WEEKEND_OPEN_HOUR), tzinfo=_tz())
     return t if t > now else t + timedelta(days=7)
 
@@ -490,6 +499,9 @@ def _notify_texts() -> dict:
         return {}
 
 
+_FA_COUNT = {2: "دو", 3: "سه", 4: "چهار"}
+
+
 def notify_plan(now: datetime | None = None, days: int = 10) -> list[dict]:
     """What the phone should announce in the next days: each night's case, the weekend case and its
     chapters, and the story opening. Texts come from content/notify.json (one hand-written teaser per
@@ -521,11 +533,11 @@ def notify_plan(now: datetime | None = None, days: int = 10) -> list[dict]:
                 t = texts.get(c.id) or {}
                 ok = t.get("title") == title and t.get("head")
                 head = t["head"] if ok else f"پرونده‌ی آخر هفته باز شد: «{title}» 🌙"
-                body = t.get("body", "") if ok else f"{c.data.get('location') or ''} · سه فصل، هشت مظنون.".strip(" ·")
+                body = t.get("body", "") if ok else f"{c.data.get('location') or ''} · {_FA_COUNT.get(len(c.data['chapters']), len(c.data['chapters']))} فصل، {len(c.data['suspects'])} مظنون؛ از همین فصل اول می‌تونی متهم کنی.".strip(" ·")
             else:
                 total = len(c.data["chapters"])
                 head = f"فصل {n} از {total} باز شد: «{title}»"
-                body = ("مدارک تازه رسید؛ فصل آخره و می‌تونی متهم کنی." if n == total
+                body = ("مدارک تازه رسید؛ فصل آخره. اگه هنوز متهم نکردی، وقتشه." if n == total
                         else "مدارک تازه رسید؛ شاید دروغ مقصر لای همین‌هاست.")
             out.append({"kind": "weekend", "at": int(at.timestamp()), "head": head, "body": body})
     at = story_opens_at()
@@ -555,7 +567,12 @@ def weekly_public(c: Case, now: datetime | None = None) -> dict:
             hidden |= set(ch.get("evidence", []))
             next_at = next_at or at
     data = c.public()
+    # what a suspect says about a card is only given by the "show" call (it is limited), never in the case file
+    data["suspects"] = [{k: v for k, v in s.items() if k != "reactions"} for s in data["suspects"]]
     data["evidence"] = [e for e in data["evidence"] if e["id"] not in hidden]
+    data["chapters_open"] = len(chapters)
+    from . import economy as eco
+    data["shows_per_chapter"] = eco.WEEKEND_SHOWS_PER_CHAPTER
     data["chapters"] = chapters
     data["chapters_total"] = len(c.data["chapters"])
     data["next_chapter_at"] = int(next_at.timestamp()) if next_at else None

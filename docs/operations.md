@@ -201,3 +201,8 @@ Provider: Ghasedak (OTP template). Liara environment (never in the repo, chat or
 ## Test players (14 Oct 2026)
 The smoke test creates one player with device id `smoke-xxxx` and deletes it again itself. To clear the ones made before this
 version: `curl -X POST -H "X-Admin-Key: $ADMIN_API_KEY" https://gaamly.ir/admin/players/purge-smoke` (repeat while it answers `"more": true`).
+
+## Weekend case, new format (14 Oct 2026)
+New weekend cases follow `docs/weekend-format.md`. Numbers (all in `server/app/economy.py`): early bonus `WEEKLY_EARLY_BONUS` 50,
+shows `WEEKEND_SHOWS_PER_CHAPTER` 3 per opened chapter, archive price `WEEKEND_ARCHIVE_COST` 250 (a normal archive case is 150,
+the weekend price is higher on purpose). The new column `case_progress.shows` is additive (migration 0021, listed in the CI check).

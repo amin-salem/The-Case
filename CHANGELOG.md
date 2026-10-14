@@ -1,5 +1,14 @@
 # Changelog
 
+## server 1.25.4, app 1.25.2 (build 53): weekend case, new format
+
+- Timing: new weekend cases open Wednesday 21:00 and close Friday 21:00 (48 h), two chapters (0 h and 24 h). The reminder for a weekend opening is moved two minutes so it does not collide with the nightly one. This week's case is a one-off (Thursday 09:00 to Saturday 09:00).
+- Accusing is allowed from chapter 1. Right + right early: 3 stars and +50 coins (`WEEKLY_EARLY_BONUS`); wrong costs a try.
+- Two-part accusation (who + why/how, `format: 2` cases): both right = 3 stars, culprit only = at most 2 stars, wrong culprit = a try is lost and the case stays open. Older cases keep suspect + proof + motive.
+- «نشان دادن مدرک»: show an evidence card to a suspect and hear a reaction written in the case file (3 shows per opened chapter, server-side count, repeats free, new `case_progress.shows` column). The reaction is never in the public case.
+- Expired weekend cases are in the archive for 250 coins (`WEEKEND_ARCHIVE_COST`), «آخر هفته» badge, both chapters open, normal archive reward; a player who solved it live keeps it. Not buyable while it is open.
+- Format guide for case writers: `docs/weekend-format.md`.
+
 ## server 1.25.3, app 1.25.1 (build 52): avatars and frames
 
 - Profile avatars: 10 free faces (`det_01`-`det_10`), 8 earned by a challenge (10 cases, 7-night streak, 30-night streak, 25 three-star cases, 10 cases without hints, 3 weekend cases, story chapter 5, top 3 of a week) and 8 sold for coins (600-2500, `economy.AVATAR_PRICE`). Buying is once and forever.

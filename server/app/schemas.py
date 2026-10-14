@@ -142,6 +142,7 @@ class CaseRow(BaseModel):
     difficulty: int
     publish: str
     today: bool
+    weekend: bool = False  # an expired weekend case in the archive (higher price)
     locked: bool        # archive case not bought yet
     unlock_cost: int
     solved: bool
@@ -167,6 +168,8 @@ class ProgressOut(BaseModel):
     stars: int
     hint_costs: list[int]
     answer_at: int | None = None  # a lost case: unix time when the answer becomes public (None = public / not lost)
+    shows: list[dict[str, Any]] = []        # weekend case: evidence cards shown to suspects {s, e, t = what the suspect said}
+    shows_left: int = 0
     wrong_tries: list[dict[str, Any]] = []  # this player's wrong accusations: {s, e, m, r} (r = wrong_suspect | wrong_proof | wrong_motive | hasty)
 
 
@@ -185,7 +188,7 @@ class HintOut(BaseModel):
 
 class AccuseIn(BaseModel):
     suspect: str = Field(max_length=16)
-    evidence: str = Field(max_length=16)
+    evidence: str = Field(default="", max_length=16)          # not asked in the two-part weekend accusation
     motive: str | None = Field(default=None, max_length=16)   # the weekly case also asks "why"
     extra_seconds: int = Field(default=0, ge=0, le=3600)      # active time since the last tick
 
@@ -219,6 +222,8 @@ class AccuseOut(BaseModel):
     unranked: bool = False         # solved without enough investigation: 1 star, no leaderboard place
     stars_capped: bool = False     # ... and it would have had more stars
     story: dict[str, Any] | None = None  # story chapter finished: {season, chapter, outro, thread}
+    early_bonus: int = 0           # weekend case solved before its last chapter: extra coins (already in reward)
+    how_right: bool | None = None  # two-part weekend accusation: was the "why/how" part right (None = not asked)
 
 
 class SuspectStat(BaseModel):
@@ -481,3 +486,16 @@ class FeedOut(BaseModel):
     items: list[FeedItem]
     unread: int
     seen_at: int | None = None
+
+
+class ShowIn(BaseModel):
+    suspect: str = Field(max_length=16)
+    evidence: str = Field(max_length=16)
+
+
+class ShowOut(BaseModel):
+    suspect: str
+    evidence: str
+    text: str            # what the suspect says when shown the card
+    shows_left: int
+    progress: ProgressOut

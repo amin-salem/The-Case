@@ -111,7 +111,9 @@ class Reminders extends ChangeNotifier {
       var extra = 0;
       for (final e in plan) {
         if (e['kind'] == 'nightly' || extra >= 8) continue;
-        await _at(500 + extra, when(e), e['head'] as String, (e['body'] as String?) ?? '');
+        // a weekend case now opens on Wednesday 21:00 with the nightly case: keep the two notifications apart
+        final w = e['kind'] == 'weekend' && nightlyAt(when(e)) != null ? when(e).add(const Duration(minutes: 2)) : when(e);
+        await _at(500 + extra, w, e['head'] as String, (e['body'] as String?) ?? '');
         extra++;
       }
       // Saturday 10:00 (Tehran = UTC+3:30): last week's ranking prizes are in the inbox

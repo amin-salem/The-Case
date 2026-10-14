@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
+import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/typewriter.dart';
@@ -8,19 +9,30 @@ import 'case_screen.dart';
 
 /// Interrogation: the suspect talks (animated), the player asks questions
 /// and marks them as suspicious / innocent. Returns the new mark.
+/// Weekend case (new format): what the sheet needs to let the player show evidence cards to this suspect.
+class WeekendShow {
+  WeekendShow({required this.caseId, required this.evidence, required this.shows, required this.left, this.onProgress});
+  final String caseId;
+  final List<Evidence> evidence;
+  final List<ShowNote> shows;
+  final int left;
+  final void Function(Progress)? onProgress;
+}
+
 Future<SuspectMark?> showSuspect(BuildContext context, Suspect s, SuspectMark mark,
-    {void Function(SuspectMark)? onMark}) {
+    {void Function(SuspectMark)? onMark, WeekendShow? weekend}) {
   return showModalBottomSheet<SuspectMark>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true, // keeps the top below the status bar; the sheet pads its own bottom
     backgroundColor: Colors.transparent,
-    builder: (_) => _SuspectSheet(s: s, mark: mark, onMark: onMark),
+    builder: (_) => _SuspectSheet(s: s, mark: mark, onMark: onMark, weekend: weekend),
   );
 }
 
 class _SuspectSheet extends StatefulWidget {
-  const _SuspectSheet({required this.s, required this.mark, this.onMark});
+  const _SuspectSheet({required this.s, required this.mark, this.onMark, this.weekend});
+  final WeekendShow? weekend;
   final Suspect s;
   final SuspectMark mark;
   /// Called at once on every tap, so the mark is kept even if the sheet is swiped away.
@@ -37,13 +49,78 @@ class _SuspectSheetState extends State<_SuspectSheet> {
   final Set<int> _seen = {};
   int _turn = 0; // new Typewriter each time a question is asked
 
-  String get _line => _asked < 0 ? widget.s.statement : widget.s.questions[_asked].a;
+  // weekend case: evidence shown to this suspect
+  late List<ShowNote> _shows = [...?widget.weekend?.shows];
+  late int _left = widget.weekend?.left ?? 0;
+  String? _showTitle, _showLine; // the card just shown and what the suspect said
+  bool _showing = false;
+
+  String get _line => _showLine ?? (_asked < 0 ? widget.s.statement : widget.s.questions[_asked].a);
+
+  Future<void> _pickEvidence() async {
+    final w = widget.weekend!;
+    final id = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: K.night2,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (ctx) => SafeArea(
+        child: ListView(shrinkWrap: true, padding: const EdgeInsets.fromLTRB(16, 16, 16, 16), children: [
+          Text('کدوم مدرک رو نشونش بدی؟', style: tDisplay(18)),
+          const SizedBox(height: 4),
+          Text(_left > 0 ? '${fa(_left)} مدرک نمایش مانده' : 'مدرک نمایشی نمونده؛ مدارکی که قبلاً نشونش دادی رایگانه',
+              style: tBody(12.5, color: K.textSoft)),
+          const SizedBox(height: 10),
+          for (final e in w.evidence)
+            Builder(builder: (_) {
+              final done = _shows.any((x) => x.evidence == e.id);
+              final locked = !done && _left <= 0;
+              return Opacity(
+                opacity: locked ? 0.45 : 1,
+                child: ListTile(
+                  onTap: locked ? null : () => Navigator.pop(ctx, e.id),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  leading: Icon(done ? Icons.check_circle_rounded : Icons.description_rounded, color: done ? K.ok : K.brass),
+                  title: Text(e.title, style: tBody(14.5, w: FontWeight.w700)),
+                  subtitle: Text(done ? 'قبلاً نشونش دادی؛ دوباره شنیدن رایگانه' : 'نشان بده',
+                      style: tBody(12, color: K.textSoft)),
+                ),
+              );
+            }),
+        ]),
+      ),
+    );
+    if (id == null || !mounted) return;
+    final e = w.evidence.firstWhere((x) => x.id == id);
+    setState(() => _showing = true);
+    try {
+      final r = await Api.i.showEvidence(w.caseId, widget.s.id, id);
+      if (!mounted) return;
+      if (r.progress != null) {
+        w.onProgress?.call(r.progress!);
+        _shows = [...r.progress!.shows];
+        _left = r.progress!.showsLeft;
+      }
+      setState(() {
+        _showTitle = e.title;
+        _showLine = r.text;
+        _talking = true;
+        _turn++;
+      });
+    } on ApiException catch (ex) {
+      if (mounted) toast(context, Api.errorText(ex.code));
+    } finally {
+      if (mounted) setState(() => _showing = false);
+    }
+  }
 
   // Everyone gets nervous on the second question, so the face never gives the culprit away.
   Mood get _mood => _talking ? (_asked == 1 ? Mood.nervous : Mood.calm) : (_asked == 1 ? Mood.nervous : Mood.calm);
 
   void _ask(int i) => setState(() {
         _asked = i;
+        _showLine = _showTitle = null;
         _talking = true;
         _turn++;
         _seen.add(i);
@@ -90,7 +167,9 @@ class _SuspectSheetState extends State<_SuspectSheet> {
             Paper(
               padding: const EdgeInsets.all(14),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                if (_asked >= 0)
+                if (_showTitle != null)
+                  Text('تو: «$_showTitle» رو نشونش دادی.', style: tBody(13, color: K.inkSoft, w: FontWeight.w700))
+                else if (_asked >= 0)
                   Text('تو: ${s.questions[_asked].q}', style: tBody(13, color: K.inkSoft, w: FontWeight.w700)),
                 Typewriter(
                   '«$_line»',
@@ -127,7 +206,27 @@ class _SuspectSheetState extends State<_SuspectSheet> {
                   ),
                 ),
               ),
-            if (_asked >= 0)
+            if (widget.weekend != null) ...[
+              const SizedBox(height: 4),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: K.night3, borderRadius: BorderRadius.circular(12), border: Border.all(color: K.brass.withValues(alpha: 0.6))),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                  Row(children: [
+                    const Icon(Icons.fact_check_rounded, color: K.brass),
+                    const SizedBox(width: 8),
+                    Expanded(child: Text('نشان دادن مدرک', style: tBody(15, w: FontWeight.w900))),
+                    Text('${fa(_left)} مانده', style: tBody(12.5, color: K.textSoft)),
+                  ]),
+                  const SizedBox(height: 4),
+                  Text('همه‌ی واکنش‌ها یکی نیست؛ شاید یکی لو بره.', style: tBody(12.5, color: K.textSoft)),
+                  const SizedBox(height: 8),
+                  StampButton(label: _showing ? 'صبر کن...' : 'یک مدرک نشونش بده', icon: Icons.visibility_rounded, onTap: _showing ? null : _pickEvidence),
+                ]),
+              ),
+            ],
+            if (_asked >= 0 || _showLine != null)
               TextButton(onPressed: () => _ask(-1), child: Text('دوباره شنیدن حرف اولش', style: tBody(13, color: K.textSoft))),
             const SizedBox(height: 6),
             Container(

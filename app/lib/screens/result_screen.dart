@@ -71,6 +71,15 @@ class _ResultScreenState extends State<ResultScreen> {
               Center(child: StampIn(delay: const Duration(milliseconds: 700), child: Stars(count: result.stars, size: 44))),
               const SizedBox(height: 12),
               FadeSlideIn(delay: const Duration(milliseconds: 1000), child: _rewards()),
+              if (result.earlyBonus > 0) ...[
+                const SizedBox(height: 10),
+                _noteCard(Icons.bolt_rounded, K.brass, 'حل زودهنگام! +${fa(result.earlyBonus)} سکه‌ی اضافه، قبل از باز شدن فصل آخر.'),
+              ],
+              if (result.howRight == false) ...[
+                const SizedBox(height: 10),
+                _noteCard(Icons.help_outline_rounded, K.textSoft,
+                    'مظنون درست بود، ولی «چرا و چطور» نه؛ برای همین دو ستاره. توضیح پایین رو بخون.'),
+              ],
               if (result.unranked) ...[
                 const SizedBox(height: 10),
                 _proofNote(),
@@ -220,6 +229,17 @@ class _ResultScreenState extends State<ResultScreen> {
       );
 
   /// One small row: coins, nights in a row, today's rank (tap: the leaderboard).
+  Widget _noteCard(IconData icon, Color color, String text) => Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: K.night2, borderRadius: BorderRadius.circular(12), border: Border.all(color: color.withValues(alpha: 0.7))),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Icon(icon, color: color, size: 20),
+          const SizedBox(width: 8),
+          Expanded(child: Text(text, style: tBody(13.5))),
+        ]),
+      );
+
   Widget _rewards() {
     Widget item(IconData icon, Color color, Widget label) => Row(mainAxisSize: MainAxisSize.min, children: [
           Icon(icon, color: color, size: 18),

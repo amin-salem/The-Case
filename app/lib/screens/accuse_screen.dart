@@ -44,11 +44,14 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
     }
   }
 
-  int get _steps => widget.caseData.weekly ? 3 : 2;
+  bool get _two => widget.caseData.weekly && widget.caseData.twoPart; // new weekend format: who + why/how
+  int get _steps => _two ? 2 : (widget.caseData.weekly ? 3 : 2);
+  // the step's meaning: 0 who, 1 which proof, 2 why/how (the two-part accusation skips the proof step)
+  int get _kind => _two && _step == 1 ? 2 : _step;
   bool get _last => _step == _steps - 1;
 
   /// Whether the current step has its choice.
-  bool get _picked => switch (_step) { 0 => _suspect != null, 1 => _evidence != null, _ => _motive != null };
+  bool get _picked => switch (_kind) { 0 => _suspect != null, 1 => _evidence != null, _ => _motive != null };
 
   @override
   void initState() {
@@ -71,12 +74,12 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
   }
 
   Future<void> _submit() async {
-    if (_suspect == null || _evidence == null) return;
+    if (_suspect == null || (!_two && _evidence == null)) return;
     // the choices stay on screen; nothing is sent without the server
     if (!needOnline(context)) return;
     setState(() => _busy = true);
     try {
-      final r = await Api.i.accuse(widget.caseData.id, _suspect!, _evidence!, motive: _motive);
+      final r = await Api.i.accuse(widget.caseData.id, _suspect!, _evidence ?? '', motive: _motive);
       if (!mounted) return;
       if (r.result == 'solved' || r.result == 'failed') {
         Navigator.pop(context, r);
@@ -226,18 +229,18 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
   Widget _mainButton(CaseData c) {
     if (!_last) {
       return StampButton(
-        label: _picked ? 'ادامه' : (_step == 0 ? 'یه مظنون انتخاب کن' : 'یه مدرک انتخاب کن'),
+        label: _picked ? 'ادامه' : (_kind == 0 ? 'یه مظنون انتخاب کن' : 'یه مدرک انتخاب کن'),
         icon: Icons.chevron_right_rounded,
         onTap: _picked && !_busy ? () => _go(_step + 1) : null,
       );
     }
-    final ready = _suspect != null && _evidence != null && (!c.weekly || _motive != null);
+    final ready = _suspect != null && (_two || _evidence != null) && (!c.weekly || _motive != null);
     return StampButton(
       label: _busy
           ? '...'
           : ready
               ? 'متهم می‌کنم!'
-              : (c.weekly ? 'انگیزه رو انتخاب کن' : 'یه مدرک انتخاب کن'),
+              : (c.weekly ? (_two ? 'چرا و چطور رو انتخاب کن' : 'انگیزه رو انتخاب کن') : 'یه مدرک انتخاب کن'),
       icon: Icons.gavel_rounded,
       onTap: _busy || !ready ? null : _submit,
     );
@@ -245,7 +248,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
 
   /// "Step N of M" and a bar.
   Widget _progressBar() {
-    final labels = ['مقصر', 'مدرک', if (widget.caseData.weekly) 'انگیزه'];
+    final labels = _two ? ['مقصر', 'چرا و چطور'] : ['مقصر', 'مدرک', if (widget.caseData.weekly) 'انگیزه'];
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -276,7 +279,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
     );
   }
 
-  List<Widget> _stepBody(CaseData c) => switch (_step) {
+  List<Widget> _stepBody(CaseData c) => switch (_kind) {
         0 => [
             Text('مقصر کیه؟', style: tDisplay(20)),
             Text('کسی رو انتخاب کن که درباره‌ی چیزی دروغ گفته.', style: tBody(13, color: K.textSoft)),
@@ -299,8 +302,14 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
             for (final e in c.evidence) _evidenceTile(e),
           ],
         _ => [
-            Text('چرا این کار رو کرد؟', style: tDisplay(20)),
-            Text('انگیزه‌ی واقعی رو انتخاب کن.', style: tBody(13, color: K.textSoft)),
+            Text(_two ? 'چرا و چطور؟' : 'چرا این کار رو کرد؟', style: tDisplay(20)),
+            Text(_two ? 'از میان گزینه‌ها، همونی رو بزن که مدرک‌هات نشون می‌دن.' : 'انگیزه‌ی واقعی رو انتخاب کن.',
+                style: tBody(13, color: K.textSoft)),
+            if (_two) ...[
+              const SizedBox(height: 6),
+              Text('سه ستاره: هر دو بخش درست · دو ستاره: فقط مظنون درست. اگه مظنون غلط باشه یه فرصتت می‌سوزه و پرونده بسته نمی‌شه.',
+                  style: tBody(12, color: K.brass)),
+            ],
             const SizedBox(height: 10),
             for (final m in c.motives) _motiveTile(m.id, m.text),
           ],
@@ -308,9 +317,9 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
 
   /// The amber card above the final button: who, with which card (and why).
   Widget _summary(CaseData c) {
-    if (_suspect == null || _evidence == null) return const SizedBox.shrink();
+    if (_suspect == null || (!_two && _evidence == null)) return const SizedBox.shrink();
     final who = c.suspect(_suspect!);
-    final card = c.evidenceById(_evidence!)?.title ?? '';
+    final card = _two ? '' : (c.evidenceById(_evidence!)?.title ?? '');
     String? why;
     if (c.weekly && _motive != null) {
       for (final m in c.motives) {
@@ -332,8 +341,10 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
             TextSpan(children: [
               TextSpan(text: 'اتهام تو: ', style: tBody(13, color: K.textSoft, w: FontWeight.w700)),
               TextSpan(text: who.name, style: tBody(14, w: FontWeight.w900)),
-              TextSpan(text: ' · با ', style: tBody(13, color: K.textSoft, w: FontWeight.w700)),
-              TextSpan(text: card, style: tBody(14, color: K.brass, w: FontWeight.w900)),
+              if (!_two) ...[
+                TextSpan(text: ' · با ', style: tBody(13, color: K.textSoft, w: FontWeight.w700)),
+                TextSpan(text: card, style: tBody(14, color: K.brass, w: FontWeight.w900)),
+              ],
               if (why != null) ...[
                 TextSpan(text: ' · چون ', style: tBody(13, color: K.textSoft, w: FontWeight.w700)),
                 TextSpan(text: why, style: tBody(13, w: FontWeight.w700)),

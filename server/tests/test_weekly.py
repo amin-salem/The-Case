@@ -77,18 +77,17 @@ async def test_solving_needs_the_motive(client, clock):
     assert done["solution"]["motive"] == right
 
 
-async def test_no_accusing_before_the_last_chapter(client, clock):
+async def test_accusing_is_allowed_from_the_first_chapter(client, clock):
     w = content.weekly_cases()[0]
     clock(content.opens_at(w) + timedelta(hours=1))  # first night: the proof cards aren't out yet
     p = await new_player(client, "weekender-early")
     h = p["headers"]
     await client.get(f"/v1/cases/{w.id}", headers=h)
     body = {"suspect": w.culprit, "evidence": sorted(w.proof)[0], "motive": w.data["solution"]["motive"]}
-    r = await client.post(f"/v1/cases/{w.id}/accuse", headers=h, json=body)
-    assert r.status_code == 409 and r.json()["detail"] == "wait_last_chapter"
-    clock(content.weekly_all_open_at(w))  # the last chapter is out: now it counts, no try was lost
     r = (await client.post(f"/v1/cases/{w.id}/accuse", headers=h, json=body)).json()
-    assert r["result"] == "solved" and r["stars"] == 3
+    # solved before the last chapter: the weekend reward plus the early bonus
+    assert r["result"] == "solved" and r["stars"] == 3 and r["early_bonus"] == eco.WEEKLY_EARLY_BONUS
+    assert r["reward"] == eco.WEEKLY_REWARD[3] + eco.WEEKLY_EARLY_BONUS
 
 
 def test_upcoming_weekend_and_story():
@@ -99,12 +98,12 @@ def test_upcoming_weekend_and_story():
     assert before["opens_at"] == int(start.timestamp())
     during = content.weekend_upcoming(start + timedelta(hours=1))
     assert during["open"] is True and during["closes_at"] == int(content.weekly_closes_at(w).timestamp())
-    # after the last written weekend case: the next Thursday at WEEKEND_OPEN_HOUR (09:00), no title yet
+    # after the last written weekend case: the next Wednesday at WEEKEND_OPEN_HOUR (21:00), no title yet
     late = content.weekly_cases()[-1]
     after = content.weekend_upcoming(content.weekly_closes_at(late) + timedelta(hours=1))
     assert after["open"] is False and after["title"] is None
     t = datetime.fromtimestamp(after["opens_at"], start.tzinfo)
-    assert t.weekday() == 3 and t.hour == content.WEEKEND_OPEN_HOUR
+    assert t.weekday() == 2 and t.hour == content.WEEKEND_OPEN_HOUR
     s = content.story_upcoming()
     assert s["title"] and s["opens_at"] > 0 and isinstance(s["open"], bool)
 

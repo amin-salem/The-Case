@@ -652,7 +652,19 @@ class _CaseScreenState extends State<CaseScreen> {
       if (mounted) setState(() {});
     }
 
-    final m = await showSuspect(context, s, _marks[s.id] ?? SuspectMark.none, onMark: keep);
+    final c = _case;
+    final p = _progress;
+    final show = (c != null && p != null && c.weekly && c.twoPart && !p.finished && Api.i.online)
+        ? WeekendShow(
+            caseId: widget.caseId,
+            evidence: c.evidence,
+            shows: p.shows,
+            left: p.showsLeft,
+            onProgress: (np) {
+              if (mounted) setState(() => _progress = np);
+            })
+        : null;
+    final m = await showSuspect(context, s, _marks[s.id] ?? SuspectMark.none, onMark: keep, weekend: show);
     if (m != null && mounted) keep(m);
   }
 
@@ -730,13 +742,7 @@ class _CaseScreenState extends State<CaseScreen> {
                 flex: 3,
                 child: KeyedSubtree(
                     key: _accuseKey,
-                    child: _case!.weekly && _case!.chapters.length < _case!.chaptersTotal
-                        // the proof cards come with the last chapter: accusing earlier only wastes a try
-                        ? GhostButton(
-                            label: 'متهم کردن از فصل آخر',
-                            icon: Icons.lock_clock_rounded,
-                            onTap: () => toast(context, 'مدرک اصلی توی فصل آخره. بعد از باز شدن فصل ${fa(_case!.chaptersTotal)} می‌تونی متهم کنی.'))
-                        : StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
+                    child: StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
               ),
           ]),
         ),

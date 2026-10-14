@@ -93,7 +93,13 @@ class CaseData {
             : null,
         motives = [for (final m in _maps(j['motives'])) (id: _s(m['id']), text: _s(m['text']))],
         motive = (j['solution'] as Map?)?['motive'] as String?,
-        story = j['story'] is Map ? StoryLines((j['story'] as Map).cast<String, dynamic>()) : null;
+        story = j['story'] is Map ? StoryLines((j['story'] as Map).cast<String, dynamic>()) : null,
+        twoPart = _i(j['format']) == 2,
+        showsPerChapter = _i(j['shows_per_chapter'], 3);
+
+  /// Weekend case in the new format: the accusation asks who + why/how (no evidence step) and cards can be shown to suspects.
+  final bool twoPart;
+  final int showsPerChapter;
 
   /// A story chapter: ناصری's intro (and, once finished, outro and the season thread). Null for other cases.
   final StoryLines? story;
@@ -124,6 +130,11 @@ class CaseData {
   }
 }
 
+class ShowNote {
+  const ShowNote({required this.suspect, required this.evidence, required this.text});
+  final String suspect, evidence, text;
+}
+
 class Progress {
   Progress(Map<String, dynamic> j)
       : hints = [for (final h in (j['hints'] as List? ?? const [])) '$h'],
@@ -137,7 +148,22 @@ class Progress {
         wrongTries = [
           for (final t in (j['wrong_tries'] as List? ?? const []))
             if (t is Map) WrongTry(t.cast<String, dynamic>())
-        ];
+        ],
+        shows = [
+          for (final t in (j['shows'] as List? ?? const []))
+            if (t is Map) ShowNote(suspect: _s(t['s']), evidence: _s(t['e']), text: _s(t['t']))
+        ],
+        showsLeft = _i(j['shows_left']);
+
+  /// Weekend case: evidence cards this player showed to suspects, with what each suspect said.
+  final List<ShowNote> shows;
+  final int showsLeft;
+  ShowNote? showFor(String suspect, String evidence) {
+    for (final s in shows) {
+      if (s.suspect == suspect && s.evidence == evidence) return s;
+    }
+    return null;
+  }
 
   /// This player's wrong accusations on the case, in order (shown in red; reviewed after a solve).
   final List<WrongTry> wrongTries;
@@ -179,6 +205,7 @@ class CaseRow {
         difficulty = _i(j['difficulty'], 2),
         publish = _s(j['publish']),
         today = _b(j['today']),
+        weekend = _b(j['weekend']),
         locked = _b(j['locked']),
         unlockCost = _i(j['unlock_cost'], 150),
         solved = _b(j['solved']),
@@ -189,6 +216,7 @@ class CaseRow {
   final String id, title, location, scene, publish;
   final int number, difficulty, unlockCost, stars, solvers;
   final bool today, locked, solved, failed;
+  final bool weekend; // an expired weekend case in the archive (higher price)
 }
 
 class CasesList {
@@ -227,6 +255,8 @@ class AccuseResult {
         answerAt = j['answer_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['answer_at'] as num).toInt() * 1000) : null,
         unranked = _b(j['unranked']),
         starsCapped = _b(j['stars_capped']),
+        earlyBonus = _i(j['early_bonus']),
+        howRight = j['how_right'] is bool ? j['how_right'] as bool : null,
         story = j['story'] is Map ? StoryLines((j['story'] as Map).cast<String, dynamic>()) : null,
         gains = Gains((j['gains'] as Map?)?.cast<String, dynamic>());
 
@@ -235,6 +265,8 @@ class AccuseResult {
   final int seconds, hintsUsed, freezesUsed;
   final int? badge; // a streak badge (7, 30, 100) reached right now
   final DateTime? answerAt; // lost: the answer (culprit, proof, explanation) is public from this time
+  final int earlyBonus; // weekend case solved before its last chapter: extra coins (already in reward)
+  final bool? howRight; // two-part accusation: was the why/how part right (null = not asked)
   final bool unranked, starsCapped; // solved without enough investigation: 1 star, no leaderboard place
   final String? explanation, culprit;
   final List<String> proof;

@@ -120,6 +120,8 @@ class CaseProgress(Base):
     reveal_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     # the player's wrong accusations in order: [{"s": suspect, "e": evidence, "m": motive|None, "r": kind}] (at most 10)
     wrong_tries: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    # weekend case: [{s, e, c}] evidence cards shown to suspects (c = chapter index when shown)
+    shows: Mapped[list | None] = mapped_column(JSON, nullable=True)
 
 
 class Purchase(Base):

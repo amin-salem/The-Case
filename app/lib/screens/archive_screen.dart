@@ -14,8 +14,12 @@ import 'dialogs.dart';
 Future<void> openCaseRow(BuildContext context, CaseRow row) async {
   if (row.locked) {
     if (!needOnline(context)) return;
-    final ok = await confirm(context, 'باز کردن پرونده‌ی قدیمی',
-        'این پرونده مال روزهای قبله. با ${fa(row.unlockCost)} سکه بازش کن.', 'باز کن');
+    final ok = row.weekend
+        ? await confirm(context, 'باز کردن پرونده‌ی آخر هفته',
+            'این پرونده‌ی آخر هفته بسته شده. هر دو فصلش با هم باز می‌شه و جایزه‌ی پرونده‌ی عادی داره. قیمتش از پرونده‌های دیگه‌ی بایگانی بیشتره: ${fa(row.unlockCost)} سکه.',
+            'باز کن · ${fa(row.unlockCost)} سکه')
+        : await confirm(context, 'باز کردن پرونده‌ی قدیمی',
+            'این پرونده مال روزهای قبله. با ${fa(row.unlockCost)} سکه بازش کن.', 'باز کن');
     if (!ok || !context.mounted) return;
     try {
       await Api.i.unlockCase(row.id);
@@ -215,6 +219,16 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                 opacity: c.locked ? 0.4 : 1,
                 child: AnimatedScene(scene: c.scene, height: 98, animated: false, dim: c.locked ? 0.3 : 0),
               ),
+              if (c.weekend)
+                Positioned(
+                  top: 6,
+                  right: 6,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(color: K.stamp, borderRadius: BorderRadius.circular(10)),
+                    child: Text('آخر هفته', style: tBody(11, color: K.night, w: FontWeight.w900)),
+                  ),
+                ),
               if (c.locked)
                 Center(
                   child: Container(

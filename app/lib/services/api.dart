@@ -739,7 +739,7 @@ class Api extends ChangeNotifier {
   Future<AccuseResult> accuse(String caseId, String suspectId, String evidenceId, {String? motive}) async {
     final j = (await _call('POST', '/v1/cases/$caseId/accuse', body: {
       'suspect': suspectId,
-      'evidence': evidenceId,
+      if (evidenceId.isNotEmpty) 'evidence': evidenceId,
       if (motive != null) 'motive': motive,
       'extra_seconds': CaseClock.i.take(caseId),
     }) as Map)
@@ -753,6 +753,17 @@ class Api extends ChangeNotifier {
       _setCoins(r.coins);
     }
     return r;
+  }
+
+  /// Weekend case: shows one evidence card to one suspect; returns what the suspect says.
+  Future<({String text, Progress? progress})> showEvidence(String caseId, String suspectId, String evidenceId) async {
+    final j = (await _call('POST', '/v1/cases/$caseId/show', body: {'suspect': suspectId, 'evidence': evidenceId}) as Map)
+        .cast<String, dynamic>();
+    await _saveProgress(caseId, j['progress']);
+    return (
+      text: (j['text'] as String?) ?? '',
+      progress: j['progress'] is Map ? Progress((j['progress'] as Map).cast<String, dynamic>()) : null,
+    );
   }
 
   /// Reports how long the case screen was open. Quiet: returns false when it didn't reach the server.
@@ -789,6 +800,8 @@ class Api extends ChangeNotifier {
   Map<String, dynamic> get _economy =>
       config['economy'] is Map ? (config['economy'] as Map).cast<String, dynamic>() : const {};
   int get weeklyReward => _economy['weekly_reward'] as int? ?? 300;
+  int get weeklyEarlyBonus => _economy['weekly_early_bonus'] as int? ?? 50;
+  int get weekendArchiveCost => _economy['weekend_archive_cost'] as int? ?? 250;
   int get freezeCost => _economy['freeze_cost'] as int? ?? 150;
   int get maxFreezes => _economy['max_freezes'] as int? ?? 2;
   int get secureReward => (_economy['secure_reward'] as num?)?.toInt() ?? 100;
@@ -1053,6 +1066,9 @@ class Api extends ChangeNotifier {
         'locked' => 'این پرونده قفله',
         'case_finished' => 'این پرونده تموم شده',
         'wait_last_chapter' => 'مدرک اصلی توی فصل آخره؛ بعد از باز شدنش می‌تونی متهم کنی',
+        'no_shows_left' => 'مدرک نمایشی نمونده؛ با باز شدن فصل بعدی چند تای دیگه می‌رسه',
+        'no_evidence' => 'این مدرک هنوز باز نشده',
+        'how_needed' => 'بگو چرا و چطور',
         'wait' => 'این پرونده هنوز بازنشده؛ صبر کن، حکم بازرسی بده یا با سکه ردش کن',
         'no_warrant' => 'حکم بازرسی نداری',
         'wrong_order' => 'اول پرونده‌ی قبلی رو تموم کن',
