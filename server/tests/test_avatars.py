@@ -51,7 +51,7 @@ async def test_buy_once_and_equip(client):
     assert r.status_code == 200 and r.json()["coins"] == 1200
     assert _by_id(r.json()["avatars"], "ex_cat")["owned"]
     again = await client.post("/v1/avatars/ex_cat/buy", headers=h)
-    assert again.status_code == 409 and (await client.get("/v1/me", headers=h)).json()["coins"] == 1200
+    assert again.status_code == 409 and (await client.get("/v1/avatars", headers=h)).json()["coins"] == 1200
     r = await client.patch("/v1/me", headers=h, json={"avatar_id": "ex_cat"})
     assert r.status_code == 200 and r.json()["avatar_id"] == "ex_cat"
 
@@ -73,7 +73,7 @@ async def test_not_enough_coins_and_unbuyable(client):
     await _set(p["player_id"], coins=100)
     r = await client.post("/v1/avatars/ex_gold/buy", headers=h)
     assert r.status_code == 402 and r.json()["detail"]["need"] == 2500
-    assert (await client.get("/v1/me", headers=h)).json()["coins"] == 100
+    assert (await client.get("/v1/avatars", headers=h)).json()["coins"] == 100
     assert (await client.post("/v1/avatars/ex_rookie/buy", headers=h)).status_code == 422   # goals are not for sale
     assert (await client.post("/v1/avatars/det_01/buy", headers=h)).status_code == 422
     assert (await client.post("/v1/avatars/nope/buy", headers=h)).status_code == 404

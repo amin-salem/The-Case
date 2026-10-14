@@ -7,7 +7,7 @@ import '../theme.dart';
 /// Frames that move (embers drift, neon pulses). Everything else is drawn still.
 const Set<String> kAnimatedFrames = {'frame_ember', 'frame_neon'};
 
-/// A player's portrait: assets/avatars/<id>.webp in a circle. If the file cannot be loaded, a drawn silhouette.
+/// A player's portrait: `assets/avatars/ID.webp` in a circle. If the file cannot be loaded, a drawn silhouette.
 class AvatarFace extends StatelessWidget {
   const AvatarFace(this.id, {super.key, required this.size});
   final String id;
