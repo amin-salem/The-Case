@@ -452,7 +452,7 @@ class _WeekendTutorialState extends State<WeekendTutorial> {
         Row(children: [
           Icon(icon, size: 18, color: color),
           const SizedBox(width: 6),
-          Text(title, style: tBody(15, w: FontWeight.w900)),
+          Flexible(child: Text(title, style: tBody(15, w: FontWeight.w900), maxLines: 1, overflow: TextOverflow.ellipsis)),
         ]),
         const SizedBox(height: 4),
         Text(sub, style: tBody(12.5, color: K.textSoft)),

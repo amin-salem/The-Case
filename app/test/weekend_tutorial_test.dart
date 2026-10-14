@@ -38,8 +38,16 @@ Future<void> _tapKey(WidgetTester t, String key) async {
   await t.pump(const Duration(milliseconds: 400));
 }
 
+/// Lets a pushed route or a sheet appear (the page transitions never settle with pumpAndSettle here).
+Future<void> _settle(WidgetTester t) async {
+  for (int i = 0; i < 8; i++) {
+    await t.pump(const Duration(milliseconds: 100));
+  }
+}
+
 Future<void> _tapText(WidgetTester t, String text) async {
   await t.ensureVisible(find.text(text).last);
+  await t.pump(const Duration(milliseconds: 100));
   await t.tap(find.text(text).last);
   await t.pump(const Duration(milliseconds: 400));
 }
@@ -51,16 +59,16 @@ Future<void> _playThrough(WidgetTester t) async {
   await _tapText(t, 'کامران'); // open the real suspect sheet
   await _tapText(t, 'یک مدرک نشونش بده');
   await t.tap(find.widgetWithText(ListTile, 'دوربین راهرو'));
-  await t.pump(const Duration(milliseconds: 600));
+  await _settle(t);
   expect(find.text('۲ از ۳'), findsOneWidget); // the counter goes down
   expect(find.textContaining('واکنش عادی'), findsWidgets);
   await _tapText(t, 'یک مدرک نشونش بده');
   await t.tap(find.widgetWithText(ListTile, 'گِل کنار در پشتی'));
-  await t.pump(const Duration(milliseconds: 600));
+  await _settle(t);
   expect(find.text('۱ از ۳'), findsOneWidget);
   expect(find.textContaining('لو رفت'), findsWidgets);
   await _tapText(t, 'بستن');
-  await t.pump(const Duration(milliseconds: 600));
+  await _settle(t);
   expect(find.textContaining('قدم ۵ از ۶'), findsOneWidget);
   await _tapKey(t, 'tut_accuse');
   expect(find.text('چه کسی؟'), findsOneWidget);
@@ -101,20 +109,20 @@ void main() {
     expect(Api.i.flag(kWeekendTutorialFlag), isFalse);
 
     await t.tap(find.text('open'));
-    await t.pump(const Duration(milliseconds: 500));
+    await _settle(t);
     expect(find.text('تمرین پرونده‌ی آخر هفته'), findsOneWidget);
     expect(find.text('CASE w1'), findsNothing);
 
     await _playThrough(t);
     await _tapText(t, 'بزن بریم');
-    await t.pump(const Duration(milliseconds: 600));
+    await _settle(t);
     expect(find.text('CASE w1'), findsOneWidget); // continues into the case
     expect(Api.i.flag(kWeekendTutorialFlag), isTrue);
 
     await t.tap(find.text('CASE w1'));
-    await t.pump(const Duration(milliseconds: 600));
+    await _settle(t);
     await t.tap(find.text('open'));
-    await t.pump(const Duration(milliseconds: 600));
+    await _settle(t);
     expect(find.text('تمرین پرونده‌ی آخر هفته'), findsNothing);
     expect(find.text('CASE w1'), findsOneWidget);
   });
@@ -123,10 +131,10 @@ void main() {
     _bigScreen(t);
     await t.pumpWidget(_app(_home()));
     await t.tap(find.text('open'));
-    await t.pump(const Duration(milliseconds: 500));
+    await _settle(t);
     expect(find.text('رد کردن'), findsOneWidget);
     await t.tap(find.text('رد کردن'));
-    await t.pump(const Duration(milliseconds: 600));
+    await _settle(t);
     expect(find.text('تمرین پرونده‌ی آخر هفته'), findsNothing);
     expect(find.text('CASE w1'), findsOneWidget);
     expect(Api.i.flag(kWeekendTutorialFlag), isTrue);
@@ -134,13 +142,15 @@ void main() {
 
   testWidgets('skip is also there inside the suspect sheet', (t) async {
     _bigScreen(t);
-    await t.pumpWidget(_app(const WeekendTutorial()));
+    await t.pumpWidget(_app(const Scaffold(body: Center(child: WeekendHelpButton()))));
+    await t.tap(find.text('راهنما'));
+    await _settle(t);
     await _tapKey(t, 'tut_ch2');
     await _tapKey(t, 'tut_accuse');
     await _tapText(t, 'کامران');
     expect(find.text('رد کردن'), findsNWidgets(2)); // the screen's and the sheet's
     await t.tap(find.text('رد کردن').last);
-    await t.pump(const Duration(milliseconds: 600));
+    await _settle(t);
     expect(find.byType(WeekendTutorial), findsNothing);
   });
 
@@ -149,10 +159,10 @@ void main() {
     await Api.i.setFlag(kWeekendTutorialFlag);
     await t.pumpWidget(_app(const Scaffold(body: Center(child: WeekendHelpButton()))));
     await t.tap(find.text('راهنما'));
-    await t.pump(const Duration(milliseconds: 500));
+    await _settle(t);
     expect(find.text('تمرین پرونده‌ی آخر هفته'), findsOneWidget);
     await t.tap(find.text('رد کردن'));
-    await t.pump(const Duration(milliseconds: 600));
+    await _settle(t);
     expect(find.text('تمرین پرونده‌ی آخر هفته'), findsNothing);
   });
 
