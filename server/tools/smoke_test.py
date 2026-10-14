@@ -5,7 +5,7 @@
     python tools/smoke_test.py http://127.0.0.1:8000 --solve     # a local server: also solves today's case
     ADMIN_API_KEY=... python tools/smoke_test.py URL             # also checks the admin calls
 
-It registers one throw-away player ("smoke-xxxx"). Exit code 0 = everything works.
+It registers one throw-away player ("smoke-xxxx") and deletes it again at the end. Exit code 0 = everything works.
 """
 import argparse
 import json
@@ -28,6 +28,26 @@ def check(ok: bool, name: str, detail: str = ""):
 
 
 def main() -> int:
+    state: dict = {}
+    try:
+        return _run(state)
+    finally:
+        _cleanup(state)
+
+
+def _cleanup(state: dict) -> None:
+    """Removes the throw-away player again, so the database never keeps «smoke-» users."""
+    c, hdr = state.get("client"), state.get("hdr")
+    if c is None or hdr is None:
+        return
+    try:
+        r = c.request("DELETE", "/v1/me/smoke", headers=hdr)
+        print(f"\nCleanup: test player {'deleted' if r.status_code == 200 else 'NOT deleted (' + str(r.status_code) + ')'}")
+    except Exception as e:  # noqa: BLE001
+        print(f"\nCleanup: could not delete the test player ({type(e).__name__})")
+
+
+def _run(state: dict) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("base", nargs="?", default=os.environ.get("API_URL", "https://gaamly.ir"))
     ap.add_argument("--solve", action="store_true", help="solve today's case using the local case files (local servers only)")
@@ -36,6 +56,7 @@ def main() -> int:
     base = a.base.rstrip("/")
     print(f"Server: {base}")
     c = httpx.Client(base_url=base, timeout=a.timeout, follow_redirects=True)
+    state["client"] = c
 
     def call(method, path, **kw):
         t = time.time()
@@ -79,6 +100,7 @@ def main() -> int:
     if not reg:
         return 1
     hdr = {"Authorization": f"Bearer {reg['token']}"}
+    state["hdr"] = hdr
     me = expect("GET", "/v1/me", headers=hdr)
     check(me and me.get("coins", 0) > 0, "new player got welcome coins", f"coins={me and me.get('coins')}")
     check(me and me.get("login_day") == 1 and me.get("login_reward", 0) > 0, "login calendar: day 1 reward",

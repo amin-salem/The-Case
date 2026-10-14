@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import case, delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import cheatreport, content
+from .. import cheatreport, content, purge
 from .. import economy as eco
 from ..db import get_session
 from ..models import AdminLog, Broadcast, CaseProgress, CoinLog, ConfigValue, InboxItem, Player, Purchase, utcnow
@@ -102,6 +102,17 @@ async def ban(player_id: str, body: BanIn, session: AsyncSession = Depends(get_s
     session.add(AdminLog(action="ban" if body.banned else "unban", target=p.id, detail={"nickname": p.nickname}))
     await session.commit()
     return {"id": p.id, "banned": p.banned}
+
+
+@router.post("/players/purge-smoke")
+async def purge_smoke_players(session: AsyncSession = Depends(get_session)):
+    """Deletes every test player whose device id starts with «smoke-» (made by tools/smoke_test.py), completely.
+    Up to 1000 per call; call again if "more" is true."""
+    ids = await purge.smoke_player_ids(session, 1000)
+    n = await purge.purge_players(session, ids)
+    session.add(AdminLog(action="purge_smoke", target="smoke-*", detail={"deleted": n}))
+    await session.commit()
+    return {"deleted": n, "more": len(ids) >= 1000}
 
 
 @router.get("/cheat-report")

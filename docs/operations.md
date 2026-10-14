@@ -197,3 +197,7 @@ Provider: Ghasedak (OTP template). Liara environment (never in the repo, chat or
 
 - All reward numbers live in `server/app/economy.py` and `server/app/achievements.py`; the app reads prices from `/v1/meta`. Existing balances are never changed.
 - The daily-missions day runs from `NEW_CASE_HOUR` (21:00 Tehran) to the same hour next evening: use `content.mission_day_str()` for anything stored per mission day (not `today_str()`, which is the calendar date and still drives riddles, the weekly leaderboard and cases).
+
+## Test players (14 Oct 2026)
+The smoke test creates one player with device id `smoke-xxxx` and deletes it again itself. To clear the ones made before this
+version: `curl -X POST -H "X-Admin-Key: $ADMIN_API_KEY" https://gaamly.ir/admin/players/purge-smoke` (repeat while it answers `"more": true`).

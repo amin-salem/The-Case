@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import content, feed, progress
+from .. import content, feed, progress, purge
 from .. import economy as eco
 from ..config import get_settings
 from ..db import get_session
@@ -79,6 +79,17 @@ async def update_me(body: ProfileIn, player: Player = Depends(current_player),
         player.avatar = body.avatar
     await session.commit()
     return profile_out(player)
+
+
+@router.delete("/me/smoke")
+async def delete_smoke_player(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """Only for the throw-away test players made by tools/smoke_test.py (device id «smoke-…»): removes the player and
+    everything that belongs to it. Any other account is refused, so a real player can never be deleted here."""
+    if not purge.is_smoke(player.device_id):
+        raise HTTPException(403, "not_a_test_player")
+    n = await purge.purge_players(session, [player.id])
+    await session.commit()
+    return {"deleted": n}
 
 
 @router.post("/me/client")

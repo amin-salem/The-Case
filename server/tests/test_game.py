@@ -197,3 +197,38 @@ async def test_wrong_tries_are_remembered_for_the_red_marks(client):
     # solved: the review still has both mistakes
     r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})).json()
     assert r["result"] == "solved" and len(r["progress"]["wrong_tries"]) == 2
+
+
+async def test_smoke_players_are_removed_completely(client):
+    from sqlalchemy import func, select
+    from app import db
+    from app.models import CoinLog, Player
+    smoke = await new_player(client, device="smoke-abc123")
+    real = await new_player(client, device="device-real-1")
+    # a real player can never delete itself through the smoke call
+    r = await client.delete("/v1/me/smoke", headers=real["headers"])
+    assert r.status_code == 403
+    # a smoke player can, and nothing of it stays behind
+    r = await client.delete("/v1/me/smoke", headers=smoke["headers"])
+    assert r.status_code == 200 and r.json() == {"deleted": 1}
+    async with db.SessionLocal() as s:
+        assert await s.get(Player, smoke["player_id"]) is None
+        assert await s.scalar(select(func.count()).select_from(CoinLog).where(CoinLog.player_id == smoke["player_id"])) == 0
+        assert await s.get(Player, real["player_id"]) is not None
+
+
+async def test_admin_purges_old_smoke_players(client):
+    from app import db
+    from app.models import Player
+    a = await new_player(client, device="smoke-old1")
+    b = await new_player(client, device="smoke-old2")
+    keep = await new_player(client, device="device-keep-9")
+    r = await client.post("/admin/players/purge-smoke")
+    assert r.status_code == 403
+    r = await client.post("/admin/players/purge-smoke", headers=ADMIN)
+    assert r.status_code == 200 and r.json()["deleted"] >= 2
+    async with db.SessionLocal() as s:
+        assert await s.get(Player, a["player_id"]) is None and await s.get(Player, b["player_id"]) is None
+        assert await s.get(Player, keep["player_id"]) is not None
+    r = await client.post("/admin/players/purge-smoke", headers=ADMIN)
+    assert r.json()["deleted"] == 0

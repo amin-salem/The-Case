@@ -1,5 +1,10 @@
 # Changelog
 
+## server 1.25.2: no more «smoke-» test players in the database
+
+- `tools/smoke_test.py` now deletes its own throw-away player at the end (`DELETE /v1/me/smoke`, only accepted for device ids starting with `smoke-`, a real player gets 403), so every test run leaves nothing behind.
+- Admin call `POST /admin/players/purge-smoke` removes all old «smoke-» players completely (every row of theirs, up to 1000 per call; call again if `more` is true). Call it once after this version is live.
+
 ## server 1.25.1, app 1.25.0 (build 51): stars without a comment, red marks on wrong accusations
 
 - Rating a case needs only stars now: the text is optional. Stars alone are counted at once (they are in the average, not listed as a comment); a written comment still waits for the admin. One rating per player and case, as before.
