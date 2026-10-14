@@ -12,6 +12,7 @@ import '../services/reminders.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/offline.dart';
+import '../widgets/whats_new_ui.dart';
 import 'account_sheets.dart';
 import 'dialogs.dart';
 import 'guide_screen.dart';
@@ -107,6 +108,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     endText: '${FontPref.fonts[FontPref.family.value] ?? ''}  •  '
                         '${FontPref.sizeNames[FontPref.sizes.indexOf(FontPref.scale.value).clamp(0, FontPref.sizeNames.length - 1)]}',
                     onTap: () => showFontSheet(context),
+                  ),
+                ]),
+                _group('تازه‌ها', [
+                  SettingsRow(
+                    icon: Icons.auto_awesome_rounded,
+                    iconColor: K.brass,
+                    title: 'چه خبر؟',
+                    sub: 'تغییرهای آخرین نسخه‌ها',
+                    onTap: () => showWhatsNewSheet(context, all: true),
                   ),
                 ]),
                 _group('صدا و اعلان', [

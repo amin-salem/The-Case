@@ -17,6 +17,9 @@ import '../widgets/offline.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
+import '../widgets/whats_new_ui.dart';
+import '../data/whats_new.dart';
+import '../services/whats_new.dart';
 import 'archive_screen.dart';
 import 'main_shell.dart';
 import 'shop_screen.dart';
@@ -44,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     Api.i.addListener(_onApi);
     MainShell.tab.addListener(_onTab);
+    WhatsNew.i.homeAction.addListener(_onWhatsNewJump);
     _load();
     Sfx.i.ambient('amb_home', volume: Sfx.homeVolume);
     _tick = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -92,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     Api.i.removeListener(_onApi);
     MainShell.tab.removeListener(_onTab);
+    WhatsNew.i.homeAction.removeListener(_onWhatsNewJump);
     _tick?.cancel();
     super.dispose();
   }
@@ -194,6 +199,20 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// A «برو به …» jump from «چی تازه شده؟» that ends on the home screen.
+  void _onWhatsNewJump() {
+    final t = WhatsNew.i.homeAction.value;
+    if (t == null || !mounted) return;
+    WhatsNew.i.homeAction.value = null;
+    switch (t) {
+      case WhatsNewTarget.missions:
+        _openMissions();
+      default:
+        final c = _cases?.today;
+        if (c != null) _open(c);
+    }
+  }
+
   /// Coming back to the home tab: fresh cases and missions.
   void _onTab() {
     if (MainShell.tab.value == MainShell.home && mounted) _load();
@@ -231,6 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   _topBar(),
                   const SizedBox(height: 14),
+                  const WhatsNewBanner(),
                   const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
                   if (_error != null && _cases == null) _errorBox(),
                   if (_cases == null && _error == null)
@@ -511,6 +531,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: title,
       sub: sub,
       subColor: color,
+      trailing: const NewTag('weekend_tab'),
       onTap: () => MainShell.tab.value = MainShell.weekend,
     );
   }

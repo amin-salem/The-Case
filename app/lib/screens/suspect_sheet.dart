@@ -4,6 +4,8 @@ import '../models/models.dart';
 import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
+import '../widgets/whats_new_ui.dart';
+import '../services/whats_new.dart';
 import '../widgets/typewriter.dart';
 import 'case_screen.dart';
 
@@ -58,6 +60,7 @@ class _SuspectSheetState extends State<_SuspectSheet> {
   String get _line => _showLine ?? (_asked < 0 ? widget.s.statement : widget.s.questions[_asked].a);
 
   Future<void> _pickEvidence() async {
+    WhatsNew.i.tagOpened('show_evidence');
     final w = widget.weekend!;
     final id = await showModalBottomSheet<String>(
       context: context,
@@ -216,7 +219,10 @@ class _SuspectSheetState extends State<_SuspectSheet> {
                   Row(children: [
                     const Icon(Icons.fact_check_rounded, color: K.brass),
                     const SizedBox(width: 8),
-                    Expanded(child: Text('نشان دادن مدرک', style: tBody(15, w: FontWeight.w900))),
+                    Text('نشان دادن مدرک', style: tBody(15, w: FontWeight.w900)),
+                    const SizedBox(width: 8),
+                    const NewTag('show_evidence'),
+                    const Spacer(),
                     Text('${fa(_left)} مانده', style: tBody(12.5, color: K.textSoft)),
                   ]),
                   const SizedBox(height: 4),

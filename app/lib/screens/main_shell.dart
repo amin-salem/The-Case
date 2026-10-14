@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../services/sound.dart';
 import '../theme.dart';
+import '../services/whats_new.dart';
+import '../widgets/whats_new_ui.dart';
 import '../services/api.dart';
 import 'account_sheets.dart';
 import 'account_screen.dart';
@@ -66,6 +68,7 @@ class _MainShellState extends State<MainShell> {
   void _onTab() {
     if (!mounted) return;
     final i = MainShell.tab.value;
+    if (i == MainShell.weekend) WhatsNew.i.tagOpened('weekend_tab');
     setState(() {
       _visits[i]++;
       _seen.add(i);
@@ -121,7 +124,15 @@ class _MainShellState extends State<MainShell> {
               destinations: [
                 NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'خانه'),
                 NavigationDestination(
-                    icon: Icon(Icons.nightlight_outlined), selectedIcon: Icon(Icons.nightlight_round), label: 'آخر هفته'),
+                    icon: ListenableBuilder(
+                        listenable: WhatsNew.i,
+                        builder: (_, __) => Badge(
+                            isLabelVisible: WhatsNew.i.tagVisible('weekend_tab'),
+                            label: const Text('تازه'),
+                            backgroundColor: K.stamp,
+                            child: const Icon(Icons.nightlight_outlined))),
+                    selectedIcon: const Icon(Icons.nightlight_round),
+                    label: 'آخر هفته'),
                 NavigationDestination(
                     icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book_rounded), label: 'داستان'),
                 NavigationDestination(

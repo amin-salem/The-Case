@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'screens/main_shell.dart';
 import 'services/api.dart';
+import 'services/whats_new.dart';
 import 'services/billing.dart';
 import 'services/font_pref.dart';
 import 'services/reminders.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light));
+  await WhatsNew.i.init(); // before Api.init: a phone with no saved player is a fresh install
   await Api.i.init();
   await Sfx.i.init();
   await FontPref.init();

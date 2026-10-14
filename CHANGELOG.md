@@ -8,6 +8,7 @@
 - «نشان دادن مدرک»: show an evidence card to a suspect and hear a reaction written in the case file (3 shows per opened chapter, server-side count, repeats free, new `case_progress.shows` column). The reaction is never in the public case.
 - Expired weekend cases are in the archive for 250 coins (`WEEKEND_ARCHIVE_COST`), «آخر هفته» badge, both chapters open, normal archive reward; a player who solved it live keeps it. Not buyable while it is open.
 - Format guide for case writers: `docs/weekend-format.md`.
+- App: «چی تازه شده؟». After an update the home screen shows a one-line banner (once per build; a fresh install shows nothing) that opens a titles-only sheet with «برو به …» jumps; the list is also in Settings as «چه خبر؟». Small red «تازه» tags (weekend tab and row, «نشان دادن مدرک») vanish when opened or after 7 days. The list is data in `app/lib/data/whats_new.dart`.
 
 ## server 1.25.3, app 1.25.1 (build 52): avatars and frames
 
