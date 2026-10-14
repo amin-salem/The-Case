@@ -9,6 +9,9 @@ export 'progress.dart' show Gains;
 int _i(Object? v, [int d = 0]) => v is int ? v : (v is num ? v.toInt() : d);
 String _s(Object? v, [String d = '']) => v is String ? v : d;
 bool _b(Object? v) => v == true;
+
+/// The free portrait for an old numeric avatar (det_01 .. det_10).
+String detId(int index) => 'det_${(index % 10 + 1).toString().padLeft(2, '0')}';
 List<Map<String, dynamic>> _maps(Object? v) =>
     v is List ? [for (final x in v) if (x is Map) x.cast<String, dynamic>()] : const [];
 
@@ -246,6 +249,8 @@ class Profile {
       : playerId = _s(j['player_id']),
         nickname = _s(j['nickname']),
         avatar = _i(j['avatar']),
+        avatarId = _s(j['avatar_id']).isNotEmpty ? _s(j['avatar_id']) : detId(_i(j['avatar'])),
+        avatarFrame = _s(j['avatar_frame'], 'frame_brass'),
         inviteCode = _s(j['invite_code']),
         referred = _b(j['referred']),
         email = j['email'] as String?,
@@ -289,6 +294,7 @@ class Profile {
   }
 
   final String playerId, nickname, inviteCode;
+  final String avatarId, avatarFrame; // det_01, ex_cat ...; frame_brass ...
   final int avatar, coins, streak, bestStreak, casesSolved, starsTotal, loginReward;
   final int loginDay, streakFreezes; // 1..7 in the login calendar; streak insurance held
   final bool referred, secured, noAds, needsPhone;
@@ -303,12 +309,14 @@ class LeaderRow {
       : rank = _i(j['rank']),
         nickname = _s(j['nickname']),
         avatar = _i(j['avatar']),
+        avatarId = _s(j['avatar_id']).isNotEmpty ? _s(j['avatar_id']) : detId(_i(j['avatar'])),
+        avatarFrame = _s(j['avatar_frame'], 'frame_brass'),
         value = _i(j['value']),
         stars = _i(j['stars']),
         me = _b(j['me']),
         rankTitle = _s(j['rank_title']);
   final int rank, avatar, value, stars;
-  final String nickname, rankTitle;
+  final String nickname, rankTitle, avatarId, avatarFrame;
   final bool me;
 }
 

@@ -8,6 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/models.dart';
+import '../models/avatars.dart';
 import '../models/progress.dart';
 import '../models/story.dart';
 import 'case_clock.dart';
@@ -659,10 +660,12 @@ class Api extends ChangeNotifier {
     }
   }
 
-  Future<void> updateProfile({String? nickname, int? avatar}) async {
+  Future<void> updateProfile({String? nickname, int? avatar, String? avatarId, String? avatarFrame}) async {
     final j = await _call('PATCH', '/v1/me', body: {
       if (nickname != null) 'nickname': nickname,
       if (avatar != null) 'avatar': avatar,
+      if (avatarId != null) 'avatar_id': avatarId,
+      if (avatarFrame != null) 'avatar_frame': avatarFrame,
     }) as Map;
     _setProfile(Map<String, dynamic>.from(j));
   }
@@ -921,6 +924,23 @@ class Api extends ChangeNotifier {
     return r;
   }
 
+  // ---------------------------------------------------------------- avatars and frames
+
+  /// Every avatar and frame with what the player owns (goals reached are unlocked by this call).
+  Future<AvatarCatalog> avatarCatalog() async {
+    final j = (await _call('GET', '/v1/avatars') as Map).cast<String, dynamic>();
+    _setCoins(j['coins'] as int);
+    _emitGains(j['gains']);
+    return AvatarCatalog(j);
+  }
+
+  /// Buys a shop avatar or frame (once, forever) and returns the new catalog.
+  Future<AvatarCatalog> buyAvatarItem(String id) async {
+    final j = (await _call('POST', '/v1/avatars/$id/buy') as Map).cast<String, dynamic>();
+    _setCoins(j['coins'] as int);
+    return AvatarCatalog(j);
+  }
+
   // ---------------------------------------------------------------- achievements
 
   /// Every achievement with progress; offline, the last saved list.
@@ -1020,6 +1040,8 @@ class Api extends ChangeNotifier {
 
   static String errorText(String code) => switch (code) {
         'not_enough_coins' => 'سکه‌ات کافی نیست',
+        'not_owned' => 'این چهره یا قاب هنوز مال تو نیست',
+        'already_owned' => 'این رو قبلاً داری',
         'finish_case_first' => 'اول پرونده رو تموم کن، بعد نظر بده',
         'already_commented' => 'تو قبلاً برای این پرونده نظر دادی',
         'comment_too_short' => 'نظرت خیلی کوتاهه',

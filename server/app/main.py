@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import cheatreport, content, db, rewards, riddles
 from .config import get_settings
 from .version import VERSION
-from .routers import admin, admin_ui, auth, cases, comments, inbox, leaderboard, meta, pages, phone, profile, purchases
+from .routers import admin, admin_ui, avatars as avatar_routes, auth, cases, comments, inbox, leaderboard, meta, pages, phone, profile, purchases
 from .routers import achievements as achievement_routes
 from .routers import missions as mission_routes
 from .routers import riddles as riddle_routes
@@ -57,7 +57,7 @@ def create_app() -> FastAPI:
     app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in s.cors_origins.split(",")],
                        allow_methods=["*"], allow_headers=["*"])
     for r in (meta.router, pages.router, auth.router, phone.router, profile.router, cases.router, leaderboard.router,
-              purchases.router, riddle_routes.router, mission_routes.router, achievement_routes.router, story_routes.router, comments.router, comments.admin_router, inbox.router, admin.router, admin_ui.page_router, admin_ui.router):
+              purchases.router, riddle_routes.router, mission_routes.router, achievement_routes.router, avatar_routes.router, story_routes.router, comments.router, comments.admin_router, inbox.router, admin.router, admin_ui.page_router, admin_ui.router):
         app.include_router(r)
     return app
 

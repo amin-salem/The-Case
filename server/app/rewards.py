@@ -40,6 +40,8 @@ async def settle_last_week(session: AsyncSession) -> int:
         rows = (await session.execute(q)).all()
         for i, (pl, stars) in enumerate(rows, start=1):
             coins = prize_for(i)
+            if i <= 3:  # unlocks the champion avatar and the loupe frame (granted on the player's next visit)
+                pl.stats = {**(pl.stats or {}), "weekly_top3": int((pl.stats or {}).get("weekly_top3", 0)) + 1}
             medal = {1: "🥇", 2: "🥈", 3: "🥉"}.get(i, "🏅")
             session.add(InboxItem(
                 player_id=pl.id, source=src,

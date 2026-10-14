@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../screens/messages_hub_screen.dart';
 import '../services/api.dart';
 import '../theme.dart';
-import 'character.dart';
+import 'avatar_frame.dart';
 
 /// "99+" for big numbers, Persian digits.
 String unreadLabel(int n) => n > 99 ? '99+' : fa(n);
@@ -37,12 +37,8 @@ class ProfileBell extends StatelessWidget {
                 Positioned(
                   right: 0,
                   top: 4,
-                  child: Container(
-                    width: size,
-                    height: size,
-                    decoration: BoxDecoration(color: K.night3, shape: BoxShape.circle, border: Border.all(color: K.brass, width: 2)),
-                    child: DetectiveFace(Api.i.profile?.avatar ?? 0, size: size - 4),
-                  ),
+                  child: AvatarWithFrame(
+                      avatar: Api.i.profile?.avatarId ?? 'det_01', frame: Api.i.profile?.avatarFrame ?? 'frame_brass', size: size),
                 ),
                 Positioned(
                   left: 0,

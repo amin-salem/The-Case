@@ -20,6 +20,8 @@ void celebrateOn(OverlayState overlay, Gains g) {
     for (final m in g.missionsDone) (Icons.task_alt_rounded, 'مأموریت انجام شد', m),
     for (final a in g.achievements)
       (Icons.military_tech_rounded, 'دستاورد تازه: «${a.title}»', a.coins > 0 ? '${fa(a.coins)} سکه جایزه' : ''),
+    for (final a in g.avatars)
+      (Icons.face_retouching_natural_rounded, a.kind == 'frame' ? 'قاب تازه باز شد' : 'چهره‌ی تازه باز شد', '«${a.title}» حالا مال توئه'),
     if (g.rankUp != null) (Icons.workspace_premium_rounded, 'درجه‌ی تازه!', 'حالا «${g.rankUp}» هستی'),
   ];
   if (items.isEmpty) return;

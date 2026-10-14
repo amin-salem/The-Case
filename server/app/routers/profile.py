@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import content, feed, progress, purge
+from .. import avatars, content, feed, progress, purge
 from .. import economy as eco
 from ..config import get_settings
 from ..db import get_session
@@ -75,8 +75,24 @@ async def update_me(body: ProfileIn, player: Player = Depends(current_player),
         if name is None:
             raise HTTPException(422, "bad_nickname")
         player.nickname = name
-    if body.avatar is not None:
+    if body.avatar is not None:  # old apps: the portrait index
         player.avatar = body.avatar
+        player.avatar_id = ""
+    owned = None
+    for kind, value in (("avatar", body.avatar_id), ("frame", body.avatar_frame)):
+        if value is None:
+            continue
+        item = avatars.BY_ID.get(value)
+        if item is None or item.kind != kind:
+            raise HTTPException(422, "not_owned")
+        if item.how != "free":
+            owned = owned if owned is not None else await avatars.owned_rows(session, player)
+            if (kind, value) not in owned:
+                raise HTTPException(422, "not_owned")
+        if kind == "avatar":
+            player.avatar_id = value
+        else:
+            player.avatar_frame = value
     await session.commit()
     return profile_out(player)
 

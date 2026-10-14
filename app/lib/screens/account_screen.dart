@@ -6,12 +6,13 @@ import '../models/progress.dart';
 import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/profile_bell.dart';
-import '../widgets/character.dart';
+import '../widgets/avatar_frame.dart';
 import '../widgets/crime_tape.dart';
 import '../widgets/offline.dart';
 import '../widgets/rank.dart';
 import 'account_sheets.dart';
 import 'achievements_screen.dart';
+import 'avatar_picker_screen.dart';
 import 'settings_screen.dart';
 
 /// The detective's profile: who you are, your numbers, your badges and your invite code.
@@ -66,41 +67,9 @@ class _AccountScreenState extends State<AccountScreen> {
     }
   }
 
-  Future<void> _setAvatar(int i) async {
-    if (!needOnline(context)) return;
-    try {
-      await Api.i.updateProfile(avatar: i);
-    } catch (e) {
-      if (mounted) toast(context, Api.friendly(e));
-    }
-  }
-
   Future<void> _pickAvatar() async {
-    final current = Api.i.profile?.avatar ?? 0;
-    final picked = await showNoirSheet<int>(
-      context,
-      title: 'چهره‌ی کارآگاه',
-      child: Wrap(alignment: WrapAlignment.center, spacing: 10, runSpacing: 10, children: [
-        for (int i = 0; i < kDetectives.length; i++)
-          Builder(
-            builder: (ctx) => GestureDetector(
-              onTap: () => Navigator.of(ctx).pop(i),
-              child: Container(
-                width: 72,
-                height: 72,
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: K.night3,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: current == i ? K.brass : Colors.transparent, width: 2.5),
-                ),
-                child: DetectiveFace(i, size: 60),
-              ),
-            ),
-          ),
-      ]),
-    );
-    if (picked != null && picked != current && mounted) await _setAvatar(picked);
+    if (!needOnline(context)) return;
+    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AvatarPickerScreen()));
   }
 
   void _showRanks(Profile p) => showNoirSheet<void>(context, child: RankLadder(profile: p));
@@ -186,13 +155,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 width: 84,
                 height: 84,
                 child: Stack(clipBehavior: Clip.none, children: [
-                  Container(
-                    width: 84,
-                    height: 84,
-                    padding: const EdgeInsets.all(3),
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: K.night3, border: Border.all(color: K.brass, width: 2)),
-                    child: DetectiveFace(p.avatar, size: 76),
-                  ),
+                  AvatarWithFrame(avatar: p.avatarId, frame: p.avatarFrame, size: 84, animate: true),
                   PositionedDirectional(
                     bottom: -2,
                     end: -2,

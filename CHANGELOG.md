@@ -1,5 +1,13 @@
 # Changelog
 
+## server 1.25.3, app 1.25.1 (build 52): avatars and frames
+
+- Profile avatars: 10 free faces (`det_01`-`det_10`), 8 earned by a challenge (10 cases, 7-night streak, 30-night streak, 25 three-star cases, 10 cases without hints, 3 weekend cases, story chapter 5, top 3 of a week) and 8 sold for coins (600-2500, `economy.AVATAR_PRICE`). Buying is once and forever.
+- Frames drawn in code (`AvatarWithFrame`, one widget everywhere): free brass; earned bronze/silver/gold (ranks 3/6/9), ember (14-night streak), tape (50 cases), loupe (top 3 of a week); shop fingerprint 300, blinds 400, cuffs 600, stamp 600, neon 900, royal 1500 (`economy.FRAME_PRICE`). Only ember and neon move, and only on the profile and the leaderboard podium, and not when the phone asks to reduce motion.
+- Server: table `player_avatars` (unique per player, kind and id) and columns `players.avatar_id`, `players.avatar_frame` (migration 0020, additive). `GET /v1/avatars` (catalog, owned, goal progress; unlocks reached goals), `POST /v1/avatars/{id}/buy` (402 not enough coins, 409 already owned, 422 not for sale), `PATCH /v1/me` accepts `avatar_id` / `avatar_frame` (422 `not_owned`). Goal unlocks are kept forever and shown as a banner (`gains.avatars`). Leaderboard rows and the profile carry `avatar_id` and `avatar_frame`. The buy route uses the `wallet` rate limit.
+- App: «چهره و قاب» screen (tabs چهره‌ها / قاب‌ها, filter همه / باز‌شده / قفل‌دار, locked cards with goal and progress bar, price chips, confirm before buying). Old profiles keep their face (`det_NN` from the old index).
+- Operator: nothing to set. The champion avatar and the loupe frame are granted on the player's next visit after the weekly prizes are paid.
+
 ## server 1.25.2: no more «smoke-» test players in the database
 
 - `tools/smoke_test.py` now deletes its own throw-away player at the end (`DELETE /v1/me/smoke`, only accepted for device ids starting with `smoke-`, a real player gets 403), so every test run leaves nothing behind.

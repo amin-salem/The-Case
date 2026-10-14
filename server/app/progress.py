@@ -14,7 +14,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import achievements, content, missions
+from . import achievements, avatars, content, missions
 from . import economy as eco
 from .models import MissionDay, Player, PlayerAchievement
 from .util import add_coins
@@ -27,13 +27,14 @@ class Gains:
     warrants: int = 0
     missions_done: list[str] = field(default_factory=list)
     achievements: list[dict] = field(default_factory=list)
+    avatars: list[dict] = field(default_factory=list)   # avatars/frames unlocked by a goal right now
 
     def is_empty(self) -> bool:
-        return not (self.rank_up or self.warrants or self.missions_done or self.achievements)
+        return not (self.rank_up or self.warrants or self.missions_done or self.achievements or self.avatars)
 
     def out(self) -> dict:
         return {"xp": self.xp, "rank_up": self.rank_up, "warrants": self.warrants, "missions_done": self.missions_done,
-                "achievements": self.achievements}
+                "achievements": self.achievements, "avatars": self.avatars}
 
 
 def add_xp(player: Player, xp: int, gains: Gains) -> None:
@@ -109,6 +110,7 @@ async def check_achievements(session: AsyncSession, player: Player, gains: Gains
             gains.achievements.append({"id": a.id, "title": a.title, "coins": a.coins})
     if (player.stats or {}).get("achievements_earned") != len(earned):
         player.stats = {**(player.stats or {}), "achievements_earned": len(earned)}  # shown on the profile
+    await avatars.check_goals(session, player, gains)
 
 
 async def _missions(session: AsyncSession, player: Player, events: dict[str, int], gains: Gains) -> None:

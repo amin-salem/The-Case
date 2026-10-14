@@ -15,6 +15,10 @@ class Gains {
         achievements = [
           for (final a in (j?['achievements'] as List? ?? const []))
             if (a is Map) EarnedAchievement(a.cast<String, dynamic>())
+        ],
+        avatars = [
+          for (final a in (j?['avatars'] as List? ?? const []))
+            if (a is Map) (kind: _s(a['kind'], 'avatar'), title: _s(a['title']))
         ];
 
   final int xp;
@@ -22,8 +26,9 @@ class Gains {
   final String? rankUp;
   final List<String> missionsDone;
   final List<EarnedAchievement> achievements;
+  final List<({String kind, String title})> avatars; // avatars and frames unlocked by a goal right now
 
-  bool get isEmpty => rankUp == null && warrants == 0 && missionsDone.isEmpty && achievements.isEmpty;
+  bool get isEmpty => rankUp == null && warrants == 0 && missionsDone.isEmpty && achievements.isEmpty && avatars.isEmpty;
 }
 
 class EarnedAchievement {

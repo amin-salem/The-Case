@@ -72,6 +72,8 @@ class ProfileOut(BaseModel):
     player_id: str
     nickname: str
     avatar: int
+    avatar_id: str = ""      # det_01, ex_cat ...
+    avatar_frame: str = "frame_brass"
     invite_code: str
     referred: bool
     email: str | None  # masked
@@ -102,7 +104,9 @@ class ProfileOut(BaseModel):
 
 class ProfileIn(BaseModel):
     nickname: str | None = Field(default=None, min_length=2, max_length=16)
-    avatar: int | None = Field(default=None, ge=0, le=11)
+    avatar: int | None = Field(default=None, ge=0, le=11)   # old apps
+    avatar_id: str | None = Field(default=None, max_length=24)
+    avatar_frame: str | None = Field(default=None, max_length=24)
 
 
 _SAFE = r"^[A-Za-z0-9 ._+,()/-]*$"
@@ -235,6 +239,8 @@ class LeaderRow(BaseModel):
     rank: int
     nickname: str
     avatar: int
+    avatar_id: str = ""
+    avatar_frame: str = "frame_brass"
     value: int        # stars (weekly/all) or seconds (daily)
     stars: int = 0
     me: bool = False
@@ -312,6 +318,7 @@ class GainsOut(BaseModel):
     warrants: int = 0                   # story warrants «حکم بازرسی» earned right now
     missions_done: list[str] = []       # titles of daily missions finished right now
     achievements: list[dict] = []       # {id, title, coins} earned right now
+    avatars: list[dict] = []            # {id, kind, title}: avatars/frames unlocked by a goal right now
 
 
 # --- quick riddles ------------------------------------------------------------------------

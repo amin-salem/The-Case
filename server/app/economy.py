@@ -150,3 +150,10 @@ def story_skip_cost(remaining_seconds: float) -> int:
         return 0
     frac = min(1.0, remaining_seconds / (STORY_WAIT_HOURS * 3600))
     return max(STORY_SKIP_MIN, round(STORY_SKIP_COST * frac))
+
+
+# profile avatars and frames (docs/avatars-plan.md): the shop sells each one once, forever
+AVATAR_PRICE = {"ex_alchemist": 600, "ex_journalist": 600, "ex_qajar": 800, "ex_cat": 800, "ex_chef": 900,
+                "ex_shadow": 1800, "ex_diva": 2200, "ex_gold": 2500}
+FRAME_PRICE = {"frame_fingerprint": 300, "frame_blinds": 400, "frame_cuffs": 600, "frame_stamp": 600,
+               "frame_neon": 900, "frame_royal": 1500}

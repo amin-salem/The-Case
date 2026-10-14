@@ -27,7 +27,9 @@ class Player(Base):
     app_version: Mapped[int] = mapped_column(Integer, default=0)
 
     nickname: Mapped[str] = mapped_column(String(24), default="")
-    avatar: Mapped[int] = mapped_column(Integer, default=0)  # detective portrait index
+    avatar: Mapped[int] = mapped_column(Integer, default=0)  # detective portrait index (old apps; see avatar_id)
+    avatar_id: Mapped[str] = mapped_column(String(24), default="", server_default="")  # det_01, ex_cat ... ("" = from avatar)
+    avatar_frame: Mapped[str] = mapped_column(String(24), default="frame_brass", server_default="frame_brass")
     invite_code: Mapped[str] = mapped_column(String(12), unique=True, index=True)
     referred_by: Mapped[str | None] = mapped_column(String(32), nullable=True)
     invites_rewarded: Mapped[int] = mapped_column(Integer, default=0)
@@ -249,6 +251,20 @@ class PlayerAchievement(Base):
     player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
     achievement_id: Mapped[str] = mapped_column(String(32))
     at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class PlayerAvatar(Base):
+    """An avatar or a frame a player owns beyond the free ones (kind: avatar | frame; how: goal | shop | admin)."""
+
+    __tablename__ = "player_avatars"
+    __table_args__ = (UniqueConstraint("player_id", "kind", "avatar_id", name="uq_player_avatar"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    kind: Mapped[str] = mapped_column(String(8), default="avatar", server_default="avatar")
+    avatar_id: Mapped[str] = mapped_column(String(24))
+    how: Mapped[str] = mapped_column(String(8), default="goal")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
 class StoryProgress(Base):

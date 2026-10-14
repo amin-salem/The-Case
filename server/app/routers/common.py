@@ -1,6 +1,7 @@
 """Shared bits for the routers."""
 from __future__ import annotations
 
+from .. import avatars
 from .. import economy as eco
 from ..config import get_settings
 from ..accounts import mask_email, mask_phone
@@ -25,7 +26,7 @@ def profile_out(p: Player, login_reward: int = 0) -> ProfileOut:
         xp=xp, rank=r, rank_title=eco.RANKS[r][1], rank_xp=eco.RANKS[r][0],
         next_rank_xp=nxt[0] if nxt else None, next_rank_title=nxt[1] if nxt else None,
         achievements=int((p.stats or {}).get("achievements_earned", 0)),
-        player_id=p.id, nickname=p.nickname, avatar=p.avatar, invite_code=p.invite_code,
+        player_id=p.id, nickname=p.nickname, avatar=p.avatar, avatar_id=avatars.avatar_key(p), avatar_frame=avatars.frame_key(p), invite_code=p.invite_code,
         referred=p.referred_by is not None, email=mask_email(p.email), secured=bool(p.email or p.phone_hash), phone=mask_phone(p),
         needs_phone=bool(p.email and not p.phone_hash and get_settings().require_phone_for_email),
         coins=p.coins, no_ads=p.no_ads or vip_active(p), vip_until=ts(p.vip_until),

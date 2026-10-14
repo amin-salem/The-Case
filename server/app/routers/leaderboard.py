@@ -6,7 +6,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
-from .. import content
+from .. import avatars, content
 from ..db import get_session
 from ..models import CaseProgress, Player
 from ..schemas import LeaderboardOut, LeaderRow
@@ -32,7 +32,7 @@ async def leaderboard(period: str = Query("daily", pattern="^(daily|weekly|all)$
                     CaseProgress.was_daily.is_(True), CaseProgress.ranked.is_(True), visible)
              .order_by(CaseProgress.stars.desc(), CaseProgress.seconds.asc()))
         rows = (await session.execute(q)).all()
-        out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, value=secs, stars=st,
+        out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, avatar_id=avatars.avatar_key(pl), avatar_frame=avatars.frame_key(pl), value=secs, stars=st,
                          me=pl.id == player.id, rank_title=rank_title(pl)) for i, (pl, st, secs) in enumerate(rows)]
         title = f"پرونده‌ی امروز: {c.data['title']}"
     elif period == "weekly":
@@ -42,14 +42,14 @@ async def leaderboard(period: str = Query("daily", pattern="^(daily|weekly|all)$
              .where(CaseProgress.solved.is_(True), CaseProgress.day >= start, CaseProgress.ranked.is_(True), visible)
              .group_by(Player.id).order_by(total.desc()))
         rows = (await session.execute(q)).all()
-        out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, value=int(t), stars=int(t),
+        out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, avatar_id=avatars.avatar_key(pl), avatar_frame=avatars.frame_key(pl), value=int(t), stars=int(t),
                          me=pl.id == player.id, rank_title=rank_title(pl)) for i, (pl, t) in enumerate(rows)]
         title = "این هفته"
     else:
         q = (select(Player).where(visible, Player.stars_total > 0)
              .order_by(Player.stars_total.desc(), Player.cases_solved.desc()))
         rows = (await session.execute(q)).scalars().all()
-        out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, value=pl.stars_total,
+        out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, avatar_id=avatars.avatar_key(pl), avatar_frame=avatars.frame_key(pl), value=pl.stars_total,
                          stars=pl.stars_total, me=pl.id == player.id, rank_title=rank_title(pl)) for i, pl in enumerate(rows)]
         title = "همه‌ی زمان‌ها"
     me = next((r for r in out if r.me), None)

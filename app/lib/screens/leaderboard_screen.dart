@@ -4,7 +4,7 @@ import '../models/models.dart';
 import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/profile_bell.dart';
-import '../widgets/character.dart';
+import '../widgets/avatar_frame.dart';
 
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
@@ -143,12 +143,10 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
             height: face + 8,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: K.night3,
               shape: BoxShape.circle,
-              border: Border.all(color: ring, width: 3),
               boxShadow: [BoxShadow(color: ring.withValues(alpha: 0.35), blurRadius: first ? 18 : 10)],
             ),
-            child: DetectiveFace(r.avatar, size: face),
+            child: AvatarWithFrame(avatar: r.avatarId, frame: r.avatarFrame, size: face + 8, animate: true),
           ),
           const SizedBox(height: 6),
           Text(r.me ? 'تو' : r.nickname,
@@ -207,7 +205,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
           child: Text(fa(r.rank), style: tBody(13, color: r.rank <= 3 ? K.ink : K.text, w: FontWeight.w900)),
         ),
         const SizedBox(width: 10),
-        DetectiveFace(r.avatar, size: 40),
+        AvatarWithFrame(avatar: r.avatarId, frame: r.avatarFrame, size: 44),
         const SizedBox(width: 10),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [

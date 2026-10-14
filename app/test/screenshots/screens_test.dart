@@ -1161,9 +1161,6 @@ void main() {
   void secured() => Api.i.profile = Profile(_securedProfile);
   shot('profile_guest', () => const AccountScreen(), wait: const Duration(milliseconds: 1200));
   shot('profile_secured', () => const AccountScreen(), before: secured, wait: const Duration(milliseconds: 1200));
-  shot('profile_avatar_sheet', () => const AccountScreen(), then: (t) async {
-    await _tap(t, find.byIcon(Icons.edit_rounded));
-  });
   shot('profile_rank_sheet', () => const AccountScreen(), size: const Size(390, 1000), then: (t) async {
     await _tap(t, find.text('کارآگاه ارشد'));
   });

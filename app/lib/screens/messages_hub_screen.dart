@@ -6,7 +6,7 @@ import '../models/progress.dart';
 import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/badge_cell.dart';
-import '../widgets/character.dart';
+import '../widgets/avatar_frame.dart';
 import '../widgets/offline.dart';
 import 'achievements_screen.dart';
 
@@ -164,12 +164,7 @@ class _MessagesHubScreenState extends State<MessagesHubScreen> {
           ),
           child: Column(children: [
             Row(children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(color: K.night3, shape: BoxShape.circle, border: Border.all(color: K.brass, width: 2)),
-                child: DetectiveFace(p?.avatar ?? 0, size: 48),
-              ),
+              AvatarWithFrame(avatar: p?.avatarId ?? 'det_01', frame: p?.avatarFrame ?? 'frame_brass', size: 56),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
