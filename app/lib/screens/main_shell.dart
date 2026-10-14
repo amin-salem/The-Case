@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../services/whats_new.dart';
-import '../widgets/whats_new_ui.dart';
 import '../services/api.dart';
 import 'account_sheets.dart';
 import 'account_screen.dart';
