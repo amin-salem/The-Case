@@ -128,7 +128,15 @@ def _run(state: dict) -> int:
 
     suspects = [s["id"] for s in got["case"]["suspects"]]
     evidence = [e["id"] for e in got["case"]["evidence"]]
-    wrong = expect("POST", f"/v1/cases/{today['id']}/accuse", headers=hdr, json={"suspect": suspects[0], "evidence": evidence[0]}, name="POST accuse (one try)")
+    # every player sees the suspects in his own random order, so suspects[0] is the culprit now and then: with --solve pick
+    # a suspect that is certainly wrong (otherwise this check solved the case by luck and the real solve got 409)
+    first = suspects[0]
+    if a.solve:
+        mine = next((p for p in CASES.glob("*.json") if json.loads(p.read_text(encoding="utf-8"))["id"] == today["id"]), None)
+        if mine:
+            culprit = json.loads(mine.read_text(encoding="utf-8"))["solution"]["culprit"]
+            first = next((x for x in suspects if x != culprit), first)
+    wrong = expect("POST", f"/v1/cases/{today['id']}/accuse", headers=hdr, json={"suspect": first, "evidence": evidence[0]}, name="POST accuse (one try)")
     check(wrong and wrong.get("result") in ("wrong_suspect", "wrong_proof", "solved"), "accusation is judged by the server", str(wrong and wrong.get("result")))
     if wrong and wrong.get("result") != "solved":
         expect("GET", f"/v1/cases/{today['id']}/stats", status=409, headers=hdr, name="others' guesses stay hidden until you finish")
