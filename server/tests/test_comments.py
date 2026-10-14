@@ -108,3 +108,23 @@ async def test_admin_lists_and_needs_key(client):
     await approve(client, cid, "delete")
     assert (await client.post(f"/admin/api/comments/{cid}", headers=ADMIN, json={"action": "delete"})).status_code == 404
     assert (await client.post(f"/admin/api/comments/{cid}", headers=ADMIN, json={"action": "nuke"})).status_code == 422
+
+
+async def test_stars_without_a_comment(client):
+    a = await new_player(client, "cm-star-1234")
+    b = await new_player(client, "cm-star-5678")
+    await finish(a["player_id"])
+    await finish(b["player_id"])
+    # no text: the stars count at once, nothing waits for the admin
+    r = await post(client, a, "", 4)
+    assert r.status_code == 200 and r.json()["status"] == "approved"
+    assert (await post(client, a, "", 4)).status_code == 409                 # one rating per player and case
+    assert (await post(client, b, "   ", 0)).status_code == 422              # stars are still needed
+    lst = (await client.get(f"/v1/cases/{CASE}/comments", headers=b["headers"])).json()
+    assert lst["count"] == 1 and lst["average"] == 4.0 and lst["items"] == []  # counted, not listed as a comment
+    assert (await client.get(f"/v1/cases/{CASE}/comments", headers=a["headers"])).json()["has_mine"] is True
+    # a written comment still waits for approval
+    r = await post(client, b, "پرونده‌ی خوبی بود", 2)
+    assert r.json()["status"] == "pending"
+    lst = (await client.get(f"/v1/cases/{CASE}/comments", headers=a["headers"])).json()
+    assert lst["items"] == [] and lst["count"] == 1

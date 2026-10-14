@@ -174,3 +174,26 @@ async def test_config_and_admin(client):
     assert stats["cases_written"] >= 6
     rep = (await client.get("/admin/cases", headers=ADMIN)).json()
     assert len(rep) >= 6
+
+
+async def test_wrong_tries_are_remembered_for_the_red_marks(client):
+    p = await new_player(client, "marker")
+    h = p["headers"]
+    c = content.todays_case()
+    await client.get(f"/v1/cases/{c.id}", headers=h)
+    bad_ev = next(e["id"] for e in c.data["evidence"] if e["id"] not in c.proof)
+    innocent = next(s["id"] for s in c.data["suspects"] if s["id"] != c.culprit)
+    r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": innocent, "evidence": bad_ev})).json()
+    assert r["result"] == "wrong_suspect" and r["progress"]["wrong_tries"] == [
+        {"s": innocent, "e": bad_ev, "m": None, "r": "wrong_suspect"}]
+    r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": c.culprit, "evidence": bad_ev})).json()
+    assert r["result"] == "wrong_proof"
+    # the list survives a reload (another device) and is the player's own
+    got = (await client.get(f"/v1/cases/{c.id}", headers=h)).json()["progress"]["wrong_tries"]
+    assert [t["r"] for t in got] == ["wrong_suspect", "wrong_proof"] and got[1]["e"] == bad_ev
+    other = await new_player(client, "marker-2")
+    await client.get(f"/v1/cases/{c.id}", headers=other["headers"])
+    assert (await client.get(f"/v1/cases/{c.id}", headers=other["headers"])).json()["progress"]["wrong_tries"] == []
+    # solved: the review still has both mistakes
+    r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h, json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})).json()
+    assert r["result"] == "solved" and len(r["progress"]["wrong_tries"]) == 2

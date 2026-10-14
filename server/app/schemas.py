@@ -163,6 +163,7 @@ class ProgressOut(BaseModel):
     stars: int
     hint_costs: list[int]
     answer_at: int | None = None  # a lost case: unix time when the answer becomes public (None = public / not lost)
+    wrong_tries: list[dict[str, Any]] = []  # this player's wrong accusations: {s, e, m, r} (r = wrong_suspect | wrong_proof | wrong_motive | hasty)
 
 
 class CaseOut(BaseModel):

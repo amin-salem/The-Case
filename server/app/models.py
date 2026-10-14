@@ -116,6 +116,8 @@ class CaseProgress(Base):
     ranked: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
     # a lost case shows its answer only from this time (UTC); None = at once
     reveal_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    # the player's wrong accusations in order: [{"s": suspect, "e": evidence, "m": motive|None, "r": kind}] (at most 10)
+    wrong_tries: Mapped[list | None] = mapped_column(JSON, nullable=True)
 
 
 class Purchase(Base):

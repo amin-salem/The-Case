@@ -66,7 +66,8 @@ async def list_comments(case_id: str, before: int = Query(0, ge=0), player: Play
     C = CaseComment
     agg = (await session.execute(select(func.count(), func.coalesce(func.avg(C.rating), 0)).where(
         C.case_id == case_id, C.parent_id.is_(None), C.status == "approved"))).one()
-    q = select(C).where(C.case_id == case_id, C.parent_id.is_(None), C.status == "approved")
+    # stars-only ratings count in the average but are not listed as comments
+    q = select(C).where(C.case_id == case_id, C.parent_id.is_(None), C.status == "approved", C.body != "")
     if before:
         q = q.where(C.id < before)
     roots = (await session.execute(q.order_by(C.id.desc()).limit(PAGE + 1))).scalars().all()
@@ -110,16 +111,20 @@ async def write_comment(case_id: str, body: CommentIn, player: Player = Depends(
     if body.parent_id is None:
         if not 1 <= body.rating <= 5:
             raise HTTPException(422, "rating_needed")
-        text = _clean(body.body, 3, MAX_ROOT)
+        # the text is optional: stars alone are counted at once, a written comment waits for the admin
+        text = _clean(body.body, 3, MAX_ROOT) if (body.body or "").strip() else ""
         old = (await session.execute(select(C).where(
             C.case_id == case_id, C.player_id == player.id, C.slot == "root"))).scalar_one_or_none()
         if old is not None:
             if old.status != "rejected":
                 raise HTTPException(409, "already_commented")
-            old.rating, old.body, old.status, old.reviewed_at, old.created_at = body.rating, text, "pending", None, utcnow()
+            old.rating, old.body, old.created_at = body.rating, text, utcnow()
+            old.status, old.reviewed_at = ("pending", None) if text else ("approved", utcnow())
             row = old
         else:
             row = C(case_id=case_id, player_id=player.id, slot="root", rating=body.rating, body=text)
+            if not text:
+                row.status, row.reviewed_at = "approved", utcnow()
             session.add(row)
     else:
         text = _clean(body.body, 2, MAX_REPLY)

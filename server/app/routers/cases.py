@@ -23,13 +23,25 @@ router = APIRouter(prefix="/v1/cases", tags=["cases"])
 log = logging.getLogger("cases")
 
 
+MAX_WRONG_NOTES = 10
+
+
+def _note_wrong(p: CaseProgress, body, kind: str) -> None:
+    """Remember a wrong accusation (bounded) so the app can show it in red, now and after the case is solved."""
+    tries = list(p.wrong_tries or [])
+    if len(tries) < MAX_WRONG_NOTES:
+        tries.append({"s": body.suspect, "e": body.evidence, "m": body.motive, "r": kind})
+        p.wrong_tries = tries  # a new list, so the change is saved
+
+
 def _progress_out(c: Case, p: CaseProgress | None) -> ProgressOut:
     hints = p.hints if p else 0
     attempts = p.attempts if p else 0
     return ProgressOut(hints=c.hints[:hints], attempts=attempts,
                        attempts_left=max(0, eco.MAX_ATTEMPTS - attempts),
                        solved=bool(p and p.solved), failed=bool(p and p.failed), stars=p.stars if p else 0,
-                       hint_costs=eco.HINT_COSTS, answer_at=ac.answer_at_ts(p))
+                       hint_costs=eco.HINT_COSTS, answer_at=ac.answer_at_ts(p),
+                       wrong_tries=list(p.wrong_tries or []) if p else [])
 
 
 async def _progress(session: AsyncSession, player_id: str, case_id: str) -> CaseProgress | None:
@@ -294,11 +306,14 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         log.info("anticheat plain_wrong case=%s active=%s seen=%d", c.id, p.active_seconds, len(p.seen or []))
     elif body.suspect == c.culprit and (p.proof_misses or 0) < eco.FREE_PROOF_MISSES:
         p.proof_misses = (p.proof_misses or 0) + 1
+        _note_wrong(p, body, near)
         await session.commit()
         return AccuseOut(result=near, attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
                          streak=player.streak, progress=_progress_out(c, p))
     p.attempts += 1
     result = near if body.suspect == c.culprit else "wrong_suspect"
+    # a hasty accusation of the real culprit is answered with the plain «wrong»: the note says so, so a later review is honest
+    _note_wrong(p, body, "hasty" if (body.suspect == c.culprit and result == "wrong_suspect") else result)
     if p.attempts >= eco.MAX_ATTEMPTS:
         p.failed, p.finished_at, p.day = True, utcnow(), today
         p.reveal_at = ac.reveal_time(c, ac.now_utc())  # the answer stays secret until then
