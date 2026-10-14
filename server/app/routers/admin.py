@@ -1,8 +1,9 @@
 """Admin tools. Every call needs the header  X-Admin-Key: <ADMIN_API_KEY>."""
+import uuid
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import case, delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,9 +12,9 @@ from .. import economy as eco
 from ..db import get_session
 from ..models import AdminLog, Broadcast, CaseProgress, CoinLog, ConfigValue, InboxItem, Player, Purchase, utcnow
 from ..schemas import ConfigIn, GiftIn
-from ..security import require_admin
-from ..services.remote_config import DEFAULTS, load_config
-from ..util import ts
+from ..security import hash_secret, make_token, new_secret, require_admin
+from ..services.remote_config import DEFAULTS, invalidate as invalidate_config, load_config
+from ..util import add_coins, default_nickname, ts, unique_invite_code
 
 router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_admin)])
 
@@ -104,6 +105,28 @@ async def ban(player_id: str, body: BanIn, session: AsyncSession = Depends(get_s
     return {"id": p.id, "banned": p.banned}
 
 
+class SmokeBulkIn(BaseModel):
+    n: int = Field(default=100, ge=1, le=500)
+
+
+@router.post("/players/smoke-bulk")
+async def smoke_bulk(body: SmokeBulkIn, session: AsyncSession = Depends(get_session)):
+    """For tools/load_test.py: makes up to 500 throw-away players (device id «smoke-load-…») and returns their tokens, so a
+    load test does not hit the per-IP registration limit. Remove them with purge-smoke (the test deletes them itself)."""
+    run = uuid.uuid4().hex[:6]
+    made = []
+    for i in range(body.n):
+        player = Player(secret_hash=hash_secret(new_secret()), device_id=f"smoke-load-{run}-{i}", app_version=1,
+                        nickname=default_nickname(), invite_code=await unique_invite_code(session), token_gen=0, coins=0)
+        session.add(player)
+        await session.flush()
+        add_coins(session, player, eco.START_COINS, "welcome")
+        made.append(player)
+    session.add(AdminLog(action="smoke_bulk", target=f"smoke-load-{run}", detail={"n": body.n}))
+    await session.commit()
+    return {"players": [{"player_id": p.id, "token": make_token(p.id, 0)[0]} for p in made]}
+
+
 @router.post("/players/purge-smoke")
 async def purge_smoke_players(session: AsyncSession = Depends(get_session)):
     """Deletes every test player whose device id starts with «smoke-» (made by tools/smoke_test.py), completely.
@@ -145,6 +168,7 @@ async def set_config(body: ConfigIn, session: AsyncSession = Depends(get_session
         else:
             row.value, row.updated_at = value, utcnow()
     await session.commit()
+    invalidate_config()
     return await load_config(session)
 
 
@@ -152,6 +176,7 @@ async def set_config(body: ConfigIn, session: AsyncSession = Depends(get_session
 async def reset_config(key: str, session: AsyncSession = Depends(get_session)):
     await session.execute(delete(ConfigValue).where(ConfigValue.key == key))
     await session.commit()
+    invalidate_config()
     return await load_config(session)
 
 

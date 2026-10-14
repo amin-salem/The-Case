@@ -1,5 +1,14 @@
 # Changelog
 
+## server 1.25.5: capacity for the small Liara plan
+
+- New `server/tools/load_test.py` (N virtual players do what the app does at 21:00; ramp or `--burst`; reports requests, 429/5xx, p50/p95/p99, requests per second) and a 30-player sanity step in CI. New admin call `POST /admin/players/smoke-bulk`. How to run it from Iran: `docs/operations.md` «Capacity».
+- Database pool per worker is bounded and configurable (`DB_POOL_SIZE`/`DB_MAX_OVERFLOW`/`DB_POOL_TIMEOUT`/`DB_POOL_RECYCLE`, defaults 5+5, 10 s).
+- Per-worker TTL caches (`app/cache.py`) for the config rows, the solver counts on the case list and the public pieces of `/v1/config` (dropped when a case opens). Nothing per player or secret is cached.
+- Rate limit: requests with a valid token are limited per player (`global_player`), the per-IP ceiling for them is a high flood guard (`global_ip_auth`); only requests without a valid token keep `global_ip`. Phones behind one carrier IP no longer block each other. Registration limits are unchanged (see the note in «Capacity»).
+- Migration 0022 (additive): indexes `ix_progress_case_solved` and `ix_progress_rank` on `case_progress`.
+- Docs: workers advice for 0.5 CPU, what to watch, upgrade advice.
+
 ## server 1.25.4, app 1.25.2 (build 53): weekend case, new format
 
 - Timing: new weekend cases open Wednesday 21:00 and close Friday 21:00 (48 h), two chapters (0 h and 24 h). The reminder for a weekend opening is moved two minutes so it does not collide with the nightly one. This week's case is a one-off (Thursday 09:00 to Saturday 09:00).

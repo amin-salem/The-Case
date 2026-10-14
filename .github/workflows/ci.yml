@@ -30,6 +30,13 @@ jobs:
         run: |
           set -e
           alembic upgrade head
+          python - <<'EOF2'
+          import sqlite3
+          d = sqlite3.connect("mig.db")
+          names = {r[1] for r in d.execute("PRAGMA index_list(case_progress)")}
+          assert {"ix_progress_case_solved", "ix_progress_rank"} <= names, names
+          print("capacity indexes ok")
+          EOF2
           rm -f mig.db
           cat > /tmp/mig_lists.py <<'EOF'
           # columns and tables added by migrations after 0001 (an old database misses them)
@@ -80,6 +87,15 @@ jobs:
           uvicorn app.main:app --port 8765 &
           sleep 5
           python tools/smoke_test.py http://127.0.0.1:8765 --solve
+      - name: Load test, sanity only (30 virtual players against a local server, rate limits off)
+        working-directory: server
+        env:
+          RATE_LIMIT: "false"
+          DATABASE_URL: sqlite+aiosqlite:///./load.db
+        run: |
+          uvicorn app.main:app --port 8766 &
+          sleep 5
+          python tools/load_test.py http://127.0.0.1:8766 -n 30 --ramp 5 --think 0.1 --concurrency 6
 
   app:
     runs-on: ubuntu-latest

@@ -239,6 +239,40 @@ async def test_exempt_routes_and_global_ceiling(clock):
         assert (await c.get("/v1/config")).status_code == 200
 
 
+async def test_two_players_behind_one_ip_do_not_block_each_other(clock):
+    """Mobile carriers share one IP across many phones (CGNAT): 110 requests from one IP in 5 s used to hit the
+    100-per-5-s IP ceiling. With valid tokens each player has his own allowance; only anonymous traffic is per IP."""
+    async with mk("198.51.100.7") as c:
+        a, b = auth("cgnat-a"), auth("cgnat-b")
+        codes = []
+        for _ in range(55):
+            codes.append((await c.get("/v1/config", headers=a)).status_code)
+            codes.append((await c.get("/v1/config", headers=b)).status_code)
+        assert 429 not in codes and len(codes) == 110
+        # one player who goes over HIS limit is stopped, the other one is not
+        for _ in range(20):
+            await c.get("/v1/config", headers=a)
+        assert (await c.get("/v1/config", headers=a)).status_code == 429
+        assert (await c.get("/v1/config", headers=b)).status_code == 200  # b used 55 of 60 reads
+    async with mk("198.51.100.8") as c:  # anonymous traffic from another IP keeps the strict per-IP ceiling
+        codes = [(await c.get("/v1/config")).status_code for _ in range(130)]
+        assert 429 in codes
+
+
+async def test_player_ceiling_and_forged_tokens_stay_per_ip(clock):
+    async with mk("198.51.100.9") as c:
+        forged = {"Authorization": "Bearer " + jwt.encode({"sub": "someone"}, "x" * 40, algorithm="HS256")}
+        codes = [(await c.get("/v1/config", headers=forged)).status_code for _ in range(130)]
+        assert 429 in codes  # a forged token is anonymous: the per-IP ceiling applies
+    limiter.reload({"RL_GLOBAL_PLAYER": "5/5", "RL_READ": "off"})
+    async with mk("198.51.100.10") as c:
+        h = auth("ceiling")
+        codes = [(await c.get("/v1/config", headers=h)).status_code for _ in range(8)]
+        assert codes[:5] == [200] * 5 and codes[5:] == [429] * 3
+        assert (await c.get("/v1/config", headers=auth("other"))).status_code == 200
+    limiter.reload({})
+
+
 async def test_kill_switch(clock, monkeypatch):
     monkeypatch.setattr(get_settings(), "rate_limit", False)
     async with mk() as c:

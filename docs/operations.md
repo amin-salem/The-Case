@@ -60,7 +60,7 @@ One limiter protects the whole API (`server/app/services/ratelimit.py`). The Tue
 - **Policy table** (`DEFAULTS` in `ratelimit.py`): each policy has one or more *tiers* `limit/seconds`, a burst tier first and a
   sustained tier after it (`accuse` = 1 per 3 s **and** 20 per hour). Tiers with limit ≥ 10 use a sliding-window estimate;
   smaller tiers use exact fixed windows.
-- **Routes** (`ROUTES`) map a method + path to a policy. Every request also passes `global_ip`. Not limited at all:
+- **Routes** (`ROUTES`) map a method + path to a policy. Every request also passes a global limit: `global_player` (per player) plus the high flood guard `global_ip_auth` when it carries a valid token, `global_ip` when it does not. Not limited at all:
   `/health`, `/privacy`, `/terms`, `/delete-account`, `/admin/ui`, `/docs`, `/openapi.json`, `/static/*`.
 - **Identity**: the player id from a *valid* login token, otherwise the client IP. A forged or expired token counts as "no token".
   Stored keys are salted hashes (never raw IPs or ids). `register_device` / `login_target` also look at client-sent values
@@ -88,7 +88,9 @@ One limiter protects the whole API (`server/app/services/ratelimit.py`). The Tue
 
 | Policy | Applies to | Key | Limits | Store | Broken store |
 |---|---|---|---|---|---|
-| `global_ip` | every request | IP | 100/5 s, 600/60 s | memory | open |
+| `global_ip` | requests WITHOUT a valid token | IP | 100/5 s, 600/60 s | memory | open |
+| `global_player` | every request WITH a valid token | player | 150/5 s, 1200/60 s | memory | open |
+| `global_ip_auth` | same, per IP: flood guard only (CGNAT) | IP | 3000/5 s, 20000/60 s | memory | open |
 | `register` | POST /v1/auth/register | IP | 3/60 s, 10/day | shared | closed |
 | `register_device` | same, by `device_id` | device_id | 3/day | shared | closed |
 | `login` | /v1/auth/login, /login/email | IP | 20/60 s, 60/10 min | shared | open |
@@ -119,7 +121,7 @@ One limiter protects the whole API (`server/app/services/ratelimit.py`). The Tue
 - `REDIS_URL` — optional shared store for the strict limits.
 - `RATE_TRUSTED_HOPS` (default 1) — proxies in front of the server. If *all* players look like one IP in the admin Health
   screen (one key with a huge blocked count), raise it; if Liara adds no proxy header, players share the proxy IP, so also raise
-  the `global_ip` limit (`RL_GLOBAL_IP`).
+  the `global_ip` and `global_ip_auth` limits (`RL_GLOBAL_IP`, `RL_GLOBAL_IP_AUTH`).
 - `RATE_TRUSTED_PROXIES` — optional CIDR list allowed to set `X-Forwarded-For` (default: private addresses).
 - `RATE_ADMIN_ALLOW_IPS` — comma list of IPs that are never locked out of `/admin`.
 
@@ -212,3 +214,70 @@ The list is data in `app/lib/data/whats_new.dart` (`kWhatsNew`, newest first). T
 - Titles only, in the players' voice («کارآگاه», never «نفر»). `target` is one of weekend, avatars, comments, caseToday, missions (add a case in `whatsNewGo` for a new place).
 - The banner shows once per build (prefs `wn_seen`); a fresh install (no saved player) shows nothing. Settings «چه خبر؟» lists the last 5 releases.
 - Red «تازه» tags: put `NewTag('<tag id>')` next to the place and list the id in the item's `tags`; call `WhatsNew.i.tagOpened('<id>')` when the player opens that place. A tag disappears when opened or 7 days after the first start of the new build.
+
+## Capacity (14 Oct 2026, server 1.25.5)
+
+**Plan (Liara):** app 0.5 CPU / 0.5 GB RAM, Postgres 0.5 CPU / 0.5 GB RAM. `start.sh` runs `WEB_CONCURRENCY` uvicorn workers (default 2).
+**Nothing has been measured on the real server yet**: the numbers come from running `tools/load_test.py` (below). Until you have run it,
+any "N players" claim is a guess.
+
+### What was changed
+- **Database pool per worker** (`app/db.py`): `DB_POOL_SIZE` 5 + `DB_MAX_OVERFLOW` 5 per worker (so 20 connections for 2 workers, far under
+  the roughly 100 a small Postgres allows), `DB_POOL_TIMEOUT` 10 s (a request that cannot get a connection fails fast with a 5xx instead
+  of queuing for ever), `DB_POOL_RECYCLE` 1800 s. All four are environment variables; change them only if the load test says so.
+- **Shared data is cached per worker** (`app/cache.py`, bounded, short TTL, one loader at a time so 200 simultaneous app starts cause one query):
+  the config rows read by `/v1/config` and the bell on `/v1/me` (10 s; an admin change clears the cache of the worker that handled it,
+  the other worker follows within 10 s); the "how many detectives solved it" counts on `/v1/cases` (30 s; this was an aggregate over the
+  whole `case_progress` table on every app start); the public pieces of `/v1/config` (economy, notify plan, upcoming weekend/story, next case
+  time: 30 s, and dropped at once when the clock passes a case or chapter opening, midnight or the mission change, so a new case shows up
+  exactly on time). Never cached: anything per player, case solutions, hints.
+- **Rate limits and shared mobile IPs** (CGNAT): a request with a valid token is now limited by its player (`global_player`), and the per-IP
+  ceiling for such requests is a high flood guard (`global_ip_auth`). Requests without a valid token (registration, forged tokens, scanners) keep
+  the strict `global_ip`. Registration is unchanged: `register` is 3/min and 10/day per IP, `register_device` 3/day.
+  **Watch this at launch:** if many new players come through one carrier IP, `register` (10 a day per IP) will refuse some of them with
+  the «امروز از این دستگاه یا شبکه چند حساب ساخته شده» message. If Health shows many `register` blocks, raise it in the Liara environment, e.g.
+  `RL_REGISTER=30/60,500/86400` (this trades some abuse protection for not losing real installs).
+- **Indexes** (migration 0022, additive, skipped if present): `ix_progress_case_solved (case_id, solved)` and `ix_progress_rank (case_id, stars, seconds)`
+  (the rank count after a solve reads only the better players instead of every solver of the case).
+- **Admin helper for tests:** `POST /admin/players/smoke-bulk {"n": 200}` makes throw-away «smoke-load-…» players and returns their tokens;
+  `POST /admin/players/purge-smoke` removes them.
+- Known heavy spots left as they are (measure first): `/v1/me` runs about 8 small queries per call (player, achievements, avatar goals, the bell:
+  gifts, broadcasts, badges); `GET /v1/feed` runs the same bell queries. They are indexed per player and cheap one by one.
+
+### Workers: 1 or 2?
+Each worker is a separate process with its own pool, its own caches and its own memory rate-limit counters. On **0.5 CPU** two workers
+share half a core, so they mostly wait for each other, and each needs its own RAM (the case files are loaded in every worker).
+Recommendation: set `WEB_CONCURRENCY=1` on the 0.5 CPU / 0.5 GB plan (the work is waiting for the database, one event loop copes with that,
+and the cache takes the repeated queries away), and keep 2 once the app has 1 CPU or more. Do not change it blindly: run the load test with
+the current value, change it, run it again and keep the better one. Watch in the Liara panel: app CPU (steadily near 100 % = too small),
+app memory (near the 0.5 GB limit = the container restarts), and Postgres CPU/memory/connections. Watch in the admin Health screen: blocked
+requests per policy (many `register` or `global_*` blocks = a limit is too tight) and the answer time.
+
+### Running the load test (from Iran, not from the cloud)
+It needs Python 3.11+ and `pip install httpx`. Get `server/tools/load_test.py` from the repository. Use the admin key (the accounts are made
+by the admin call, because registering 200 accounts from one IP is correctly refused). Keep the key out of shell history if you can
+(`export ADMIN_API_KEY=...` first).
+
+    export ADMIN_API_KEY=your-admin-key
+    python load_test.py https://gaamly.ir -n 200                  # 200 players over 60 s
+    python load_test.py https://gaamly.ir -n 200 --burst           # 200 players within 20 s (the 21:00 rush)
+    python load_test.py https://gaamly.ir -n 1000 --burst          # only after the 200 run was clean
+    python load_test.py https://gaamly.ir -n 1000 --ramp 300       # a gentler 5-minute arrival
+
+Run it when few real players are online (not at 21:00): it shares the server with them. The test players are deleted at the end
+(`DELETE /v1/me/smoke`); if a run is cut off, `curl -X POST -H "X-Admin-Key: $ADMIN_API_KEY" https://gaamly.ir/admin/players/purge-smoke`.
+A test from one computer also tests that computer's connection: if "lost connections" appear but the server is fine, lower `--concurrency`.
+
+### Reading the result
+- **Requests/second** is what the server really served; compare it with the arrival you expect (a player makes about 15 requests when the app opens).
+- **Answers by status**: `200` good; `4xx` normal answers (409/402 are game rules); **`429`** = a rate limit refused real-looking traffic;
+  **`5xx`** = the server failed. `ERR:...` = the connection was lost or timed out.
+- **p50/p95/p99** = half / 95 % / 99 % of requests were faster than this (milliseconds). The per-endpoint table shows which call is slow.
+- **OK:** p95 under 1000 ms, no 5xx, no lost connections, no 429. The tool prints `VERDICT: OK` or what to look at; its exit code is 1 for 5xx or lost connections.
+- If p95 rises sharply between the 200 and 1000 runs, or any 5xx appears, that is the number of simultaneous players the current plan carries.
+
+### When to upgrade
+Before a big launch (a store feature, an ad, a Telegram post), move **both the app and Postgres to 1 CPU / 1 GB**, then use 2 workers.
+Do it a day before, run the 1000-player burst once, and leave the bigger plan on until the first week's numbers are known. If the load test
+shows 5xx or p95 over 1 s at 200 players on the current plan, upgrade even without a launch. This is cheap next to the cost of a first
+evening where new players see errors.

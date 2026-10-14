@@ -37,6 +37,14 @@ async def client():
 
 
 @pytest.fixture(autouse=True)
+def _fresh_caches():
+    """The per-worker caches (app/cache.py) start empty in every test, so no test sees another test's data."""
+    from app import cache
+    cache.clear_all()
+    yield
+
+
+@pytest.fixture(autouse=True)
 def _no_proof_requirement(monkeypatch):
     """Most tests solve a case at once: switch the proof-of-investigation rule off here.
     tests/test_anticheat.py turns it back on for the tests about it."""

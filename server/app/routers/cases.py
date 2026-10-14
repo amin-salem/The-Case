@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
 from .. import content, progress
+from ..cache import TTLCache
 from .. import economy as eco
 from ..content import Case
 from ..db import get_session
@@ -131,14 +132,25 @@ def _can_open(c: Case, p: CaseProgress | None, player: Player) -> bool:
     return _is_today(c) or vip_active(player) or bool(p and (p.unlocked or p.solved or p.failed))
 
 
+_solvers = TTLCache("solver_counts", ttl=30, max_size=2)
+
+
+async def _solver_counts(session: AsyncSession) -> dict[str, int]:
+    """How many detectives solved each case: one aggregate over the whole progress table, the same for everybody
+    and only decoration on the list, so it is shared for 30 s per worker instead of being run on every app start."""
+    async def load():
+        return {k: int(n) for k, n in (await session.execute(
+            select(CaseProgress.case_id, func.count()).where(CaseProgress.solved.is_(True))
+            .group_by(CaseProgress.case_id))).all()}
+    return await _solvers.get_or_load("n", load)
+
+
 @router.get("", response_model=CasesOut)
 async def list_cases(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     opened = content.opened()
     mine = {p.case_id: p for p in (await session.execute(
         select(CaseProgress).where(CaseProgress.player_id == player.id))).scalars().all()}
-    counts = dict((await session.execute(
-        select(CaseProgress.case_id, func.count()).where(CaseProgress.solved.is_(True))
-        .group_by(CaseProgress.case_id))).all())
+    counts = await _solver_counts(session)
     today = content.todays_case()
 
     def row(c: Case) -> CaseRow:
@@ -331,6 +343,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
             fast2=int(p.seconds <= 120 and not weekly), early_daily=int(early), weekly_solved=int(live), warrants=warrants)
         await story_finish(session, player.id, c.id, p)
         await session.commit()
+        _solvers.clear()  # this worker shows the new solver count at once; the others within 30 s
         await ac.maybe_pay_referral(player.id)
         rank = (await _daily_rank(session, c.id, p.stars, p.seconds)
                 if today_case and p.ranked and ac.is_visible(player) else None)

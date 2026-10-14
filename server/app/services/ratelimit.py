@@ -56,7 +56,12 @@ def _p(name, tiers, scope="player", store="mem", fail="open", note=""):
 
 
 DEFAULTS: dict[str, Policy] = {p.name: p for p in [
-    _p("global_ip", [(100, 5), (600, 60)], "ip", note="every request, per IP"),
+    # Many Iranian phones share one mobile IP (CGNAT), so a request with a VALID token is limited by its player, and the
+    # per-IP ceiling for such traffic is only a flood guard. Requests without a valid token (registration, forged tokens,
+    # scanners) keep the strict per-IP limit.
+    _p("global_ip", [(100, 5), (600, 60)], "ip", note="requests WITHOUT a valid token, per IP"),
+    _p("global_player", [(150, 5), (1200, 60)], "player", note="every request with a valid token, per player"),
+    _p("global_ip_auth", [(3000, 5), (20000, 60)], "ip", note="requests with a valid token, per IP: flood guard only (CGNAT)"),
     # accounts: very strict
     _p("register", [(3, 60), (10, 86400)], "ip", "strict", "closed", "new account, per IP: 3 a minute, 10 a day"),
     _p("register_device", [(3, 86400)], "key", "strict", "closed", "new account, per device_id: 3 a day (extra, client-supplied)"),
@@ -560,15 +565,24 @@ class Limiter:
                     blocked = await self._admin_gate(iph, headers.get("x-admin-key", ""), s.admin_api_key)
                     if blocked is not None:
                         return None, blocked
-            v = await self.evaluate(self.policies.get("global_ip"), "i" + iph)
-            if v is not None and not v.allowed:
-                return v, RateLimited(v.retry_after, 429, v)
+            v = None
+            auth_pid = player_id_from_auth(headers.get("authorization"), s.jwt_secret)
+            if auth_pid:  # a real player: limited by player id; the IP only has the high flood-guard ceiling
+                for gname, gident in (("global_player", "p" + self.hash(auth_pid)), ("global_ip_auth", "i" + iph)):
+                    gv = await self.evaluate(self.policies.get(gname), gident)
+                    if gv is not None and not gv.allowed:
+                        return gv, RateLimited(gv.retry_after, 429, gv)
+                    v = gv or v
+            else:
+                v = await self.evaluate(self.policies.get("global_ip"), "i" + iph)
+                if v is not None and not v.allowed:
+                    return v, RateLimited(v.retry_after, 429, v)
             for m, rx, name in ROUTES:
                 if (m == "*" or m == method) and rx.match(path):
                     pol = self.policies.get(name)
                     if pol is None:
                         break
-                    pid = player_id_from_auth(headers.get("authorization"), s.jwt_secret) if pol.scope == "player" else None
+                    pid = auth_pid if pol.scope == "player" else None
                     ident = ("p" + self.hash(pid)) if pid else ("i" + iph)
                     rv = await self.evaluate(pol, ident)
                     if rv is not None:

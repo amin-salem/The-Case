@@ -172,6 +172,20 @@ def next_case_at(now: datetime | None = None) -> datetime:
     return t if t > now else t + timedelta(days=1)
 
 
+def next_boundary(now: datetime | None = None) -> datetime:
+    """The next moment anything that depends on the clock can change for everybody: a case or chapter opens, a weekend
+    case closes, the story opens, the date changes, the mission day changes. Caches of clock-dependent data that is
+    the same for all players are dropped at this moment (app/cache.py)."""
+    now = now or now_local()
+    times = [now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1), mission_next_at(now), next_case_at(now)]
+    for c in weekly_cases():
+        start = opens_at(c)
+        times += [start + timedelta(hours=ch.get("at_hours", 0)) for ch in c.data.get("chapters") or []]
+        times.append(weekly_closes_at(c))
+    times += [story_opens_at(), next_thursday_at(now)]
+    return min(t for t in times if t > now)
+
+
 def week_start(d: date) -> date:
     """Iranian weeks start on Saturday."""
     return d - timedelta(days=(d.weekday() - 5) % 7)

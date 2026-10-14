@@ -1,4 +1,5 @@
 """Database connection (SQLAlchemy 2, async)."""
+import os
 from collections.abc import AsyncIterator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -11,11 +12,28 @@ class Base(DeclarativeBase):
     pass
 
 
+def _env_int(name: str, default: int, lo: int, hi: int) -> int:
+    """An integer setting from the environment, kept inside [lo, hi]; a bad value falls back to the default."""
+    try:
+        return max(lo, min(hi, int(os.environ.get(name, default))))
+    except ValueError:
+        return default
+
+
+def pool_settings() -> dict:
+    """Connection pool PER WORKER PROCESS (Postgres only). The total is workers x (DB_POOL_SIZE + DB_MAX_OVERFLOW) and must
+    stay well under the database's connection limit (a 0.5 GB Postgres allows roughly 100, of which a few are reserved).
+    Defaults: 5 + 5 = 10 per worker, 20 for two workers. A request that cannot get a connection waits DB_POOL_TIMEOUT
+    seconds and then fails with a clean 5xx instead of piling up. Idle connections are recycled after DB_POOL_RECYCLE s."""
+    return {"pool_size": _env_int("DB_POOL_SIZE", 5, 1, 50), "max_overflow": _env_int("DB_MAX_OVERFLOW", 5, 0, 50),
+            "pool_timeout": _env_int("DB_POOL_TIMEOUT", 10, 1, 120), "pool_recycle": _env_int("DB_POOL_RECYCLE", 1800, 60, 86400),
+            "pool_pre_ping": True}
+
+
 def _make_engine(url: str):
-    kwargs = {"pool_pre_ping": True}
     if url.startswith("sqlite"):
-        kwargs = {"connect_args": {"check_same_thread": False}}
-    return create_async_engine(url, **kwargs)
+        return create_async_engine(url, connect_args={"check_same_thread": False})
+    return create_async_engine(url, **pool_settings())
 
 
 engine = _make_engine(get_settings().database_url)

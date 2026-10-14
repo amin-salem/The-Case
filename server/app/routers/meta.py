@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import content
 from .. import economy as eco
+from ..cache import TTLCache
 from ..db import get_session
 from ..models import Event, Player, utcnow
 from ..schemas import EventsIn
@@ -25,31 +26,49 @@ async def health(session: AsyncSession = Depends(get_session)):
     return {"ok": True, "cases": len(content.all_cases()), "version": VERSION}
 
 
+_public = TTLCache("config_public", ttl=30, max_size=2)
+
+
+def _economy() -> dict:
+    return {"hint_costs": eco.HINT_COSTS, "unlock_cost": eco.UNLOCK_COST, "weekend_archive_cost": eco.WEEKEND_ARCHIVE_COST,
+            "weekend_shows_per_chapter": eco.WEEKEND_SHOWS_PER_CHAPTER, "weekly_early_bonus": eco.WEEKLY_EARLY_BONUS,
+            "max_attempts": eco.MAX_ATTEMPTS, "ad_reward": eco.AD_REWARD, "ads_per_day": eco.AD_PER_DAY,
+            "secure_reward": eco.SECURE_REWARD, "invite_reward": eco.INVITE_INVITER,
+            "invite_new_player": eco.INVITE_NEW_PLAYER,
+            "login_calendar": eco.LOGIN_CALENDAR, "login_envelope": [min(eco.LOGIN_ENVELOPE), max(eco.LOGIN_ENVELOPE)],
+            "freeze_cost": eco.FREEZE_COST, "max_freezes": eco.MAX_FREEZES,
+            "streak_badges": list(eco.STREAK_BADGES),
+            "riddles_per_day": eco.RIDDLES_PER_DAY, "riddle_free": eco.RIDDLE_FREE,
+            "riddle_unlock_cost": eco.RIDDLE_UNLOCK_COST, "riddle_reward": eco.RIDDLE_REWARD,
+            "riddle_seconds": eco.RIDDLE_SECONDS, "chest_coins": eco.CHEST_COINS,
+            "chest_bonus": eco.CHEST_BONUS, "weekly_reward": eco.WEEKLY_REWARD[3],
+            "ranks": [{"xp": x, "title": t} for x, t in eco.RANKS], "products": {
+                k: {"coins": p.coins, "no_ads": p.no_ads, "kind": p.kind} for k, p in eco.PRODUCTS.items()}}
+
+
+async def _public_pieces(now) -> dict:
+    """What is the same for every player at this moment. Cached until the clock passes the next boundary (a case or
+    chapter opening, midnight) or 30 s, so a new case shows up exactly on time."""
+    async def build():
+        return {"next_case_at": int(content.next_case_at(now).timestamp()), "notify": content.notify_plan(now),
+                "upcoming": {"weekend": content.weekend_upcoming(now), "story": content.story_upcoming(now)},
+                "economy": _economy(), "until": content.next_boundary(now)}
+    return await _public.get_or_load("p", build, now_wall=now, valid_until_of=lambda v: v["until"])
+
+
 @router.get("/v1/config")
 async def config(session: AsyncSession = Depends(get_session)):
     """No login needed: forced update, maintenance, prices, game numbers."""
     cfg = await load_config(session)
     now = content.now_local()
+    pieces = await _public_pieces(now)
     cfg.update({
         "server_time": int(now.timestamp()),
         "today": now.date().isoformat(),
-        "next_case_at": int(content.next_case_at(now).timestamp()),
-        "notify": content.notify_plan(now),
-        "upcoming": {"weekend": content.weekend_upcoming(now), "story": content.story_upcoming(now)},
-        "economy": {"hint_costs": eco.HINT_COSTS, "unlock_cost": eco.UNLOCK_COST, "weekend_archive_cost": eco.WEEKEND_ARCHIVE_COST,
-                    "weekend_shows_per_chapter": eco.WEEKEND_SHOWS_PER_CHAPTER, "weekly_early_bonus": eco.WEEKLY_EARLY_BONUS,
-                    "max_attempts": eco.MAX_ATTEMPTS, "ad_reward": eco.AD_REWARD, "ads_per_day": eco.AD_PER_DAY,
-                    "secure_reward": eco.SECURE_REWARD, "invite_reward": eco.INVITE_INVITER,
-                    "invite_new_player": eco.INVITE_NEW_PLAYER,
-                    "login_calendar": eco.LOGIN_CALENDAR, "login_envelope": [min(eco.LOGIN_ENVELOPE), max(eco.LOGIN_ENVELOPE)],
-                    "freeze_cost": eco.FREEZE_COST, "max_freezes": eco.MAX_FREEZES,
-                    "streak_badges": list(eco.STREAK_BADGES),
-                    "riddles_per_day": eco.RIDDLES_PER_DAY, "riddle_free": eco.RIDDLE_FREE,
-                    "riddle_unlock_cost": eco.RIDDLE_UNLOCK_COST, "riddle_reward": eco.RIDDLE_REWARD,
-                    "riddle_seconds": eco.RIDDLE_SECONDS, "chest_coins": eco.CHEST_COINS,
-                    "chest_bonus": eco.CHEST_BONUS, "weekly_reward": eco.WEEKLY_REWARD[3],
-                    "ranks": [{"xp": x, "title": t} for x, t in eco.RANKS], "products": {
-                        k: {"coins": p.coins, "no_ads": p.no_ads, "kind": p.kind} for k, p in eco.PRODUCTS.items()}},
+        "next_case_at": pieces["next_case_at"],
+        "notify": pieces["notify"],
+        "upcoming": pieces["upcoming"],
+        "economy": pieces["economy"],
     })
     return cfg
 

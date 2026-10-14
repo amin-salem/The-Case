@@ -92,6 +92,7 @@ class CaseProgress(Base):
     __table_args__ = (
         UniqueConstraint("player_id", "case_id", name="uq_progress"),
         Index("ix_progress_case_solved", "case_id", "solved"),
+        Index("ix_progress_rank", "case_id", "stars", "seconds"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)

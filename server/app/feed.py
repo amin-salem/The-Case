@@ -10,8 +10,8 @@ from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import achievements, content
-from .models import Broadcast, BroadcastClaim, ConfigValue, InboxItem, Player, PlayerAchievement, utcnow
-from .services.remote_config import load_config
+from .models import Broadcast, BroadcastClaim, InboxItem, Player, PlayerAchievement, utcnow
+from .services.remote_config import load_config, stamp_of
 from .util import ts
 
 MAX_ITEMS = 40
@@ -94,7 +94,7 @@ async def build_feed(session: AsyncSession, player: Player, now: datetime | None
     try:
         cfg = await load_config(session)
         news = cfg.get("news") or []
-        stamp = await session.scalar(select(ConfigValue.updated_at).where(ConfigValue.key == "news"))
+        stamp = await stamp_of(session, "news")
         for i, n in enumerate(news[:5] if isinstance(news, list) else []):
             if isinstance(n, str):
                 n = {"title": n}
