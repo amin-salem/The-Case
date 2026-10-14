@@ -6,7 +6,7 @@ import '../theme.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/coming_soon.dart';
 import '../widgets/scene.dart';
-import 'case_screen.dart';
+import 'weekend_tutorial.dart';
 
 DateTime? _time(Object? v) => v is num ? DateTime.fromMillisecondsSinceEpoch(v.toInt() * 1000) : null;
 
@@ -50,7 +50,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
   }
 
   void _play(CaseRow c) async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: c.id)));
+    await openWeekendCase(context, c.id);
     _load();
   }
 
@@ -72,6 +72,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
                   Text('یه پرونده‌ی بزرگ و خیلی سخت، هر هفته', style: tBody(13, color: K.textSoft)),
                 ]),
               ),
+              const WeekendHelpButton(),
             ]),
             const SizedBox(height: 14),
             if (weekly != null)

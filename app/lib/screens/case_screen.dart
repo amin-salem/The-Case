@@ -24,6 +24,7 @@ import 'comments_screen.dart';
 import 'dialogs.dart';
 import 'result_screen.dart';
 import 'suspect_sheet.dart';
+import 'weekend_tutorial.dart';
 
 IconData evidenceIcon(String type) => switch (type) {
       'cctv' => Icons.videocam_rounded,
@@ -420,6 +421,7 @@ class _CaseScreenState extends State<CaseScreen> {
                   ]),
               ]),
             ),
+            if (c.weekly) const WeekendHelpButton(compact: true),
             const ProfileBell(size: 32),
             const SoundButton(),
             ListenableBuilder(listenable: Api.i, builder: (_, __) => CoinChip(coins: Api.i.coins)),

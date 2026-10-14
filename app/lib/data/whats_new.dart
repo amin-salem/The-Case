@@ -41,6 +41,9 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(54, '۱.۲۵.۳', '2026-10-14', [
+    WhatsNewItem('weekend_tutorial', 'آموزش پرونده‌ی آخر هفته', WhatsNewTarget.weekend),
+  ]),
   WhatsNewRelease(53, '۱.۲۵', '2026-10-14', [
     WhatsNewItem('weekend_v2', 'پرونده‌ی آخر هفته، قالب تازه', WhatsNewTarget.weekend, tags: ['weekend_tab', 'show_evidence']),
     WhatsNewItem('avatars_frames', 'آواتار و قاب‌های تازه', WhatsNewTarget.avatars),

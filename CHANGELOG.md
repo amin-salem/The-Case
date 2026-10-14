@@ -1,5 +1,9 @@
 # Changelog
 
+## app 1.25.3 (build 54): weekend case tutorial
+
+- App only (no server change). The first time a player taps a weekend case (live or in the archive) a 90-second practice runs before the case opens: a tiny built-in fake case (3 suspects, 4 cards in 2 chapters, one suspect who slips), six coach-mark steps (chapters and the 24 h countdown, early accusation and its bonus, showing a card with the «۳ از ۳» counter, slip vs normal reaction, the two-step accusation, the archive). Fully local: no server call, no coins, stars or rewards; only the flag `weekend_tutorial_seen_v1` is stored. «رد کردن» at every step. A «راهنما» button on the weekend tab and on the weekend case replays it. «چی تازه شده؟» has the entry «آموزش پرونده‌ی آخر هفته».
+
 ## server 1.25.4, app 1.25.2 (build 53): weekend case, new format
 
 - Timing: new weekend cases open Wednesday 21:00 and close Friday 21:00 (48 h), two chapters (0 h and 24 h). The reminder for a weekend opening is moved two minutes so it does not collide with the nightly one. This week's case is a one-off (Thursday 09:00 to Saturday 09:00).

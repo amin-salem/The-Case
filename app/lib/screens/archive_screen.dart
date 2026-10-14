@@ -8,6 +8,7 @@ import '../widgets/offline.dart';
 import '../widgets/scene.dart';
 import 'case_screen.dart';
 import 'dialogs.dart';
+import 'weekend_tutorial.dart';
 
 /// Opens a case from a list: an old locked case is unlocked with coins first (after asking).
 /// Returns once the player leaves the case.
@@ -37,7 +38,11 @@ Future<void> openCaseRow(BuildContext context, CaseRow row) async {
     }
   }
   if (!context.mounted) return;
-  await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: row.id)));
+  if (row.weekend) {
+    await openWeekendCase(context, row.id);
+  } else {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: row.id)));
+  }
   Sfx.i.ambient('amb_home', volume: Sfx.homeVolume);
 }
 

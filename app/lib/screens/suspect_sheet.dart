@@ -13,12 +13,27 @@ import 'case_screen.dart';
 /// and marks them as suspicious / innocent. Returns the new mark.
 /// Weekend case (new format): what the sheet needs to let the player show evidence cards to this suspect.
 class WeekendShow {
-  WeekendShow({required this.caseId, required this.evidence, required this.shows, required this.left, this.onProgress});
+  WeekendShow(
+      {required this.caseId,
+      required this.evidence,
+      required this.shows,
+      required this.left,
+      this.onProgress,
+      this.localShow,
+      this.coach,
+      this.highlight = false});
   final String caseId;
   final List<Evidence> evidence;
   final List<ShowNote> shows;
   final int left;
   final void Function(Progress)? onProgress;
+
+  /// The practice case (weekend tutorial): answers a show on the phone, with no server call.
+  final Future<({String text, int left})> Function(String suspectId, String evidenceId)? localShow;
+
+  /// A coach-mark card drawn at the top of the sheet (tutorial only), and a glow around the «نشان دادن مدرک» box.
+  final Widget? coach;
+  final bool highlight;
 }
 
 Future<SuspectMark?> showSuspect(BuildContext context, Suspect s, SuspectMark mark,
@@ -98,6 +113,22 @@ class _SuspectSheetState extends State<_SuspectSheet> {
     final e = w.evidence.firstWhere((x) => x.id == id);
     setState(() => _showing = true);
     try {
+      final local = w.localShow;
+      if (local != null) {
+        final r = await local(widget.s.id, id);
+        if (!mounted) return;
+        if (!_shows.any((x) => x.suspect == widget.s.id && x.evidence == id)) {
+          _shows = [..._shows, ShowNote(suspect: widget.s.id, evidence: id, text: r.text)];
+        }
+        _left = r.left;
+        setState(() {
+          _showTitle = e.title;
+          _showLine = r.text;
+          _talking = true;
+          _turn++;
+        });
+        return;
+      }
       final r = await Api.i.showEvidence(w.caseId, widget.s.id, id);
       if (!mounted) return;
       if (r.progress != null) {
@@ -146,6 +177,7 @@ class _SuspectSheetState extends State<_SuspectSheet> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(9)))),
             const SizedBox(height: 10),
+            if (widget.weekend?.coach != null) ...[widget.weekend!.coach!, const SizedBox(height: 10)],
             // interrogation room: lamp light behind the suspect
             Container(
               height: 210,
@@ -214,7 +246,10 @@ class _SuspectSheetState extends State<_SuspectSheet> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                    color: K.night3, borderRadius: BorderRadius.circular(12), border: Border.all(color: K.brass.withValues(alpha: 0.6))),
+                    color: K.night3,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: widget.weekend!.highlight ? K.brass : K.brass.withValues(alpha: 0.6), width: widget.weekend!.highlight ? 2.5 : 1),
+                    boxShadow: widget.weekend!.highlight ? [BoxShadow(color: K.brass.withValues(alpha: 0.4), blurRadius: 14)] : null),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                   Row(children: [
                     const Icon(Icons.fact_check_rounded, color: K.brass),
