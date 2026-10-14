@@ -130,7 +130,14 @@ class Progress {
         failed = _b(j['failed']),
         stars = _i(j['stars']),
         hintCosts = [for (final c in (j['hint_costs'] as List? ?? const [30, 50, 80])) _i(c)],
-        answerAt = j['answer_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['answer_at'] as num).toInt() * 1000) : null;
+        answerAt = j['answer_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['answer_at'] as num).toInt() * 1000) : null,
+        wrongTries = [
+          for (final t in (j['wrong_tries'] as List? ?? const []))
+            if (t is Map) WrongTry(t.cast<String, dynamic>())
+        ];
+
+  /// This player's wrong accusations on the case, in order (shown in red; reviewed after a solve).
+  final List<WrongTry> wrongTries;
 
   /// A lost case: when its answer becomes public (anti-cheat: nobody reads the answer early). Null = public.
   final DateTime? answerAt;
@@ -143,6 +150,20 @@ class Progress {
 
   bool get finished => solved || failed;
   int? get nextHintCost => hints.length < hintCosts.length ? hintCosts[hints.length] : null;
+}
+
+/// One wrong accusation: who, with which card, why (weekend case) and what was wrong.
+class WrongTry {
+  WrongTry(Map<String, dynamic> j)
+      : suspect = _s(j['s']),
+        evidence = _s(j['e']),
+        motive = j['m'] as String?,
+        kind = _s(j['r']);
+  final String suspect, evidence, kind; // kind: wrong_suspect | hasty | wrong_proof | wrong_motive
+  final String? motive;
+  bool get suspectWrong => kind == 'wrong_suspect' || kind == 'hasty';
+  bool get proofWrong => kind == 'wrong_proof';
+  bool get motiveWrong => kind == 'wrong_motive';
 }
 
 class CaseRow {

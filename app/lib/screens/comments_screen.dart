@@ -113,7 +113,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       if (canWrite)
                         Padding(
                           padding: const EdgeInsets.fromLTRB(16, 4, 16, 14),
-                          child: StampButton(label: 'نظر خودت را بنویس', icon: Icons.edit_rounded, color: K.brass, onTap: _write),
+                          child: StampButton(label: 'ستاره بده یا نظر بنویس', icon: Icons.edit_rounded, color: K.brass, onTap: _write),
                         )
                       else if (d['can_write'] != true)
                         Padding(
@@ -270,9 +270,12 @@ class _WriteSheetState extends State<_WriteSheet> {
       setState(() => _err = 'اول چند ستاره بده');
       return;
     }
-    if (text.length < (_reply ? 2 : 3)) {
-      setState(() => _err = 'نظرت خیلی کوتاهه');
-      return;
+    // a root comment may be stars only; a reply, or a text that was started, needs a few letters
+    if (text.isNotEmpty || _reply) {
+      if (text.length < (_reply ? 2 : 3)) {
+        setState(() => _err = 'نظرت خیلی کوتاهه');
+        return;
+      }
     }
     setState(() {
       _busy = true;
@@ -320,19 +323,24 @@ class _WriteSheetState extends State<_WriteSheet> {
               maxLines: 4,
               minLines: 3,
               enabled: !_busy,
+              onChanged: (_) => setState(() {}),
               style: tBody(14),
               decoration: InputDecoration(
-                hintText: 'نظرت را بنویس (قاتل را لو نده!)',
+                hintText: _reply ? 'نظرت را بنویس (قاتل را لو نده!)' : 'نوشتن نظر اختیاریه (قاتل را لو نده!)',
                 hintStyle: tBody(13, color: K.textSoft),
                 filled: true,
                 fillColor: K.night3,
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
               ),
             ),
-            Text('بعد از بررسی مدیر منتشر می‌شود.', style: tBody(12, color: K.kraft)),
+            Text(_reply || _c.text.trim().isNotEmpty ? 'بعد از بررسی مدیر منتشر می‌شود.' : 'ستاره‌ها همان لحظه ثبت می‌شوند.',
+                style: tBody(12, color: K.kraft)),
             if (_err != null) Padding(padding: const EdgeInsets.only(top: 6), child: Text(_err!, style: tBody(12.5, color: K.stamp, w: FontWeight.w700))),
             const SizedBox(height: 12),
-            StampButton(label: _busy ? 'در حال ارسال…' : 'ارسال برای بررسی', color: K.brass, onTap: _busy ? null : _send),
+            StampButton(
+                label: _busy ? 'در حال ارسال…' : (_reply || _c.text.trim().isNotEmpty ? 'ارسال برای بررسی' : 'ثبت ستاره‌ها'),
+                color: K.brass,
+                onTap: _busy ? null : _send),
           ]),
         ),
       ),

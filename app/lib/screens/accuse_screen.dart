@@ -32,6 +32,17 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
   late int _left = widget.progress.attemptsLeft;
   late final AnimationController _shake = AnimationController(vsync: this, duration: const Duration(milliseconds: 420));
   final ScrollController _scroll = ScrollController();
+  // what was already tried and found wrong: shown in red, not selectable again
+  final Set<String> _badSuspects = {}, _badEvidence = {}, _badMotives = {};
+
+  void _markTries(Iterable<WrongTry> tries) {
+    for (final t in tries) {
+      if (t.suspectWrong) _badSuspects.add(t.suspect);
+      // a wrong card only counts against the real culprit, so it is marked only when the suspect itself was right
+      if (t.proofWrong) _badEvidence.add(t.evidence);
+      if (t.motiveWrong && t.motive != null) _badMotives.add(t.motive!);
+    }
+  }
 
   int get _steps => widget.caseData.weekly ? 3 : 2;
   bool get _last => _step == _steps - 1;
@@ -43,6 +54,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
     Sfx.i.play('heartbeat', volume: 0.5); // the moment of accusing
+    _markTries(widget.progress.wrongTries);
   }
 
   @override
@@ -72,6 +84,12 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
       }
       Sfx.i.play('wrong', volume: 0.6);
       _shake.forward(from: 0);
+      if (r.progress != null) {
+        _markTries(r.progress!.wrongTries);
+      } else {
+        // an older server: remember this try here
+        _markTries([WrongTry({'s': _suspect, 'e': _evidence, 'm': _motive, 'r': r.result})]);
+      }
       setState(() {
         _busy = false;
         _left = r.attemptsLeft;
@@ -329,62 +347,84 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
     );
   }
 
+  /// A small red tag: «✗ …».
+  Widget _wrongTag(String text) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        decoration: BoxDecoration(color: K.stamp, borderRadius: BorderRadius.circular(10)),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          const Icon(Icons.close_rounded, size: 12, color: K.night),
+          const SizedBox(width: 3),
+          Flexible(child: Text(text, style: tBody(11, color: K.night, w: FontWeight.w900))),
+        ]),
+      );
+
   Widget _suspectTile(Suspect s) {
-    final on = _suspect == s.id;
+    final bad = _badSuspects.contains(s.id);
+    final on = !bad && _suspect == s.id;
     final mark = widget.marks[s.id] ?? SuspectMark.none;
     return GestureDetector(
-      onTap: () => setState(() => _suspect = s.id),
+      onTap: bad ? null : () => setState(() => _suspect = s.id),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         decoration: BoxDecoration(
-          color: on ? const Color(0xFF3A1C1A) : K.night2,
+          color: bad ? const Color(0xFF2A1A18) : (on ? K.brass.withValues(alpha: 0.14) : K.night2),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: on ? K.stamp : (mark == SuspectMark.suspicious ? K.brass : K.night3), width: on ? 2.5 : 1),
+          border: Border.all(
+              color: bad ? K.stamp : (on ? K.brass : (mark == SuspectMark.suspicious ? K.brass : K.night3)),
+              width: bad || on ? 2.5 : 1),
         ),
         padding: const EdgeInsets.all(6),
-        child: Column(children: [
-          Expanded(child: AnimatedSuspect(avatar: s.avatar, size: 90, mood: on ? Mood.nervous : Mood.calm)),
-          Text(s.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(13, w: FontWeight.w900)),
-          if (mark == SuspectMark.innocent) Text('بی‌گناه؟', style: tBody(10, color: K.ok)),
+        child: Stack(children: [
+          Column(children: [
+            Expanded(
+                child: Opacity(opacity: bad ? 0.5 : 1, child: AnimatedSuspect(avatar: s.avatar, size: 90, mood: on ? Mood.nervous : Mood.calm))),
+            Text(s.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(13, w: FontWeight.w900)),
+            if (!bad && mark == SuspectMark.innocent) Text('بی‌گناه؟', style: tBody(10, color: K.ok)),
+          ]),
+          if (bad) PositionedDirectional(top: 0, end: 0, child: _wrongTag('اشتباه')),
         ]),
       ),
     );
   }
 
   Widget _motiveTile(String id, String text) {
-    final on = _motive == id;
+    final bad = _badMotives.contains(id);
+    final on = !bad && _motive == id;
     return GestureDetector(
-      onTap: () => setState(() => _motive = id),
+      onTap: bad ? null : () => setState(() => _motive = id),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: on ? const Color(0xFF3A1C1A) : K.night2,
+          color: bad ? const Color(0xFF2A1A18) : (on ? K.brass.withValues(alpha: 0.14) : K.night2),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: on ? K.stamp : K.night3, width: on ? 2 : 1),
+          border: Border.all(color: bad ? K.stamp : (on ? K.brass : K.night3), width: bad || on ? 2.5 : 1),
         ),
         child: Row(children: [
-          Icon(on ? Icons.radio_button_checked_rounded : Icons.radio_button_unchecked_rounded, color: on ? K.stamp : K.textSoft),
+          Icon(bad ? Icons.cancel_rounded : (on ? Icons.radio_button_checked_rounded : Icons.radio_button_unchecked_rounded),
+              color: bad ? K.stamp : (on ? K.brass : K.textSoft)),
           const SizedBox(width: 10),
           Expanded(child: Text(text, style: tBody(14.5, w: FontWeight.w700))),
+          if (bad) _wrongTag('اشتباه'),
         ]),
       ),
     );
   }
 
   Widget _evidenceTile(Evidence e) {
-    final on = _evidence == e.id;
+    final bad = _badEvidence.contains(e.id);
+    final on = !bad && _evidence == e.id;
     return GestureDetector(
-      onTap: () => setState(() => _evidence = e.id),
+      onTap: bad ? null : () => setState(() => _evidence = e.id),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: on ? K.clue : K.paper,
+          color: bad ? const Color(0xFFE6D7D2) : (on ? K.clue : K.paper),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: on ? K.stamp : Colors.transparent, width: 2),
+          border: Border.all(color: bad ? K.stamp : (on ? K.brass : Colors.transparent), width: bad || on ? 2.5 : 2),
         ),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Icon(evidenceIcon(e.type), color: K.ink),
@@ -393,9 +433,10 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(e.title, style: tBody(14.5, color: K.ink, w: FontWeight.w900)),
               Text(e.text, style: tBody(13, color: K.ink), maxLines: on ? 8 : 2, overflow: TextOverflow.ellipsis),
+              if (bad) ...[const SizedBox(height: 6), Align(alignment: AlignmentDirectional.centerStart, child: _wrongTag('این مدرک دروغش را ثابت نمی‌کند'))],
             ]),
           ),
-          if (on) const Icon(Icons.check_circle_rounded, color: K.stamp),
+          if (on) const Icon(Icons.check_circle_rounded, color: K.brass),
         ]),
       ),
     );

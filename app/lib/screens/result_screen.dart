@@ -8,6 +8,7 @@ import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
+import '../widgets/mistakes_card.dart';
 import '../widgets/partner_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
@@ -154,6 +155,11 @@ class _ResultScreenState extends State<ResultScreen> {
             if (solved || result.culprit != null) ...[
               const SizedBox(height: 14),
               GuessStatsCard(caseData: caseData),
+            ],
+            // only for a case the player solved, and only when there was something to learn from
+            if (solved && (result.progress?.wrongTries.isNotEmpty ?? false)) ...[
+              const SizedBox(height: 14),
+              MistakesCard(caseData: caseData, tries: result.progress!.wrongTries, proof: result.proof),
             ],
             const SizedBox(height: 18),
             FadeSlideIn(

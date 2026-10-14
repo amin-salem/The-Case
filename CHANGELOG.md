@@ -1,5 +1,12 @@
 # Changelog
 
+## server 1.25.1, app 1.25.0 (build 51): stars without a comment, red marks on wrong accusations
+
+- Rating a case needs only stars now: the text is optional. Stars alone are counted at once (they are in the average, not listed as a comment); a written comment still waits for the admin. One rating per player and case, as before.
+- After a wrong accusation the wrong suspect, the wrong evidence card (right suspect only) and the wrong motive (weekend case) stay on screen with a red frame and a «اشتباه» tag and cannot be picked again. A selected choice now has a brass frame, so red always means wrong. A card is never marked wrong after a wrong SUSPECT (we cannot know if it was right).
+- The server remembers each player's wrong accusations (`case_progress.wrong_tries`, at most 10, additive column), so the marks survive a reinstall or a new phone.
+- The result screen of a SOLVED case shows «اشتباه‌های تو در این پرونده» with every wrong accusation in order; it never shows for a lost case or a clean solve.
+
 ## server 1.25.0: coins are scarcer, missions change at 21:00
 
 - Economy (numbers only, existing players keep their coins): solving a case pays 30/20/10 for 3/2/1 stars (was 60/40/20); daily bonus 15; streak bonus 60; login calendar 10,10,15,15,20,25 and envelope 40-80; mission chest 30 (+60 every 7th day); archive case 150 coins (was 120); invites pay 150 to the inviter and 100 to the new player. Start coins and the secure-account reward stay 100.
