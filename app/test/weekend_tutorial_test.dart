@@ -35,7 +35,7 @@ void _bigScreen(WidgetTester t) {
 
 Future<void> _tapKey(WidgetTester t, String key) async {
   await t.tap(find.byKey(ValueKey(key)));
-  await t.pump(const Duration(milliseconds: 400));
+  await _settle(t);
 }
 
 /// Lets a pushed route or a sheet appear (the page transitions never settle with pumpAndSettle here).
@@ -49,7 +49,7 @@ Future<void> _tapText(WidgetTester t, String text) async {
   await t.ensureVisible(find.text(text).last);
   await t.pump(const Duration(milliseconds: 100));
   await t.tap(find.text(text).last);
-  await t.pump(const Duration(milliseconds: 400));
+  await _settle(t);
 }
 
 /// Plays the whole practice with real taps.
@@ -149,6 +149,8 @@ void main() {
     await _tapKey(t, 'tut_accuse');
     await _tapText(t, 'کامران');
     expect(find.text('رد کردن'), findsNWidgets(2)); // the screen's and the sheet's
+    await t.ensureVisible(find.text('رد کردن').last);
+    await t.pump(const Duration(milliseconds: 100));
     await t.tap(find.text('رد کردن').last);
     await _settle(t);
     expect(find.byType(WeekendTutorial), findsNothing);
