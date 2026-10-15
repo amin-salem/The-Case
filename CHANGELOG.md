@@ -1,5 +1,11 @@
 # Changelog
 
+## server 1.25.6: runtime meter (find the real limit of one worker)
+
+- The 500-player load test (15 Oct) stopped at about 40-50 requests per second whatever the pool size or `WEB_CONCURRENCY`, and the Liara graphs showed idle CPU. This release adds a meter per worker so the next test says why: CPU share, event-loop lag, database connections in use, requests in flight, 5xx count.
+- One WARNING line `runtime busy pid=... cpu=...% lag_ms=... pool=out/max inflight=...` at most every 10 s, only while the worker is busy (CPU 70 %+, loop lag 200 ms+, 50+ requests in flight or every connection checked out). No personal data.
+- New admin call `GET /admin/api/runtime` (X-Admin-Key): the last minute of THIS worker (ask a few times, `pid` tells workers apart). No database use, no new setting, no migration.
+
 ## server 1.25.5: capacity for the small Liara plan
 
 - New `server/tools/load_test.py` (N virtual players do what the app does at 21:00; ramp or `--burst`; reports requests, 429/5xx, p50/p95/p99, requests per second) and a 30-player sanity step in CI. New admin call `POST /admin/players/smoke-bulk`. How to run it from Iran: `docs/operations.md` «Capacity».

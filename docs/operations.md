@@ -253,6 +253,17 @@ the current value, change it, run it again and keep the better one. Watch in the
 app memory (near the 0.5 GB limit = the container restarts), and Postgres CPU/memory/connections. Watch in the admin Health screen: blocked
 requests per policy (many `register` or `global_*` blocks = a limit is too tight) and the answer time.
 
+### Runtime meter (server 1.25.6): why is it slow?
+Every worker measures itself once a second. Use it during a load test to tell the causes apart:
+- **Log line** (Liara logs, only while the worker is busy, at most one per 10 s per worker):
+  `runtime busy pid=12 cpu=96% lag_ms=340 pool=10/10 inflight=62 requests=8120 errors_5xx=0`.
+- **Admin call** `GET /admin/api/runtime` with `X-Admin-Key`: the last minute of the worker that answered. Ask several times (the
+  `pid` shows which worker). Fields: `cpu_avg_percent` / `cpu_max_percent` (share of ONE core), `lag_max_ms` (how late the event
+  loop woke up), `pool_out_max` of `pool_limit` (database connections in use), `inflight_max`, `requests_per_second`, `errors_5xx_window`.
+- **Reading it:** `cpu` near 100 % and `lag` high = the worker is CPU bound (more CPU, or less work per request). `pool_out_max`
+  equal to `pool_limit` with low CPU = requests wait for the database (a bigger pool, or slow queries). Low CPU, low lag, low pool
+  use and still slow = the limit is outside the app (the network, the proxy, the database itself).
+
 ### Running the load test (from Iran, not from the cloud)
 It needs Python 3.11+ and `pip install httpx`. Get `server/tools/load_test.py` from the repository. Use the admin key (the accounts are made
 by the admin call, because registering 200 accounts from one IP is correctly refused). Keep the key out of shell history if you can

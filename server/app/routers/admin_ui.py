@@ -292,6 +292,14 @@ async def health(session: AsyncSession = Depends(get_session)):
             "rate_limit": await limiter.admin_summary() if get_settings().rate_limit else {"enabled": False}}
 
 
+@router.get("/runtime")
+async def runtime():
+    """What THIS worker did in the last minute (CPU, event-loop lag, database connections in use, requests in flight, 5xx).
+    There are several workers: ask a few times, `pid` tells them apart. See docs/operations.md «Capacity»."""
+    from ..services import runtime_stats
+    return runtime_stats.STATS.snapshot()
+
+
 class ClearLockIn(BaseModel):
     id: str = Field(min_length=4, max_length=32, pattern=r"^[0-9a-f]+$")
 
