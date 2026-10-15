@@ -1,5 +1,9 @@
 # Changelog
 
+## app 1.25.4 (build 55): UI polish
+
+- App only (no server change). Counters now read number first, then the icon (right to left): the profile stats, the streak chip, rewards and prices. The coin chip reads «+», the number, then the coin. One shared coin icon everywhere (the avatar and frame screen, the result screen and the story skip button used a different one). Tap the invite code (profile, messages and badges screen) or the account transfer code to copy it: a short «کپی شد» message appears.
+
 ## app 1.25.3 (build 54): weekend case tutorial
 
 - App only (no server change). The first time a player taps a weekend case (live or in the archive) a 90-second practice runs before the case opens: a tiny built-in fake case (3 suspects, 4 cards in 2 chapters, one suspect who slips), six coach-mark steps (chapters and the 24 h countdown, early accusation and its bonus, showing a card with the «۳ از ۳» counter, slip vs normal reaction, the two-step accusation, the archive). Fully local: no server call, no coins, stars or rewards; only the flag `weekend_tutorial_seen_v1` is stored. «رد کردن» at every step. A «راهنما» button on the weekend tab and on the weekend case replays it. «چی تازه شده؟» has the entry «آموزش پرونده‌ی آخر هفته».
