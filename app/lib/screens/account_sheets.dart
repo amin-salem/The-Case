@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -407,10 +408,18 @@ class _LoginTransferFormState extends State<LoginTransferForm> with SingleTicker
         Text('گوشی قدیمی', style: tBody(13, w: FontWeight.w900, color: K.brass)),
         const SizedBox(height: 4),
         if (_myCode != null)
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            decoration: BoxDecoration(color: K.night, borderRadius: BorderRadius.circular(12)),
-            child: Center(child: SelectableText(_myCode!, style: tDisplay(28, color: K.brass))),
+          InkWell(
+            key: const ValueKey('transfer-code'),
+            borderRadius: BorderRadius.circular(12),
+            onTap: () async {
+              await Clipboard.setData(ClipboardData(text: _myCode!));
+              if (mounted) toast(context, 'کد کپی شد');
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              decoration: BoxDecoration(color: K.night, borderRadius: BorderRadius.circular(12)),
+              child: Center(child: Text(_myCode!, textDirection: TextDirection.ltr, style: tDisplay(28, color: K.brass))),
+            ),
           )
         else
           StampButton(

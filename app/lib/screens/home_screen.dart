@@ -314,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _streakChip(int streak) => GestureDetector(
         onTap: _openStreak,
         child: Container(
-          padding: const EdgeInsets.fromLTRB(10, 6, 8, 6),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
             color: K.stamp.withValues(alpha: 0.16),
             borderRadius: BorderRadius.circular(999),
