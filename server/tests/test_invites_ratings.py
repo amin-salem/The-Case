@@ -79,16 +79,16 @@ async def test_inviter_gets_a_gift_that_adds_coins_when_claimed(client):
     assert (await client.post("/v1/referrals/redeem", headers=friend["headers"], json={"code": code})).status_code == 200
     await me(client, inviter)  # the daily login reward (if any) is paid by this call, not by the invite
     await solve_days(friend["player_id"], eco.INVITE_MIN_DAYS)
-    start = (await me(client, inviter))["coins"]
     assert await ac.maybe_pay_referral(friend["player_id"]) is True
-    assert (await me(client, inviter))["coins"] == start  # a gift waits in the inbox, it is not paid by itself
+    after = await me(client, inviter)  # may add an achievement reward for the invite; the gift itself waits in the inbox
+    start = after["coins"]
     inbox = (await client.get("/v1/inbox", headers=inviter["headers"])).json()
     gift = next(i for i in inbox if i["title"].startswith("یه کارآگاه تازه"))
     assert gift["grants"] == [{"type": "coins", "amount": eco.INVITE_INVITER}]
     claimed = await client.post(f"/v1/inbox/{gift['id']}/claim", headers=inviter["headers"])
     assert claimed.status_code == 200 and claimed.json()["coins"] == start + eco.INVITE_INVITER
     assert (await client.post(f"/v1/inbox/{gift['id']}/claim", headers=inviter["headers"])).status_code == 409
-    assert (await me(client, inviter))["coins"] == start + eco.INVITE_INVITER
+    assert (await me(client, inviter))["coins"] == start + eco.INVITE_INVITER  # paid exactly once
 
 
 async def test_referral_status_shows_progress_for_both_sides(client):
