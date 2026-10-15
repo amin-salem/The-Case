@@ -385,7 +385,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 borderRadius: BorderRadius.circular(12),
                 onTap: () async {
                   await Clipboard.setData(ClipboardData(text: code));
-                  if (context.mounted) toast(context, 'کد دعوت کپی شد');
+                  if (mounted) toast(context, 'کد دعوت کپی شد');
                 },
                 child: Container(
                   height: 46,
