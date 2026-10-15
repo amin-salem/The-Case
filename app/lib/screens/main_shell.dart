@@ -8,6 +8,7 @@ import 'account_sheets.dart';
 import 'account_screen.dart';
 import 'guide_screen.dart';
 import 'home_screen.dart';
+import 'invite_step_screen.dart';
 import 'leaderboard_screen.dart';
 import 'story_screen.dart';
 import 'weekend_screen.dart';
@@ -45,8 +46,14 @@ class _MainShellState extends State<MainShell> {
         Api.i.setFlag('intro_done');
         return;
       }
-      GuideScreen.maybeShowFirstRun(context);
+      _firstRun();
     });
+  }
+
+  /// First run: the guide, then the optional "friend's invite code" step (both shown once).
+  Future<void> _firstRun() async {
+    await GuideScreen.maybeShowFirstRun(context);
+    if (mounted) await InviteStepScreen.maybeShow(context);
   }
 
   @override

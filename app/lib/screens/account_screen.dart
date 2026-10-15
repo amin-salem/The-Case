@@ -26,11 +26,18 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   AchievementsList? _ach;
+  ReferralStatus? _ref;
 
   @override
   void initState() {
     super.initState();
     _loadAchievements();
+    _loadReferral();
+  }
+
+  Future<void> _loadReferral() async {
+    final r = await Api.i.referralStatus();
+    if (mounted && r != null) setState(() => _ref = r);
   }
 
   Future<void> _loadAchievements() async {
@@ -356,8 +363,34 @@ class _AccountScreenState extends State<AccountScreen> {
 
   // ---------------------------------------------------------------- invite
 
+  Widget _rule(IconData icon, String text) => Padding(
+        padding: const EdgeInsets.only(top: 5),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(padding: const EdgeInsets.only(top: 3), child: Icon(icon, color: K.brass, size: 16)),
+          const SizedBox(width: 6),
+          Expanded(child: Text(text, style: tBody(12.5, color: K.textSoft).copyWith(height: 1.55))),
+        ]),
+      );
+
+  Widget _bar(int done, int of) => Row(children: [
+        Expanded(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(99),
+            child: LinearProgressIndicator(
+                value: of == 0 ? 0 : (done / of).clamp(0.0, 1.0), minHeight: 8, backgroundColor: K.night3, color: K.brass),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text('${fa(done)} از ${fa(of)} روز', style: tBody(12.5, w: FontWeight.w900, color: K.brass)),
+      ]);
+
   Widget _invite(Profile p) {
     final code = p.inviteCode;
+    final r = _ref;
+    final mine = r?.inviterReward ?? Api.i.inviteReward;
+    final theirs = r?.newPlayerReward ?? Api.i.inviteNewPlayer;
+    final days = r?.needDays ?? 3;
+    final canRedeem = r?.canRedeem ?? !p.referred;
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
       decoration: BoxDecoration(
@@ -371,10 +404,33 @@ class _AccountScreenState extends State<AccountScreen> {
           const SizedBox(width: 8),
           Expanded(child: Text('دوستات رو دعوت کن', style: tDisplay(16.5))),
         ]),
-        const SizedBox(height: 2),
-        Text('هر دوستی که با کد تو بیاد، ${fa(Api.i.inviteReward)} سکه می‌گیری و دوستت ${fa(Api.i.inviteNewPlayer)} سکه.',
-            style: tBody(12.5, color: K.textSoft)),
+        const SizedBox(height: 4),
+        _rule(Icons.redeem_rounded, 'دوستت کدت رو موقع شروع می‌زنه و همون لحظه ${fa(theirs)} سکه می‌گیره.'),
+        _rule(Icons.monetization_on_rounded,
+            'تو ${fa(mine)} سکه می‌گیری، وقتی اون در ${fa(days)} روز مختلف پرونده حل کنه. جایزه می‌ره تو پیام‌هات؛ بازش کن و بردار.'),
+        _rule(Icons.info_outline_rounded, 'حداکثر ${fa(r?.maxPaid ?? 20)} دوست جایزه می‌دن.'),
         const SizedBox(height: 10),
+        if (r != null && r.invited > 0) ...[
+          if (r.invitedPaid < r.invited && r.bestDays < days) ...[
+            Text('نزدیک‌ترین دوستت', style: tBody(12, color: K.textSoft)),
+            const SizedBox(height: 4),
+            _bar(r.bestDays, days),
+            const SizedBox(height: 6),
+          ],
+          Text('${fa(r.invited)} دوست با کد تو اومدن · جایزه‌ی ${fa(r.invitedPaid)} تاشون رسیده',
+              style: tBody(12.5, w: FontWeight.w700)),
+          const SizedBox(height: 8),
+        ] else if (r != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text('هنوز کسی با کد تو نیومده.', style: tBody(12.5, color: K.textSoft)),
+          ),
+        if (r != null && r.referred) ...[
+          Text(r.myInviterPaid ? 'دوستی که دعوتت کرد، جایزه‌ش رو گرفت.' : 'دوستی که دعوتت کرد، جایزه‌ش رو بعد از ${fa(days)} روز حل پرونده می‌گیره:',
+              style: tBody(12.5, color: K.textSoft)),
+          if (!r.myInviterPaid) ...[const SizedBox(height: 4), _bar(r.myDays, days)],
+          const SizedBox(height: 8),
+        ],
         Row(children: [
           Expanded(
             child: Container(
@@ -395,17 +451,20 @@ class _AccountScreenState extends State<AccountScreen> {
               label: 'بفرست',
               height: 46,
               onTap: () => SharePlus.instance.share(ShareParams(
-                  text: 'بیا «پرونده» بازی کنیم! هر شب یه جنایت تازه 🕵️ موقع شروع کد دعوت من رو بزن: $code')),
+                  text: 'بیا «پرونده» بازی کنیم! هر شب یه جنایت تازه 🕵️ موقع شروع کد دعوت من رو بزن تا ${fa(theirs)} سکه هدیه بگیری: $code')),
             ),
           ),
         ]),
-        if (!p.referred)
+        if (canRedeem && !p.referred)
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: TextButton(
-              onPressed: () => openAccountSheet(context, showInviteCodeSheet),
+              onPressed: () async {
+                await openAccountSheet(context, showInviteCodeSheet);
+                _loadReferral();
+              },
               style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 4)),
-              child: Text('کد دوستت رو داری؟',
+              child: Text('کد دوستت رو داری؟ (تا ۷ روز اول)',
                   style: tBody(13, color: K.textSoft, w: FontWeight.w700)
                       .copyWith(decoration: TextDecoration.underline, decorationColor: K.textSoft)),
             ),

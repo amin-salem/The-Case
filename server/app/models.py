@@ -19,6 +19,7 @@ def new_id() -> str:
 
 class Player(Base):
     __tablename__ = "players"
+    __table_args__ = (Index("ix_players_referred_by", "referred_by"),)  # the invite status lists the players I invited
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
     secret_hash: Mapped[str] = mapped_column(String(64))

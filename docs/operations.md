@@ -215,6 +215,15 @@ The list is data in `app/lib/data/whats_new.dart` (`kWhatsNew`, newest first). T
 - The banner shows once per build (prefs `wn_seen`); a fresh install (no saved player) shows nothing. Settings «چه خبر؟» lists the last 5 releases.
 - Red «تازه» tags: put `NewTag('<tag id>')` next to the place and list the id in the item's `tags`; call `WhatsNew.i.tagOpened('<id>')` when the player opens that place. A tag disappears when opened or 7 days after the first start of the new build.
 
+## Invite codes, ratings, archive (15 Oct 2026, server 1.26.0, app 1.26.0+54)
+
+- **How an invite pays (server rules, unchanged):** the NEW player gets `INVITE_NEW_PLAYER` (100) coins at once when the code is redeemed (`POST /v1/referrals/redeem`, only for accounts at most 7 days old, never the same phone as the inviter). The INVITER gets `INVITE_INVITER` (150) as an inbox gift after the invited player solved cases on `INVITE_MIN_DAYS` (3) different days; the gift must be claimed in the messages. Tests: `server/tests/test_invites_ratings.py`.
+- **Why testers saw no coins:** the code field was only in the profile, the first run never asked, accounts older than 7 days are refused (`only_for_new_players`), and the inviter's coins arrive late. The app now asks once on the first run («کد دعوت داری؟», one-tap «بعداً») and the profile card states the rule and shows the progress.
+- **New call `GET /v1/referrals/status`:** can_redeem, rewards, `need_days`, my days (as an invited player), friends invited/paid, the closest friend's days. Bounded to the 50 newest friends; migration 0023 (additive) adds `ix_players_referred_by`.
+- **Ratings on case rows:** `GET /v1/cases` rows carry `rating_avg`, `rating_count`, `comment_count`, `my_rating`. The shared part is one aggregate cached 30 s per worker (`app/ratings.py`, cleared when a comment is written or moderated); `my_rating` is one query on `player_id`. A stars-only rating counts at once; a written comment counts after the admin approves it. A player with stars only may add words once (they wait for the admin); the stars never change.
+- **App:** the rating step (`RateCard`) after a solve and on every finished case (also archive cases), the rating chip on the home and archive cards, and the new archive screen (progress header, sort, filters, price button, coin chip to the shop). «چی تازه شده؟» release 54.
+- Deploy: this is a server change (new call + migration), so it needs the normal Liara deploy; the game APK is built from the same commit.
+
 ## Capacity (14 Oct 2026, server 1.25.5)
 
 **Plan (Liara):** app 0.5 CPU / 0.5 GB RAM, Postgres 0.5 CPU / 0.5 GB RAM. `start.sh` runs `WEB_CONCURRENCY` uvicorn workers (default 2).

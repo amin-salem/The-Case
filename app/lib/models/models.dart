@@ -211,12 +211,37 @@ class CaseRow {
         solved = _b(j['solved']),
         failed = _b(j['failed']),
         stars = _i(j['stars']),
-        solvers = _i(j['solvers']);
+        solvers = _i(j['solvers']),
+        ratingAvg = j['rating_avg'] is num ? (j['rating_avg'] as num).toDouble() : 0,
+        ratingCount = _i(j['rating_count']),
+        commentCount = _i(j['comment_count']),
+        myRating = _i(j['my_rating']);
 
   final String id, title, location, scene, publish;
   final int number, difficulty, unlockCost, stars, solvers;
+  final double ratingAvg; // average stars of all detectives (0 = nobody rated)
+  final int ratingCount, commentCount, myRating;
   final bool today, locked, solved, failed;
   final bool weekend; // an expired weekend case in the archive (higher price)
+}
+
+/// The invite card's numbers (all counted by the server).
+class ReferralStatus {
+  ReferralStatus(Map<String, dynamic> j)
+      : referred = _b(j['referred']),
+        canRedeem = _b(j['can_redeem']),
+        newPlayerReward = _i(j['new_player_reward'], 100),
+        inviterReward = _i(j['inviter_reward'], 150),
+        needDays = _i(j['need_days'], 3),
+        myDays = _i(j['my_days']),
+        myInviterPaid = _b(j['my_inviter_paid']),
+        invited = _i(j['invited']),
+        invitedPaid = _i(j['invited_paid']),
+        bestDays = _i(j['best_days']),
+        maxPaid = _i(j['max_paid'], 20);
+
+  final bool referred, canRedeem, myInviterPaid;
+  final int newPlayerReward, inviterReward, needDays, myDays, invited, invitedPaid, bestDays, maxPaid;
 }
 
 class CasesList {

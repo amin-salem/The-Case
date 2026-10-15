@@ -1,6 +1,6 @@
 """Gift inbox (admin/event gifts) and invite codes."""
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import or_, select
+from sqlalchemy import distinct, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,8 +8,8 @@ from .. import economy as eco
 from .. import feed as feedmod
 from .. import rewards
 from ..db import get_session
-from ..models import Broadcast, BroadcastClaim, InboxItem, Player, utcnow
-from ..schemas import ClaimOut, FeedOut, InboxRow, RedeemIn
+from ..models import Broadcast, BroadcastClaim, CaseProgress, InboxItem, Player, utcnow
+from ..schemas import ClaimOut, FeedOut, InboxRow, RedeemIn, ReferralStatusOut
 from ..security import current_player
 from ..util import add_coins, from_ts, ts
 from .common import fast_json
@@ -97,6 +97,37 @@ async def claim(item_id: str, player: Player = Depends(current_player), session:
         await session.rollback()
         raise HTTPException(409, "already_claimed")
     return ClaimOut(grants=b.grants, coins=player.coins)
+
+
+async def _solve_days(session: AsyncSession, ids: list[str]) -> dict[str, int]:
+    """player id -> on how many different days the player solved a case (the rule maybe_pay_referral applies)."""
+    if not ids:
+        return {}
+    rows = (await session.execute(select(CaseProgress.player_id, func.count(distinct(CaseProgress.day))).where(
+        CaseProgress.player_id.in_(ids), CaseProgress.solved.is_(True), CaseProgress.day != "")
+        .group_by(CaseProgress.player_id))).all()
+    return {pid: int(n) for pid, n in rows}
+
+
+@router.get("/referrals/status", response_model=ReferralStatusOut)
+async def referral_status(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """The invite card: whether a code can still be entered, my own progress as an invited player, and how far
+    the friends I invited are (bounded: the 50 newest)."""
+    need = eco.INVITE_MIN_DAYS
+    referred = player.referred_by is not None
+    out = ReferralStatusOut(referred=referred, can_redeem=(not referred and (utcnow() - player.created_at).days <= 7),
+                            new_player_reward=eco.INVITE_NEW_PLAYER, inviter_reward=eco.INVITE_INVITER, need_days=need,
+                            max_paid=eco.MAX_REWARDED_INVITES, invited_paid=player.invites_rewarded)
+    if referred:
+        out.my_days = min(need, (await _solve_days(session, [player.id])).get(player.id, 0))
+        out.my_inviter_paid = bool(player.referral_paid)
+    friends = (await session.execute(select(Player.id, Player.referral_paid).where(Player.referred_by == player.id)
+                                     .order_by(Player.created_at.desc()).limit(50))).all()
+    out.invited = len(friends)
+    open_ids = [pid for pid, paid in friends if not paid]
+    if open_ids:
+        out.best_days = min(need, max((await _solve_days(session, open_ids)).values(), default=0))
+    return out
 
 
 @router.post("/referrals/redeem", response_model=ClaimOut)

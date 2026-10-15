@@ -15,6 +15,7 @@ import '../widgets/engagement.dart';
 import '../widgets/missions_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/profile_bell.dart';
+import '../widgets/rate_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import '../widgets/whats_new_ui.dart';
@@ -207,6 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
     switch (t) {
       case WhatsNewTarget.missions:
         _openMissions();
+      case WhatsNewTarget.archive:
+        _openArchive();
       default:
         final c = _cases?.today;
         if (c != null) _open(c);
@@ -424,10 +427,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: tBody(14, w: FontWeight.w900, color: c.solved ? K.brass : K.stamp),
                 ),
               ),
-              Text('دیدن پرونده', style: tBody(12.5, color: K.textSoft, w: FontWeight.w700)),
+              Text(c.solved && c.myRating == 0 ? 'ستاره بده' : 'دیدن پرونده',
+                  style: tBody(12.5, color: c.solved && c.myRating == 0 ? K.brass : K.textSoft, w: FontWeight.w700)),
               const Icon(Icons.chevron_right_rounded, color: K.textSoft, size: 20),
             ]),
           ),
+        if (c.ratingCount > 0) ...[
+          const SizedBox(height: 8),
+          RatingChip(avg: c.ratingAvg, count: c.ratingCount, comments: c.commentCount, size: 13),
+        ],
         const SizedBox(height: 10),
         _nextLine(),
       ],

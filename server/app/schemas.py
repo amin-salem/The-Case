@@ -149,6 +149,10 @@ class CaseRow(BaseModel):
     failed: bool
     stars: int
     solvers: int        # how many players solved it
+    rating_avg: float = 0     # average stars of the approved ratings (0 = none yet)
+    rating_count: int = 0     # how many detectives gave stars
+    comment_count: int = 0    # approved written comments
+    my_rating: int = 0        # the stars this player gave (0 = not rated)
 
 
 class CasesOut(BaseModel):
@@ -287,6 +291,21 @@ class InboxRow(BaseModel):
 class ClaimOut(BaseModel):
     grants: list[dict]
     coins: int
+
+
+class ReferralStatusOut(BaseModel):
+    """What the invite card shows. All numbers are server-side; the app only displays them."""
+    referred: bool                # this player already entered a friend's code
+    can_redeem: bool              # not referred yet and the account is at most 7 days old
+    new_player_reward: int        # coins the new player gets at once
+    inviter_reward: int           # coins the inviter gets later
+    need_days: int                # solve days the invited player needs before the inviter is paid
+    my_days: int = 0              # (referred players) days on which I solved cases, counted up to need_days
+    my_inviter_paid: bool = False  # (referred players) my inviter has been settled
+    invited: int = 0              # players who entered MY code
+    invited_paid: int = 0         # ... of which already paid to me
+    best_days: int = 0            # solve days of my closest unpaid invited friend (0 = nobody yet)
+    max_paid: int = 0             # lifetime cap of paid invites
 
 
 class RedeemIn(BaseModel):

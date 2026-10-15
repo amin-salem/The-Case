@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
-from .. import content, progress
+from .. import content, progress, ratings
 from ..cache import TTLCache
 from .. import economy as eco
 from ..content import Case
@@ -152,6 +152,8 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
     mine = {p.case_id: p for p in (await session.execute(
         select(CaseProgress).where(CaseProgress.player_id == player.id))).scalars().all()}
     counts = await _solver_counts(session)
+    rated = await ratings.summary(session)
+    my_stars = await ratings.mine(session, player.id)
     today = content.todays_case()
 
     def row(c: Case) -> CaseRow:
@@ -160,7 +162,9 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
         return CaseRow(**s, today=today is not None and c.id == today.id,
                        weekend=content.is_weekly(c.id), locked=not _can_open(c, p, player, today), unlock_cost=_unlock_cost(c),
                        solved=bool(p and p.solved), failed=bool(p and p.failed),
-                       stars=p.stars if p else 0, solvers=int(counts.get(c.id, 0)))
+                       stars=p.stars if p else 0, solvers=int(counts.get(c.id, 0)),
+                       rating_avg=rated.get(c.id, (0.0, 0, 0))[0], rating_count=rated.get(c.id, (0.0, 0, 0))[1],
+                       comment_count=rated.get(c.id, (0.0, 0, 0))[2], my_rating=my_stars.get(c.id, 0))
 
     archive = [row(c) for c in reversed(opened) if today is None or c.id != today.id]
     now = content.now_local()

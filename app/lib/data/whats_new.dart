@@ -3,7 +3,7 @@
 library;
 
 /// Where a «برو به …» jump takes the player.
-enum WhatsNewTarget { weekend, avatars, comments, caseToday, missions }
+enum WhatsNewTarget { weekend, avatars, comments, caseToday, missions, archive }
 
 extension WhatsNewTargetLabel on WhatsNewTarget {
   String get label => switch (this) {
@@ -12,6 +12,7 @@ extension WhatsNewTargetLabel on WhatsNewTarget {
         WhatsNewTarget.comments => 'نظرها',
         WhatsNewTarget.caseToday => 'پرونده',
         WhatsNewTarget.missions => 'مأموریت‌ها',
+        WhatsNewTarget.archive => 'بایگانی',
       };
 }
 
@@ -41,6 +42,11 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(54, '۱.۲۶', '2026-10-15', [
+    WhatsNewItem('archive_v2', 'بایگانی تازه: امتیاز، قیمت و مرتب‌سازی', WhatsNewTarget.archive),
+    WhatsNewItem('rate_step', 'بعد از هر پرونده، با یه ضربه ستاره بده', WhatsNewTarget.comments),
+    WhatsNewItem('invite_step', 'کد دعوت دوستت رو موقع شروع بزن و سکه بگیر', WhatsNewTarget.avatars),
+  ]),
   WhatsNewRelease(53, '۱.۲۵', '2026-10-14', [
     WhatsNewItem('weekend_v2', 'پرونده‌ی آخر هفته، قالب تازه', WhatsNewTarget.weekend, tags: ['weekend_tab', 'show_evidence']),
     WhatsNewItem('avatars_frames', 'آواتار و قاب‌های تازه', WhatsNewTarget.avatars),

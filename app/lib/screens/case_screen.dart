@@ -17,10 +17,10 @@ import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
 import '../widgets/offline.dart';
 import '../widgets/partner_card.dart';
+import '../widgets/rate_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'accuse_screen.dart';
-import 'comments_screen.dart';
 import 'dialogs.dart';
 import 'result_screen.dart';
 import 'suspect_sheet.dart';
@@ -490,12 +490,7 @@ class _CaseScreenState extends State<CaseScreen> {
         const SizedBox(height: 14),
         GuessStatsCard(key: ValueKey('stats-${c.id}'), caseData: c),
         const SizedBox(height: 12),
-        GhostButton(
-          label: 'نظر کارآگاه‌ها',
-          icon: Icons.chat_bubble_outline_rounded,
-          onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => CommentsScreen(caseId: c.id, title: c.title))),
-        ),
+        RateCard(key: ValueKey('rate-${c.id}'), caseId: c.id, title: c.title),
       ] else if (p.failed && c.explanation == null) ...[
         // lost, and the answer is still secret (anti-cheat): wait for it, it shows here by itself
         const SizedBox(height: 14),

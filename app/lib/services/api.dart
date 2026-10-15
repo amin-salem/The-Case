@@ -805,8 +805,8 @@ class Api extends ChangeNotifier {
   int get freezeCost => _economy['freeze_cost'] as int? ?? 150;
   int get maxFreezes => _economy['max_freezes'] as int? ?? 2;
   int get secureReward => (_economy['secure_reward'] as num?)?.toInt() ?? 100;
-  int get inviteReward => (_economy['invite_reward'] as num?)?.toInt() ?? 300;
-  int get inviteNewPlayer => (_economy['invite_new_player'] as num?)?.toInt() ?? 150;
+  int get inviteReward => (_economy['invite_reward'] as num?)?.toInt() ?? 150;
+  int get inviteNewPlayer => (_economy['invite_new_player'] as num?)?.toInt() ?? 100;
   List<int> get loginCalendar =>
       [for (final v in (_economy['login_calendar'] as List? ?? const [20, 30, 40, 50, 60, 80])) (v as num).toInt()];
   List<int> get streakBadges => [for (final v in (_economy['streak_badges'] as List? ?? const [7, 30, 100])) (v as num).toInt()];
@@ -912,6 +912,16 @@ class Api extends ChangeNotifier {
       return (grants.isEmpty ? 0 : ((grants.first as Map)['amount'] as int? ?? 0), null);
     } catch (e) {
       return (0, friendly(e));
+    }
+  }
+
+  /// The invite card: can a code still be entered, my progress, the friends' progress. Null when it cannot be read.
+  Future<ReferralStatus?> referralStatus() async {
+    try {
+      return ReferralStatus((await _call('GET', '/v1/referrals/status') as Map).cast<String, dynamic>());
+    } catch (e) {
+      debugPrint('referral status: $e');
+      return null;
     }
   }
 

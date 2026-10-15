@@ -10,6 +10,7 @@ import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
 import '../widgets/mistakes_card.dart';
 import '../widgets/partner_card.dart';
+import '../widgets/rate_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'comments_screen.dart';
@@ -170,6 +171,14 @@ class _ResultScreenState extends State<ResultScreen> {
               const SizedBox(height: 14),
               MistakesCard(caseData: caseData, tries: result.progress!.wrongTries, proof: result.proof),
             ],
+            // the rating step: big stars, one tap, closes with «بعداً» (a lost case cannot be rated)
+            if (solved) ...[
+              const SizedBox(height: 14),
+              FadeSlideIn(
+                delay: const Duration(milliseconds: 1400),
+                child: RateCard(caseId: caseData.id, title: caseData.title),
+              ),
+            ],
             const SizedBox(height: 18),
             FadeSlideIn(
               delay: const Duration(milliseconds: 1500),
@@ -179,13 +188,15 @@ class _ResultScreenState extends State<ResultScreen> {
                 onTap: () => SharePlus.instance.share(ShareParams(text: shortShareText(caseData, result))),
               ),
             ),
-            const SizedBox(height: 10),
-            GhostButton(
-              label: 'نظر کارآگاه‌ها',
-              icon: Icons.chat_bubble_outline_rounded,
-              onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
-                  builder: (_) => CommentsScreen(caseId: caseData.id, title: caseData.title))),
-            ),
+            if (!solved) ...[
+              const SizedBox(height: 10),
+              GhostButton(
+                label: 'نظر کارآگاه‌ها',
+                icon: Icons.chat_bubble_outline_rounded,
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
+                    builder: (_) => CommentsScreen(caseId: caseData.id, title: caseData.title))),
+              ),
+            ],
             const SizedBox(height: 10),
             GhostButton(
               label: result.story != null ? 'برگشت به نقشه‌ی داستان' : 'برگشت به خانه',

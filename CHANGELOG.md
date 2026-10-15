@@ -1,5 +1,15 @@
 # Changelog
 
+## server 1.26.0, app 1.26.0 (build 54): invite codes explained, stars after every case, new archive
+
+- **Invite codes (why testers got no coins):** the redeem itself works (the new player gets 100 coins at once; a test now proves it, and proves the inviter's 150 coins arrive as an inbox gift after the friend solved on 3 different days and the gift is claimed). What failed was the path around it: the only field was hidden in the profile, the first run never asked although the share text says «موقع شروع کد دعوت من رو بزن», accounts older than 7 days are refused (a tester with an older account sees an error), and the card promised the inviter's coins immediately. The app default coin numbers (300/150) did not match the server (150/100) when the config was missing; fixed.
+- First run: after the guide, one optional screen «کد دعوت داری؟» (asked once, one tap on «بعداً» closes it). The invite card in the profile now says the rule in plain Persian, shows the closest friend's progress («x از ۳ روز»), how many friends came and were paid, and, for an invited player, his own progress. The share text names the 100 coins.
+- New `GET /v1/referrals/status` (bounded, migration 0023 adds `ix_players_referred_by`).
+- **Ratings and comments:** a big rating card right after a solve and on every finished case, including archive cases (one tap on a star rates and counts at once; an optional sentence; «بعداً» closes it). Case rows carry the average, the number of ratings and approved comments and the player's own rating (`rating_avg`, `rating_count`, `comment_count`, `my_rating`, cached 30 s per worker). The home card and the archive cards show them. A player who gave only stars may add words once; the stars stay.
+- **Archive screen redesigned:** progress header (solved, stars, the price hint), coin chip that opens the shop, sort (newest, oldest, best rated, most solved), filters (all, unsolved, open, 3 stars, «ستاره ندادم»), wide cards with the scene, state (stars / lost / a brass «price · باز کن» button), difficulty and rating.
+- «چی تازه شده؟» release 54 lists the three changes. Tests: `server/tests/test_invites_ratings.py`, `app/test/invite_rating_test.dart`.
+- Deploy: server change (new call, migration), then the game APK from the same commit. Details: `docs/operations.md` «Invite codes, ratings, archive».
+
 ## server 1.25.7: less CPU per request on the app-start calls
 
 - Why: the 500-player load test from Iran (15 Oct) stopped at 40-50 requests per second; the runtime meter showed each worker at about 50 % CPU (one core in all), the pool full and no 5xx. The app was CPU bound, about 24 ms of CPU per request.

@@ -8,7 +8,7 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import content
+from .. import content, ratings
 from ..config import get_settings
 from ..db import get_session
 from ..models import AdminLog, CaseComment, CaseProgress, Player, new_id, utcnow
@@ -115,10 +115,13 @@ async def write_comment(case_id: str, body: CommentIn, player: Player = Depends(
         text = _clean(body.body, 3, MAX_ROOT) if (body.body or "").strip() else ""
         old = (await session.execute(select(C).where(
             C.case_id == case_id, C.player_id == player.id, C.slot == "root"))).scalar_one_or_none()
+        # a rejected comment may be rewritten; a stars-only rating may get its text once (and then waits for the admin)
+        adds_text = old is not None and old.status == "approved" and old.body == "" and bool(text)
         if old is not None:
-            if old.status != "rejected":
+            if old.status != "rejected" and not adds_text:
                 raise HTTPException(409, "already_commented")
-            old.rating, old.body, old.created_at = body.rating, text, utcnow()
+            old.rating = old.rating if adds_text else body.rating  # words added later never change the stars
+            old.body, old.created_at = text, utcnow()
             old.status, old.reviewed_at = ("pending", None) if text else ("approved", utcnow())
             row = old
         else:
@@ -142,6 +145,7 @@ async def write_comment(case_id: str, body: CommentIn, player: Player = Depends(
     except IntegrityError:
         await session.rollback()
         raise HTTPException(409, "already_commented")
+    ratings.clear()
     return {"id": row.id, "status": row.status}
 
 
@@ -218,4 +222,5 @@ async def admin_action(comment_id: int, body: ActionIn, session: AsyncSession = 
         c.status, c.reviewed_at = status, utcnow()
     session.add(AdminLog(action=f"comment_{body.action}", target=str(comment_id), detail={"case": c.case_id}))
     await session.commit()
+    ratings.clear()
     return {"id": comment_id, "status": status}
