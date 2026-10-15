@@ -321,9 +321,10 @@ class _HomeScreenState extends State<HomeScreen> {
             border: Border.all(color: K.stamp.withValues(alpha: 0.7)),
           ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            const Icon(Icons.local_fire_department_rounded, size: 18, color: K.stamp),
-            const SizedBox(width: 3),
+            // right to left: the number first, then the flame
             Text(fa(streak), style: tBody(15, w: FontWeight.w900)),
+            const SizedBox(width: 3),
+            const Icon(Icons.local_fire_department_rounded, size: 18, color: K.stamp),
           ]),
         ),
       );

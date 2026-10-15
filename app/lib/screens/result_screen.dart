@@ -222,9 +222,9 @@ class _ResultScreenState extends State<ResultScreen> {
           border: Border.all(color: K.brass.withValues(alpha: 0.6)),
         ),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(Icons.gavel_rounded, size: 16, color: K.brass),
-          const SizedBox(width: 6),
           Text('+${fa(n)} حکم بازرسی', style: tBody(13, color: K.brass, w: FontWeight.w900)),
+          const SizedBox(width: 6),
+          const Icon(Icons.gavel_rounded, size: 16, color: K.brass),
         ]),
       );
 
@@ -241,19 +241,21 @@ class _ResultScreenState extends State<ResultScreen> {
       );
 
   Widget _rewards() {
-    Widget item(IconData icon, Color color, Widget label) => Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(icon, color: color, size: 18),
-          const SizedBox(width: 4),
+    // right to left: the number/label first, then the icon (the coin is the shared CoinIcon)
+    Widget item(Widget icon, Widget label) => Row(mainAxisSize: MainAxisSize.min, children: [
           label,
+          const SizedBox(width: 4),
+          icon,
         ]);
+    Widget ic(IconData d, Color c) => Icon(d, color: c, size: 18);
     final style = tBody(13.5, w: FontWeight.w900);
     final items = <Widget>[
-      item(Icons.monetization_on_rounded, K.brass, AnimatedCount(value: result.reward, prefix: '+', suffix: ' سکه', style: style)),
-      if (result.story == null) item(Icons.local_fire_department_rounded, K.stamp, Text('${fa(result.streak)} شب', style: style)),
+      item(const CoinIcon(size: 18), AnimatedCount(value: result.reward, prefix: '+', suffix: ' سکه', style: style)),
+      if (result.story == null) item(ic(Icons.local_fire_department_rounded, K.stamp), Text('${fa(result.streak)} شب', style: style)),
       if (result.rank != null)
         GestureDetector(
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LeaderboardScreen())),
-          child: item(Icons.emoji_events_rounded, K.brass, Text('رتبه‌ی ${fa(result.rank!)}', style: style)),
+          child: item(ic(Icons.emoji_events_rounded, K.brass), Text('رتبه‌ی ${fa(result.rank!)}', style: style)),
         ),
     ];
     return Column(children: [

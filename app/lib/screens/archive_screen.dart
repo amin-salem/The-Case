@@ -198,9 +198,9 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
       status = Stars(count: c.stars, size: 18);
     } else if (c.locked) {
       status = Row(mainAxisSize: MainAxisSize.min, children: [
-        const CoinIcon(size: 16),
-        const SizedBox(width: 4),
         Text(fa(c.unlockCost), style: tBody(13, color: K.brass, w: FontWeight.w900)),
+        const SizedBox(width: 4),
+        const CoinIcon(size: 16),
       ]);
     } else if (c.failed) {
       status = Text('باخت', style: tBody(12.5, color: K.stamp, w: FontWeight.w900));

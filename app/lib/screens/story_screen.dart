@@ -261,9 +261,9 @@ class _StoryScreenState extends State<StoryScreen> {
           border: Border.all(color: K.brass.withValues(alpha: 0.6)),
         ),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(Icons.gavel_rounded, size: 16, color: K.brass),
-          const SizedBox(width: 5),
           Text('${fa(n)} حکم', style: tBody(13, color: K.brass, w: FontWeight.w900)),
+          const SizedBox(width: 5),
+          const Icon(Icons.gavel_rounded, size: 16, color: K.brass),
         ]),
       );
 
@@ -360,7 +360,7 @@ class _StoryScreenState extends State<StoryScreen> {
           child: Text('حکمی نداری؛ با حل پرونده‌ی امشب یکی می‌گیری', style: tBody(11.5, color: K.textSoft)),
         ),
       const SizedBox(height: 6),
-      GhostButton(label: 'رد شدن با سکه · ${fa(c.skipCost ?? 0)}', icon: Icons.monetization_on_rounded, color: K.brass, onTap: () => _skip(c)),
+      GhostButton(label: 'رد شدن با سکه · ${fa(c.skipCost ?? 0)}', leading: const CoinIcon(size: 18), color: K.brass, onTap: () => _skip(c)),
     ]);
   }
 

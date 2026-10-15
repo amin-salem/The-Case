@@ -232,9 +232,9 @@ class _ShopScreenState extends State<ShopScreen> {
       title: 'بیمه‌ی زنجیره',
       sub: 'یه شب جا بمونی، زنجیره‌ات نمی‌شکنه · داری: ${fa(held)} از ${fa(api.maxFreezes)}',
       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-        const CoinIcon(size: 18),
-        const SizedBox(width: 4),
         Text(fa(api.freezeCost), style: tBody(13, color: K.brass, w: FontWeight.w900)),
+        const SizedBox(width: 4),
+        const CoinIcon(size: 18),
       ]),
       onTap: () => buyStreakInsurance(context),
     );

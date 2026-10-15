@@ -157,9 +157,9 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
                     border: Border.all(color: K.stamp),
                   ),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    const Icon(Icons.gavel_rounded, size: 15, color: K.stamp),
-                    const SizedBox(width: 4),
                     Text('${fa(_left)} فرصت', style: tBody(13, w: FontWeight.w900)),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.gavel_rounded, size: 15, color: K.stamp),
                   ]),
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../models/models.dart';
@@ -377,15 +378,26 @@ class _AccountScreenState extends State<AccountScreen> {
         const SizedBox(height: 10),
         Row(children: [
           Expanded(
-            child: Container(
-              height: 46,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: K.night,
+            child: Tooltip(
+              message: 'برای کپی بزن',
+              child: InkWell(
+                key: const ValueKey('profile-invite-code'),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: K.brass.withValues(alpha: 0.5)),
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: code));
+                  if (context.mounted) toast(context, 'کد دعوت کپی شد');
+                },
+                child: Container(
+                  height: 46,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: K.night,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: K.brass.withValues(alpha: 0.5)),
+                  ),
+                  child: Text(code, textDirection: TextDirection.ltr, style: tDisplay(22, color: K.brass)),
+                ),
               ),
-              child: SelectableText(code, textDirection: TextDirection.ltr, style: tDisplay(22, color: K.brass)),
             ),
           ),
           const SizedBox(width: 10),

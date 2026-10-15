@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../models/progress.dart';
 import '../services/api.dart';
@@ -62,6 +63,7 @@ class _MessagesHubScreenState extends State<MessagesHubScreen> {
   @override
   void dispose() {
     _seenTimer?.cancel();
+    _inviteTimer?.cancel();
     super.dispose();
   }
 
@@ -150,6 +152,21 @@ class _MessagesHubScreenState extends State<MessagesHubScreen> {
 
   // ---------------------------------------------------------------- profile card
 
+  bool _inviteCopied = false;
+  Timer? _inviteTimer;
+
+  /// Tap the invite code: copy it, say so in the label for a moment and in a small message.
+  Future<void> _copyInvite(String code) async {
+    await Clipboard.setData(ClipboardData(text: code));
+    if (!mounted) return;
+    toast(context, 'کد دعوت کپی شد');
+    setState(() => _inviteCopied = true);
+    _inviteTimer?.cancel();
+    _inviteTimer = Timer(const Duration(milliseconds: 1800), () {
+      if (mounted) setState(() => _inviteCopied = false);
+    });
+  }
+
   Widget _profileCard() {
     return ListenableBuilder(
       listenable: Api.i,
@@ -174,13 +191,25 @@ class _MessagesHubScreenState extends State<MessagesHubScreen> {
                 ]),
               ),
               if (p != null && p.inviteCode.isNotEmpty)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(10)),
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    Text('کد دعوت', style: tBody(10.5, color: K.textSoft).copyWith(height: 1.3)),
-                    Text(p.inviteCode, style: tBody(13, w: FontWeight.w900, color: K.brass).copyWith(height: 1.3)),
-                  ]),
+                Tooltip(
+                  message: 'برای کپی بزن',
+                  child: Material(
+                    color: K.night3,
+                    borderRadius: BorderRadius.circular(10),
+                    child: InkWell(
+                      key: const ValueKey('hub-invite-code'),
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () => _copyInvite(p.inviteCode),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        child: Column(mainAxisSize: MainAxisSize.min, children: [
+                          Text(_inviteCopied ? 'کپی شد ✓' : 'کد دعوت',
+                              style: tBody(10.5, color: _inviteCopied ? K.brass : K.textSoft).copyWith(height: 1.3)),
+                          Text(p.inviteCode, style: tBody(13, w: FontWeight.w900, color: K.brass).copyWith(height: 1.3)),
+                        ]),
+                      ),
+                    ),
+                  ),
                 ),
             ]),
             const SizedBox(height: 10),
@@ -202,9 +231,10 @@ class _MessagesHubScreenState extends State<MessagesHubScreen> {
           decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12)),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(icon, size: 16, color: K.brass),
-              const SizedBox(width: 4),
+              // right to left: the number first, then the icon
               Text(value, style: tBody(15, w: FontWeight.w900).copyWith(height: 1.3)),
+              const SizedBox(width: 4),
+              Icon(icon, size: 16, color: K.brass),
             ]),
             Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11, color: K.textSoft).copyWith(height: 1.3)),
           ]),

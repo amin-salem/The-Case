@@ -168,17 +168,19 @@ class _StampButtonState extends State<StampButton> {
 
 /// Quiet outlined button.
 class GhostButton extends StatelessWidget {
-  const GhostButton({super.key, required this.label, required this.onTap, this.icon, this.color = K.text});
+  const GhostButton({super.key, required this.label, required this.onTap, this.icon, this.leading, this.color = K.text});
   final String label;
   final VoidCallback? onTap;
   final IconData? icon;
+  /// A custom leading widget (e.g. the shared [CoinIcon]); wins over [icon].
+  final Widget? leading;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: onTap,
-      icon: Icon(icon ?? Icons.chevron_right_rounded, color: color, size: 20),
+      icon: leading ?? Icon(icon ?? Icons.chevron_right_rounded, color: color, size: 20),
       label: Text(label, style: tBody(14, color: color, w: FontWeight.w700)),
       style: OutlinedButton.styleFrom(
         side: BorderSide(color: color.withValues(alpha: 0.4)),
@@ -200,17 +202,18 @@ class CoinChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(10, 6, 12, 6),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(999),
             border: Border.all(color: K.brass.withValues(alpha: 0.5))),
+        // right to left: «+», then the number, then the coin (children run right to left in this RTL app)
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          const CoinIcon(size: 18),
-          const SizedBox(width: 6),
-          AnimatedCount(value: coins, style: tBody(15, w: FontWeight.w900)),
           if (onTap != null) ...[
-            const SizedBox(width: 4),
             const Icon(Icons.add_circle_rounded, size: 18, color: K.brass),
+            const SizedBox(width: 6),
           ],
+          AnimatedCount(value: coins, style: tBody(15, w: FontWeight.w900)),
+          const SizedBox(width: 6),
+          const CoinIcon(size: 18),
         ]),
       ),
     );

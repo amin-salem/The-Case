@@ -307,9 +307,10 @@ class _CoinChip extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: small ? 8 : 10, vertical: small ? 2 : 4),
         decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(99)),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(Icons.monetization_on_rounded, color: K.brass, size: small ? 14 : 18),
-          const SizedBox(width: 4),
+          // the same coin as everywhere else, number first (right to left), then the coin
           Text(fa(amount), style: tBody(small ? 12 : 14, color: K.brass, w: FontWeight.w900)),
+          const SizedBox(width: 4),
+          CoinIcon(size: small ? 14 : 18),
         ]),
       );
 }

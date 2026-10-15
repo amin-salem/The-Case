@@ -225,9 +225,9 @@ class _CalendarDialog extends StatelessWidget {
           StampIn(
             delay: const Duration(milliseconds: 350),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const CoinIcon(size: 30),
-              const SizedBox(width: 8),
               Flexible(child: Text('+${fa(reward)} سکه', style: tDisplay(28, color: K.kraftDark))),
+              const SizedBox(width: 8),
+              const CoinIcon(size: 30),
             ]),
           ),
           if (day >= 7)
