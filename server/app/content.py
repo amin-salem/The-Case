@@ -144,12 +144,20 @@ def mission_next_at(now: datetime | None = None) -> datetime:
     return t if t > now else t + timedelta(days=1)
 
 
+@lru_cache(maxsize=1024)
+def _open_moment(publish: date, hour: int, tzname: str) -> datetime:
+    """A pure function of its arguments (datetimes are immutable), so it is memoised: opened()/todays_case() ask for the
+    opening moment of every case several times per request and the case list used to do it once per row."""
+    return datetime.combine(publish, time(hour), tzinfo=ZoneInfo(tzname))
+
+
 def opens_at(c: Case) -> datetime:
     # a weekend case may set its own `open_hour` (new ones open at 09:00, away from the 21:00 nightly case)
+    s = get_settings()
     hour = c.data.get("open_hour") if isinstance(c.data, dict) else None
     if not isinstance(hour, int) or not 0 <= hour <= 23:
-        hour = get_settings().new_case_hour
-    return datetime.combine(c.publish, time(hour), tzinfo=_tz())
+        hour = s.new_case_hour
+    return _open_moment(c.publish, hour, s.timezone)
 
 
 def opened(now: datetime | None = None) -> list[Case]:

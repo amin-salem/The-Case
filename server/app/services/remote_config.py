@@ -56,6 +56,14 @@ async def load_config(session: AsyncSession) -> dict[str, Any]:
     return cfg
 
 
+async def load_value(session: AsyncSession, key: str) -> Any:
+    """One setting, the same value load_config()[key] has, without copying all the others."""
+    for k, value, _ in await _load_rows(session):
+        if k == key:
+            return copy.deepcopy(value)
+    return copy.deepcopy(DEFAULTS.get(key))
+
+
 async def stamp_of(session: AsyncSession, key: str):
     """When a config value was last saved (None if it was never set)."""
     return next((at for k, _, at in await _load_rows(session) if k == key), None)

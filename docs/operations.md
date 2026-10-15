@@ -244,6 +244,24 @@ any "N players" claim is a guess.
 - Known heavy spots left as they are (measure first): `/v1/me` runs about 8 small queries per call (player, achievements, avatar goals, the bell:
   gifts, broadcasts, badges); `GET /v1/feed` runs the same bell queries. They are indexed per player and cheap one by one.
 
+### CPU per request (server 1.25.7, 15 Oct 2026)
+**What was observed:** the 500-player load test from Iran stopped at about 40-50 requests per second whatever `DB_POOL_SIZE` or
+`WEB_CONCURRENCY`. The runtime meter (1.25.6) logged cpu=50 % for each of the two workers (one core in total on the 1 CPU plan), pool 19-20/20
+in use, 33-88 requests in flight, no 5xx: CPU bound, about 24 ms of CPU per request on average.
+**What was NOT measured:** profiling needs the server dependencies and PyPI was unreachable from the workspace, so there is no profile and no
+per-endpoint share. The changes below come from reading the code, they are not tuned to numbers, and SQLite (CI) would not be Postgres anyway.
+**What was changed** (details in the CHANGELOG): the opening moment of a case is memoised (the case list used to recompute all of them for every
+row); the three biggest answers (`/v1/cases`, `/v1/cases/<id>`, `/v1/feed`) skip a second validation; the case/weekend part of the bell/feed is
+shared per worker for 60 s; the proxy list of the rate limiter is parsed once. **Still heavy and left alone on purpose:** `/v1/me` runs about 8
+queries (achievements, avatar goals and the bell are per player and cannot be cached), `pool_pre_ping` (one extra round trip per connection
+checkout, kept for safety), and the JWT check that runs twice per request (rate limiter and `current_player`).
+**How to re-test:** deploy 1.25.7, check `https://gaamly.ir/health` (without a VPN) shows the version, set `WEB_CONCURRENCY` to the number of CPUs
+of the plan, run `python .\tools\load_test.py https://gaamly.ir -n 500` from Iran, and compare requests/second and p95 with the 15 Oct run
+(40-50 req/s). During the run watch the Liara log for `runtime busy pid=... cpu=...%` lines and, afterwards, `GET /admin/api/runtime`
+(ask a few times; `cpu_avg_percent` per worker, `requests_per_second`). If CPU is still near 100 % per core at the same rate, the next step is a
+real profile (run the app locally with `pip install pyinstrument` and the load test against `http://127.0.0.1:8000`) and then
+fewer queries in `/v1/me`.
+
 ### Workers: 1 or 2?
 Each worker is a separate process with its own pool, its own caches and its own memory rate-limit counters. On **0.5 CPU** two workers
 share half a core, so they mostly wait for each other, and each needs its own RAM (the case files are loaded in every worker).

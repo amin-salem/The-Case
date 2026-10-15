@@ -1,6 +1,8 @@
 """Shared bits for the routers."""
 from __future__ import annotations
 
+from fastapi.responses import JSONResponse
+
 from .. import avatars
 from .. import economy as eco
 from ..config import get_settings
@@ -34,3 +36,10 @@ def profile_out(p: Player, login_reward: int = 0) -> ProfileOut:
         stars_total=p.stars_total, login_reward=login_reward,
         login_day=p.login_day or 0, warrants=p.warrants or 0, streak_freezes=p.streak_freezes or 0,
     )
+
+
+def fast_json(model) -> JSONResponse:
+    """The JSON FastAPI would send for `response_model=<this model>`, without validating the model a second time and
+    walking it a third time (on the case list that was about 50 rows x 3). Same bytes: by_alias, JSON mode, and
+    Starlette's own JSONResponse. The route keeps its response_model, so the OpenAPI schema is unchanged."""
+    return JSONResponse(model.model_dump(mode="json", by_alias=True))

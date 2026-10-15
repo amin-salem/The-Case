@@ -1,5 +1,15 @@
 # Changelog
 
+## server 1.25.7: less CPU per request on the app-start calls
+
+- Why: the 500-player load test from Iran (15 Oct) stopped at 40-50 requests per second; the runtime meter showed each worker at about 50 % CPU (one core in all), the pool full and no 5xx. The app was CPU bound, about 24 ms of CPU per request.
+- **Not measured:** the workspace could not install the server dependencies (PyPI unreachable), so nothing was profiled. These are code-review fixes of work that was clearly repeated per request; the speed gain is an estimate until the load test is repeated.
+- `content.opens_at` is memoised on its pure inputs (publish day, hour, timezone). Before, `GET /v1/cases` asked `todays_case()` once per row, and every `todays_case()` rebuilt the opening time of all 50 cases (about 2,500 timezone computations per request). The list now asks once, and `_opened_case` no longer builds the opened list.
+- `GET /v1/cases`, `GET /v1/cases/<id>` and `GET /v1/feed` send the model they already built (`fast_json`: same bytes) instead of validating it again and walking it a third time. The OpenAPI schema is unchanged.
+- The bell/feed (`/v1/me` and `/v1/feed`): the "a case / a weekend chapter opened" items are built once per worker (60 s, bounded, nothing per player; the per-player `born` filter and the clock check still run per request) and only the `news` setting is copied instead of the whole config.
+- Rate limiter: the trusted-proxy CIDR list is parsed once per setting value, not on every request.
+- Same answers: `tests/test_perf.py` compares the new output with the old computation. No migration, no new setting, no rule changed (coins, stars, time and answers stay server-side).
+
 ## server 1.25.6: runtime meter (find the real limit of one worker)
 
 - The 500-player load test (15 Oct) stopped at about 40-50 requests per second whatever the pool size or `WEB_CONCURRENCY`, and the Liara graphs showed idle CPU. This release adds a meter per worker so the next test says why: CPU share, event-loop lag, database connections in use, requests in flight, 5xx count.

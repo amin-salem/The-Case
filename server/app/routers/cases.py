@@ -17,7 +17,7 @@ from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut
                        ShowIn, ShowOut, StatsOut, SuspectStat, TickIn, TickOut)
 from ..security import current_player
 from ..util import add_coins
-from .common import vip_active
+from .common import fast_json, vip_active
 from .story import finish as story_finish, story_extra
 
 router = APIRouter(prefix="/v1/cases", tags=["cases"])
@@ -90,7 +90,7 @@ def _opened_case(case_id: str) -> Case:
             raise HTTPException(404, "no_case")
         return c
     c = content.by_id(case_id)
-    if c is None or c not in content.opened():
+    if c is None or content.opens_at(c) > content.now_local():  # same as "c not in content.opened()", without the list
         raise HTTPException(404, "no_case")
     return c
 
@@ -116,12 +116,13 @@ def add_active_time(p: CaseProgress, seconds: int, now) -> int:
     return add
 
 
-def _is_today(c: Case) -> bool:
-    t = content.todays_case()
+def _is_today(c: Case, today: Case | None = ...) -> bool:
+    """`today` may be passed by a caller that already knows today's case (the case list asks for 50 rows)."""
+    t = content.todays_case() if today is ... else today
     return t is not None and t.id == c.id
 
 
-def _can_open(c: Case, p: CaseProgress | None, player: Player) -> bool:
+def _can_open(c: Case, p: CaseProgress | None, player: Player, today: Case | None = ...) -> bool:
     if content.is_story(c.id):
         return p is not None  # a story chapter is opened on /v1/story, never bought here
     if content.is_weekly(c.id):
@@ -129,7 +130,7 @@ def _can_open(c: Case, p: CaseProgress | None, player: Player) -> bool:
             return True  # the weekend case is free for everyone while it is open
         # once it closed it is an archive case (higher price), unless bought, played to the end, or VIP
         return vip_active(player) or bool(p and (p.unlocked or p.solved or p.failed))
-    return _is_today(c) or vip_active(player) or bool(p and (p.unlocked or p.solved or p.failed))
+    return _is_today(c, today) or vip_active(player) or bool(p and (p.unlocked or p.solved or p.failed))
 
 
 _solvers = TTLCache("solver_counts", ttl=30, max_size=2)
@@ -145,7 +146,7 @@ async def _solver_counts(session: AsyncSession) -> dict[str, int]:
     return await _solvers.get_or_load("n", load)
 
 
-@router.get("", response_model=CasesOut)
+@router.get("", response_model=CasesOut)  # the answer is already a validated model: sent as it is (fast_json)
 async def list_cases(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     opened = content.opened()
     mine = {p.case_id: p for p in (await session.execute(
@@ -157,7 +158,7 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
         p = mine.get(c.id)
         s = c.summary()
         return CaseRow(**s, today=today is not None and c.id == today.id,
-                       weekend=content.is_weekly(c.id), locked=not _can_open(c, p, player), unlock_cost=_unlock_cost(c),
+                       weekend=content.is_weekly(c.id), locked=not _can_open(c, p, player, today), unlock_cost=_unlock_cost(c),
                        solved=bool(p and p.solved), failed=bool(p and p.failed),
                        stars=p.stars if p else 0, solvers=int(counts.get(c.id, 0)))
 
@@ -167,10 +168,10 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
     archive += [row(c) for c in content.weekly_cases() if content.weekly_closes_at(c) <= now]
     archive.sort(key=lambda r: r.publish, reverse=True)
     weekly = content.current_weekly()
-    return CasesOut(today=row(today) if today else None,
-                    next_case_at=int(content.next_case_at().timestamp()), archive=archive,
-                    weekly=row(weekly) if weekly else None,
-                    weekly_closes_at=int(content.weekly_closes_at(weekly).timestamp()) if weekly else None)
+    return fast_json(CasesOut(today=row(today) if today else None,
+                              next_case_at=int(content.next_case_at().timestamp()), archive=archive,
+                              weekly=row(weekly) if weekly else None,
+                              weekly_closes_at=int(content.weekly_closes_at(weekly).timestamp()) if weekly else None))
 
 
 @router.get("/{case_id}", response_model=CaseOut)
@@ -202,7 +203,7 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
     for k in ("suspects", "evidence"):
         if isinstance(data.get(k), list):
             data[k] = ac.shuffled(data[k], f"{seed}:{k}")
-    return CaseOut(case=data, progress=_progress_out(c, p), today=_is_today(c))
+    return fast_json(CaseOut(case=data, progress=_progress_out(c, p), today=_is_today(c)))
 
 
 @router.post("/{case_id}/unlock", response_model=CaseOut)

@@ -24,6 +24,7 @@ import re
 import time
 from collections import OrderedDict
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import Callable
 
 import jwt
@@ -160,6 +161,13 @@ def _trusted_peer(peer: str, proxies: list) -> bool:
     if proxies:
         return any(ip in net for net in proxies)
     return ip.is_private or ip.is_loopback or ip.is_link_local
+
+
+@lru_cache(maxsize=8)
+def _proxy_networks(text: str) -> list:
+    """The trusted-proxy CIDR list, parsed once per distinct setting (it used to be parsed on every request).
+    Callers only read the list. A bad entry raises exactly as before and is not cached."""
+    return [ipaddress.ip_network(x.strip(), strict=False) for x in text.split(",") if x.strip()]
 
 
 def client_ip(headers: dict, peer: str | None, hops: int = 1, proxies: list | None = None) -> str:
@@ -555,7 +563,7 @@ class Limiter:
         """Returns (verdict to put in the headers, a refusal or None)."""
         from ..config import get_settings
         s = get_settings()
-        proxies = [ipaddress.ip_network(x.strip(), strict=False) for x in s.rate_trusted_proxies.split(",") if x.strip()]
+        proxies = _proxy_networks(s.rate_trusted_proxies)
         ip = client_ip(headers, peer, s.rate_trusted_hops, proxies)
         iph = self.hash(ip)
         try:

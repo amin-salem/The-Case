@@ -10,8 +10,10 @@ from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import achievements, content
+from .cache import TTLCache
+from .config import get_settings
 from .models import Broadcast, BroadcastClaim, InboxItem, Player, PlayerAchievement, utcnow
-from .services.remote_config import load_config, stamp_of
+from .services.remote_config import load_value, stamp_of
 from .util import ts
 
 MAX_ITEMS = 40
@@ -26,6 +28,36 @@ def _coins(grants: list | None) -> int:
 def _utc(dt: datetime) -> datetime:
     """Aware local time -> naive UTC (the database way)."""
     return dt.astimezone(timezone.utc).replace(tzinfo=None)
+
+
+# The "a case / a weekend chapter opened" news does not depend on the player or on the clock (the clock only decides
+# whether an item is already in the past, which build_feed checks per item), so it is built once per worker.
+_openings = TTLCache("feed_openings", ttl=60, max_size=4)
+
+
+def _static_openings() -> list[tuple]:
+    """(id, kind, title, body, opening moment as naive UTC) for every nightly case and weekend chapter."""
+    st = get_settings()
+    key = (st.new_case_hour, st.timezone)
+    hit = _openings.get_sync(key)
+    if hit is not None:
+        return hit
+    out: list[tuple] = []
+    for c in content.all_cases():
+        out.append((f"c{c.id}", "case", f"پرونده‌ی «{c.data.get('title', '')}» باز شد", c.data.get("location") or "",
+                    _utc(content.opens_at(c))))
+    for c in content.weekly_cases():
+        start = content.opens_at(c)
+        chapters = c.data.get("chapters") or []
+        title = c.data.get("title", "")
+        for n, ch in enumerate(chapters, start=1):
+            at = _utc(start + timedelta(hours=ch.get("at_hours", 0)))
+            if n == 1:
+                out.append((f"w{c.id}1", "weekend", f"پرونده‌ی آخر هفته باز شد: «{title}»", c.data.get("location") or "", at))
+            else:
+                out.append((f"w{c.id}{n}", "weekend", f"فصل {n} از {len(chapters)} باز شد: «{title}»", "مدارک تازه رسید.", at))
+    _openings.put_sync(key, out)
+    return out
 
 
 async def build_feed(session: AsyncSession, player: Player, now: datetime | None = None) -> list[dict]:
@@ -66,22 +98,9 @@ async def build_feed(session: AsyncSession, player: Player, now: datetime | None
     # openings that already happened (only those after the player joined: older ones are not news to them)
     born = player.created_at or since
     local_now = now.replace(tzinfo=timezone.utc).astimezone(content._tz())
-    for c in content.opened(local_now):
-        at = _utc(content.opens_at(c))
-        if at >= born:
-            add(f"c{c.id}", "case", f"پرونده‌ی «{c.data.get('title', '')}» باز شد", c.data.get("location") or "", at)
-    for c in content.weekly_cases():
-        start = content.opens_at(c)
-        chapters = c.data.get("chapters") or []
-        for n, ch in enumerate(chapters, start=1):
-            at = _utc(start + timedelta(hours=ch.get("at_hours", 0)))
-            if at < born:
-                continue
-            title = c.data.get("title", "")
-            if n == 1:
-                add(f"w{c.id}1", "weekend", f"پرونده‌ی آخر هفته باز شد: «{title}»", c.data.get("location") or "", at)
-            else:
-                add(f"w{c.id}{n}", "weekend", f"فصل {n} از {len(chapters)} باز شد: «{title}»", "مدارک تازه رسید.", at)
+    for id_, kind, title, body, at in _static_openings():
+        if at >= born:  # items in the future (not opened yet) are dropped by add()
+            add(id_, kind, title, body, at)
     try:  # story mode is paused while its opening time is in the future
         if content.story_opens_at() <= local_now and content.story_chapters():
             at = _utc(content.story_opens_at())
@@ -92,8 +111,7 @@ async def build_feed(session: AsyncSession, player: Player, now: datetime | None
 
     # announcements from the remote config (`news`: a list of {title, body, at?})
     try:
-        cfg = await load_config(session)
-        news = cfg.get("news") or []
+        news = await load_value(session, "news") or []
         stamp = await stamp_of(session, "news")
         for i, n in enumerate(news[:5] if isinstance(news, list) else []):
             if isinstance(n, str):
