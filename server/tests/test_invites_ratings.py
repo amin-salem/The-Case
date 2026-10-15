@@ -77,8 +77,9 @@ async def test_inviter_gets_a_gift_that_adds_coins_when_claimed(client):
     friend = await new_player(client, "iv-friend-3")
     code = (await me(client, inviter))["invite_code"]
     assert (await client.post("/v1/referrals/redeem", headers=friend["headers"], json={"code": code})).status_code == 200
-    start = (await me(client, inviter))["coins"]
+    await me(client, inviter)  # the daily login reward (if any) is paid by this call, not by the invite
     await solve_days(friend["player_id"], eco.INVITE_MIN_DAYS)
+    start = (await me(client, inviter))["coins"]
     assert await ac.maybe_pay_referral(friend["player_id"]) is True
     assert (await me(client, inviter))["coins"] == start  # a gift waits in the inbox, it is not paid by itself
     inbox = (await client.get("/v1/inbox", headers=inviter["headers"])).json()
