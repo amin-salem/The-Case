@@ -22,7 +22,7 @@ class RatingChip extends StatelessWidget {
   Widget build(BuildContext context) {
     if (count <= 0) return const SizedBox.shrink();
     return Row(mainAxisSize: MainAxisSize.min, children: [
-      Icon(Icons.favorite_rounded, color: K.stamp, size: size + 3),
+      Icon(Icons.star_rounded, color: K.brass, size: size + 3),
       const SizedBox(width: 2),
       Text(faRating(avg), style: tBody(size, w: FontWeight.w900, color: K.brass).copyWith(height: 1.2)),
       Text(' (${fa(count)})', style: tBody(size - 1, color: K.textSoft).copyWith(height: 1.2)),
@@ -187,15 +187,7 @@ class _RateCardState extends State<RateCard> {
                 style: tBody(12.5, color: K.textSoft)),
           ),
           const SizedBox(height: 6),
-          Row(mainAxisAlignment: MainAxisAlignment.center, textDirection: TextDirection.ltr, children: [
-            for (int i = 1; i <= 5; i++)
-              IconButton(
-                onPressed: _busy ? null : () => _rate(i),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(minWidth: 52, minHeight: 52),
-                icon: Icon(i <= _stars ? Icons.favorite_rounded : Icons.favorite_border_rounded, color: K.stamp, size: 42),
-              ),
-          ]),
+          RatingPicker(value: _stars, enabled: !_busy, onPick: _rate),
           if (_err != null) Text(_err!, textAlign: TextAlign.center, style: tBody(12.5, color: K.stamp, w: FontWeight.w700)),
         ]),
       );
@@ -208,7 +200,7 @@ class _RateCardState extends State<RateCard> {
       decoration: _box.copyWith(border: Border.all(color: K.night3)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Row(children: [
-          Icon(rated ? Icons.check_circle_rounded : Icons.favorite_rounded, color: rated ? K.ok : K.stamp, size: 22),
+          Icon(rated ? Icons.check_circle_rounded : Icons.star_rounded, color: rated ? K.ok : K.brass, size: 22),
           const SizedBox(width: 8),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -227,7 +219,7 @@ class _RateCardState extends State<RateCard> {
             alignment: AlignmentDirectional.centerStart,
             child: TextButton.icon(
               onPressed: () => _skip(false),
-              icon: const Icon(Icons.favorite_border_rounded, color: K.stamp, size: 20),
+              icon: const Icon(Icons.star_border_rounded, color: K.brass, size: 20),
               label: Text('امتیاز بده', style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
             ),
           ),
@@ -277,4 +269,43 @@ class _RateCardState extends State<RateCard> {
     final items = _d?['items'];
     return items is List && items.any((e) => e is Map && e['mine'] == true);
   }
+}
+
+
+/// Five stars the player taps. The app reads right to left, so ONE is on the right and FIVE on the left, and each star
+/// has its number under it, so the player knows what he is giving.
+class RatingPicker extends StatelessWidget {
+  const RatingPicker({super.key, required this.value, required this.onPick, this.enabled = true, this.size = 40});
+  final int value;
+  final ValueChanged<int> onPick;
+  final bool enabled;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Row(mainAxisAlignment: MainAxisAlignment.center, textDirection: TextDirection.rtl, children: [
+        for (int i = 1; i <= 5; i++)
+          InkResponse(
+            onTap: enabled ? () => onPick(i) : null,
+            radius: size,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                Icon(i <= value ? Icons.star_rounded : Icons.star_border_rounded, color: K.brass, size: size),
+                Text(fa(i), style: tBody(13, w: FontWeight.w900, color: i <= value ? K.brass : K.textSoft).copyWith(height: 1.2)),
+              ]),
+            ),
+          ),
+      ]);
+}
+
+/// A small read-only row of a given rating (1 on the right, like the picker).
+class RatingRow extends StatelessWidget {
+  const RatingRow(this.n, {super.key, this.size = 16});
+  final int n;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, textDirection: TextDirection.rtl, children: [
+        for (int i = 1; i <= 5; i++) Icon(i <= n ? Icons.star_rounded : Icons.star_border_rounded, color: K.brass, size: size),
+      ]);
 }

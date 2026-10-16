@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../services/api.dart';
 import '../theme.dart';
+import '../widgets/rate_card.dart';
 
 /// What other detectives said about a case: stars, comments, replies. The admin approves everything before it shows.
 class CommentsScreen extends StatefulWidget {
@@ -141,7 +142,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
         const SizedBox(width: 16),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _Hearts(n == 0 ? 0 : avg.round()),
+            RatingRow(n == 0 ? 0 : avg.round()),
             const SizedBox(height: 4),
             Text(n == 0 ? 'هنوز امتیازی نیست' : 'میانگین امتیاز ${fa(n)} کارآگاه', style: tBody(12, color: K.textSoft)),
           ]),
@@ -219,24 +220,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
       ),
       const SizedBox(width: 8),
       Flexible(child: Text(name, overflow: TextOverflow.ellipsis, style: tBody(13, w: FontWeight.w900))),
-      if (!reply && (c['rating'] as int) > 0) ...[const SizedBox(width: 8), _Hearts(c['rating'] as int)],
+      if (!reply && (c['rating'] as int) > 0) ...[const SizedBox(width: 8), RatingRow(c['rating'] as int)],
       if (pending && reply) ...[
         const SizedBox(width: 8),
         Text('در انتظار تأیید', style: tBody(11, color: K.brass, w: FontWeight.w900)),
       ],
     ]);
   }
-}
-
-class _Hearts extends StatelessWidget {
-  const _Hearts(this.n);
-  final int n;
-
-  @override
-  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, textDirection: TextDirection.ltr, children: [
-        for (int i = 1; i <= 5; i++)
-          Icon(i <= n ? Icons.favorite_rounded : Icons.favorite_border_rounded, color: K.stamp, size: 16),
-      ]);
 }
 
 class _WriteSheet extends StatefulWidget {
@@ -308,13 +298,7 @@ class _WriteSheetState extends State<_WriteSheet> {
             Text(_reply ? 'پاسخ به ${widget.parentName ?? ''}' : 'نظر تو درباره‌ی این پرونده', style: tDisplay(18)),
             if (!_reply) ...[
               const SizedBox(height: 10),
-              Row(mainAxisAlignment: MainAxisAlignment.center, textDirection: TextDirection.ltr, children: [
-                for (int i = 1; i <= 5; i++)
-                  IconButton(
-                    onPressed: _busy ? null : () => setState(() => _rating = i),
-                    icon: Icon(i <= _rating ? Icons.favorite_rounded : Icons.favorite_border_rounded, color: K.stamp, size: 38),
-                  ),
-              ]),
+              RatingPicker(value: _rating, enabled: !_busy, onPick: (v) => setState(() => _rating = v), size: 36),
             ],
             const SizedBox(height: 6),
             TextField(

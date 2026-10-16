@@ -1,8 +1,13 @@
 # Changelog
 
+## app 1.26.2 (build 56): rating is stars again, 1 on the right, a number under each star
+
+- Amin did not like the hearts: the case rating is **stars** again (the solving score stays «پلاک»). The app reads right to left, so **1 star is on the right and 5 on the left** (it was reversed), and each star has its **number under it** so the player knows what he gives. One widget (`RatingPicker`) is used by the rating card and the write sheet; `RatingRow` shows a given rating the same way.
+- App only: no server change, no push to `main` (APK from branch `release`). «چی تازه شده؟» release 56 replaces the unreleased 55 text.
+
 ## server 1.26.1, app 1.26.1 (build 55): «پلاک کارآگاهی» for solving, hearts for rating
 
-- Amin: stars for solving and stars for rating together confused players. Now **solving gives plaques** («پلاک کارآگاهی», police-badge shield icon, brass): 3 = no mistake, 2 = one, 1 = more. **Rating a case uses red hearts** (1-5) and the word «امتیاز». The data is unchanged: the server still stores `stars` for the plaque count and `rating` for hearts, so the leaderboard, weekly prizes, XP and achievements behave exactly as before. Only words and icons changed.
+- Amin: stars for solving and stars for rating together confused players. Now **solving gives plaques** («پلاک کارآگاهی», police-badge shield icon, brass): 3 = no mistake, 2 = one, 1 = more. **Rating a case used red hearts** (1-5; stars again in app 1.26.2) and the word «امتیاز». The data is unchanged: the server still stores `stars` for the plaque count and `rating` for hearts, so the leaderboard, weekly prizes, XP and achievements behave exactly as before. Only words and icons changed.
 - Why «پلاک» and not «نشان»: «نشان‌ها» is already the achievements tab and the profile counter, so a second «نشان» would have recreated the confusion. To switch the word, replace «پلاک» in the app texts and the few server texts.
 - Server texts only: mission, achievements (`stars_1`, `stars_10`), avatar `ex_threestar`, the weekly prize message and the privacy page now say plaques/امتیاز. No new call, no migration.
 - «چی تازه شده؟» release 55 lists both changes.
