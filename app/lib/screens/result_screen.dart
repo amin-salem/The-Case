@@ -69,7 +69,7 @@ class _ResultScreenState extends State<ResultScreen> {
             ),
             const SizedBox(height: 18),
             if (solved) ...[
-              Center(child: StampIn(delay: const Duration(milliseconds: 700), child: Stars(count: result.stars, size: 44))),
+              Center(child: StampIn(delay: const Duration(milliseconds: 700), child: Plaques(count: result.stars, size: 44))),
               const SizedBox(height: 12),
               FadeSlideIn(delay: const Duration(milliseconds: 1000), child: _rewards()),
               if (result.earlyBonus > 0) ...[
@@ -79,7 +79,7 @@ class _ResultScreenState extends State<ResultScreen> {
               if (result.howRight == false) ...[
                 const SizedBox(height: 10),
                 _noteCard(Icons.help_outline_rounded, K.textSoft,
-                    'مظنون درست بود، ولی «چرا و چطور» نه؛ برای همین دو ستاره. توضیح پایین رو بخون.'),
+                    'مظنون درست بود، ولی «چرا و چطور» نه؛ برای همین دو پلاک. توضیح پایین رو بخون.'),
               ],
               if (result.unranked) ...[
                 const SizedBox(height: 10),
@@ -218,9 +218,9 @@ class _ResultScreenState extends State<ResultScreen> {
           border: Border.all(color: K.brass.withValues(alpha: 0.5)),
         ),
         child: Column(children: [
-          Text('برای ۳ ستاره، پرونده رو کامل بررسی کن', textAlign: TextAlign.center, style: tBody(14, color: K.brass, w: FontWeight.w900)),
+          Text('برای ۳ پلاک، پرونده رو کامل بررسی کن', textAlign: TextAlign.center, style: tBody(14, color: K.brass, w: FontWeight.w900)),
           const SizedBox(height: 2),
-          Text('از چند مظنون سؤال بپرس و کمی وقت بذار؛ بعدش ستاره و جایگاه جدول مال توئه.',
+          Text('از چند مظنون سؤال بپرس و کمی وقت بذار؛ بعدش پلاک و جایگاه جدول مال توئه.',
               textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
         ]),
       );

@@ -97,8 +97,8 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
         _busy = false;
         _left = r.attemptsLeft;
         _feedback = switch (r.result) {
-          'wrong_proof' => 'آدم درست رو گرفتی، ولی این مدرک دروغش رو ثابت نمی‌کنه. یه ستاره کم شد؛ مدرک دیگه‌ای رو امتحان کن.',
-          'wrong_motive' => 'آدم و مدرک درسته، ولی انگیزه‌اش این نبود. یه ستاره کم شد؛ دوباره فکر کن چرا این کار رو کرد.',
+          'wrong_proof' => 'آدم درست رو گرفتی، ولی این مدرک دروغش رو ثابت نمی‌کنه. یه پلاک کم شد؛ مدرک دیگه‌ای رو امتحان کن.',
+          'wrong_motive' => 'آدم و مدرک درسته، ولی انگیزه‌اش این نبود. یه پلاک کم شد؛ دوباره فکر کن چرا این کار رو کرد.',
           _ => 'اشتباه بود! این آدم بی‌گناهه. ${fa(r.attemptsLeft)} فرصت دیگه داری.',
         };
         // back to the step that was wrong
@@ -307,7 +307,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
                 style: tBody(13, color: K.textSoft)),
             if (_two) ...[
               const SizedBox(height: 6),
-              Text('سه ستاره: هر دو بخش درست · دو ستاره: فقط مظنون درست. اگه مظنون غلط باشه یه فرصتت می‌سوزه و پرونده بسته نمی‌شه.',
+              Text('سه پلاک: هر دو بخش درست · دو پلاک: فقط مظنون درست. اگه مظنون غلط باشه یه فرصتت می‌سوزه و پرونده بسته نمی‌شه.',
                   style: tBody(12, color: K.brass)),
             ],
             const SizedBox(height: 10),

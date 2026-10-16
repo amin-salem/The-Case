@@ -22,7 +22,7 @@ class RatingChip extends StatelessWidget {
   Widget build(BuildContext context) {
     if (count <= 0) return const SizedBox.shrink();
     return Row(mainAxisSize: MainAxisSize.min, children: [
-      Icon(Icons.star_rounded, color: K.brass, size: size + 3),
+      Icon(Icons.favorite_rounded, color: K.stamp, size: size + 3),
       const SizedBox(width: 2),
       Text(faRating(avg), style: tBody(size, w: FontWeight.w900, color: K.brass).copyWith(height: 1.2)),
       Text(' (${fa(count)})', style: tBody(size - 1, color: K.textSoft).copyWith(height: 1.2)),
@@ -183,7 +183,7 @@ class _RateCardState extends State<RateCard> {
           ]),
           Padding(
             padding: const EdgeInsetsDirectional.only(end: 6),
-            child: Text('یه ستاره کافیه؛ به کارآگاه‌های بعدی کمک می‌کنی. $summary',
+            child: Text('یه ضربه کافیه؛ به کارآگاه‌های بعدی کمک می‌کنی. $summary',
                 style: tBody(12.5, color: K.textSoft)),
           ),
           const SizedBox(height: 6),
@@ -193,7 +193,7 @@ class _RateCardState extends State<RateCard> {
                 onPressed: _busy ? null : () => _rate(i),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(minWidth: 52, minHeight: 52),
-                icon: Icon(i <= _stars ? Icons.star_rounded : Icons.star_border_rounded, color: K.brass, size: 42),
+                icon: Icon(i <= _stars ? Icons.favorite_rounded : Icons.favorite_border_rounded, color: K.stamp, size: 42),
               ),
           ]),
           if (_err != null) Text(_err!, textAlign: TextAlign.center, style: tBody(12.5, color: K.stamp, w: FontWeight.w700)),
@@ -208,7 +208,7 @@ class _RateCardState extends State<RateCard> {
       decoration: _box.copyWith(border: Border.all(color: K.night3)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Row(children: [
-          Icon(rated ? Icons.check_circle_rounded : Icons.star_rounded, color: rated ? K.ok : K.brass, size: 22),
+          Icon(rated ? Icons.check_circle_rounded : Icons.favorite_rounded, color: rated ? K.ok : K.stamp, size: 22),
           const SizedBox(width: 8),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -227,8 +227,8 @@ class _RateCardState extends State<RateCard> {
             alignment: AlignmentDirectional.centerStart,
             child: TextButton.icon(
               onPressed: () => _skip(false),
-              icon: const Icon(Icons.star_border_rounded, color: K.brass, size: 20),
-              label: Text('ستاره بده', style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
+              icon: const Icon(Icons.favorite_border_rounded, color: K.stamp, size: 20),
+              label: Text('امتیاز بده', style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
             ),
           ),
         if (rated && !_textSent && !_hasText && !_textOpen)

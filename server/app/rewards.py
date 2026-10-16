@@ -46,7 +46,7 @@ async def settle_last_week(session: AsyncSession) -> int:
             session.add(InboxItem(
                 player_id=pl.id, source=src,
                 title=f"جایزه‌ی هفته: رتبه‌ی {i} {medal}",
-                message=f"تو هفته‌ی گذشته با {int(stars)} ستاره رتبه‌ی {i} جدول برترها شدی. این جایزه‌ی توئه!",
+                message=f"تو هفته‌ی گذشته با {int(stars)} پلاک رتبه‌ی {i} جدول برترها شدی. این جایزه‌ی توئه!",
                 grants=[{"type": "coins", "amount": coins}]))
         await session.commit()
         return len(rows)

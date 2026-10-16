@@ -243,8 +243,8 @@ class _CoinPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter old) => false;
 }
 
-class Stars extends StatelessWidget {
-  const Stars({super.key, required this.count, this.size = 22, this.max = 3});
+class Plaques extends StatelessWidget {
+  const Plaques({super.key, required this.count, this.size = 22, this.max = 3});
   final int count;
   final double size;
   final int max;
@@ -252,7 +252,7 @@ class Stars extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
         for (int i = 0; i < max; i++)
-          Icon(i < count ? Icons.star_rounded : Icons.star_outline_rounded, color: K.brass, size: size),
+          Icon(i < count ? Icons.local_police_rounded : Icons.local_police_outlined, color: K.brass, size: size),
       ]);
 }
 

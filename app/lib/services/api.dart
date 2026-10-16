@@ -1070,7 +1070,7 @@ class Api extends ChangeNotifier {
         'comment_too_short' => 'نظرت خیلی کوتاهه',
         'comment_too_long' => 'نظرت خیلی بلنده',
         'no_links' => 'توی نظر لینک یا آیدی نذار',
-        'rating_needed' => 'اول چند ستاره بده',
+        'rating_needed' => 'اول امتیاز بده',
         'too_many_replies' => 'پاسخ‌های زیادی فرستادی؛ بعد از تأیید مدیر ادامه بده',
         'comments_off' => 'نظرها فعلاً بسته‌ست',
         'locked' => 'این پرونده قفله',

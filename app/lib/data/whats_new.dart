@@ -42,6 +42,10 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(55, '۱.۲۶', '2026-10-16', [
+    WhatsNewItem('plaques', 'حل پرونده حالا «پلاک کارآگاهی» می‌گیره؛ ۳ پلاک یعنی بدون اشتباه', WhatsNewTarget.archive),
+    WhatsNewItem('rate_hearts', 'امتیاز دادن به پرونده جدا شد: با قلب نظرت رو بده', WhatsNewTarget.comments),
+  ]),
   WhatsNewRelease(54, '۱.۲۶', '2026-10-15', [
     WhatsNewItem('archive_v2', 'بایگانی تازه: امتیاز، قیمت و مرتب‌سازی', WhatsNewTarget.archive),
     WhatsNewItem('rate_step', 'بعد از هر پرونده، با یه ضربه ستاره بده', WhatsNewTarget.comments),

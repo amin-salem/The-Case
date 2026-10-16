@@ -54,7 +54,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
 
   String _value(LeaderRow r) {
-    if (widget.period != 'daily') return '${fa(r.value)} ستاره';
+    if (widget.period != 'daily') return '${fa(r.value)} پلاک';
     final m = r.value ~/ 60, s = r.value % 60;
     return '${fa(m)}:${fa(s).padLeft(2, '۰')}';
   }
@@ -99,7 +99,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
                       if (widget.period == 'daily')
                         Padding(
                           padding: const EdgeInsets.only(bottom: 6),
-                          child: Text('${lb.title} · بیشترین ستاره و کمترین زمان',
+                          child: Text('${lb.title} · بیشترین پلاک و کمترین زمان',
                               textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
                         ),
                       if (podium.isNotEmpty) _podium(podium),
@@ -151,7 +151,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
           const SizedBox(height: 6),
           Text(r.me ? 'تو' : r.nickname,
               maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: tBody(13.5, w: FontWeight.w900)),
-          if (widget.period == 'daily') Stars(count: r.stars, size: 13),
+          if (widget.period == 'daily') Plaques(count: r.stars, size: 13),
           Text(_value(r), maxLines: 1, style: tBody(12.5, color: ring, w: FontWeight.w900)),
           const SizedBox(height: 4),
           Container(
@@ -218,7 +218,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
                   style: tBody(11.5, color: pinned ? K.textSoft : K.brass), maxLines: 1, overflow: TextOverflow.ellipsis),
           ]),
         ),
-        if (widget.period == 'daily') ...[Stars(count: r.stars, size: 16), const SizedBox(width: 8)],
+        if (widget.period == 'daily') ...[Plaques(count: r.stars, size: 16), const SizedBox(width: 8)],
         Text(_value(r), style: tBody(14, color: K.brass, w: FontWeight.w900)),
       ]),
     );

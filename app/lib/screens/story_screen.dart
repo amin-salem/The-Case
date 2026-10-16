@@ -314,7 +314,7 @@ class _StoryScreenState extends State<StoryScreen> {
     final locked = c.state == 'locked';
     final title = locked ? 'پرونده‌ی ${fa(c.chapter)}' : (c.title ?? 'پرونده‌ی ${fa(c.chapter)}');
     final body = switch (c.state) {
-      'done' => c.solved ? Stars(count: c.stars, size: 20) : Text('این یکی از دستت در رفت', style: tBody(12.5, color: K.stamp, w: FontWeight.w700)),
+      'done' => c.solved ? Plaques(count: c.stars, size: 20) : Text('این یکی از دستت در رفت', style: tBody(12.5, color: K.stamp, w: FontWeight.w700)),
       'open' => Text('در جریان؛ ادامه بده', style: tBody(12.5, color: K.brass, w: FontWeight.w700)),
       'ready' => Text('آماده‌ست', style: tBody(12.5, color: K.ok, w: FontWeight.w700)),
       'waiting' => _waiting(c),

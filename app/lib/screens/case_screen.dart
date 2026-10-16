@@ -159,7 +159,7 @@ class _CaseScreenState extends State<CaseScreen> {
     final vipFree = (Api.i.profile?.vip ?? false) && p.hints.isEmpty;
     final ok = await confirm(context, 'سرنخ ${fa(p.hints.length + 1)} از ${fa(p.hintCosts.length)}',
         '${vipFree ? 'اولین سرنخ برای VIP رایگانه.' : 'این سرنخ ${fa(cost)} سکه هزینه داره.'} '
-            '${p.hints.isEmpty ? 'ستاره‌ای کم نمی‌شه.' : 'یه ستاره از امتیازت کم می‌شه.'}',
+            '${p.hints.isEmpty ? 'پلاکی کم نمی‌شه.' : 'یه پلاک از امتیازت کم می‌شه.'}',
         'بگیر');
     if (!ok || !mounted) return;
     try {
@@ -399,7 +399,7 @@ class _CaseScreenState extends State<CaseScreen> {
                 const Spacer(),
                 if (p.solved)
                   Row(children: [
-                    Stars(count: p.stars, size: 18),
+                    Plaques(count: p.stars, size: 18),
                     const SizedBox(width: 6),
                     Flexible(child: Text('حل شد', maxLines: 1, style: tBody(13, color: K.brass, w: FontWeight.w900))),
                   ])
@@ -507,7 +507,7 @@ class _CaseScreenState extends State<CaseScreen> {
         const SizedBox(height: 4),
         Text('مدارک رو بخون و از مظنون‌ها سؤال کن. مقصر درباره‌ی چیزی دروغ گفته. '
             'وقتی پیداش کردی، متهمش کن و مدرکی رو نشون بده که دروغش رو ثابت می‌کنه. '
-            'اتهام اشتباه و سرنخ دوم و سوم، ستاره‌هات رو کم می‌کنه.', style: tBody(14, color: K.textSoft)),
+            'اتهام اشتباه و سرنخ دوم و سوم، پلاک‌هات رو کم می‌کنه.', style: tBody(14, color: K.textSoft)),
       ],
     ]);
   }

@@ -26,7 +26,7 @@ POOL = [
     # core: every day
     Mission("daily_case", "پرونده‌ی امشب رو حل کن", "daily_solved", 1, "core"),
     # skill: how you solve it
-    Mission("case_3stars", "یک پرونده رو با ۳ ستاره حل کن", "case_3stars", 1, "case"),
+    Mission("case_3stars", "یک پرونده رو با ۳ پلاک حل کن", "case_3stars", 1, "case"),
     Mission("case_no_hint", "یک پرونده رو بدون خریدن سرنخ حل کن", "case_no_hint", 1, "case"),
     Mission("case_first_try", "یک پرونده رو بدون حتی یک اتهام اشتباه حل کن", "first_try", 1, "case"),
     # investigation: the work around it

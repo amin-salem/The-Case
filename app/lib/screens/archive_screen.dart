@@ -66,8 +66,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     _Filter.all: 'همه',
     _Filter.unsolved: 'حل‌نشده',
     _Filter.free: 'باز',
-    _Filter.three: '۳ ستاره',
-    _Filter.unrated: 'ستاره ندادم',
+    _Filter.three: '۳ پلاک',
+    _Filter.unrated: 'امتیاز ندادم',
   };
   static const _sortLabels = {
     _Sort.newest: 'تازه‌ترین',
@@ -205,7 +205,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
           Text(fa(solved), style: tDisplay(30, color: K.brass)),
           const SizedBox(width: 6),
           Expanded(child: Text('از ${fa(rows.length)} پرونده‌ی بایگانی حل شده', style: tBody(13.5, color: K.textSoft))),
-          const Icon(Icons.star_rounded, color: K.brass, size: 20),
+          const Icon(Icons.local_police_rounded, color: K.brass, size: 20),
           const SizedBox(width: 2),
           Text(fa(stars), style: tBody(15, w: FontWeight.w900, color: K.brass)),
         ]),
@@ -221,7 +221,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             const CoinIcon(size: 15),
             const SizedBox(width: 6),
             Expanded(
-              child: Text('هر پرونده‌ی قدیمی از ${fa(minCost)} سکه باز می‌شه؛ ستاره و جایزه‌ی حلش مال خودته.',
+              child: Text('هر پرونده‌ی قدیمی از ${fa(minCost)} سکه باز می‌شه؛ پلاک و جایزه‌ی حلش مال خودته.',
                   style: tBody(12, color: K.textSoft)),
             ),
           ]),
@@ -297,10 +297,10 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
   Widget _state(CaseRow c) {
     if (c.solved) {
       return Row(mainAxisSize: MainAxisSize.min, children: [
-        Stars(count: c.stars, size: 20),
+        Plaques(count: c.stars, size: 20),
         if (c.myRating == 0) ...[
           const SizedBox(width: 10),
-          Text('ستاره بده', style: tBody(12.5, color: K.brass, w: FontWeight.w900)),
+          Text('امتیاز بده', style: tBody(12.5, color: K.brass, w: FontWeight.w900)),
         ],
       ]);
     }

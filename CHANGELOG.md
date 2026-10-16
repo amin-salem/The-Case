@@ -1,5 +1,12 @@
 # Changelog
 
+## server 1.26.1, app 1.26.1 (build 55): «پلاک کارآگاهی» for solving, hearts for rating
+
+- Amin: stars for solving and stars for rating together confused players. Now **solving gives plaques** («پلاک کارآگاهی», police-badge shield icon, brass): 3 = no mistake, 2 = one, 1 = more. **Rating a case uses red hearts** (1-5) and the word «امتیاز». The data is unchanged: the server still stores `stars` for the plaque count and `rating` for hearts, so the leaderboard, weekly prizes, XP and achievements behave exactly as before. Only words and icons changed.
+- Why «پلاک» and not «نشان»: «نشان‌ها» is already the achievements tab and the profile counter, so a second «نشان» would have recreated the confusion. To switch the word, replace «پلاک» in the app texts and the few server texts.
+- Server texts only: mission, achievements (`stars_1`, `stars_10`), avatar `ex_threestar`, the weekly prize message and the privacy page now say plaques/امتیاز. No new call, no migration.
+- «چی تازه شده؟» release 55 lists both changes.
+
 ## server 1.26.0, app 1.26.0 (build 54): invite codes explained, stars after every case, new archive
 
 - **Invite codes (why testers got no coins):** the redeem itself works (the new player gets 100 coins at once; a test now proves it, and proves the inviter's 150 coins arrive as an inbox gift after the friend solved on 3 different days and the gift is claimed). What failed was the path around it: the only field was hidden in the profile, the first run never asked although the share text says «موقع شروع کد دعوت من رو بزن», accounts older than 7 days are refused (a tester with an older account sees an error), and the card promised the inviter's coins immediately. The app default coin numbers (300/150) did not match the server (150/100) when the config was missing; fixed.

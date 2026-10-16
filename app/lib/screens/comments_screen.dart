@@ -113,7 +113,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       if (canWrite)
                         Padding(
                           padding: const EdgeInsets.fromLTRB(16, 4, 16, 14),
-                          child: StampButton(label: 'ستاره بده یا نظر بنویس', icon: Icons.edit_rounded, color: K.brass, onTap: _write),
+                          child: StampButton(label: 'امتیاز بده یا نظر بنویس', icon: Icons.edit_rounded, color: K.brass, onTap: _write),
                         )
                       else if (d['can_write'] != true)
                         Padding(
@@ -141,7 +141,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
         const SizedBox(width: 16),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            _Stars(n == 0 ? 0 : avg.round()),
+            _Hearts(n == 0 ? 0 : avg.round()),
             const SizedBox(height: 4),
             Text(n == 0 ? 'هنوز امتیازی نیست' : 'میانگین امتیاز ${fa(n)} کارآگاه', style: tBody(12, color: K.textSoft)),
           ]),
@@ -219,7 +219,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       ),
       const SizedBox(width: 8),
       Flexible(child: Text(name, overflow: TextOverflow.ellipsis, style: tBody(13, w: FontWeight.w900))),
-      if (!reply && (c['rating'] as int) > 0) ...[const SizedBox(width: 8), _Stars(c['rating'] as int)],
+      if (!reply && (c['rating'] as int) > 0) ...[const SizedBox(width: 8), _Hearts(c['rating'] as int)],
       if (pending && reply) ...[
         const SizedBox(width: 8),
         Text('در انتظار تأیید', style: tBody(11, color: K.brass, w: FontWeight.w900)),
@@ -228,14 +228,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
   }
 }
 
-class _Stars extends StatelessWidget {
-  const _Stars(this.n);
+class _Hearts extends StatelessWidget {
+  const _Hearts(this.n);
   final int n;
 
   @override
   Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, textDirection: TextDirection.ltr, children: [
         for (int i = 1; i <= 5; i++)
-          Icon(i <= n ? Icons.star_rounded : Icons.star_border_rounded, color: K.brass, size: 16),
+          Icon(i <= n ? Icons.favorite_rounded : Icons.favorite_border_rounded, color: K.stamp, size: 16),
       ]);
 }
 
@@ -267,7 +267,7 @@ class _WriteSheetState extends State<_WriteSheet> {
   Future<void> _send() async {
     final text = _c.text.trim();
     if (!_reply && _rating == 0) {
-      setState(() => _err = 'اول چند ستاره بده');
+      setState(() => _err = 'اول امتیاز بده');
       return;
     }
     // a root comment may be stars only; a reply, or a text that was started, needs a few letters
@@ -312,7 +312,7 @@ class _WriteSheetState extends State<_WriteSheet> {
                 for (int i = 1; i <= 5; i++)
                   IconButton(
                     onPressed: _busy ? null : () => setState(() => _rating = i),
-                    icon: Icon(i <= _rating ? Icons.star_rounded : Icons.star_border_rounded, color: K.brass, size: 38),
+                    icon: Icon(i <= _rating ? Icons.favorite_rounded : Icons.favorite_border_rounded, color: K.stamp, size: 38),
                   ),
               ]),
             ],
@@ -333,12 +333,12 @@ class _WriteSheetState extends State<_WriteSheet> {
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
               ),
             ),
-            Text(_reply || _c.text.trim().isNotEmpty ? 'بعد از بررسی مدیر منتشر می‌شود.' : 'ستاره‌ها همان لحظه ثبت می‌شوند.',
+            Text(_reply || _c.text.trim().isNotEmpty ? 'بعد از بررسی مدیر منتشر می‌شود.' : 'امتیاز همان لحظه ثبت می‌شود.',
                 style: tBody(12, color: K.kraft)),
             if (_err != null) Padding(padding: const EdgeInsets.only(top: 6), child: Text(_err!, style: tBody(12.5, color: K.stamp, w: FontWeight.w700))),
             const SizedBox(height: 12),
             StampButton(
-                label: _busy ? 'در حال ارسال…' : (_reply || _c.text.trim().isNotEmpty ? 'ارسال برای بررسی' : 'ثبت ستاره‌ها'),
+                label: _busy ? 'در حال ارسال…' : (_reply || _c.text.trim().isNotEmpty ? 'ارسال برای بررسی' : 'ثبت امتیاز'),
                 color: K.brass,
                 onTap: _busy ? null : _send),
           ]),

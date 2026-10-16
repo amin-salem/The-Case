@@ -420,14 +420,14 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12)),
             child: Row(children: [
-              if (c.solved) ...[Stars(count: c.stars, size: 20), const SizedBox(width: 8)],
+              if (c.solved) ...[Plaques(count: c.stars, size: 20), const SizedBox(width: 8)],
               Expanded(
                 child: Text(
                   c.solved ? 'امشب حلش کردی!' : 'این بار نشد؛ فردا شب جبران کن.',
                   style: tBody(14, w: FontWeight.w900, color: c.solved ? K.brass : K.stamp),
                 ),
               ),
-              Text(c.solved && c.myRating == 0 ? 'ستاره بده' : 'دیدن پرونده',
+              Text(c.solved && c.myRating == 0 ? 'امتیاز بده' : 'دیدن پرونده',
                   style: tBody(12.5, color: c.solved && c.myRating == 0 ? K.brass : K.textSoft, w: FontWeight.w700)),
               const Icon(Icons.chevron_right_rounded, color: K.textSoft, size: 20),
             ]),
