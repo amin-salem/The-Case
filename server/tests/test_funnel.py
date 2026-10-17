@@ -30,7 +30,7 @@ async def session(tmp_path):
 
 
 def player(s, n, created, seen, coins=0, device=None, banned=False):
-    p = Player(id=f"p{n}", secret_hash="x", device_id=device or f"dev-{n}", invite_code=f"CODE{n:04d}",
+    p = Player(id=f"p{n}", secret_hash="x", device_id=device or f"dev-{n}", invite_code=f"CODE{n}",
                nickname=f"nick{n}", coins=coins, banned=banned, created_at=created, last_seen=seen)
     s.add(p)
     return p
