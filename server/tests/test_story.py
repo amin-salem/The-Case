@@ -123,6 +123,7 @@ async def test_free_chapters_in_order_then_wait(client, story):
     assert case["story"]["intro"] and "partner_outro_win" not in case and "solution" in case
     await play(client, h, 2, win=False)  # losing also finishes a chapter
     await play(client, h, 3)  # chapters 1-3 are free and instant
+    await give(pid_of(p), warrants=0)  # the first solve paid the onboarding warrant; this test is about having none
     body = (await client.get("/v1/story", headers=h)).json()
     assert states(body) == ["done", "done", "done", "waiting", "locked"]
     assert body["chapters"][1]["solved"] is False and body["chapters"][0]["stars"] == 3
@@ -138,6 +139,7 @@ async def test_warrant_opens_next_chapter(client, story):
     h = p["headers"]
     for n in (1, 2, 3):
         await play(client, h, n)
+    await give(pid_of(p), warrants=0)  # drop the onboarding warrant the first solve paid
     r = await client.post("/v1/story/4/open", headers=h, json={"warrant": True})
     assert r.status_code == 409 and r.json()["detail"] == "no_warrant"
     await give(pid_of(p), warrants=2)
@@ -161,6 +163,7 @@ async def test_twelve_hours_open_it_by_themselves(client, story):
     pid = pid_of(p)
     for n in (1, 2, 3):
         await play(client, h, n)
+    await give(pid, warrants=0)  # drop the onboarding warrant the first solve paid
     await age_finish(pid, 3, 11)
     assert states((await client.get("/v1/story", headers=h)).json())[3] == "waiting"
     await age_finish(pid, 3, 12.1)
