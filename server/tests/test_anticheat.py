@@ -7,7 +7,7 @@ import pytest
 from sqlalchemy import func, select, update
 
 from app import anticheat as ac
-from app import content, db
+from app import content, db, gameclock
 from app import economy as eco
 from app.config import get_settings
 from app.main import app
@@ -212,27 +212,26 @@ async def test_new_unsecured_accounts_are_hidden_from_leaderboards(client, clock
         assert ac.is_visible(pl)
 
 
-async def test_weekly_prizes_skip_hidden_accounts(client):
-    from app import rewards
-    prev = content.week_start(date.fromisoformat(content.today_str())) - timedelta(days=7)
-    async with db.SessionLocal() as s:
-        await s.execute(InboxItem.__table__.delete().where(InboxItem.source == rewards.source_for(prev)))
-        await s.commit()
+async def test_weekly_prizes_skip_hidden_accounts(client, monkeypatch):
+    from types import SimpleNamespace
+
+    from app import gameclock, rewards, weekboard
+    ws = date(2027, 6, 18)   # a Friday; fake cases, so no other test's solves are on this board
+    monkeypatch.setattr(content, "week_cases", lambda w: [SimpleNamespace(id=f"za{w.isoformat()}-{i}") for i in range(7)])
+    monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
+    monkeypatch.setattr(content, "now_local", lambda: datetime(2027, 6, 25, 22, 0, tzinfo=TEHRAN))
     young = await new_player(client, "prize-young", aged=False)
     old = await new_player(client, "prize-old")
     async with db.SessionLocal() as s:
         for pl in (young, old):
-            s.add(CaseProgress(player_id=pl["player_id"], case_id="zp1", solved=True, stars=9999,
-                               day=(prev + timedelta(days=1)).isoformat()))
+            for i in range(2):
+                s.add(CaseProgress(player_id=pl["player_id"], case_id=f"za{ws.isoformat()}-{i}", solved=True, stars=3, ranked=True,
+                                   seconds=60, finished_at=gameclock.to_utc_naive(datetime(2027, 6, 19 + i, 10, tzinfo=TEHRAN))))
         await s.commit()
     async with db.SessionLocal() as s:
-        await rewards.settle_last_week(s)
+        await rewards.settle_week(s, ws)
         got = {i.player_id for i in (await s.execute(select(InboxItem).where(
-            InboxItem.source == rewards.source_for(prev)))).scalars()}
-        # leave the week clean for tests/test_rewards.py
-        await s.execute(CaseProgress.__table__.delete().where(CaseProgress.case_id == "zp1"))
-        await s.execute(InboxItem.__table__.delete().where(InboxItem.source == rewards.source_for(prev)))
-        await s.commit()
+            InboxItem.source == rewards.source_for(ws)))).scalars()}
     assert old["player_id"] in got and young["player_id"] not in got
 
 
@@ -284,7 +283,7 @@ async def test_one_paid_invite_per_device_and_five_per_week(client):
     assert await ac.maybe_pay_referral(b["player_id"]) is False  # same device
     assert await referral_items(inviter["player_id"]) == 1
     # a full week: the 6th paid invite of the same week is refused
-    week = content.week_start(date.fromisoformat(content.today_str())).isoformat()
+    week = gameclock.week_of(content.now_local()).isoformat()
     async with db.SessionLocal() as s:
         for i in range(2, eco.INVITE_PAID_PER_WEEK + 1):
             s.add(ReferralPayout(inviter_id=inviter["player_id"], invitee_id=f"x{i}", device_id=f"dev-x{i}", week=week, slot=i))

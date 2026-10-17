@@ -382,10 +382,19 @@ class Leaderboard {
       : period = _s(j['period']),
         title = _s(j['title']),
         top = [for (final r in _maps(j['top'])) LeaderRow(r)],
-        me = j['me'] is Map ? LeaderRow((j['me'] as Map).cast<String, dynamic>()) : null;
+        me = j['me'] is Map ? LeaderRow((j['me'] as Map).cast<String, dynamic>()) : null,
+        weekEndsAt = j['week_ends_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['week_ends_at'] as num).toInt() * 1000) : null,
+        league = j['league'] is num ? (j['league'] as num).toInt() : null,
+        myLeague = j['my_league'] is num ? (j['my_league'] as num).toInt() : null,
+        leagues = [for (final l in _maps(j['leagues'])) _s(l['name'])];
   final String period, title;
   final List<LeaderRow> top;
   final LeaderRow? me;
+  /// Weekly board: when it closes (the moment the next week's first case opens), from the server's clock.
+  final DateTime? weekEndsAt;
+  /// Weekly board: the league shown / the player's own league / league names (empty = one board for everybody).
+  final int? league, myLeague;
+  final List<String> leagues;
 }
 
 class InboxGift {

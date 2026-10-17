@@ -256,11 +256,20 @@ class LeaderRow(BaseModel):
     rank_title: str = ""      # the player's detective rank
 
 
+class LeagueInfo(BaseModel):
+    id: int
+    name: str
+
+
 class LeaderboardOut(BaseModel):
     period: str
     title: str
     top: list[LeaderRow]
     me: LeaderRow | None
+    week_ends_at: int | None = None            # weekly: when the board closes (= the next week's first case opens)
+    league: int | None = None                  # weekly: the league shown (None = the single board)
+    my_league: int | None = None
+    leagues: list[LeagueInfo] = []             # weekly: the choices of the league switch (empty = leagues are off)
 
 
 # ---- purchases, inbox, referral, analytics

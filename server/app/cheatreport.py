@@ -2,12 +2,12 @@
 and can ban a player with POST /admin/players/{id}/ban (the existing Player.banned flag)."""
 from __future__ import annotations
 
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import content
+from . import content, gameclock
 from . import economy as eco
 from .models import AdminLog, CaseProgress, Player, utcnow
 from .util import ts
@@ -76,7 +76,7 @@ async def build(session: AsyncSession, days: int = 7) -> dict:
 
 async def store_weekly(session: AsyncSession) -> bool:
     """Once a week, writes the short summary into the admin log (action "cheat_report"). Safe to call any time."""
-    week = content.week_start(date.fromisoformat(content.today_str())).isoformat()
+    week = gameclock.week_of(content.now_local()).isoformat()
     done = await session.scalar(select(AdminLog.id).where(AdminLog.action == "cheat_report", AdminLog.target == week).limit(1))
     if done is not None:
         return False

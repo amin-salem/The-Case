@@ -3,15 +3,18 @@
 Run locally:   uvicorn app.main:app --reload
 API docs:      http://127.0.0.1:8000/docs
 """
+import logging
 import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import cheatreport, content, db, rewards, riddles
+from . import cheatreport, content, db, gameclock, rewards, riddles, weekboard
 from .config import get_settings
 from .version import VERSION
+
+log = logging.getLogger("main")
 from .routers import admin, admin_ui, avatars as avatar_routes, auth, cases, comments, inbox, leaderboard, meta, pages, phone, profile, purchases
 from .routers import achievements as achievement_routes
 from .routers import missions as mission_routes
@@ -34,11 +37,13 @@ async def lifespan(app: FastAPI):
         while True:
             try:
                 async with db.SessionLocal() as ses:
+                    if weekboard.leagues_on():  # the league snapshot of a new week is taken at its start, once
+                        await weekboard.ensure_snapshot(ses, gameclock.week_of(content.now_local()))
                     await rewards.settle_last_week(ses)
                     await cheatreport.store_weekly(ses)
             except Exception:
-                pass
-            await asyncio.sleep(3600)
+                log.exception("weekly job failed")
+            await asyncio.sleep(300)
 
     task = asyncio.create_task(weekly_prizes())
     rl_task = asyncio.create_task(ratelimit.cleanup_loop())

@@ -384,3 +384,26 @@ class PhoneCode(Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime)
     attempts: Mapped[int] = mapped_column(Integer, default=0)
     used: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class WeekLeague(Base):
+    """A snapshot, taken once at the start of a week, of the league each player competes in that week (see
+    weekboard.py). player_id "*" is the marker that the snapshot of that week exists. A player without a row plays in
+    league 0. Never rewritten during the week, so every worker shows the same board."""
+
+    __tablename__ = "week_leagues"
+    __table_args__ = (Index("ix_week_leagues_week_league", "week", "league"),)
+
+    week: Mapped[str] = mapped_column(String(10), primary_key=True)        # first game day of the week, YYYY-MM-DD
+    player_id: Mapped[str] = mapped_column(String(32), primary_key=True)
+    league: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class WeekSettlement(Base):
+    """One row per paid week: the primary key makes paying a week twice impossible, even from two workers."""
+
+    __tablename__ = "week_settlements"
+
+    week: Mapped[str] = mapped_column(String(10), primary_key=True)
+    at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    paid: Mapped[int] = mapped_column(Integer, default=0)        # how many players got a prize

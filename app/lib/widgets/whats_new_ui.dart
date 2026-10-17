@@ -98,6 +98,8 @@ void whatsNewGo(WhatsNewTarget t) {
       MainShell.tab.value = MainShell.weekend;
     case WhatsNewTarget.avatars:
       MainShell.tab.value = MainShell.profile;
+    case WhatsNewTarget.leaderboard:
+      MainShell.tab.value = MainShell.leaderboard;
     case WhatsNewTarget.comments:
     case WhatsNewTarget.caseToday:
     case WhatsNewTarget.missions:

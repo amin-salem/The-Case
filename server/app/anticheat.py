@@ -10,12 +10,12 @@ from __future__ import annotations
 
 import hashlib
 import logging
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import and_, func, or_, select, update
 from sqlalchemy.exc import IntegrityError
 
-from . import content
+from . import content, gameclock
 from . import economy as eco
 from .models import CaseProgress, InboxItem, Player, ReferralPayout, utcnow
 
@@ -108,7 +108,7 @@ async def maybe_pay_referral(player_id: str) -> bool:
             await session.rollback()
             return False
         inviter = await session.get(Player, player.referred_by)
-        week = content.week_start(date.fromisoformat(content.today_str())).isoformat()
+        week = gameclock.week_of(content.now_local()).isoformat()
         if inviter is None or inviter.banned or inviter.invites_rewarded >= eco.MAX_REWARDED_INVITES:
             await session.commit()
             log.info("referral refused reason=inviter_unavailable")

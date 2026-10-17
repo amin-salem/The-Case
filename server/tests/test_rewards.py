@@ -1,22 +1,25 @@
-from datetime import date, timedelta
+from datetime import date, datetime
+from types import SimpleNamespace
+from zoneinfo import ZoneInfo
 
-from sqlalchemy import delete
-
-from app import content, db, rewards
-from app.models import CaseProgress, InboxItem
+from app import content, db, gameclock, rewards, weekboard
+from app.models import CaseProgress
 
 from .conftest import new_player
 
+TEHRAN = ZoneInfo("Asia/Tehran")
 
-async def test_weekly_prize_paid_once_and_in_inbox(client):
-    prev = content.week_start(date.fromisoformat(content.today_str())) - timedelta(days=7)
-    async with db.SessionLocal() as s:
-        await s.execute(delete(InboxItem).where(InboxItem.source == rewards.source_for(prev)))
-        await s.commit()
+
+async def test_weekly_prize_paid_once_and_in_inbox(client, monkeypatch):
+    ws = date(2027, 6, 4)   # a Friday; fake cases, so no other test's solves are on this board
+    monkeypatch.setattr(content, "week_cases", lambda w: [SimpleNamespace(id=f"zr{w.isoformat()}-{i}") for i in range(7)])
+    monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
+    monkeypatch.setattr(content, "now_local", lambda: datetime(2027, 6, 11, 22, 0, tzinfo=TEHRAN))  # the week closed at 21:00
     p = await new_player(client, "device-reward-1")
     async with db.SessionLocal() as s:
-        s.add(CaseProgress(player_id=p["player_id"], case_id="zz1", solved=True, stars=999,
-                           day=(prev + timedelta(days=2)).isoformat()))
+        for i in range(2):
+            s.add(CaseProgress(player_id=p["player_id"], case_id=f"zr{ws.isoformat()}-{i}", solved=True, stars=3, ranked=True,
+                               seconds=90, finished_at=gameclock.to_utc_naive(datetime(2027, 6, 5 + i, 10, 0, tzinfo=TEHRAN))))
         await s.commit()
     items = (await client.get("/v1/inbox", headers=p["headers"])).json()
     prizes = [i for i in items if i["title"].startswith("جایزه‌ی هفته")]

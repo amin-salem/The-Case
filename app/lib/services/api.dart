@@ -814,8 +814,9 @@ class Api extends ChangeNotifier {
       ? config['share_url'] as String
       : (config['update_url'] is String ? config['update_url'] as String : 'https://cafebazaar.ir/app/ir.gammly.parvandeh');
 
-  Future<Leaderboard> leaderboard(String period) async =>
-      Leaderboard((await _call('GET', '/v1/leaderboard?period=$period') as Map).cast<String, dynamic>());
+  Future<Leaderboard> leaderboard(String period, {int? league}) async =>
+      Leaderboard((await _call('GET', '/v1/leaderboard?period=$period${league != null ? '&league=$league' : ''}') as Map)
+          .cast<String, dynamic>());
 
   // ---------------------------------------------------------------- shop
 

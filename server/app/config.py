@@ -50,9 +50,13 @@ class Settings(BaseSettings):
     # Rewarded ads pay coins only when a real ad network is in the app.
     ads_enabled: bool = False
 
-    # Daily case: the day changes at midnight in Iran, the new case opens at 21:00
+    # The game clock (app/gameclock.py): a game day starts when the night's case opens (21:00 Tehran); a week starts on
+    # WEEK_START_WEEKDAY (Monday=0 ... Friday=4) at that hour and lasts 7 game days.
     timezone: str = "Asia/Tehran"
     new_case_hour: int = 21
+    week_start_weekday: int = 4
+    # Weekly board: leagues by experience (False = one board for everybody)
+    leagues_enabled: bool = True
 
     cors_origins: str = "*"
     rate_limit: bool = True  # RATE_LIMIT=false is the kill switch (policies: RL_<NAME>, see docs/operations.md)

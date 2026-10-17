@@ -1,5 +1,15 @@
 # Changelog
 
+## server 1.27.0, app 1.27.0 (build 56): one game clock, a fair weekly board, leagues
+
+- **Problem (Amin):** veterans who solved the whole archive fell behind in the weekly board, because the weekly sum counted every solve of the week including bought archive cases (a newcomer could solve 10-20 archive cases in a week). And the game day (new case at 21:00) and the week (midnight) ran on different clocks.
+- **One game clock** `server/app/gameclock.py`: game day = 21:00 to 21:00 Tehran (named by the date it starts on = the case's publish date); **week = Friday 21:00 to the next Friday 21:00** (7 daily cases; the Friday-21:00 case belongs to the NEW week and has a full week). `NEW_CASE_HOUR`, `WEEK_START_WEEKDAY` (4 = Friday) are settings. Everything uses zoneinfo and is compared in UTC; the old Saturday-midnight week and `content.week_start` are gone. Missions keep their labels; login reward, ad limit and riddles stay on the calendar day on purpose. Streaks were already by case (publish date), so they are unchanged across the switch: no stored value is rewritten.
+- **Fair weekly board** (`weekboard.py`): only the week's own cases count (7 nightly + the weekend case), derived from the case, not from `day`; a case counts until the next week's first case opens, then it is archive (coins, plaques, album yes; weekly points no). Tie-break: more cases, then faster. The screen says it in one sentence and counts down to the end of the week (server time).
+- **Prizes** use the same standings, are paid at Friday 21:10 (a safety margin after the close), exactly once (primary key `week_settlements`, safe with 2 workers), and need at least 2 cases. The week of 16-23 Oct 2026 is the first paid by the new rule; weeks before it were paid by the old one.
+- **Leagues** (`week_leagues` snapshot per week, by XP: تازه‌کار / کارآگاه / بازرس / سرپرست): own league by default, a switch for the others, top 3 of each league are paid (120/80/50; at most 1000 coins a week against 1175 before). `LEAGUES_ENABLED=false` returns to one board.
+- Migration 0024 (two new tables, listed in ci.yml). `notify_plan` has a `weekresult` entry; the app no longer computes a Saturday itself. «چی تازه شده؟» release 56. Tests: `test_gameclock.py`, `test_fair_week.py`, `test_rewards.py`, `test_anticheat.py`, `app/test/leaderboard_week_test.dart`.
+- Deploy: server change (migration + new rule) from this commit, then the game APK.
+
 ## server 1.26.1, app 1.26.1 (build 55): «پلاک کارآگاهی» for solving, hearts for rating
 
 - Amin: stars for solving and stars for rating together confused players. Now **solving gives plaques** («پلاک کارآگاهی», police-badge shield icon, brass): 3 = no mistake, 2 = one, 1 = more. **Rating a case uses red hearts** (1-5) and the word «امتیاز». The data is unchanged: the server still stores `stars` for the plaque count and `rating` for hearts, so the leaderboard, weekly prizes, XP and achievements behave exactly as before. Only words and icons changed.

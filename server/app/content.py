@@ -14,6 +14,7 @@ from functools import lru_cache
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from . import gameclock
 from .config import get_settings
 
 CASES_DIR = Path(__file__).parent / "content" / "cases"
@@ -119,29 +120,30 @@ def by_id(case_id: str) -> Case | None:
 
 
 def _tz() -> ZoneInfo:
-    return ZoneInfo(get_settings().timezone)
+    return gameclock.tz()
 
 
 def now_local() -> datetime:
-    return datetime.now(_tz())
+    """Now (Tehran). The one entry point tests patch; the rules themselves live in app/gameclock.py."""
+    return gameclock.now()
 
 
 def today_str() -> str:
-    return now_local().date().isoformat()
+    """The CALENDAR day (midnight to midnight, Tehran): login reward, ad limit, riddles. Not for cases or weeks."""
+    return gameclock.calendar_day(now_local()).isoformat()
 
 
 def mission_day_str(now: datetime | None = None) -> str:
-    """The daily-missions day runs from the new case's hour (21:00) to the same hour next evening:
-    after 21:00 it is already tomorrow's date, so missions change together with the new case."""
+    """The daily-missions day runs from the new case's hour (21:00) to the same hour next evening and is named by the
+    NEXT date (after 21:00 it is already tomorrow's date), so missions change together with the new case.
+    Same labels as before the game clock existed: stored MissionDay rows stay valid."""
     now = now or now_local()
-    return (now + timedelta(hours=24 - get_settings().new_case_hour)).date().isoformat()
+    return (gameclock.game_day(now) + timedelta(days=1)).isoformat()
 
 
 def mission_next_at(now: datetime | None = None) -> datetime:
     """When the missions change next: the next time the clock shows the new case's hour."""
-    now = now or now_local()
-    t = datetime.combine(now.date(), time(get_settings().new_case_hour), tzinfo=_tz())
-    return t if t > now else t + timedelta(days=1)
+    return gameclock.next_rollover(now or now_local())
 
 
 @lru_cache(maxsize=1024)
@@ -176,8 +178,7 @@ def next_case_at(now: datetime | None = None) -> datetime:
     future = [opens_at(c) for c in all_cases() if opens_at(c) > now]
     if future:
         return min(future)
-    t = datetime.combine(now.date(), time(get_settings().new_case_hour), tzinfo=_tz())
-    return t if t > now else t + timedelta(days=1)
+    return gameclock.next_rollover(now)
 
 
 def next_boundary(now: datetime | None = None) -> datetime:
@@ -185,7 +186,8 @@ def next_boundary(now: datetime | None = None) -> datetime:
     case closes, the story opens, the date changes, the mission day changes. Caches of clock-dependent data that is
     the same for all players are dropped at this moment (app/cache.py)."""
     now = now or now_local()
-    times = [now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1), mission_next_at(now), next_case_at(now)]
+    times = [now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1), mission_next_at(now), next_case_at(now),
+             gameclock.next_week_start(now), gameclock.settle_at(gameclock.week_of(now) - timedelta(days=7))]
     for c in weekly_cases():
         start = opens_at(c)
         times += [start + timedelta(hours=ch.get("at_hours", 0)) for ch in c.data.get("chapters") or []]
@@ -194,9 +196,14 @@ def next_boundary(now: datetime | None = None) -> datetime:
     return min(t for t in times if t > now)
 
 
-def week_start(d: date) -> date:
-    """Iranian weeks start on Saturday."""
-    return d - timedelta(days=(d.weekday() - 5) % 7)
+def case_week(c: Case) -> date:
+    """The week (its first game day) a case belongs to: from when the CASE opens, never from when it is solved."""
+    return gameclock.case_week(opens_at(c))
+
+
+def week_cases(ws: date) -> list[Case]:
+    """The nightly cases and the weekend case that belong to week `ws` (what the weekly board counts)."""
+    return [c for c in (*all_cases(), *weekly_cases()) if case_week(c) == ws]
 
 
 # ---------------------------------------------------------------- weekly big case
@@ -562,6 +569,11 @@ def notify_plan(now: datetime | None = None, days: int = 10) -> list[dict]:
                 body = ("مدارک تازه رسید؛ فصل آخره. اگه هنوز متهم نکردی، وقتشه." if n == total
                         else "مدارک تازه رسید؛ شاید دروغ مقصر لای همین‌هاست.")
             out.append({"kind": "weekend", "at": int(at.timestamp()), "head": head, "body": body})
+    for back in (0, 1, 2):  # the weekly prizes are paid when the week has closed (Friday 21:00 + a few minutes)
+        at = gameclock.settle_at(gameclock.week_of(now) - timedelta(days=7 * back))
+        if now < at <= end:
+            out.append({"kind": "weekresult", "at": int(at.timestamp()), "head": "نتیجه‌ی هفته اعلام شد 🏆",
+                        "body": "جدول برترهای هفته بسته شد. شاید جایزه گرفته باشی؛ صندوق هدیه‌ها رو ببین!"})
     at = story_opens_at()
     if now < at <= end:
         out.append({"kind": "story", "at": int(at.timestamp()),

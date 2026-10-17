@@ -3,7 +3,7 @@
 library;
 
 /// Where a «برو به …» jump takes the player.
-enum WhatsNewTarget { weekend, avatars, comments, caseToday, missions, archive }
+enum WhatsNewTarget { weekend, avatars, comments, caseToday, missions, archive, leaderboard }
 
 extension WhatsNewTargetLabel on WhatsNewTarget {
   String get label => switch (this) {
@@ -13,6 +13,7 @@ extension WhatsNewTargetLabel on WhatsNewTarget {
         WhatsNewTarget.caseToday => 'پرونده',
         WhatsNewTarget.missions => 'مأموریت‌ها',
         WhatsNewTarget.archive => 'بایگانی',
+        WhatsNewTarget.leaderboard => 'جدول برترها',
       };
 }
 
@@ -42,6 +43,11 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(56, '۱.۲۷', '2026-10-17', [
+    WhatsNewItem('fair_week', 'جدول هفتگی عادلانه شد: فقط پرونده‌های همین هفته حساب می‌شن و بایگانی توش نیست', WhatsNewTarget.leaderboard),
+    WhatsNewItem('leagues', 'لیگ‌های هفتگی: کارآگاه‌های هم‌سطح با هم رقابت می‌کنن و ۳ کارآگاه اول هر لیگ جایزه می‌گیرن', WhatsNewTarget.leaderboard),
+    WhatsNewItem('week_clock', 'هفته جمعه ساعت ۲۱ شروع می‌شه، همون لحظه‌ای که پرونده‌ی اول هفته باز می‌شه', WhatsNewTarget.leaderboard),
+  ]),
   WhatsNewRelease(55, '۱.۲۶', '2026-10-16', [
     WhatsNewItem('plaques', 'حل پرونده حالا «پلاک کارآگاهی» می‌گیره؛ ۳ پلاک یعنی بدون اشتباه', WhatsNewTarget.archive),
     WhatsNewItem('rate_hearts', 'امتیاز دادن به پرونده جدا شد: با قلب نظرت رو بده', WhatsNewTarget.comments),

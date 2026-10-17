@@ -116,16 +116,8 @@ class Reminders extends ChangeNotifier {
         await _at(500 + extra, w, e['head'] as String, (e['body'] as String?) ?? '');
         extra++;
       }
-      // Saturday 10:00 (Tehran = UTC+3:30): last week's ranking prizes are in the inbox
-      var sat = DateTime.now().toUtc();
-      sat = DateTime.utc(sat.year, sat.month, sat.day, 6, 30);
-      while (sat.weekday != DateTime.saturday || !sat.isAfter(DateTime.now().toUtc())) {
-        sat = sat.add(const Duration(days: 1));
-      }
-      for (int w = 0; w < 4; w++) {
-        await _at(400 + w, sat.add(Duration(days: 7 * w)), 'نتیجه‌ی هفته اعلام شد 🏆',
-            'جدول برترهای هفته بسته شد. شاید جایزه گرفته باشی؛ صندوق هدیه‌ها رو ببین!');
-      }
+      // the week's result (prizes in the inbox) comes from the server's plan as kind "weekresult" (Friday 21:10 Tehran):
+      // no day or week math on the phone
       final sr = (_prefs?.getString('story_ready') ?? '').split('|');
       if (sr.length >= 2) {
         final ms = int.tryParse(sr[0]);

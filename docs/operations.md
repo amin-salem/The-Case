@@ -198,7 +198,7 @@ Provider: Ghasedak (OTP template). Liara environment (never in the repo, chat or
 ## Coins and mission day (13 Oct 2026, server 1.25.0)
 
 - All reward numbers live in `server/app/economy.py` and `server/app/achievements.py`; the app reads prices from `/v1/meta`. Existing balances are never changed.
-- The daily-missions day runs from `NEW_CASE_HOUR` (21:00 Tehran) to the same hour next evening: use `content.mission_day_str()` for anything stored per mission day (not `today_str()`, which is the calendar date and still drives riddles, the weekly leaderboard and cases).
+- The daily-missions day runs from `NEW_CASE_HOUR` (21:00 Tehran) to the same hour next evening: use `content.mission_day_str()` for anything stored per mission day (not `today_str()`, which is the calendar date and still drives the login reward, the ad limit and riddles).
 
 ## Test players (14 Oct 2026)
 The smoke test creates one player with device id `smoke-xxxx` and deletes it again itself. To clear the ones made before this
@@ -319,3 +319,53 @@ Before a big launch (a store feature, an ad, a Telegram post), move **both the a
 Do it a day before, run the 1000-player burst once, and leave the bigger plan on until the first week's numbers are known. If the load test
 shows 5xx or p95 over 1 s at 200 players on the current plan, upgrade even without a launch. This is cheap next to the cost of a first
 evening where new players see errors.
+
+
+## The game clock, the fair weekly board and leagues (17 Oct 2026, server 1.27.0, app 1.27.0+56)
+
+**One clock: `server/app/gameclock.py`.** Nothing else may compute a game day, a week or a rollover. Everything is
+computed with zoneinfo `Asia/Tehran` (no hard-coded +3:30) and stored/compared in UTC. Tests set the time with
+`content.now_local` (or `gameclock.set_clock`).
+
+In plain words (قانون ساعت بازی):
+
+- **روز بازی** از ساعت ۲۱:۰۰ تهران شروع می‌شه (لحظه‌ی باز شدن پرونده‌ی شب) و ۲۴ ساعت طول می‌کشه. اسمش تاریخ روزیه که توش شروع شده، یعنی
+  همون `publish` پرونده. ساعت ۲۲ شنبه و ۰۲ صبح یکشنبه هر دو «روز بازی شنبه»ن؛ ۲۰:۵۹ یکشنبه هنوز شنبه‌ست و ۲۱:۰۰ یکشنبه شروع یکشنبه.
+- **هفته** از **جمعه ۲۱:۰۰** (لحظه‌ی باز شدن پرونده‌ی اول هفته) تا **جمعه‌ی بعد ۲۱:۰۰** (لحظه‌ی باز شدن پرونده‌ی اول هفته‌ی بعد) است:
+  دقیقاً ۷ روز بازی و ۷ پرونده‌ی شبانه (جمعه، شنبه، یکشنبه، دوشنبه، سه‌شنبه، چهارشنبه، پنجشنبه). پرونده‌ی جمعه‌شب مال هفته‌ی تازه‌ست و یک هفته‌ی کامل وقت داره.
+- **هر پرونده مال هفته‌ای است که توش منتشر شده** (از لحظه‌ی باز شدنش حساب می‌شه، نه از لحظه‌ی حل شدنش). پرونده‌ی آخر هفته (چهارشنبه ۲۱) هم مال همون هفته‌ست و جمعه ۲۱ بسته می‌شه.
+- **جوایز هفته** ۱۰ دقیقه بعد از بسته شدن هفته (جمعه ۲۱:۱۰) پرداخت می‌شن (`SETTLE_MARGIN`)، پس جدول بعد از پرداخت عوض نمی‌شه.
+- **روز تقویمی** (نیمه‌شب تهران، `gameclock.calendar_day`) فقط برای چیزهای غیر پرونده‌ایه: جایزه‌ی ورود روزانه، سقف تبلیغ و معماها. عمداً عوض نشدن تا کسی وسط شب دوباره جایزه نگیره.
+- مأموریت‌ها همون قبل: روز مأموریت از ۲۱:۰۰ شروع می‌شه و اسمش تاریخ **فردا**ست (`content.mission_day_str`)، برچسب‌های ذخیره‌شده معتبر می‌مونن.
+
+Settings (env): `NEW_CASE_HOUR` (default 21), `TIMEZONE` (Asia/Tehran), `WEEK_START_WEEKDAY` (default 4 = Friday; Monday=0),
+`LEAGUES_ENABLED` (default true; false = one board for everybody, the kill switch).
+
+What changed from the old behaviour: the week used to run Saturday 00:00 to Friday 24:00 by the midnight of the solve day, and the case
+that opened Friday 21:00 had 3 hours left in its week; a case solved before tonight's release counted for the new week. Now see above.
+The old rule is gone from the code; nothing is stored differently: `CaseProgress.day` of new solves is the game day (old rows keep the
+calendar date; it is only used to count distinct days for invites), and the weekly board never reads `day`: it derives the week from the
+CASE (`content.case_week`), so old rows work.
+
+**Weekly points (one definition, `server/app/weekboard.py`, used by the board and by the prizes).** A solve counts for week W when the case
+belongs to W (`content.week_cases(W)`: the 7 nightly cases and the weekend case published in W), it was solved and ranked, the player is
+visible (not a fresh throwaway account), and it was finished BEFORE W closed (Friday 21:00). After that the case is archive: coins, plaques,
+album and achievements yes, weekly points no. Points = plaques (stars). Tie-break: more cases solved that week, then less total time, then
+older account. Archive purchases never count. The query is bounded by `case_id IN (<= 8 ids)` and the existing index
+`ix_progress_case_solved (case_id, solved)`; the board is limited (50/100 rows) and cached 45 s per worker. A player below the limit gets his
+own rank by a count query.
+
+**Prizes (`server/app/rewards.py`).** Settled once per week from the same standings. The primary key of `week_settlements` is the claim, so two
+workers can never pay twice (a second caller fails and pays nothing). A prize needs at least 2 cases solved in the week. Leagues on: top 3 of each league get
+120/80/50 coins (4 leagues = at most 1000 coins a week; the old single board paid up to 1175); the champion avatar/loupe frame (`weekly_top3`) goes only
+to the top 3 of the highest league that has winners, to keep it scarce. Leagues off: the old 300/200/150 and 75 for ranks 4-10. Weeks before 16 Oct 2026
+(`FIRST_FAIR_WEEK`) were paid by the old rule and are never touched. The server's `notify_plan` carries a `weekresult` entry (Friday 21:10) that the
+app schedules; older apps still announce it on Saturday 10:00.
+
+**Leagues.** `تازه‌کار` (XP below the rank «کارآگاه»), `کارآگاه`, `بازرس`, `سرپرست` (XP from the rank «کارآگاه نخبه»), thresholds = the XP of
+`economy.RANKS[0, 2, 4, 6]`. `weekboard.ensure_snapshot(week)` stores the league of every player who solved at least one case in `week_leagues`
+once, at the start of the week (the 5-minute weekly job, or the first request), with a marker row, so every worker shows the same league all week;
+a player without a row (nothing solved at that time) is in league 0. Promotion is the next week's snapshot. `GET /v1/leaderboard?period=weekly&league=N`
+shows league N (default: your own), the answer carries `week_ends_at`, `league`, `my_league`, `leagues`.
+
+Migration `0024_week_leagues` (new tables `week_leagues`, `week_settlements`; listed in `.github/workflows/ci.yml`).

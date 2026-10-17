@@ -5,6 +5,7 @@ import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/avatar_frame.dart';
+import '../widgets/engagement.dart' show faDuration;
 
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
@@ -48,7 +49,13 @@ class _Board extends StatefulWidget {
 }
 
 class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
+  int? _league; // weekly: the league chosen with the switch (null = my own)
   late Future<Leaderboard> _f = Api.i.leaderboard(widget.period);
+
+  void _pick(int? league) => setState(() {
+        _league = league;
+        _f = Api.i.leaderboard(widget.period, league: league);
+      });
 
   @override
   bool get wantKeepAlive => true;
@@ -77,7 +84,7 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
               child: Column(mainAxisSize: MainAxisSize.min, children: [
               Text(msg, textAlign: TextAlign.center, style: tBody(15)),
               const SizedBox(height: 10),
-              StampButton(label: 'دوباره', onTap: () => setState(() => _f = Api.i.leaderboard(widget.period))),
+              StampButton(label: 'دوباره', onTap: () => setState(() => _f = Api.i.leaderboard(widget.period, league: _league))),
               ]),
             ),
           );
@@ -102,16 +109,53 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
                           child: Text('${lb.title} · بیشترین پلاک و کمترین زمان',
                               textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
                         ),
+                      if (widget.period == 'weekly') ..._weeklyHeader(lb),
                       if (podium.isNotEmpty) _podium(podium),
                       const SizedBox(height: 12),
                       for (final r in rest) _row(r),
                     ],
                   ),
           ),
-          if (me != null && me.rank > 0) _pinned(me),
+          if (me != null && me.rank > 0) _pinned(me, leagues: widget.period == 'weekly' && lb.leagues.isNotEmpty),
         ]);
       },
     );
+  }
+
+  String _weekLeft(Duration d) => d.inHours >= 24
+      ? '${fa(d.inDays)} روز و ${fa(d.inHours % 24)} ساعت'
+      : faDuration(d.inSeconds);
+
+  /// The weekly board: the rule in one sentence, when the week ends (server time), and the league switch.
+  List<Widget> _weeklyHeader(Leaderboard lb) {
+    final end = lb.weekEndsAt;
+    final left = end?.difference(DateTime.now());
+    return [
+      Text('فقط پرونده‌های همین هفته حساب می‌شن؛ بایگانی پلاک می‌ده ولی توی جدول هفتگی نیست',
+          textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
+      if (left != null && !left.isNegative)
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text('هفته ${_weekLeft(left)} دیگه بسته می‌شه، همون موقع که پرونده‌ی اولِ هفته‌ی بعد باز می‌شه',
+              textAlign: TextAlign.center, style: tBody(12.5, color: K.brass, w: FontWeight.w700)),
+        ),
+      if (lb.leagues.isNotEmpty) ...[
+        const SizedBox(height: 4),
+        Text('جایزه‌ی هفته برای ۳ کارآگاه اولِ هر لیگ', textAlign: TextAlign.center, style: tBody(12, color: K.textSoft)),
+        const SizedBox(height: 8),
+        Wrap(alignment: WrapAlignment.center, spacing: 8, runSpacing: 6, children: [
+          for (int i = 0; i < lb.leagues.length; i++)
+            ChoiceChip(
+              label: Text(lb.leagues[i] + (lb.myLeague == i ? ' (تو)' : ''), style: tBody(12.5, w: FontWeight.w900)),
+              selected: (lb.league ?? lb.myLeague) == i,
+              selectedColor: K.brass,
+              backgroundColor: K.night2,
+              onSelected: (_) => _pick(i == lb.myLeague ? null : i),
+            ),
+        ]),
+      ],
+      const SizedBox(height: 8),
+    ];
   }
 
   static const _silver = Color(0xFFC9CED8);
@@ -174,9 +218,11 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
   }
 
   /// The player's own row, always at the bottom.
-  Widget _pinned(LeaderRow me) {
-    final inTop = me.rank >= 1 && me.rank <= 10;
-    final line = inTop ? 'جزو ۱۰ کارآگاه اول! 🏆' : '${fa(me.rank - 10)} رتبه مونده تا ۱۰ کارآگاه اول';
+  Widget _pinned(LeaderRow me, {bool leagues = false}) {
+    // weekly with leagues: the prizes go to the first 3 of each league
+    final n = leagues ? 3 : 10;
+    final inTop = me.rank >= 1 && me.rank <= n;
+    final line = inTop ? 'جزو ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}! 🏆' : '${fa(me.rank - n)} رتبه مونده تا ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}';
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
       decoration: const BoxDecoration(color: K.night2, border: Border(top: BorderSide(color: K.night3))),

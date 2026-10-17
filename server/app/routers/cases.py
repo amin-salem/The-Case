@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
-from .. import content, progress, ratings
+from .. import content, gameclock, progress, ratings
 from ..cache import TTLCache
 from .. import economy as eco
 from ..content import Case
@@ -281,7 +281,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     explanation = c.data["solution"]["explanation"]
     add_active_time(p, body.extra_seconds, utcnow())  # once per accusation, before the judging below
     today_case = _is_today(c)
-    today = content.today_str()
+    today = gameclock.game_day(content.now_local()).isoformat()  # the GAME day it was finished (app/gameclock.py)
     if p.first_accused is None and body.suspect in {s["id"] for s in c.data["suspects"]}:
         p.first_accused = body.suspect  # the player's first instinct, for the "what others thought" stats
 
