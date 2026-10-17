@@ -43,6 +43,10 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(58, '۱.۲۹', '2026-10-17', [
+    WhatsNewItem('difficulty_bar', 'سختی پرونده حالا نوار رنگی ۵ سطحی با برچسب: از آسان (سبز) تا خیلی سخت (قرمز)', WhatsNewTarget.archive),
+    WhatsNewItem('stars_back', 'امتیاز دوباره ستاره است: ۱ سمت راست، ۵ سمت چپ، با عدد زیر هر ستاره', WhatsNewTarget.comments),
+  ]),
   WhatsNewRelease(57, '۱.۲۸', '2026-10-17', [
     WhatsNewItem('rate_sheet', 'بعد از حل پرونده، امتیازدادن با یه ضربه، توی یه پنجره‌ی کوچیک', WhatsNewTarget.comments),
     WhatsNewItem('rate_old', 'پرونده‌های قبلی که امتیاز ندادی توی بایگانی منتظرتن', WhatsNewTarget.archive),
@@ -56,7 +60,7 @@ const List<WhatsNewRelease> kWhatsNew = [
   ]),
   WhatsNewRelease(55, '۱.۲۶', '2026-10-16', [
     WhatsNewItem('plaques', 'حل پرونده حالا «پلاک کارآگاهی» می‌گیره؛ ۳ پلاک یعنی بدون اشتباه', WhatsNewTarget.archive),
-    WhatsNewItem('rate_hearts', 'امتیاز دادن به پرونده جدا شد: با قلب نظرت رو بده', WhatsNewTarget.comments),
+    WhatsNewItem('rate_numbers', 'امتیاز پرونده با ستاره و عدد زیر هر ستاره: ۱ سمت راست، ۵ سمت چپ', WhatsNewTarget.comments),
   ]),
   WhatsNewRelease(54, '۱.۲۶', '2026-10-15', [
     WhatsNewItem('archive_v2', 'بایگانی تازه: امتیاز، قیمت و مرتب‌سازی', WhatsNewTarget.archive),

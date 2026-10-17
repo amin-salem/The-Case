@@ -293,17 +293,69 @@ class StampMark extends StatelessWidget {
       );
 }
 
-/// Difficulty shown as magnifying glasses.
-class Difficulty extends StatelessWidget {
-  const Difficulty(this.level, {super.key, this.color = K.inkSoft});
-  final int level;
-  final Color color;
+/// Difficulty colours, a calm green -> yellow -> orange -> red ramp (level 1..5).
+const List<Color> kDifficultyColors = [
+  Color(0xFF5DAE7E), // 1 green
+  Color(0xFFA4C65C), // 2 light green
+  Color(0xFFE6C84A), // 3 yellow
+  Color(0xFFE88B35), // 4 orange
+  Color(0xFFD9503F), // 5 red
+];
+
+/// Persian label per difficulty level (1..5).
+const List<String> kDifficultyLabels = ['آسان', 'نسبتاً آسان', 'متوسط', 'سخت', 'خیلی سخت'];
+
+int clampDifficulty(int? level) => (level ?? 2).clamp(1, 5);
+
+/// Difficulty as an intensity bar: 5 equal rounded segments, level 1 on the RIGHT filling toward the left.
+/// Filled segments use the level's colour, the rest are muted. The filled count and the label carry the meaning
+/// too (not colour alone). [compact] = small bar without label, in a fixed-size slot (archive card).
+class DifficultyBar extends StatelessWidget {
+  const DifficultyBar(this.level, {super.key, this.compact = false});
+  final int? level;
+  final bool compact;
 
   @override
-  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
-        for (int i = 0; i < 5; i++)
-          Icon(Icons.search_rounded, size: 16, color: i < level ? color : color.withValues(alpha: 0.25)),
-      ]);
+  Widget build(BuildContext context) {
+    final l = clampDifficulty(level);
+    final color = kDifficultyColors[l - 1];
+    final segW = compact ? 8.0 : 16.0, segH = compact ? 5.0 : 6.0, gap = compact ? 2.0 : 3.0;
+    final barW = segW * 5 + gap * 4;
+    final bar = Row(mainAxisSize: MainAxisSize.min, children: [
+      for (int i = 0; i < 5; i++) ...[
+        if (i > 0) SizedBox(width: gap),
+        Container(
+          key: ValueKey('diff-seg-$i'),
+          width: segW,
+          height: segH,
+          decoration: BoxDecoration(
+            color: i < l ? color : K.textSoft.withValues(alpha: 0.28),
+            borderRadius: BorderRadius.circular(segH / 2),
+          ),
+        ),
+      ],
+    ]);
+    return Semantics(
+      label: 'سختی ${fa(l)} از ${fa(5)}، ${kDifficultyLabels[l - 1]}',
+      excludeSemantics: true,
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: compact
+            ? SizedBox(width: barW, height: 12, child: Center(child: bar))
+            : SizedBox(
+                width: 96,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisSize: MainAxisSize.min, children: [
+                  bar,
+                  const SizedBox(height: 3),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(kDifficultyLabels[l - 1], maxLines: 1, style: tBody(11.5, color: color)),
+                  ),
+                ]),
+              ),
+      ),
+    );
+  }
 }
 
 /// Subtle film grain for the night background.

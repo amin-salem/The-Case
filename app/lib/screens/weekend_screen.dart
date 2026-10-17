@@ -93,6 +93,8 @@ class _WeekendScreenState extends State<WeekendScreen> {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text('آخر هفته', style: tDisplay(26)),
                   Text('یه پرونده‌ی بزرگ و خیلی سخت، هر هفته', style: tBody(13, color: K.textSoft)),
+                  const SizedBox(height: 4),
+                  const DifficultyBar(5, compact: true),
                 ]),
               ),
             ]),

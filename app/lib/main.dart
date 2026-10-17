@@ -21,11 +21,19 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light));
-  await WhatsNew.i.init(); // before Api.init: a phone with no saved player is a fresh install
-  await Api.i.init();
-  await Sfx.i.init();
-  await FontPref.init();
-  await Reminders.i.init();
+  // A plugin that hangs or throws at start-up must never keep the app on a black screen (build 57-58 did):
+  // every step gets a time limit, and runApp always runs.
+  Future<void> step(Future<void> Function() f) async {
+    try {
+      await f().timeout(const Duration(seconds: 4));
+    } catch (_) {}
+  }
+
+  await step(() => WhatsNew.i.init()); // before Api.init: a phone with no saved player is a fresh install
+  await step(() => Api.i.init());
+  await step(() => Sfx.i.init());
+  await step(() => FontPref.init());
+  await step(() => Reminders.i.init());
   unawaited(Billing.i.init());
   runApp(const TheCaseApp());
 }
