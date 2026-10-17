@@ -1,14 +1,26 @@
 # Changelog
 
-## server 1.27.0, app 1.27.0 (build 56): one game clock, a fair weekly board, leagues
+## server 1.28.0, app 1.27.0 (build 56): one game clock, a fair weekly board, leagues
 
 - **Problem (Amin):** veterans who solved the whole archive fell behind in the weekly board, because the weekly sum counted every solve of the week including bought archive cases (a newcomer could solve 10-20 archive cases in a week). And the game day (new case at 21:00) and the week (midnight) ran on different clocks.
 - **One game clock** `server/app/gameclock.py`: game day = 21:00 to 21:00 Tehran (named by the date it starts on = the case's publish date); **week = Friday 21:00 to the next Friday 21:00** (7 daily cases; the Friday-21:00 case belongs to the NEW week and has a full week). `NEW_CASE_HOUR`, `WEEK_START_WEEKDAY` (4 = Friday) are settings. Everything uses zoneinfo and is compared in UTC; the old Saturday-midnight week and `content.week_start` are gone. Missions keep their labels; login reward, ad limit and riddles stay on the calendar day on purpose. Streaks were already by case (publish date), so they are unchanged across the switch: no stored value is rewritten.
 - **Fair weekly board** (`weekboard.py`): only the week's own cases count (7 nightly + the weekend case), derived from the case, not from `day`; a case counts until the next week's first case opens, then it is archive (coins, plaques, album yes; weekly points no). Tie-break: more cases, then faster. The screen says it in one sentence and counts down to the end of the week (server time).
 - **Prizes** use the same standings, are paid at Friday 21:10 (a safety margin after the close), exactly once (primary key `week_settlements`, safe with 2 workers), and need at least 2 cases. The week of 16-23 Oct 2026 is the first paid by the new rule; weeks before it were paid by the old one.
 - **Leagues** (`week_leagues` snapshot per week, by XP: تازه‌کار / کارآگاه / بازرس / سرپرست): own league by default, a switch for the others, top 3 of each league are paid (120/80/50; at most 1000 coins a week against 1175 before). `LEAGUES_ENABLED=false` returns to one board.
-- Migration 0024 (two new tables, listed in ci.yml). `notify_plan` has a `weekresult` entry; the app no longer computes a Saturday itself. «چی تازه شده؟» release 56. Tests: `test_gameclock.py`, `test_fair_week.py`, `test_rewards.py`, `test_anticheat.py`, `app/test/leaderboard_week_test.dart`.
+- Migration 0025 (two new tables, listed in ci.yml). `notify_plan` has a `weekresult` entry; the app no longer computes a Saturday itself. «چی تازه شده؟» release 56. Tests: `test_gameclock.py`, `test_fair_week.py`, `test_rewards.py`, `test_anticheat.py`, `app/test/leaderboard_week_test.dart`.
 - Deploy: server change (migration + new rule) from this commit, then the game APK.
+
+## server 1.27.0: admin screen «قیف و ماندگاری» (funnel and retention)
+
+- Amin (16 Oct, for the Cafe Bazaar launch): real numbers right after publishing. New panel tab **🧭 قیف و ماندگاری** and the call `GET /admin/api/funnel?days=30` (max 90, admin key, cached 60 s per worker).
+- **It works for the current players too:** everything is derived from tables that already exist (`players`, `case_progress`, `purchases`); no tracking table. **Retention is derived from case activity** (a case opened or finished on day 1/3/7 after the signup day, Tehran days), so a player who only opened the app does not count as returned. DAU/WAU use `last_seen`.
+- Sections: signups per day; funnel (registered → opened a case → finished the first case → solved the first case → solved on 3 different days, the invite-paid rule) per signup-day cohort and in total; D1/D3/D7 (cohorts too young show a dot and are left out of the total) plus DAU, WAU and DAU/WAU; where players stop (last stage reached, top 10 cases opened but not finished); money (payers, conversion of registered and of D7-retained, median hours to the first purchase, purchases and coins by pack, coin quartiles of players seen in 7 days); gameplay quality (plaque 3/2/1 shares, median active seconds, average hints, failed share, per case of the last 14 days).
+- Test accounts (device id «smoke-…») and banned players are left out of every number. (The existing player list does not hide smoke accounts; this screen does.)
+- Plain SQL aggregates (medians and quartiles with window functions, nearest rank), no rows loaded into Python, no ids, names or emails in the answer or logs. A failing section returns `{"error": "section_failed"}` and the rest of the page works (the failure is logged as one line with the exception class only; partial answers are not cached).
+- «کپی به‌صورت متن» copies a plain-text summary (also in the answer as `text`) that Amin can paste to Claude.
+- Migration 0024 (additive, skipped when present): `ix_players_created_at`, `ix_players_last_seen`, `ix_progress_opened_at`, `ix_progress_finished_at`; listed in `.github/workflows/ci.yml`.
+- Tests: `server/tests/test_funnel.py` (seeded cohorts, retention math with too-young cohorts, smoke/banned excluded, zero-data page, one failing section, the 90-day cap, no personal data). Details: `docs/operations.md` «Funnel and retention».
+- Deploy: server only (no APK). Amin deploys version 1.27.0 from the Liara panel.
 
 ## server 1.26.1, app 1.26.1 (build 55): «پلاک کارآگاهی» for solving, hearts for rating
 

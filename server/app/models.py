@@ -19,7 +19,11 @@ def new_id() -> str:
 
 class Player(Base):
     __tablename__ = "players"
-    __table_args__ = (Index("ix_players_referred_by", "referred_by"),)  # the invite status lists the players I invited
+    __table_args__ = (
+        Index("ix_players_referred_by", "referred_by"),  # the invite status lists the players I invited
+        Index("ix_players_created_at", "created_at"),    # admin funnel: signups per day
+        Index("ix_players_last_seen", "last_seen"),      # admin funnel / overview: active in the last 24 h / 7 days
+    )
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)
     secret_hash: Mapped[str] = mapped_column(String(64))
@@ -94,6 +98,8 @@ class CaseProgress(Base):
         UniqueConstraint("player_id", "case_id", name="uq_progress"),
         Index("ix_progress_case_solved", "case_id", "solved"),
         Index("ix_progress_rank", "case_id", "stars", "seconds"),
+        Index("ix_progress_opened_at", "opened_at"),      # admin funnel: activity by day
+        Index("ix_progress_finished_at", "finished_at"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)

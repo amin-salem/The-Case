@@ -12,6 +12,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import content
 from ..config import get_settings
+from ..cache import TTLCache
+from ..services import funnel as funnel_service
 from ..services import health as health_service
 from ..db import get_session
 from ..models import (AdminLog, CaseProgress, CoinLog, Event, InboxItem, MissionDay, Player, PlayerAchievement,
@@ -298,6 +300,22 @@ async def runtime():
     There are several workers: ask a few times, `pid` tells them apart. See docs/operations.md «Capacity»."""
     from ..services import runtime_stats
     return runtime_stats.STATS.snapshot()
+
+
+_funnel_cache = TTLCache("admin_funnel", ttl=60, max_size=8)
+
+
+@router.get("/funnel")
+async def funnel_report(days: int = Query(30, ge=1, le=funnel_service.MAX_DAYS), session: AsyncSession = Depends(get_session)):
+    """Funnel and retention per signup-day cohort, derived from case activity (docs/operations.md «Funnel and retention»).
+    Cached 60 s per worker; a failing section comes back as {"error": "section_failed"} while the rest stays intact."""
+    hit = _funnel_cache.get_sync(days)
+    if hit is not None:
+        return hit
+    out = await funnel_service.build(session, days)
+    if not any(isinstance(v, dict) and v.get("error") for v in out.values()):  # never cache a partial answer
+        _funnel_cache.put_sync(days, out)
+    return out
 
 
 class ClearLockIn(BaseModel):

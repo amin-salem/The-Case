@@ -36,7 +36,8 @@ jobs:
           names = {r[1] for r in d.execute("PRAGMA index_list(case_progress)")}
           assert {"ix_progress_case_solved", "ix_progress_rank"} <= names, names
           pnames = {r[1] for r in d.execute("PRAGMA index_list(players)")}
-          assert "ix_players_referred_by" in pnames, pnames
+          assert {"ix_players_referred_by", "ix_players_created_at", "ix_players_last_seen"} <= pnames, pnames
+          assert {"ix_progress_opened_at", "ix_progress_finished_at"} <= names, names
           print("capacity indexes ok")
           EOF2
           rm -f mig.db

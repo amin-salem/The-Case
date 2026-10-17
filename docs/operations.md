@@ -215,6 +215,21 @@ The list is data in `app/lib/data/whats_new.dart` (`kWhatsNew`, newest first). T
 - The banner shows once per build (prefs `wn_seen`); a fresh install (no saved player) shows nothing. Settings «چه خبر؟» lists the last 5 releases.
 - Red «تازه» tags: put `NewTag('<tag id>')` next to the place and list the id in the item's `tags`; call `WhatsNew.i.tagOpened('<id>')` when the player opens that place. A tag disappears when opened or 7 days after the first start of the new build.
 
+## Funnel and retention (17 Oct 2026, server 1.27.0)
+
+Panel tab **🧭 قیف و ماندگاری** (`/admin/ui`), data from `GET /admin/api/funnel?days=30` (1-90 days; cached 60 s per worker, so a number can be a minute old; «تازه‌سازی» asks again). «کپی به‌صورت متن» copies a plain-text summary to paste to Claude.
+
+- **Where the numbers come from:** only existing tables. **Retention is derived from case activity**, not from app opens: a player «returned on day N» if one of his cases was opened or finished on the Tehran calendar day N days after his signup day. If a player opens the app and does nothing, he is not counted as returned (he is counted in DAU/WAU, which use `last_seen`). Days are Tehran calendar days.
+- **Left out of every number:** test accounts (device id «smoke-…») and banned players.
+- **Signups:** new accounts per day. **Funnel** (counts and % of registered; each step counts players, not cases): registered → opened a case → finished the FIRST case he opened (solved or failed) → solved the first case → solved cases on 3 different days (the rule that pays the inviter). Steps are independent counts, so «3 days» can include a player whose first case was lost.
+- **D1/D3/D7:** share of the cohort active on that day. A cohort is counted only after day +N is over (so D7 of today's cohort is a dot, and the total ignores it). The row «cohorts» says how many signup days the total uses. **DAU/WAU:** players seen in the last 24 h / 7 days, % of all players, and DAU/WAU (stickiness; higher is better).
+- **Where players stop:** players not seen for 48 h, by the last stage they reached (never opened; opened but did not finish; finished 1, 2, 3-4, 5+ cases). Under it, the top 10 cases that were opened more than 24 h ago and never finished: a case high here is too hard, too long or too boring.
+- **Money:** payers = players with a `granted` purchase; conversion of registered and of D7-retained players; median hours from signup to the first purchase (nearest rank, the lower middle value); purchases per pack in the window with the coins they gave (from the product table; **no prices are shown, none are stored**); quartiles of coin balance of players seen in 7 days and the share with no coins (if the median is near 0, coins are scarce, which is the plan).
+- **Gameplay quality:** plaque shares among solves (3 = no mistake), failed share of finished cases, median ACTIVE seconds to solve (cases with no active time recorded are skipped), average hints per finished case; the table lists cases opened in the last 14 days (at most 40): solved %, failed %, median time. Very high solved % with plaque 3 = too easy; low solved % or many failures = too hard.
+- **Small numbers:** with a few dozen players a percentage jumps by several points for one player; read the counts next to it.
+- **Failure:** if one section fails the page shows a red note for that section only and logs `funnel section failed name=... error=<ExceptionClass>` (no data). Nothing is cached while a section fails.
+- **Cost:** a few aggregate queries over the players of the window and their case rows; indexes from migration 0024 (`players.created_at`, `players.last_seen`, `case_progress.opened_at`, `case_progress.finished_at`). Read it once or twice a day, not in a loop.
+
 ## Invite codes, ratings, archive (15 Oct 2026, server 1.26.0, app 1.26.0+54)
 
 - **How an invite pays (server rules, unchanged):** the NEW player gets `INVITE_NEW_PLAYER` (100) coins at once when the code is redeemed (`POST /v1/referrals/redeem`, only for accounts at most 7 days old, never the same phone as the inviter). The INVITER gets `INVITE_INVITER` (150) as an inbox gift after the invited player solved cases on `INVITE_MIN_DAYS` (3) different days; the gift must be claimed in the messages. Tests: `server/tests/test_invites_ratings.py`.
@@ -321,7 +336,7 @@ shows 5xx or p95 over 1 s at 200 players on the current plan, upgrade even witho
 evening where new players see errors.
 
 
-## The game clock, the fair weekly board and leagues (17 Oct 2026, server 1.27.0, app 1.27.0+56)
+## The game clock, the fair weekly board and leagues (17 Oct 2026, server 1.28.0, app 1.27.0+56)
 
 **One clock: `server/app/gameclock.py`.** Nothing else may compute a game day, a week or a rollover. Everything is
 computed with zoneinfo `Asia/Tehran` (no hard-coded +3:30) and stored/compared in UTC. Tests set the time with
@@ -368,4 +383,4 @@ once, at the start of the week (the 5-minute weekly job, or the first request), 
 a player without a row (nothing solved at that time) is in league 0. Promotion is the next week's snapshot. `GET /v1/leaderboard?period=weekly&league=N`
 shows league N (default: your own), the answer carries `week_ends_at`, `league`, `my_league`, `leagues`.
 
-Migration `0024_week_leagues` (new tables `week_leagues`, `week_settlements`; listed in `.github/workflows/ci.yml`).
+Migration `0025_week_leagues` (new tables `week_leagues`, `week_settlements`; listed in `.github/workflows/ci.yml`).
