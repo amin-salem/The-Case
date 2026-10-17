@@ -1,5 +1,17 @@
 # Changelog
 
+## server 1.27.0: admin screen «قیف و ماندگاری» (funnel and retention)
+
+- Amin (16 Oct, for the Cafe Bazaar launch): real numbers right after publishing. New panel tab **🧭 قیف و ماندگاری** and the call `GET /admin/api/funnel?days=30` (max 90, admin key, cached 60 s per worker).
+- **It works for the current players too:** everything is derived from tables that already exist (`players`, `case_progress`, `purchases`); no tracking table. **Retention is derived from case activity** (a case opened or finished on day 1/3/7 after the signup day, Tehran days), so a player who only opened the app does not count as returned. DAU/WAU use `last_seen`.
+- Sections: signups per day; funnel (registered → opened a case → finished the first case → solved the first case → solved on 3 different days, the invite-paid rule) per signup-day cohort and in total; D1/D3/D7 (cohorts too young show a dot and are left out of the total) plus DAU, WAU and DAU/WAU; where players stop (last stage reached, top 10 cases opened but not finished); money (payers, conversion of registered and of D7-retained, median hours to the first purchase, purchases and coins by pack, coin quartiles of players seen in 7 days); gameplay quality (plaque 3/2/1 shares, median active seconds, average hints, failed share, per case of the last 14 days).
+- Test accounts (device id «smoke-…») and banned players are left out of every number. (The existing player list does not hide smoke accounts; this screen does.)
+- Plain SQL aggregates (medians and quartiles with window functions, nearest rank), no rows loaded into Python, no ids, names or emails in the answer or logs. A failing section returns `{"error": "section_failed"}` and the rest of the page works (the failure is logged as one line with the exception class only; partial answers are not cached).
+- «کپی به‌صورت متن» copies a plain-text summary (also in the answer as `text`) that Amin can paste to Claude.
+- Migration 0024 (additive, skipped when present): `ix_players_created_at`, `ix_players_last_seen`, `ix_progress_opened_at`, `ix_progress_finished_at`; listed in `.github/workflows/ci.yml`.
+- Tests: `server/tests/test_funnel.py` (seeded cohorts, retention math with too-young cohorts, smoke/banned excluded, zero-data page, one failing section, the 90-day cap, no personal data). Details: `docs/operations.md` «Funnel and retention».
+- Deploy: server only (no APK). Amin deploys version 1.27.0 from the Liara panel.
+
 ## server 1.26.1, app 1.26.1 (build 55): «پلاک کارآگاهی» for solving, hearts for rating
 
 - Amin: stars for solving and stars for rating together confused players. Now **solving gives plaques** («پلاک کارآگاهی», police-badge shield icon, brass): 3 = no mistake, 2 = one, 1 = more. **Rating a case uses red hearts** (1-5) and the word «امتیاز». The data is unchanged: the server still stores `stars` for the plaque count and `rating` for hearts, so the leaderboard, weekly prizes, XP and achievements behave exactly as before. Only words and icons changed.

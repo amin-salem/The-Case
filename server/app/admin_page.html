@@ -100,6 +100,12 @@ h2{font-weight:900}
   nav{order:3;flex:1 0 100%;flex-wrap:wrap;overflow:visible;gap:6px}
   nav button{flex:1 1 calc(33.3% - 6px);padding:8px 6px;font-size:13px;text-align:center}
 }
+
+/* funnel screen */
+.fbar{display:block;height:10px;min-width:60px;background:var(--bg3);border-radius:5px;overflow:hidden;direction:ltr}.fbar i{display:block;height:100%;background:var(--brass)}
+.fbar.ok i{background:var(--ok)}.fbar.bad i{background:var(--bad)}
+.spark{display:inline-flex;gap:1px;align-items:flex-end;height:22px;direction:ltr}.spark i{display:block;width:5px;background:var(--brass);opacity:.8;min-height:1px}
+td.na{color:var(--soft)}td.num,th.num{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -153,7 +159,7 @@ async function api(path, opts = {}) {
   if (!r.ok) throw new Error('خطا ' + r.status + ': ' + (await r.text()).slice(0, 200));
   return r.json();
 }
-const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت زنده'],['players','👥 بازیکن‌ها'],['cases','🗂 پرونده‌ها'],['comments','💬 نظرها'],['money','💰 پول و سکه'],['health','🩺 سلامت'],['actions','⚙ اقدام‌ها']];
+const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت زنده'],['players','👥 بازیکن‌ها'],['cases','🗂 پرونده‌ها'],['comments','💬 نظرها'],['money','💰 پول و سکه'],['funnel','🧭 قیف و ماندگاری'],['health','🩺 سلامت'],['actions','⚙ اقدام‌ها']];
 // remember the open tab (per browser tab / app session) so a reload or a refresh never jumps elsewhere
 let tab = 'overview', timer = null;
 try { const t = sessionStorage.getItem('adminTab'); if (TABS.some(x => x[0] === t)) tab = t; } catch (e) {}
@@ -290,6 +296,56 @@ const VIEWS = {
       b.disabled = true;
       try { await api('/admin/api/comments/' + b.dataset.id, {method: 'POST', body: JSON.stringify({action: b.dataset.a})}); render(); } catch (e) { note(e.message); b.disabled = false; }
     });
+  },
+  async funnel(m) {
+    const pc = v => v == null ? '—' : num(v) + '٪', n0 = v => v == null ? '—' : num(v);
+    const bar = (v, cls) => `<span class="fbar ${cls || ''}"><i style="width:${Math.max(0, Math.min(100, v || 0))}%"></i></span>`;
+    const spark = vals => { const mx = Math.max(1, ...vals); return `<span class="spark">${vals.map(v => `<i style="height:${Math.max(1, Math.round(22 * v / mx))}px"></i>`).join('')}</span>`; };
+    const sec = (d, k, f) => d[k] && d[k].error ? '<p class="err">این بخش الان خطا داد؛ بقیه‌ی صفحه سالم است. چند لحظه بعد دوباره بزن.</p>' : f(d[k]);
+    const tbl = (head, rows) => `<div class="scroll"><table><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr>${rows.join('')}</table></div>`;
+    m.innerHTML = '<div class="row"><span class="muted">بازه:</span><span id="fdays"></span><button id="fcopy">کپی به‌صورت متن</button><button id="fre">تازه‌سازی</button><span class="muted" id="fat"></span></div><div id="fbody"></div>';
+    let days = 30, data = null;
+    const show = () => {
+      $('#fdays').innerHTML = [7, 14, 30, 90].map(x => `<button data-d="${x}" class="${x === days ? 'on' : ''}">${num(x)} روز</button>`).join(' ');
+      $('#fdays').querySelectorAll('button').forEach(b => b.onclick = () => { days = +b.dataset.d; load(); });
+      const d = data; $('#fat').textContent = 'ساخته‌شده: ' + fmtT(d.generated_at) + ' · روزها به وقت تهران';
+      const sg = sec(d, 'signups', s => `<div class="cards">${card(s.total, 'ثبت‌نام در ' + num(d.days) + ' روز')}${card(Math.round(10 * s.total / d.days) / 10, 'میانگین ثبت‌نام روزانه')}</div><p>${spark(s.days.map(x => x.new))} <span class="muted">ثبت‌نام روزانه، از قدیم به جدید</span></p>`);
+      const fn = sec(d, 'funnel', f => {
+        const steps = [['registered', 'ثبت‌نام'], ['opened', 'پرونده باز کرد'], ['finished_first', 'اولین پرونده را تمام کرد (حل یا شکست)'], ['solved_first', 'اولین پرونده را حل کرد'], ['solved_3_days', 'در ۳ روز مختلف حل کرد (شرط جایزه‌ی دعوت)']];
+        const top = tbl(['مرحله', 'کارآگاه', 'درصد از ثبت‌نام', ''], steps.map(([k, l]) => `<tr><td>${l}</td><td class="num">${n0(f.total[k])}</td><td class="num">${k === 'registered' ? '—' : pc(f.pct[k])}</td><td style="width:40%">${bar(k === 'registered' ? 100 : f.pct[k])}</td></tr>`));
+        const per = tbl(['روز ثبت‌نام', 'ثبت‌نام', 'باز کرد', 'تمام کرد', 'حل کرد', '۳ روز'], f.days.slice().reverse().map(r => `<tr><td>${esc(dayName(r.day))}</td><td class="num">${n0(r.registered)}</td><td class="num">${n0(r.opened)}</td><td class="num">${n0(r.finished_first)}</td><td class="num">${n0(r.solved_first)}</td><td class="num">${n0(r.solved_3_days)}</td></tr>`));
+        return top + '<h3>به تفکیک روز ثبت‌نام</h3>' + per;
+      });
+      const rt = sec(d, 'retention', r => {
+        const a = r.active;
+        const cards = ['d1', 'd3', 'd7'].map(k => card(r.total[k].pct == null ? 0 : r.total[k].pct, k.toUpperCase() + ' ٪' + (r.total[k].of ? ' (' + num(r.total[k].returned) + ' از ' + num(r.total[k].of) + ')' : ' (هنوز زود است)'))).join('');
+        const per = tbl(['روز ثبت‌نام', 'ثبت‌نام', 'D1', 'D3', 'D7'], r.days.slice().reverse().map(x => `<tr><td>${esc(dayName(x.day))}</td><td class="num">${n0(x.new)}</td>${['d1', 'd3', 'd7'].map(k => x[k] == null ? '<td class="na" title="هنوز زود است">·</td>' : `<td class="num">${n0(x[k])} <span class="muted">(${pc(x.new ? Math.round(1000 * x[k] / x.new) / 10 : null)})</span></td>`).join('')}</tr>`));
+        return `<div class="cards">${cards}</div><div class="cards">${card(a.dau, 'فعال در ۲۴ ساعت اخیر (' + pc(a.dau_pct) + ' از ' + num(a.players) + ')')}${card(a.wau, 'فعال در ۷ روز اخیر (' + pc(a.wau_pct) + ')')}${card(a.dau_wau_pct == null ? 0 : a.dau_wau_pct, 'DAU/WAU ٪')}</div><p class="muted">ماندگاری از فعالیت در پرونده‌ها حساب می‌شود: کارآگاهی «برگشته» که در روز ۱ / ۳ / ۷ بعد از ثبت‌نامش پرونده‌ای را باز یا تمام کرده باشد. فقط روزهای ثبت‌نامی حساب می‌شوند که آن روز تمام شده باشد؛ نقطه یعنی هنوز زود است. DAU/WAU از آخرین حضور (last_seen) می‌آید.</p>` + per;
+      });
+      const dr = sec(d, 'drop_off', o => `<p class="muted">کارآگاه‌هایی که بیش از ${num(o.stopped_after_hours)} ساعت است نیامده‌اند: <b>${num(o.stopped)}</b></p>` +
+        tbl(['آخرین مرحله', 'کارآگاه', 'درصد', ''], o.stages.map(x => `<tr><td>${esc(x.label)}</td><td class="num">${n0(x.players)}</td><td class="num">${pc(x.pct)}</td><td style="width:40%">${bar(x.pct, 'bad')}</td></tr>`)) +
+        '<h3>پرونده‌هایی که بیشتر رها می‌شوند (باز شده، تمام نشده، بیش از ۲۴ ساعت پیش)</h3>' + (o.abandoned_cases.length ? tbl(['پرونده', 'عنوان', 'رها شده'], o.abandoned_cases.map(c => `<tr><td class="ltr">${esc(c.case)}</td><td>${esc(c.title)}</td><td class="num">${n0(c.abandoned)}</td></tr>`)) : '<p class="muted">هنوز داده‌ای نیست.</p>'));
+      const mo = sec(d, 'money', x => {
+        const c = x.coins;
+        return `<div class="cards">${card(x.payers, 'خریدار (خرید موفق)')}${card(x.conversion_pct == null ? 0 : x.conversion_pct, 'تبدیل به خریدار ٪ از ثبت‌نام')}${card(x.d7_conversion_pct == null ? 0 : x.d7_conversion_pct, 'تبدیل ٪ از ماندگارهای D7 (' + num(x.d7_retained_payers) + ' از ' + num(x.d7_retained) + ')')}<div class="card"><b>${x.first_purchase_median_hours == null ? '—' : num(x.first_purchase_median_hours)}</b><span>میانه‌ی ساعت تا اولین خرید</span></div></div>` +
+          '<h3>خرید به تفکیک بسته (در بازه)</h3>' + (x.packs.length ? tbl(['بسته', 'موفق', 'سکه‌ی داده‌شده', 'برگشتی', 'ردشده'], x.packs.map(p => `<tr><td class="ltr">${esc(p.product)}</td><td class="num">${n0(p.granted)}</td><td class="num">${p.coins ? n0(p.coins) : (p.vip_days ? n0(p.vip_days) + ' روز VIP' : (p.no_ads ? 'بدون تبلیغ' : '—'))}</td><td class="num">${n0(p.refunded)}</td><td class="num">${n0(p.rejected)}</td></tr>`)) : '<p class="muted">هنوز خریدی نیست.</p>') +
+          `<h3>سکه‌ی کارآگاه‌های فعال ۷ روز اخیر (${num(c.active_players)} کارآگاه)</h3>` + tbl(['چارک اول', 'میانه', 'چارک سوم', 'بدون سکه'], [`<tr><td class="num">${n0(c.p25)}</td><td class="num">${n0(c.median)}</td><td class="num">${n0(c.p75)}</td><td class="num">${pc(c.zero_pct)}</td></tr>`]);
+      });
+      const ql = sec(d, 'quality', q => {
+        const p = q.plaques;
+        return `<div class="cards">${card(q.solved, 'حل‌شده')}${card(q.failed_pct == null ? 0 : q.failed_pct, 'شکست ٪ از تمام‌شده‌ها')}<div class="card"><b>${pc(p['3_pct'])} / ${pc(p['2_pct'])} / ${pc(p['1_pct'])}</b><span>پلاک ۳ / ۲ / ۱ از حل‌ها</span></div><div class="card"><b>${n0(q.median_active_seconds)}</b><span>میانه‌ی ثانیه‌ی فعال تا حل</span></div><div class="card"><b>${q.avg_hints == null ? '—' : num(q.avg_hints)}</b><span>میانگین سرنخ برای هر پرونده‌ی تمام‌شده</span></div></div>` +
+          `<h3>هر پرونده (باز شده در ${num(q.cases_days)} روز اخیر)</h3>` + (q.cases.length ? tbl(['پرونده', 'عنوان', 'باز شد', 'حل ٪', 'شکست ٪', 'میانه‌ی ثانیه'], q.cases.map(c => `<tr><td class="ltr">${esc(c.case)}</td><td>${esc(c.title)}</td><td class="num">${n0(c.opened)}</td><td class="num">${pc(c.solved_pct)} ${bar(c.solved_pct, 'ok')}</td><td class="num">${pc(c.failed_pct)} ${bar(c.failed_pct, 'bad')}</td><td class="num">${n0(c.median_active_seconds)}</td></tr>`)) : '<p class="muted">هنوز داده‌ای نیست.</p>');
+      });
+      $('#fbody').innerHTML = '<h2>۱. ثبت‌نام</h2>' + sg + '<h2>۲. قیف</h2>' + fn + '<h2>۳. ماندگاری</h2>' + rt + '<h2>۴. کجا ول می‌کنند</h2>' + dr + '<h2>۵. پول</h2>' + mo + '<h2>۶. کیفیت بازی</h2>' + ql;
+    };
+    const load = async () => { $('#fre').disabled = true; try { data = await api('/admin/api/funnel?days=' + days); show(); } catch (e) { $('#fbody').innerHTML = '<p class="err">' + esc(e.message) + '</p>'; } finally { $('#fre').disabled = false; } };
+    $('#fre').onclick = load;
+    $('#fcopy').onclick = async () => {
+      if (!data) return;
+      try { await navigator.clipboard.writeText(data.text); note('کپی شد'); }
+      catch (e) { const t = document.createElement('textarea'); t.value = data.text; t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); note('کپی شد'); } catch (e2) { note('کپی نشد'); } t.remove(); }
+    };
+    await load();
   },
   async money(m) {
     const d = await api('/admin/api/money?days=30');
