@@ -392,3 +392,11 @@ a player without a row (nothing solved at that time) is in league 0. Promotion i
 shows league N (default: your own), the answer carries `week_ends_at`, `league`, `my_league`, `leagues`.
 
 Migration `0025_week_leagues` (new tables `week_leagues`, `week_settlements`; listed in `.github/workflows/ci.yml`).
+
+
+## App testers (17 Oct 2026)
+To test story mode before it opens: the tester secures his account with his phone in the app (profile), then call
+`POST /admin/players/tester` with `X-Admin-Key` and body `{"phone": "09190000000", "tester": true}` (use the real number;
+it is never stored in the repo). Send `"tester": false` to remove it. A tester sees the story and its chapters (only the chapters
+that are on `main`), his solves never reach any leaderboard or weekly prize, and nothing changes for other players. The phone
+must already be linked to one account; the answer `no_player` means nobody verified that number yet.

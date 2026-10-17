@@ -515,6 +515,13 @@ def story_opens_at() -> datetime:
     return datetime.fromisoformat(STORY_SEASON["opens_at"]).replace(tzinfo=_tz())
 
 
+def story_open_for(player, now: datetime | None = None) -> bool:
+    """Story mode for one player: open for everybody on the opening date, and any time for a tester."""
+    if getattr(player, "tester", False):
+        return bool(story_chapters())
+    return story_open(now)
+
+
 def story_open(now: datetime | None = None) -> bool:
     """Story mode is playable: its opening time has passed AND chapters are written."""
     return story_opens_at() <= (now or now_local()) and bool(story_chapters())

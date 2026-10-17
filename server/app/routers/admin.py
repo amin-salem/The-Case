@@ -1,4 +1,5 @@
 """Admin tools. Every call needs the header  X-Admin-Key: <ADMIN_API_KEY>."""
+import logging
 import uuid
 from datetime import timedelta
 
@@ -13,9 +14,11 @@ from ..db import get_session
 from ..models import AdminLog, Broadcast, CaseProgress, CoinLog, ConfigValue, InboxItem, Player, Purchase, utcnow
 from ..schemas import ConfigIn, GiftIn
 from ..security import hash_secret, make_token, new_secret, require_admin
+from ..services import sms
 from ..services.remote_config import DEFAULTS, invalidate as invalidate_config, load_config
 from ..util import add_coins, default_nickname, ts, unique_invite_code
 
+log = logging.getLogger("admin")
 router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_admin)])
 
 
@@ -69,7 +72,7 @@ async def find_players(q: str = Query("", max_length=40), limit: int = Query(30,
         stmt = stmt.where(or_(Player.nickname.contains(q), Player.invite_code == q.upper(),
                               Player.id.startswith(q), Player.email == q.lower()))
     return [{"id": p.id, "nickname": p.nickname, "coins": p.coins, "solved": p.cases_solved,
-             "banned": p.banned, "last_seen": ts(p.last_seen)} for p in (await session.execute(stmt)).scalars().all()]
+             "banned": p.banned, "tester": p.tester, "last_seen": ts(p.last_seen)} for p in (await session.execute(stmt)).scalars().all()]
 
 
 @router.get("/players/{player_id}")
@@ -201,3 +204,25 @@ async def send_gift(body: GiftIn, session: AsyncSession = Depends(get_session)):
     session.add(AdminLog(action="broadcast", target="everyone", detail={"title": body.title, "grants": grants}))
     await session.commit()
     return {"sent_to": "everyone", "id": f"b{b.id}"}
+
+
+class TesterIn(BaseModel):
+    phone: str = Field(min_length=10, max_length=20)  # the phone number linked to the player's account
+    tester: bool = True
+
+
+@router.post("/players/tester")
+async def set_tester(body: TesterIn, session: AsyncSession = Depends(get_session)):
+    """Makes the player who secured the account with this phone number a tester (or removes it): the story is open for
+    him while it is closed to everybody, and he never appears on a leaderboard. The number is only compared as a hash."""
+    phone = sms.normalize_phone(body.phone)
+    if phone is None:
+        raise HTTPException(400, "bad_phone")
+    p = await session.scalar(select(Player).where(Player.phone_hash == sms.phone_hash(phone)))
+    if p is None:
+        raise HTTPException(404, "no_player")
+    p.tester = body.tester
+    session.add(AdminLog(action="tester" if body.tester else "untester", target=p.id, detail={"nickname": p.nickname}))
+    await session.commit()
+    log.info("admin tester player=%s tester=%s", p.id[:6], body.tester)
+    return {"id": p.id, "nickname": p.nickname, "tester": p.tester}

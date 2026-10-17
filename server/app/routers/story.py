@@ -88,7 +88,7 @@ async def _out(session: AsyncSession, player: Player, case_id: str | None = None
             next_at = next_at or row.unlock_at
         out.append(row)
     s = content.STORY_SEASON
-    return StoryOut(open=content.story_open(), opens_at=int(content.story_opens_at().timestamp()),
+    return StoryOut(open=content.story_open_for(player), opens_at=int(content.story_opens_at().timestamp()),
                     season=s["season"], title=s["title"], tagline=s["tagline"], partner=s["partner"],
                     warrants=player.warrants or 0, coins=player.coins, free_chapters=eco.STORY_FREE_CHAPTERS,
                     wait_hours=eco.STORY_WAIT_HOURS, next_open_at=next_at, chapters=out, case_id=case_id)
@@ -109,7 +109,7 @@ async def _begin(session: AsyncSession, player: Player, c: content.Case) -> None
 
 async def _prepare(session: AsyncSession, player: Player, chapter: int):
     """Checks shared by open and skip. Returns (case, state, unlock time) or raises."""
-    if not content.story_open():
+    if not content.story_open_for(player):
         raise HTTPException(409, "story_not_open")
     chapters = content.story_chapters()
     if not 1 <= chapter <= len(chapters):
@@ -160,8 +160,8 @@ class ChooseIn(BaseModel):
     option: str = Field(min_length=1, max_length=24)
 
 
-def _flow_case(chapter_id: str) -> content.Case:
-    if not content.story_open():
+def _flow_case(chapter_id: str, player: Player) -> content.Case:
+    if not content.story_open_for(player):
         raise HTTPException(409, "story_not_open")
     c = content.story_by_id(chapter_id)
     if c is None:
@@ -197,7 +197,7 @@ async def _row(session: AsyncSession, player: Player, c: content.Case, create: b
 async def chapter_state(chapter_id: str, player: Player = Depends(current_player),
                         session: AsyncSession = Depends(get_session)):
     """The scene the player is in, its options (locked ones marked) and the chapter's board. Own state only."""
-    c = _flow_case(chapter_id)
+    c = _flow_case(chapter_id, player)
     row = await _row(session, player, c, create=True)
     return storyflow.state_out(c, _to_state(row))
 
@@ -206,7 +206,7 @@ async def chapter_state(chapter_id: str, player: Player = Depends(current_player
 async def choose(chapter_id: str, body: ChooseIn, player: Player = Depends(current_player),
                  session: AsyncSession = Depends(get_session)):
     """Picks an option of the current scene. Repeating the same pick (double tap, retry) returns the state again."""
-    c = _flow_case(chapter_id)
+    c = _flow_case(chapter_id, player)
     row = await _row(session, player, c, create=True)
     state = _to_state(row)
     pick = [body.scene, body.option]
@@ -236,7 +236,7 @@ async def choose(chapter_id: str, body: ChooseIn, player: Player = Depends(curre
 @router.get("/board")
 async def board(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """The season case board: people met, clues held/open/missed, over every chapter the player has started."""
-    if not content.story_open():
+    if not content.story_open_for(player):
         raise HTTPException(409, "story_not_open")
     chapters = {c.id: c for c in content.story_chapters()}
     rows = (await session.execute(select(StoryState).where(

@@ -78,10 +78,10 @@ async def _progress(session: AsyncSession, player_id: str, case_id: str) -> Case
         CaseProgress.player_id == player_id, CaseProgress.case_id == case_id))
 
 
-def _opened_case(case_id: str) -> Case:
+def _opened_case(case_id: str, player: Player) -> Case:
     if content.is_story(case_id):
         c = content.story_by_id(case_id)
-        if c is None or not content.story_open():
+        if c is None or not content.story_open_for(player):
             raise HTTPException(404, "no_case")
         return c
     if content.is_weekly(case_id):
@@ -181,7 +181,7 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
 @router.get("/{case_id}", response_model=CaseOut)
 async def get_case(case_id: str, player: Player = Depends(current_player),
                    session: AsyncSession = Depends(get_session)):
-    c = _opened_case(case_id)
+    c = _opened_case(case_id, player)
     p = await _progress(session, player.id, c.id)
     if not _can_open(c, p, player):
         if content.is_story(c.id):
@@ -213,7 +213,7 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
 @router.post("/{case_id}/unlock", response_model=CaseOut)
 async def unlock(case_id: str, player: Player = Depends(current_player),
                  session: AsyncSession = Depends(get_session)):
-    c = _opened_case(case_id)
+    c = _opened_case(case_id, player)
     p = await _progress(session, player.id, c.id)
     if content.is_story(c.id) and p is None:
         raise HTTPException(409, "chapter_locked")
@@ -235,7 +235,7 @@ async def unlock(case_id: str, player: Player = Depends(current_player),
 @router.post("/{case_id}/hint", response_model=HintOut)
 async def buy_hint(case_id: str, player: Player = Depends(current_player),
                    session: AsyncSession = Depends(get_session)):
-    c = _opened_case(case_id)
+    c = _opened_case(case_id, player)
     p = await _progress(session, player.id, c.id)
     if p is None or not _can_open(c, p, player):
         raise HTTPException(409, "open_case_first")
@@ -267,7 +267,7 @@ async def _daily_rank(session: AsyncSession, case_id: str, stars: int, seconds: 
 @router.post("/{case_id}/accuse", response_model=AccuseOut)
 async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_player),
                  session: AsyncSession = Depends(get_session)):
-    c = _opened_case(case_id)
+    c = _opened_case(case_id, player)
     p = await _progress(session, player.id, c.id)
     if p is None or not _can_open(c, p, player):
         raise HTTPException(409, "open_case_first")
@@ -404,7 +404,7 @@ async def show_evidence(case_id: str, body: ShowIn, player: Player = Depends(cur
                         session: AsyncSession = Depends(get_session)):
     """Weekend case: show one evidence card to one suspect and get what the suspect says. A few shows per opened
     chapter; showing the same card to the same suspect again is free (it only repeats the answer)."""
-    c = _opened_case(case_id)
+    c = _opened_case(case_id, player)
     if not content.is_weekly(c.id):
         raise HTTPException(404, "no_case")
     # the progress row is locked, so two requests at once cannot spend the same show twice
@@ -434,7 +434,7 @@ async def show_evidence(case_id: str, body: ShowIn, player: Player = Depends(cur
 @router.get("/{case_id}/stats", response_model=StatsOut)
 async def stats(case_id: str, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """What everyone else thought: shown only after the player has finished the case (no spoilers)."""
-    c = _opened_case(case_id)
+    c = _opened_case(case_id, player)
     p = await _progress(session, player.id, c.id)
     if p is None or not (p.solved or p.failed):
         raise HTTPException(409, "finish_first")
@@ -464,7 +464,7 @@ async def stats(case_id: str, player: Player = Depends(current_player), session:
 async def seen(case_id: str, body: SeenIn, player: Player = Depends(current_player),
                session: AsyncSession = Depends(get_session)):
     """The app says a suspect's interrogation was opened (for the "interrogate everyone" mission)."""
-    c = _opened_case(case_id)
+    c = _opened_case(case_id, player)
     p = await _progress(session, player.id, c.id)
     if p is None or not _can_open(c, p, player):
         raise HTTPException(409, "open_case_first")
@@ -501,7 +501,7 @@ async def seen(case_id: str, body: SeenIn, player: Player = Depends(current_play
 async def tick(case_id: str, body: TickIn, player: Player = Depends(current_player),
                session: AsyncSession = Depends(get_session)):
     """The app reports, every half minute and when leaving, how long the case screen was open."""
-    c = _opened_case(case_id)
+    c = _opened_case(case_id, player)
     p = await _progress(session, player.id, c.id)
     if p is None:
         raise HTTPException(409, "open_case_first")

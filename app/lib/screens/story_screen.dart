@@ -34,13 +34,14 @@ class _StoryScreenState extends State<StoryScreen> {
   String? _error;
   bool _loading = false;
 
-  bool get _open => Api.i.upcomingStory['open'] == true;
+  // open for everybody on the opening date, or for a tester whose own /v1/story answer says open
+  bool get _open => Api.i.upcomingStory['open'] == true || (_map?.open ?? false);
 
   @override
   void initState() {
     super.initState();
     Api.i.addListener(_onApi);
-    if (_open) _load();
+    _load(); // a tester sees the story before the opening date: the server decides
   }
 
   @override
@@ -64,7 +65,7 @@ class _StoryScreenState extends State<StoryScreen> {
       final m = await Api.i.story();
       if (!mounted) return;
       setState(() => _map = m);
-      _remind(m);
+      if (m.open) _remind(m);
     } catch (e) {
       if (mounted) setState(() => _error = Api.isNetworkFail(e) && !Api.i.online ? Api.offlineText : Api.friendly(e));
     } finally {

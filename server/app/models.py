@@ -86,6 +86,8 @@ class Player(Base):
     client_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     banned: Mapped[bool] = mapped_column(Boolean, default=False)
+    # app tester (set by the admin): sees the story while it is closed to everyone and never appears on a leaderboard
+    tester: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     last_seen: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased: app testers (Amin, 17 Oct 2026)
+
+- New flag `players.tester` (migration 0026, additive). A tester sees the story while it is closed to everybody and never appears on a leaderboard (all-time, daily, weekly, league prizes). Everybody else is unchanged; `opens_at` stays 2099.
+- Admin: `POST /admin/players/tester {"phone": "09...", "tester": true|false}` (X-Admin-Key). It finds the player who secured the account with that number (compared as a hash; the number is never stored or logged) and sets the flag. The player must have verified that phone in the app first.
+- Game app: the story tab asks the server instead of trusting the global config, so a tester's story opens (needs the next game APK).
+
 ## server 1.29.0, app 1.28.0 (build 57): fewer free warrants, rating sheet, rate nudge, exact weekend time
 
 - **Warrants (Amin: players had so many that nobody spent coins on the story).** Cut: tonight's case (1 a day), all daily missions done (1 a day), streak 3 and 7, every weekend case. Kept: the first solved case ever (onboarding), streak 14 and 30, every 2nd live weekend case. New free supply for a normal player: about one warrant per two weeks (before: about 14 a week). Nothing replaces them (no free coins). Warrants already owned stay; only future grants changed (no migration); the grant is still one per solve inside the solve transaction. Rules in `economy.warrants_for_solve`. Story texts, the guide and `docs/story-mode.md` say the new rule; coin skip of the 12 h wait is unchanged and clearly priced.
