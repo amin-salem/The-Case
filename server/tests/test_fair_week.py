@@ -248,13 +248,13 @@ async def test_league_snapshot_is_stable_and_a_player_is_in_one_league(client, c
 
 
 async def test_board_shows_own_league_with_a_switch(client, clock, leagues, week_of_fake_cases):
-    ws = date(2027, 4, 16)
-    clock(T(2027, 4, 17, 12))
+    ws = date(2027, 5, 14)
+    clock(T(2027, 5, 15, 12))
     rookie, boss = await new_player(client, "fw-lg-r"), await new_player(client, "fw-lg-b")
     await set_player(boss["player_id"], xp=7000, cases_solved=50)
     await set_player(rookie["player_id"], xp=10, cases_solved=1)
-    await solve(rookie["player_id"], wid(ws, 0), 3, T(2027, 4, 17, 10))
-    await solve(boss["player_id"], wid(ws, 0), 1, T(2027, 4, 17, 10))
+    await solve(rookie["player_id"], wid(ws, 0), 3, T(2027, 5, 15, 10))
+    await solve(boss["player_id"], wid(ws, 0), 1, T(2027, 5, 15, 10))
     mine = await board(client, rookie["headers"])
     assert mine["league"] == 0 and mine["my_league"] == 0 and len(mine["leagues"]) == 4 and mine["me"]["rank"] == 1
     assert "تازه‌کار" in mine["title"]
