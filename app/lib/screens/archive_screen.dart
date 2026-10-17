@@ -221,7 +221,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Padding(padding: EdgeInsets.only(top: 6), child: Icon(Icons.favorite_rounded, color: K.stamp, size: 20)),
+            const Padding(padding: EdgeInsets.only(top: 6), child: Icon(Icons.star_rounded, color: K.brass, size: 20)),
             const SizedBox(width: 8),
             Expanded(
               child: Padding(
@@ -241,7 +241,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             alignment: AlignmentDirectional.centerStart,
             child: TextButton.icon(
               onPressed: () => _closeNudge(showList: true),
-              icon: const Icon(Icons.favorite_border_rounded, color: K.stamp, size: 20),
+              icon: const Icon(Icons.star_border_rounded, color: K.brass, size: 20),
               label: Text('${fa(_unratedSolved(rows))} پرونده منتظر امتیازته؛ نشونم بده',
                   style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
             ),
@@ -457,7 +457,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                     Expanded(
                       child: Text(c.location, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.textSoft)),
                     ),
-                    Difficulty(c.difficulty, color: K.brass),
+                    DifficultyBar(c.difficulty, compact: true),
                   ]),
                 ]),
               ),

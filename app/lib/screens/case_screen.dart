@@ -268,7 +268,7 @@ class _CaseScreenState extends State<CaseScreen> {
                           const Icon(Icons.place_rounded, size: 16, color: K.brass),
                           const SizedBox(width: 4),
                           Expanded(child: Text(c.location, style: tBody(14, color: K.textSoft))),
-                          Difficulty(c.difficulty, color: K.brass),
+                          DifficultyBar(c.difficulty),
                         ]),
                       ),
                       const SizedBox(height: 16),

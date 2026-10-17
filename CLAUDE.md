@@ -87,3 +87,12 @@ Story mode opens for players only when BOTH are true (AND, not OR):
 Until then `STORY_SEASON["opens_at"]` stays `2099-01-01T00:00:00`. Only Amin (or Claude after he says so) sets the real date.
 Reason: a story that gets one chapter a night would never make players buy warrants/skips; a finished season does
 (chapters 1-3 free, later ones need a warrant, the 12 h wait or coins).
+
+## One slot, one build (Amin, 17 Oct 2026)
+When Amin asks for several changes for the same time slot (or the same night), they are ONE scheduled task, ONE branch, ONE
+server version and ONE APK. Never schedule them as separate tasks that each build their own APK: a later build overwrites
+`release` and silently drops the earlier work (17 Oct: the difficulty bar and the stars fix were lost from build 57).
+- Before building an APK: `git fetch origin`, merge the newest `origin/main` AND `origin/release`, and check that the
+  earlier features are still in the code (grep) before pushing to `release`.
+- If you find two tasks scheduled at the same time, merge them into one before they run.
+- Docs/tools-only work (prompt kits, triage) stays on its own branch and does not build anything.
