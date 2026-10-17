@@ -1,5 +1,10 @@
 # Changelog
 
+## app 1.29.1 (build 59): fix for the black screen at start (builds 57-58)
+
+- **Cause found:** from build 57 on, the CI build resolved a newer `shared_preferences_android` (native side rewritten) than build 56 had; the app waits for saved settings before the first screen, so it stayed on the logo. The APKs prove it: build 56 has the old plugin classes, 57-58 the new ones; nothing else in the plugins differs.
+- **Fix:** `shared_preferences_android` pinned to 2.4.28 (`dependency_overrides`), and every start-up step now has a 4 s limit so the app always opens even if a plugin misbehaves. No other change; server stays 1.29.0.
+
 ## app 1.29.0 (build 58): everything in one APK (difficulty bar + stars back + all of tonight's changes)
 
 - **Why:** tonight's tasks were scheduled separately and each built its own APK from its own branch; the last build (1.28.0+57) was made from `main`, which had neither the difficulty bar nor the stars fix (1-on-the-right, numbers under the stars), so it still showed hearts and magnifying glasses. This build merges `difficulty-bar` (with `badges-plaques`, i.e. the stars fix) into the latest `main`.

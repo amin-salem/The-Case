@@ -1,7 +1,7 @@
 name: the_case
 description: "پرونده - a daily Persian crime-mystery game."
 publish_to: 'none'
-version: 1.29.0+58
+version: 1.29.1+59
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -63,3 +63,8 @@ flutter:
           weight: 700
         - asset: assets/fonts/Estedad-Black.ttf
           weight: 900
+
+# Pinned on purpose: builds 57-58 picked up a newer shared_preferences_android (rewritten native side) and the app
+# stayed on a black screen. This is the version build 56 (last good one) shipped with.
+dependency_overrides:
+  shared_preferences_android: 2.4.28
