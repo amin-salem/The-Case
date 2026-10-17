@@ -1,5 +1,14 @@
 # Changelog
 
+## server 1.29.0, app 1.28.0 (build 57): fewer free warrants, rating sheet, rate nudge, exact weekend time
+
+- **Warrants (Amin: players had so many that nobody spent coins on the story).** Cut: tonight's case (1 a day), all daily missions done (1 a day), streak 3 and 7, every weekend case. Kept: the first solved case ever (onboarding), streak 14 and 30, every 2nd live weekend case. New free supply for a normal player: about one warrant per two weeks (before: about 14 a week). Nothing replaces them (no free coins). Warrants already owned stay; only future grants changed (no migration); the grant is still one per solve inside the solve transaction. Rules in `economy.warrants_for_solve`. Story texts, the guide and `docs/story-mode.md` say the new rule; coin skip of the 12 h wait is unchanged and clearly priced.
+- **Rating sheet** right after a solve (7 s, once per case, close button, never blocks coins), inline card kept as fallback.
+- **Rate nudge** in the archive for solved cases without a rating (every 3 days at most, one tap closes, the button opens the unrated list). Built from the existing case list: no server change.
+- **Weekend text:** «معمولاً» removed. The server sends the schedule (`upcoming.weekend.schedule`): «هر هفته چهارشنبه شب ساعت ۲۱ باز می‌شه و تا جمعه ساعت ۲۱ وقت داری.» The guide page (which still said Thursday 9:00 / Sunday) was fixed and the fallback countdown follows the same schedule.
+- Tests: `test_story.py` (warrant rules), `test_weekly.py` (schedule text), `app/test/weekend_time_test.dart`. «چی تازه شده؟» release 57. Details: `docs/operations.md`.
+- Deploy: server change, then the game APK from the same commit.
+
 ## server 1.28.0, app 1.27.0 (build 56): one game clock, a fair weekly board, leagues
 
 - **Problem (Amin):** veterans who solved the whole archive fell behind in the weekly board, because the weekly sum counted every solve of the week including bought archive cases (a newcomer could solve 10-20 archive cases in a week). And the game day (new case at 21:00) and the week (midnight) ran on different clocks.

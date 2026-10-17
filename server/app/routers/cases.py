@@ -334,8 +334,11 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
                     reward += eco.STREAK_BONUS
                 if player.streak in eco.STREAK_BADGES:
                     badge = player.streak
-        # story warrants: tonight's case, a streak milestone, the weekend case
-        warrants = int(today_case) + int(streak_up and player.streak in eco.STREAK_WARRANTS) + int(live)
+        # story warrants are scarce (economy.warrants_for_solve): the first solve ever, a streak milestone, every
+        # second live weekend case. Tonight's case and the daily missions no longer give one.
+        warrants = eco.warrants_for_solve(first_ever=(player.cases_solved or 0) == 0, streak_up=streak_up,
+                                          streak=player.streak, live=live,
+                                          live_solved_before=int((player.stats or {}).get("weekly_solved", 0)))
         player.cases_solved += 1
         player.stars_total += p.stars
         add_coins(session, player, reward, f"solve:{c.id}")

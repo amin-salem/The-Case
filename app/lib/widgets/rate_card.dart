@@ -278,3 +278,109 @@ class _RateCardState extends State<RateCard> {
     return items is List && items.any((e) => e is Map && e['mine'] == true);
   }
 }
+
+/// Shows the rating sheet right after a case is solved: once per case (remembered when it opens, so closing it
+/// or rating never brings it back), only when the player may rate and has not. It never blocks anything:
+/// the result screen and the rewards are already on screen, and the close button / a swipe / a tap outside closes it.
+/// The inline [RateCard] on the result screen stays as the fallback.
+Future<void> maybeShowRateSheet(BuildContext context, String caseId, String title) async {
+  final key = 'rate_sheet_$caseId';
+  try {
+    if (Api.i.flag(key) || Api.i.flag('rate_skip_$caseId')) return;
+    final d = await Api.i.caseComments(caseId);
+    if (d['has_mine'] == true || d['can_write'] != true) return;
+    if (!context.mounted) return;
+    await Api.i.setFlag(key, true);
+    if (!context.mounted) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: K.night2,
+      isDismissible: true,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(22))),
+      builder: (_) => RateSheet(caseId: caseId),
+    );
+  } catch (_) {
+    // offline or limited: the inline card is still there
+  }
+}
+
+/// The content of the rating sheet: the five hearts (1 on the right, the number under each), one tap rates.
+class RateSheet extends StatefulWidget {
+  const RateSheet({super.key, required this.caseId});
+  final String caseId;
+
+  @override
+  State<RateSheet> createState() => _RateSheetState();
+}
+
+class _RateSheetState extends State<RateSheet> {
+  int _stars = 0;
+  bool _busy = false, _done = false;
+  String? _err;
+
+  Future<void> _rate(int n) async {
+    if (_busy) return;
+    setState(() {
+      _busy = true;
+      _stars = n;
+      _err = null;
+    });
+    try {
+      await Api.i.sendComment(widget.caseId, '', rating: n);
+      if (mounted) setState(() => _done = true);
+    } catch (e) {
+      if (!mounted) return;
+      if (e is ApiException && e.code == 'already_commented') {
+        setState(() => _done = true);
+      } else {
+        setState(() => _err = Api.friendly(e));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+    if (_done) {
+      await Future<void>.delayed(const Duration(milliseconds: 1100));
+      if (mounted) Navigator.of(context).maybePop();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Row(children: [
+            Expanded(child: Text(_done ? 'ممنون! امتیازت ثبت شد.' : 'این پرونده چطور بود؟', style: tDisplay(18))),
+            IconButton(
+              tooltip: 'بستن',
+              onPressed: () => Navigator.of(context).maybePop(),
+              icon: const Icon(Icons.close_rounded, color: K.textSoft),
+            ),
+          ]),
+          if (!_done) ...[
+            Text('یه ضربه کافیه؛ به کارآگاه‌های بعدی کمک می‌کنی.', style: tBody(12.5, color: K.textSoft)),
+            const SizedBox(height: 8),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              for (int i = 1; i <= 5; i++)
+                InkWell(
+                  onTap: _busy ? null : () => _rate(i),
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    width: 58,
+                    height: 70,
+                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Icon(i <= _stars ? Icons.favorite_rounded : Icons.favorite_border_rounded, color: K.stamp, size: 38),
+                      Text(fa(i), style: tBody(12.5, color: K.textSoft, w: FontWeight.w800)),
+                    ]),
+                  ),
+                ),
+            ]),
+          ],
+          if (_err != null) Text(_err!, textAlign: TextAlign.center, style: tBody(12.5, color: K.stamp, w: FontWeight.w700)),
+        ]),
+      ),
+    );
+  }
+}

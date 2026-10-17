@@ -144,7 +144,23 @@ STORY_FREE_CHAPTERS = 3
 STORY_WAIT_HOURS = 12
 STORY_SKIP_COST = 120
 STORY_SKIP_MIN = 10
-STREAK_WARRANTS = (3, 7, 14, 30)   # streak lengths that give a warrant
+# Free warrants are scarce on purpose (Amin, 17 Oct 2026: players had so many that nobody spent coins on the story).
+# Supply for a normal player: about one per two weeks. Everything else is bought: skip the wait with coins.
+STREAK_WARRANTS = (14, 30)         # streak lengths that give a warrant (was 3, 7, 14, 30)
+WEEKEND_WARRANT_EVERY = 2          # every 2nd live weekend case pays a warrant, the 1st, 3rd, 5th... (was every one)
+# cut on 17 Oct 2026: tonight's case (was 1 a day) and "all daily missions done" (was 1 a day) give none any more
+
+
+def warrants_for_solve(*, first_ever: bool, streak_up: bool, streak: int, live: bool, live_solved_before: int) -> int:
+    """Free warrants for ONE first-time solve (the caller runs this once per solved case, inside the solve
+    transaction, so a repeated request cannot pay twice):
+    - the player's very first solved case: 1 (onboarding, so the feature is learned)
+    - a streak milestone (STREAK_WARRANTS): 1
+    - a live weekend case: 1 for the 1st, 3rd, 5th... one the player ever solves live"""
+    n = int(first_ever)
+    n += int(streak_up and streak in STREAK_WARRANTS)
+    n += int(live and live_solved_before % WEEKEND_WARRANT_EVERY == 0)
+    return n
 
 
 def story_skip_cost(remaining_seconds: float) -> int:

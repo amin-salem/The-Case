@@ -10,15 +10,18 @@ import 'case_screen.dart';
 
 DateTime? _time(Object? v) => v is num ? DateTime.fromMillisecondsSinceEpoch(v.toInt() * 1000) : null;
 
-/// Next Wednesday 21:00 in Tehran (UTC+3:30), used when the server doesn't say when the next one opens.
-DateTime nextWednesdayNine([DateTime? now]) {
+/// The next weekend opening (the weekday and hour of the server's schedule; Wednesday 21:00 Tehran by default,
+/// Tehran is a fixed UTC+3:30). Only a fallback when the server doesn't say when the next one opens.
+DateTime nextWeekendOpening([DateTime? now, int weekday = DateTime.wednesday, int hour = 21]) {
   const offset = Duration(hours: 3, minutes: 30);
   final local = (now ?? DateTime.now()).toUtc().add(offset); // Tehran wall clock, kept in a UTC DateTime
-  var day = DateTime.utc(local.year, local.month, local.day, 21);
-  day = day.add(Duration(days: (DateTime.wednesday - day.weekday) % 7));
+  var day = DateTime.utc(local.year, local.month, local.day, hour);
+  day = day.add(Duration(days: (weekday - day.weekday) % 7));
   if (!day.isAfter(local)) day = day.add(const Duration(days: 7));
   return day.subtract(offset).toLocal();
 }
+
+DateTime nextWednesdayNine([DateTime? now]) => nextWeekendOpening(now);
 
 /// The weekend tab: this weekend's big case, or a countdown to the next one.
 class WeekendScreen extends StatefulWidget {
@@ -52,6 +55,26 @@ class _WeekendScreenState extends State<WeekendScreen> {
   void _play(CaseRow c) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: c.id)));
     _load();
+  }
+
+  /// The schedule the server sends with the weekend info (`schedule`), or the built-in default.
+  Map<String, dynamic> _schedule(Map<String, dynamic> up) {
+    final s = up['schedule'];
+    return s is Map ? Map<String, dynamic>.from(s) : <String, dynamic>{};
+  }
+
+  /// «هر هفته چهارشنبه شب ساعت ۲۱ باز می‌شه و تا جمعه ساعت ۲۱ وقت داری.» comes from the server (content.weekend_schedule),
+  /// so the app can never disagree with the clock; this literal is only for an old cached config.
+  String _scheduleText(Map<String, dynamic> up) {
+    final t = _schedule(up)['text'];
+    return t is String && t.isNotEmpty ? t : 'هر هفته چهارشنبه شب ساعت ۲۱ باز می‌شه و تا جمعه ساعت ۲۱ وقت داری.';
+  }
+
+  DateTime _fallbackOpening(Map<String, dynamic> up) {
+    final s = _schedule(up);
+    final wd = s['open_weekday'], h = s['open_hour'];
+    // the server counts Monday = 0, Dart counts Monday = 1
+    return nextWeekendOpening(null, wd is num ? wd.toInt() + 1 : DateTime.wednesday, h is num ? h.toInt() : 21);
   }
 
   @override
@@ -98,12 +121,12 @@ class _WeekendScreenState extends State<WeekendScreen> {
                 title: (up['title'] as String?) ?? 'پرونده‌ی بعدی در راهه',
                 subtitle: up['location'] as String?,
                 countdownLabel: 'تا باز شدن پرونده',
-                at: _time(up['opens_at']) ?? nextWednesdayNine(),
+                at: _time(up['opens_at']) ?? _fallbackOpening(up),
                 onCountdownDone: _opened,
               ),
             const SizedBox(height: 14),
             InfoCard(title: 'چطوری کار می‌کنه؟', lines: [
-              (Icons.event_rounded, 'هر هفته (معمولاً چهارشنبه‌شب ساعت ۲۱) باز می‌شه و ۴۸ ساعت وقت داری. پرونده‌ی شبانه سر جاشه.'),
+              (Icons.event_rounded, '${_scheduleText(up)} پرونده‌ی شبانه سر جاشه.'),
               (Icons.auto_stories_rounded, 'دو فصل داره؛ فصل دوم، ۲۴ ساعت بعد، مدارک و حرف‌های تازه می‌آره.'),
               (Icons.fact_check_rounded, 'هر مدرک رو می‌تونی به یه مظنون نشون بدی و ببینی چی می‌گه. تعدادش محدوده.'),
               (Icons.gavel_rounded, 'از همون فصل اول می‌تونی متهم کنی: هم مقصر، هم «چرا و چطور». زودتر درست بگی، ${fa(Api.i.weeklyEarlyBonus)} سکه‌ی اضافه می‌گیری.'),

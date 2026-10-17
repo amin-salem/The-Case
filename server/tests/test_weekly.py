@@ -90,6 +90,17 @@ async def test_accusing_is_allowed_from_the_first_chapter(client, clock):
     assert r["reward"] == eco.WEEKLY_REWARD[3] + eco.WEEKLY_EARLY_BONUS
 
 
+def test_weekend_schedule_text_comes_from_the_clock_constants():
+    sch = content.weekend_schedule()
+    assert sch["text"] == "هر هفته چهارشنبه شب ساعت ۲۱ باز می‌شه و تا جمعه ساعت ۲۱ وقت داری."
+    assert (sch["open_weekday"], sch["open_hour"], sch["hours"]) == (2, content.WEEKEND_OPEN_HOUR, content.WEEKLY_HOURS)
+    assert "معمولاً" not in sch["text"]
+    # served with the upcoming weekend, open or not
+    assert content.weekend_upcoming()["schedule"] == sch
+    w = content.weekly_cases()[0]
+    assert content.weekend_upcoming(content.opens_at(w) + timedelta(hours=1))["schedule"] == sch
+
+
 def test_upcoming_weekend_and_story():
     w = content.weekly_cases()[0]
     start = content.opens_at(w)

@@ -215,6 +215,14 @@ The list is data in `app/lib/data/whats_new.dart` (`kWhatsNew`, newest first). T
 - The banner shows once per build (prefs `wn_seen`); a fresh install (no saved player) shows nothing. Settings «چه خبر؟» lists the last 5 releases.
 - Red «تازه» tags: put `NewTag('<tag id>')` next to the place and list the id in the item's `tags`; call `WhatsNew.i.tagOpened('<id>')` when the player opens that place. A tag disappears when opened or 7 days after the first start of the new build.
 
+## Warrants, rating sheet, rate nudge, weekend schedule (17 Oct 2026, server 1.29.0, app 1.28.0+57)
+
+- **Free warrants «حکم بازرسی» are scarce** (`economy.warrants_for_solve`, one place for all rules): the player's FIRST solved case ever (onboarding, 1), a streak of 14 and 30 nights (`STREAK_WARRANTS`, 1 each), and every 2nd live weekend case (`WEEKEND_WARRANT_EVERY = 2`: the 1st, 3rd, 5th). CUT: tonight's case (was 1 a day), «all daily missions done» (was 1 a day), streak 3 and 7, every weekend case. Normal player: about one free warrant per two weeks (was about 14 a week). Warrants players already own are untouched; only future grants changed, no migration. Idempotent as before: the grant runs once inside the solve transaction. To change the pace, edit the constants in `economy.py`. The rest is bought with coins: skipping a chapter's 12 h wait costs `STORY_SKIP_COST` (120, falling to 10 as the wait runs down); story mode itself stays closed until Season 1 is done and the app is on Cafe Bazaar.
+- **Rating sheet after solving:** a bottom sheet 7 s after the result appears (once per case, remembered on the phone as `flag_rate_sheet_<case>`; skipped if the player already rated, cannot rate, or chose «بعداً»). Uses the same rate call (`POST` comment with rating); the inline card stays as fallback.
+- **Rate nudge in the archive:** computed on the phone from the case list (`solved` and `my_rating == 0`), at most once per 3 days (`pref_rate_nudge_at`), closes in one tap, the button opens the «امتیاز ندادم» filter. No new server call.
+- **Weekend schedule text:** the server sends `schedule` (`open_weekday`, `open_hour`, `hours`, `text`) inside `upcoming.weekend` of `/v1/config`, built from `WEEKEND_OPEN_WEEKDAY` / `WEEKEND_OPEN_HOUR` / `WEEKLY_HOURS`; the weekend screen shows `text` and its fallback countdown uses the same weekday and hour. One-off cases with their own `open_hour` (w002) still show their own countdown.
+- Deploy: server (new field, new grant rule) from Liara, then the game APK from the same commit.
+
 ## Funnel and retention (17 Oct 2026, server 1.27.0)
 
 Panel tab **🧭 قیف و ماندگاری** (`/admin/ui`), data from `GET /admin/api/funnel?days=30` (1-90 days; cached 60 s per worker, so a number can be a minute old; «تازه‌سازی» asks again). «کپی به‌صورت متن» copies a plain-text summary to paste to Claude.

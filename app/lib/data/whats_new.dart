@@ -43,6 +43,12 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(57, '۱.۲۸', '2026-10-17', [
+    WhatsNewItem('rate_sheet', 'بعد از حل پرونده، امتیازدادن با یه ضربه، توی یه پنجره‌ی کوچیک', WhatsNewTarget.comments),
+    WhatsNewItem('rate_old', 'پرونده‌های قبلی که امتیاز ندادی توی بایگانی منتظرتن', WhatsNewTarget.archive),
+    WhatsNewItem('warrant_rare', 'حکم بازرسی کم‌یاب‌تر شد؛ بقیه‌ش رو می‌تونی با سکه رد کنی', WhatsNewTarget.caseToday),
+    WhatsNewItem('weekend_time', 'ساعت دقیق پرونده‌ی آخر هفته: چهارشنبه شب ۲۱ تا جمعه ۲۱', WhatsNewTarget.weekend),
+  ]),
   WhatsNewRelease(56, '۱.۲۷', '2026-10-17', [
     WhatsNewItem('fair_week', 'جدول هفتگی عادلانه شد: فقط پرونده‌های همین هفته حساب می‌شن و بایگانی توش نیست', WhatsNewTarget.leaderboard),
     WhatsNewItem('leagues', 'لیگ‌های هفتگی: کارآگاه‌های هم‌سطح با هم رقابت می‌کنن و ۳ کارآگاه اول هر لیگ جایزه می‌گیرن', WhatsNewTarget.leaderboard),

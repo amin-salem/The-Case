@@ -10,4 +10,11 @@ void main() {
     // Wed 14 Oct 08:00 Tehran -> same day
     expect(nextWednesdayNine(DateTime.utc(2026, 10, 14, 4, 30)).toUtc(), DateTime.utc(2026, 10, 14, 17, 30));
   });
+
+  test('fallback follows the server schedule (weekday Monday=0 -> Dart +1, hour)', () {
+    // server says Wednesday (2) at 21: Dart weekday 3. Tue 13 Oct 12:00 UTC -> Wed 14 Oct 17:30 UTC
+    expect(nextWeekendOpening(DateTime.utc(2026, 10, 13, 12, 0), 3, 21).toUtc(), DateTime.utc(2026, 10, 14, 17, 30));
+    // Thursday (3) at 9 Tehran = 05:30 UTC
+    expect(nextWeekendOpening(DateTime.utc(2026, 10, 13, 12, 0), 4, 9).toUtc(), DateTime.utc(2026, 10, 15, 5, 30));
+  });
 }

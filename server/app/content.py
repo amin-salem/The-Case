@@ -263,6 +263,26 @@ def weekly_by_id(case_id: str) -> Case | None:
 
 
 WEEKEND_OPEN_HOUR = 21  # when a new weekend case opens (Wednesday, with the nightly case); a file may set open_hour
+WEEKEND_OPEN_WEEKDAY = 2  # Monday = 0 ... Wednesday = 2
+
+_FA_DAYS = ["دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه", "یکشنبه"]
+
+
+def _fa_num(n: int) -> str:
+    return str(n).translate(str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹"))
+
+
+def weekend_schedule() -> dict:
+    """The weekend case's regular schedule, from the same constants the clock uses, so the app text can never
+    drift: opens WEEKEND_OPEN_WEEKDAY at WEEKEND_OPEN_HOUR, stays open WEEKLY_HOURS. `text` is the sentence the
+    app shows (e.g. «هر هفته چهارشنبه شب ساعت ۲۱ باز می‌شه و تا جمعه ساعت ۲۱ وقت داری.»)."""
+    total = WEEKEND_OPEN_HOUR + WEEKLY_HOURS
+    close_day = (WEEKEND_OPEN_WEEKDAY + total // 24) % 7
+    close_hour = total % 24
+    part = "شب " if WEEKEND_OPEN_HOUR >= 18 else ("صبح " if WEEKEND_OPEN_HOUR < 12 else "")
+    text = (f"هر هفته {_FA_DAYS[WEEKEND_OPEN_WEEKDAY]} {part}ساعت {_fa_num(WEEKEND_OPEN_HOUR)} باز می‌شه و "
+            f"تا {_FA_DAYS[close_day]} ساعت {_fa_num(close_hour)} وقت داری.")
+    return {"open_weekday": WEEKEND_OPEN_WEEKDAY, "open_hour": WEEKEND_OPEN_HOUR, "hours": WEEKLY_HOURS, "text": text}
 
 
 def weekly_closes_at(c: Case) -> datetime:
@@ -286,7 +306,7 @@ def next_weekly(now: datetime | None = None) -> Case | None:
 def next_thursday_at(now: datetime | None = None) -> datetime:
     """Next Thursday at NEW_CASE_HOUR (when a weekend case would open if none is written yet)."""
     now = now or now_local()
-    d = now.date() + timedelta(days=(2 - now.weekday()) % 7)
+    d = now.date() + timedelta(days=(WEEKEND_OPEN_WEEKDAY - now.weekday()) % 7)
     t = datetime.combine(d, time(WEEKEND_OPEN_HOUR), tzinfo=_tz())
     return t if t > now else t + timedelta(days=7)
 
@@ -512,12 +532,12 @@ def weekend_upcoming(now: datetime | None = None) -> dict:
     cur = current_weekly(now)
     if cur:
         return {"open": True, "title": cur.data["title"], "scene": cur.data.get("scene"),
-                "closes_at": int(weekly_closes_at(cur).timestamp())}
+                "closes_at": int(weekly_closes_at(cur).timestamp()), "schedule": weekend_schedule()}
     nxt = next_weekly(now)
     at = opens_at(nxt) if nxt else next_thursday_at(now)
     return {"open": False, "opens_at": int(at.timestamp()),
             "title": nxt.data["title"] if nxt else None, "scene": nxt.data.get("scene") if nxt else None,
-            "location": nxt.data.get("location") if nxt else None}
+            "location": nxt.data.get("location") if nxt else None, "schedule": weekend_schedule()}
 
 
 @lru_cache

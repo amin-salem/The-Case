@@ -165,6 +165,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             child: CustomScrollView(physics: const AlwaysScrollableScrollPhysics(), slivers: [
               const SliverToBoxAdapter(child: OfflineBanner(margin: EdgeInsets.fromLTRB(16, 10, 16, 0))),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _summary(rows)),
+              if (rows != null && _nudgeVisible(rows)) SliverToBoxAdapter(child: _rateNudge(rows)),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _filters()),
               if (rows == null && _error == null)
                 const SliverToBoxAdapter(
@@ -185,6 +186,68 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
       ),
     );
   }
+
+  // ---- gentle nudge to rate older solved cases (only on the phone: at most once per few days, one tap closes)
+  static const _nudgeKey = 'rate_nudge_at';
+  static const _nudgeEvery = Duration(days: 3);
+  bool _nudgeHidden = false;
+
+  int _unratedSolved(List<CaseRow> rows) => rows.where((r) => r.solved && r.myRating == 0).length;
+
+  bool _nudgeVisible(List<CaseRow> rows) {
+    if (_nudgeHidden || _unratedSolved(rows) == 0) return false;
+    final last = Api.i.intPref(_nudgeKey);
+    return DateTime.now().millisecondsSinceEpoch - last > _nudgeEvery.inMilliseconds;
+  }
+
+  void _closeNudge({bool showList = false}) {
+    Api.i.setIntPref(_nudgeKey, DateTime.now().millisecondsSinceEpoch);
+    setState(() {
+      _nudgeHidden = true;
+      if (showList) {
+        _filter = _Filter.unrated; // the list of solved cases the player has not rated yet
+        _sort = _Sort.newest;
+      }
+    });
+  }
+
+  Widget _rateNudge(List<CaseRow> rows) => Container(
+        margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+        padding: const EdgeInsets.fromLTRB(14, 8, 6, 10),
+        decoration: BoxDecoration(
+          color: K.night2,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: K.stamp.withValues(alpha: 0.5)),
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Padding(padding: EdgeInsets.only(top: 6), child: Icon(Icons.favorite_rounded, color: K.stamp, size: 20)),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text('پرونده‌های قبلی رو هم امتیاز بده؛ نظرت کمک می‌کنه پرونده‌های بهتری بسازیم',
+                    style: tBody(13.5, w: FontWeight.w700)),
+              ),
+            ),
+            IconButton(
+              tooltip: 'بستن',
+              onPressed: _closeNudge,
+              constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+              icon: const Icon(Icons.close_rounded, color: K.textSoft, size: 20),
+            ),
+          ]),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              onPressed: () => _closeNudge(showList: true),
+              icon: const Icon(Icons.favorite_border_rounded, color: K.stamp, size: 20),
+              label: Text('${fa(_unratedSolved(rows))} پرونده منتظر امتیازته؛ نشونم بده',
+                  style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
+            ),
+          ),
+        ]),
+      );
 
   /// Progress and the coin hint: how much of the archive is done, and what an old case costs.
   Widget _summary(List<CaseRow> rows) {

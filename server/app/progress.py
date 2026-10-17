@@ -123,9 +123,5 @@ async def _missions(session: AsyncSession, player: Player, events: dict[str, int
     for m in missions.for_day(md.day):
         if before.get(m.event, 0) < m.target <= after.get(m.event, 0):
             gains.missions_done.append(m.title)
-    todays = missions.for_day(md.day)
-    if md.day == content.mission_day_str() and not before.get("_warrant") and all(
-            after.get(m.event, 0) >= m.target for m in todays):
-        after["_warrant"] = 1  # all of the day's missions done: one warrant, once a day
-        md.counts = after
-        add_warrants(player, 1, gains)
+    # (until 17 Oct 2026 finishing all of a day's missions also paid a warrant; free warrants are scarce now)
+

@@ -23,8 +23,10 @@ nightly case (daily habit + leaderboard) and the weekend case (weekly event), wh
 
 ## Opening chapters
 1. Chapters 1–3 of season 1: open at once, free (the hook).
-2. Then each chapter needs one **warrant «حکم بازرسی»**. Earned by: solving tonight's case, finishing
-   the daily missions, streak milestones, riddles. (The story pulls players into the daily loop.)
+2. Then each chapter needs one **warrant «حکم بازرسی»**. Free warrants are **scarce on purpose** (Amin, 17 Oct 2026,
+   so that coins buy the rest): the player's very first solved case (onboarding), a streak of **14 and 30** nights,
+   and every **second** live weekend case (the 1st, 3rd, 5th). Tonight's case and the daily missions give none any
+   more. Rules live in `economy.warrants_for_solve`. Normal player: about one free warrant per two weeks.
 3. No warrant: the next chapter opens by itself **12 hours** after the previous one is finished; the wait
    can be skipped with coins.
 4. Later: a season pass (whole season open + gold badge). No energy system that stops play mid-case.

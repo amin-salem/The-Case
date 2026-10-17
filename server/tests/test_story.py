@@ -218,7 +218,7 @@ def no_missions(monkeypatch):
     monkeypatch.setattr(missions, "for_day", lambda day: [missions.BY_ID["hint_use"]])
 
 
-async def test_warrant_for_tonights_case(client, clock, no_missions):
+async def test_onboarding_warrant_only_once(client, clock, no_missions):
     c = content.by_id("c020")
     clock(datetime(c.publish.year, c.publish.month, c.publish.day, 22, 0, tzinfo=TEHRAN))
     p = await new_player(client, "story-6")
@@ -226,7 +226,7 @@ async def test_warrant_for_tonights_case(client, clock, no_missions):
     await client.get(f"/v1/cases/{c.id}", headers=h)
     r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h,
                            json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})).json()
-    assert r["gains"]["warrants"] == 1  # tonight's case
+    assert r["gains"]["warrants"] == 1  # the very first solve: the onboarding warrant
     assert (await client.get("/v1/me", headers=h)).json()["warrants"] == 1
     # an archive case gives none
     old = content.by_id("c019")
@@ -236,7 +236,7 @@ async def test_warrant_for_tonights_case(client, clock, no_missions):
     assert r["gains"]["warrants"] == 0
 
 
-async def test_streak_milestone_gives_a_warrant(client, clock, no_missions):
+async def test_early_streak_nights_give_no_warrant(client, clock, no_missions):
     cases = content.all_cases()[-3:]
     p = await new_player(client, "story-7")
     h = p["headers"]
@@ -247,10 +247,10 @@ async def test_streak_milestone_gives_a_warrant(client, clock, no_missions):
         r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h,
                                json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})).json()
         got.append((r["streak"], r["gains"]["warrants"]))
-    assert got == [(1, 1), (2, 1), (3, 2)]  # the third night in a row adds the streak warrant
+    assert got == [(1, 1), (2, 0), (3, 0)]  # only the first solve ever pays; streak 3 no longer does
 
 
-async def test_all_missions_done_gives_one_warrant(client, clock, monkeypatch):
+async def test_all_missions_done_gives_no_warrant(client, clock, monkeypatch):
     c = content.by_id("c020")
     clock(datetime(c.publish.year, c.publish.month, c.publish.day, 22, 0, tzinfo=TEHRAN))
     monkeypatch.setattr(missions, "for_day", lambda day: [missions.BY_ID["daily_case"], missions.BY_ID["talk3"]])
@@ -265,5 +265,33 @@ async def test_all_missions_done_gives_one_warrant(client, clock, monkeypatch):
     assert r["gains"]["warrants"] == 0  # the case itself is still open
     r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h,
                            json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})).json()
-    assert r["gains"]["warrants"] == 2  # tonight's case + the last mission done
-    assert (await client.get("/v1/me", headers=h)).json()["warrants"] == 2
+    assert r["gains"]["warrants"] == 1  # only the onboarding warrant: tonight's case and the missions pay none
+    assert (await client.get("/v1/me", headers=h)).json()["warrants"] == 1
+
+
+def test_warrant_rules():
+    w = eco.warrants_for_solve
+    base = dict(first_ever=False, streak_up=False, streak=0, live=False, live_solved_before=0)
+    assert w(**base) == 0                                             # a normal night: nothing
+    assert w(**{**base, "first_ever": True}) == 1                     # onboarding
+    for streak in (3, 7, 10):
+        assert w(**{**base, "streak_up": True, "streak": streak}) == 0
+    for streak in eco.STREAK_WARRANTS:
+        assert w(**{**base, "streak_up": True, "streak": streak}) == 1
+    assert w(**{**base, "streak": 14}) == 0                           # same number without a streak step: none
+    # weekend case: the 1st, 3rd, 5th live solve pays, the 2nd and 4th do not
+    paid = [w(**{**base, "live": True, "live_solved_before": n}) for n in range(5)]
+    assert paid == [1, 0, 1, 0, 1]
+    assert w(**{**base, "live": False, "live_solved_before": 0}) == 0  # an expired weekend case pays nothing
+
+
+def test_weekly_free_supply_is_small():
+    """A player who solves every night and every weekend case gets about one warrant a fortnight after onboarding."""
+    total, streak, weekends = 0, 0, 0
+    for day in range(1, 29):
+        streak += 1
+        total += eco.warrants_for_solve(first_ever=day == 1, streak_up=True, streak=streak, live=False, live_solved_before=0)
+        if day % 7 == 0:
+            total += eco.warrants_for_solve(first_ever=False, streak_up=False, streak=streak, live=True, live_solved_before=weekends)
+            weekends += 1
+    assert total - 1 <= 5            # four weeks, onboarding excluded: 2 weekend + streak 14 + streak (28 is no milestone)

@@ -45,6 +45,12 @@ class _ResultScreenState extends State<ResultScreen> {
         if (mounted) offerSecure(context, afterSolve: true);
       });
     }
+    if (solved) {
+      // the rating sheet: after the verdict, the rewards and the "secure your account" offer had their moment
+      Future<void>.delayed(const Duration(milliseconds: 7000), () {
+        if (mounted) maybeShowRateSheet(context, caseData.id, caseData.title);
+      });
+    }
     if (result.badge != null) {
       Future<void>.delayed(const Duration(milliseconds: 2600), () => Sfx.i.play('clue', volume: 0.7));
     }

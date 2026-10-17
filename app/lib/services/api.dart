@@ -531,6 +531,21 @@ class Api extends ChangeNotifier {
     } catch (_) {}
   }
 
+  /// A number kept on the phone (e.g. when a gentle nudge was last dismissed). Only a convenience.
+  int intPref(String key) {
+    try {
+      return _p.getInt('pref_$key') ?? 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  Future<void> setIntPref(String key, int v) async {
+    try {
+      await _p.setInt('pref_$key', v);
+    } catch (_) {}
+  }
+
   // ---------------------------------------------------------------- http
 
   Future<http.Response> _send(String method, Uri uri, Map<String, String> headers, String? data) {
