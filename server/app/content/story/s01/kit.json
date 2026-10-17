@@ -1,0 +1,76 @@
+{
+ "_about": "Season ledger for the story kit (tools/). `plan` comes from docs/story-season1-bible.md; `chapters` is filled by tools/import_story.py. Ignored by the server loader (it reads only chNN.json).",
+ "plan": {
+  "1": {
+   "title": "هفت‌ستاره",
+   "scene": "bazaar_night",
+   "type": 3,
+   "culprit": "s4"
+  },
+  "2": {
+   "title": "اتاق ۳۱۱",
+   "scene": "hotel",
+   "type": 5,
+   "culprit": "s2"
+  },
+  "3": {
+   "title": "نقشه‌ی گمشده",
+   "scene": "library",
+   "type": 2,
+   "culprit": "s5"
+  },
+  "4": {
+   "title": "لنگرگاه سه",
+   "scene": "harbor",
+   "type": 8,
+   "culprit": "s1"
+  },
+  "5": {
+   "title": "جعبه‌ی سبز",
+   "scene": "train",
+   "type": 9,
+   "culprit": "s3"
+  },
+  "6": {
+   "title": "پرده‌ی آخر",
+   "scene": "theater",
+   "type": 4,
+   "culprit": "s2"
+  },
+  "7": {
+   "title": "پرونده‌ی ۹۰",
+   "scene": "office",
+   "type": 1,
+   "culprit": "s4"
+  },
+  "8": {
+   "title": "ویلای تابانی",
+   "scene": "villa_rain",
+   "type": 7,
+   "culprit": "s5"
+  },
+  "9": {
+   "title": "خرابه‌ی تابان",
+   "scene": "warehouse",
+   "type": 6,
+   "culprit": "s1"
+  },
+  "10": {
+   "title": "کبریت آخر",
+   "scene": "office",
+   "type": 10,
+   "culprit": "s3"
+  }
+ },
+ "chapters": {
+  "1": {
+   "title": "هفت‌ستاره",
+   "type": 3,
+   "culprit": "s4",
+   "summary": "کامران نیک‌پی، پسر صاحب زرگری، گردنبند «هفت‌ستاره» را خرداد گرو گذاشته و بدلی در گاوصندوق گذاشته بود. شب پیش از آمدن کارشناس خریدار، با کلید سرا برگشت، بدل را برد و پنجره را از داخل اهرم کرد تا کار «دزد کبریت سوخته» به نظر برسد. دزد واقعی هیچ‌چیز نمی‌شکند و کبریتش سبزسر است.",
+   "thread": "عصر همان روز پاکتی بی‌تمبر به میز نامه‌های اداره رسید، به اسم «همکار تازه‌ی سرگرد ناصری»، با یک کبریت سوخته‌ی سبزسر: «اون یکی کار من نبود. خوش اومدی.»",
+   "imported": "2026-10-12",
+   "blind_test": "pass (docs/case-log.md)"
+  }
+ }
+}

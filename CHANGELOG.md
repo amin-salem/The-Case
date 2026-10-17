@@ -1,5 +1,10 @@
 # Changelog
 
+## story kit (tools only, no server/app version change): ChatGPT writes story chapters, Claude validates
+
+- Amin (17 Oct 2026): to save Opus, ChatGPT writes the Season 1 chapters (and, optionally, daily cases); Claude only validates. New `tools/`: `validate_story.py`, `validate_case.py` (Persian pass/fail report with line numbers and a ready «اصلاحیه» message for ChatGPT), `import_story.py`, `import_case.py` (draft import, story gate untouched), `build_prompt.py`. Prompt kit: `docs/story-chatgpt-prompt.md`; bible digest `docs/story-season1-bible.md`; loop and blind-test checklist `docs/story-workflow.md`; status `docs/story-status.md`; inbox `content_inbox/`.
+- Season ledger `server/app/content/story/s01/kit.json` (plan per chapter + summaries; the server loader ignores it). Tests: `server/tests/test_story_kit.py`. The story stays closed (`opens_at` 2099, a test guards it). Branch work only; nothing to deploy.
+
 ## server 1.26.1, app 1.26.1 (build 55): «پلاک کارآگاهی» for solving, hearts for rating
 
 - Amin: stars for solving and stars for rating together confused players. Now **solving gives plaques** («پلاک کارآگاهی», police-badge shield icon, brass): 3 = no mistake, 2 = one, 1 = more. **Rating a case uses red hearts** (1-5) and the word «امتیاز». The data is unchanged: the server still stores `stars` for the plaque count and `rating` for hearts, so the leaderboard, weekly prizes, XP and achievements behave exactly as before. Only words and icons changed.

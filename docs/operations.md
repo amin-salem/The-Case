@@ -319,3 +319,10 @@ Before a big launch (a store feature, an ad, a Telegram post), move **both the a
 Do it a day before, run the 1000-player burst once, and leave the bigger plan on until the first week's numbers are known. If the load test
 shows 5xx or p95 over 1 s at 200 players on the current plan, upgrade even without a launch. This is cheap next to the cost of a first
 evening where new players see errors.
+
+## Story kit (ChatGPT writes, Claude validates) - added 17 Oct 2026
+Operator-facing summary; the full loop is `docs/story-workflow.md`. Offline tools (Python 3, no packages, no network, no paid API):
+`python tools/validate_story.py FILE --chapter N`, `python tools/import_story.py FILE | --inbox content_inbox/story`,
+`python tools/validate_case.py FILE`, `python tools/import_case.py FILE`, `python tools/build_prompt.py` (rebuilds `docs/story-chatgpt-prompt.md`).
+Imported chapters are drafts under `server/app/content/story/s01/`; the story gate (`STORY_SEASON.opens_at` = 2099) is not touched and
+`test_story_kit.py` fails if it is. Importing a chapter is a `server/` change: batch chapters on branch `story-inbox` and let them ride in the next real server push.

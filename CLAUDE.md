@@ -87,3 +87,12 @@ Story mode opens for players only when BOTH are true (AND, not OR):
 Until then `STORY_SEASON["opens_at"]` stays `2099-01-01T00:00:00`. Only Amin (or Claude after he says so) sets the real date.
 Reason: a story that gets one chapter a night would never make players buy warrants/skips; a finished season does
 (chapters 1-3 free, later ones need a warrant, the 12 h wait or coins).
+
+## Story chapters: ChatGPT writes, Claude only validates (Amin, 17 Oct 2026)
+To save Opus, ChatGPT writes the Season 1 chapters (and, if Amin wants, daily cases) with the kit in `docs/story-chatgpt-prompt.md`;
+Claude (Sonnet) never writes story chapters. Loop and checklists: `docs/story-workflow.md`; status: `docs/story-status.md`.
+- Nightly/scheduled runs only **validate and import** what Amin drops in `content_inbox/story/` (`python tools/import_story.py --inbox content_inbox/story`),
+  then run the blind test (Sonnet helper) and update `docs/story-status.md` and `docs/case-log.md`. A rejected chapter gets a ready «اصلاحیه» message for ChatGPT; tell Amin.
+- Imported chapters are drafts: they live on branch `story-inbox`; they reach `main` only inside the next push that really changes `server/` (deploy budget above).
+  The story gate does not change: `opens_at` stays 2099 (a test guards it).
+- After changing limits in `tools/storykit.py`, the bible or the fixtures, run `python tools/build_prompt.py` (a test fails if the prompt is stale).
