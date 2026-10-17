@@ -394,7 +394,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                     Expanded(
                       child: Text(c.location, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.textSoft)),
                     ),
-                    Difficulty(c.difficulty, color: K.brass),
+                    DifficultyBar(c.difficulty, compact: true),
                   ]),
                 ]),
               ),

@@ -1,5 +1,11 @@
 # Changelog
 
+## app 1.26.3 (build 57): difficulty is a 5-level colour bar, not magnifying glasses
+
+- One widget, `DifficultyBar` (`app/lib/theme.dart`), replaces the old `Difficulty` magnifier row: 5 equal rounded segments, level 1 on the RIGHT filling toward the left, filled segments in the level colour (1 green, 2 light green, 3 yellow, 4 orange, 5 red), the rest muted. Label per level: آسان، نسبتاً آسان، متوسط، سخت، خیلی سخت. The count and the label carry the meaning too (colour-blind safe); semantics «سختی ۴ از ۵». Null/out-of-range is clamped to 1..5.
+- Shown in: archive card (compact, fixed 12 dp slot, no label), case intro (normal, with label), weekend screen header (compact, level 5 = خیلی سخت).
+- No server text used «ذره‌بین» for difficulty (only avatar/frame names and case story text, left as is). App only: no push to `main`; APK from a branch pushed to `release`. Tests: `app/test/difficulty_bar_test.dart`.
+
 ## app 1.26.2 (build 56): rating is stars again, 1 on the right, a number under each star
 
 - Amin did not like the hearts: the case rating is **stars** again (the solving score stays «پلاک»). The app reads right to left, so **1 star is on the right and 5 on the left** (it was reversed), and each star has its **number under it** so the player knows what he gives. One widget (`RatingPicker`) is used by the rating card and the write sheet; `RatingRow` shows a given rating the same way.

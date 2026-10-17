@@ -42,6 +42,9 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(57, '۱.۲۶', '2026-10-17', [
+    WhatsNewItem('difficulty_bar', 'سختی پرونده حالا نوار رنگی ۵ سطحی با برچسب: از آسان (سبز) تا خیلی سخت (قرمز)', WhatsNewTarget.archive),
+  ]),
   WhatsNewRelease(56, '۱.۲۶', '2026-10-16', [
     WhatsNewItem('plaques', 'حل پرونده حالا «پلاک کارآگاهی» می‌گیره؛ ۳ پلاک یعنی بدون اشتباه', WhatsNewTarget.archive),
     WhatsNewItem('rate_numbers', 'امتیاز پرونده با ستاره و عدد زیر هر ستاره: ۱ سمت راست، ۵ سمت چپ', WhatsNewTarget.comments),
