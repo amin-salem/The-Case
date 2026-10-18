@@ -134,7 +134,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
           'یه مظنون تازه',
           'مدارک و حرف‌های جدید',
           night2Open ? 'باز شده' : 'تا باز شدنش:',
-        ], active: night2Open, extra: night2Open || at == null ? null : BigCountdown(at: at, onDone: _opened)),
+        ], active: night2Open, extra: at == null ? null : BigCountdown(at: at, onDone: _opened)),
       ]),
     ]);
   }
