@@ -120,7 +120,20 @@ class _CastStripState extends State<CastStrip> {
         child: DefaultTextStyle(
           style: tBody(12, color: K.ink),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-            SuspectPortrait(s.avatar, size: cardWidth - 16),
+            Stack(children: [
+              SuspectPortrait(s.avatar, size: cardWidth - 16),
+              if (s.isNewcomer)
+                Positioned(
+                  top: 6,
+                  right: 6,
+                  child: Container(
+                    key: ValueKey('newcomer-${s.id}'),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(color: K.stamp, borderRadius: BorderRadius.circular(999)),
+                    child: Text('تازه · شب دوم', style: tBody(11, color: Colors.white, w: FontWeight.w900)),
+                  ),
+                ),
+            ]),
             const SizedBox(height: 6),
             Text(s.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, color: K.ink, w: FontWeight.w900).copyWith(height: 1.4)),
             Text(s.role, maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.stamp, w: FontWeight.w900).copyWith(height: 1.4)),

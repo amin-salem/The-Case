@@ -781,6 +781,19 @@ class Api extends ChangeNotifier {
     );
   }
 
+  /// Weekend format 3, night 1: answers «کی دروغ می‌گه؟» (one try). Returns the new progress (with the reveal) and the reward.
+  Future<({bool ok, int reward, Progress? progress})> answerLiar(String caseId, String suspectId) async {
+    final j = (await _call('POST', '/v1/cases/$caseId/liar', body: {'suspect': suspectId}) as Map).cast<String, dynamic>();
+    await _saveProgress(caseId, j['progress']);
+    final reward = (j['reward'] as num?)?.toInt() ?? 0;
+    if (reward > 0) _setCoins((j['coins'] as num?)?.toInt() ?? coins);
+    return (
+      ok: j['ok'] == true,
+      reward: reward,
+      progress: j['progress'] is Map ? Progress((j['progress'] as Map).cast<String, dynamic>()) : null,
+    );
+  }
+
   /// Reports how long the case screen was open. Quiet: returns false when it didn't reach the server.
   Future<bool> tickCase(String caseId, int seconds) async {
     if (!online) return false;
@@ -815,7 +828,8 @@ class Api extends ChangeNotifier {
   Map<String, dynamic> get _economy =>
       config['economy'] is Map ? (config['economy'] as Map).cast<String, dynamic>() : const {};
   int get weeklyReward => _economy['weekly_reward'] as int? ?? 300;
-  int get weeklyEarlyBonus => _economy['weekly_early_bonus'] as int? ?? 50;
+  int get weeklyEarlyBonus => _economy['weekly_early_bonus'] as int? ?? 80;
+  int get weekendLiarReward => _economy['weekend_liar_reward'] as int? ?? 10;
   int get weekendArchiveCost => _economy['weekend_archive_cost'] as int? ?? 250;
   int get freezeCost => _economy['freeze_cost'] as int? ?? 150;
   int get maxFreezes => _economy['max_freezes'] as int? ?? 2;
