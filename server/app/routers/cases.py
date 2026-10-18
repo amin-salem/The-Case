@@ -13,7 +13,7 @@ from .. import economy as eco
 from ..content import Case
 from ..db import get_session
 from ..models import CaseProgress, Player, utcnow
-from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut, HintOut, ProgressOut, SeenIn, SeenOut,
+from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut, HintOut, LiarIn, LiarOut, ProgressOut, SeenIn, SeenOut,
                        ShowIn, ShowOut, StatsOut, SuspectStat, TickIn, TickOut)
 from ..security import current_player
 from ..util import add_coins
@@ -55,6 +55,17 @@ def _shows_allowed(c: Case) -> int:
     return eco.WEEKEND_SHOWS_PER_CHAPTER * max(1, opened)
 
 
+def _next_chapter_at(c: Case | None) -> int | None:
+    """Unix time when the weekend case's next chapter opens (None when all are open)."""
+    if c is None:
+        return None
+    from datetime import timedelta
+    start, now = content.opens_at(c), content.now_local()
+    later = [start + timedelta(hours=ch.get("at_hours", 0)) for ch in c.data["chapters"]]
+    nxt = [t for t in later if t > now]
+    return int(min(nxt).timestamp()) if nxt else None
+
+
 def _reaction(c: Case, suspect: str, evidence: str) -> str:
     s = next((x for x in c.data["suspects"] if x["id"] == suspect), None) or {}
     return (s.get("reactions") or {}).get(evidence) or NEUTRAL_REACTION
@@ -70,7 +81,16 @@ def _progress_out(c: Case, p: CaseProgress | None) -> ProgressOut:
                        wrong_tries=list(p.wrong_tries or []) if p else [],
                        shows=[{"s": x["s"], "e": x["e"], "t": _reaction(c, x["s"], x["e"])} for x in (p.shows or [])]
                        if content.is_weekly(c.id) and p else [],
-                       shows_left=max(0, _shows_allowed(c) - len(p.shows or [])) if content.is_weekly(c.id) and p else 0)
+                       shows_left=max(0, _shows_allowed(c) - len(p.shows or [])) if content.is_weekly(c.id) and p else 0,
+                       night1=_night1_out(c, p))
+
+
+def _night1_out(c: Case, p: CaseProgress | None) -> dict | None:
+    """The player's night-1 answer with the reveal (the card and the explanation); None until answered."""
+    n1 = c.data.get("night1")
+    if not p or not p.night1 or not isinstance(n1, dict):
+        return None
+    return {**p.night1, "liar": n1["liar"], "card": n1["card"], "explanation": n1["explanation"]}
 
 
 async def _progress(session: AsyncSession, player_id: str, case_id: str) -> CaseProgress | None:
@@ -175,7 +195,9 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
     return fast_json(CasesOut(today=row(today) if today else None,
                               next_case_at=int(content.next_case_at().timestamp()), archive=archive,
                               weekly=row(weekly) if weekly else None,
-                              weekly_closes_at=int(content.weekly_closes_at(weekly).timestamp()) if weekly else None))
+                              weekly_closes_at=int(content.weekly_closes_at(weekly).timestamp()) if weekly else None,
+                              weekly_next_chapter_at=_next_chapter_at(weekly),
+                              weekly_format=int(weekly.data.get("format", 0)) if weekly else 0))
 
 
 @router.get("/{case_id}", response_model=CaseOut)
@@ -274,7 +296,10 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     if p.solved or p.failed:
         raise HTTPException(409, "case_finished")
     # weekend case: accusing is allowed from chapter 1 (a right early accusation pays a bonus, a wrong one costs a try)
-    fmt2 = content.is_weekly(c.id) and c.data.get("format") == 2
+    fmt2 = content.is_weekly(c.id) and c.data.get("format") in (2, 3)
+    if content.is_weekly(c.id) and body.suspect in {s["id"] for s in c.data["suspects"]} \
+            and body.suspect not in content.visible_suspect_ids(c):
+        raise HTTPException(404, "no_suspect")  # the newcomer of chapter 2 cannot be accused on night 1
     if fmt2 and not body.motive:
         raise HTTPException(422, "how_needed")
 
@@ -348,7 +373,8 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
             session, player, xp=xp, case_solved=1, daily_solved=int(today_case),
             case_3stars=int(p.stars == 3), case_no_hint=int(p.hints == 0),
             first_try=int(p.attempts == 0 and not p.proof_misses), fast5=int(p.seconds <= 300),
-            fast2=int(p.seconds <= 120 and not weekly), early_daily=int(early), weekly_solved=int(live), warrants=warrants)
+            fast2=int(p.seconds <= 120 and not weekly), early_daily=int(early), weekly_solved=int(live),
+            weekend_night1=int(early_bonus > 0), warrants=warrants)
         await story_finish(session, player.id, c.id, p)
         await session.commit()
         _solvers.clear()  # this worker shows the new solver count at once; the others within 30 s
@@ -414,8 +440,8 @@ async def show_evidence(case_id: str, body: ShowIn, player: Player = Depends(cur
         raise HTTPException(409, "open_case_first")
     if p.solved or p.failed:
         raise HTTPException(409, "case_finished")
-    if body.suspect not in {s["id"] for s in c.data["suspects"]}:
-        raise HTTPException(404, "no_suspect")
+    if body.suspect not in content.visible_suspect_ids(c):
+        raise HTTPException(404, "no_suspect")  # unknown, or the newcomer of chapter 2 before it opens
     if body.evidence not in {e["id"] for e in content.weekly_public(c)["evidence"]}:
         raise HTTPException(404, "no_evidence")  # unknown, or its chapter is not open yet
     shows = list(p.shows or [])
@@ -429,6 +455,36 @@ async def show_evidence(case_id: str, body: ShowIn, player: Player = Depends(cur
     out = _progress_out(c, p)
     return ShowOut(suspect=body.suspect, evidence=body.evidence, text=_reaction(c, body.suspect, body.evidence),
                    shows_left=out.shows_left, progress=out)
+
+
+@router.post("/{case_id}/liar", response_model=LiarOut)
+async def night1_liar(case_id: str, body: LiarIn, player: Player = Depends(current_player),
+                      session: AsyncSession = Depends(get_session)):
+    """Weekend format 3, night 1: «کی دروغ می‌گه؟». One try per player; only until chapter 2 opens. A right pick pays
+    a small reward (economy.WEEKEND_LIAR_REWARD) once. The answer, the card that proves it and the explanation come
+    back in `progress.night1` (right or wrong)."""
+    c = _opened_case(case_id, player)
+    if not content.is_weekly(c.id) or c.data.get("format") != 3:
+        raise HTTPException(404, "no_case")
+    # the progress row is locked: two taps at once cannot answer (and pay) twice
+    p = await session.scalar(select(CaseProgress).where(
+        CaseProgress.player_id == player.id, CaseProgress.case_id == c.id).with_for_update())
+    if p is None or not _can_open(c, p, player):
+        raise HTTPException(409, "open_case_first")
+    if p.night1:
+        raise HTTPException(409, "already_answered")
+    if not content.night1_open(c):
+        raise HTTPException(409, "night1_closed")
+    if body.suspect not in content.visible_suspect_ids(c):
+        raise HTTPException(404, "no_suspect")
+    ok = body.suspect == c.data["night1"]["liar"]
+    reward = eco.WEEKEND_LIAR_REWARD if ok else 0
+    p.night1 = {"pick": body.suspect, "ok": ok, "reward": reward}
+    if reward:
+        add_coins(session, player, reward, f"liar:{c.id}")
+    await session.commit()
+    log.info("weekend night1 case=%s ok=%s", c.id, ok)
+    return LiarOut(ok=ok, reward=reward, coins=player.coins, progress=_progress_out(c, p))
 
 
 @router.get("/{case_id}/stats", response_model=StatsOut)
@@ -469,6 +525,8 @@ async def seen(case_id: str, body: SeenIn, player: Player = Depends(current_play
     if p is None or not _can_open(c, p, player):
         raise HTTPException(409, "open_case_first")
     ids = [s["id"] for s in c.data["suspects"]]
+    if content.is_weekly(c.id):
+        ids = [i for i in ids if i in content.visible_suspect_ids(c)]  # the newcomer counts once chapter 2 is open
     if body.suspect not in ids:
         raise HTTPException(404, "no_suspect")
     before = set(p.seen or [])

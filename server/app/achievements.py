@@ -26,7 +26,7 @@ METRICS: dict[str, Callable[[Player], int]] = {
     # lifetime counters (progress.record adds every event to Player.stats)
     **{k: stat(k) for k in ("case_3stars", "case_no_hint", "first_try", "fast5", "fast2", "early_daily",
                             "riddle_correct", "riddle_fast", "riddle_perfect_day", "interrogate_all",
-                            "case_unlock", "full_week", "best_chest_streak")},
+                            "case_unlock", "full_week", "best_chest_streak", "weekend_night1")},
 }
 
 
@@ -59,6 +59,8 @@ ALL = [
     Achievement("fast_5", "تیزهوش", "یک پرونده را زیر ۵ دقیقه حل کن", "skill", "fast5", 1, 30, 40),
     Achievement("fast_2", "برق‌آسا", "یک پرونده را زیر ۲ دقیقه حل کن", "skill", "fast2", 1, 60, 80),
     Achievement("early_daily", "شب‌زنده‌دار", "پرونده‌ی تازه را در نیم ساعت اول حل کن", "skill", "early_daily", 1, 40, 50),
+    Achievement("weekend_night1", "پلاک شب اول", "پرونده‌ی آخر هفته را همون شب اول، قبل از باز شدن فصل دوم، کامل حل کن", "skill",
+                "weekend_night1", 1, 25, 40),
     Achievement("streak_3", "سه شب پیاپی", "۳ شب پشت سر هم پرونده‌ی روز را حل کن", "streak", "best_streak", 3, 20, 30),
     Achievement("streak_7", "یک هفته‌ی کامل", "۷ شب پشت سر هم پرونده‌ی روز را حل کن", "streak", "best_streak", 7, 60, 80),
     Achievement("streak_30", "یک ماه بی‌وقفه", "۳۰ شب پشت سر هم پرونده‌ی روز را حل کن", "streak", "best_streak", 30, 250, 300),

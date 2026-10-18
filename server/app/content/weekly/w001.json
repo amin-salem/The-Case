@@ -3,6 +3,7 @@
  "number": 1,
  "weekly": true,
  "publish": "2026-10-08",
+ "closes_hours": 48,
  "difficulty": 5,
  "scene": "snow_lodge",
  "category": "family",

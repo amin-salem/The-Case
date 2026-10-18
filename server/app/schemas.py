@@ -162,6 +162,8 @@ class CasesOut(BaseModel):
     archive: list[CaseRow]
     weekly: CaseRow | None = None         # this weekend's big case, while it is open
     weekly_closes_at: int | None = None
+    weekly_next_chapter_at: int | None = None  # when chapter 2 opens (None once it has, or no chapters)
+    weekly_format: int = 0                    # 3 = two-night format (night-1 question, newcomer in chapter 2)
 
 
 class ProgressOut(BaseModel):
@@ -176,6 +178,7 @@ class ProgressOut(BaseModel):
     shows: list[dict[str, Any]] = []        # weekend case: evidence cards shown to suspects {s, e, t = what the suspect said}
     shows_left: int = 0
     wrong_tries: list[dict[str, Any]] = []  # this player's wrong accusations: {s, e, m, r} (r = wrong_suspect | wrong_proof | wrong_motive | hasty)
+    night1: dict[str, Any] | None = None    # format 3: the player's night-1 answer {pick, ok, reward, card, explanation}; None = not answered
 
 
 class CaseOut(BaseModel):
@@ -196,6 +199,17 @@ class AccuseIn(BaseModel):
     evidence: str = Field(default="", max_length=16)          # not asked in the two-part weekend accusation
     motive: str | None = Field(default=None, max_length=16)   # the weekly case also asks "why"
     extra_seconds: int = Field(default=0, ge=0, le=3600)      # active time since the last tick
+
+
+class LiarIn(BaseModel):
+    suspect: str = Field(max_length=16)
+
+
+class LiarOut(BaseModel):
+    ok: bool
+    reward: int = 0
+    coins: int = 0
+    progress: ProgressOut
 
 
 class TickIn(BaseModel):

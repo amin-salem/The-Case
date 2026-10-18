@@ -58,10 +58,10 @@ def test_new_weekend_timing_and_validation(wk):
         s["reactions"].pop("e14", None)  # the culprit never reacts to a proof card
     with pytest.raises(content.CaseError):
         content.validate_weekly(bad)
-    # without closes_hours a new case closes 48 h after it opens
+    # without closes_hours a case closes WEEKLY_HOURS (36 h: Thursday 09:00 -> Friday 21:00) after it opens
     d = copy.deepcopy(wk.data)
     del d["closes_hours"]
-    assert content.weekly_closes_at(content.Case(id="w099", number=99, publish=WED, data=d)) == content.opens_at(wk) + timedelta(hours=48)
+    assert content.weekly_closes_at(content.Case(id="w099", number=99, publish=WED, data=d)) == content.opens_at(wk) + timedelta(hours=content.WEEKLY_HOURS)
 
 
 async def test_reactions_are_never_in_the_public_case(client, clock, wk):
