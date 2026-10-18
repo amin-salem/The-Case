@@ -24,6 +24,8 @@ PERMISSIONS = [
     "android.permission.INTERNET",
     "android.permission.POST_NOTIFICATIONS",
     "android.permission.RECEIVE_BOOT_COMPLETED",
+    # Cafe Bazaar in-app billing (Poolakey's own manifest declares it too; stating it here makes sure it is there)
+    "com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR",
 ]
 
 RECEIVERS = """
@@ -49,6 +51,19 @@ LINK_QUERIES = """    <queries>
     </queries>
 """
 
+# Android 11+ package visibility: without this the app cannot see (or bind to) the Cafe Bazaar app
+BAZAAR_QUERIES = """    <queries>
+        <package android:name="com.farsitel.bazaar" />
+    </queries>
+"""
+
+BAZAAR_PROGUARD = """# Cafe Bazaar in-app billing (Poolakey binds to Bazaar's AIDL service and parses its answers; R8 must not strip it)
+-keep class ir.cafebazaar.poolakey.** { *; }
+-keep class ir.cafebazaar.flutter_poolakey.** { *; }
+-keep class com.farsitel.bazaar.** { *; }
+-dontwarn ir.cafebazaar.poolakey.**
+"""
+
 PROGUARD = """# Myket in-app billing (the plugin reads purchases with Gson; keep their fields)
 -keep class ir.myket.billingclient.** { *; }
 -keep class ir.mservices.myketiap.** { *; }
@@ -71,6 +86,9 @@ def patch_manifest() -> None:
     if 'android:scheme="https"' not in s:
         s = s.replace("</manifest>", LINK_QUERIES + "</manifest>", 1)
         print("  manifest: + https link query (privacy page)")
+    if 'android:name="com.farsitel.bazaar"' not in s:
+        s = s.replace("</manifest>", BAZAAR_QUERIES + "</manifest>", 1)
+        print("  manifest: + Cafe Bazaar package query")
     if "ScheduledNotificationReceiver" not in s:
         s = s.replace("</application>", RECEIVERS.lstrip("\n") + "    </application>", 1)
         print("  manifest: + reminder receivers")
@@ -159,6 +177,10 @@ def patch_gradle() -> None:
         with rules.open("a", encoding="utf-8") as f:
             f.write(PROGUARD)
         print("  proguard-rules.pro: + Myket keep rules")
+    if "cafebazaar.poolakey" not in rules.read_text(encoding="utf-8"):
+        with rules.open("a", encoding="utf-8") as f:
+            f.write("\n" + BAZAAR_PROGUARD)
+        print("  proguard-rules.pro: + Cafe Bazaar keep rules")
 
 
 def copy_icons() -> None:

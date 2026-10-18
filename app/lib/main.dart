@@ -76,6 +76,7 @@ class _TheCaseAppState extends State<TheCaseApp> with WidgetsBindingObserver {
       Sfx.i.resumeAll();
       // back from the background: if we were offline, try the server again right away
       if (Api.i.ready && !Api.i.online) unawaited(Api.i.reconnect());
+      unawaited(Billing.i.onResume()); // Cafe Bazaar connection may have dropped while we were away
     } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
       Sfx.i.pauseAll();
     }
