@@ -107,3 +107,36 @@ def test_a_suspect_without_intro_is_refused():
     d["suspects"][0]["intro"] = "کوتاه"
     with pytest.raises(content.CaseError):
         content.validate(d)
+
+
+def test_every_case_has_a_known_category_and_all_are_used():
+    from app.content import CATEGORIES
+    cats = Counter(c.data.get("category") for c in [*content.all_cases(), *content.weekly_cases()])
+    assert None not in cats, "every case sets a category (docs/case-writing-rules.md §9)"
+    assert set(cats) <= set(CATEGORIES)
+    assert set(cats) == set(CATEGORIES), "all seven categories have at least one case"
+    assert all(name and icon for name, icon in CATEGORIES.values())
+
+
+def test_unknown_category_is_refused_and_empty_is_allowed_for_old_files():
+    import copy
+
+    import pytest
+    d = copy.deepcopy(content.all_cases()[0].data)
+    d["category"] = "nope"
+    with pytest.raises(content.CaseError):
+        content.validate(d)
+    del d["category"]
+    content.validate(d)  # optional: old files and old clients keep working
+    assert content.Case(id="x", number=1, publish=content.all_cases()[0].publish, data=d).summary()["category"] == ""
+
+
+async def test_category_in_the_case_list_and_detail(client, monkeypatch):
+    from .conftest import new_player
+    when = content.opens_at(content.by_id("c040")) + timedelta(hours=1)
+    monkeypatch.setattr(content, "now_local", lambda: when)
+    p = await new_player(client, "category-1")
+    cs = (await client.get("/v1/cases", headers=p["headers"])).json()
+    assert cs["today"]["category"] in content.CATEGORIES
+    detail = (await client.get(f"/v1/cases/{cs['today']['id']}", headers=p["headers"])).json()
+    assert detail["case"]["category"] == cs["today"]["category"]

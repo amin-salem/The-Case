@@ -9,6 +9,7 @@ import '../services/case_clock.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/cast_strip.dart';
+import '../widgets/category.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/character.dart';
 import '../widgets/coach_marks.dart';
@@ -271,6 +272,11 @@ class _CaseScreenState extends State<CaseScreen> {
                           DifficultyBar(c.difficulty),
                         ]),
                       ),
+                      if (c.category.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6),
+                          child: Align(alignment: Alignment.centerRight, child: CategoryBadge(c.category)),
+                        ),
                       const SizedBox(height: 16),
                       if (c.story != null) ...[
                         FadeSlideIn(delay: const Duration(milliseconds: 600), child: PartnerCard(text: c.story!.intro, dark: false)),

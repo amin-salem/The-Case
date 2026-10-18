@@ -26,6 +26,18 @@ SCENES = frozenset({
     "theater", "hotel", "kitchen", "snow_lodge", "desert", "subway", "lab", "wedding", "school", "airport", "tower",
 })
 
+# Topic category of a case (docs/case-writing-rules.md §9): key -> (Persian name, icon name the app draws).
+# `category` is optional in the JSON for old files, but every case written from 18 Oct 2026 sets it.
+CATEGORIES = {
+    "medical": ("پزشکی", "medical_services"),
+    "art": ("هنر و صحنه", "palette"),
+    "family": ("خانواده و ارث", "family_restroom"),
+    "business": ("تجارت و پول", "storefront"),
+    "science": ("علم و پژوهش", "science"),
+    "travel": ("سفر و مهمانی", "luggage"),
+    "crime": ("جرم و قانون", "gavel"),
+}
+
 
 class CaseError(ValueError):
     pass
@@ -58,7 +70,8 @@ class Case:
     def summary(self) -> dict:
         d = self.data
         return {"id": self.id, "number": self.number, "title": d["title"], "location": d["location"],
-                "scene": d["scene"], "difficulty": d["difficulty"], "publish": self.publish.isoformat()}
+                "scene": d["scene"], "category": d.get("category", ""), "difficulty": d["difficulty"],
+                "publish": self.publish.isoformat()}
 
 
 INTRO_MIN, INTRO_MAX = 20, 90  # every suspect has a short neutral intro (docs/case-writing-rules.md)
@@ -73,6 +86,8 @@ def validate(d: dict, max_suspects: int = 6) -> None:
         raise CaseError(f"{d['id']}: unknown scene {d['scene']!r}")
     if d["difficulty"] not in (1, 2, 3, 4, 5):
         raise CaseError(f"{d['id']}: difficulty must be 1-5")
+    if d.get("category", "") != "" and d["category"] not in CATEGORIES:
+        raise CaseError(f"{d['id']}: unknown category {d['category']!r} (known: {sorted(CATEGORIES)})")
     sids = [s["id"] for s in d["suspects"]]
     eids = [e["id"] for e in d["evidence"]]
     if len(eids) < 5:

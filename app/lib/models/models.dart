@@ -79,6 +79,7 @@ class CaseData {
         title = _s(j['title']),
         location = _s(j['location']),
         scene = _s(j['scene']),
+        category = _s(j['category']),
         difficulty = _i(j['difficulty'], 2),
         intro = _s(j['intro']),
         suspects = [for (final s in _maps(j['suspects'])) Suspect(s)],
@@ -115,6 +116,7 @@ class CaseData {
   bool get weekly => motives.isNotEmpty;
 
   final String id, title, location, scene, intro;
+  final String category; // topic key, '' when the case has none (old server)
   final String? culprit, explanation; // only for finished cases
   final List<String> proof;
   final int number, difficulty;
@@ -202,6 +204,7 @@ class CaseRow {
         title = _s(j['title']),
         location = _s(j['location']),
         scene = _s(j['scene']),
+        category = _s(j['category']),
         difficulty = _i(j['difficulty'], 2),
         publish = _s(j['publish']),
         today = _b(j['today']),
@@ -218,6 +221,7 @@ class CaseRow {
         myRating = _i(j['my_rating']);
 
   final String id, title, location, scene, publish;
+  final String category; // topic key, '' when unknown
   final int number, difficulty, unlockCost, stars, solvers;
   final double ratingAvg; // average stars of all detectives (0 = nobody rated)
   final int ratingCount, commentCount, myRating;

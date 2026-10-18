@@ -4,6 +4,7 @@ import '../models/models.dart';
 import '../services/api.dart';
 import '../services/sound.dart';
 import '../theme.dart';
+import '../widgets/category.dart';
 import '../widgets/offline.dart';
 import '../widgets/rate_card.dart';
 import '../widgets/scene.dart';
@@ -61,6 +62,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
   String? _error;
   _Filter _filter = _Filter.all;
   _Sort _sort = _Sort.newest;
+  String _cat = ''; // topic filter ('' = all topics)
 
   static const _filterLabels = {
     _Filter.all: 'همه',
@@ -106,7 +108,9 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     if (mounted) _load();
   }
 
-  bool _keep(CaseRow r) => switch (_filter) {
+  bool _keep(CaseRow r) => (_cat.isEmpty || r.category == _cat) && _keepByFilter(r);
+
+  bool _keepByFilter(CaseRow r) => switch (_filter) {
         _Filter.all => true,
         _Filter.unsolved => !r.solved,
         _Filter.free => !r.locked,
@@ -167,6 +171,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _summary(rows)),
               if (rows != null && _nudgeVisible(rows)) SliverToBoxAdapter(child: _rateNudge(rows)),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _filters()),
+              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _categoryChips(rows)),
               if (rows == null && _error == null)
                 const SliverToBoxAdapter(
                   child: Padding(padding: EdgeInsets.all(40), child: Center(child: CircularProgressIndicator(color: K.brass))),
@@ -336,12 +341,46 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     );
   }
 
+  /// Topic chips (only the topics that exist in the archive), under the sort/filter row.
+  Widget _categoryChips(List<CaseRow> rows) {
+    final present = {for (final r in rows) r.category}..remove('');
+    if (present.isEmpty) return const SizedBox.shrink();
+    Widget chip(String key, String label, IconData? icon) {
+      final on = _cat == key;
+      return Padding(
+        padding: const EdgeInsets.only(right: 8),
+        child: ChoiceChip(
+          key: ValueKey('cat-chip-${key.isEmpty ? 'all' : key}'),
+          avatar: icon == null ? null : Icon(icon, size: 16, color: on ? K.ink : K.kraft),
+          label: Text(label, style: tBody(13, w: FontWeight.w700, color: on ? K.ink : K.text)),
+          selected: on,
+          showCheckmark: false,
+          selectedColor: K.kraft,
+          backgroundColor: K.night2,
+          side: BorderSide(color: on ? K.kraft : K.night3),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+          onSelected: (_) => setState(() => _cat = key),
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+      child: Row(children: [
+        chip('', 'همه‌ی موضوع‌ها', null),
+        for (final e in kCategories.entries)
+          if (present.contains(e.key)) chip(e.key, e.value.name, e.value.icon),
+      ]),
+    );
+  }
+
   Widget _list(List<CaseRow> rows) {
     if (rows.isEmpty) {
       return SliverToBoxAdapter(
         child: Padding(
           padding: const EdgeInsets.all(32),
-          child: Text(_filter == _Filter.all ? 'هنوز پرونده‌ی قدیمی‌ای نیست.' : 'پرونده‌ای با این فیلتر نیست.',
+          child: Text(_filter == _Filter.all && _cat.isEmpty ? 'هنوز پرونده‌ی قدیمی‌ای نیست.' : 'پرونده‌ای با این فیلتر نیست.',
               textAlign: TextAlign.center, style: tBody(15, color: K.textSoft)),
         ),
       );
@@ -457,6 +496,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                     Expanded(
                       child: Text(c.location, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.textSoft)),
                     ),
+                    if (c.category.isNotEmpty) ...[CategoryBadge(c.category, compact: true), const SizedBox(width: 6)],
                     DifficultyBar(c.difficulty, compact: true),
                   ]),
                 ]),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/api.dart';
 import '../theme.dart';
+import '../widgets/category.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/coming_soon.dart';
 import '../widgets/scene.dart';
@@ -104,7 +105,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
                 background: AnimatedScene(scene: weekly.scene, height: double.infinity, dim: 0.2),
                 chip: weekly.solved ? 'حلش کردی!' : 'پرونده‌ی این هفته · بازه',
                 title: weekly.title,
-                subtitle: 'دو فصل، هشت مظنون · جایزه‌ی ${fa(Api.i.weeklyReward)} سکه',
+                subtitle: '${weekly.category.isEmpty ? '' : '${categoryName(weekly.category)} · '}دو فصل، هشت مظنون · جایزه‌ی ${fa(Api.i.weeklyReward)} سکه',
                 countdownLabel: 'تا پایان پرونده',
                 at: _cases?.weeklyClosesAt,
                 onCountdownDone: _opened,
