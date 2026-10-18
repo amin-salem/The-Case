@@ -96,3 +96,10 @@ server version and ONE APK. Never schedule them as separate tasks that each buil
   earlier features are still in the code (grep) before pushing to `release`.
 - If you find two tasks scheduled at the same time, merge them into one before they run.
 - Docs/tools-only work (prompt kits, triage) stays on its own branch and does not build anything.
+
+## Never leave known issues (Amin, 18 Oct 2026)
+Every "minor issue" or "open note" you find in a case (Gemini output, blind test, your own review) is FIXED before the case
+is reported done: edit the file, re-validate, re-run the blind test if the clue chain changed, and only then log it as resolved.
+Do not write soft spots into `docs/case-log.md` as "notes" and move on. Story-type errors Amin has reported (culprit named by one
+card, impossible timelines, an alibi never checked, leftover names, a clue that contradicts another card, a bag/object left
+unaccounted for) must never reach him again: check for them yourself on every case.
