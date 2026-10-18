@@ -94,7 +94,11 @@ def test_format3_timing_and_validation(wk):
     broken(lambda d: d["chapters"].append({"title": "x", "at_hours": 20}))                              # three chapters
     broken(lambda d: d["chapters"][1].pop("text"))
     # the older formats still load without any of this (w001 has no format, w002 is format 2)
-    assert {c.data.get("format") for c in content.weekly_cases()} == {None, 2}
+    import json
+    for name, fmt in (("w001", None), ("w002", 2)):
+        data = json.loads((content.WEEKLY_DIR / f"{name}.json").read_text(encoding="utf-8"))
+        assert data.get("format") == fmt
+        content.validate_weekly(data)
 
 
 async def test_night1_hides_the_newcomer_and_the_night2_cards(client, clock, wk):
