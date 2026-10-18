@@ -27,10 +27,17 @@ INVITE_MIN_DAYS = 3              # the inviter is paid after the invited player 
 INVITE_PAID_PER_WEEK = 5         # paid invites per inviter per week (Saturday to Friday); also 1 paid invite per device
 
 # anti-cheat (docs/operations.md): proof of investigation and delayed answers
-MIN_ACTIVE_SECONDS = 180         # 3 stars and a leaderboard place need this much active time on the case ...
+MIN_ACTIVE_SECONDS = 90          # 3 stars and a leaderboard place need this much active time on a difficulty-3 case ...
+# ... scaled by the case's difficulty (1-5): an easy case asks for less, a hard one for more (60/75/90/110/130 s)
+ACTIVE_TIME_FACTOR = {1: 0.67, 2: 0.83, 3: 1.0, 4: 1.22, 5: 1.44}
 MIN_SUSPECTS_SEEN = 2            # ... and at least this many suspects interrogated
 STORY_ANSWER_DELAY_HOURS = 24    # a failed story chapter shows its answer this long after the failure
 HIDE_NEW_ACCOUNT_HOURS = 48      # accounts younger than this and without email are hidden from the leaderboards
+
+
+def min_active_seconds(difficulty: int | None) -> int:
+    """Active time a case of this difficulty needs for 3 stars and a leaderboard place (an unknown difficulty counts as 3)."""
+    return round(MIN_ACTIVE_SECONDS * ACTIVE_TIME_FACTOR.get(int(difficulty or 3), 1.0))
 
 
 def login_reward(day: int, pick=None) -> int:

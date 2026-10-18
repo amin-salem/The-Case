@@ -1,5 +1,9 @@
 # Changelog
 
+## server: proof-of-investigation time follows the case difficulty (Amin, 18 Oct 2026)
+
+- A quick reader who reaches the clue was marked «unproven» (1 star, no leaderboard place) by the flat 180 s rule (seen on c019). The needed active time is now 90 s for a difficulty-3 case and scales with the case difficulty: 60 / 75 / 90 / 110 / 130 s for difficulty 1-5 (`economy.min_active_seconds`, `ACTIVE_TIME_FACTOR`). Still needs 2 interrogated suspects. Same rule for the «right person, wrong proof» nudge. No migration, no app change.
+
 ## server 1.30.0, app 1.29.2 (build 60): app testers (Amin, 17 Oct 2026)
 
 - New flag `players.tester` (migration 0026, additive). A tester sees the story while it is closed to everybody and never appears on a leaderboard (all-time, daily, weekly, league prizes). Everybody else is unchanged; `opens_at` stays 2099.

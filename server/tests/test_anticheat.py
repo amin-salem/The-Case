@@ -32,7 +32,7 @@ def clock(monkeypatch):
 @pytest.fixture
 def strict_rules(monkeypatch):
     """The real proof-of-investigation numbers (the other tests switch them off)."""
-    monkeypatch.setattr(eco, "MIN_ACTIVE_SECONDS", 180)
+    monkeypatch.setattr(eco, "MIN_ACTIVE_SECONDS", 90)
     monkeypatch.setattr(eco, "MIN_SUSPECTS_SEEN", 2)
 
 
@@ -159,7 +159,7 @@ async def test_solve_without_investigation_is_one_star_and_unranked(client, cloc
     assert r["result"] == "solved" and r["stars"] == 1 and r["unranked"] and r["stars_capped"] and r["rank"] is None
     assert r["reward"] == eco.SOLVE_REWARD[1] + eco.DAILY_BONUS
     ids = [s["id"] for s in c.data["suspects"]][:2]
-    await set_progress(diligent["player_id"], c.id, active_seconds=eco.MIN_ACTIVE_SECONDS, seen=ids)
+    await set_progress(diligent["player_id"], c.id, active_seconds=eco.min_active_seconds(c.data["difficulty"]), seen=ids)
     r = await accuse(client, diligent["headers"], c, c.culprit)
     assert r["stars"] == 3 and not r["unranked"] and r["rank"] is not None
     assert r["reward"] == eco.SOLVE_REWARD[3] + eco.DAILY_BONUS
@@ -176,7 +176,7 @@ async def test_time_alone_or_suspects_alone_is_not_enough(client, clock, strict_
     clock(night("c048"))
     ids = [s["id"] for s in c.data["suspects"]]
     cases = [({"active_seconds": 500, "seen": ids[:1]}, "proof-one-suspect"),
-             ({"active_seconds": 60, "seen": ids[:3]}, "proof-short-time")]
+             ({"active_seconds": 30, "seen": ids[:3]}, "proof-short-time")]
     for vals, device in cases:
         p = await new_player(client, device)
         await client.get(f"/v1/cases/{c.id}", headers=p["headers"])
@@ -417,10 +417,31 @@ async def test_hasty_accusation_does_not_reveal_the_culprit(client, clock, stric
     careful = await new_player(client, "nudge-careful")
     for pl in (hasty, careful):
         await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
-    await set_progress(careful["player_id"], c.id, active_seconds=eco.MIN_ACTIVE_SECONDS, seen=ids)
+    await set_progress(careful["player_id"], c.id, active_seconds=eco.min_active_seconds(c.data["difficulty"]), seen=ids)
     # right person, wrong proof: the hasty one gets the same answer as for an innocent person and loses a try
     r = await accuse(client, hasty["headers"], c, c.culprit, bad_ev)
     assert r["result"] == "wrong_suspect" and r["attempts_left"] == eco.MAX_ATTEMPTS - 1
     # a player who investigated gets the usual nudge, free of tries
     r = await accuse(client, careful["headers"], c, c.culprit, bad_ev)
     assert r["result"] == "wrong_proof" and r["attempts_left"] == eco.MAX_ATTEMPTS
+
+
+def test_needed_active_time_follows_the_difficulty(strict_rules):
+    """90 s for a medium case; easier cases ask for less, harder ones for more (60/75/90/110/130)."""
+    assert [eco.min_active_seconds(d) for d in (1, 2, 3, 4, 5)] == [60, 75, 90, 110, 130]
+    assert eco.min_active_seconds(None) == 90 and eco.min_active_seconds(9) == 90
+
+
+async def test_a_fast_reader_of_an_easy_case_gets_the_stars_but_a_hard_one_needs_more(client, clock, strict_rules, monkeypatch):
+    c = content.by_id("c047")
+    ids = [s["id"] for s in c.data["suspects"]][:2]
+    clock(night("c047"))
+    results = {}
+    for diff, active in ((2, 80), (5, 80)):  # 80 s: enough for difficulty 2 (75 s), not for 5 (130 s)
+        monkeypatch.setitem(c.data, "difficulty", diff)
+        pl = await new_player(client, f"proof-diff-{diff}")
+        await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
+        await set_progress(pl["player_id"], c.id, active_seconds=active, seen=ids)
+        results[diff] = await accuse(client, pl["headers"], c, c.culprit)
+    assert results[2]["stars"] == 3 and not results[2]["unranked"]
+    assert results[5]["stars"] == 1 and results[5]["unranked"]

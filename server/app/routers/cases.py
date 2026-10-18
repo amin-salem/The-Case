@@ -299,7 +299,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         if fmt2 and not right_motive:
             natural = min(natural, 2)
         # proof of investigation: without enough time and interrogations it is still solved, but 1 star, no place
-        proven = ac.proof_ok(p)
+        proven = ac.proof_ok(p, c)
         p.stars, p.ranked = (natural if proven else 1), proven
         if not proven:
             log.info("anticheat unproven_solve case=%s active=%s seen=%d capped=%s", c.id, p.active_seconds,
@@ -366,7 +366,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     # right person but not the evidence that proves it (or, in the weekly case, the wrong motive):
     # the first few times it costs a star, not a try
     near = "wrong_motive" if body.evidence in c.proof else "wrong_proof"
-    if body.suspect == c.culprit and not ac.proof_ok(p):
+    if body.suspect == c.culprit and not ac.proof_ok(p, c):
         # anti-cheat: "right person, wrong proof" tells a probing throwaway account who the culprit is. Only a player
         # who has really investigated (the same bar as 3 stars) gets this hint; a hasty accusation gets the plain
         # «wrong» answer and loses a try. Fair players investigate first, so for them nothing changes.

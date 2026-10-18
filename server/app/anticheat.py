@@ -68,9 +68,11 @@ def answer_at_ts(p: CaseProgress | None) -> int | None:
 
 
 # ---------------------------------------------------------------- proof of investigation
-def proof_ok(p: CaseProgress) -> bool:
-    """Enough real work on the case for 3 stars and a leaderboard place?"""
-    return (p.active_seconds or 0) >= eco.MIN_ACTIVE_SECONDS and len(p.seen or []) >= eco.MIN_SUSPECTS_SEEN
+def proof_ok(p: CaseProgress, c: content.Case) -> bool:
+    """Enough real work on the case for 3 stars and a leaderboard place? The needed time follows the case's difficulty
+    (eco.min_active_seconds): a quick reader who reaches the clue on an easy case is not punished as a cheater."""
+    need = eco.min_active_seconds(c.data.get("difficulty"))
+    return (p.active_seconds or 0) >= need and len(p.seen or []) >= eco.MIN_SUSPECTS_SEEN
 
 
 # ---------------------------------------------------------------- throwaway accounts
