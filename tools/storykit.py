@@ -480,8 +480,9 @@ def check_suspects(rep: Report, d: dict, root: Path):
         intro = s.get("intro")
         if isinstance(intro, str):
             _bound(rep, "suspect.intro", len(intro.strip()), base + ("intro",), f"{name} / intro (معرفی خنثی)")
+            intro_chk = intro.replace("رازان", "")  # the city name contains «راز»
             for w in INTRO_FORBIDDEN:
-                if w in intro:
+                if w in intro_chk:
                     rep.add("error", "intro_neutral", f"معرفیِ {name} خنثی نیست (کلمه‌ی «{w}»)",
                             "intro فقط بگوید او کیست (نقش و رابطه)؛ بدون انگیزه، دروغ، راز، بدهی یا شک", base + ("intro",))
                     break
