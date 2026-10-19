@@ -28,7 +28,7 @@ Future<void> capture(WidgetTester t, String name) async {
 
 Future<void> openEditor(WidgetTester t, {ClaimLink? link, ValueNotifier<bool>? owner, double scale = 1}) async {
   final c = sample();
-  await t.pumpWidget(RepaintBoundary(key: boundary, child: MaterialApp(theme: buildTheme(),
+  await t.pumpWidget(RepaintBoundary(key: boundary, child: MaterialApp(debugShowCheckedModeBanner: false, theme: buildTheme(),
     builder: (context, child) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(scale)),
       child: Directionality(textDirection: TextDirection.rtl, child: child!)),
     home: Builder(builder: (context) => Scaffold(body: TextButton(onPressed: () async {
@@ -45,6 +45,14 @@ void main() {
     final loader = FontLoader('Vazirmatn');
     loader.addFont(rootBundle.load('assets/fonts/Vazirmatn-Regular.ttf'));
     await loader.load();
+    final roots = <String>[if (Platform.environment['FLUTTER_ROOT'] case final String root) root];
+    var dir = File(Platform.resolvedExecutable).parent;
+    for (var i = 0; i < 8; i++) { roots.add(dir.path); dir = dir.parent; }
+    final font = roots.map((r) => File('$r/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf'))
+      .firstWhere((f) => f.existsSync());
+    final icons = FontLoader('MaterialIcons');
+    icons.addFont(font.readAsBytes().then((b) => b.buffer.asByteData(b.offsetInBytes, b.lengthInBytes)));
+    await icons.load();
   });
 
   testWidgets('optional editor saves personal text, edits it, and cancels without saving', (t) async {
@@ -93,9 +101,11 @@ void main() {
   });
 
   testWidgets('notebook supports empty/missing references, revisiting, editing and removal offline', (t) async {
+    t.view.physicalSize = const Size(360, 800); t.view.devicePixelRatio = 1;
+    addTearDown(t.view.resetPhysicalSize); addTearDown(t.view.resetDevicePixelRatio);
     var links = [linkFor(sample(), note: 'یادداشت من')];
     var edits = 0;
-    await t.pumpWidget(RepaintBoundary(key: boundary, child: MaterialApp(theme: buildTheme(),
+    await t.pumpWidget(RepaintBoundary(key: boundary, child: MaterialApp(debugShowCheckedModeBanner: false, theme: buildTheme(),
       home: StatefulBuilder(builder: (context, update) => Directionality(textDirection: TextDirection.rtl,
         child: Scaffold(body: ListView(children: [ClaimNotesPanel(caseData: sample(), links: links,
           onAdd: () {}, onEdit: (_) => edits++, onRemove: (link) => update(() => links = []))])))))));
