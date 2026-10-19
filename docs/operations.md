@@ -424,3 +424,53 @@ must already be linked to one account; the answer `no_player` means nobody verif
 - New column `case_progress.night1` (migration 0027, additive, listed in `.github/workflows/ci.yml`). New route `POST /v1/cases/{id}/liar` shares the strict
   `accuse` rate-limit policy. New numbers in `economy.py`: `WEEKLY_EARLY_BONUS` 80, `WEEKEND_LIAR_REWARD` 10. New achievement `weekend_night1`.
 - Nothing to set on Liara. Deploy the server from the panel (version 1.31.0). Old apps keep working (all new fields are optional).
+
+## Preparing an external content root (CONTENT_DIR)
+
+This is preparation only. Existing JSON files stay in this repository and already-public
+answers remain public, including in Git history, forks and old APKs/caches. Setting an
+environment variable does not revoke any of those copies or change repository visibility.
+
+With CONTENT_DIR unset/empty, runtime loading is unchanged: server/app/content is used.
+Set CONTENT_DIR to an absolute directory containing the complete bundle:
+- cases/*.json: nightly/archive cases, with their existing IDs.
+- weekly/*.json: weekend cases and their chapter schedules.
+- story/sNN/chNN.json: story chapters; empty story/ is allowed.
+- riddles.json: the existing riddle pool.
+- notify.json: optional notification teasers; missing/broken teasers retain their current safe fallback.
+
+All runtime consumers (cases, weekend, story, riddles and notification planning) use this
+single root. There is no per-file fallback/overlay onto the bundled public content.
+An explicitly configured root must contain cases/, weekly/, story/ and riddles.json;
+a missing/incomplete root fails clearly. Relative paths resolve against the server's
+working directory; prefer an absolute mount path. Content is cached at startup: restart
+all workers after changing the path or bundle, rather than attempting a hot swap.
+
+Read-only inventory, from server/:
+```sh
+python tools/unpublished_content.py
+CONTENT_DIR=/private/content python tools/unpublished_content.py --at 2026-10-20T01:00:00+03:30
+```
+The JSON allowlist contains only kind, ID, chapter index, opening time and (when needed)
+an unscheduled-season reason. It never exports prose, suspect names, answers or hints.
+Daily/weekend publication uses content.opens_at (including a weekend open_hour override);
+weekend chapters use at_hours. Story chapters follow the current season's global opening
+gate, not their placeholder publish date or a player's personal wait/warrant status.
+Other seasons have no invented release date and appear as unscheduled. At the exact opening
+instant an item is published. Dates display in Asia/Tehran; an explicit --at needs an offset.
+
+For a later private migration: provision a complete versioned bundle outside public Git,
+web/static roots, APK assets and public CI artifacts. Restrict host filesystem access to
+the service account; mount it read-only at an absolute path using the host's private storage
+mechanism. Validate the bundle and run the inventory in an isolated environment before
+pointing the service at it. Keep IDs stable to preserve player progress. Stage a complete
+new directory, switch the configured path, then restart all workers together. Do not print
+the bundle or secrets into deployment logs. Provisioning, content removal, secret changes,
+repository settings and deployment are deliberately not performed by this preparation.
+
+Rollback: restore the previous complete private bundle/path and restart all workers.
+Unsetting CONTENT_DIR restores the bundled default, which can be older and public;
+only use that fallback intentionally after checking its content/version. No database
+migration is needed and this mechanism never rewrites existing player progress.
+
+

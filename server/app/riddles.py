@@ -11,12 +11,12 @@ import random
 from dataclasses import dataclass
 from datetime import date
 from functools import lru_cache
-from pathlib import Path
 
 from . import economy as eco
 from .content import SCENES
+from .content_paths import CONTENT_ROOT
 
-PATH = Path(__file__).parent / "content" / "riddles.json"
+PATH = CONTENT_ROOT / "riddles.json"
 EPOCH = date(2026, 1, 1)
 
 
@@ -75,3 +75,4 @@ def for_day(day: str) -> list[Riddle]:
     cycle, k = divmod(n, days_per_cycle)
     order = random.Random(f"riddle-cycle-{cycle}").sample(items, len(items))
     return order[k * per:(k + 1) * per]
+

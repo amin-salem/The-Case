@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     env: str = "dev"  # "dev" or "prod"
     database_url: str = "sqlite+aiosqlite:///./the_case.db"
     auto_create_tables: bool = True
+    content_dir: str = ""  # CONTENT_DIR: complete external content root; empty keeps bundled defaults
 
     jwt_secret: str = _DEV_JWT
     jwt_days: int = 30
@@ -93,3 +94,4 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+
