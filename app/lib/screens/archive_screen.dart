@@ -104,7 +104,6 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
   List<CaseRow> _shown(List<CaseRow> rows) => archiveSorted(
         archiveVisible(rows, filter: _filter, category: _cat, query: _query),
         _sort,
-        prior: ratingPrior(rows),
       );
 
   bool get _narrowed => _filter != ArchiveFilter.all || _cat.isNotEmpty || _query.trim().isNotEmpty;

@@ -56,18 +56,18 @@ void main() {
 
     test('equal weighted rating: more votes first; then the case number; stable across refreshes', () {
       final rows = [_r(1, avg: 4, votes: 10), _r(2, avg: 4, votes: 10), _r(3, avg: 4, votes: 20)];
-      expect(_nums(archiveSorted(rows, ArchiveSort.popular, prior: 4)), [3, 2, 1]);
-      expect(_nums(archiveSorted(rows.reversed.toList(), ArchiveSort.popular, prior: 4)), [3, 2, 1]);
+      expect(_nums(archiveSorted(rows, ArchiveSort.popular)), [3, 2, 1]);
+      expect(_nums(archiveSorted(rows.reversed.toList(), ArchiveSort.popular)), [3, 2, 1]);
     });
 
     test('nothing rated: order falls back to the case number, no crash on an empty list', () {
       expect(_nums(archiveSorted([_r(1), _r(3), _r(2)], ArchiveSort.popular)), [3, 2, 1]);
       expect(archiveSorted(const [], ArchiveSort.popular), isEmpty);
-      expect(ratingPrior(const []), 4.0);
     });
 
-    test('the prior is the vote-weighted mean of the rated cases', () {
-      expect(ratingPrior([_r(1, avg: 5, votes: 1), _r(2, avg: 3, votes: 3), _r(3)]), closeTo(3.5, 1e-9));
+    test('few votes are pulled toward the modest prior, many votes are not', () {
+      expect(weightedRating(_r(1, avg: 5, votes: 1)), closeTo(3.636, 0.001));
+      expect(weightedRating(_r(2, avg: 4.8, votes: 200)), closeTo(4.738, 0.001));
     });
 
     test('does not change the input list', () {

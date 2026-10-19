@@ -75,20 +75,12 @@ List<CaseRow> archiveVisible(List<CaseRow> rows, {ArchiveFilter filter = Archive
 /// as the average of all cases.
 const double kRatingPriorVotes = 10;
 
-/// The mean rating of all rated cases (the prior), 4.0 when nothing is rated.
-double ratingPrior(Iterable<CaseRow> rows) {
-  var sum = 0.0, n = 0;
-  for (final r in rows) {
-    if (r.ratingCount > 0) {
-      sum += r.ratingAvg * r.ratingCount;
-      n += r.ratingCount;
-    }
-  }
-  return n == 0 ? 4.0 : sum / n;
-}
+/// The rating a case with no votes is assumed to have: deliberately modest, so a single 5-star vote never beats a
+/// case that many detectives rated 4.8.
+const double kRatingPrior = 3.5;
 
 /// Bayesian (weighted) rating: one 5-star vote does not beat 4.8 from 200 votes.
-double weightedRating(CaseRow r, double prior) =>
+double weightedRating(CaseRow r, [double prior = kRatingPrior]) =>
     (kRatingPriorVotes * prior + r.ratingAvg * r.ratingCount) / (kRatingPriorVotes + r.ratingCount);
 
 int _byPublishDesc(CaseRow a, CaseRow b) {
@@ -97,8 +89,7 @@ int _byPublishDesc(CaseRow a, CaseRow b) {
 }
 
 /// Sorted copy. Every order ends in the case number, so equal cases never swap places between refreshes.
-/// [prior] is the rating prior of the WHOLE archive (so a filter does not change the order of what stays).
-List<CaseRow> archiveSorted(List<CaseRow> rows, ArchiveSort sort, {double? prior}) {
+List<CaseRow> archiveSorted(List<CaseRow> rows, ArchiveSort sort, {double prior = kRatingPrior}) {
   final l = [...rows];
   switch (sort) {
     case ArchiveSort.newest:
@@ -107,7 +98,7 @@ List<CaseRow> archiveSorted(List<CaseRow> rows, ArchiveSort sort, {double? prior
       l.sort((a, b) => _byPublishDesc(b, a));
     case ArchiveSort.popular:
       // rated first by weighted rating (ties: more votes), then by votes; unrated last, newest number first
-      final p = prior ?? ratingPrior(rows);
+      final p = prior;
       l.sort((a, b) {
         final ra = a.ratingCount > 0, rb = b.ratingCount > 0;
         if (ra != rb) return ra ? -1 : 1;
