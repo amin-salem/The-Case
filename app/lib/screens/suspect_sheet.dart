@@ -22,18 +22,19 @@ class WeekendShow {
 }
 
 Future<SuspectMark?> showSuspect(BuildContext context, Suspect s, SuspectMark mark,
-    {void Function(SuspectMark)? onMark, WeekendShow? weekend}) {
+    {void Function(SuspectMark)? onMark, WeekendShow? weekend, Future<void> Function(Suspect, int)? onLinkClaim}) {
   return showModalBottomSheet<SuspectMark>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true, // keeps the top below the status bar; the sheet pads its own bottom
     backgroundColor: Colors.transparent,
-    builder: (_) => _SuspectSheet(s: s, mark: mark, onMark: onMark, weekend: weekend),
+    builder: (_) => _SuspectSheet(s: s, mark: mark, onMark: onMark, weekend: weekend, onLinkClaim: onLinkClaim),
   );
 }
 
 class _SuspectSheet extends StatefulWidget {
-  const _SuspectSheet({required this.s, required this.mark, this.onMark, this.weekend});
+  const _SuspectSheet({required this.s, required this.mark, this.onMark, this.weekend, this.onLinkClaim});
+  final Future<void> Function(Suspect, int)? onLinkClaim;
   final WeekendShow? weekend;
   final Suspect s;
   final SuspectMark mark;
@@ -184,6 +185,10 @@ class _SuspectSheetState extends State<_SuspectSheet> {
                 ),
               ]),
             ),
+            if (widget.onLinkClaim != null && _showLine == null)
+              Align(alignment: AlignmentDirectional.centerStart, child: TextButton.icon(
+                onPressed: () => widget.onLinkClaim!(s, _asked),
+                icon: const Icon(Icons.add_link_rounded, size: 19), label: const Text('یادداشت و پیوند مدرک'))),
             const SizedBox(height: 12),
             Text('بپرس:', style: tBody(14, w: FontWeight.w700)),
             const SizedBox(height: 6),
@@ -275,3 +280,4 @@ class _SuspectSheetState extends State<_SuspectSheet> {
     );
   }
 }
+
