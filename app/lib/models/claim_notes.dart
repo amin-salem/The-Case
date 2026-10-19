@@ -61,7 +61,9 @@ class ClaimLink {
       final claim = value['claim'], evidence = value['evidence'], revision = value['revision'];
       if (claim is! String || claim.length > 150 || claim.isEmpty ||
           evidence is! String || evidence.length > 64 || evidence.isEmpty ||
-          revision is! String || !RegExp(r'^[a-f0-9]{64}$').hasMatch(revision)) continue;
+          revision is! String || !RegExp(r'^[a-f0-9]{64}$').hasMatch(revision)) {
+        continue;
+      }
       final relation = ClaimRelation.values.where((r) => r.name == value['relation']).firstOrNull ?? ClaimRelation.checking;
       final link = ClaimLink(claim: claim, evidence: evidence, revision: revision, relation: relation,
         note: value['note'] is String ? value['note'] as String : '');

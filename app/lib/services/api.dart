@@ -78,7 +78,6 @@ class Api extends ChangeNotifier {
   String get apiBase => kApiUrls[_baseIx];
   http.Client _http = http.Client();
   String? _playerId, _secret, _token;
-  String? get playerId => _playerId;
   int _tokenExp = 0;
 
   Map<String, dynamic> config = const {};

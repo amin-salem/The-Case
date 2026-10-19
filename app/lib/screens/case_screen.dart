@@ -712,12 +712,14 @@ class _CaseScreenState extends State<CaseScreen> {
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       itemCount: c.evidence.length + 1,
       itemBuilder: (_, j) {
-        if (j == 0) return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        if (j == 0) {
+          return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           _evidenceHeader(c),
           ClaimNotesPanel(caseData: c, links: _claimLinks, onAdd: () => _editClaim(),
             onEdit: (link) => _editClaim(existing: link), onRemove: _removeClaim),
           const SizedBox(height: 8),
-        ]);
+          ]);
+        }
         final i = j - 1;
         final e = c.evidence[i];
         final key = (_progress?.finished ?? false) && c.proof.contains(e.id);
