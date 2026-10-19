@@ -1,0 +1,3 @@
+# ch02 «اتاق ۳۱۱» images (Amin, 19 Oct 2026)
+One sheet `ch02-scenes-sheet.png` (crop with PIL): top-left hotel room 311 (key-card lock, desk with notebook, ring box on bedside table, suitcase, harbour window); top-right 3rd-floor corridor (CCTV, housekeeping trolley); bottom-left reception (wall clock, key rack, CCTV monitor, logbook, tea glass); right column: the Taban factory opening photo, intact (top) and with a burnt hole over the 4th man (bottom).
+Room number stays 311 (Amin confirmed; he wrote 313 by mistake). Priority: Important -> built in the 19 Oct 22:00 slot together with the archive fixes (one slot, one build).
