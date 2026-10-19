@@ -122,4 +122,3 @@ async def answer(riddle_id: str, body: RiddleAnswerIn, player: Player = Depends(
         raise HTTPException(409, "already_answered") from None
     return RiddleAnswerOut(correct=ok, answer=r.answer, explain=r.explain, reward=reward, coins=player.coins,
                            item=_item(r, slot, a), gains=GainsOut(**gains.out()))
-

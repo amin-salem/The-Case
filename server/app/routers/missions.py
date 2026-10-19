@@ -67,4 +67,3 @@ async def claim(player: Player = Depends(current_player), session: AsyncSession 
     gains = await progress.record(session, player, xp=eco.XP_CHEST, chest=1)
     await session.commit()
     return ChestOut(missions=missions_out(player, md, day), reward=reward, gains=GainsOut(**gains.out()))
-

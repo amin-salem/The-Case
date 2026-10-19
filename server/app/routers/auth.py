@@ -132,4 +132,3 @@ async def use_transfer_code(body: TransferIn, session: AsyncSession = Depends(ge
         raise HTTPException(404, "bad_code")
     row.used = True
     return await _login_as(session, player, body.device_id)
-

@@ -226,4 +226,3 @@ async def set_tester(body: TesterIn, session: AsyncSession = Depends(get_session
     await session.commit()
     log.info("admin tester player=%s tester=%s", p.id[:6], body.tester)
     return {"id": p.id, "nickname": p.nickname, "tester": p.tester}
-

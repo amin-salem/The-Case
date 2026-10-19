@@ -101,4 +101,3 @@ async def verify(body: VerifyIn, player: Player = Depends(current_player),
             return _out(player, "rejected", reason="wrong_product")
         return _out(player, "already_granted", consume=consume)
     return _out(player, "granted", added=added, consume=consume)
-

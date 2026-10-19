@@ -147,4 +147,3 @@ async def redeem(body: RedeemIn, player: Player = Depends(current_player), sessi
     await apply_grants(session, player, grants, "invited")
     await session.commit()
     return ClaimOut(grants=grants, coins=player.coins)
-

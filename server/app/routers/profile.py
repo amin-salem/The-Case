@@ -136,4 +136,3 @@ async def ad_reward(player: Player = Depends(current_player), session: AsyncSess
     await add_coins(session, player, eco.AD_REWARD, "ad")
     await session.commit()
     return CoinsOut(coins=player.coins, added=eco.AD_REWARD)
-

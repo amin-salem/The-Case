@@ -567,4 +567,3 @@ async def tick(case_id: str, body: TickIn, player: Player = Depends(current_play
         add_active_time(p, body.seconds, utcnow())
         await session.commit()
     return TickOut(active_seconds=p.active_seconds or 0)
-

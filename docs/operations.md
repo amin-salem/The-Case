@@ -441,8 +441,11 @@ request reads eligibility, balances, progress, one-time flags, counters or XP.
 case-detail GETs lock while creating progress. PostgreSQL uses `SELECT FOR UPDATE`
 with a fresh ORM snapshot. Different accounts remain independent. Requests for one
 account queue, including store-verification latency (existing network timeouts apply).
-SQLite development requests reserve the writer with `BEGIN IMMEDIATE`; this is not
-proof of PostgreSQL concurrency correctness.
+SQLite single-process development requests use a transaction-scoped process lock,
+released on commit/rollback/close. They do not reserve the database writer before
+in-handler rate-limit checks (those use an independent transaction). `last_seen`
+writes are deferred until those checks finish. This fallback is not suitable for
+multiple SQLite workers and is not proof of PostgreSQL concurrency correctness.
 
 Every new wallet/grant caller must acquire `db.lock_players` before its first
 eligibility read, keep flags and ledger in the same transaction, and reacquire after

@@ -3,6 +3,7 @@ import hashlib
 import hmac
 import secrets
 from datetime import datetime, timedelta, timezone
+from collections.abc import AsyncIterator
 
 import jwt
 from fastapi import Depends, Header, HTTPException, Request, status
@@ -59,7 +60,7 @@ async def current_player(
     request: Request,
     cred: HTTPAuthorizationCredentials | None = Depends(_bearer),
     session: AsyncSession = Depends(get_session),
-):
+) -> AsyncIterator[Player]:
     if cred is None:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "no_token")
     player_id, gen = read_token(cred.credentials)
@@ -75,14 +76,18 @@ async def current_player(
     if player.banned:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "banned")
     now = utcnow()
-    if (now - player.last_seen).total_seconds() > 300:
+    touch = (now - player.last_seen).total_seconds() > 300
+    if touch and not writing:
         player.last_seen = now
-        if not writing:
-            await session.commit()
+        await session.commit()
     try:
         yield player
         if writing:
-            await session.commit()  # also persist last_seen on successful no-op writes
+            # Defer this write: rate-limit checks inside handlers use an independent
+            # transaction and must not wait on a SQLite writer held by last_seen.
+            if touch:
+                player.last_seen = now
+            await session.commit()
     except Exception:
         await session.rollback()
         raise
@@ -94,4 +99,3 @@ async def require_admin(x_admin_key: str = Header(default="")) -> None:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "admin_disabled")
     if not hmac.compare_digest(x_admin_key, get_settings().admin_api_key):
         raise HTTPException(status.HTTP_403_FORBIDDEN, "not_admin")
-

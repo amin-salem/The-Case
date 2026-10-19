@@ -1,9 +1,12 @@
 """Database connection (SQLAlchemy 2, async)."""
 import os
+import asyncio
+from weakref import WeakKeyDictionary
 from collections.abc import AsyncIterator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import event
+from sqlalchemy.orm import DeclarativeBase, Session
 
 from .config import get_settings
 
@@ -60,14 +63,37 @@ async def get_session() -> AsyncIterator[AsyncSession]:
 
 
 
-async def begin_write(session: AsyncSession) -> None:
-    """SQLite has no row locks: reserve its writer before the first eligibility read.
+# SQLite is a single-process development/test backend. Do not reserve its SQL writer
+# before rate-limit checks: DBStore uses a separate transaction in the same database.
+# PostgreSQL correctness never depends on this process-local fallback.
+_sqlite_writers = WeakKeyDictionary()
 
-    PostgreSQL uses row locks instead, so unrelated accounts remain independent.
+
+@event.listens_for(Session, "after_transaction_end")
+def _release_sqlite_writer(session, transaction) -> None:
+    if transaction.parent is None:
+        lock = session.info.pop("wallet_sqlite_writer", None)
+        if lock is not None:
+            lock.release()
+
+
+async def begin_write(session: AsyncSession) -> None:
+    """Serialize SQLite game transactions without blocking independent rate-limit writes.
+
+    Released by commit/rollback/close, including error paths. PostgreSQL uses row locks.
     """
-    if session.get_bind().dialect.name == "sqlite" and not session.in_transaction():
-        from sqlalchemy import text
-        await session.execute(text("BEGIN IMMEDIATE"))
+    bind = session.get_bind()
+    if bind.dialect.name != "sqlite" or "wallet_sqlite_writer" in session.info:
+        return
+    lock = _sqlite_writers.setdefault(bind, asyncio.Lock())
+    await lock.acquire()
+    try:
+        if not session.in_transaction():
+            await session.begin()
+        session.info["wallet_sqlite_writer"] = lock
+    except BaseException:
+        lock.release()
+        raise
 
 
 async def lock_players(session: AsyncSession, ids: list[str]) -> dict:

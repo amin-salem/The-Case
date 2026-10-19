@@ -197,9 +197,18 @@ async def test_purchase_retries_grant_once_and_distinct_tokens_accumulate(client
         assert await s.scalar(select(func.count()).select_from(Purchase)) == 3
 
 
-async def test_token_race_across_accounts_rolls_back_losing_credit(client):
+async def test_token_race_across_accounts_rolls_back_losing_credit(client, monkeypatch):
     a, ha = await account(200)
     b, hb = await account(200)
+    # Force BOTH requests past the token lookup before either can grant it.
+    from app.main import app
+    from app.services.bazaar import get_bazaar, PurchaseCheck
+    barrier = asyncio.Barrier(2)
+    class Store:
+        async def check_inapp(self, product, token):
+            await barrier.wait()
+            return PurchaseCheck(valid=True)
+    monkeypatch.setitem(app.dependency_overrides, get_bazaar, lambda: Store())
     body = {"product_id": "coins_small", "purchase_token": "test-shared", "store": "bazaar"}
     responses = await together(*(client.post("/v1/purchases/verify", headers=h, json=body) for h in [ha, hb]))
     assert sorted(r.json()["status"] for r in responses) == ["granted", "rejected"]
@@ -383,3 +392,41 @@ async def test_parallel_riddle_answers_pay_once(client):
     assert p.stats["riddle_correct"] == 1
     assert len([l for l in logs if l.reason == f"riddle:{riddle.id}"]) == 1
     ledger(logs, 200, p.coins)
+
+
+async def test_weekly_settlement_refreshes_stats_after_concurrent_player_update(monkeypatch):
+    from datetime import date
+    from types import SimpleNamespace
+    from app import rewards, weekboard
+    pid, _ = await account(200)
+    loaded = asyncio.Event()
+    resume = asyncio.Event()
+    async def standings(session, *args, **kwargs):
+        player = await session.get(Player, pid)
+        loaded.set()
+        await resume.wait()  # settlement holds a stale stats snapshot while another request updates it
+        return [SimpleNamespace(player=player, cases=weekboard.MIN_CASES_FOR_PRIZE, points=100)]
+    monkeypatch.setattr(weekboard, "standings", standings)
+    monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
+    async def settle():
+        async with db.SessionLocal() as session:
+            return await rewards.settle_week(session, date(2026, 10, 16))
+    task = asyncio.create_task(settle())
+    try:
+        await asyncio.wait_for(loaded.wait(), 5)
+        async with db.SessionLocal() as session:
+            p = (await db.lock_players(session, [pid]))[pid]
+            p.stats = {"parallel_progress": 1}
+            await session.commit()
+        resume.set()
+        assert await asyncio.wait_for(task, 10) == 1
+    finally:
+        resume.set()
+        if not task.done():
+            task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+    p, _ = await snapshot(pid)
+    assert p.stats == {"parallel_progress": 1, "weekly_top3": 1}
+    async with db.SessionLocal() as session:
+        assert await rewards.settle_week(session, date(2026, 10, 16)) == 0
+        assert await session.scalar(select(func.count()).select_from(InboxItem)) == 1

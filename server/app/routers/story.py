@@ -257,4 +257,3 @@ async def board(player: Player = Depends(current_player), session: AsyncSession 
     held = sum(1 for x in clues if x["status"] == "held")
     return {"people": list(people.values()), "clues": clues, "held": held, "total": len(clues),
             "continue_chapter": current}
-

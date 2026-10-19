@@ -154,4 +154,3 @@ def shuffled(items: list, seed: str) -> list:
         return hashlib.sha256(f"{seed}:{ident}".encode()).hexdigest()
 
     return sorted(items, key=key)
-

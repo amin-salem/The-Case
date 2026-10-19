@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import content, gameclock, weekboard
 from .models import InboxItem, Player, WeekSettlement, utcnow
-from .db import lock_players
+from .db import begin_write, lock_players
 
 # Weeks before this one were paid by the old rule (Saturday-to-Friday, archive solves counted) and are never touched.
 FIRST_FAIR_WEEK = date(2026, 10, 16)
@@ -50,6 +50,7 @@ async def settle_last_week(session: AsyncSession) -> int:
 
 
 async def settle_week(session: AsyncSession, ws: date) -> int:
+    await begin_write(session)  # SQLite fallback must precede the settlement claim write
     key = ws.isoformat()
     if await session.get(WeekSettlement, key) is not None:
         return 0
@@ -93,4 +94,3 @@ async def settle_week(session: AsyncSession, ws: date) -> int:
         await session.rollback()
         return 0
     return n_rows
-

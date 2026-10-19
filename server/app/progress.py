@@ -124,5 +124,3 @@ async def _missions(session: AsyncSession, player: Player, events: dict[str, int
         if before.get(m.event, 0) < m.target <= after.get(m.event, 0):
             gains.missions_done.append(m.title)
     # (until 17 Oct 2026 finishing all of a day's missions also paid a warrant; free warrants are scarce now)
-
-

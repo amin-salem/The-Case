@@ -149,4 +149,3 @@ async def login(body: PhoneLoginIn, session: AsyncSession = Depends(get_session)
     if player is None or player.phone_hash != phash:
         raise HTTPException(400, "code_expired")
     return await _login_as(session, player, body.device_id)
-
