@@ -76,6 +76,49 @@ PROGUARD = """# Myket in-app billing (the plugin reads purchases with Gson; keep
 APPLICATION_ID = "ir.gammly.parvandeh"
 
 
+def patch_screen_capture() -> None:
+    """Secure every generated game build. Fail rather than silently ship an unsupported unprotected host."""
+    main = APP / "android" / "app" / "src" / "main"
+    activities = [p for folder in (main / "kotlin", main / "java")
+                  for pattern in ("MainActivity.kt", "MainActivity.java") for p in folder.rglob(pattern)]
+    if len(activities) != 1:
+        raise RuntimeError("Expected one generated MainActivity for secure-window protection")
+    activity = activities[0]
+    source = activity.read_text(encoding="utf-8")
+    package = re.search(r"^\s*package\s+([A-Za-z_][\w.]*)", source, re.M)
+    if package is None:
+        raise RuntimeError("MainActivity package missing")
+    namespace = package.group(1)
+    kotlin = activity.suffix == ".kt"
+    base = r"(class\s+MainActivity\s*:\s*)(?:io\.flutter\.embedding\.android\.)?FlutterActivity(\s*\(\s*\))" if kotlin else r"(class\s+MainActivity\s+extends\s+)(?:io\.flutter\.embedding\.android\.)?FlutterActivity\b"
+    if re.search(base, source):
+        source = re.sub(base, lambda m: m.group(1) + "SecureFlutterActivity" + (m.group(2) if kotlin else ""), source, count=1)
+    elif not re.search(r"class\s+MainActivity\s*(?::|extends)\s*SecureFlutterActivity\b", source):
+        raise RuntimeError("Unsupported MainActivity superclass: adapt secure host explicitly before release")
+    manifest = MANIFEST.read_text(encoding="utf-8")
+    tag = re.search(r"<application\b[^>]*>", manifest, re.S)
+    if tag is None:
+        raise RuntimeError("Android application tag missing")
+    name = re.search(r'android:name\s*=\s*"([^"]+)"', tag.group())
+    secure_name = namespace + ".SecureGameApplication"
+    if name and name.group(1) not in ("${applicationName}", "android.app.Application", secure_name):
+        raise RuntimeError("Custom Application found: integrate secure lifecycle callbacks without replacing it")
+    protected_tag = (tag.group()[:name.start(1)] + secure_name + tag.group()[name.end(1):] if name else
+                     tag.group().replace("<application", f'<application android:name="{secure_name}"', 1))
+    templates = Path(__file__).resolve().parent / "android"
+    generated = {p.name: p.read_text(encoding="utf-8").replace("__PACKAGE__", namespace)
+                 for p in templates.glob("Secure*.java")}
+    if set(generated) != {"SecureGameWindows.java", "SecureGameApplication.java", "SecureFlutterActivity.java"}:
+        raise RuntimeError("Secure-window source templates missing")
+    destination = main / "java" / Path(*namespace.split("."))
+    destination.mkdir(parents=True, exist_ok=True)
+    for name, code in generated.items():
+        (destination / name).write_text(code, encoding="utf-8")
+    activity.write_text(source, encoding="utf-8")
+    MANIFEST.write_text(manifest[:tag.start()] + protected_tag + manifest[tag.end():], encoding="utf-8")
+    print("  Android: secure game windows, lifecycle and recents protection")
+
+
 def patch_manifest() -> None:
     s = MANIFEST.read_text(encoding="utf-8")
     for perm in PERMISSIONS:
@@ -201,9 +244,11 @@ def main() -> None:
         sys.exit("Android project missing - run first:  flutter create --org ir.gammly --project-name the_case --platforms android .")
     patch_manifest()
     patch_gradle()
+    patch_screen_capture()
     copy_icons()
     print("android/ is ready")
 
 
 if __name__ == "__main__":
     main()
+
