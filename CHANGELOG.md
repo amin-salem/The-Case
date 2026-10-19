@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased: delegated aggregate analytics
+
+- Added an opt-in, expiring report-only credential for `GET /v1/analytics/funnel`. It cannot authorize admin/player endpoints or writes. Server stores only a SHA-256 digest; nested aggregate fields are whitelisted, responses are not HTTP-cached, and reads have a shared fail-closed rate limit. No migration or APK. Activation, expiry, revocation and safe JSON export are documented in `docs/operations.md`.
+
 ## server 1.31.0, app 1.30.0 (build 61): Bazaar purchase fix, case categories, weekend format 3 (Amin, 18 Oct 2026)
 
 - **Cafe Bazaar rejection (version code 55) fixed.** The vendored `flutter_poolakey` plugin never answered the `connect` call, so the app's `await connect(...)` hung for ever and the shop always said «برای خرید، اپ کافه‌بازار باید روی گوشی نصب و به‌روز باشه». Now: the plugin answers; the connection is lazy and retried (startup, when buying: 3 tries of 18 s, app resume, after a disconnect); the shop shows «در حال اتصال به کافه‌بازار…» and tells failures apart (not installed → open Bazaar, too old, no answer → retry, key missing, other); the purchase call survives a missing activity and a restored process; patch_android adds the Bazaar `queries`, the `PAY_THROUGH_BAZAAR` permission and R8 keep rules. Unit tests with a fake Poolakey (`app/test/billing_test.dart`). How to test on a phone: `docs/operations.md`.
@@ -599,3 +603,4 @@ Every case has one answer, so the threats are a throwaway account that loses a c
 
 ## 1.0.0
 - First release: daily cases, interrogation, accusation with proof, coins, archive, leaderboards, shop, inbox.
+
