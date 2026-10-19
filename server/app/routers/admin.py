@@ -123,7 +123,7 @@ async def smoke_bulk(body: SmokeBulkIn, session: AsyncSession = Depends(get_sess
                         nickname=default_nickname(), invite_code=await unique_invite_code(session), token_gen=0, coins=0)
         session.add(player)
         await session.flush()
-        add_coins(session, player, eco.START_COINS, "welcome")
+        await add_coins(session, player, eco.START_COINS, "welcome")
         made.append(player)
     session.add(AdminLog(action="smoke_bulk", target=f"smoke-load-{run}", detail={"n": body.n}))
     await session.commit()
@@ -226,3 +226,4 @@ async def set_tester(body: TesterIn, session: AsyncSession = Depends(get_session
     await session.commit()
     log.info("admin tester player=%s tester=%s", p.id[:6], body.tester)
     return {"id": p.id, "nickname": p.nickname, "tester": p.tester}
+

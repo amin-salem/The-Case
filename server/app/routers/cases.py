@@ -243,7 +243,7 @@ async def unlock(case_id: str, player: Player = Depends(current_player),
         cost = _unlock_cost(c)
         if player.coins < cost:
             raise HTTPException(402, {"error": "not_enough_coins", "need": cost})
-        add_coins(session, player, -cost, f"unlock:{c.id}")
+        await add_coins(session, player, -cost, f"unlock:{c.id}")
         await progress.record(session, player, case_unlock=1)
         if p is None:
             p = CaseProgress(player_id=player.id, case_id=c.id)
@@ -269,7 +269,7 @@ async def buy_hint(case_id: str, player: Player = Depends(current_player),
     if player.coins < cost:
         raise HTTPException(402, {"error": "not_enough_coins", "need": cost})
     if cost:
-        add_coins(session, player, -cost, f"hint{p.hints + 1}:{c.id}")
+        await add_coins(session, player, -cost, f"hint{p.hints + 1}:{c.id}")
     hint = c.hints[p.hints]
     p.hints += 1
     gains = await progress.record(session, player, hint=1)
@@ -366,7 +366,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
                                           live_solved_before=int((player.stats or {}).get("weekly_solved", 0)))
         player.cases_solved += 1
         player.stars_total += p.stars
-        add_coins(session, player, reward, f"solve:{c.id}")
+        await add_coins(session, player, reward, f"solve:{c.id}")
         xp = eco.WEEKLY_XP[p.stars] if live else eco.XP_CASE[p.stars] + (eco.XP_DAILY_BONUS if today_case else 0)
         early = today_case and (content.now_local() - content.opens_at(c)).total_seconds() <= 30 * 60
         gains = await progress.record(
@@ -481,7 +481,7 @@ async def night1_liar(case_id: str, body: LiarIn, player: Player = Depends(curre
     reward = eco.WEEKEND_LIAR_REWARD if ok else 0
     p.night1 = {"pick": body.suspect, "ok": ok, "reward": reward}
     if reward:
-        add_coins(session, player, reward, f"liar:{c.id}")
+        await add_coins(session, player, reward, f"liar:{c.id}")
     await session.commit()
     log.info("weekend night1 case=%s ok=%s", c.id, ok)
     return LiarOut(ok=ok, reward=reward, coins=player.coins, progress=_progress_out(c, p))
@@ -567,3 +567,4 @@ async def tick(case_id: str, body: TickIn, player: Player = Depends(current_play
         add_active_time(p, body.seconds, utcnow())
         await session.commit()
     return TickOut(active_seconds=p.active_seconds or 0)
+

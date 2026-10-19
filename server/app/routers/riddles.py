@@ -78,7 +78,7 @@ async def unlock(riddle_id: str, player: Player = Depends(current_player),
             raise HTTPException(402, {"error": "not_enough_coins", "need": eco.RIDDLE_UNLOCK_COST})
         a = await _row(session, player, day, r.id)
         a.unlocked = True
-        add_coins(session, player, -eco.RIDDLE_UNLOCK_COST, f"riddle_unlock:{r.id}")
+        await add_coins(session, player, -eco.RIDDLE_UNLOCK_COST, f"riddle_unlock:{r.id}")
         gains = await progress.record(session, player, riddle_unlock=1)
         try:
             await session.commit()
@@ -104,7 +104,7 @@ async def answer(riddle_id: str, body: RiddleAnswerIn, player: Player = Depends(
     a.choice, a.correct, a.seconds, a.at = body.choice, ok, body.seconds, utcnow()
     reward = eco.RIDDLE_REWARD if ok else 0
     if reward:
-        add_coins(session, player, reward, f"riddle:{r.id}")
+        await add_coins(session, player, reward, f"riddle:{r.id}")
     events = {"riddle_answer": 1}
     if ok:
         events["riddle_correct"] = 1
@@ -122,3 +122,4 @@ async def answer(riddle_id: str, body: RiddleAnswerIn, player: Player = Depends(
         raise HTTPException(409, "already_answered") from None
     return RiddleAnswerOut(correct=ok, answer=r.answer, explain=r.explain, reward=reward, coins=player.coins,
                            item=_item(r, slot, a), gains=GainsOut(**gains.out()))
+

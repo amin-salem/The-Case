@@ -70,7 +70,7 @@ async def verify(body: VerifyIn, player: Player = Depends(current_player),
     if not renewal:
         if prod.coins:
             added = prod.coins
-            add_coins(session, player, added, f"buy:{prod.id}")
+            await add_coins(session, player, added, f"buy:{prod.id}")
             grants.append({"type": "coins", "amount": added})
         if prod.no_ads:
             player.no_ads = True
@@ -94,5 +94,11 @@ async def verify(body: VerifyIn, player: Player = Depends(current_player),
     except IntegrityError:
         await session.rollback()
         await session.refresh(player)
+        winner = await session.scalar(select(Purchase).where(Purchase.purchase_token == body.purchase_token))
+        if winner is None or winner.player_id != player.id:
+            return _out(player, "rejected", reason="token_used")
+        if winner.product_id != body.product_id:
+            return _out(player, "rejected", reason="wrong_product")
         return _out(player, "already_granted", consume=consume)
     return _out(player, "granted", added=added, consume=consume)
+

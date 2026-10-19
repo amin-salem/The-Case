@@ -118,3 +118,34 @@ jobs:
       - name: Report Flutter failure
         if: failure()
         run: echo "::error title=flutter::$(tail -c 6000 flutter.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"
+
+
+  wallet-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: wallet_ci
+          POSTGRES_PASSWORD: isolated-ci-only
+          POSTGRES_DB: wallet_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U wallet_ci -d wallet_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        working-directory: server
+        run: pip install -r requirements-dev.txt
+      - name: PostgreSQL wallet and claim concurrency (isolated database)
+        working-directory: server
+        env:
+          WALLET_TEST_DATABASE_URL: postgresql+asyncpg://wallet_ci:isolated-ci-only@localhost:5432/wallet_test
+        run: pytest -q tests/test_wallet_concurrency.py

@@ -57,3 +57,28 @@ async def create_tables() -> None:
 async def get_session() -> AsyncIterator[AsyncSession]:
     async with SessionLocal() as session:
         yield session
+
+
+
+async def begin_write(session: AsyncSession) -> None:
+    """SQLite has no row locks: reserve its writer before the first eligibility read.
+
+    PostgreSQL uses row locks instead, so unrelated accounts remain independent.
+    """
+    if session.get_bind().dialect.name == "sqlite" and not session.in_transaction():
+        from sqlalchemy import text
+        await session.execute(text("BEGIN IMMEDIATE"))
+
+
+async def lock_players(session: AsyncSession, ids: list[str]) -> dict:
+    """Lock accounts in deterministic order and refresh any already-loaded ORM state.
+
+    Caller owns the transaction. Reacquire after any intermediate commit before more mutations.
+    Multi-account jobs must acquire the complete set at once (never actor then inviter).
+    """
+    from sqlalchemy import select
+    from .models import Player
+    await begin_write(session)
+    rows = (await session.scalars(select(Player).where(Player.id.in_(ids)).order_by(Player.id)
+                                  .with_for_update().execution_options(populate_existing=True))).all()
+    return {p.id: p for p in rows}

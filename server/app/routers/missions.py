@@ -63,7 +63,8 @@ async def claim(player: Player = Depends(current_player), session: AsyncSession 
     player.chests = (player.chests or 0) + 1
     md.claimed = True
     progress.set_stat_max(player, "best_chest_streak", player.chest_streak)
-    add_coins(session, player, reward, f"chest:{day}")
+    await add_coins(session, player, reward, f"chest:{day}")
     gains = await progress.record(session, player, xp=eco.XP_CHEST, chest=1)
     await session.commit()
     return ChestOut(missions=missions_out(player, md, day), reward=reward, gains=GainsOut(**gains.out()))
+
