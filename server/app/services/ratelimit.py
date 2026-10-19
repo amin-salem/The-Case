@@ -92,6 +92,8 @@ DEFAULTS: dict[str, Policy] = {p.name: p for p in [
     # generous
     _p("read", [(60, 10), (1500, 600)], "player", note="GET under /v1"),
     _p("write", [(30, 10), (900, 600)], "player", note="other POST/PATCH under /v1"),
+    # Restricted aggregate reports: expensive queries, shared limit, fail closed.
+    _p("analytics", [(6, 60), (60, 3600)], "ip", "strict", "closed", "report-only API, including failed authentication"),
     # admin
     _p("admin", [(60, 10), (2000, 600)], "ip", note="admin API with a correct key"),
     _p("admin_fail", [(5, 900)], "ip", "strict", "closed", "wrong X-Admin-Key: N failures in the window lock the IP for the window"),
@@ -115,6 +117,7 @@ ROUTES: list[tuple[str, re.Pattern, str]] = [(m, re.compile(rx), pol) for m, rx,
     ("POST", r"^/v1/referrals/redeem$", "referral"),
     ("POST", r"^/v1/cases/[^/]+/comments$", "comment"),
     ("POST", r"^/v1/me/client$", "client_info"),
+    ("*", r"^/v1/analytics(/|$)", "analytics"),
     ("GET", r"^/v1/", "read"),
     ("*", r"^/v1/", "write"),
     ("*", r"^/admin(/|$)", "admin"),
@@ -719,3 +722,4 @@ class RateLimitMiddleware:
             await send(message)
 
         await self.app(scope, receive, send_with_headers)
+

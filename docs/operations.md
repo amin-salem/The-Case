@@ -424,3 +424,73 @@ must already be linked to one account; the answer `no_player` means nobody verif
 - New column `case_progress.night1` (migration 0027, additive, listed in `.github/workflows/ci.yml`). New route `POST /v1/cases/{id}/liar` shares the strict
   `accuse` rate-limit policy. New numbers in `economy.py`: `WEEKLY_EARLY_BONUS` 80, `WEEKEND_LIAR_REWARD` 10. New achievement `weekend_night1`.
 - Nothing to set on Liara. Deploy the server from the panel (version 1.31.0). Old apps keep working (all new fields are optional).
+
+
+## Delegated aggregate analytics (19 Oct 2026; opt-in, no admin access)
+
+`GET /v1/analytics/funnel?days=30` returns the existing funnel/retention report, including aggregate purchase counts,
+coin-balance quartiles and per-case completion metrics. It accepts **only** `X-Analytics-Key`. It grants no admin UI,
+player listing, email/phone/device access, payment-token access, gifts, bans, wallet changes or config writes.
+The original `X-Admin-Key` routes are unchanged. No database migration or APK is needed.
+
+The route is disabled until BOTH environment settings exist:
+
+- `ANALYTICS_API_KEY_SHA256`: lowercase SHA-256 hex digest of a separate random key (not the raw key).
+- `ANALYTICS_API_KEY_EXPIRES_AT`: expiry in Unix seconds (UTC). Missing/zero/past expiry refuses access.
+
+Generate the credential on your own trusted computer; never paste its output into GitHub, build logs, tickets or the app:
+
+```bash
+python3 - <<'PY'
+import hashlib, secrets, time
+key = secrets.token_urlsafe(32)
+print('Private reader key (share only through your approved secret channel):', key)
+print('ANALYTICS_API_KEY_SHA256=' + hashlib.sha256(key.encode()).hexdigest())
+print('ANALYTICS_API_KEY_EXPIRES_AT=' + str(int(time.time()) + 7 * 86400))
+PY
+```
+
+Set only the digest and deadline in Liara's environment, then apply the reviewed server change through the owner's
+normal deployment. Merely pushing a feature branch does not enable access. Do not reuse `ADMIN_API_KEY` or `JWT_SECRET`;
+the report authentication explicitly refuses either as the delegated key. Keep the raw reader key separate from admin
+credentials. To revoke: clear the digest and restart/redeploy workers. To rotate: replace the digest and deadline and
+restart/redeploy workers; the old key stops working. After the deadline, requests fail even when the report is cached.
+All worker processes need the same environment. This is one delegated credential, not a new admin account.
+
+Read the report from a trusted client. The following prompts for the key without echoing it or putting it in command-line
+arguments, sends it only as an HTTPS header, rejects redirects (so a credential cannot follow a redirect to another host),
+and saves ONLY aggregate data to `funnel-report.json`. It never needs the main admin key:
+
+```bash
+python3 - <<'PY'
+import getpass, json, urllib.request
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *args, **kwargs):
+        return None
+key = getpass.getpass('Reader key: ')
+request = urllib.request.Request('https://gaamly.ir/v1/analytics/funnel?days=30',
+                                 headers={'X-Analytics-Key': key})
+with urllib.request.build_opener(NoRedirect()).open(request, timeout=60) as response:
+    data = json.load(response)
+with open('funnel-report.json', 'w', encoding='utf-8') as output:
+    json.dump(data, output, ensure_ascii=False, indent=2)
+print('Saved funnel-report.json')
+PY
+```
+
+A connected reader needs the raw limited key through an approved secret channel, OR the owner can supply the JSON export;
+creating this endpoint alone does not grant an assistant live access. If there is no secure credential channel, use the export.
+The current GitHub connector cannot store Liara environment variables or authenticate arbitrary private HTTP APIs.
+
+Controls: `days` is 1..90 (default 30); a dedicated existing-limiter policy allows 6 requests/minute and 60/hour per IP,
+shared via Redis or the database and fail-closed if that store fails. `RL_ANALYTICS` uses the usual override format.
+Report queries are SELECT-only; the limiter's own counters can still write to `rate_hits`. Auth is checked before report
+queries and on every cached response. Internal cache is bounded to 4 windows, 60 seconds per worker; HTTP responses are
+`Cache-Control: no-store`. Nested response models whitelist aggregate fields and reconstruct the summary from that data.
+Do not record the reader header in a proxy/access-log configuration. Small cohorts still expose business-sensitive
+aggregate information: give the key only to a trusted analyst. Retention still measures case open/finish activity, not
+all app sessions; purchase counts are not actual paid currency amounts. No metric definition changed in this patch.
+
+Rollback: disable/revoke the credential first; removing this optional route/settings has no effect on existing clients or data.
+CI covers denied/default/expired/rotated credentials, admin-scope isolation, window bounds, nested-field filtering,
+partial errors, bounded caching and absence of business-data writes.
