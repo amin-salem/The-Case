@@ -43,6 +43,11 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(61, '۱.۳۰', '2026-10-18', [
+    WhatsNewItem('bazaar_fix', 'خرید از کافه‌بازار درست شد: اتصال خودکار دوباره امتحان می‌شه و اگه مشکلی باشه دلیلش رو می‌گه', WhatsNewTarget.caseToday),
+    WhatsNewItem('categories', 'هر پرونده یه موضوع داره (پزشکی، هنر، خانواده...) و توی بایگانی می‌تونی با موضوع فیلتر کنی', WhatsNewTarget.archive),
+    WhatsNewItem('weekend_nights', 'پرونده‌ی آخر هفته دو شبه شد: شب اول «کی دروغ می‌گه؟»، شب دوم مظنون تازه. ساعتش: پنجشنبه ۹ صبح تا جمعه ۲۱', WhatsNewTarget.weekend),
+  ]),
   WhatsNewRelease(58, '۱.۲۹', '2026-10-17', [
     WhatsNewItem('difficulty_bar', 'سختی پرونده حالا نوار رنگی ۵ سطحی با برچسب: از آسان (سبز) تا خیلی سخت (قرمز)', WhatsNewTarget.archive),
     WhatsNewItem('stars_back', 'امتیاز دوباره ستاره است: ۱ سمت راست، ۵ سمت چپ، با عدد زیر هر ستاره', WhatsNewTarget.comments),
@@ -51,7 +56,7 @@ const List<WhatsNewRelease> kWhatsNew = [
     WhatsNewItem('rate_sheet', 'بعد از حل پرونده، امتیازدادن با یه ضربه، توی یه پنجره‌ی کوچیک', WhatsNewTarget.comments),
     WhatsNewItem('rate_old', 'پرونده‌های قبلی که امتیاز ندادی توی بایگانی منتظرتن', WhatsNewTarget.archive),
     WhatsNewItem('warrant_rare', 'حکم بازرسی کم‌یاب‌تر شد؛ بقیه‌ش رو می‌تونی با سکه رد کنی', WhatsNewTarget.caseToday),
-    WhatsNewItem('weekend_time', 'ساعت دقیق پرونده‌ی آخر هفته: چهارشنبه شب ۲۱ تا جمعه ۲۱', WhatsNewTarget.weekend),
+    WhatsNewItem('weekend_time', 'ساعت دقیق پرونده‌ی آخر هفته', WhatsNewTarget.weekend),
   ]),
   WhatsNewRelease(56, '۱.۲۷', '2026-10-17', [
     WhatsNewItem('fair_week', 'جدول هفتگی عادلانه شد: فقط پرونده‌های همین هفته حساب می‌شن و بایگانی توش نیست', WhatsNewTarget.leaderboard),

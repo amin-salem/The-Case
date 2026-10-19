@@ -54,8 +54,12 @@ class Suspect {
         avatar = AvatarSpec((j['avatar'] as Map?)?.cast<String, dynamic>() ?? const {}),
         motive = _s(j['motive']),
         statement = _s(j['statement']),
+        appearsChapter = _i(j['appears_chapter']),
         questions = [for (final q in _maps(j['questions'])) QA(q)];
 
+  /// Weekend format 3: 1 = the newcomer who appears in chapter 2 (night 2); 0 = there from the start.
+  final int appearsChapter;
+  bool get isNewcomer => appearsChapter >= 1;
   final String id, name, role, motive, statement;
   final String intro; // one neutral line: who this is (empty in an old cached case)
   final int age;
@@ -68,8 +72,49 @@ class Evidence {
       : id = _s(j['id']),
         type = _s(j['type']),
         title = _s(j['title']),
-        text = _s(j['text']);
+        text = _s(j['text']),
+        chapter = _i(j['chapter'], 1);
+
+  /// Which night/chapter the card belongs to (1 = from the start; 2 = arrived with chapter 2).
+  final int chapter;
   final String id, type, title, text;
+}
+
+/// Format 3, night 1: the question as the case file shows it (the answer is only given by the answer call).
+class Night1Info {
+  Night1Info(Map<String, dynamic> j)
+      : question = _s(j['question'], 'کی دروغ می‌گه؟'),
+        open = _b(j['open']),
+        reward = _i(j['reward'], 10);
+  final String question;
+  final bool open; // false once chapter 2 has opened
+  final int reward;
+}
+
+/// Format 3, night 2 teaser: when chapter 2 opens and how much is new (counts only, no names).
+class Night2Info {
+  Night2Info(Map<String, dynamic> j)
+      : opensAt = j['opens_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['opens_at'] as num).toInt() * 1000) : null,
+        newSuspects = _i(j['new_suspects']),
+        newCards = _i(j['new_cards']),
+        open = _b(j['open']);
+  final DateTime? opensAt;
+  final int newSuspects, newCards;
+  final bool open;
+}
+
+/// The player's answer to the night-1 question, with the reveal.
+class Night1Answer {
+  Night1Answer(Map<String, dynamic> j)
+      : pick = _s(j['pick']),
+        ok = _b(j['ok']),
+        reward = _i(j['reward']),
+        liar = _s(j['liar']),
+        card = _s(j['card']),
+        explanation = _s(j['explanation']);
+  final String pick, liar, card, explanation;
+  final bool ok;
+  final int reward;
 }
 
 class CaseData {
@@ -79,6 +124,7 @@ class CaseData {
         title = _s(j['title']),
         location = _s(j['location']),
         scene = _s(j['scene']),
+        category = _s(j['category']),
         difficulty = _i(j['difficulty'], 2),
         intro = _s(j['intro']),
         suspects = [for (final s in _maps(j['suspects'])) Suspect(s)],
@@ -94,11 +140,20 @@ class CaseData {
         motives = [for (final m in _maps(j['motives'])) (id: _s(m['id']), text: _s(m['text']))],
         motive = (j['solution'] as Map?)?['motive'] as String?,
         story = j['story'] is Map ? StoryLines((j['story'] as Map).cast<String, dynamic>()) : null,
-        twoPart = _i(j['format']) == 2,
+        format = _i(j['format']),
+        night1 = j['night1'] is Map ? Night1Info((j['night1'] as Map).cast<String, dynamic>()) : null,
+        night2 = j['night2'] is Map ? Night2Info((j['night2'] as Map).cast<String, dynamic>()) : null,
         showsPerChapter = _i(j['shows_per_chapter'], 3);
 
-  /// Weekend case in the new format: the accusation asks who + why/how (no evidence step) and cards can be shown to suspects.
-  final bool twoPart;
+  /// Weekend case format (0/1 old, 2 two-part accusation, 3 two nights).
+  final int format;
+  bool get twoPart => format == 2 || format == 3;
+  bool get twoNights => format == 3;
+
+  /// Format 3: the night-1 question («کی دروغ می‌گه؟») and a teaser of night 2.
+  final Night1Info? night1;
+  final Night2Info? night2;
+
   final int showsPerChapter;
 
   /// A story chapter: ناصری's intro (and, once finished, outro and the season thread). Null for other cases.
@@ -115,6 +170,7 @@ class CaseData {
   bool get weekly => motives.isNotEmpty;
 
   final String id, title, location, scene, intro;
+  final String category; // topic key, '' when the case has none (old server)
   final String? culprit, explanation; // only for finished cases
   final List<String> proof;
   final int number, difficulty;
@@ -153,7 +209,11 @@ class Progress {
           for (final t in (j['shows'] as List? ?? const []))
             if (t is Map) ShowNote(suspect: _s(t['s']), evidence: _s(t['e']), text: _s(t['t']))
         ],
-        showsLeft = _i(j['shows_left']);
+        showsLeft = _i(j['shows_left']),
+        night1 = j['night1'] is Map ? Night1Answer((j['night1'] as Map).cast<String, dynamic>()) : null;
+
+  /// Weekend format 3: this player's answer to the night-1 question (null = not answered yet).
+  final Night1Answer? night1;
 
   /// Weekend case: evidence cards this player showed to suspects, with what each suspect said.
   final List<ShowNote> shows;
@@ -202,6 +262,7 @@ class CaseRow {
         title = _s(j['title']),
         location = _s(j['location']),
         scene = _s(j['scene']),
+        category = _s(j['category']),
         difficulty = _i(j['difficulty'], 2),
         publish = _s(j['publish']),
         today = _b(j['today']),
@@ -218,6 +279,7 @@ class CaseRow {
         myRating = _i(j['my_rating']);
 
   final String id, title, location, scene, publish;
+  final String category; // topic key, '' when unknown
   final int number, difficulty, unlockCost, stars, solvers;
   final double ratingAvg; // average stars of all detectives (0 = nobody rated)
   final int ratingCount, commentCount, myRating;
@@ -252,7 +314,13 @@ class CasesList {
         weekly = j['weekly'] is Map ? CaseRow((j['weekly'] as Map).cast<String, dynamic>()) : null,
         weeklyClosesAt = j['weekly_closes_at'] is num
             ? DateTime.fromMillisecondsSinceEpoch((j['weekly_closes_at'] as num).toInt() * 1000)
-            : null;
+            : null,
+        weeklyNextChapterAt = j['weekly_next_chapter_at'] is num
+            ? DateTime.fromMillisecondsSinceEpoch((j['weekly_next_chapter_at'] as num).toInt() * 1000)
+            : null,
+        weeklyFormat = _i(j['weekly_format']);
+  final DateTime? weeklyNextChapterAt; // when chapter 2 opens (null once open)
+  final int weeklyFormat; // 3 = two nights
   final CaseRow? weekly; // this weekend's big case, while it is open
   final DateTime? weeklyClosesAt;
   final CaseRow? today;

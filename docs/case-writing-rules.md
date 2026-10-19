@@ -92,6 +92,18 @@ why. Then judge:
 - At least 5 evidence cards (nightly cases usually 7–9; weekend cases about 16, in chapters).
 - After editing, run the content checks (JSON loads, `server/app/content.py` validation); CI must be green.
 
+## 9. Category (every case, from 18 Oct 2026)
+Every new case sets `"category"` (next to `scene`) with the topic it is really about. Choose it from the intro, the suspects
+and the solution, not from the title. The server refuses an unknown key; a missing one is tolerated only for old files.
+- `medical` پزشکی: hospital, patient, medicine, a doctor or nurse at the centre.
+- `art` هنر و صحنه: museum, theatre, art, antiques, manuscripts, crafts and restoration.
+- `family` خانواده و ارث: inheritance, wills, a family secret, relatives who gain or lose.
+- `business` تجارت و پول: shops, companies, stock, accounts, contracts, trade fraud.
+- `science` علم و پژوهش: labs, universities, research, archaeology.
+- `travel` سفر و مهمانی: trains, hotels, airports, tours, weddings and parties, mountain lodges.
+- `crime` جرم و قانون: smuggling, customs, arson/insurance, exam leaks, police-and-court matters.
+Spread new cases across the categories (the filter chips in the archive show the mix); the app draws the icon and name itself.
+
 ## Notification teaser (every nightly case and every weekend case)
 Every case needs an entry in `server/app/content/notify.json`: `{"<case id>": {"title": "<the case's exact title>", "head": "...", "body": "..."}}`.
 - `head` is the notification title (max ~35 characters, may end with one emoji) and must be different from every other case's head; `body` is one or two spoken-Persian sentences (max ~90 characters).

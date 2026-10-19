@@ -9,6 +9,7 @@ import '../services/case_clock.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/cast_strip.dart';
+import '../widgets/category.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/character.dart';
 import '../widgets/coach_marks.dart';
@@ -271,6 +272,11 @@ class _CaseScreenState extends State<CaseScreen> {
                           DifficultyBar(c.difficulty),
                         ]),
                       ),
+                      if (c.category.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6),
+                          child: Align(alignment: Alignment.centerRight, child: CategoryBadge(c.category)),
+                        ),
                       const SizedBox(height: 16),
                       if (c.story != null) ...[
                         FadeSlideIn(delay: const Duration(milliseconds: 600), child: PartnerCard(text: c.story!.intro, dark: false)),
@@ -458,7 +464,9 @@ class _CaseScreenState extends State<CaseScreen> {
             const Icon(Icons.lock_clock_rounded, color: K.brass),
             const SizedBox(width: 8),
             Expanded(
-              child: Text('فصل ${fa(c.chapters.length + 1)} از ${fa(c.chaptersTotal)} با مدارک تازه باز می‌شه',
+              child: Text(c.twoNights
+                  ? 'شب دوم: یه مظنون تازه و مدارک جدید باز می‌شه'
+                  : 'فصل ${fa(c.chapters.length + 1)} از ${fa(c.chaptersTotal)} با مدارک تازه باز می‌شه',
                   style: tBody(13.5, w: FontWeight.w700)),
             ),
             Text(faClock(c.nextChapterAt!.difference(DateTime.now()).isNegative
@@ -467,6 +475,10 @@ class _CaseScreenState extends State<CaseScreen> {
                 style: tDisplay(16, color: K.brass)),
           ]),
         ),
+      ],
+      if (c.twoNights && c.night1 != null) ...[
+        const SizedBox(height: 12),
+        _night1Card(c, p),
       ],
       const SizedBox(height: 18),
       CastStrip(suspects: c.suspects, onOpen: _openSuspect),
@@ -510,6 +522,77 @@ class _CaseScreenState extends State<CaseScreen> {
             'اتهام اشتباه و سرنخ دوم و سوم، پلاک‌هات رو کم می‌کنه.', style: tBody(14, color: K.textSoft)),
       ],
     ]);
+  }
+
+  /// Weekend format 3, night 1: «کی دروغ می‌گه؟». One try, a small reward; the answer comes with the card that proves it.
+  Widget _night1Card(CaseData c, Progress p) {
+    final n = c.night1!;
+    final a = p.night1;
+    final canAnswer = n.open && a == null && !p.finished && Api.i.online;
+    return Paper(
+      color: K.paperDark,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          const Icon(Icons.nightlight_round, color: K.stamp, size: 20),
+          const SizedBox(width: 6),
+          Expanded(child: Text('شب اول · ${n.question}', style: tDisplay(17, color: K.ink))),
+          if (a != null && a.ok)
+            Text('+${fa(a.reward)} سکه', style: tBody(13, color: K.stamp, w: FontWeight.w900)),
+        ]),
+        const SizedBox(height: 6),
+        if (a == null && n.open)
+          Text('یکی از مظنون‌ها توی حرفش با یکی از مدارک امشب نمی‌خونه. فقط یک بار می‌تونی جواب بدی؛ جواب درست ${fa(n.reward)} سکه‌ست. '
+              'ربطی به متهم‌کردن اصلی نداره و فرصت اتهامت رو کم نمی‌کنه.', style: tBody(13.5, color: K.ink))
+        else if (a == null)
+          Text('وقتش گذشت؛ شب دوم شروع شده.', style: tBody(13.5, color: K.inkSoft))
+        else ...[
+          Text(a.ok ? 'درست گفتی!' : 'این بار نشد.', style: tBody(14.5, color: a.ok ? K.ok : K.stamp, w: FontWeight.w900)),
+          const SizedBox(height: 4),
+          Text('دروغگو: ${c.suspect(a.liar).name}. مدرک: ${c.evidenceById(a.card)?.title ?? a.card}.',
+              style: tBody(13.5, color: K.ink, w: FontWeight.w700)),
+          Text(a.explanation, style: tBody(13.5, color: K.ink)),
+        ],
+        if (canAnswer) ...[
+          const SizedBox(height: 10),
+          Wrap(spacing: 8, runSpacing: 8, children: [
+            for (final s in c.suspects.where((s) => !s.isNewcomer))
+              ActionChip(
+                key: ValueKey('liar-${s.id}'),
+                label: Text(s.name, style: tBody(13, color: K.ink, w: FontWeight.w700)),
+                backgroundColor: K.paper,
+                onPressed: () => _answerLiar(c, s),
+              ),
+          ]),
+        ],
+      ]),
+    );
+  }
+
+  Future<void> _answerLiar(CaseData c, Suspect s) async {
+    final sure = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          backgroundColor: K.night,
+          title: Text('مطمئنی؟', style: tDisplay(18)),
+          content: Text('فقط یک بار می‌تونی جواب بدی. «${s.name}» دروغ می‌گه؟'),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('نه، صبر کن')),
+            TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('آره، همینه')),
+          ],
+        ),
+      ),
+    );
+    if (sure != true || !mounted) return;
+    try {
+      final r = await Api.i.answerLiar(c.id, s.id);
+      if (!mounted) return;
+      setState(() => _progress = r.progress ?? _progress);
+      toast(context, r.ok ? 'آفرین! ${fa(r.reward)} سکه اضافه شد.' : 'این بار نشد؛ جواب درست رو پایین ببین.');
+    } catch (e) {
+      if (mounted) toast(context, Api.friendly(e));
+    }
   }
 
   Widget _solutionBox(CaseData c) {
@@ -621,6 +704,11 @@ class _CaseScreenState extends State<CaseScreen> {
                     const SizedBox(height: 4),
                     Text(e.text, style: tBody(14.5, color: K.ink)),
                     ..._namedChips(c, e),
+                    if (c.twoNights && e.chapter >= 2)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text('تازه · شب دوم', key: ValueKey('night2-${e.id}'), style: tBody(11.5, color: K.stamp, w: FontWeight.w900)),
+                      ),
                     if (key) Text('مدرک کلیدی', style: tBody(12, color: K.stamp, w: FontWeight.w900)),
                     if (pinned && !key) Text('نشان‌شده', style: tBody(11, color: K.stamp, w: FontWeight.w900)),
                   ]),

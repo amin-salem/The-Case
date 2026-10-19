@@ -36,15 +36,24 @@ class FlutterPoolakey {
   /// This function may return an error, you should handle the error and check the stacktrace to resolve it.
   static Future<void> connect(String? inAppBillingKey,
       {VoidCallback? onSucceed,
-      VoidCallback? onFailed,
+      void Function(String reason)? onFailed,
       VoidCallback? onDisconnected}) async {
     _registerConnectCallBack(onSucceed, onFailed, onDisconnected);
     await _channel
         .invokeMethod('connect', {'in_app_billing_key': inAppBillingKey});
   }
 
+  /// True while the binding to the Bazaar app is alive (asked from the native side).
+  static Future<bool> isConnected() async {
+    try {
+      return (await _channel.invokeMethod('is_connected')) == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   static void _registerConnectCallBack(VoidCallback? onConnectionSucceed,
-      VoidCallback? onConnectionFailed, VoidCallback? onDisconnected) {
+      void Function(String reason)? onConnectionFailed, VoidCallback? onDisconnected) {
     if (onConnectionSucceed == null &&
         onConnectionFailed == null &&
         onDisconnected == null) {
@@ -58,7 +67,7 @@ class FlutterPoolakey {
         onConnectionSucceed?.call();
         return Future.value(true);
       } else if (call.method == 'connectionFailed') {
-        onConnectionFailed?.call();
+        onConnectionFailed?.call('${call.arguments ?? ''}');
         return Future.value(true);
       }
       throw StateError('method ${call.method} is not supported');

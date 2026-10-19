@@ -132,6 +132,8 @@ class CaseProgress(Base):
     wrong_tries: Mapped[list | None] = mapped_column(JSON, nullable=True)
     # weekend case: [{s, e, c}] evidence cards shown to suspects (c = chapter index when shown)
     shows: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    # weekend format 3, night 1: the one try at «کی دروغ می‌گه؟»: {"pick": suspect id, "ok": bool, "reward": coins}
+    night1: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class Purchase(Base):

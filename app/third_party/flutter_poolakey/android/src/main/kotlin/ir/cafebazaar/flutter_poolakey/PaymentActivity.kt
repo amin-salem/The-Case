@@ -14,25 +14,34 @@ class PaymentActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // After the process was killed and restored the static state is gone: close quietly.
+        if (!Companion.isReady()) {
+            finish()
+            return
+        }
+        var answered = false
+        fun answerOnce(block: () -> Unit) {
+            if (answered) return
+            answered = true
+            try { block() } catch (e: Exception) { }
+            finish()
+        }
+
         val callback: PurchaseCallback.() -> Unit = {
             purchaseSucceed {
-                result.success(it.toMap())
-                finish()
+                answerOnce { result.success(it.toMap()) }
             }
             purchaseCanceled {
-                result.error("PURCHASE_CANCELLED", "Purchase flow has been canceled", null)
-                finish()
+                answerOnce { result.error("PURCHASE_CANCELLED", "Purchase flow has been canceled", null) }
             }
             purchaseFailed {
-                result.error("PURCHASE_FAILED", "Purchase flow has been failed", null)
-                finish()
+                answerOnce { result.error("PURCHASE_FAILED", "Purchase flow has been failed", null) }
             }
             purchaseFlowBegan {
                 // Nothing
             }
             failedToBeginFlow {
-                result.error("FAILED_TO_BEGIN_FLOW", it.toString(), null)
-                finish()
+                answerOnce { result.error("FAILED_TO_BEGIN_FLOW", it.toString(), null) }
             }
         }
         when (command) {
@@ -67,6 +76,9 @@ class PaymentActivity : ComponentActivity() {
         private lateinit var result: MethodChannel.Result
         private var payload: String? = null
         private var dynamicPriceToken: String? = null
+
+        fun isReady(): Boolean =
+            ::command.isInitialized && ::productId.isInitialized && ::payment.isInitialized && ::result.isInitialized
 
         @JvmStatic
         fun start(

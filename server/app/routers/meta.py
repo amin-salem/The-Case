@@ -31,7 +31,7 @@ _public = TTLCache("config_public", ttl=30, max_size=2)
 
 def _economy() -> dict:
     return {"hint_costs": eco.HINT_COSTS, "unlock_cost": eco.UNLOCK_COST, "weekend_archive_cost": eco.WEEKEND_ARCHIVE_COST,
-            "weekend_shows_per_chapter": eco.WEEKEND_SHOWS_PER_CHAPTER, "weekly_early_bonus": eco.WEEKLY_EARLY_BONUS,
+            "weekend_shows_per_chapter": eco.WEEKEND_SHOWS_PER_CHAPTER, "weekly_early_bonus": eco.WEEKLY_EARLY_BONUS, "weekend_liar_reward": eco.WEEKEND_LIAR_REWARD,
             "max_attempts": eco.MAX_ATTEMPTS, "ad_reward": eco.AD_REWARD, "ads_per_day": eco.AD_PER_DAY,
             "secure_reward": eco.SECURE_REWARD, "invite_reward": eco.INVITE_INVITER,
             "invite_new_player": eco.INVITE_NEW_PLAYER,

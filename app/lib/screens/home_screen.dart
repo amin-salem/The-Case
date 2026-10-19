@@ -7,6 +7,7 @@ import '../models/models.dart';
 import '../models/progress.dart';
 import '../services/api.dart';
 import '../services/billing.dart';
+import '../widgets/category.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
 import '../theme.dart';
@@ -411,6 +412,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text('${c.location} · ${fa(c.solvers)} کارآگاه حلش کردن',
                 maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(12.5, color: K.textSoft)),
           ),
+        ]),
+        const SizedBox(height: 6),
+        Row(children: [
+          CategoryBadge(c.category),
+          if (c.category.isNotEmpty) const SizedBox(width: 10),
+          DifficultyBar(c.difficulty, compact: true),
+          const SizedBox(width: 6),
+          Text(kDifficultyLabels[clampDifficulty(c.difficulty) - 1], style: tBody(11.5, color: K.textSoft)),
         ]),
         const SizedBox(height: 12),
         if (!finished)

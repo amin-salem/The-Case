@@ -22,8 +22,9 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var activityBinding: ActivityPluginBinding? = null
     private lateinit var flutterPluginBinding: FlutterPlugin.FlutterPluginBinding
 
-    private val requireActivity: Activity
-        get() = activityBinding!!.activity
+    // null when the app has no foreground activity (never crash on a missing one)
+    private val currentActivity: Activity?
+        get() = activityBinding?.activity
 
     private var purchaseCallback: (PurchaseCallback.() -> Unit)? = null
 
@@ -47,6 +48,10 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 getVersion(result);
             }
 
+            "is_connected" -> {
+                result.success(::paymentConnection.isInitialized && paymentConnection.getState() == ConnectionState.Connected)
+            }
+
             "connect" -> {
                 val inAppBillingKey = call.argument<String>("in_app_billing_key")
                 connect(inAppBillingKey, result)
@@ -57,8 +62,13 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             "purchase" -> {
+                val activity = currentActivity
+                if (activity == null) {
+                    result.error("NO_ACTIVITY", "No foreground activity to start the payment screen", null)
+                    return
+                }
                 startActivity(
-                    activity = requireActivity,
+                    activity = activity,
                     command = PaymentActivity.Command.Purchase,
                     productId = call.argument<String>("product_id")!!,
                     result = result,
@@ -68,8 +78,13 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             "subscribe" -> {
+                val activity = currentActivity
+                if (activity == null) {
+                    result.error("NO_ACTIVITY", "No foreground activity to start the payment screen", null)
+                    return
+                }
                 startActivity(
-                    activity = requireActivity,
+                    activity = activity,
                     command = PaymentActivity.Command.Subscribe,
                     productId = call.argument<String>("product_id")!!,
                     result = result,
@@ -121,7 +136,16 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         }
         val paymentConfiguration = PaymentConfiguration(localSecurityCheck = securityCheck)
 
-        payment = Payment(context = requireActivity, config = paymentConfiguration)
+        val activity = currentActivity
+        if (activity == null) {
+            result.error("NO_ACTIVITY", "No foreground activity to connect from", null)
+            return
+        }
+        // a reconnect must not leave the old binding behind
+        if (::paymentConnection.isInitialized) {
+            try { paymentConnection.disconnect() } catch (e: Exception) { }
+        }
+        payment = Payment(context = activity, config = paymentConfiguration)
 
         paymentConnection = payment.connect {
             connectionSucceed {
@@ -134,10 +158,13 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 channel.invokeMethod("disconnected", null)
             }
         }
+        // IMPORTANT: answer the Dart call. It was never answered, so `await FlutterPoolakey.connect(...)` hung
+        // forever and the app never knew it was connected (the cause of Bazaar's rejection, version 55).
+        result.success(null)
     }
 
     private fun disconnect(result: Result) {
-        paymentConnection.disconnect()
+        if (::paymentConnection.isInitialized) paymentConnection.disconnect()
         result.success(null)
     }
 
@@ -151,7 +178,7 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         dynamicPriceToken: String
         ?
     ) {
-        if (paymentConnection.getState() != ConnectionState.Connected) {
+        if (!::paymentConnection.isInitialized || paymentConnection.getState() != ConnectionState.Connected) {
             result.error("PURCHASE_FAILED", "In order to purchasing, connect to Poolakey!", null)
             return
         }
@@ -168,10 +195,10 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun consume(purchaseToken: String, result: Result) {
-        if (paymentConnection.getState() != ConnectionState.Connected) {
+        if (!::paymentConnection.isInitialized || paymentConnection.getState() != ConnectionState.Connected) {
             result.error(
                 "PAYMENT_CONNECTION_IS_NOT_CONNECTED",
-                "PaymentConnection is not connected (state: ${paymentConnection.getState()})",
+                "PaymentConnection is not connected (not connected)",
                 null
             )
             return
@@ -187,10 +214,10 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun checkTrialSubscription(result: Result) {
-        if (paymentConnection.getState() != ConnectionState.Connected) {
+        if (!::paymentConnection.isInitialized || paymentConnection.getState() != ConnectionState.Connected) {
             result.error(
                 "PAYMENT_CONNECTION_IS_NOT_CONNECTED",
-                "PaymentConnection is not connected (state: ${paymentConnection.getState()})",
+                "PaymentConnection is not connected (not connected)",
                 null
             )
             return
@@ -213,10 +240,10 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun getAllPurchasedProducts(result: Result) {
-        if (paymentConnection.getState() != ConnectionState.Connected) {
+        if (!::paymentConnection.isInitialized || paymentConnection.getState() != ConnectionState.Connected) {
             result.error(
                 "PAYMENT_CONNECTION_IS_NOT_CONNECTED",
-                "PaymentConnection is not connected (state: ${paymentConnection.getState()})",
+                "PaymentConnection is not connected (not connected)",
                 null
             )
             return
@@ -232,10 +259,10 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun getAllSubscribedProducts(result: Result) {
-        if (paymentConnection.getState() != ConnectionState.Connected) {
+        if (!::paymentConnection.isInitialized || paymentConnection.getState() != ConnectionState.Connected) {
             result.error(
                 "PAYMENT_CONNECTION_IS_NOT_CONNECTED",
-                "PaymentConnection is not connected (state: ${paymentConnection.getState()})",
+                "PaymentConnection is not connected (not connected)",
                 null
             )
             return
@@ -251,10 +278,10 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun getInAppSkuDetails(skuIds: List<String>, result: Result) {
-        if (paymentConnection.getState() != ConnectionState.Connected) {
+        if (!::paymentConnection.isInitialized || paymentConnection.getState() != ConnectionState.Connected) {
             result.error(
                 "PAYMENT_CONNECTION_IS_NOT_CONNECTED",
-                "PaymentConnection is not connected (state: ${paymentConnection.getState()})",
+                "PaymentConnection is not connected (not connected)",
                 null
             )
             return
@@ -271,10 +298,10 @@ class FlutterPoolakeyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun getSubscriptionSkuDetails(skuIds: List<String>, result: Result) {
-        if (paymentConnection.getState() != ConnectionState.Connected) {
+        if (!::paymentConnection.isInitialized || paymentConnection.getState() != ConnectionState.Connected) {
             result.error(
                 "PAYMENT_CONNECTION_IS_NOT_CONNECTED",
-                "PaymentConnection is not connected (state: ${paymentConnection.getState()})",
+                "PaymentConnection is not connected (not connected)",
                 null
             )
             return

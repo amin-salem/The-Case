@@ -19,12 +19,25 @@ from .config import get_settings
 
 CASES_DIR = Path(__file__).parent / "content" / "cases"
 WEEKLY_DIR = Path(__file__).parent / "content" / "weekly"
-SECRET_KEYS = ("hints", "solution")
+# `night1` (weekend format 3) holds the answer of the night-1 question; weekly_public() adds a safe copy back
+SECRET_KEYS = ("hints", "solution", "night1")
 # the scenes the app can draw and play sound for (app/lib/widgets/scene.dart, app/assets/sounds)
 SCENES = frozenset({
     "bazaar_night", "office", "train", "museum", "villa_rain", "warehouse", "harbor", "hospital", "library",
     "theater", "hotel", "kitchen", "snow_lodge", "desert", "subway", "lab", "wedding", "school", "airport", "tower",
 })
+
+# Topic category of a case (docs/case-writing-rules.md §9): key -> (Persian name, icon name the app draws).
+# `category` is optional in the JSON for old files, but every case written from 18 Oct 2026 sets it.
+CATEGORIES = {
+    "medical": ("پزشکی", "medical_services"),
+    "art": ("هنر و صحنه", "palette"),
+    "family": ("خانواده و ارث", "family_restroom"),
+    "business": ("تجارت و پول", "storefront"),
+    "science": ("علم و پژوهش", "science"),
+    "travel": ("سفر و مهمانی", "luggage"),
+    "crime": ("جرم و قانون", "gavel"),
+}
 
 
 class CaseError(ValueError):
@@ -58,7 +71,8 @@ class Case:
     def summary(self) -> dict:
         d = self.data
         return {"id": self.id, "number": self.number, "title": d["title"], "location": d["location"],
-                "scene": d["scene"], "difficulty": d["difficulty"], "publish": self.publish.isoformat()}
+                "scene": d["scene"], "category": d.get("category", ""), "difficulty": d["difficulty"],
+                "publish": self.publish.isoformat()}
 
 
 INTRO_MIN, INTRO_MAX = 20, 90  # every suspect has a short neutral intro (docs/case-writing-rules.md)
@@ -73,6 +87,8 @@ def validate(d: dict, max_suspects: int = 6) -> None:
         raise CaseError(f"{d['id']}: unknown scene {d['scene']!r}")
     if d["difficulty"] not in (1, 2, 3, 4, 5):
         raise CaseError(f"{d['id']}: difficulty must be 1-5")
+    if d.get("category", "") != "" and d["category"] not in CATEGORIES:
+        raise CaseError(f"{d['id']}: unknown category {d['category']!r} (known: {sorted(CATEGORIES)})")
     sids = [s["id"] for s in d["suspects"]]
     eids = [e["id"] for e in d["evidence"]]
     if len(eids) < 5:
@@ -211,7 +227,7 @@ def week_cases(ws: date) -> list[Case]:
 # WEEKLY_DAYS later. It comes in chapters: evidence listed in a later chapter is hidden until
 # that chapter opens (at_hours after the start). Solving it also asks for the motive.
 WEEKLY_DAYS = 3  # old cases (w001) without closes_hours; kept for reference
-WEEKLY_HOURS = 48  # new weekend cases: Wednesday 21:00 to Friday 21:00 unless the file says closes_hours
+WEEKLY_HOURS = 36  # new weekend cases: Thursday 09:00 to Friday 21:00 unless the file says closes_hours (w001: its file says 48)
 
 
 def validate_weekly(d: dict) -> None:
@@ -230,17 +246,81 @@ def validate_weekly(d: dict) -> None:
         raise CaseError(f"{d['id']}: open_hour must be 0..23")
     if "closes_hours" in d and not (isinstance(d["closes_hours"], int) and d["closes_hours"] > max(hours)):
         raise CaseError(f"{d['id']}: closes_hours must be after the last chapter")
-    if d.get("format") == 2:
+    if d.get("format") in (2, 3):
         for s in d["suspects"]:
             r = s.get("reactions")
             if not isinstance(r, dict) or not r or not set(r) <= eids or not all(isinstance(v, str) and v.strip() for v in r.values()):
-                raise CaseError(f"{d['id']}/{s['id']}: format 2 needs `reactions` (evidence id -> what the suspect says)")
+                raise CaseError(f"{d['id']}/{s['id']}: format {d['format']} needs `reactions` (evidence id -> what the suspect says)")
         culprit_r = next(s for s in d["suspects"] if s["id"] == d["solution"]["culprit"])["reactions"]
         if not set(culprit_r) & set(d["solution"]["proof"]):
             raise CaseError(f"{d['id']}: the culprit must react to at least one proof card")
+    if d.get("format") == 3:
+        validate_format3(d, eids)
     motives = {m["id"] for m in d.get("motives", [])}
     if len(motives) < 2 or d["solution"].get("motive") not in motives:
         raise CaseError(f"{d['id']}: needs motives and the right one in the solution")
+
+
+def validate_format3(d: dict, eids: set[str]) -> None:
+    """Weekend format 3 (docs/weekend-format.md): two nights. Night 1 has its own small question («کی دروغ می‌گه؟») and
+    its own suspects/cards; chapter 2 brings ONE new suspect and new cards."""
+    cid = d["id"]
+    chapters = d["chapters"]
+    if len(chapters) != 2 or chapters[1].get("at_hours", 0) <= 0 or not str(chapters[1].get("text", "")).strip():
+        raise CaseError(f"{cid}: format 3 has exactly two chapters; the second has at_hours > 0 and a `text`")
+    later = set(chapters[1].get("evidence", []))
+    if len(later) < 2:
+        raise CaseError(f"{cid}: format 3 chapter 2 needs at least two new evidence cards")
+    if len(eids - later) < 4:
+        raise CaseError(f"{cid}: format 3 night 1 needs at least four cards of its own")
+    new = []
+    for s in d["suspects"]:
+        a = s.get("appears_chapter", 0)
+        if a not in (0, 1) or isinstance(a, bool):
+            raise CaseError(f"{cid}/{s['id']}: appears_chapter must be 0 or 1")
+        if a == 1:
+            new.append(s["id"])
+    if len(new) != 1:
+        raise CaseError(f"{cid}: format 3 has exactly ONE suspect with appears_chapter 1 (the newcomer of chapter 2)")
+    if d["solution"]["culprit"] in new:
+        raise CaseError(f"{cid}: the culprit must be there from night 1 (a newcomer would make the early answer impossible)")
+    n1 = d.get("night1")
+    if not isinstance(n1, dict):
+        raise CaseError(f"{cid}: format 3 needs `night1` {{liar, card, explanation}}")
+    visible = {s["id"] for s in d["suspects"]} - set(new)
+    if n1.get("liar") not in visible or n1.get("liar") == d["solution"]["culprit"]:
+        raise CaseError(f"{cid}: night1.liar must be a night-1 suspect and not the culprit")
+    if n1.get("card") not in eids or n1.get("card") in later:
+        raise CaseError(f"{cid}: night1.card must be a night-1 evidence card")
+    if not isinstance(n1.get("explanation"), str) or not n1["explanation"].strip():
+        raise CaseError(f"{cid}: night1.explanation is required")
+    q = n1.get("question", "")
+    if not isinstance(q, str) or len(q) > 80:
+        raise CaseError(f"{cid}: night1.question must be text up to 80 characters")
+
+
+def suspect_chapter(s: dict) -> int:
+    """The chapter index (0-based) a suspect appears in; old files have no `appears_chapter` (= there from the start)."""
+    a = s.get("appears_chapter", 0)
+    return a if isinstance(a, int) and a >= 0 else 0
+
+
+def chapters_open(c: Case, now: datetime | None = None) -> int:
+    now = now or now_local()
+    start = opens_at(c)
+    return sum(1 for ch in c.data["chapters"] if start + timedelta(hours=ch.get("at_hours", 0)) <= now)
+
+
+def visible_suspect_ids(c: Case, now: datetime | None = None) -> set[str]:
+    """Suspects a player may see (and accuse, question, show cards to) right now. Format 3 hides the newcomer until chapter 2."""
+    n = chapters_open(c, now)
+    return {s["id"] for s in c.data["suspects"] if suspect_chapter(s) < max(1, n)}
+
+
+def night1_open(c: Case, now: datetime | None = None) -> bool:
+    """The night-1 question can be answered while chapter 2 has not opened yet (and the case is open)."""
+    now = now or now_local()
+    return c.data.get("format") == 3 and opens_at(c) <= now < weekly_closes_at(c) and chapters_open(c, now) < 2
 
 
 @lru_cache
@@ -262,8 +342,8 @@ def weekly_by_id(case_id: str) -> Case | None:
     return next((c for c in weekly_cases() if c.id == case_id), None)
 
 
-WEEKEND_OPEN_HOUR = 21  # when a new weekend case opens (Wednesday, with the nightly case); a file may set open_hour
-WEEKEND_OPEN_WEEKDAY = 2  # Monday = 0 ... Wednesday = 2
+WEEKEND_OPEN_HOUR = 9  # when a new weekend case opens (Thursday 09:00, away from the 21:00 nightly case); a file may set open_hour
+WEEKEND_OPEN_WEEKDAY = 3  # Monday = 0 ... Thursday = 3
 
 _FA_DAYS = ["دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه", "یکشنبه"]
 
@@ -593,7 +673,8 @@ def notify_plan(now: datetime | None = None, days: int = 10) -> list[dict]:
             else:
                 total = len(c.data["chapters"])
                 head = f"فصل {n} از {total} باز شد: «{title}»"
-                body = ("مدارک تازه رسید؛ فصل آخره. اگه هنوز متهم نکردی، وقتشه." if n == total
+                body = ("یه مظنون تازه و مدارک جدید رسید؛ شب دوم شروع شد." if c.data.get("format") == 3 else
+                        "مدارک تازه رسید؛ فصل آخره. اگه هنوز متهم نکردی، وقتشه." if n == total
                         else "مدارک تازه رسید؛ شاید دروغ مقصر لای همین‌هاست.")
             out.append({"kind": "weekend", "at": int(at.timestamp()), "head": head, "body": body})
     for back in (0, 1, 2):  # the weekly prizes are paid when the week has closed (Friday 21:00 + a few minutes)
@@ -629,13 +710,26 @@ def weekly_public(c: Case, now: datetime | None = None) -> dict:
             next_at = next_at or at
     data = c.public()
     # what a suspect says about a card is only given by the "show" call (it is limited), never in the case file
-    data["suspects"] = [{k: v for k, v in s.items() if k != "reactions"} for s in data["suspects"]]
-    data["evidence"] = [e for e in data["evidence"] if e["id"] not in hidden]
+    shown = {sid for sid in visible_suspect_ids(c, now)}
+    data["suspects"] = [{k: v for k, v in s.items() if k != "reactions"} for s in data["suspects"] if s["id"] in shown]
+    # which night each card belongs to (1 = from the start), so the app can split «شب اول / شب دوم»
+    night_of = {e: i + 1 for i, ch in enumerate(c.data["chapters"]) for e in ch.get("evidence", [])}
+    data["evidence"] = [{**e, "chapter": night_of.get(e["id"], 1)} for e in data["evidence"] if e["id"] not in hidden]
     data["chapters_open"] = len(chapters)
     from . import economy as eco
     data["shows_per_chapter"] = eco.WEEKEND_SHOWS_PER_CHAPTER
     data["chapters"] = chapters
     data["chapters_total"] = len(c.data["chapters"])
     data["next_chapter_at"] = int(next_at.timestamp()) if next_at else None
+    n1 = c.data.get("night1")
+    if c.data.get("format") == 3 and isinstance(n1, dict):
+        # the question only; liar, card and explanation are given by the answer call
+        data["night1"] = {"question": n1.get("question") or "کی دروغ می‌گه؟", "open": night1_open(c, now),
+                          "reward": eco.WEEKEND_LIAR_REWARD}
+        late = [e for ch in c.data["chapters"][1:] for e in ch.get("evidence", [])]
+        newcomers = [s for s in c.data["suspects"] if suspect_chapter(s) >= 1]
+        # a teaser before chapter 2 (counts only, no names); the newcomer and cards show up in the lists afterwards
+        data["night2"] = {"opens_at": int((start + timedelta(hours=c.data["chapters"][1].get("at_hours", 0))).timestamp()),
+                          "new_suspects": len(newcomers), "new_cards": len(late), "open": len(chapters) >= 2}
     data["closes_at"] = int(weekly_closes_at(c).timestamp())
     return data

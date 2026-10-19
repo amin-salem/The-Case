@@ -150,6 +150,21 @@ The app pays through Cafe Bazaar (Poolakey) and sends the purchase token to `POS
 3. On Liara set `BAZAAR_MODE` to `api_secret` (plus `BAZAAR_API_SECRET`) or `oauth` (plus `BAZAAR_CLIENT_ID`, `BAZAAR_CLIENT_SECRET`, `BAZAAR_REFRESH_TOKEN`). `fake` is refused in production (`store_not_configured`) and shown as bad on the Health page.
 4. Test one real purchase on a test device before publishing.
 
+### Testing a purchase on a phone (Amin; 18 Oct 2026, after Bazaar rejected version code 55)
+Bazaar rejected build 55 with «after starting an in-app purchase the message «برای خرید، اپ کافه‌بازار باید روی گوشی نصب و به‌روز باشه» is shown».
+**Cause:** the vendored Poolakey plugin never answered the `connect` call, so `await FlutterPoolakey.connect(...)` in `Billing.init()` never
+finished, `_ready` stayed false for ever and every purchase hit that toast, even with Bazaar installed and up to date. Since build 61 the
+plugin answers, the connection is opened at start, again when the player buys (3 tries of 18 s), on app resume and after a disconnect, and
+the shop says WHY it failed (not installed / too old / no answer / key missing / other) with a button to open Bazaar or retry.
+How to test before resubmitting:
+1. Phone: Cafe Bazaar installed, **logged in with a real account** (a test account of the Bazaar developer panel works for the in-app products),
+   good internet, Android 11+ is fine. Install the APK from the GitHub release (`release` build 61 or newer).
+2. Open the app, open the shop, tap the smallest coin pack. The Bazaar payment screen must open (Bazaar's own price). If you see
+   «در حال اتصال به کافه‌بازار…» for a few seconds that is normal on a slow phone; a dialog with a reason means something is wrong.
+3. Pay, come back: coins are added; the product is consumed so it can be bought again. Kill the app during a payment and reopen: «خریدت اضافه شد».
+4. The release notes must say «Cafe Bazaar payments: on» (the `BAZAAR_RSA_KEY` secret is set), and Liara needs `BAZAAR_MODE` + credentials (step 3 above).
+5. Logs: `adb logcat | grep -i billing` shows `billing: connect attempt N/3 -> notInstalled | tooOld | timeout | none`.
+
 ## Case comments (12 Oct 2026)
 - Players write comments + 1-5 stars after finishing a case; admin approves in the panel tab «💬 نظرها» (also in the admin app). Nothing is public before approval.
 - Kill switch: `COMMENTS_ENABLED=false` (reads and writes answer 503 `comments_off`). Limit: `RL_COMMENT` (default `2/20,10/3600`).
@@ -205,7 +220,7 @@ The smoke test creates one player with device id `smoke-xxxx` and deletes it aga
 version: `curl -X POST -H "X-Admin-Key: $ADMIN_API_KEY" https://gaamly.ir/admin/players/purge-smoke` (repeat while it answers `"more": true`).
 
 ## Weekend case, new format (14 Oct 2026)
-New weekend cases follow `docs/weekend-format.md`. Numbers (all in `server/app/economy.py`): early bonus `WEEKLY_EARLY_BONUS` 50,
+New weekend cases follow `docs/weekend-format.md`. Numbers (all in `server/app/economy.py`): early bonus `WEEKLY_EARLY_BONUS` 80 (was 50 until 18 Oct 2026),
 shows `WEEKEND_SHOWS_PER_CHAPTER` 3 per opened chapter, archive price `WEEKEND_ARCHIVE_COST` 250 (a normal archive case is 150,
 the weekend price is higher on purpose). The new column `case_progress.shows` is additive (migration 0021, listed in the CI check).
 
@@ -400,3 +415,12 @@ To test story mode before it opens: the tester secures his account with his phon
 it is never stored in the repo). Send `"tester": false` to remove it. A tester sees the story and its chapters (only the chapters
 that are on `main`), his solves never reach any leaderboard or weekly prize, and nothing changes for other players. The phone
 must already be linked to one account; the answer `no_player` means nobody verified that number yet.
+
+## Case categories, weekend format 3 (18 Oct 2026, server 1.31.0, app 1.30.0+61)
+- Every case has `category` (7 topics, `content.CATEGORIES`; rules in `docs/case-writing-rules.md` §9). `GET /v1/cases` rows carry it
+  (`""` when a case has none), the case file carries it, the app shows it with the difficulty and filters the archive by it.
+- Weekend schedule is now Thursday 09:00 → Friday 21:00 (`WEEKEND_OPEN_WEEKDAY` 3, `WEEKEND_OPEN_HOUR` 9, `WEEKLY_HOURS` 36).
+  Chapter 2 of a format-3 case opens at +12 h (21:00). Format 3 is described in `docs/weekend-format.md`.
+- New column `case_progress.night1` (migration 0027, additive, listed in `.github/workflows/ci.yml`). New route `POST /v1/cases/{id}/liar` shares the strict
+  `accuse` rate-limit policy. New numbers in `economy.py`: `WEEKLY_EARLY_BONUS` 80, `WEEKEND_LIAR_REWARD` 10. New achievement `weekend_night1`.
+- Nothing to set on Liara. Deploy the server from the panel (version 1.31.0). Old apps keep working (all new fields are optional).

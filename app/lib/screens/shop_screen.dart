@@ -1,5 +1,6 @@
 import 'account_sheets.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../services/api.dart';
 import '../services/billing.dart';
@@ -24,10 +25,8 @@ class _ShopScreenState extends State<ShopScreen> {
     if (!needOnline(context)) return;
     if (!await offerSecure(context, afterSolve: false)) return;
     if (!mounted) return;
-    if (!Billing.i.available) {
-      toast(context, 'برای خرید، اپ $kStoreName باید روی گوشی نصب و به‌روز باشه.');
-      return;
-    }
+    _lastId = productId;
+    _lastTitle = title;
     setState(() => _busy = true);
     try {
       final (result, added) = await Billing.i.buy(productId);
@@ -40,13 +39,52 @@ class _ShopScreenState extends State<ShopScreen> {
         case BuyResult.cancelled:
           break;
         case BuyResult.unavailable:
-          toast(context, 'برای خرید، اپ $kStoreName باید روی گوشی نصب و به‌روز باشه.');
+          await _explainProblem();
         case BuyResult.failed:
           toast(context, 'خرید انجام نشد. اگه پولی کم شده، نگران نباش؛ برمی‌گرده یا خریدت اضافه می‌شه.');
       }
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// Tells WHY the purchase could not start (not just "install Bazaar"): missing, too old, no answer, other.
+  Future<void> _explainProblem() async {
+    final problem = Billing.i.problem;
+    final text = billingProblemText(problem) ?? billingProblemText(BillingProblem.other)!;
+    final openStore = problem == BillingProblem.notInstalled || problem == BillingProblem.tooOld;
+    final retry = problem == BillingProblem.timeout || problem == BillingProblem.other;
+    final choice = await showDialog<String>(
+      context: context,
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          backgroundColor: K.night,
+          title: Text('خرید شروع نشد', style: tDisplay(18)),
+          content: Text(text),
+          actions: [
+            if (openStore) TextButton(onPressed: () => Navigator.pop(ctx, 'store'), child: Text('باز کردن $kStoreName')),
+            if (retry) TextButton(onPressed: () => Navigator.pop(ctx, 'retry'), child: const Text('دوباره امتحان کن')),
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('بستن')),
+          ],
+        ),
+      ),
+    );
+    if (!mounted) return;
+    if (choice == 'store') {
+      for (final u in ['bazaar://details?id=com.farsitel.bazaar', 'https://cafebazaar.ir/app/com.farsitel.bazaar']) {
+        try {
+          if (await launchUrl(Uri.parse(u), mode: LaunchMode.externalApplication)) break;
+        } catch (_) {}
+      }
+    } else if (choice == 'retry') {
+      await _buyAgain();
+    }
+  }
+
+  String? _lastId, _lastTitle;
+  Future<void> _buyAgain() async {
+    if (_lastId != null) await _buy(_lastId!, _lastTitle ?? '');
   }
 
   @override
@@ -71,6 +109,19 @@ class _ShopScreenState extends State<ShopScreen> {
             top: false,
             child: ListView(padding: const EdgeInsets.all(16), children: [
               const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
+              ListenableBuilder(
+                listenable: Billing.i,
+                builder: (_, __) => Billing.i.connecting
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Row(children: [
+                          const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+                          const SizedBox(width: 10),
+                          Text('در حال اتصال به $kStoreName…', style: const TextStyle(color: K.textSoft)),
+                        ]),
+                      )
+                    : const SizedBox.shrink(),
+              ),
               ListenableBuilder(listenable: api, builder: (_, __) => _vipHero()),
               const SizedBox(height: 22),
               _heading('سکه', 'برای سرنخ و پرونده‌های قدیمی'),

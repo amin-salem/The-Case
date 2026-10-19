@@ -1,5 +1,13 @@
 # Changelog
 
+## server 1.31.0, app 1.30.0 (build 61): Bazaar purchase fix, case categories, weekend format 3 (Amin, 18 Oct 2026)
+
+- **Cafe Bazaar rejection (version code 55) fixed.** The vendored `flutter_poolakey` plugin never answered the `connect` call, so the app's `await connect(...)` hung for ever and the shop always said «برای خرید، اپ کافه‌بازار باید روی گوشی نصب و به‌روز باشه». Now: the plugin answers; the connection is lazy and retried (startup, when buying: 3 tries of 18 s, app resume, after a disconnect); the shop shows «در حال اتصال به کافه‌بازار…» and tells failures apart (not installed → open Bazaar, too old, no answer → retry, key missing, other); the purchase call survives a missing activity and a restored process; patch_android adds the Bazaar `queries`, the `PAY_THROUGH_BAZAAR` permission and R8 keep rules. Unit tests with a fake Poolakey (`app/test/billing_test.dart`). How to test on a phone: `docs/operations.md`.
+- **Categories:** `category` on all 53 cases (medical, art, family, business, science, travel, crime), validated by the server, in the case list/detail (optional), shown with the difficulty on the home card, case page and archive, and as filter chips in the archive.
+- **Weekend format 3 (two nights):** a newcomer suspect and new cards appear in chapter 2 (`appears_chapter`), night 1 has its own question «کی دروغ می‌گه؟» (one try, 10 coins, `POST /v1/cases/{id}/liar`), the early-solve bonus is 80 coins (was 50) and earns the plaque «پلاک شب اول», and the weekend screen has a «شب اول / شب دوم» card with a countdown. Formats 1 and 2 are unchanged. No case was written for it yet (w003 is the first to use it; Opus).
+- **Weekend schedule** is Thursday 09:00 → Friday 21:00 (server constants, app texts, guide). w001 keeps its 48 h window in its file.
+- Migration 0027 (`case_progress.night1`, additive). Old apps keep working; new fields are optional.
+
 ## server: proof-of-investigation time follows the case difficulty (Amin, 18 Oct 2026)
 
 - A quick reader who reaches the clue was marked «unproven» (1 star, no leaderboard place) by the flat 180 s rule (seen on c019). The needed active time is now 90 s for a difficulty-3 case and scales with the case difficulty: 60 / 75 / 90 / 110 / 130 s for difficulty 1-5 (`economy.min_active_seconds`, `ACTIVE_TIME_FACTOR`). Still needs 2 interrogated suspects. Same rule for the «right person, wrong proof» nudge. No migration, no app change.
