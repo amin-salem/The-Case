@@ -177,7 +177,7 @@ class ProgressOut(BaseModel):
     answer_at: int | None = None  # a lost case: unix time when the answer becomes public (None = public / not lost)
     shows: list[dict[str, Any]] = []        # weekend case: evidence cards shown to suspects {s, e, t = what the suspect said}
     shows_left: int = 0
-    wrong_tries: list[dict[str, Any]] = []  # this player's wrong accusations: {s, e, m, r} (r = wrong_suspect | wrong_proof | wrong_motive | hasty)
+    wrong_tries: list[dict[str, Any]] = []  # this player's wrong accusations: {s, e, m, r} (r = wrong_suspect | wrong_proof | wrong_motive | inconclusive)
     night1: dict[str, Any] | None = None    # format 3: the player's night-1 answer {pick, ok, reward, card, explanation}; None = not answered
 
 
@@ -221,7 +221,7 @@ class TickOut(BaseModel):
 
 
 class AccuseOut(BaseModel):
-    result: str  # solved | wrong_suspect | wrong_proof | failed
+    result: str  # solved | wrong_suspect | wrong_proof | wrong_motive | inconclusive | failed
     attempts_left: int
     stars: int = 0
     reward: int = 0
@@ -542,3 +542,4 @@ class ShowOut(BaseModel):
     text: str            # what the suspect says when shown the card
     shows_left: int
     progress: ProgressOut
+

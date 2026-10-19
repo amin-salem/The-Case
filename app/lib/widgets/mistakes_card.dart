@@ -25,7 +25,7 @@ class MistakesCard extends StatelessWidget {
     final note = switch (t.kind) {
       'wrong_proof' => 'قاتل درست بود، اما مدرک غلط',
       'wrong_motive' => 'قاتل و مدرک درست، اما انگیزه غلط',
-      'hasty' => 'اتهام بدون بررسی کافی بود',
+      'hasty' || 'inconclusive' => 'این اتهام اثبات نشد؛ بی‌گناهی مظنون تأیید نشده بود',
       _ => 'بی‌گناه بود',
     };
     return Container(
@@ -103,3 +103,4 @@ class MistakesCard extends StatelessWidget {
     );
   }
 }
+

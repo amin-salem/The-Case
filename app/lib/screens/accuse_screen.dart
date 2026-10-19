@@ -93,10 +93,16 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
         // an older server: remember this try here
         _markTries([WrongTry({'s': _suspect, 'e': _evidence, 'm': _motive, 'r': r.result})]);
       }
+      // Old servers used wrong_suspect plus a hasty history entry. That is
+      // inconclusive too: it must never label the selected person innocent.
+      final history = r.progress?.wrongTries ?? const <WrongTry>[];
+      final inconclusive = r.result == 'inconclusive' || (history.isNotEmpty && history.last.inconclusive);
       setState(() {
         _busy = false;
         _left = r.attemptsLeft;
-        _feedback = switch (r.result) {
+        _feedback = inconclusive
+            ? 'این اتهام اثبات نشد. حرف مظنون رو دوباره با مدارک بسنج؛ می‌تونی همین مظنون رو با مدرک دیگه‌ای انتخاب کنی. ${fa(r.attemptsLeft)} فرصت دیگه داری.'
+            : switch (r.result) {
           'wrong_proof' => 'آدم درست رو گرفتی، ولی این مدرک دروغش رو ثابت نمی‌کنه. یه پلاک کم شد؛ مدرک دیگه‌ای رو امتحان کن.',
           'wrong_motive' => 'آدم و مدرک درسته، ولی انگیزه‌اش این نبود. یه پلاک کم شد؛ دوباره فکر کن چرا این کار رو کرد.',
           _ => 'اشتباه بود! این آدم بی‌گناهه. ${fa(r.attemptsLeft)} فرصت دیگه داری.',
@@ -453,3 +459,4 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
     );
   }
 }
+

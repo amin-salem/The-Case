@@ -248,9 +248,10 @@ class WrongTry {
         evidence = _s(j['e']),
         motive = j['m'] as String?,
         kind = _s(j['r']);
-  final String suspect, evidence, kind; // kind: wrong_suspect | hasty | wrong_proof | wrong_motive
+  final String suspect, evidence, kind; // kind: wrong_suspect | inconclusive | wrong_proof | wrong_motive (legacy: hasty)
   final String? motive;
-  bool get suspectWrong => kind == 'wrong_suspect' || kind == 'hasty';
+  bool get suspectWrong => kind == 'wrong_suspect';
+  bool get inconclusive => kind == 'inconclusive' || kind == 'hasty';
   bool get proofWrong => kind == 'wrong_proof';
   bool get motiveWrong => kind == 'wrong_motive';
 }
@@ -488,3 +489,4 @@ class CaseStats {
   final String culprit;
   final Map<String, int> suspects; // suspect id -> % of first accusations
 }
+

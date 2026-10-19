@@ -31,8 +31,22 @@ def _note_wrong(p: CaseProgress, body, kind: str) -> None:
     """Remember a wrong accusation (bounded) so the app can show it in red, now and after the case is solved."""
     tries = list(p.wrong_tries or [])
     if len(tries) < MAX_WRONG_NOTES:
-        tries.append({"s": body.suspect, "e": body.evidence, "m": body.motive, "r": kind})
+        tries.append({"s": body.suspect, "e": body.evidence, "m": body.motive, "r": kind, "v": 2})
         p.wrong_tries = tries  # a new list, so the change is saved
+
+
+def _wrong_tries_out(p: CaseProgress | None) -> list[dict]:
+    """Old hasty/wrong_suspect pairs encoded whether the culprit was selected.
+    Treat both legacy kinds as inconclusive; only version-2 investigated refusals
+    may rule a suspect out. Never expose the internal history version marker.
+    """
+    out = []
+    for t in (p.wrong_tries or []) if p else []:
+        kind = t.get("r", "inconclusive")
+        if kind == "hasty" or (kind == "wrong_suspect" and t.get("v") != 2):
+            kind = "inconclusive"
+        out.append({"s": t.get("s", ""), "e": t.get("e", ""), "m": t.get("m"), "r": kind})
+    return out
 
 
 NEUTRAL_REACTION = "اینو دیدم، ولی چیزی برای گفتن ندارم."
@@ -78,7 +92,7 @@ def _progress_out(c: Case, p: CaseProgress | None) -> ProgressOut:
                        attempts_left=max(0, eco.MAX_ATTEMPTS - attempts),
                        solved=bool(p and p.solved), failed=bool(p and p.failed), stars=p.stars if p else 0,
                        hint_costs=eco.HINT_COSTS, answer_at=ac.answer_at_ts(p),
-                       wrong_tries=list(p.wrong_tries or []) if p else [],
+                       wrong_tries=_wrong_tries_out(p),
                        shows=[{"s": x["s"], "e": x["e"], "t": _reaction(c, x["s"], x["e"])} for x in (p.shows or [])]
                        if content.is_weekly(c.id) and p else [],
                        shows_left=max(0, _shows_allowed(c) - len(p.shows or [])) if content.is_weekly(c.id) and p else 0,
@@ -392,22 +406,18 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     # right person but not the evidence that proves it (or, in the weekly case, the wrong motive):
     # the first few times it costs a star, not a try
     near = "wrong_motive" if body.evidence in c.proof else "wrong_proof"
-    if body.suspect == c.culprit and not ac.proof_ok(p, c):
-        # anti-cheat: "right person, wrong proof" tells a probing throwaway account who the culprit is. Only a player
-        # who has really investigated (the same bar as 3 stars) gets this hint; a hasty accusation gets the plain
-        # «wrong» answer and loses a try. Fair players investigate first, so for them nothing changes.
-        near = "wrong_suspect"
-        log.info("anticheat plain_wrong case=%s active=%s seen=%d", c.id, p.active_seconds, len(p.seen or []))
-    elif body.suspect == c.culprit and (p.proof_misses or 0) < eco.FREE_PROOF_MISSES:
+    investigated = ac.proof_ok(p, c)
+    if investigated and body.suspect == c.culprit and (p.proof_misses or 0) < eco.FREE_PROOF_MISSES:
         p.proof_misses = (p.proof_misses or 0) + 1
         _note_wrong(p, body, near)
         await session.commit()
         return AccuseOut(result=near, attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
                          streak=player.streak, progress=_progress_out(c, p))
     p.attempts += 1
-    result = near if body.suspect == c.culprit else "wrong_suspect"
-    # a hasty accusation of the real culprit is answered with the plain «wrong»: the note says so, so a later review is honest
-    _note_wrong(p, body, "hasty" if (body.suspect == c.culprit and result == "wrong_suspect") else result)
+    # Before investigation, ALL rejected accusations have the same public result
+    # and history shape. Neither the verdict nor metadata identifies the culprit.
+    result = (near if body.suspect == c.culprit else "wrong_suspect") if investigated else "inconclusive"
+    _note_wrong(p, body, result)
     if p.attempts >= eco.MAX_ATTEMPTS:
         p.failed, p.finished_at, p.day = True, utcnow(), today
         p.reveal_at = ac.reveal_time(c, ac.now_utc())  # the answer stays secret until then
@@ -567,3 +577,4 @@ async def tick(case_id: str, body: TickIn, player: Player = Depends(current_play
         add_active_time(p, body.seconds, utcnow())
         await session.commit()
     return TickOut(active_seconds=p.active_seconds or 0)
+

@@ -420,7 +420,8 @@ async def test_hasty_accusation_does_not_reveal_the_culprit(client, clock, stric
     await set_progress(careful["player_id"], c.id, active_seconds=eco.min_active_seconds(c.data["difficulty"]), seen=ids)
     # right person, wrong proof: the hasty one gets the same answer as for an innocent person and loses a try
     r = await accuse(client, hasty["headers"], c, c.culprit, bad_ev)
-    assert r["result"] == "wrong_suspect" and r["attempts_left"] == eco.MAX_ATTEMPTS - 1
+    assert r["result"] == "inconclusive" and r["attempts_left"] == eco.MAX_ATTEMPTS - 1
+    assert r["progress"]["wrong_tries"][-1]["r"] == "inconclusive"
     # a player who investigated gets the usual nudge, free of tries
     r = await accuse(client, careful["headers"], c, c.culprit, bad_ev)
     assert r["result"] == "wrong_proof" and r["attempts_left"] == eco.MAX_ATTEMPTS
@@ -445,3 +446,54 @@ async def test_a_fast_reader_of_an_easy_case_gets_the_stars_but_a_hard_one_needs
         results[diff] = await accuse(client, pl["headers"], c, c.culprit)
     assert results[2]["stars"] == 3 and not results[2]["unranked"]
     assert results[5]["stars"] == 1 and results[5]["unranked"]
+
+
+
+async def test_early_refusals_have_no_culprit_oracle_and_can_be_corrected(client, clock, strict_rules):
+    c = content.by_id("c049")
+    clock(night(c.id))
+    bad = next(e["id"] for e in c.data["evidence"] if e["id"] not in c.proof)
+    histories = []
+    for i, suspect in enumerate((c.culprit, innocent_of(c))):
+        pl = await new_player(client, f"inconclusive-{i}")
+        await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
+        result = await accuse(client, pl["headers"], c, suspect, bad)
+        assert result["result"] == "inconclusive"
+        assert result["culprit"] is None and result["proof"] == [] and result["explanation"] is None
+        assert result["attempts_left"] == eco.MAX_ATTEMPTS - 1
+        note = result["progress"]["wrong_tries"][-1]
+        assert note == {"s": suspect, "e": bad, "m": None, "r": "inconclusive"}
+        reopened = (await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])).json()
+        assert reopened["progress"]["wrong_tries"] == [note] and "solution" not in reopened["case"]
+        histories.append({**note, "s": "submitted-suspect"})
+        if suspect == c.culprit:
+            await set_progress(pl["player_id"], c.id, active_seconds=eco.min_active_seconds(c.data["difficulty"]),
+                               seen=[s["id"] for s in c.data["suspects"]][:2])
+            solved = await accuse(client, pl["headers"], c, c.culprit)
+            assert solved["result"] == "solved" and solved["stars"] == 2
+    assert histories[0] == histories[1]
+
+
+async def test_legacy_hasty_and_wrong_suspect_histories_do_not_reveal_culprit(client, clock, strict_rules):
+    c = content.by_id("c049")
+    clock(night(c.id))
+    pl = await new_player(client, "legacy-refusals")
+    await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
+    await set_progress(pl["player_id"], c.id, wrong_tries=[
+        {"s": c.culprit, "e": "e1", "m": None, "r": "hasty"},
+        {"s": innocent_of(c), "e": "e1", "m": None, "r": "wrong_suspect"},
+    ])
+    p = (await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])).json()["progress"]
+    assert [t["r"] for t in p["wrong_tries"]] == ["inconclusive", "inconclusive"]
+    assert all(set(t) == {"s", "e", "m", "r"} for t in p["wrong_tries"])
+
+
+async def test_inconclusive_refusals_keep_the_same_attempt_limit(client, clock, strict_rules):
+    c = content.by_id("c049")
+    clock(night(c.id))
+    pl = await new_player(client, "inconclusive-limit")
+    await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
+    result = await fail_case(client, pl["headers"], c)
+    assert result["attempts_left"] == 0 and result["progress"]["failed"]
+    assert {t["r"] for t in result["progress"]["wrong_tries"]} == {"inconclusive"}
+    assert result["culprit"] is None
