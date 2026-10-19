@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../data/story_art.dart';
 import '../models/story.dart';
 import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/offline.dart';
+import '../widgets/story_art.dart';
 import '../widgets/story_choice.dart';
 import 'case_screen.dart';
 import 'story_board_screen.dart';
@@ -153,7 +155,14 @@ class _StorySceneScreenState extends State<StorySceneScreen> {
       Expanded(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-          child: sc.isPartner ? _partner(sc.text) : _narration(sc.text),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            // the scene's picture (only chapters that have art; the others look as before)
+            if (storySceneArt(widget.chapterId, sc.id) case final art?) ...[
+              StorySceneArt(key: ValueKey('art-${sc.id}'), art: art),
+              const SizedBox(height: 12),
+            ],
+            sc.isPartner ? _partner(sc.text) : _narration(sc.text),
+          ]),
         ),
       ),
       ConstrainedBox(
