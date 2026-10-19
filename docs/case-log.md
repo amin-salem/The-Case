@@ -41,3 +41,5 @@ Rewritten in Claude's voice (spoken answers, people-first, surface motives) and 
 - w003 ch1 leaning, full 94%, difficulty 4. w004 full 90%, difficulty 4. w005 full 93%, difficulty 4. w006 full 94%, measured 3 (difficulty field set to 3).
 - Fixes after tests: leftover names in evidence titles, witness logic, statement clashes, times. Not re-run after the final small edits.
 - c029-c050 are older short drafts and were not part of this pass.
+
+- c029 «برگه‌ی امانت شماره‌ی ۴۱۸» (ChatGPT Plus rewrite, type 6 staged scene / time trick: stamp counter 5520→5521→5522 + taped folder + stamp ring on the book lining; Claude fixes 19 Oct: times, desk location, motive, shorter cards; blind tests Babak 82-90%, second suspect Zohre 6-13%, difficulty 4)
