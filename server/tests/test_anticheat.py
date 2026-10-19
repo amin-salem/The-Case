@@ -157,12 +157,12 @@ async def test_solve_without_investigation_is_one_star_and_unranked(client, cloc
         await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
     r = await accuse(client, lazy["headers"], c, c.culprit)
     assert r["result"] == "solved" and r["stars"] == 1 and r["unranked"] and r["stars_capped"] and r["rank"] is None
-    assert r["reward"] == eco.SOLVE_REWARD[1] + eco.DAILY_BONUS
+    assert r["reward"] == eco.solve_reward(c.data.get("difficulty"), 1) + eco.DAILY_BONUS
     ids = [s["id"] for s in c.data["suspects"]][:2]
     await set_progress(diligent["player_id"], c.id, active_seconds=eco.min_active_seconds(c.data["difficulty"]), seen=ids)
     r = await accuse(client, diligent["headers"], c, c.culprit)
     assert r["stars"] == 3 and not r["unranked"] and r["rank"] is not None
-    assert r["reward"] == eco.SOLVE_REWARD[3] + eco.DAILY_BONUS
+    assert r["reward"] == eco.solve_reward(c.data.get("difficulty"), 3) + eco.DAILY_BONUS
     lb = (await client.get("/v1/leaderboard?period=daily", headers=lazy["headers"])).json()
     assert lb["me"] is None
     lb = (await client.get("/v1/leaderboard?period=daily", headers=diligent["headers"])).json()
@@ -445,3 +445,4 @@ async def test_a_fast_reader_of_an_easy_case_gets_the_stars_but_a_hard_one_needs
         results[diff] = await accuse(client, pl["headers"], c, c.culprit)
     assert results[2]["stars"] == 3 and not results[2]["unranked"]
     assert results[5]["stars"] == 1 and results[5]["unranked"]
+

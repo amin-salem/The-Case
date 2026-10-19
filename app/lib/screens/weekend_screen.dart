@@ -166,7 +166,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
                 background: AnimatedScene(scene: weekly.scene, height: double.infinity, dim: 0.2),
                 chip: weekly.solved ? 'حلش کردی!' : 'پرونده‌ی این هفته · بازه',
                 title: weekly.title,
-                subtitle: '${weekly.category.isEmpty ? '' : '${categoryName(weekly.category)} · '}دو فصل، هشت مظنون · جایزه‌ی ${fa(Api.i.weeklyReward)} سکه',
+                subtitle: '${weekly.category.isEmpty ? '' : '${categoryName(weekly.category)} · '}دو فصل، هشت مظنون · پاداش پایه تا ${fa(weekly.maxSolveReward ?? Api.i.weeklyReward)} سکه',
                 countdownLabel: 'تا پایان پرونده',
                 at: _cases?.weeklyClosesAt,
                 onCountdownDone: _opened,
@@ -197,7 +197,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
                   : 'دو فصل داره؛ فصل دوم مدارک و حرف‌های تازه می‌آره.'),
               (Icons.fact_check_rounded, 'هر مدرک رو می‌تونی به یه مظنون نشون بدی و ببینی چی می‌گه. تعدادش محدوده.'),
               (Icons.gavel_rounded, 'از همون فصل اول می‌تونی متهم کنی: هم مقصر، هم «چرا و چطور». زودتر درست بگی، ${fa(Api.i.weeklyEarlyBonus)} سکه‌ی اضافه می‌گیری.'),
-              (Icons.emoji_events_rounded, 'جایزه: تا ${fa(Api.i.weeklyReward)} سکه و کلی امتیاز رتبه. زنجیره‌ی شبانه‌ت هم دست نمی‌خوره.'),
+              (Icons.emoji_events_rounded, 'پاداش پایه: تا ${fa(weekly?.maxSolveReward ?? Api.i.weeklyReward)} سکه و کلی امتیاز رتبه. جایزهٔ حل زودهنگام جداست؛ زنجیره‌ی شبانه‌ت هم دست نمی‌خوره.'),
             ]),
           ]),
         ),
@@ -205,3 +205,4 @@ class _WeekendScreenState extends State<WeekendScreen> {
     );
   }
 }
+

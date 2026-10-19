@@ -208,7 +208,7 @@ async def test_night1_solve_pays_the_bigger_bonus_and_earns_the_plaque(client, c
     await client.get("/v1/cases/w098", headers=a)
     r = (await client.post("/v1/cases/w098/accuse", headers=a, json={"suspect": wk.culprit, "motive": sol["motive"]})).json()
     assert r["result"] == "solved" and r["stars"] == 3
-    assert r["early_bonus"] == eco.WEEKLY_EARLY_BONUS and r["reward"] == eco.WEEKLY_REWARD[3] + eco.WEEKLY_EARLY_BONUS
+    assert r["early_bonus"] == eco.WEEKLY_EARLY_BONUS and r["reward"] == eco.solve_reward(wk.data.get("difficulty"), 3, live_weekend=True) + eco.WEEKLY_EARLY_BONUS
     assert "weekend_night1" in {x["id"] for x in r["gains"]["achievements"]}
 
     # solved on night 2: the normal reward, no bonus, no plaque
@@ -229,3 +229,4 @@ async def test_case_list_tells_the_app_when_chapter_2_opens(client, clock, wk):
     clock(content.opens_at(wk) + timedelta(hours=13))
     lst = (await client.get("/v1/cases", headers=h)).json()
     assert lst["weekly_next_chapter_at"] is None
+

@@ -14,7 +14,7 @@ from ..content import Case
 from ..db import get_session
 from ..models import CaseProgress, Player, utcnow
 from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut, HintOut, LiarIn, LiarOut, ProgressOut, SeenIn, SeenOut,
-                       ShowIn, ShowOut, StatsOut, SuspectStat, TickIn, TickOut)
+                       ShowIn, ShowOut, StatsOut, SuspectStat, TickIn, TickOut, UnlockIn)
 from ..security import current_player
 from ..util import add_coins
 from .common import fast_json, vip_active
@@ -44,7 +44,7 @@ def _weekly_live(c: Case) -> bool:
 
 
 def _unlock_cost(c: Case) -> int:
-    return eco.WEEKEND_ARCHIVE_COST if content.is_weekly(c.id) else eco.UNLOCK_COST
+    return eco.archive_unlock_cost(c.data.get("difficulty"), weekend=content.is_weekly(c.id))
 
 
 def _shows_allowed(c: Case) -> int:
@@ -181,6 +181,7 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
         s = c.summary()
         return CaseRow(**s, today=today is not None and c.id == today.id,
                        weekend=content.is_weekly(c.id), locked=not _can_open(c, p, player, today), unlock_cost=_unlock_cost(c),
+                       base_solve_rewards={stars: eco.solve_reward(c.data.get("difficulty"), stars, live_weekend=_weekly_live(c)) for stars in (1, 2, 3)},
                        solved=bool(p and p.solved), failed=bool(p and p.failed),
                        stars=p.stars if p else 0, solvers=int(counts.get(c.id, 0)),
                        rating_avg=rated.get(c.id, (0.0, 0, 0))[0], rating_count=rated.get(c.id, (0.0, 0, 0))[1],
@@ -233,7 +234,7 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
 
 
 @router.post("/{case_id}/unlock", response_model=CaseOut)
-async def unlock(case_id: str, player: Player = Depends(current_player),
+async def unlock(case_id: str, body: UnlockIn | None = None, player: Player = Depends(current_player),
                  session: AsyncSession = Depends(get_session)):
     c = _opened_case(case_id, player)
     p = await _progress(session, player.id, c.id)
@@ -241,6 +242,8 @@ async def unlock(case_id: str, player: Player = Depends(current_player),
         raise HTTPException(409, "chapter_locked")
     if not _can_open(c, p, player):
         cost = _unlock_cost(c)
+        if body is not None and body.expected_cost is not None and body.expected_cost != cost:
+            raise HTTPException(409, {"error": "price_changed", "cost": cost})
         if player.coins < cost:
             raise HTTPException(402, {"error": "not_enough_coins", "need": cost})
         add_coins(session, player, -cost, f"unlock:{c.id}")
@@ -329,7 +332,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         if not proven:
             log.info("anticheat unproven_solve case=%s active=%s seen=%d capped=%s", c.id, p.active_seconds,
                      len(p.seen or []), natural > 1)
-        reward = (eco.WEEKLY_REWARD if live else eco.SOLVE_REWARD)[p.stars]
+        reward = eco.solve_reward(c.data.get("difficulty"), p.stars, live_weekend=live)
         early_bonus = 0
         if live and right_motive and content.now_local() < content.weekly_all_open_at(c):
             early_bonus = eco.WEEKLY_EARLY_BONUS  # solved before the last chapter opened
@@ -567,3 +570,4 @@ async def tick(case_id: str, body: TickIn, player: Player = Depends(current_play
         add_active_time(p, body.seconds, utcnow())
         await session.commit()
     return TickOut(active_seconds=p.active_seconds or 0)
+

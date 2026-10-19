@@ -703,8 +703,8 @@ class Api extends ChangeNotifier {
         Progress((j['progress'] as Map).cast<String, dynamic>()), j['today'] == true);
   }
 
-  Future<void> unlockCase(String id) async {
-    await _call('POST', '/v1/cases/$id/unlock');
+  Future<void> unlockCase(String id, {int? expectedCost}) async {
+    await _call('POST', '/v1/cases/$id/unlock', body: expectedCost == null ? null : {'expected_cost': expectedCost});
     await _refreshProfileQuietly();
   }
 
@@ -1151,3 +1151,4 @@ class Api extends ChangeNotifier {
         _ => genericText,
       };
 }
+

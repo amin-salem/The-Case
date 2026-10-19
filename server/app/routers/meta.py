@@ -30,6 +30,7 @@ _public = TTLCache("config_public", ttl=30, max_size=2)
 
 
 def _economy() -> dict:
+    weekly = content.current_weekly()
     return {"hint_costs": eco.HINT_COSTS, "unlock_cost": eco.UNLOCK_COST, "weekend_archive_cost": eco.WEEKEND_ARCHIVE_COST,
             "weekend_shows_per_chapter": eco.WEEKEND_SHOWS_PER_CHAPTER, "weekly_early_bonus": eco.WEEKLY_EARLY_BONUS, "weekend_liar_reward": eco.WEEKEND_LIAR_REWARD,
             "max_attempts": eco.MAX_ATTEMPTS, "ad_reward": eco.AD_REWARD, "ads_per_day": eco.AD_PER_DAY,
@@ -41,7 +42,9 @@ def _economy() -> dict:
             "riddles_per_day": eco.RIDDLES_PER_DAY, "riddle_free": eco.RIDDLE_FREE,
             "riddle_unlock_cost": eco.RIDDLE_UNLOCK_COST, "riddle_reward": eco.RIDDLE_REWARD,
             "riddle_seconds": eco.RIDDLE_SECONDS, "chest_coins": eco.CHEST_COINS,
-            "chest_bonus": eco.CHEST_BONUS, "weekly_reward": eco.WEEKLY_REWARD[3],
+            "chest_bonus": eco.CHEST_BONUS,
+            "weekly_reward": eco.solve_reward(weekly.data.get("difficulty"), 3, live_weekend=True) if weekly else eco.WEEKLY_REWARD[3],
+            "difficulty_policy": eco.difficulty_policy(),
             "ranks": [{"xp": x, "title": t} for x, t in eco.RANKS], "products": {
                 k: {"coins": p.coins, "no_ads": p.no_ads, "kind": p.kind} for k, p in eco.PRODUCTS.items()}}
 
@@ -85,3 +88,4 @@ async def events(body: EventsIn, player: Player = Depends(current_player), sessi
         session.add(Event(player_id=player.id, name=e.name, props=dict(list(e.props.items())[:20]), ts=when))
     await session.commit()
     return {"stored": len(body.events)}
+
