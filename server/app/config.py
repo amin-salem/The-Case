@@ -18,9 +18,6 @@ class Settings(BaseSettings):
     jwt_secret: str = _DEV_JWT
     jwt_days: int = 30
     admin_api_key: str = _DEV_ADMIN
-    # Independent report-only credential. Empty hash or expired/missing deadline disables access.
-    analytics_api_key_sha256: str = ""
-    analytics_api_key_expires_at: int = 0  # Unix seconds, UTC
 
     # Cafe Bazaar
     bazaar_mode: str = "fake"  # fake | api_secret | oauth
@@ -96,4 +93,3 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-
