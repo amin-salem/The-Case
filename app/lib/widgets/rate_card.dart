@@ -291,7 +291,7 @@ Future<void> maybeShowRateSheet(BuildContext context, String caseId, String titl
     if (d['has_mine'] == true || d['can_write'] != true) return;
     if (!active() || Api.i.flag('rate_skip_$caseId')) return;
     await Api.i.setFlag(key, true);
-    if (!active()) return;
+    if (!context.mounted || !active()) return;
     await showModalBottomSheet<void>(
       context: context,
       backgroundColor: K.night2,

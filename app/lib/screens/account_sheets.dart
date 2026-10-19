@@ -244,11 +244,11 @@ bool _askedThisRun = false;
 
 Future<bool> offerSecure(BuildContext context, {required bool afterSolve, bool Function()? canOffer}) async {
   bool active() => context.mounted && (canOffer?.call() ?? true);
-  if (!active()) return true;
+  if (!context.mounted || !active()) return true;
   final p = Api.i.profile;
   if (p == null || p.secured || !Api.i.online) return true;
   final prefs = await SharedPreferences.getInstance();
-  if (!active()) return true;
+  if (!context.mounted || !active()) return true;
   if (afterSolve) {
     if (prefs.getBool('secure_offer_solve') ?? false) return true;
     await prefs.setBool('secure_offer_solve', true);
@@ -256,7 +256,7 @@ Future<bool> offerSecure(BuildContext context, {required bool afterSolve, bool F
     if (_askedThisRun) return true;
     _askedThisRun = true;
   }
-  if (!active()) return true;
+  if (!context.mounted || !active()) return true;
   final r = await showNoirSheet<String>(
     context,
     child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -288,7 +288,7 @@ Future<bool> offerSecure(BuildContext context, {required bool afterSolve, bool F
     ]),
   );
   if (r != 'secure') return true;
-  if (active()) await openAccountSheet(context, showSecureSheet);
+  if (context.mounted && active()) await openAccountSheet(context, showSecureSheet);
   return false;
 }
 

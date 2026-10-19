@@ -57,7 +57,7 @@ class _ResultScreenState extends State<ResultScreen> {
     setState(() { _promptsStarted = true; _promptBusy = true; });
     try {
       await offerSecure(context, afterSolve: true, canOffer: active);
-      if (!active() || _manualRating) return;
+      if (!mounted || !active() || _manualRating) return;
       await maybeShowRateSheet(context, caseData.id, caseData.title,
           canOffer: () => active() && !_manualRating);
     } finally {
