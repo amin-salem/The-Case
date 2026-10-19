@@ -97,3 +97,26 @@ Every case needs an entry in `server/app/content/notify.json`: `{"<case id>": {"
 - `head` is the notification title (max ~35 characters, may end with one emoji) and must be different from every other case's head; `body` is one or two spoken-Persian sentences (max ~90 characters).
 - It must tease the situation from the case's intro (place, time, object, the central question) without revealing the culprit, motive, or any proof, and without inventing facts that are not in the case.
 - When a case is rewritten or its title changes, update its entry (the app falls back to an automatic text while the title does not match). A server test checks that every nightly case has an entry with a unique head.
+
+## 9. Review of every case Gemini (or anyone else) wrote (Amin, 19 Oct 2026)
+A case written by Gemini is not imported as it is. Before the blind test, Claude rewrites it into the house voice (the style of
+c020-c024) and checks every item below. Findings are FIXED in the file, never only logged.
+- **Voice.** Statements and answers are spoken Persian with a personality each (curt, chatty, formal), short sentences, no
+  written-style «می‌باشد/لذا». Suspects mention each other. Evidence cards are concrete, with times, numbers, names; no vague
+  «افراد مختلفی», «کارکنان گفتند» without a named source.
+- **One truth.** Write the true timeline first (who, where, minute by minute). Every card, answer and the explanation must agree with
+  it. Check: clock offsets (a «5 minutes fast» clock must show the right real time), counts, keys, doors, directions and distances
+  (28 km east + 30 km west = 58 km), room names (archive room vs management room), days of the week.
+- **Every sentence of the explanation points to a card the player has.** No fact appears only in the explanation or only in a
+  suspect's «story» (no «petty cash settled» unless a card or answer says it). Every alibi used to clear someone has a card.
+- **Questions match statements.** A question never presumes something the suspect did not say (no «why did you say you did not
+  see it?» if they did not). Reactions are keyed to the right card id and answer what that card actually says.
+- **The culprit's lie is testable.** His own statement is contradicted by at least two cards that the player can combine. «I do not
+  have much schooling» is not a lie; «the notebook is filled in by Mahnaz» is.
+- **The trick must matter.** If a clock/time trick is the point, the case must be unsolvable or wrong without it (at the naive time
+  everybody has an alibi; at the real time only the culprit is free). Blind-test it.
+- **Motives.** The `motive` field is only what everybody believes (a surface motive, never exculpatory). The real motive is in a card.
+- **Names and polish.** No repeated first name inside one case; no leftover names from other cases in the same week; ZWNJ only where
+  needed (no «جا‌لیوانی»); proof ≤ half the cards and every proof card contradicts the culprit's own words.
+- **Difficulty is measured, not claimed.** Blind test the public file; below 3.5 → harden (a second strong false trail, no
+  card that names him) and test again. Weekend cases: a chapter-1-only run and a full run.

@@ -103,3 +103,5 @@ is reported done: edit the file, re-validate, re-run the blind test if the clue 
 Do not write soft spots into `docs/case-log.md` as "notes" and move on. Story-type errors Amin has reported (culprit named by one
 card, impossible timelines, an alibi never checked, leftover names, a clue that contradicts another card, a bag/object left
 unaccounted for) must never reach him again: check for them yourself on every case.
+Cases written by Gemini are rewritten into the house voice and reviewed with the checklist in `docs/case-writing-rules.md` section 9
+(Amin, 19 Oct 2026) before the blind test; Amin wants them to read like c020-c024, not like Gemini's flat prose.
