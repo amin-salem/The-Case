@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../models/models.dart';
+import '../services/api.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
@@ -40,23 +41,29 @@ class _ResultScreenState extends State<ResultScreen> {
     Future<void>.delayed(const Duration(milliseconds: 700), () => Sfx.i.play(solved ? 'win' : 'lose'));
     if (solved) Future<void>.delayed(const Duration(milliseconds: 1800), () => Sfx.i.play('music_result', volume: 0.55));
     Future<void>.delayed(const Duration(milliseconds: 4500), Sfx.i.unduck);
-    if (solved) {
-      Future<void>.delayed(const Duration(milliseconds: 3800), () {
-        if (mounted) offerSecure(context, afterSolve: true);
-      });
-    }
-    if (solved) {
-      // the rating sheet: after the verdict, the rewards and the "secure your account" offer had their moment
-      Future<void>.delayed(const Duration(milliseconds: 7000), () {
-        if (mounted) maybeShowRateSheet(context, caseData.id, caseData.title);
-      });
-    }
     if (result.badge != null) {
       Future<void>.delayed(const Duration(milliseconds: 2600), () => Sfx.i.play('clue', volume: 0.7));
     }
   }
 
   bool _more = false; // the full explanation
+  bool _promptsStarted = false, _promptBusy = false, _manualRating = false;
+
+  Future<void> _finishedReading() async {
+    if (_promptsStarted || !solved) return;
+    final account = Api.i.account;
+    bool active() => mounted && Api.i.account == account && ModalRoute.of(context)?.isCurrent == true;
+    if (!active()) return;
+    setState(() { _promptsStarted = true; _promptBusy = true; });
+    try {
+      await offerSecure(context, afterSolve: true, canOffer: active);
+      if (!active() || _manualRating) return;
+      await maybeShowRateSheet(context, caseData.id, caseData.title,
+          canOffer: () => active() && !_manualRating);
+    } finally {
+      if (mounted) setState(() => _promptBusy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +172,15 @@ class _ResultScreenState extends State<ResultScreen> {
                       ]),
                     ),
                   ),
+                  if (_more && solved) ...[
+                    const SizedBox(height: 6),
+                    TextButton.icon(
+                      key: const ValueKey('finished-reading'),
+                      onPressed: _promptsStarted ? null : _finishedReading,
+                      icon: const Icon(Icons.done_rounded, size: 20),
+                      label: Text(_promptBusy ? 'کمی صبر کن...' : 'توضیح رو خواندم', style: tBody(14, color: K.stamp)),
+                    ),
+                  ],
                 ]),
               ),
             ),
@@ -182,7 +198,7 @@ class _ResultScreenState extends State<ResultScreen> {
               const SizedBox(height: 14),
               FadeSlideIn(
                 delay: const Duration(milliseconds: 1400),
-                child: RateCard(caseId: caseData.id, title: caseData.title),
+                child: RateCard(caseId: caseData.id, title: caseData.title, onInteraction: () => _manualRating = true),
               ),
             ],
             const SizedBox(height: 18),
@@ -304,3 +320,4 @@ class _ResultScreenState extends State<ResultScreen> {
     ]);
   }
 }
+

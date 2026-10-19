@@ -40,7 +40,8 @@ class RatingChip extends StatelessWidget {
 /// five big stars, ONE tap rates (counted at once), then an optional sentence. «بعداً» closes it in one tap.
 /// Without a rating yet it asks; with one it shows the average and the way to the comments.
 class RateCard extends StatefulWidget {
-  const RateCard({super.key, required this.caseId, required this.title});
+  const RateCard({super.key, required this.caseId, required this.title, this.onInteraction});
+  final VoidCallback? onInteraction;
   final String caseId;
   final String title;
 
@@ -86,12 +87,16 @@ class _RateCardState extends State<RateCard> {
     }
   }
 
-  void _openComments() => Navigator.of(context)
+  void _openComments() {
+    widget.onInteraction?.call();
+    Navigator.of(context)
       .push(MaterialPageRoute<void>(builder: (_) => CommentsScreen(caseId: widget.caseId, title: widget.title)))
       .then((_) => _load());
+  }
 
   Future<void> _rate(int stars) async {
     if (_busy) return;
+    widget.onInteraction?.call();
     setState(() {
       _busy = true;
       _stars = stars;
@@ -115,6 +120,7 @@ class _RateCardState extends State<RateCard> {
   }
 
   Future<void> _sendText() async {
+    widget.onInteraction?.call();
     final t = _text.text.trim();
     if (t.length < 3) {
       setState(() => _err = 'نظرت خیلی کوتاهه');
@@ -141,6 +147,7 @@ class _RateCardState extends State<RateCard> {
   }
 
   void _skip(bool on) {
+    widget.onInteraction?.call();
     Api.i.setFlag('rate_skip_${widget.caseId}', on);
     setState(() => _skipped = on);
   }
@@ -275,15 +282,16 @@ class _RateCardState extends State<RateCard> {
 /// or rating never brings it back), only when the player may rate and has not. It never blocks anything:
 /// the result screen and the rewards are already on screen, and the close button / a swipe / a tap outside closes it.
 /// The inline [RateCard] on the result screen stays as the fallback.
-Future<void> maybeShowRateSheet(BuildContext context, String caseId, String title) async {
+Future<void> maybeShowRateSheet(BuildContext context, String caseId, String title, {bool Function()? canOffer}) async {
+  bool active() => context.mounted && (canOffer?.call() ?? true);
   final key = 'rate_sheet_$caseId';
   try {
-    if (Api.i.flag(key) || Api.i.flag('rate_skip_$caseId')) return;
+    if (!active() || Api.i.flag(key) || Api.i.flag('rate_skip_$caseId')) return;
     final d = await Api.i.caseComments(caseId);
     if (d['has_mine'] == true || d['can_write'] != true) return;
-    if (!context.mounted) return;
+    if (!active() || Api.i.flag('rate_skip_$caseId')) return;
     await Api.i.setFlag(key, true);
-    if (!context.mounted) return;
+    if (!active()) return;
     await showModalBottomSheet<void>(
       context: context,
       backgroundColor: K.night2,
@@ -400,3 +408,4 @@ class RatingRow extends StatelessWidget {
         for (int i = 1; i <= 5; i++) Icon(i <= n ? Icons.star_rounded : Icons.star_border_rounded, color: K.brass, size: size),
       ]);
 }
+
