@@ -26,6 +26,11 @@ Future<void> _pump(WidgetTester t) async {
   await t.pump();
 }
 
+Future<void> _close(WidgetTester t) async {
+  await t.pumpWidget(const SizedBox());
+  await t.pump(const Duration(seconds: 10));
+}
+
 Future<void> _open(WidgetTester t) async {
   await t.pumpWidget(MaterialApp(theme: buildTheme(), home: Builder(builder: (context) => Scaffold(
     body: TextButton(onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
@@ -41,7 +46,7 @@ Future<void> _read(WidgetTester t) async {
   await t.tap(expand);
   await _pump(t);
   final done = find.byKey(const ValueKey('finished-reading'));
-  await t.scrollUntilVisible(done, 300, scrollable: find.byType(Scrollable).first);
+  await t.scrollUntilVisible(done.hitTestable(), 180, scrollable: find.byType(Scrollable).first);
   await t.tap(done);
   await _pump(t);
 }
@@ -69,7 +74,7 @@ void main() {
     await t.tap(home);
     await _pump(t);
     expect(find.text('باز کردن نتیجه'), findsOneWidget);
-    await t.pumpWidget(const SizedBox());
+    await _close(t);
   });
 
   testWidgets('explicit finish serializes eligible secure then rate; both dismiss and do not repeat', (t) async {
@@ -87,12 +92,12 @@ void main() {
     expect(Api.i.flag('rate_sheet_prompt-case'), isTrue);
     await t.pump(const Duration(seconds: 30));
     expect(find.byType(RateSheet), findsNothing);
-    await t.pumpWidget(const SizedBox());
+    await _close(t);
     await _open(t);
     await _read(t);
     expect(find.byType(RateSheet), findsNothing);
     expect(find.textContaining('اولین پرونده‌ات رو حل کردی!'), findsNothing);
-    await t.pumpWidget(const SizedBox());
+    await _close(t);
   });
 
   testWidgets('secured accounts skip securing and an inline skip suppresses the automatic rating', (t) async {
@@ -103,7 +108,7 @@ void main() {
     expect(find.byType(RateSheet), findsNothing);
     expect(find.textContaining('حسابت رو امن کن'), findsNothing);
     expect(Api.i.flag('rate_sheet_prompt-case'), isFalse);
-    await t.pumpWidget(const SizedBox());
+    await _close(t);
   });
 
   testWidgets('leaving while rating eligibility is in flight cancels the pending sheet', (t) async {
@@ -124,6 +129,6 @@ void main() {
     expect(find.byType(RateSheet), findsNothing);
     expect(find.text('باز کردن نتیجه'), findsOneWidget);
     expect(Api.i.flag('rate_sheet_prompt-case'), isFalse);
-    await t.pumpWidget(const SizedBox());
+    await _close(t);
   });
 }
