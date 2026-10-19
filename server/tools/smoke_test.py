@@ -137,7 +137,7 @@ def _run(state: dict) -> int:
             culprit = json.loads(mine.read_text(encoding="utf-8"))["solution"]["culprit"]
             first = next((x for x in suspects if x != culprit), first)
     wrong = expect("POST", f"/v1/cases/{today['id']}/accuse", headers=hdr, json={"suspect": first, "evidence": evidence[0]}, name="POST accuse (one try)")
-    check(wrong and wrong.get("result") in ("wrong_suspect", "wrong_proof", "solved"), "accusation is judged by the server", str(wrong and wrong.get("result")))
+    check(wrong and wrong.get("result") in ("inconclusive", "wrong_suspect", "wrong_proof", "solved"), "accusation is judged by the server", str(wrong and wrong.get("result")))
     if wrong and wrong.get("result") != "solved":
         expect("GET", f"/v1/cases/{today['id']}/stats", status=409, headers=hdr, name="others' guesses stay hidden until you finish")
     if a.solve:

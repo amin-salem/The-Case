@@ -75,6 +75,7 @@ void main() {
     final result = ValueNotifier<String>('');
     await _open(tester, Progress({'attempts_left': 3}), result);
     await tester.tap(find.text('مظنون a'));
+    await tester.pump();
     await tester.tap(find.text('ادامه'));
     await _pump(tester);
     await tester.tap(find.text('مدرک نامرتبط'));
@@ -84,6 +85,7 @@ void main() {
     expect(find.textContaining('این اتهام اثبات نشد'), findsOneWidget);
     expect(find.textContaining('این آدم بی‌گناهه'), findsNothing);
     await tester.tap(find.text('مظنون a'));
+    await tester.pump();
     await tester.tap(find.text('ادامه'));
     await _pump(tester);
     expect(find.text('کدوم مدرک دروغش رو ثابت می‌کنه؟'), findsOneWidget);
@@ -106,6 +108,7 @@ void main() {
       });
       await _open(tester, progress, result);
       await tester.tap(find.text('مظنون a'));
+    await tester.pump();
       await tester.tap(find.text('ادامه'));
       await _pump(tester);
       expect(find.text('کدوم مدرک دروغش رو ثابت می‌کنه؟'), findsOneWidget);
