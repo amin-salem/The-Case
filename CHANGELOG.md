@@ -1,5 +1,8 @@
 # Changelog
 
+## server 1.31.2, app 1.31.2 (build 64): ChatGPT batch merged (Amin, 20 Oct 2026)
+- Merged: read-only analytics access, private content-dir prep, result prompts after the explanation, personal claim notes, Android screen-capture protection. Details are in the entries below.
+
 ## server 1.31.1, app 1.31.1 (build 63): lost cases stay closed, second chance costs 2x (Amin, 20 Oct 2026)
 - A case the player LOST (3 wrong accusations, not solved) no longer opens: `GET /v1/cases/{id}`, its stats and the answer return 402 `locked` with `lost: true` and the reopen price, also after the next case opens or the weekend closes. Story chapters are not affected.
 - Reopening costs **2x the archive price of the case difficulty** (200/240/300/360/440; weekend 340-740), `economy.reopen_lost_cost`, kill-free constant `LOST_REOPEN_FACTOR`. VIP pays too. One transaction under the player lock (`reopen:<case>` in the coin log, a double tap charges once), `expected_cost` mismatch gives 409 `price_changed`.
