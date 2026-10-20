@@ -434,3 +434,31 @@ class WeekSettlement(Base):
     week: Mapped[str] = mapped_column(String(10), primary_key=True)
     at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     paid: Mapped[int] = mapped_column(Integer, default=0)        # how many players got a prize
+
+
+class PlayerTool(Base):
+    """A player's stock of one kind of detective tool (app/tools.py). `count` is only ever changed by guarded SQL
+    (UPDATE ... WHERE count >= 1 / an upsert), never read-modify-write. `free_used` is the one-time tutorial tool."""
+
+    __tablename__ = "player_tools"
+
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), primary_key=True)
+    kind: Mapped[str] = mapped_column(String(16), primary_key=True)
+    count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    free_used: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+
+
+class CaseToolUse(Base):
+    """One tool used on one case: unique per player, case and kind (a tool can be used once per case), and it keeps the
+    result, so the answer stays pinned on the case when the player comes back. Part of the investigation record."""
+
+    __tablename__ = "case_tool_uses"
+    __table_args__ = (UniqueConstraint("player_id", "case_id", "kind", name="uq_case_tool_use"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    case_id: Mapped[str] = mapped_column(String(16))
+    kind: Mapped[str] = mapped_column(String(16))
+    source: Mapped[str] = mapped_column(String(8))  # free | stock | coins
+    result: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

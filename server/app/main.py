@@ -16,6 +16,7 @@ from .version import VERSION
 
 log = logging.getLogger("main")
 from .routers import admin, admin_ui, analytics, avatars as avatar_routes, auth, cases, comments, inbox, leaderboard, meta, pages, phone, profile, purchases
+from .routers import tools as tool_routes
 from .routers import achievements as achievement_routes
 from .routers import missions as mission_routes
 from .routers import riddles as riddle_routes
@@ -65,7 +66,7 @@ def create_app() -> FastAPI:
                        allow_methods=["*"], allow_headers=["*"])
     app.add_middleware(runtime_stats.StatsMiddleware)  # outermost: counts every request and 5xx
     for r in (analytics.router, meta.router, pages.router, auth.router, phone.router, profile.router, cases.router, leaderboard.router,
-              purchases.router, riddle_routes.router, mission_routes.router, achievement_routes.router, avatar_routes.router, story_routes.router, comments.router, comments.admin_router, inbox.router, admin.router, admin_ui.page_router, admin_ui.router):
+              purchases.router, riddle_routes.router, mission_routes.router, achievement_routes.router, avatar_routes.router, story_routes.router, tool_routes.router, comments.router, comments.admin_router, inbox.router, admin.router, admin_ui.page_router, admin_ui.router):
         app.include_router(r)
     return app
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../models/claim_notes.dart';
+import '../models/tools.dart';
 import '../services/api.dart';
 import '../services/case_clock.dart';
 import '../services/sound.dart';
@@ -21,6 +22,7 @@ import '../widgets/fx.dart';
 import '../widgets/offline.dart';
 import '../widgets/partner_card.dart';
 import '../widgets/rate_card.dart';
+import '../widgets/tool_tray.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'accuse_screen.dart';
@@ -185,6 +187,7 @@ class _CaseScreenState extends State<CaseScreen> {
         _progress = p;
         if (p.finished || p.hints.isNotEmpty || p.attempts > 0) _intro = false;
       });
+      unawaited(_loadTools());
       // the case file opens with its own sting and the sounds of the place
       if (_intro) {
         Sfx.i.openCase(c.scene);
@@ -200,6 +203,130 @@ class _CaseScreenState extends State<CaseScreen> {
         setState(() => _error = Api.isNetworkFail(e) && !Api.i.online ? Api.notSavedText : Api.friendly(e));
       }
     }
+  }
+
+  // ---------------------------------------------------------------- detective tools «ابزارهای کارآگاهی»
+
+  ToolTray? _tray;
+  bool _toolBusy = false;
+
+  Future<void> _loadTools() async {
+    final t = await Api.i.toolsTray(widget.caseId);
+    if (mounted && t != null) setState(() => _tray = t);
+  }
+
+  Future<String?> _pickSuspect(ToolInfo t) {
+    final list = [for (final s in _case!.suspects) if (t.suspects!.contains(s.id)) s];
+    return showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: K.night2,
+      builder: (ctx) => SafeArea(
+        child: SingleChildScrollView(
+          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
+              child: Text('${t.title}: روی کدوم مظنون؟', style: tDisplay(18)),
+            ),
+            for (final s in list)
+              ListTile(
+                key: ValueKey('tool-suspect-${s.id}'),
+                title: Text(s.name, style: tBody(15, w: FontWeight.w900)),
+                subtitle: Text(s.role, style: tBody(12.5, color: K.textSoft)),
+                onTap: () => Navigator.pop(ctx, s.id),
+              ),
+            const SizedBox(height: 8),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showToolResult(ToolInfo t, String text) async {
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: StampIn(
+          child: Paper(
+            color: K.clue,
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Icon(toolIcon(t.kind), color: K.ink, size: 34),
+              const SizedBox(height: 8),
+              Text(text, textAlign: TextAlign.center, style: tBody(16.5, color: K.ink, w: FontWeight.w700)),
+              const SizedBox(height: 12),
+              StampButton(label: 'باشه', height: 44, onTap: () => Navigator.pop(ctx)),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// One tap uses a tool the player holds; with none in hand it asks once and buys. Never blocks the case.
+  Future<void> _useTool(ToolInfo t) async {
+    if (_toolBusy) return;
+    if (t.used && t.result != null) {
+      await _showToolResult(t, t.result!.text);
+      return;
+    }
+    if (!t.usable || !needOnline(context)) return;
+    String? suspect;
+    if (t.needsSuspect) {
+      suspect = await _pickSuspect(t);
+      if (suspect == null || !mounted) return;
+    }
+    var buy = !t.hasOne;
+    if (buy) {
+      final ok = await confirm(context, t.title,
+          '${t.desc}\nهزینه: ${fa(t.price)} سکه. پلاکی کم نمی‌شه، و برای هر پرونده فقط یک بار می‌تونی ازش استفاده کنی.',
+          'بخر و استفاده کن');
+      if (!ok || !mounted) return;
+    }
+    setState(() => _toolBusy = true);
+    try {
+      final out = await Api.i.useTool(_case!.id, t.kind, suspect: suspect, buy: buy);
+      if (!mounted) return;
+      setState(() => _tray = out.tray);
+      if (out.nothingNew || out.result == null) {
+        toast(context, out.text.isNotEmpty ? out.text : 'این بار چیز تازه‌ای پیدا نشد. چیزی ازت کم نشد.');
+      } else {
+        Sfx.i.play('clue');
+        await _showToolResult(t, out.result!.text);
+      }
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      if (e.code == 'not_enough_coins') {
+        await showNeedCoins(context, e.need);
+      } else {
+        toast(context, e.code == 'already_used' || e.code == 'no_tool' ? 'وضعیت ابزارها به‌روز شد.' : Api.friendly(e));
+        unawaited(_loadTools());
+      }
+    } catch (e) {
+      if (mounted) toast(context, Api.friendly(e));
+    } finally {
+      if (mounted) setState(() => _toolBusy = false);
+    }
+  }
+
+  /// What the tools found, pinned on the case so reopening it does not lose it.
+  Widget _toolFindings() {
+    final pinned = _tray?.pinned ?? const <ToolInfo>[];
+    if (pinned.isEmpty) return const SizedBox.shrink();
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      const SizedBox(height: 14),
+      for (final t in pinned)
+        Container(
+          key: ValueKey('tool-finding-${t.kind}'),
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: K.clue, borderRadius: BorderRadius.circular(6)),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Icon(toolIcon(t.kind), color: K.ink, size: 20),
+            const SizedBox(width: 8),
+            Expanded(child: Text(t.result!.text, style: tBody(14, color: K.ink, w: FontWeight.w700))),
+          ]),
+        ),
+    ]);
   }
 
   Future<void> _hint() async {
@@ -547,6 +674,7 @@ class _CaseScreenState extends State<CaseScreen> {
             ]),
           ),
       ],
+      _toolFindings(),
       if (p.finished && c.explanation != null) ...[
         const SizedBox(height: 14),
         _solutionBox(c),
@@ -724,6 +852,7 @@ class _CaseScreenState extends State<CaseScreen> {
         final e = c.evidence[i];
         final key = (_progress?.finished ?? false) && c.proof.contains(e.id);
         final pinned = _pins.contains(e.id);
+        final irrelevant = _tray?.irrelevantCards.contains(e.id) ?? false;
         return FadeSlideIn(
           delay: Duration(milliseconds: 50 * i),
           child: GestureDetector(
@@ -741,7 +870,9 @@ class _CaseScreenState extends State<CaseScreen> {
             child: Container(
             margin: const EdgeInsets.only(bottom: 10),
             child: Stack(clipBehavior: Clip.none, children: [
-            Paper(
+            Opacity(
+              opacity: irrelevant ? 0.6 : 1,
+              child: Paper(
               color: key ? K.clue : K.paper,
               padding: const EdgeInsets.all(14),
               child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -770,11 +901,14 @@ class _CaseScreenState extends State<CaseScreen> {
                         padding: const EdgeInsets.only(top: 4),
                         child: Text('تازه · شب دوم', key: ValueKey('night2-${e.id}'), style: tBody(11.5, color: K.stamp, w: FontWeight.w900)),
                       ),
+                    if (irrelevant)
+                      Text('بی‌ربط · ذره‌بین', key: ValueKey('irrelevant-${e.id}'), style: tBody(12, color: K.inkSoft, w: FontWeight.w900)),
                     if (key) Text('مدرک کلیدی', style: tBody(12, color: K.stamp, w: FontWeight.w900)),
                     if (pinned && !key) Text('نشان‌شده', style: tBody(11, color: K.stamp, w: FontWeight.w900)),
                   ]),
                 ),
               ]),
+            ),
             ),
             Positioned(top: -8, left: 10, child: PinBadge(on: pinned)),
             Positioned(top: -10, right: 8, child: EvidenceMarker(i + 1)),
@@ -873,7 +1007,9 @@ class _CaseScreenState extends State<CaseScreen> {
         minimum: const EdgeInsets.only(bottom: 12),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
-          child: Row(children: [
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            if (_tray != null) ToolTrayBar(tray: _tray!, busy: _toolBusy, onTap: _useTool),
+            Row(children: [
               Expanded(
                 flex: 2,
                 child: StampButton(
@@ -890,6 +1026,7 @@ class _CaseScreenState extends State<CaseScreen> {
                     key: _accuseKey,
                     child: StampButton(label: 'متهم کن', icon: Icons.gavel_rounded, onTap: _accuse)),
               ),
+            ]),
           ]),
         ),
       ),

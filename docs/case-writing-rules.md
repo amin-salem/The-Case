@@ -132,3 +132,14 @@ c020-c024) and checks every item below. Findings are FIXED in the file, never on
   needed (no «جا‌لیوانی»); proof ≤ half the cards and every proof card contradicts the culprit's own words.
 - **Difficulty is measured, not claimed.** Blind test the public file; below 3.5 → harden (a second strong false trail, no
   card that names him) and test again. Weekend cases: a chapter-1-only run and a full run.
+
+## 10. Data for the detective tools (optional, from 20 Oct 2026)
+The tools «ذره‌بین» and «دوربین مخفی» only appear on a case whose file carries the data below. Add it when a case has a
+natural place for it; never force it. The server refuses a file that breaks these rules (`content._validate_tool_data`).
+- `solution.irrelevant`: 1 or 2 evidence ids that are truly **not needed** for the solution: not in `proof`, not used to clear a
+  false trail, not cited by id in the explanation. The magnifier tells the player «this card is irrelevant», so a wrong entry
+  would send a player away from a card he needs. If every card matters (the house rule for new cases), leave it out.
+- `suspect.camera`: one line (or up to 3), 20-160 characters, a **neutral observation** about the person's behaviour or a small
+  fact («چند بار به ساعت مچی‌اش نگاه کرد»). It names no guilt, no motive, no lie, and does not repeat a statement or an answer.
+  It must not make the culprit stand out compared with the others (give every suspect with a camera line a line of the same weight).
+- The fingerprint needs no data. Do not rely on it: it says which suspects the proof cards name, never who is guilty.

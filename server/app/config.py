@@ -53,6 +53,8 @@ class Settings(BaseSettings):
 
     streak_repair_enabled: bool = True  # STREAK_REPAIR_ENABLED=false hides and refuses the paid streak repair (kill switch)
 
+    detective_tools_enabled: bool = True  # DETECTIVE_TOOLS_ENABLED=false hides and refuses the detective tools (kill switch)
+
     # Rewarded ads pay coins only when a real ad network is in the app.
     ads_enabled: bool = False
 

@@ -5,6 +5,12 @@ from dataclasses import dataclass
 
 START_COINS = 100                # was 150: a throwaway account should not start rich
 HINT_COSTS = [30, 50, 80]        # hint 1, 2, 3 of a case
+# detective tools «ابزارهای کارآگاهی» (app/tools.py): a little under the hint they sit next to (30 / 50 / 80), because a
+# tool narrows the search but never names a card or a culprit. Each kind can be used once per case; using one never
+# lowers the plaques. The first of each kind is free ONCE per player (tutorial); the only other free source is a rare
+# drop at two existing reward points (the 7th chest day in a row; three long-term achievements).
+TOOL_PRICES = {"magnifier": 25, "fingerprint": 45, "camera": 70}
+TOOL_DROP_ACHIEVEMENTS = {"streak_30": "fingerprint", "cases_50": "magnifier", "interrogate_10": "camera"}
 UNLOCK_COST = 150                # open an old case from the archive
 MAX_ATTEMPTS = 3                 # wrong accusations allowed before the case is lost
 SOLVE_REWARD = {3: 30, 2: 20, 1: 10}

@@ -102,6 +102,8 @@ One limiter protects the whole API (`server/app/services/ratelimit.py`). The Tue
 | `unlock` | case / riddle unlock | player | 3/10 s, 60/h | shared | open |
 | `riddle_answer` | POST …/answer | player | 2/5 s, 60/10 min | shared | open |
 | `wallet` | streak freeze, ad reward, mission claim | player | 5/10 s, 60/10 min | shared | open |
+| `tool_buy` | POST …/tools/{kind}/buy | player | 3/10 s, 30/h | shared | open |
+| `tool_use` | POST …/tools/{kind}/use | player | 10/10 s, 120/h | per worker | open |
 | `purchase` | POST /v1/purchases/verify | player | 3/30 s, 20/h | shared | open |
 | `story` | story open / skip | player | 3/10 s, 60/h | shared | open |
 | `claim` | inbox claim | player | 5/10 s, 60/10 min | shared | open |
@@ -473,6 +475,36 @@ variables, schema migration or economy configuration are required.
 - **Kill switch:** `STREAK_REPAIR_ENABLED=false` hides the offer and answers 403 `repair_disabled`. Rate limit: the strict `wallet` policy (`RL_WALLET`), because the route is under `/v1/wallet/`.
 - **Logs:** one line per decision, no player data: `streak_repair decision=repaired|not_eligible|not_enough_coins|already_repaired|disabled streak=N price=N` (logger `streak`). Count them in the Liara logs to see conversion.
 - Migration 0028 (`players.streak_repair_mark`, table `streak_repairs`), additive.
+
+## Detective tools «ابزارهای کارآگاهی» (20 Oct 2026, server 1.33.0, app 1.33.0+66)
+Three consumables on the daily case screen. They narrow the search, never solve it: no card is named, the culprit is never
+said, plaques and stars are untouched, and a tool never counts as investigation (active time and interrogated suspects are
+what anti-cheat reads, so a solve with tools alone is still unranked).
+- **Tools** (`app/tools.py`, `app/routers/tools.py`): `magnifier` marks ONE card «بی‌ربط»; `fingerprint` says whether a chosen
+  suspect is touched by the main (proof) cards; `camera` shows one extra neutral line about a chosen suspect. Once per case
+  per kind (`case_tool_uses` is UNIQUE per player, case, kind) and the result is stored there, so it stays pinned on the case.
+- **Routes:** `GET /v1/cases/{id}/tools` (tray: price, stock, `available`, `usable`, `used`, `result`, `suspects`),
+  `POST /v1/cases/{id}/tools/{kind}/use` (stock or the one-time tutorial tool; 409 `no_tool {price}` otherwise) and
+  `POST /v1/cases/{id}/tools/{kind}/buy` (coins; buys one and uses it in the same transaction). Body `{suspect}` for
+  fingerprint and camera. Daily cases only: weekend/story answer 409 `tools_not_for_this_case` and the tray says so.
+- **Prices** (`economy.TOOL_PRICES`): magnifier 25, fingerprint 45, camera 70 (hints are 30/50/80). The first of each kind per
+  player is free ONCE (`player_tools.free_used`, claimed by a guarded UPDATE). The only other free source is a rare drop at
+  existing reward points: the 7th chest day in a row (`ChestOut.tool`, kind rotates) and the achievements in
+  `economy.TOOL_DROP_ACHIEVEMENTS` (streak_30 fingerprint, cases_50 magnifier, interrogate_10 camera).
+- **Atomicity:** the player lock (`current_player`) serialises a player's requests; the unique `case_tool_uses` row is written
+  first (a double tap loses there, before any coin or tool moves); coins go through `add_coins` (guarded), stock through
+  `UPDATE ... WHERE count >= 1`. A double tap or two workers charge/spend once. Not enough coins: 402 `not_enough_coins`.
+- **What the case file must provide** (docs/case-writing-rules.md §10): `solution.irrelevant` (1-2 evidence ids the author
+  certifies as not needed; never a proof card and never one the explanation cites) for the magnifier, and `suspect.camera`
+  (a line or up to 3, 20-160 characters, neutral) for the camera. The server refuses a file that breaks this. Without that
+  data the tool is simply not offered on that case (the tray hides it) and nothing is charged. `camera` lines are stripped
+  from the public case JSON. The fingerprint needs no data: it is offered when 2..n-1 suspects are touched (the culprit plus
+  everybody named in a proof card), so a "yes" is never "this is the culprit" (29 of the 50 cases at launch).
+- **Kill switch:** `DETECTIVE_TOOLS_ENABLED=false` hides the tray (`enabled: false`), refuses use/buy with 503
+  `tools_disabled` and stops the drops. Rate limits: `tool_buy` (strict) and `tool_use` (relaxed), `RL_TOOL_BUY`, `RL_TOOL_USE`.
+- **Logs** (logger `tools`, no player id): `tool_used kind= case= source=free|stock|coins price=`, `tool_nothing_new`,
+  `tool_granted kind= n= why=chest|achievement:<id>`. Count `source=coins` in the Liara logs to see revenue.
+- Migration 0029 (`player_tools`, `case_tool_uses`), additive, listed in `.github/workflows/ci.yml`.
 
 ## Lost cases and the second chance (20 Oct 2026)
 A lost case (failed, not solved) is closed for that player: 402 `locked` + `lost: true` on the case, its stats and the answer, until the player pays `reopen_lost_cost` (2 x the archive price of its difficulty, set by `LOST_REOPEN_FACTOR` in `server/app/economy.py`, shown in `/v1/economy` as `lost_reopen_factor`). Look for the log line `lost_case_reopened` and the coin-log reason `reopen:<case>`. To change the factor, edit the constant and push to main once; the app reads the price from the case list, so no APK is needed for a price change.

@@ -455,6 +455,7 @@ class MissionsOut(BaseModel):
 class ChestOut(BaseModel):
     missions: MissionsOut
     reward: int
+    tool: str | None = None             # a detective tool dropped by the 7th chest day in a row (app/tools.py)
     gains: GainsOut = GainsOut()
 
 

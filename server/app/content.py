@@ -66,8 +66,11 @@ class Case:
         return self.data.get("partner_hints") or self.data["hints"]
 
     def public(self) -> dict:
-        """Everything except the hints and the solution."""
-        return {k: v for k, v in self.data.items() if k not in SECRET_KEYS}
+        """Everything except the hints and the solution (and the detective tools' private lines, app/tools.py)."""
+        out = {k: v for k, v in self.data.items() if k not in SECRET_KEYS}
+        if any("camera" in s for s in out.get("suspects", ())):
+            out["suspects"] = [{k: v for k, v in s.items() if k != "camera"} for s in out["suspects"]]
+        return out
 
     def summary(self) -> dict:
         d = self.data
@@ -118,7 +121,43 @@ def validate(d: dict, max_suspects: int = 6) -> None:
         for key in ("type", "title", "text"):
             if key not in e:
                 raise CaseError(f"{d['id']}/{e['id']}: missing {key}")
+    _validate_tool_data(d, set(eids))
     date.fromisoformat(d["publish"])
+
+
+CAMERA_MIN, CAMERA_MAX, CAMERA_LINES = 20, 160, 3
+IRRELEVANT_MAX = 2
+
+
+def _validate_tool_data(d: dict, eids: set) -> None:
+    """Optional data for the detective tools (docs/case-writing-rules.md §10). Both are optional; a case without them
+    simply does not offer that tool.
+    - solution.irrelevant: evidence ids the author certifies as NOT needed for the solution (at most 2); never a proof
+      card and never a card the explanation cites by id.
+    - suspect.camera: a short neutral observation (a string or up to 3), 20-160 characters, that adds a small fact and
+      names no guilt."""
+    sol = d["solution"]
+    irr = sol.get("irrelevant")
+    if irr is not None:
+        if not isinstance(irr, list) or not 1 <= len(irr) <= IRRELEVANT_MAX or len(set(irr)) != len(irr):
+            raise CaseError(f"{d['id']}: solution.irrelevant must be 1-{IRRELEVANT_MAX} distinct evidence ids")
+        for i in irr:
+            if i not in eids:
+                raise CaseError(f"{d['id']}: solution.irrelevant {i!r} is not an evidence id")
+            if i in sol["proof"]:
+                raise CaseError(f"{d['id']}: solution.irrelevant {i!r} is a proof card")
+            if re.search(rf"\b{re.escape(i)}\b", sol.get("explanation", "")):
+                raise CaseError(f"{d['id']}: solution.irrelevant {i!r} is cited in the explanation")
+    for s in d["suspects"]:
+        cam = s.get("camera")
+        if cam is None:
+            continue
+        lines = [cam] if isinstance(cam, str) else cam
+        if not isinstance(lines, list) or not 1 <= len(lines) <= CAMERA_LINES:
+            raise CaseError(f"{d['id']}/{s['id']}: camera must be a line or 1-{CAMERA_LINES} lines")
+        for ln in lines:
+            if not isinstance(ln, str) or not CAMERA_MIN <= len(ln.strip()) <= CAMERA_MAX:
+                raise CaseError(f"{d['id']}/{s['id']}: a camera line must be {CAMERA_MIN}-{CAMERA_MAX} characters")
 
 
 @lru_cache

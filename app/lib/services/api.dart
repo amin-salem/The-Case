@@ -11,6 +11,7 @@ import '../models/models.dart';
 import '../models/avatars.dart';
 import '../models/progress.dart';
 import '../models/story.dart';
+import '../models/tools.dart';
 import 'case_clock.dart';
 import 'claim_note_store.dart';
 import 'reminders.dart';
@@ -756,6 +757,29 @@ class Api extends ChangeNotifier {
     _emitGains(j['gains']);
     await _saveProgress(id, j['progress']);
     return (j['hint'] as String, Progress((j['progress'] as Map).cast<String, dynamic>()));
+  }
+
+  // ---------------------------------------------------------------- detective tools
+
+  /// The tool tray of a case (prices, stock, pinned results). Null when offline or failing: the tray just stays hidden.
+  Future<ToolTray?> toolsTray(String caseId) async {
+    if (!online) return null;
+    try {
+      return ToolTray((await _call('GET', '/v1/cases/$caseId/tools') as Map).cast<String, dynamic>());
+    } catch (e) {
+      debugPrint('tools tray: $e');
+      return null;
+    }
+  }
+
+  /// Uses a tool the player holds ([buy] false) or buys one with coins and uses it at once ([buy] true).
+  /// Throws ApiException: not_enough_coins (need), no_tool (price), already_used, case_finished, tools_disabled.
+  Future<ToolOutcome> useTool(String caseId, String kind, {String? suspect, required bool buy}) async {
+    final j = (await _call('POST', '/v1/cases/$caseId/tools/$kind/${buy ? 'buy' : 'use'}',
+            body: {if (suspect != null) 'suspect': suspect}) as Map)
+        .cast<String, dynamic>();
+    if (j['coins'] is int) _setCoins(j['coins'] as int);
+    return ToolOutcome(j);
   }
 
   Future<AccuseResult> accuse(String caseId, String suspectId, String evidenceId, {String? motive}) async {

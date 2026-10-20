@@ -4,7 +4,8 @@ from datetime import date, timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import content, missions, progress
+from .. import content, missions, progress, tools
+from ..config import get_settings
 from .. import economy as eco
 from ..db import get_session
 from ..models import MissionDay, Player
@@ -64,6 +65,11 @@ async def claim(player: Player = Depends(current_player), session: AsyncSession 
     md.claimed = True
     progress.set_stat_max(player, "best_chest_streak", player.chest_streak)
     await add_coins(session, player, reward, f"chest:{day}")
+    tool = None
+    if player.chest_streak % eco.CHEST_BONUS_EVERY == 0 and get_settings().detective_tools_enabled:
+        # the 7th chest day in a row also drops one detective tool (rotating kind); the claimed flag above makes it once
+        tool = tools.KINDS[(player.chest_streak // eco.CHEST_BONUS_EVERY) % len(tools.KINDS)]
+        await tools.grant(session, player.id, tool, 1, why="chest")
     gains = await progress.record(session, player, xp=eco.XP_CHEST, chest=1)
     await session.commit()
-    return ChestOut(missions=missions_out(player, md, day), reward=reward, gains=GainsOut(**gains.out()))
+    return ChestOut(missions=missions_out(player, md, day), reward=reward, tool=tool, gains=GainsOut(**gains.out()))

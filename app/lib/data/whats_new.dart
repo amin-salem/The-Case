@@ -43,6 +43,10 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(66, '۱.۳۳', '2026-10-20', [
+    WhatsNewItem('tools_tray', 'ابزارهای کارآگاهی توی پرونده‌های روزانه: اثر انگشت‌خوان، ذره‌بین و دوربین مخفی (هر پرونده هر کدوم رو داشته باشه)؛ پلاکی کم نمی‌شه', WhatsNewTarget.caseToday),
+    WhatsNewItem('tools_free', 'از هر ابزار اولیش رایگانه تا امتحانش کنی؛ بعدش با سکه می‌گیری یا گاهی از مأموریت‌ها و نشان‌ها هدیه می‌گیری', WhatsNewTarget.caseToday),
+  ]),
   WhatsNewRelease(65, '۱.۳۲', '2026-10-20', [
     WhatsNewItem('streak_ladder', 'زنجیره حالا تا ۳۶۵ شب پله داره (۳، ۷، ۱۴، ۳۰، ۶۰، ۱۰۰، ۲۰۰، ۳۶۵) و کارت زنجیره می‌گه چند شب مونده', WhatsNewTarget.caseToday),
     WhatsNewItem('streak_frames', 'سه قاب آتشی تازه برای زنجیره‌های ۶۰، ۲۰۰ و ۳۶۵ شبه؛ همیشه مال خودته', WhatsNewTarget.avatars),

@@ -14,7 +14,8 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import achievements, avatars, content, missions
+from . import achievements, avatars, content, missions, tools
+from .config import get_settings
 from . import economy as eco
 from .models import MissionDay, Player, PlayerAchievement
 from .util import add_coins
@@ -107,7 +108,12 @@ async def check_achievements(session: AsyncSession, player: Player, gains: Gains
             if a.coins:
                 await add_coins(session, player, a.coins, f"achievement:{a.id}")
             add_xp(player, a.xp, gains)
-            gains.achievements.append({"id": a.id, "title": a.title, "coins": a.coins})
+            row = {"id": a.id, "title": a.title, "coins": a.coins}
+            drop = eco.TOOL_DROP_ACHIEVEMENTS.get(a.id)
+            if drop and get_settings().detective_tools_enabled:  # a rare detective tool (app/tools.py), once: the row above is unique
+                await tools.grant(session, player.id, drop, 1, why=f"achievement:{a.id}")
+                row["tool"] = drop
+            gains.achievements.append(row)
     if (player.stats or {}).get("achievements_earned") != len(earned):
         player.stats = {**(player.stats or {}), "achievements_earned": len(earned)}  # shown on the profile
     await avatars.check_goals(session, player, gains)
