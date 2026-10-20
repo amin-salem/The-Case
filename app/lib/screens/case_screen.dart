@@ -4,11 +4,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
+import '../models/claim_notes.dart';
 import '../services/api.dart';
 import '../services/case_clock.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/cast_strip.dart';
+import '../widgets/claim_notes.dart';
 import '../widgets/category.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/character.dart';
@@ -67,6 +69,11 @@ class _CaseScreenState extends State<CaseScreen> {
   final Map<String, SuspectMark> _marks = {};
   final Set<String> _pins = {}; // evidence the player has pinned to the board
   final Set<String> _seen = {}; // evidence cards the player has tapped (read)
+  List<ClaimLink> _claimLinks = [];
+  late final String? _noteOwner;
+  late final int _noteAccount;
+  bool _notesInvalid = false;
+  bool get _sameNoteOwner => !_notesInvalid && _noteOwner != null && Api.i.playerId == _noteOwner && Api.i.account == _noteAccount;
 
   // the first-case tutorial: null = not showing, else the step (0..2)
   int? _coach;
@@ -79,6 +86,9 @@ class _CaseScreenState extends State<CaseScreen> {
   @override
   void initState() {
     super.initState();
+    _noteOwner = Api.i.playerId;
+    _noteAccount = Api.i.account;
+    Api.i.addListener(_noteAccountChanged);
     CaseClock.i.start(widget.caseId); // solving time counts only while this screen is open
     _loadNotes();
     _load();
@@ -86,6 +96,7 @@ class _CaseScreenState extends State<CaseScreen> {
 
   @override
   void dispose() {
+    Api.i.removeListener(_noteAccountChanged);
     CaseClock.i.stop();
     super.dispose();
   }
@@ -107,17 +118,56 @@ class _CaseScreenState extends State<CaseScreen> {
       if (pins is List) _pins.addAll([for (final p in pins) '$p']);
       final seen = n['seen'];
       if (seen is List) _seen.addAll([for (final p in seen) '$p']);
+      _claimLinks = ClaimLink.read(n['links']);
     } catch (e) {
       debugPrint('notes: $e');
     }
   }
 
-  void _saveNotes() {
-    Api.i.saveNotes(widget.caseId, {
+  Future<void> _saveNotes() async {
+    if (!_sameNoteOwner) return;
+    try {
+      await Api.i.saveNotes(widget.caseId, {
+      ...Api.i.loadNotes(widget.caseId),
       'marks': {for (final e in _marks.entries) if (e.value != SuspectMark.none) e.key: e.value.name},
       'pins': _pins.toList(),
       'seen': _seen.toList(),
+      'links': [for (final link in _claimLinks) link.toJson()],
+    }, owner: _noteOwner);
+    } catch (_) {
+      if (mounted && _sameNoteOwner) toast(context, 'یادداشت روی گوشی ذخیره نشد؛ دوباره امتحان کن.');
+    }
+  }
+
+  void _noteAccountChanged() {
+    if (!mounted || (Api.i.playerId == _noteOwner && Api.i.account == _noteAccount)) return;
+    final route = ModalRoute.of(context);
+    setState(() { _notesInvalid = true; _claimLinks = []; _marks.clear(); _pins.clear(); _seen.clear(); });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || route == null || !route.isActive) return;
+      Navigator.of(context).popUntil((r) => r == route || r.isFirst);
+      if (route.isCurrent && !route.isFirst) Navigator.of(context).pop();
     });
+  }
+
+  Future<void> _editClaim({ClaimLink? existing, String? claim, String? evidence}) async {
+    final c = _case;
+    if (!_sameNoteOwner || c == null) return;
+    final link = await showClaimNoteEditor(context, caseData: c, existing: existing, claim: claim, evidence: evidence,
+      ownerChanges: Api.i, ownerCurrent: () => mounted && _sameNoteOwner);
+    if (!mounted || !_sameNoteOwner || link == null) return;
+    try {
+      setState(() => _claimLinks = putClaimLink(_claimLinks, link, replacing: existing?.id));
+      await _saveNotes();
+    } on StateError catch (_) {
+      if (mounted) toast(context, 'سقف یادداشت‌های این پرونده پر شده؛ یکی رو ویرایش یا حذف کن.');
+    }
+  }
+
+  void _removeClaim(ClaimLink link) {
+    if (!_sameNoteOwner) return;
+    setState(() => _claimLinks.removeWhere((l) => l.id == link.id));
+    _saveNotes();
   }
 
   Future<void> _retry() async {
@@ -210,6 +260,7 @@ class _CaseScreenState extends State<CaseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_notesInvalid) return const Scaffold(body: SafeArea(child: Center(child: Text('حساب عوض شده؛ پرونده رو دوباره باز کن.'))));
     final c = _case;
     if (c == null) {
       return Scaffold(
@@ -661,7 +712,14 @@ class _CaseScreenState extends State<CaseScreen> {
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       itemCount: c.evidence.length + 1,
       itemBuilder: (_, j) {
-        if (j == 0) return _evidenceHeader(c);
+        if (j == 0) {
+          return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          _evidenceHeader(c),
+          ClaimNotesPanel(caseData: c, links: _claimLinks, onAdd: () => _editClaim(),
+            onEdit: (link) => _editClaim(existing: link), onRemove: _removeClaim),
+          const SizedBox(height: 8),
+          ]);
+        }
         final i = j - 1;
         final e = c.evidence[i];
         final key = (_progress?.finished ?? false) && c.proof.contains(e.id);
@@ -704,6 +762,9 @@ class _CaseScreenState extends State<CaseScreen> {
                     const SizedBox(height: 4),
                     Text(e.text, style: tBody(14.5, color: K.ink)),
                     ..._namedChips(c, e),
+                    TextButton.icon(onPressed: () => _editClaim(evidence: e.id),
+                      icon: const Icon(Icons.add_link_rounded, size: 18, color: K.stamp),
+                      label: Text('پیوند به حرف مظنون', style: tBody(12.5, color: K.stamp))),
                     if (c.twoNights && e.chapter >= 2)
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
@@ -747,7 +808,9 @@ class _CaseScreenState extends State<CaseScreen> {
               if (mounted) setState(() => _progress = np);
             })
         : null;
-    final m = await showSuspect(context, s, _marks[s.id] ?? SuspectMark.none, onMark: keep, weekend: show);
+    final m = await showSuspect(context, s, _marks[s.id] ?? SuspectMark.none, onMark: keep, weekend: show,
+      onLinkClaim: (suspect, question) => _editClaim(claim: ClaimChoice(suspect,
+        question < 0 ? null : suspect.questions[question]).key));
     if (m != null && mounted) keep(m);
   }
 
@@ -833,3 +896,4 @@ class _CaseScreenState extends State<CaseScreen> {
     );
   }
 }
+

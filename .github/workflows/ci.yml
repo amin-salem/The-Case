@@ -134,6 +134,18 @@ jobs:
       - name: Report Flutter failure
         if: failure()
         run: echo "::error title=flutter::$(tail -c 6000 flutter.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"
+      - name: Render personal notebook previews (widget tests only)
+        working-directory: app
+        run: flutter test test/claim_notes_widget_test.dart --dart-define=NOTE_PREVIEWS=true
+      - name: Personal notebook UI previews
+        uses: actions/upload-artifact@v4
+        with:
+          name: claim-notes-ui
+          path: app/test_previews/*.png
+          if-no-files-found: error
+      - name: Report preview failure
+        if: failure()
+        run: echo "::error title=flutter::$(tail -c 6000 flutter.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"
 
 
   wallet-postgres:

@@ -12,6 +12,7 @@ import '../models/avatars.dart';
 import '../models/progress.dart';
 import '../models/story.dart';
 import 'case_clock.dart';
+import 'claim_note_store.dart';
 import 'reminders.dart';
 
 /// Server address (Liara). Another server for testing:
@@ -200,6 +201,7 @@ class Api extends ChangeNotifier {
       _baseIx = (_p.getInt('api_base') ?? 0).clamp(0, kApiUrls.length - 1);
     } catch (_) {}
     _playerId = _p.getString('player');
+    await ClaimNoteStore(_p).migrateLegacy(_playerId);
     _secret = _p.getString('secret');
     _token = _p.getString('token');
     _tokenExp = _p.getInt('token_exp') ?? 0;
@@ -409,6 +411,7 @@ class Api extends ChangeNotifier {
     } catch (e) {
       return friendly(e);
     }
+    await ClaimNoteStore(_p).removeAccount(_playerId);
     for (final k in const ['player', 'secret', 'token', 'token_exp']) {
       await _p.remove(k);
     }
@@ -422,6 +425,7 @@ class Api extends ChangeNotifier {
   }
 
   Future<void> _storeLogin(Map<String, dynamic> j) async {
+    await ClaimNoteStore(_p).migrateLegacy(_playerId);
     final newId = j['player_id'] as String;
     final switched = _p.getString('player') != null && _p.getString('player') != newId;
     _clientReported = false; // the new account reports the app again
@@ -510,11 +514,14 @@ class Api extends ChangeNotifier {
 
   /// The player's own marks on a case (suspicious / innocent, pinned evidence). Only on the phone.
   Map<String, dynamic> loadNotes(String caseId) {
-    final j = _readCache('$_kNotesPrefix$caseId');
-    return j is Map ? Map<String, dynamic>.from(j) : <String, dynamic>{};
+    return ClaimNoteStore(_p).load(_playerId, caseId);
   }
 
-  Future<void> saveNotes(String caseId, Map<String, dynamic> notes) => _writeCache('$_kNotesPrefix$caseId', notes);
+  Future<void> saveNotes(String caseId, Map<String, dynamic> notes, {String? owner}) async {
+    final target = owner ?? _playerId;
+    if (target == null || target != _playerId) throw StateError('note_account_changed');
+    await ClaimNoteStore(_p).save(target, caseId, notes);
+  }
 
   /// One-time flags kept on the phone (e.g. the first-case tutorial was shown).
   bool flag(String key) {
