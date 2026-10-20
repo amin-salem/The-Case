@@ -8,6 +8,32 @@ HINT_COSTS = [30, 50, 80]        # hint 1, 2, 3 of a case
 UNLOCK_COST = 150                # open an old case from the archive
 MAX_ATTEMPTS = 3                 # wrong accusations allowed before the case is lost
 SOLVE_REWARD = {3: 30, 2: 20, 1: 10}
+# Level 3 retains the old baseline; bonuses are added by the caller exactly once.
+ARCHIVE_PRICES = (100, 120, 150, 180, 220)
+WEEKEND_ARCHIVE_PRICES = (170, 200, 250, 300, 370)
+DIFFICULTY_REWARDS = {3: (20, 25, 30, 36, 45), 2: (12, 16, 20, 24, 30), 1: (6, 8, 10, 12, 15)}
+LIVE_WEEKEND_REWARDS = {3: (200, 250, 300, 360, 450), 2: (120, 160, 200, 240, 300), 1: (72, 96, 120, 144, 180)}
+
+
+def difficulty_level(value) -> int:
+    return value if type(value) is int and 1 <= value <= 5 else 3
+
+
+def archive_unlock_cost(difficulty, *, weekend: bool = False) -> int:
+    return (WEEKEND_ARCHIVE_PRICES if weekend else ARCHIVE_PRICES)[difficulty_level(difficulty) - 1]
+
+
+def solve_reward(difficulty, stars: int, *, live_weekend: bool = False) -> int:
+    if stars not in (1, 2, 3):
+        raise ValueError("stars must be 1..3")
+    return (LIVE_WEEKEND_REWARDS if live_weekend else DIFFICULTY_REWARDS)[stars][difficulty_level(difficulty) - 1]
+
+
+def difficulty_policy() -> dict:
+    return {"version": 1, "fallback_difficulty": 3, "archive_prices": list(ARCHIVE_PRICES),
+            "weekend_archive_prices": list(WEEKEND_ARCHIVE_PRICES),
+            "base_rewards": {n: [solve_reward(n, s) for s in (1, 2, 3)] for n in range(1, 6)},
+            "live_weekend_base_rewards": {n: [solve_reward(n, s, live_weekend=True) for s in (1, 2, 3)] for n in range(1, 6)}}
 DAILY_BONUS = 15                 # extra for solving the case on its own day
 STREAK_BONUS_EVERY = 7           # every 7 days in a row ...
 STREAK_BONUS = 60                # ... this many coins
@@ -184,3 +210,4 @@ AVATAR_PRICE = {"ex_alchemist": 600, "ex_journalist": 600, "ex_qajar": 800, "ex_
                 "ex_shadow": 1800, "ex_diva": 2200, "ex_gold": 2500}
 FRAME_PRICE = {"frame_fingerprint": 300, "frame_blinds": 400, "frame_cuffs": 600, "frame_stamp": 600,
                "frame_neon": 900, "frame_royal": 1500}
+

@@ -71,7 +71,7 @@ async def test_solving_needs_the_motive(client, clock):
     assert r["result"] == "wrong_motive" and r["attempts_left"] == eco.MAX_ATTEMPTS
     r = (await client.post(f"/v1/cases/{w.id}/accuse", headers=h,
                            json={"suspect": w.culprit, "evidence": proof, "motive": right})).json()
-    assert r["result"] == "solved" and r["stars"] == 2 and r["reward"] == eco.WEEKLY_REWARD[2]
+    assert r["result"] == "solved" and r["stars"] == 2 and r["reward"] == eco.solve_reward(w.data.get("difficulty"), 2, live_weekend=True)
     assert r["streak"] == 0  # the weekend case doesn't touch the nightly streak
     done = (await client.get(f"/v1/cases/{w.id}", headers=h)).json()["case"]
     assert done["solution"]["motive"] == right
@@ -87,7 +87,7 @@ async def test_accusing_is_allowed_from_the_first_chapter(client, clock):
     r = (await client.post(f"/v1/cases/{w.id}/accuse", headers=h, json=body)).json()
     # solved before the last chapter: the weekend reward plus the early bonus
     assert r["result"] == "solved" and r["stars"] == 3 and r["early_bonus"] == eco.WEEKLY_EARLY_BONUS
-    assert r["reward"] == eco.WEEKLY_REWARD[3] + eco.WEEKLY_EARLY_BONUS
+    assert r["reward"] == eco.solve_reward(w.data.get("difficulty"), 3, live_weekend=True) + eco.WEEKLY_EARLY_BONUS
 
 
 def test_weekend_schedule_text_comes_from_the_clock_constants():
@@ -133,3 +133,4 @@ def test_weekend_case_own_open_hour_and_close():
     assert content.opens_at(c).hour == 9 and content.opens_at(c).weekday() == 3
     assert content.weekly_closes_at(c) == content.opens_at(c) + (datetime(2026, 10, 18, 21) - datetime(2026, 10, 15, 9))
     assert content.weekly_all_open_at(c) == content.opens_at(c) + (datetime(2026, 10, 17, 9) - datetime(2026, 10, 15, 9))
+

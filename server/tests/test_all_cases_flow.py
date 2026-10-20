@@ -15,7 +15,7 @@ def all_open(monkeypatch):
     last = content.all_cases()[-1]
     later = datetime(last.publish.year, last.publish.month, last.publish.day, 23, 0, tzinfo=ZoneInfo("Asia/Tehran"))
     monkeypatch.setattr(content, "now_local", lambda: later)
-    monkeypatch.setattr(economy, "UNLOCK_COST", 0)
+    monkeypatch.setattr(economy, "archive_unlock_cost", lambda difficulty, *, weekend=False: 0)
     return later
 
 
@@ -49,3 +49,4 @@ async def test_every_case_can_be_solved_and_only_by_the_right_proof(client, all_
             r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=q["headers"], json={"suspect": c.culprit, "evidence": ev})).json()
             assert r["result"] == "solved" and r["culprit"] == c.culprit, f"{c.id} {ev}"
             assert r["explanation"]
+

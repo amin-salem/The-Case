@@ -60,7 +60,7 @@ async def test_today_case_flow_solve(client, clock):
     r = (await client.post(f"/v1/cases/{c.id}/accuse", headers=h,
                            json={"suspect": c.culprit, "evidence": sorted(c.proof)[0]})).json()
     assert r["result"] == "solved" and r["stars"] == 2 and r["streak"] == 1 and r["rank"] == 1
-    assert r["reward"] == economy.SOLVE_REWARD[2] + economy.DAILY_BONUS
+    assert r["reward"] == economy.solve_reward(c.data.get("difficulty"), 2) + economy.DAILY_BONUS
     lb = (await client.get("/v1/leaderboard?period=daily", headers=h)).json()
     assert lb["me"]["rank"] == 1
     again = await client.post(f"/v1/cases/{c.id}/accuse", headers=h,
@@ -102,7 +102,7 @@ async def test_wrong_proof_costs_a_star(client):
 
 async def test_archive_unlock_costs_coins(client, monkeypatch):
     # a new player (100 coins + the first login reward) cannot afford the full price on day 1: that is intended
-    monkeypatch.setattr(economy, "UNLOCK_COST", 100)
+    monkeypatch.setattr(economy, "archive_unlock_cost", lambda difficulty, *, weekend=False: 100)
     p = await new_player(client, "archivist")
     h = p["headers"]
     lst = (await client.get("/v1/cases", headers=h)).json()
@@ -114,7 +114,7 @@ async def test_archive_unlock_costs_coins(client, monkeypatch):
     r = await client.post(f"/v1/cases/{old['id']}/unlock", headers=h)
     assert r.status_code == 200
     after = (await client.get("/v1/me", headers=h)).json()["coins"]
-    assert before - after == economy.UNLOCK_COST
+    assert before - after == old["unlock_cost"]
 
 
 async def test_not_enough_coins_for_hint(client):
@@ -232,3 +232,4 @@ async def test_admin_purges_old_smoke_players(client):
         assert await s.get(Player, keep["player_id"]) is not None
     r = await client.post("/admin/players/purge-smoke", headers=ADMIN)
     assert r.json()["deleted"] == 0
+

@@ -133,6 +133,10 @@ class SecureOut(BaseModel):
 
 
 # ---- cases
+class UnlockIn(BaseModel):
+    expected_cost: int | None = Field(default=None, ge=0, le=1_000_000)
+
+
 class CaseRow(BaseModel):
     id: str
     number: int
@@ -146,6 +150,7 @@ class CaseRow(BaseModel):
     weekend: bool = False  # an expired weekend case in the archive (higher price)
     locked: bool        # archive case not bought yet
     unlock_cost: int
+    base_solve_rewards: dict[int, int] = Field(default_factory=dict)  # stars -> base coins; bonuses separate
     solved: bool
     failed: bool
     stars: int

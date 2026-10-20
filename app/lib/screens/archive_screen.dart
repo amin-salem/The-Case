@@ -16,32 +16,53 @@ import 'shop_screen.dart';
 /// Returns once the player leaves the case.
 Future<void> openCaseRow(BuildContext context, CaseRow row) async {
   if (row.locked) {
-    if (!needOnline(context)) return;
-    final ok = row.weekend
-        ? await confirm(context, 'باز کردن پرونده‌ی آخر هفته',
-            'این پرونده‌ی آخر هفته بسته شده. هر دو فصلش با هم باز می‌شه و جایزه‌ی پرونده‌ی عادی داره. قیمتش از پرونده‌های دیگه‌ی بایگانی بیشتره: ${fa(row.unlockCost)} سکه.',
-            'باز کن · ${fa(row.unlockCost)} سکه')
-        : await confirm(context, 'باز کردن پرونده‌ی قدیمی',
-            'این پرونده مال روزهای قبله. با ${fa(row.unlockCost)} سکه بازش کن.', 'باز کن');
-    if (!ok || !context.mounted) return;
-    try {
-      await Api.i.unlockCase(row.id);
-    } on ApiException catch (e) {
-      if (!context.mounted) return;
-      if (e.code == 'not_enough_coins') {
-        await showNeedCoins(context, row.unlockCost);
-      } else {
-        toast(context, Api.friendly(e));
-      }
-      return;
-    } catch (e) {
-      if (context.mounted) toast(context, Api.friendly(e));
-      return;
-    }
+    final unlocked = await unlockQuotedCase(context, row);
+    if (!context.mounted || !unlocked) return;
   }
   if (!context.mounted) return;
   await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: row.id)));
   Sfx.i.ambient('amb_home', volume: Sfx.homeVolume);
+}
+
+/// The amount the player confirms is the amount sent to the server. A changed
+/// quote always gets a new explicit confirmation; no silent retry/debit.
+Future<bool> unlockQuotedCase(BuildContext context, CaseRow row) async {
+  if (!needOnline(context)) return false;
+  var quote = row.unlockCost;
+  var changed = false;
+  final account = Api.i.account;
+  for (var tries = 0; tries < 5; tries++) {
+    if (!context.mounted || Api.i.account != account) return false;
+    final rewards = row.baseSolveRewards;
+    final rewardText = rewards.isEmpty ? '' : '\nپاداش پایهٔ حل: ${fa(rewards[1] ?? 0)} تا ${fa(rewards[3] ?? 0)} سکه؛ بسته به پلاک‌ها.';
+    final ok = await confirm(context,
+        changed ? 'قیمت پرونده تغییر کرده' : row.weekend ? 'باز کردن پرونده‌ی آخر هفته' : 'باز کردن پرونده‌ی قدیمی',
+        '${row.weekend ? 'همهٔ فصل‌های این پروندهٔ بسته‌شده با هم باز می‌شن.' : 'این پرونده مال روزهای قبله.'} با ${fa(quote)} سکه بازش کن.$rewardText',
+        'باز کن · ${fa(quote)} سکه');
+    if (!ok || !context.mounted || Api.i.account != account) return false;
+    try {
+      await Api.i.unlockCase(row.id, expectedCost: quote);
+      return true;
+    } on ApiException catch (e) {
+      if (!context.mounted) return false;
+      if (e.code == 'price_changed' && e.need >= 0) {
+        quote = e.need;
+        changed = true;
+        continue;
+      }
+      if (e.code == 'not_enough_coins') {
+        await showNeedCoins(context, e.need > 0 ? e.need : quote);
+      } else {
+        toast(context, Api.friendly(e));
+      }
+      return false;
+    } catch (e) {
+      if (context.mounted) toast(context, Api.friendly(e));
+      return false;
+    }
+  }
+  if (context.mounted) toast(context, 'قیمت دوباره تغییر کرد؛ فهرست پرونده‌ها رو تازه کن.');
+  return false;
 }
 
 enum _Filter { all, unsolved, free, three, unrated }
@@ -514,6 +535,10 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                 Text('هنوز امتیازی نیست', style: tBody(11.5, color: K.textSoft)),
             ]),
           ),
+          if (!c.solved && !c.failed && c.baseSolveRewards.isNotEmpty)
+            Padding(padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              child: Text('پاداش پایهٔ حل: ${fa(c.baseSolveRewards[1] ?? 0)} تا ${fa(c.maxSolveReward ?? 0)} سکه',
+                style: tBody(12, color: K.textSoft))),
         ]),
       ),
     );
@@ -525,3 +550,4 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
         child: Text(text, style: tBody(11, color: fg, w: FontWeight.w900).copyWith(height: 1.4)),
       );
 }
+

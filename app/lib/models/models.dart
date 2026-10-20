@@ -9,6 +9,18 @@ export 'progress.dart' show Gains;
 int _i(Object? v, [int d = 0]) => v is int ? v : (v is num ? v.toInt() : d);
 String _s(Object? v, [String d = '']) => v is String ? v : d;
 bool _b(Object? v) => v == true;
+int _difficulty(Object? value) => value is int && value >= 1 && value <= 5 ? value : 3;
+Map<int, int> _coinRewards(Object? value) {
+  if (value is! Map) return {};
+  final rewards = <int, int>{};
+  for (final entry in value.entries) {
+    final stars = int.tryParse('${entry.key}');
+    if (stars != null && stars >= 1 && stars <= 3 && entry.value is int && (entry.value as int) >= 0) {
+      rewards[stars] = entry.value as int;
+    }
+  }
+  return rewards;
+}
 
 /// The free portrait for an old numeric avatar (det_01 .. det_10).
 String detId(int index) => 'det_${(index % 10 + 1).toString().padLeft(2, '0')}';
@@ -125,7 +137,7 @@ class CaseData {
         location = _s(j['location']),
         scene = _s(j['scene']),
         category = _s(j['category']),
-        difficulty = _i(j['difficulty'], 2),
+        difficulty = _difficulty(j['difficulty']),
         intro = _s(j['intro']),
         suspects = [for (final s in _maps(j['suspects'])) Suspect(s)],
         evidence = [for (final e in _maps(j['evidence'])) Evidence(e)],
@@ -264,12 +276,13 @@ class CaseRow {
         location = _s(j['location']),
         scene = _s(j['scene']),
         category = _s(j['category']),
-        difficulty = _i(j['difficulty'], 2),
+        difficulty = _difficulty(j['difficulty']),
         publish = _s(j['publish']),
         today = _b(j['today']),
         weekend = _b(j['weekend']),
         locked = _b(j['locked']),
         unlockCost = _i(j['unlock_cost'], 150),
+        baseSolveRewards = _coinRewards(j['base_solve_rewards']),
         solved = _b(j['solved']),
         failed = _b(j['failed']),
         stars = _i(j['stars']),
@@ -282,6 +295,8 @@ class CaseRow {
   final String id, title, location, scene, publish;
   final String category; // topic key, '' when unknown
   final int number, difficulty, unlockCost, stars, solvers;
+  final Map<int, int> baseSolveRewards;
+  int? get maxSolveReward => baseSolveRewards[3];
   final double ratingAvg; // average stars of all detectives (0 = nobody rated)
   final int ratingCount, commentCount, myRating;
   final bool today, locked, solved, failed;

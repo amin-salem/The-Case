@@ -113,7 +113,7 @@ async def test_two_part_accusation_stars_and_early_bonus(client, clock, wk):
     r = (await client.post("/v1/cases/w099/accuse", headers=a["headers"],
                            json={"suspect": wk.culprit, "motive": sol["motive"]})).json()
     assert r["result"] == "solved" and r["stars"] == 3 and r["how_right"] is True
-    assert r["early_bonus"] == eco.WEEKLY_EARLY_BONUS and r["reward"] == eco.WEEKLY_REWARD[3] + eco.WEEKLY_EARLY_BONUS
+    assert r["early_bonus"] == eco.WEEKLY_EARLY_BONUS and r["reward"] == eco.solve_reward(wk.data.get("difficulty"), 3, live_weekend=True) + eco.WEEKLY_EARLY_BONUS
     r2 = await client.post("/v1/cases/w099/accuse", headers=a["headers"], json={"suspect": wk.culprit, "motive": sol["motive"]})
     assert r2.status_code == 409  # solved: no second payout
 
@@ -123,7 +123,7 @@ async def test_two_part_accusation_stars_and_early_bonus(client, clock, wk):
     r = (await client.post("/v1/cases/w099/accuse", headers=b["headers"],
                            json={"suspect": wk.culprit, "motive": wrong_how})).json()
     assert r["result"] == "solved" and r["stars"] == 2 and r["how_right"] is False and r["early_bonus"] == 0
-    assert r["reward"] == eco.WEEKLY_REWARD[2]
+    assert r["reward"] == eco.solve_reward(wk.data.get("difficulty"), 2, live_weekend=True)
 
     # wrong culprit: a try is lost and the case stays open
     c = await new_player(client, "wk2-c")
@@ -143,7 +143,7 @@ async def test_two_part_accusation_stars_and_early_bonus(client, clock, wk):
     await client.get("/v1/cases/w099", headers=d["headers"])
     r = (await client.post("/v1/cases/w099/accuse", headers=d["headers"],
                            json={"suspect": wk.culprit, "motive": sol["motive"]})).json()
-    assert r["result"] == "solved" and r["early_bonus"] == 0 and r["reward"] == eco.WEEKLY_REWARD[3]
+    assert r["result"] == "solved" and r["early_bonus"] == 0 and r["reward"] == eco.solve_reward(wk.data.get("difficulty"), 3, live_weekend=True)
 
 
 async def test_no_shows_after_the_case_is_solved(client, clock, wk):
@@ -156,7 +156,7 @@ async def test_no_shows_after_the_case_is_solved(client, clock, wk):
 
 
 async def test_expired_weekend_case_is_an_archive_case_with_a_higher_price(client, clock, wk, monkeypatch):
-    monkeypatch.setattr(eco, "WEEKEND_ARCHIVE_COST", 100)  # new players start with 100 coins
+    monkeypatch.setattr(eco, "archive_unlock_cost", lambda difficulty, *, weekend=False: 100)  # new players start with 100 coins
     start = content.opens_at(wk)
     live = await new_player(client, "wk2-live")
     late = await new_player(client, "wk2-late")
@@ -197,11 +197,12 @@ async def test_expired_weekend_case_is_an_archive_case_with_a_higher_price(clien
     # solving it in the archive pays like a normal archive case: no weekend reward, no early bonus
     r = (await client.post("/v1/cases/w099/accuse", headers=late["headers"],
                            json={"suspect": wk.culprit, "motive": sol["motive"]})).json()
-    assert r["result"] == "solved" and r["reward"] == eco.SOLVE_REWARD[3] and r["early_bonus"] == 0
+    assert r["result"] == "solved" and r["reward"] == eco.solve_reward(wk.data.get("difficulty"), 3) and r["early_bonus"] == 0
 
 
 async def test_not_enough_coins_for_the_weekend_archive(client, clock, wk):
     clock(content.weekly_closes_at(wk) + timedelta(minutes=1))
     h = (await new_player(client, "wk2-poor"))["headers"]  # 100 coins, the price is 250
     r = await client.post("/v1/cases/w099/unlock", headers=h)
-    assert r.status_code == 402 and r.json()["detail"] == {"error": "not_enough_coins", "need": eco.WEEKEND_ARCHIVE_COST}
+    assert r.status_code == 402 and r.json()["detail"] == {"error": "not_enough_coins", "need": eco.archive_unlock_cost(wk.data.get("difficulty"), weekend=True)}
+
