@@ -15,12 +15,21 @@ DIFFICULTY_REWARDS = {3: (20, 25, 30, 36, 45), 2: (12, 16, 20, 24, 30), 1: (6, 8
 LIVE_WEEKEND_REWARDS = {3: (200, 250, 300, 360, 450), 2: (120, 160, 200, 240, 300), 1: (72, 96, 120, 144, 180)}
 
 
+# A case the player LOST stays closed. Playing it again is a paid second chance, always dearer than the normal
+# archive price of the same difficulty (Amin, 20 Oct 2026).
+LOST_REOPEN_FACTOR = 2
+
+
 def difficulty_level(value) -> int:
     return value if type(value) is int and 1 <= value <= 5 else 3
 
 
 def archive_unlock_cost(difficulty, *, weekend: bool = False) -> int:
     return (WEEKEND_ARCHIVE_PRICES if weekend else ARCHIVE_PRICES)[difficulty_level(difficulty) - 1]
+
+
+def reopen_lost_cost(difficulty, *, weekend: bool = False) -> int:
+    return archive_unlock_cost(difficulty, weekend=weekend) * LOST_REOPEN_FACTOR
 
 
 def solve_reward(difficulty, stars: int, *, live_weekend: bool = False) -> int:
@@ -32,6 +41,7 @@ def solve_reward(difficulty, stars: int, *, live_weekend: bool = False) -> int:
 def difficulty_policy() -> dict:
     return {"version": 1, "fallback_difficulty": 3, "archive_prices": list(ARCHIVE_PRICES),
             "weekend_archive_prices": list(WEEKEND_ARCHIVE_PRICES),
+            "lost_reopen_factor": LOST_REOPEN_FACTOR,
             "base_rewards": {n: [solve_reward(n, s) for s in (1, 2, 3)] for n in range(1, 6)},
             "live_weekend_base_rewards": {n: [solve_reward(n, s, live_weekend=True) for s in (1, 2, 3)] for n in range(1, 6)}}
 DAILY_BONUS = 15                 # extra for solving the case on its own day

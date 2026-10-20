@@ -76,18 +76,16 @@ async def test_lost_nightly_case_hides_the_answer_until_the_next_case(client, cl
     await client.get(f"/v1/cases/{c.id}", headers=h)
     r = await fail_case(client, h, c)
     assert r["culprit"] is None and r["explanation"] is None and r["proof"] == [] and r["answer_at"] == opens_next
-    got = (await client.get(f"/v1/cases/{c.id}", headers=h)).json()
-    assert "solution" not in got["case"] and got["progress"]["failed"] and got["progress"]["answer_at"] == opens_next
-    st = (await client.get(f"/v1/cases/{c.id}/stats", headers=h)).json()
-    assert st["culprit"] == ""  # the stats screen must not give it away either
-    blob = (await client.get(f"/v1/cases/{c.id}", headers=h)).text + (await client.get("/v1/cases", headers=h)).text
-    assert c.data["solution"]["explanation"] not in blob
-    # the next case opens: the answer is public
+    # a LOST case stays closed: the case, its stats and the answer are all behind the paid second chance
+    locked = await client.get(f"/v1/cases/{c.id}", headers=h)
+    assert locked.status_code == 402 and locked.json()["detail"]["lost"] is True
+    assert (await client.get(f"/v1/cases/{c.id}/stats", headers=h)).status_code == 402
+    blob = locked.text + (await client.get("/v1/cases", headers=h)).text
+    assert c.data["solution"]["explanation"] not in blob and c.culprit not in blob.replace(c.id, "")
+    # the next case opens: the answer is still not public for the player who lost
     clock(datetime.fromtimestamp(opens_next + 60, TEHRAN))
-    got = (await client.get(f"/v1/cases/{c.id}", headers=h)).json()
-    assert got["case"]["solution"]["culprit"] == c.culprit and got["progress"]["answer_at"] is None
-    st = (await client.get(f"/v1/cases/{c.id}/stats", headers=h)).json()
-    assert st["culprit"] == c.culprit
+    assert (await client.get(f"/v1/cases/{c.id}", headers=h)).status_code == 402
+    assert (await client.get(f"/v1/cases/{c.id}/stats", headers=h)).status_code == 402
 
 
 async def test_solvers_see_the_explanation_at_once(client, clock):
@@ -125,9 +123,9 @@ async def test_lost_weekend_case_waits_for_its_closing(client, clock):
         r = await accuse(client, h, w, innocent_of(w), motive=wrong_motive)
     closes = int(content.weekly_closes_at(w).timestamp())
     assert r["result"] == "failed" and r["culprit"] is None and r["answer_at"] == closes
-    assert "solution" not in (await client.get(f"/v1/cases/{w.id}", headers=h)).json()["case"]
+    assert (await client.get(f"/v1/cases/{w.id}", headers=h)).status_code == 402  # lost = closed
     clock(datetime.fromtimestamp(closes + 60, TEHRAN))
-    assert (await client.get(f"/v1/cases/{w.id}", headers=h)).json()["case"]["solution"]["culprit"] == w.culprit
+    assert (await client.get(f"/v1/cases/{w.id}", headers=h)).status_code == 402
 
 
 def test_story_answer_comes_24_hours_after_the_failure():

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — lost cases stay closed, second chance costs 2x (Amin, 20 Oct 2026)
+- A case the player LOST (3 wrong accusations, not solved) no longer opens: `GET /v1/cases/{id}`, its stats and the answer return 402 `locked` with `lost: true` and the reopen price, also after the next case opens or the weekend closes. Story chapters are not affected.
+- Reopening costs **2x the archive price of the case difficulty** (200/240/300/360/440; weekend 340-740), `economy.reopen_lost_cost`, kill-free constant `LOST_REOPEN_FACTOR`. VIP pays too. One transaction under the player lock (`reopen:<case>` in the coin log, a double tap charges once), `expected_cost` mismatch gives 409 `price_changed`.
+- The reopen gives 3 fresh tries; hints and notes stay; that run is unranked on the daily board. Revenue: a lost case becomes a coin sink instead of a free answer.
+- App: the lost row shows the doubled price with «فرصت دوباره» and a dialog that explains it.
+
 ## Unreleased — atomic wallet
 - Apply wallet deltas with guarded atomic SQL; ledger and related reward/purchase state share one transaction.
 - Serialize account mutations and one-time grants across workers; lock referral and weekly-prize state consistently.

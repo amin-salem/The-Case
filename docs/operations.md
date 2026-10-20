@@ -464,3 +464,6 @@ the isolated `wallet_test` database schema provided by `WALLET_TEST_DATABASE_URL
 never set this variable to a live database. Regular CI tests still run on SQLite;
 the PostgreSQL tests skip when that explicit test URL is absent. No new production
 variables, schema migration or economy configuration are required.
+
+## Lost cases and the second chance (20 Oct 2026)
+A lost case (failed, not solved) is closed for that player: 402 `locked` + `lost: true` on the case, its stats and the answer, until the player pays `reopen_lost_cost` (2 x the archive price of its difficulty, set by `LOST_REOPEN_FACTOR` in `server/app/economy.py`, shown in `/v1/economy` as `lost_reopen_factor`). Look for the log line `lost_case_reopened` and the coin-log reason `reopen:<case>`. To change the factor, edit the constant and push to main once; the app reads the price from the case list, so no APK is needed for a price change.

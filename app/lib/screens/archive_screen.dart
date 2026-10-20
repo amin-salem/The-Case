@@ -35,10 +35,13 @@ Future<bool> unlockQuotedCase(BuildContext context, CaseRow row) async {
     if (!context.mounted || Api.i.account != account) return false;
     final rewards = row.baseSolveRewards;
     final rewardText = rewards.isEmpty ? '' : '\nپاداش پایهٔ حل: ${fa(rewards[1] ?? 0)} تا ${fa(rewards[3] ?? 0)} سکه؛ بسته به پلاک‌ها.';
+    final lost = row.failed;
     final ok = await confirm(context,
-        changed ? 'قیمت پرونده تغییر کرده' : row.weekend ? 'باز کردن پرونده‌ی آخر هفته' : 'باز کردن پرونده‌ی قدیمی',
-        '${row.weekend ? 'همهٔ فصل‌های این پروندهٔ بسته‌شده با هم باز می‌شن.' : 'این پرونده مال روزهای قبله.'} با ${fa(quote)} سکه بازش کن.$rewardText',
-        'باز کن · ${fa(quote)} سکه');
+        changed ? 'قیمت پرونده تغییر کرده' : lost ? 'فرصت دوباره' : row.weekend ? 'باز کردن پرونده‌ی آخر هفته' : 'باز کردن پرونده‌ی قدیمی',
+        lost
+            ? 'این پرونده رو باختی و بسته شده. با ${fa(quote)} سکه (دو برابر قیمت عادی) دوباره باز می‌شه و ${fa(3)} فرصت تازه داری؛ این دور تو رتبه‌بندی شبانه حساب نمی‌شه.$rewardText'
+            : '${row.weekend ? 'همهٔ فصل‌های این پروندهٔ بسته‌شده با هم باز می‌شن.' : 'این پرونده مال روزهای قبله.'} با ${fa(quote)} سکه بازش کن.$rewardText',
+        lost ? 'دوباره باز کن · ${fa(quote)} سکه' : 'باز کن · ${fa(quote)} سکه');
     if (!ok || !context.mounted || Api.i.account != account) return false;
     try {
       await Api.i.unlockCase(row.id, expectedCost: quote);
@@ -434,7 +437,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           const CoinIcon(size: 16),
           const SizedBox(width: 5),
-          Text('${fa(c.unlockCost)} · باز کن', style: tBody(13, color: K.ink, w: FontWeight.w900).copyWith(height: 1.3)),
+          Text('${fa(c.unlockCost)} · ${c.failed ? 'فرصت دوباره' : 'باز کن'}', style: tBody(13, color: K.ink, w: FontWeight.w900).copyWith(height: 1.3)),
         ]),
       );
     }
