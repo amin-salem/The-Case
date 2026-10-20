@@ -175,7 +175,7 @@ async def test_free_tutorial_tool_is_claimed_once_even_when_asked_twice_at_once(
 
 
 async def test_buying_charges_the_price_once_and_double_tap_is_safe(client, today):
-    p = await start(client, today, "buy")
+    p = await start(client, today, "buy-1")
     h, pid = p["headers"], p["player_id"]
     rs = await asyncio.gather(*[client.post(url(today, "fingerprint", "buy"), headers=h, json={"suspect": "s2"}) for _ in range(3)])
     assert sorted(r.status_code for r in rs) == [200, 409, 409]
@@ -262,12 +262,21 @@ async def test_finished_case_refuses_tools_but_shows_results(client, today):
     p = await start(client, today, "finished")
     h = p["headers"]
     assert (await client.post(url(today, "fingerprint", "use"), headers=h, json={"suspect": "s1"})).status_code == 200
-    await fail_case(client, h, today)
+    r = await client.post(f"/v1/cases/{today.id}/accuse", headers=h,
+                          json={"suspect": today.culprit, "evidence": sorted(today.proof)[0]})
+    assert r.json()["result"] == "solved"
     r = await client.post(url(today, "magnifier", "use"), headers=h, json={})
     assert r.status_code == 409 and r.json()["detail"] == "case_finished"
     tray = (await client.get(f"/v1/cases/{today.id}/tools", headers=h)).json()
     assert next(t for t in tray["tools"] if t["kind"] == "fingerprint")["result"] is not None
     assert not any(t["usable"] for t in tray["tools"])
+
+
+async def test_lost_case_refuses_tools(client, today):
+    p = await start(client, today, "lost-tools")
+    await fail_case(client, p["headers"], today)
+    r = await client.post(url(today, "magnifier", "buy"), headers=p["headers"], json={})
+    assert r.status_code == 409 and await balance(p["player_id"]) == 500
 
 
 # ---- off switches and abuse -----------------------------------------------------------------------------------------------
