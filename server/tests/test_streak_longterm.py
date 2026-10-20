@@ -305,6 +305,8 @@ async def test_leaderboard_flame_shows_live_streaks_only(client, clock):
     await _set(stale["player_id"], stars_total=3_000_002)
     await _set(b["player_id"], stars_total=3_000_001)
     everyone = (await client.get("/v1/leaderboard?period=all&limit=100", headers=a["headers"])).json()["top"]
+    for x in (a, b, stale):   # the database is shared by the whole test session: leave no giant scores behind
+        await _set(x["player_id"], stars_total=0)
     by_name = {r["nickname"]: r for r in everyone}
     assert by_name["شعله"]["streak"] == 13
     assert by_name["کهنه"]["streak"] == 0                       # the stored 40 is already broken: no flame
