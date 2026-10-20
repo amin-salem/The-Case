@@ -242,10 +242,13 @@ class _PhoneFormState extends State<_PhoneForm> with _SheetJob {
 /// (skipped, or nothing to offer); false when the player went to secure the account.
 bool _askedThisRun = false;
 
-Future<bool> offerSecure(BuildContext context, {required bool afterSolve}) async {
+Future<bool> offerSecure(BuildContext context, {required bool afterSolve, bool Function()? canOffer}) async {
+  bool active() => context.mounted && (canOffer?.call() ?? true);
+  if (!context.mounted || !active()) return true;
   final p = Api.i.profile;
   if (p == null || p.secured || !Api.i.online) return true;
   final prefs = await SharedPreferences.getInstance();
+  if (!context.mounted || !active()) return true;
   if (afterSolve) {
     if (prefs.getBool('secure_offer_solve') ?? false) return true;
     await prefs.setBool('secure_offer_solve', true);
@@ -253,7 +256,7 @@ Future<bool> offerSecure(BuildContext context, {required bool afterSolve}) async
     if (_askedThisRun) return true;
     _askedThisRun = true;
   }
-  if (!context.mounted) return true;
+  if (!context.mounted || !active()) return true;
   final r = await showNoirSheet<String>(
     context,
     child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -285,7 +288,7 @@ Future<bool> offerSecure(BuildContext context, {required bool afterSolve}) async
     ]),
   );
   if (r != 'secure') return true;
-  if (context.mounted) await openAccountSheet(context, showSecureSheet);
+  if (context.mounted && active()) await openAccountSheet(context, showSecureSheet);
   return false;
 }
 
@@ -558,3 +561,4 @@ Future<void> showPhoneGate(BuildContext context) async {
     _gateOpen = false;
   }
 }
+
