@@ -181,7 +181,7 @@ async def test_expired_weekend_case_is_an_archive_case_with_a_higher_price(clien
     row = next(r for r in lst["archive"] if r["id"] == "w099")
     assert row["weekend"] is True and row["locked"] is True and row["unlock_cost"] == 100 and lst["weekly"] is None
     r = await client.get("/v1/cases/w099", headers=late["headers"])
-    assert r.status_code == 402 and r.json()["detail"] == {"error": "locked", "cost": 100}
+    assert r.status_code == 402 and r.json()["detail"] == {"error": "locked", "cost": 100, "lost": False}
     # the player who solved it live keeps it, free
     mine = next(r for r in (await client.get("/v1/cases", headers=live["headers"])).json()["archive"] if r["id"] == "w099")
     assert mine["locked"] is False and mine["solved"] is True
