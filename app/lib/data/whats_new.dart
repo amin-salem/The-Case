@@ -43,6 +43,10 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(62, '۱.۳۱', '2026-10-19', [
+    WhatsNewItem('archive_popular', '«محبوب‌ترین» درست شد: پرونده‌هایی که کارآگاه‌های بیشتری بهشون امتیاز خوب دادن اول میان، بدون امتیازها آخر', WhatsNewTarget.archive),
+    WhatsNewItem('archive_search', 'توی بایگانی می‌تونی جست‌وجو کنی و روی هر فیلتر تعداد پرونده‌ها رو ببینی', WhatsNewTarget.archive),
+  ]),
   WhatsNewRelease(61, '۱.۳۰', '2026-10-18', [
     WhatsNewItem('bazaar_fix', 'خرید از کافه‌بازار درست شد: اتصال خودکار دوباره امتحان می‌شه و اگه مشکلی باشه دلیلش رو می‌گه', WhatsNewTarget.caseToday),
     WhatsNewItem('categories', 'هر پرونده یه موضوع داره (پزشکی، هنر، خانواده...) و توی بایگانی می‌تونی با موضوع فیلتر کنی', WhatsNewTarget.archive),

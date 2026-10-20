@@ -3,8 +3,10 @@ import 'dart:ui' show PathMetric;
 
 import 'package:flutter/material.dart';
 
+import '../data/story_art.dart';
 import '../models/story.dart';
 import '../theme.dart';
+import 'story_art.dart';
 
 /// A rounded rectangle with a dashed border (locked options, clues not found, people not met).
 class DashedBox extends StatelessWidget {
@@ -171,6 +173,7 @@ class ClueTile extends StatelessWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(clue.title ?? '', style: tBody(14, color: K.ink, w: FontWeight.w900)),
               if ((clue.text ?? '').isNotEmpty) Text(clue.text!, style: tBody(12.5, color: K.inkSoft)),
+              if (storyClueIsTabanPhoto(clue.chapter, clue.id)) const TabanPhotoClue(),
             ]),
           ),
           if (clue.byChoice) ...[

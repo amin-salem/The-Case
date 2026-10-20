@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
+import '../services/archive_logic.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/category.dart';
 import '../widgets/offline.dart';
-import '../widgets/rate_card.dart';
+import '../widgets/archive_stats.dart';
 import '../widgets/scene.dart';
 import 'case_screen.dart';
 import 'dialogs.dart';
@@ -68,10 +69,6 @@ Future<bool> unlockQuotedCase(BuildContext context, CaseRow row) async {
   return false;
 }
 
-enum _Filter { all, unsolved, free, three, unrated }
-
-enum _Sort { newest, oldest, best, popular }
-
 /// Every earlier case: a progress header, filters and sorting, and wide cards with the scene, the state
 /// (stars / price / lost) and the detectives' rating.
 class ArchiveScreen extends StatefulWidget {
@@ -84,23 +81,17 @@ class ArchiveScreen extends StatefulWidget {
 class _ArchiveScreenState extends State<ArchiveScreen> {
   List<CaseRow>? _rows;
   String? _error;
-  _Filter _filter = _Filter.all;
-  _Sort _sort = _Sort.newest;
+  ArchiveFilter _filter = ArchiveFilter.all;
+  ArchiveSort _sort = ArchiveSort.newest;
   String _cat = ''; // topic filter ('' = all topics)
+  String _query = ''; // search text
+  final _searchCtl = TextEditingController();
 
-  static const _filterLabels = {
-    _Filter.all: 'همه',
-    _Filter.unsolved: 'حل‌نشده',
-    _Filter.free: 'باز',
-    _Filter.three: '۳ پلاک',
-    _Filter.unrated: 'امتیاز ندادم',
-  };
-  static const _sortLabels = {
-    _Sort.newest: 'تازه‌ترین',
-    _Sort.oldest: 'قدیمی‌ترین',
-    _Sort.best: 'بهترین امتیاز',
-    _Sort.popular: 'محبوب‌ترین',
-  };
+  @override
+  void dispose() {
+    _searchCtl.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -115,6 +106,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
         setState(() {
           _rows = c.archive;
           _error = null;
+          // a topic that vanished from the list must not leave an invisible filter behind
+          if (_cat.isNotEmpty && !c.archive.any((r) => r.category == _cat)) _cat = '';
         });
       }
     } catch (e) {
@@ -132,34 +125,20 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     if (mounted) _load();
   }
 
-  bool _keep(CaseRow r) => (_cat.isEmpty || r.category == _cat) && _keepByFilter(r);
+  List<CaseRow> _shown(List<CaseRow> rows) => archiveSorted(
+        archiveVisible(rows, filter: _filter, category: _cat, query: _query),
+        _sort,
+      );
 
-  bool _keepByFilter(CaseRow r) => switch (_filter) {
-        _Filter.all => true,
-        _Filter.unsolved => !r.solved,
-        _Filter.free => !r.locked,
-        _Filter.three => r.solved && r.stars >= 3,
-        _Filter.unrated => r.solved && r.myRating == 0,
-      };
+  bool get _narrowed => _filter != ArchiveFilter.all || _cat.isNotEmpty || _query.trim().isNotEmpty;
 
-  List<CaseRow> _shown(List<CaseRow> rows) {
-    final l = rows.where(_keep).toList();
-    switch (_sort) {
-      case _Sort.newest:
-        l.sort((a, b) => b.publish.compareTo(a.publish));
-      case _Sort.oldest:
-        l.sort((a, b) => a.publish.compareTo(b.publish));
-      case _Sort.best:
-        // rated cases first, the best average first; more voters win a tie
-        l.sort((a, b) {
-          if ((a.ratingCount > 0) != (b.ratingCount > 0)) return a.ratingCount > 0 ? -1 : 1;
-          final c = b.ratingAvg.compareTo(a.ratingAvg);
-          return c != 0 ? c : b.ratingCount.compareTo(a.ratingCount);
-        });
-      case _Sort.popular:
-        l.sort((a, b) => b.solvers.compareTo(a.solvers));
-    }
-    return l;
+  void _clearFilters() {
+    _searchCtl.clear();
+    setState(() {
+      _filter = ArchiveFilter.all;
+      _cat = '';
+      _query = '';
+    });
   }
 
   @override
@@ -194,7 +173,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
               const SliverToBoxAdapter(child: OfflineBanner(margin: EdgeInsets.fromLTRB(16, 10, 16, 0))),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _summary(rows)),
               if (rows != null && _nudgeVisible(rows)) SliverToBoxAdapter(child: _rateNudge(rows)),
-              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _filters()),
+              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _searchBox()),
+              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _filters(rows)),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _categoryChips(rows)),
               if (rows == null && _error == null)
                 const SliverToBoxAdapter(
@@ -234,8 +214,11 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     setState(() {
       _nudgeHidden = true;
       if (showList) {
-        _filter = _Filter.unrated; // the list of solved cases the player has not rated yet
-        _sort = _Sort.newest;
+        _filter = ArchiveFilter.unrated; // the list of solved cases the player has not rated yet
+        _sort = ArchiveSort.newest;
+        _cat = '';
+        _query = '';
+        _searchCtl.clear();
       }
     });
   }
@@ -322,19 +305,55 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     );
   }
 
-  Widget _filters() {
+  Widget _searchBox() => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+        child: TextField(
+          key: const ValueKey('archive-search'),
+          controller: _searchCtl,
+          textInputAction: TextInputAction.search,
+          style: tBody(14),
+          onChanged: (v) => setState(() => _query = v),
+          decoration: InputDecoration(
+            isDense: true,
+            hintText: 'جست‌وجو در نام، مکان یا شماره‌ی پرونده',
+            hintStyle: tBody(13, color: K.textSoft),
+            prefixIcon: const Icon(Icons.search_rounded, color: K.textSoft, size: 20),
+            suffixIcon: _query.isEmpty
+                ? null
+                : IconButton(
+                    tooltip: 'پاک کردن',
+                    icon: const Icon(Icons.close_rounded, color: K.textSoft, size: 18),
+                    onPressed: () {
+                      _searchCtl.clear();
+                      setState(() => _query = '');
+                    },
+                  ),
+            filled: true,
+            fillColor: K.night2,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: K.night3)),
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: K.night3)),
+            focusedBorder:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: K.brass.withValues(alpha: 0.7))),
+          ),
+        ),
+      );
+
+  Widget _filters(List<CaseRow> rows) {
+    final counts = archiveFilterCounts(rows, category: _cat, query: _query);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
       child: Row(children: [
-        PopupMenuButton<_Sort>(
+        PopupMenuButton<ArchiveSort>(
           tooltip: 'مرتب‌سازی',
           color: K.night2,
           initialValue: _sort,
           onSelected: (v) => setState(() => _sort = v),
           itemBuilder: (_) => [
-            for (final e in _sortLabels.entries)
-              PopupMenuItem<_Sort>(value: e.key, child: Text(e.value, style: tBody(14, w: e.key == _sort ? FontWeight.w900 : FontWeight.w400))),
+            for (final e in archiveSortLabels.entries)
+              PopupMenuItem<ArchiveSort>(
+                  value: e.key, child: Text(e.value, style: tBody(14, w: e.key == _sort ? FontWeight.w900 : FontWeight.w400))),
           ],
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
@@ -343,24 +362,28 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               const Icon(Icons.swap_vert_rounded, color: K.brass, size: 18),
               const SizedBox(width: 4),
-              Text(_sortLabels[_sort]!, style: tBody(13, w: FontWeight.w700)),
+              Text(archiveSortLabels[_sort]!, style: tBody(13, w: FontWeight.w700)),
             ]),
           ),
         ),
-        for (final f in _Filter.values)
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: ChoiceChip(
-              label: Text(_filterLabels[f]!, style: tBody(13, w: FontWeight.w700, color: _filter == f ? K.ink : K.text)),
-              selected: _filter == f,
-              showCheckmark: false,
-              selectedColor: K.brass,
-              backgroundColor: K.night2,
-              side: BorderSide(color: _filter == f ? K.brass : K.night3),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-              onSelected: (_) => setState(() => _filter = f),
+        for (final f in ArchiveFilter.values)
+          // a filter that would show nothing is hidden, except «همه» and the one that is on
+          if (f == ArchiveFilter.all || f == _filter || (counts[f] ?? 0) > 0)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ChoiceChip(
+                key: ValueKey('filter-chip-${f.name}'),
+                label: Text(f == ArchiveFilter.all ? archiveFilterLabels[f]! : '${archiveFilterLabels[f]} · ${fa(counts[f] ?? 0)}',
+                    style: tBody(13, w: FontWeight.w700, color: _filter == f ? K.ink : K.text)),
+                selected: _filter == f,
+                showCheckmark: false,
+                selectedColor: K.brass,
+                backgroundColor: K.night2,
+                side: BorderSide(color: _filter == f ? K.brass : K.night3),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+                onSelected: (_) => setState(() => _filter = f),
+              ),
             ),
-          ),
       ]),
     );
   }
@@ -369,14 +392,16 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
   Widget _categoryChips(List<CaseRow> rows) {
     final present = {for (final r in rows) r.category}..remove('');
     if (present.isEmpty) return const SizedBox.shrink();
+    final counts = archiveCategoryCounts(rows, filter: _filter, query: _query);
     Widget chip(String key, String label, IconData? icon) {
       final on = _cat == key;
+      final n = counts[key] ?? 0;
       return Padding(
         padding: const EdgeInsets.only(right: 8),
         child: ChoiceChip(
           key: ValueKey('cat-chip-${key.isEmpty ? 'all' : key}'),
           avatar: icon == null ? null : Icon(icon, size: 16, color: on ? K.ink : K.kraft),
-          label: Text(label, style: tBody(13, w: FontWeight.w700, color: on ? K.ink : K.text)),
+          label: Text('$label · ${fa(n)}', style: tBody(13, w: FontWeight.w700, color: on ? K.ink : K.text)),
           selected: on,
           showCheckmark: false,
           selectedColor: K.kraft,
@@ -394,7 +419,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
       child: Row(children: [
         chip('', 'همه‌ی موضوع‌ها', null),
         for (final e in kCategories.entries)
-          if (present.contains(e.key)) chip(e.key, e.value.name, e.value.icon),
+          if (present.contains(e.key) && ((counts[e.key] ?? 0) > 0 || _cat == e.key)) chip(e.key, e.value.name, e.value.icon),
       ]),
     );
   }
@@ -404,8 +429,16 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
       return SliverToBoxAdapter(
         child: Padding(
           padding: const EdgeInsets.all(32),
-          child: Text(_filter == _Filter.all && _cat.isEmpty ? 'هنوز پرونده‌ی قدیمی‌ای نیست.' : 'پرونده‌ای با این فیلتر نیست.',
-              textAlign: TextAlign.center, style: tBody(15, color: K.textSoft)),
+          child: Column(children: [
+            Text(_narrowed ? 'پرونده‌ای با این فیلتر و جست‌وجو پیدا نشد.' : 'هنوز پرونده‌ی قدیمی‌ای نیست.',
+                textAlign: TextAlign.center, style: tBody(15, color: K.textSoft)),
+            if (_narrowed)
+              TextButton(
+                key: const ValueKey('archive-clear'),
+                onPressed: _clearFilters,
+                child: Text('پاک کردن فیلترها', style: tBody(14, color: K.brass, w: FontWeight.w900)),
+              ),
+          ]),
         ),
       );
     }
@@ -529,13 +562,13 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 9, 12, 10),
-            child: Row(children: [
-              Flexible(child: _state(c)),
-              const Spacer(),
-              if (c.ratingCount > 0)
-                RatingChip(avg: c.ratingAvg, count: c.ratingCount, comments: c.commentCount, size: 12.5)
-              else
-                Text('هنوز امتیازی نیست', style: tBody(11.5, color: K.textSoft)),
+            // state on the right, the rating + comments block in its own fixed slot on the left edge
+            child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Expanded(
+                child: FittedBox(fit: BoxFit.scaleDown, alignment: AlignmentDirectional.centerStart, child: _state(c)),
+              ),
+              const SizedBox(width: 8),
+              ArchiveStatsSlot(avg: c.ratingAvg, count: c.ratingCount, comments: c.commentCount),
             ]),
           ),
           if (!c.solved && !c.failed && c.baseSolveRewards.isNotEmpty)
