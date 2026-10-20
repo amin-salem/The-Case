@@ -16,9 +16,10 @@ from zoneinfo import ZoneInfo
 
 from . import gameclock
 from .config import get_settings
+from .content_paths import CONTENT_ROOT
 
-CASES_DIR = Path(__file__).parent / "content" / "cases"
-WEEKLY_DIR = Path(__file__).parent / "content" / "weekly"
+CASES_DIR = CONTENT_ROOT / "cases"
+WEEKLY_DIR = CONTENT_ROOT / "weekly"
 # `night1` (weekend format 3) holds the answer of the night-1 question; weekly_public() adds a safe copy back
 SECRET_KEYS = ("hints", "solution", "night1")
 # the scenes the app can draw and play sound for (app/lib/widgets/scene.dart, app/assets/sounds)
@@ -394,7 +395,7 @@ def next_thursday_at(now: datetime | None = None) -> datetime:
 # ---------------------------------------------------------------- story mode
 # Chapters live in content/story/sNN/chNN.json: the same case JSON as nightly cases plus the partner's
 # lines (see validate_story). A missing or empty folder means "coming soon": the app shows the banner.
-STORY_DIR = Path(__file__).parent / "content" / "story"
+STORY_DIR = CONTENT_ROOT / "story"
 STORY_FIELDS = ("partner_intro", "partner_outro_win", "partner_outro_lose", "thread")
 STORY_ID = re.compile(r"^s(\d{2})ch(\d{2})$")
 STORY_SEASON = {
@@ -630,7 +631,7 @@ def weekend_upcoming(now: datetime | None = None) -> dict:
 @lru_cache
 def _notify_texts() -> dict:
     try:
-        return json.loads((Path(__file__).parent / "content" / "notify.json").read_text(encoding="utf-8"))
+        return json.loads((CONTENT_ROOT / "notify.json").read_text(encoding="utf-8"))
     except Exception:  # a missing or broken teaser file must never break the app's config
         return {}
 
@@ -733,3 +734,4 @@ def weekly_public(c: Case, now: datetime | None = None) -> dict:
                           "new_suspects": len(newcomers), "new_cards": len(late), "open": len(chapters) >= 2}
     data["closes_at"] = int(weekly_closes_at(c).timestamp())
     return data
+
