@@ -99,3 +99,19 @@ async def require_admin(x_admin_key: str = Header(default="")) -> None:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "admin_disabled")
     if not hmac.compare_digest(x_admin_key, get_settings().admin_api_key):
         raise HTTPException(status.HTTP_403_FORBIDDEN, "not_admin")
+
+
+
+async def require_analytics(x_analytics_key: str = Header(default="")) -> None:
+    """An independent, expiring report-only key; never an admin/JWT credential."""
+    s = get_settings()
+    digest = s.analytics_api_key_sha256
+    now = int(datetime.now(timezone.utc).timestamp())
+    if (not digest or len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest)
+            or s.analytics_api_key_expires_at <= now or not 32 <= len(x_analytics_key) <= 256):
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "analytics_forbidden")
+    supplied = hash_secret(x_analytics_key)
+    if (not hmac.compare_digest(supplied, digest)
+            or hmac.compare_digest(supplied, hash_secret(s.admin_api_key))
+            or hmac.compare_digest(supplied, hash_secret(s.jwt_secret))):
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "analytics_forbidden")
