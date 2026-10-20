@@ -21,7 +21,10 @@ const {chromium} = require('playwright');
         const payload = url.pathname.endsWith('/funnel') ? {
           generated_at: 1, days: 30,
           ...Object.fromEntries(['signups', 'funnel', 'retention', 'drop_off', 'money', 'quality'].map(k => [k, {error: 'fixture'}])),
-        } : url.pathname.endsWith('/log') ? [] : {days: [], totals: {}};
+        } : url.pathname.endsWith('/log') ? [] : {
+          days: [{day: '2026-10-20', new: 0, active: 0, opened: 0, solved: 0, failed: 0,
+            purchases: 0, coins_in: 0, coins_out: 0, stars: 0}], totals: {},
+        };
         return route.fulfill({contentType: 'application/json', body: JSON.stringify(payload)});
       });
       await page.goto('http://admin-menu.test/admin/ui#k=synthetic-ui-test');
