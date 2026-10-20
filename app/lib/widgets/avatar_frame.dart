@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 
 /// Frames that move (embers drift, neon pulses). Everything else is drawn still.
-const Set<String> kAnimatedFrames = {'frame_ember', 'frame_neon'};
+const Set<String> kAnimatedFrames = {'frame_ember', 'frame_neon', 'frame_blaze', 'frame_inferno', 'frame_eternal'};
 
 /// A player's portrait: `assets/avatars/ID.webp` in a circle. If the file cannot be loaded, a drawn silhouette.
 class AvatarFace extends StatelessWidget {
@@ -207,6 +207,12 @@ class FramePainter extends CustomPainter {
         _circle(canvas, 42, _ring(5, color: const Color(0xFF7A2A1E)));
         _dashed(canvas, 42, _ring(2.5, color: const Color(0xFFD0543F)), const [14, 5]);
         _embers(canvas);
+      case 'frame_blaze':
+        _blaze(canvas);
+      case 'frame_inferno':
+        _inferno(canvas);
+      case 'frame_eternal':
+        _eternal(canvas);
       case 'frame_tape':
         _circle(canvas, 43, _ring(9, color: const Color(0xFFF2C230)));
         _dashed(canvas, 43, _ring(9, color: K.night), const [9, 9], rotateDeg: 10);
@@ -276,6 +282,56 @@ class FramePainter extends CustomPainter {
       final color = [const Color(0xFFFFB347), const Color(0xFFFFD27A), const Color(0xFFFF7A3C)][k % 3];
       canvas.drawCircle(Offset(x, y), r, Paint()..color = color.withValues(alpha: (1 - phase).clamp(0.0, 1.0)));
     }
+  }
+
+  /// A ring of flame: a dark red base, an orange-to-yellow gradient ring and tongues of fire that sway.
+  void _flames(Canvas canvas, {required int count, required double height, required List<Color> grad, double radius = 43}) {
+    final tip = Paint()..style = PaintingStyle.fill;
+    for (int k = 0; k < count; k++) {
+      final a = k * 2 * math.pi / count - math.pi / 2;
+      final sway = math.sin(t * 2 * math.pi + k * 1.7) * 0.18;
+      final h = height * (0.75 + 0.25 * math.sin(t * 2 * math.pi + k * 2.3));
+      final base = Offset(60 + radius * math.cos(a), 60 + radius * math.sin(a));
+      final out = Offset(60 + (radius + h) * math.cos(a + sway), 60 + (radius + h) * math.sin(a + sway));
+      final left = Offset(60 + radius * math.cos(a - 0.17), 60 + radius * math.sin(a - 0.17));
+      final right = Offset(60 + radius * math.cos(a + 0.17), 60 + radius * math.sin(a + 0.17));
+      final path = Path()
+        ..moveTo(left.dx, left.dy)
+        ..quadraticBezierTo(base.dx, base.dy, out.dx, out.dy)
+        ..quadraticBezierTo(base.dx, base.dy, right.dx, right.dy)
+        ..close();
+      tip.color = grad[k % grad.length];
+      canvas.drawPath(path, tip);
+    }
+  }
+
+  void _blaze(Canvas canvas) {
+    _circle(canvas, 42, _ring(5, color: const Color(0xFF7A1F12)));
+    _flames(canvas, count: 12, height: 9, grad: const [Color(0xFFFF7A3C), Color(0xFFFFB347), Color(0xFFFF5A2A)]);
+    _circle(canvas, 42, _ring(3, grad: const [Color(0xFFFFD27A), Color(0xFFE0502A)]));
+  }
+
+  void _inferno(Canvas canvas) {
+    const glow = MaskFilter.blur(BlurStyle.normal, 3);
+    _circle(canvas, 41, _ring(7, color: const Color(0xFF8C1B10)));
+    _flames(canvas, count: 16, height: 12, grad: const [Color(0xFFFF4D2E), Color(0xFFFF9A3C), Color(0xFFFFD27A)], radius: 44);
+    _circle(canvas, 42, _ring(4, grad: const [Color(0xFFFFE08A), Color(0xFFE0381F)]));
+    _circle(canvas, 37.5, _ring(1.6, color: const Color(0xFFFFC46B).withValues(alpha: 0.55 + 0.25 * math.sin(t * 2 * math.pi)))..maskFilter = glow);
+    _embers(canvas);
+  }
+
+  /// The rarest frame: a gold ring wrapped in blue-white fire, with four stars. A year of nights.
+  void _eternal(Canvas canvas) {
+    const glow = MaskFilter.blur(BlurStyle.normal, 3.5);
+    final pulse = 0.7 + 0.3 * math.sin(t * 2 * math.pi);
+    _circle(canvas, 43, _ring(8, color: const Color(0xFF59B8FF).withValues(alpha: 0.5 * pulse))..maskFilter = glow);
+    _flames(canvas, count: 20, height: 13, grad: const [Color(0xFF7FD4FF), Color(0xFFE6F7FF), Color(0xFFFFE08A)], radius: 45);
+    _circle(canvas, 43, _ring(6, grad: _gold));
+    for (int k = 0; k < 4; k++) {
+      final a = k * math.pi / 2 + math.pi / 4;
+      _diamond(canvas, Offset(60 + 43 * math.cos(a), 60 + 43 * math.sin(a)), 3.5, 4.5);
+    }
+    _embers(canvas);
   }
 
   void _cuffs(Canvas canvas) {

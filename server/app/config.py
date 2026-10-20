@@ -51,6 +51,8 @@ class Settings(BaseSettings):
 
     comments_enabled: bool = True  # COMMENTS_ENABLED=false hides and refuses case comments (kill switch)
 
+    streak_repair_enabled: bool = True  # STREAK_REPAIR_ENABLED=false hides and refuses the paid streak repair (kill switch)
+
     # Rewarded ads pay coins only when a real ad network is in the app.
     ads_enabled: bool = False
 

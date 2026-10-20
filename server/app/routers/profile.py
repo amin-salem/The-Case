@@ -2,13 +2,14 @@
 from datetime import date, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import avatars, content, feed, progress, purge
+from .. import avatars, content, feed, progress, purge, streakrepair
 from .. import economy as eco
 from ..config import get_settings
-from ..db import get_session
-from ..models import Player, utcnow
+from ..db import get_session, lock_players
+from ..models import Player, StreakRepair, utcnow
 from ..schemas import ClientInfoIn, CoinsOut, GainsOut, ProfileIn, ProfileOut
 from ..security import current_player
 from ..util import add_coins, clean_nickname
@@ -64,6 +65,39 @@ async def buy_streak_freeze(player: Player = Depends(current_player), session: A
     await add_coins(session, player, -eco.FREEZE_COST, "streak_freeze")
     player.streak_freezes = (player.streak_freezes or 0) + 1
     await session.commit()
+    return profile_out(player)
+
+
+@router.post("/wallet/streak-repair", response_model=ProfileOut)
+async def repair_streak(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """Mends a streak that broke within the last 24 h (the player missed exactly one daily case). The server decides
+    whether the player is eligible (app/streakrepair.py); one transaction under the player lock plus a UNIQUE row per
+    break, so a double tap or two workers charge once. The repair counts the missed night as bridged: tonight's case
+    then continues the streak (it does not add a night). Rate limit: the strict «wallet» policy (/v1/wallet/*)."""
+    if not get_settings().streak_repair_enabled:
+        streakrepair.log_decision("disabled")
+        raise HTTPException(403, "repair_disabled")
+    player = (await lock_players(session, [player.id]))[player.id]
+    offer = streakrepair.repair_offer(player)
+    if offer is None:
+        streakrepair.log_decision("not_eligible", player.streak or 0)
+        raise HTTPException(409, "not_eligible")
+    price = offer["price"]
+    if player.coins < price:
+        streakrepair.log_decision("not_enough_coins", offer["streak"], price)
+        raise HTTPException(402, {"error": "not_enough_coins", "need": price})
+    await add_coins(session, player, -price, "streak_repair")
+    player.last_daily_solved = offer["bridge"]
+    player.streak_repair_mark = offer["bridge"]
+    session.add(StreakRepair(player_id=player.id, broken_after=offer["key"], streak=offer["streak"], price=price))
+    try:
+        await session.flush()
+    except IntegrityError:  # this break was repaired already: undo the charge as well
+        await session.rollback()
+        streakrepair.log_decision("already_repaired", offer["streak"], price)
+        raise HTTPException(409, "not_eligible")
+    await session.commit()
+    streakrepair.log_decision("repaired", offer["streak"], price)
     return profile_out(player)
 
 

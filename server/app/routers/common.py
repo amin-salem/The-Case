@@ -3,12 +3,12 @@ from __future__ import annotations
 
 from fastapi.responses import JSONResponse
 
-from .. import avatars
+from .. import avatars, streakrepair
 from .. import economy as eco
 from ..config import get_settings
 from ..accounts import mask_email, mask_phone
 from ..models import Player, utcnow
-from ..schemas import ProfileOut
+from ..schemas import ProfileOut, StreakRepairOffer
 from ..util import ts
 
 
@@ -24,7 +24,12 @@ def profile_out(p: Player, login_reward: int = 0) -> ProfileOut:
     xp = p.xp or 0
     r = eco.rank_of(xp)
     nxt = eco.RANKS[r + 1] if r + 1 < len(eco.RANKS) else None
+    try:  # the repair offer must never break the profile
+        offer = streakrepair.repair_offer(p)
+    except Exception:
+        offer = None
     return ProfileOut(
+        streak_repair=StreakRepairOffer(key=offer["key"], streak=offer["streak"], price=offer["price"]) if offer else None,
         xp=xp, rank=r, rank_title=eco.RANKS[r][1], rank_xp=eco.RANKS[r][0],
         next_rank_xp=nxt[0] if nxt else None, next_rank_title=nxt[1] if nxt else None,
         achievements=int((p.stats or {}).get("achievements_earned", 0)),

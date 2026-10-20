@@ -10,6 +10,7 @@ import '../widgets/avatar_frame.dart';
 import '../widgets/crime_tape.dart';
 import '../widgets/offline.dart';
 import '../widgets/rank.dart';
+import '../widgets/streak_flame.dart';
 import 'account_sheets.dart';
 import 'achievements_screen.dart';
 import 'avatar_picker_screen.dart';
@@ -184,6 +185,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   onTap: _editName,
                   child: Row(children: [
                     Flexible(child: Text(p.nickname, maxLines: 1, style: tDisplay(21), overflow: TextOverflow.ellipsis)),
+                    if (p.streak >= 2) ...[const SizedBox(width: 6), StreakFlame(p.streak, size: 16)],
                     const SizedBox(width: 6),
                     const Icon(Icons.edit_rounded, size: 16, color: K.textSoft),
                   ]),

@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
-from .. import content, gameclock, progress, ratings
+from .. import content, gameclock, progress, ratings, streakrepair
 from ..cache import TTLCache
 from .. import economy as eco
 from ..content import Case
@@ -135,12 +135,8 @@ def _opened_case(case_id: str, player: Player) -> Case:
 
 def _missed_between(last_solved: str, c: Case) -> int | None:
     """How many daily cases came between the last one solved (by publish date) and c.
-    0 = c is the very next case; None = nothing solved before (or unknown)."""
-    cases = content.all_cases()
-    last = next((i for i, x in enumerate(cases) if x.publish.isoformat() == last_solved), None)
-    if last is None:
-        return None
-    return cases.index(c) - last - 1
+    0 = c is the very next case; None = nothing solved before (or unknown). (Shared with the streak repair.)"""
+    return streakrepair.missed_between(last_solved, c)
 
 
 def add_active_time(p: CaseProgress, seconds: int, now) -> int:
@@ -371,7 +367,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         if live and right_motive and content.now_local() < content.weekly_all_open_at(c):
             early_bonus = eco.WEEKLY_EARLY_BONUS  # solved before the last chapter opened
             reward += early_bonus
-        freezes_used, badge, streak_up = 0, None, False
+        freezes_used, badge, milestone, streak_up = 0, None, None, False
         if today_case:
             reward += eco.DAILY_BONUS
             # the streak counts daily cases in a row (by case, not by calendar day,
@@ -396,6 +392,8 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
                     reward += eco.STREAK_BONUS
                 if player.streak in eco.STREAK_BADGES:
                     badge = player.streak
+                if player.streak in eco.STREAK_MILESTONES:
+                    milestone = player.streak  # the new apps celebrate every step of the ladder (badge is only 7/30/100)
         # story warrants are scarce (economy.warrants_for_solve): the first solve ever, a streak milestone, every
         # second live weekend case. Tonight's case and the daily missions no longer give one.
         warrants = eco.warrants_for_solve(first_ever=(player.cases_solved or 0) == 0, streak_up=streak_up,
@@ -422,7 +420,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
                          attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,
                          reward=reward, coins=player.coins, streak=player.streak, explanation=explanation,
                          culprit=c.culprit, proof=sorted(c.proof), rank=rank, progress=_progress_out(c, p),
-                         seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge,
+                         seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge, streak_milestone=milestone,
                          gains=GainsOut(**gains.out()), story=story_extra(c, p) if content.is_story(c.id) else None,
                          early_bonus=early_bonus, how_right=right_motive if fmt2 else None)
 

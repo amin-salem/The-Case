@@ -79,6 +79,13 @@ FRAMES: list[Item] = [
     Item("frame_gold", "frame", "طلایی", "چهار الماس برای افسانه‌ها.", "goal", "legendary", "rank", 9, "به درجه‌ی «افسانه» برس"),
     Item("frame_ember", "frame", "اخگر", "شعله‌ای که شب‌های پیاپی روشن مانده.", "goal", "epic", "best_streak", 14,
          "۱۴ شب پشت سر هم پرونده‌ی روز را حل کن"),
+    # long streak rewards (Amin, 16 Oct 2026): permanent, never sold, drawn in code (app/lib/widgets/avatar_frame.dart)
+    Item("frame_blaze", "frame", "شعله", "حلقه‌ی آتشی که ۶۰ شب پیاپی خاموش نشد.", "goal", "epic", "best_streak", 60,
+         "۶۰ شب پشت سر هم پرونده‌ی روز را حل کن"),
+    Item("frame_inferno", "frame", "آتشفشان", "دو حلقه‌ی گداخته؛ ۲۰۰ شب بی‌وقفه.", "goal", "legendary", "best_streak", 200,
+         "۲۰۰ شب پشت سر هم پرونده‌ی روز را حل کن"),
+    Item("frame_eternal", "frame", "شعله‌ی جاودان", "یک سال کامل، هر شب. کمتر کسی به این قاب می‌رسد.", "goal", "legendary",
+         "best_streak", 365, "۳۶۵ شب پشت سر هم پرونده‌ی روز را حل کن"),
     Item("frame_tape", "frame", "نوار پلیس", "نوار زرد و مشکی دور صحنه‌ی ۵۰ پرونده.", "goal", "epic", "cases_solved", 50,
          "۵۰ پرونده حل کن"),
     Item("frame_loupe", "frame", "ذره‌بین طلایی", "برای ۳ کارآگاه اول هفته.", "goal", "legendary", "weekly_top3", 1,

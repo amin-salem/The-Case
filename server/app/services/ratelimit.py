@@ -82,7 +82,7 @@ DEFAULTS: dict[str, Policy] = {p.name: p for p in [
     _p("hint", [(2, 5), (60, 3600)], "player", "strict"),
     _p("unlock", [(3, 10), (60, 3600)], "player", "strict", note="unlock case / riddle"),
     _p("riddle_answer", [(2, 5), (60, 600)], "player", "strict"),
-    _p("wallet", [(5, 10), (60, 600)], "player", "strict", note="streak freeze, ad reward, mission chest"),
+    _p("wallet", [(5, 10), (60, 600)], "player", "strict", note="streak freeze, streak repair, ad reward, mission chest"),
     _p("purchase", [(3, 30), (20, 3600)], "player", "strict", note="purchase verification"),
     _p("story", [(3, 10), (60, 3600)], "player", "strict", note="story open / skip"),
     _p("claim", [(5, 10), (60, 600)], "player", "strict", note="inbox claim"),

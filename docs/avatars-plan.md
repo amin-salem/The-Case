@@ -51,6 +51,9 @@ A frame is a decorative border around the avatar, chosen separately from the ava
   | frame_silver | silver ring | reach rank 6 |
   | frame_gold | gold ring | reach rank 9 |
   | frame_ember | ring with slow drifting embers | 14-day streak |
+  | frame_blaze | ring of flame | 60-night streak (20 Oct 2026) |
+  | frame_inferno | molten double ring with embers | 200-night streak |
+  | frame_eternal | gold ring in blue-white fire, four stars | 365-night streak |
   | frame_tape | yellow crime-tape wrapped diagonally | solve 50 cases |
   | frame_laurel | golden laurel leaves | top 3 of a weekly leaderboard |
   (Use the real rank numbering in the code; adjust the numbers if ranks differ.)

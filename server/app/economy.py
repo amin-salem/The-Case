@@ -52,7 +52,32 @@ LOGIN_ENVELOPE = [40, 50, 60, 80]      # day 7: a sealed envelope with one of th
 LOGIN_REWARD = LOGIN_CALENDAR[0]           # first day (and after a missed day)
 FREEZE_COST = 150                # "streak insurance": saves the streak for one missed case
 MAX_FREEZES = 2                  # how many a player can hold
-STREAK_BADGES = (7, 30, 100)     # badges for daily cases solved in a row
+STREAK_BADGES = (7, 30, 100)     # badges for daily cases solved in a row (the old apps know exactly these three)
+# Long-term streak ladder (Amin, 16 Oct 2026). The coin and warrant rewards above stay as they were; the long steps
+# (60, 200, 365) pay NOTHING sellable: a permanent frame (avatars.py) and an achievement with XP only.
+STREAK_MILESTONES = (3, 7, 14, 30, 60, 100, 200, 365)
+STREAK_COSMETIC_MILESTONES = (60, 200, 365)
+
+
+def next_streak_milestone(streak: int) -> int | None:
+    """The next step of the ladder above this streak (None after the last)."""
+    return next((m for m in STREAK_MILESTONES if m > max(0, int(streak or 0))), None)
+
+
+# Streak repair: a streak that broke within the last 24 h (the player missed exactly one daily case and has no
+# insurance) can be mended ONCE per break for coins. Dearer than the insurance (FREEZE_COST) on purpose, so buying the
+# insurance in advance stays the cheaper way, and dearer the longer the streak is, up to a cap.
+REPAIR_MIN_STREAK = 3
+REPAIR_BASE = 200
+REPAIR_PER_DAY = 5
+REPAIR_CAP = 500
+REPAIR_WINDOW_HOURS = 24
+
+
+def streak_repair_cost(streak: int) -> int:
+    """Coins to mend a broken streak of this length: 215 for 3 nights ... 350 for 30 ... capped at 500 (from 60)."""
+    n = max(0, int(streak or 0))
+    return min(REPAIR_CAP, REPAIR_BASE + REPAIR_PER_DAY * n)
 AD_REWARD = 25
 AD_PER_DAY = 5
 SECURE_REWARD = 100              # first time an email is added

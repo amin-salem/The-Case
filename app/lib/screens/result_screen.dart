@@ -41,7 +41,7 @@ class _ResultScreenState extends State<ResultScreen> {
     Future<void>.delayed(const Duration(milliseconds: 700), () => Sfx.i.play(solved ? 'win' : 'lose'));
     if (solved) Future<void>.delayed(const Duration(milliseconds: 1800), () => Sfx.i.play('music_result', volume: 0.55));
     Future<void>.delayed(const Duration(milliseconds: 4500), Sfx.i.unduck);
-    if (result.badge != null) {
+    if (result.streakMilestone != null || result.badge != null) {
       Future<void>.delayed(const Duration(milliseconds: 2600), () => Sfx.i.play('clue', volume: 0.7));
     }
   }
@@ -98,9 +98,9 @@ class _ResultScreenState extends State<ResultScreen> {
                 const SizedBox(height: 10),
                 _proofNote(),
               ],
-              if (result.badge != null) ...[
+              if ((result.streakMilestone ?? result.badge) != null) ...[
                 const SizedBox(height: 10),
-                BadgeBanner(badge: result.badge!),
+                BadgeBanner(badge: (result.streakMilestone ?? result.badge)!),
               ],
             ] else
               Center(

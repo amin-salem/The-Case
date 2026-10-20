@@ -68,6 +68,12 @@ class PhoneSentOut(BaseModel):
 
 
 # ---- profile & wallet
+class StreakRepairOffer(BaseModel):
+    key: str          # names the break (the app closes the offer once per key)
+    streak: int       # the streak that would be mended
+    price: int        # coins
+
+
 class ProfileOut(BaseModel):
     player_id: str
     nickname: str
@@ -90,6 +96,7 @@ class ProfileOut(BaseModel):
     login_reward: int = 0  # coins given right now for today's first visit
     login_day: int = 0     # 1..7: today's place in the login calendar
     streak_freezes: int = 0
+    streak_repair: StreakRepairOffer | None = None   # a paid repair the player may buy right now (null = none)
     xp: int = 0
     rank: int = 0             # index in the ranks list
     rank_title: str = ""
@@ -241,6 +248,7 @@ class AccuseOut(BaseModel):
     hints_used: int = 0
     freezes_used: int = 0    # streak insurance spent to keep the streak
     badge: int | None = None  # a streak badge (7, 30, 100) reached right now
+    streak_milestone: int | None = None  # a step of the streak ladder (economy.STREAK_MILESTONES) reached right now
     gains: "GainsOut | None" = None
     answer_at: int | None = None   # lost case: the answer (culprit, proof, explanation) is public from this time
     unranked: bool = False         # solved without enough investigation: 1 star, no leaderboard place
@@ -270,6 +278,7 @@ class LeaderRow(BaseModel):
     avatar: int
     avatar_id: str = ""
     avatar_frame: str = "frame_brass"
+    streak: int = 0   # the flame next to the nickname: the live streak (0 = no flame), bounded
     value: int        # stars (weekly/all) or seconds (daily)
     stars: int = 0
     me: bool = False

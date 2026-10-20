@@ -465,6 +465,15 @@ never set this variable to a live database. Regular CI tests still run on SQLite
 the PostgreSQL tests skip when that explicit test URL is absent. No new production
 variables, schema migration or economy configuration are required.
 
+## Long-term streak: ladder, frames, flame and the paid repair (20 Oct 2026, server 1.32.0, app 1.32.0+65)
+- **Ladder** (`economy.STREAK_MILESTONES`): 3, 7, 14, 30, 60, 100, 200, 365. The coin and warrant rewards did not change (60 coins every 7 nights, a warrant at 14 and 30, badges 7/30/100). 60, 200 and 365 give **only** a permanent frame (`frame_blaze`, `frame_inferno`, `frame_eternal`, drawn in code) and an achievement with XP and 0 coins. `streak_badges` in `/v1/config` stays `[7, 30, 100]` for old apps; new apps read `streak_milestones` and `AccuseOut.streak_milestone`.
+- **Flame:** `LeaderRow.streak` (daily, weekly, all-time) is the *live* streak: 0 when the last daily case solved is older than yesterday's, bounded to 9999. No extra query: it uses the player rows the board already loads (`streakrepair.LiveStreak`).
+- **Repair:** `POST /v1/wallet/streak-repair`, offered in `GET /v1/me` as `streak_repair {key, streak, price}` (null when not allowed). The server offers it only when the player missed exactly ONE daily case, tonight's case opened less than 24 h ago, the streak is at least 3, no streak insurance is held, and this break was not repaired (`streak_repairs` has UNIQUE (player, broken_after); `players.streak_repair_mark` stops a second offer until the player has played again). One transaction under the player lock: coin debit, ledger row `streak_repair`, bridge the missed night. A double tap pays once (the loser gets 409 `not_eligible`). Not enough coins: 402 `not_enough_coins`.
+- **Price** (`economy.streak_repair_cost`): `min(500, 200 + 5 x streak)`: 215 coins at 3 nights, 350 at 30, 500 from 60 nights. Always above the insurance (`FREEZE_COST` 150).
+- **Kill switch:** `STREAK_REPAIR_ENABLED=false` hides the offer and answers 403 `repair_disabled`. Rate limit: the strict `wallet` policy (`RL_WALLET`), because the route is under `/v1/wallet/`.
+- **Logs:** one line per decision, no player data: `streak_repair decision=repaired|not_eligible|not_enough_coins|already_repaired|disabled streak=N price=N` (logger `streak`). Count them in the Liara logs to see conversion.
+- Migration 0028 (`players.streak_repair_mark`, table `streak_repairs`), additive.
+
 ## Lost cases and the second chance (20 Oct 2026)
 A lost case (failed, not solved) is closed for that player: 402 `locked` + `lost: true` on the case, its stats and the answer, until the player pays `reopen_lost_cost` (2 x the archive price of its difficulty, set by `LOST_REOPEN_FACTOR` in `server/app/economy.py`, shown in `/v1/economy` as `lost_reopen_factor`). Look for the log line `lost_case_reopened` and the coin-log reason `reopen:<case>`. To change the factor, edit the constant and push to main once; the app reads the price from the case list, so no APK is needed for a price change.
 

@@ -33,7 +33,8 @@ void main() {
   testWidgets('every frame draws, still and animated', (tester) async {
     const frames = [
       'frame_brass', 'frame_bronze', 'frame_silver', 'frame_gold', 'frame_ember', 'frame_tape', 'frame_loupe',
-      'frame_fingerprint', 'frame_blinds', 'frame_cuffs', 'frame_stamp', 'frame_neon', 'frame_royal', null,
+      'frame_fingerprint', 'frame_blinds', 'frame_cuffs', 'frame_stamp', 'frame_neon', 'frame_royal',
+      'frame_blaze', 'frame_inferno', 'frame_eternal', null,
     ];
     await tester.pumpWidget(Directionality(
       textDirection: TextDirection.rtl,

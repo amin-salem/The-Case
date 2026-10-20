@@ -832,6 +832,22 @@ class Api extends ChangeNotifier {
     _setProfile(Map<String, dynamic>.from(j));
   }
 
+  /// Mends a streak that broke in the last 24 h (the server decides; throws ApiException not_enough_coins / not_eligible).
+  Future<void> repairStreak() async {
+    final j = await _call('POST', '/v1/wallet/streak-repair') as Map;
+    _setProfile(Map<String, dynamic>.from(j));
+  }
+
+  /// The repair offer is shown once per break and player: this remembers that it was shown / closed.
+  String _repairMark(StreakRepairOffer o) => '${_playerId ?? ''}:${o.key}';
+  bool repairOfferClosed(StreakRepairOffer o) => _p.getString('repair_closed') == _repairMark(o);
+  Future<void> closeRepairOffer(StreakRepairOffer o) async {
+    try {
+      await _p.setString('repair_closed', _repairMark(o));
+    } catch (_) {}
+    notifyListeners();
+  }
+
   Map<String, dynamic> get _economy =>
       config['economy'] is Map ? (config['economy'] as Map).cast<String, dynamic>() : const {};
   int get weeklyReward => _economy['weekly_reward'] as int? ?? 300;
@@ -845,6 +861,9 @@ class Api extends ChangeNotifier {
   int get inviteNewPlayer => (_economy['invite_new_player'] as num?)?.toInt() ?? 100;
   List<int> get loginCalendar =>
       [for (final v in (_economy['login_calendar'] as List? ?? const [20, 30, 40, 50, 60, 80])) (v as num).toInt()];
+  List<int> get streakMilestones => [
+        for (final v in (_economy['streak_milestones'] as List? ?? const [3, 7, 14, 30, 60, 100, 200, 365])) (v as num).toInt()
+      ];
   List<int> get streakBadges => [for (final v in (_economy['streak_badges'] as List? ?? const [7, 30, 100])) (v as num).toInt()];
   String get shareUrl => config['share_url'] is String
       ? config['share_url'] as String
@@ -1100,6 +1119,8 @@ class Api extends ChangeNotifier {
 
   static String errorText(String code) => switch (code) {
         'not_enough_coins' => 'سکه‌ات کافی نیست',
+        'not_eligible' => 'این زنجیره دیگه قابل ترمیم نیست',
+        'repair_disabled' => 'ترمیم زنجیره فعلاً بسته‌ست',
         'not_owned' => 'این چهره یا قاب هنوز مال تو نیست',
         'already_owned' => 'این رو قبلاً داری',
         'finish_case_first' => 'اول پرونده رو تموم کن، بعد نظر بده',

@@ -43,6 +43,12 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(65, '۱.۳۲', '2026-10-20', [
+    WhatsNewItem('streak_ladder', 'زنجیره حالا تا ۳۶۵ شب پله داره (۳، ۷، ۱۴، ۳۰، ۶۰، ۱۰۰، ۲۰۰، ۳۶۵) و کارت زنجیره می‌گه چند شب مونده', WhatsNewTarget.caseToday),
+    WhatsNewItem('streak_frames', 'سه قاب آتشی تازه برای زنجیره‌های ۶۰، ۲۰۰ و ۳۶۵ شبه؛ همیشه مال خودته', WhatsNewTarget.avatars),
+    WhatsNewItem('streak_flame', 'کنار اسم کارآگاه‌ها توی جدول برترها یه شعله با تعداد شب‌های پیاپی‌شون می‌بینی', WhatsNewTarget.leaderboard),
+    WhatsNewItem('streak_repair', 'اگه زنجیره‌ات دیشب شکسته باشه، یک بار می‌تونی با سکه ترمیمش کنی', WhatsNewTarget.caseToday),
+  ]),
   WhatsNewRelease(63, '۱.۳۱', '2026-10-20', [
     WhatsNewItem('lost_reopen', 'پرونده‌ای که باختی بسته می‌شه؛ با سکه (دو برابر قیمت عادی) می‌تونی یه فرصت دوباره بگیری', WhatsNewTarget.archive),
     WhatsNewItem('difficulty_prices', 'قیمت بایگانی و پاداش حل حالا به سختی پرونده بستگی داره: هرچی سخت‌تر، قیمت و پاداش بیشتر', WhatsNewTarget.archive),

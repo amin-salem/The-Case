@@ -1,2 +1,2 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.31.2"
+VERSION = "1.32.0"

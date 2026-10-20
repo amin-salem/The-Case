@@ -6,6 +6,7 @@ import '../theme.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/avatar_frame.dart';
 import '../widgets/engagement.dart' show faDuration;
+import '../widgets/streak_flame.dart';
 
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
@@ -255,10 +256,15 @@ class _BoardState extends State<_Board> with AutomaticKeepAliveClientMixin {
         const SizedBox(width: 10),
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-            Text(title ?? (r.me ? '${r.nickname} (تو)' : r.nickname),
-                style: tBody(pinned ? 14 : 15, w: FontWeight.w900, color: pinned ? K.brass : K.text),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis),
+            Row(children: [
+              Flexible(
+                child: Text(title ?? (r.me ? '${r.nickname} (تو)' : r.nickname),
+                    style: tBody(pinned ? 14 : 15, w: FontWeight.w900, color: pinned ? K.brass : K.text),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
+              ),
+              if (!pinned && r.streak >= 2) ...[const SizedBox(width: 6), StreakFlame(r.streak, size: 13)],
+            ]),
             if (r.rankTitle.isNotEmpty || pinned)
               Text(pinned ? r.nickname : r.rankTitle,
                   style: tBody(11.5, color: pinned ? K.textSoft : K.brass), maxLines: 1, overflow: TextOverflow.ellipsis),

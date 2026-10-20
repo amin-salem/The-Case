@@ -270,6 +270,102 @@ class _CalendarDialog extends StatelessWidget {
 
 const Map<int, String> kBadgeNames = {7: 'کارآگاه پیگیر', 30: 'کارآگاه خستگی‌ناپذیر', 100: 'افسانه‌ی شب'};
 
+/// Every step of the streak ladder (server: economy.STREAK_MILESTONES) with its name and the lasting reward, if any.
+/// 60, 200 and 365 pay a frame only: nothing sellable.
+const Map<int, String> kMilestoneNames = {
+  3: 'سه شب پیاپی',
+  7: 'کارآگاه پیگیر',
+  14: 'قاب «اخگر»',
+  30: 'کارآگاه خستگی‌ناپذیر',
+  60: 'قاب «شعله»',
+  100: 'افسانه‌ی شب',
+  200: 'قاب «آتشفشان»',
+  365: 'قاب «شعله‌ی جاودان»',
+};
+
+/// The next step of the ladder above [streak], or null after the last one.
+int? nextStreakMilestone(int streak, List<int> ladder) {
+  int? best;
+  for (final m in ladder) {
+    if (m > streak && (best == null || m < best)) best = m;
+  }
+  return best;
+}
+
+/// «۱۲ شب مونده تا قاب «شعله»».
+String nextMilestoneLine(int streak, List<int> ladder) {
+  final next = nextStreakMilestone(streak, ladder);
+  if (next == null) return 'همه‌ی پله‌های زنجیره رو بالا رفتی!';
+  return '${fa(next - streak)} شب مونده تا «${kMilestoneNames[next] ?? '${fa(next)} شب'}»';
+}
+
+/// The one-time offer to mend a streak that broke last night. Closing it (any tap outside, «نه، ممنون») is final for
+/// this break; it never blocks the daily case.
+Future<void> showStreakRepairOffer(BuildContext context, StreakRepairOffer offer) async {
+  final api = Api.i;
+  await api.closeRepairOffer(offer); // shown once, whatever the player does next
+  if (!context.mounted) return;
+  await showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: K.night,
+    isScrollControlled: true,
+    builder: (ctx) => SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Row(children: [
+            const Icon(Icons.local_fire_department_rounded, color: K.stamp, size: 30),
+            const SizedBox(width: 8),
+            Expanded(child: Text('زنجیره‌ی ${fa(offer.streak)} شبه‌ات شکسته', style: tDisplay(18))),
+          ]),
+          const SizedBox(height: 10),
+          Text(
+              'دیشب پرونده رو حل نکردی. می‌تونی با ${fa(offer.price)} سکه ترمیمش کنی: شبِ جامونده جبران می‌شه و با حل پرونده‌ی امشب '
+              'زنجیره‌ات از همون‌جا ادامه پیدا می‌کنه (شبِ جامونده به شمارش اضافه نمی‌شه).',
+              style: tBody(14, color: K.text)),
+          const SizedBox(height: 8),
+          Text(
+              'اگه نخوای، چیزی عوض نمی‌شه و پرونده‌ی امشب رو مثل همیشه می‌تونی حل کنی؛ فقط زنجیره دوباره از ۱ شروع می‌شه. '
+              'این پیشنهاد برای هر شکستن فقط همین یک بار میاد. بیمه‌ی زنجیره از قبل ارزون‌تره (${fa(api.freezeCost)} سکه).',
+              style: tBody(12.5, color: K.textSoft)),
+          const SizedBox(height: 14),
+          StampButton(
+            label: 'ترمیم زنجیره · ${fa(offer.price)} سکه',
+            icon: Icons.local_fire_department_rounded,
+            height: 48,
+            onTap: () async {
+              Navigator.of(ctx).pop();
+              if (context.mounted) await repairStreak(context, offer);
+            },
+          ),
+          const SizedBox(height: 6),
+          TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text('نه، ممنون', style: tBody(14, color: K.textSoft))),
+        ]),
+      ),
+    ),
+  );
+}
+
+/// Buys the repair; the server decides and charges once.
+Future<void> repairStreak(BuildContext context, StreakRepairOffer offer) async {
+  if (!needOnline(context)) return;
+  final api = Api.i;
+  try {
+    await api.repairStreak();
+    Sfx.i.play('clue', volume: 0.7);
+    if (context.mounted) toast(context, 'زنجیره‌ات ترمیم شد؛ امشب ادامه بده 🔥');
+  } on ApiException catch (e) {
+    if (!context.mounted) return;
+    if (e.code == 'not_enough_coins') {
+      await showNeedCoins(context, e.need > 0 ? e.need : offer.price);
+    } else {
+      toast(context, Api.friendly(e));
+    }
+  } catch (e) {
+    if (context.mounted) toast(context, Api.friendly(e));
+  }
+}
+
 /// Asks, then buys one streak insurance with coins.
 Future<void> buyStreakInsurance(BuildContext context) async {
   if (!needOnline(context)) return;
@@ -306,7 +402,8 @@ class StreakCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final api = Api.i;
     final held = profile.streakFreezes, max = api.maxFreezes;
-    final next = api.streakBadges.where((b) => b > profile.streak).fold<int?>(null, (a, b) => a == null || b < a ? b : a);
+    final ladder = api.streakMilestones;
+    final offer = profile.streakRepair;
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
@@ -321,12 +418,8 @@ class StreakCard extends StatelessWidget {
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text('${fa(profile.streak)} شب پشت سر هم', style: tDisplay(18)),
-              Text(
-                next == null
-                    ? 'همه‌ی نشان‌ها رو گرفتی!'
-                    : '${fa(next - profile.streak)} شب دیگه تا نشان «${kBadgeNames[next] ?? '${fa(next)} شب'}»',
-                style: tBody(12.5, color: K.textSoft),
-              ),
+              Text(nextMilestoneLine(profile.streak, ladder), style: tBody(12.5, color: K.textSoft)),
+              Text('بهترین زنجیره‌ات: ${fa(profile.bestStreak)} شب', style: tBody(11.5, color: K.textSoft.withValues(alpha: 0.8))),
             ]),
           ),
           for (int i = 0; i < max; i++)
@@ -336,6 +429,23 @@ class StreakCard extends StatelessWidget {
                   color: i < held ? K.ok : K.textSoft.withValues(alpha: 0.5), size: 26),
             ),
         ]),
+        if (offer != null && !Api.i.repairOfferClosed(offer)) ...[
+          const SizedBox(height: 10),
+          StampButton(
+            label: 'ترمیم زنجیره · ${fa(offer.price)} سکه',
+            icon: Icons.local_fire_department_rounded,
+            height: 44,
+            onTap: () async {
+              await Api.i.closeRepairOffer(offer);
+              if (context.mounted) await repairStreak(context, offer);
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text('زنجیره‌ات دیشب شکسته؛ این پیشنهاد فقط یک بار میاد و پرونده‌ی امشب بازه.',
+                style: tBody(11.5, color: K.textSoft)),
+          ),
+        ],
         if (held < max) ...[
           const SizedBox(height: 10),
           StampButton(
@@ -388,7 +498,7 @@ class StreakBadges extends StatelessWidget {
 /// Shown on the result screen when a badge was just earned.
 class BadgeBanner extends StatelessWidget {
   const BadgeBanner({super.key, required this.badge});
-  final int badge;
+  final int badge; // a step of the streak ladder (7, 30, 100 are badges; the others are frames or plain steps)
 
   @override
   Widget build(BuildContext context) => StampIn(
@@ -406,7 +516,7 @@ class BadgeBanner extends StatelessWidget {
             Expanded(
               child: Text.rich(
                 TextSpan(children: [
-                  TextSpan(text: 'نشان تازه: «${kBadgeNames[badge] ?? ''}»', style: tBody(14, color: K.brass, w: FontWeight.w900)),
+                  TextSpan(text: '${kBadgeNames.containsKey(badge) ? 'نشان تازه' : 'پله‌ی تازه'}: «${kBadgeNames[badge] ?? kMilestoneNames[badge] ?? '${fa(badge)} شب'}»', style: tBody(14, color: K.brass, w: FontWeight.w900)),
                   TextSpan(text: '  ${fa(badge)} شب پشت سر هم!', style: tBody(12.5, color: K.text)),
                 ]),
                 maxLines: 2,

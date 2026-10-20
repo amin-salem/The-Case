@@ -361,6 +361,7 @@ class AccuseResult {
         hintsUsed = _i(j['hints_used']),
         freezesUsed = _i(j['freezes_used']),
         badge = j['badge'] is int ? j['badge'] as int : null,
+        streakMilestone = j['streak_milestone'] is int ? j['streak_milestone'] as int : null,
         answerAt = j['answer_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['answer_at'] as num).toInt() * 1000) : null,
         unranked = _b(j['unranked']),
         starsCapped = _b(j['stars_capped']),
@@ -373,6 +374,7 @@ class AccuseResult {
   final int attemptsLeft, stars, reward, coins, streak;
   final int seconds, hintsUsed, freezesUsed;
   final int? badge; // a streak badge (7, 30, 100) reached right now
+  final int? streakMilestone; // a step of the streak ladder (3, 7, 14, 30, 60, 100, 200, 365) reached right now
   final DateTime? answerAt; // lost: the answer (culprit, proof, explanation) is public from this time
   final int earlyBonus; // weekend case solved before its last chapter: extra coins (already in reward)
   final bool? howRight; // two-part accusation: was the why/how part right (null = not asked)
@@ -408,6 +410,7 @@ class Profile {
         loginReward = _i(j['login_reward']),
         loginDay = _i(j['login_day']),
         streakFreezes = _i(j['streak_freezes']),
+        streakRepair = j['streak_repair'] is Map ? StreakRepairOffer((j['streak_repair'] as Map).cast<String, dynamic>()) : null,
         xp = _i(j['xp']),
         rank = _i(j['rank']),
         rankTitle = _s(j['rank_title'], 'کارآگاه تازه‌کار'),
@@ -438,6 +441,7 @@ class Profile {
   final String avatarId, avatarFrame; // det_01, ex_cat ...; frame_brass ...
   final int avatar, coins, streak, bestStreak, casesSolved, starsTotal, loginReward;
   final int loginDay, streakFreezes; // 1..7 in the login calendar; streak insurance held
+  final StreakRepairOffer? streakRepair; // a paid repair of a streak that broke in the last 24 h (null = none)
   final bool referred, secured, noAds, needsPhone;
   final String? email, phone;
   final int? vipUntil;
@@ -445,9 +449,20 @@ class Profile {
   bool get vip => vipUntil != null && vipUntil! * 1000 > DateTime.now().millisecondsSinceEpoch;
 }
 
+/// «ترمیم زنجیره»: the server says whether a broken streak can be mended and for how many coins.
+class StreakRepairOffer {
+  StreakRepairOffer(Map<String, dynamic> j)
+      : key = _s(j['key']),
+        streak = _i(j['streak']),
+        price = _i(j['price']);
+  final String key; // names the break: the offer is shown once per key
+  final int streak, price;
+}
+
 class LeaderRow {
   LeaderRow(Map<String, dynamic> j)
       : rank = _i(j['rank']),
+        streak = _i(j['streak']),
         nickname = _s(j['nickname']),
         avatar = _i(j['avatar']),
         avatarId = _s(j['avatar_id']).isNotEmpty ? _s(j['avatar_id']) : detId(_i(j['avatar'])),
@@ -456,7 +471,7 @@ class LeaderRow {
         stars = _i(j['stars']),
         me = _b(j['me']),
         rankTitle = _s(j['rank_title']);
-  final int rank, avatar, value, stars;
+  final int rank, avatar, value, stars, streak; // streak: the flame next to the name (0 = none)
   final String nickname, rankTitle, avatarId, avatarFrame;
   final bool me;
 }

@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .. import content
 from .. import economy as eco
 from ..cache import TTLCache
+from ..config import get_settings
 from ..db import get_session
 from ..models import Event, Player, utcnow
 from ..schemas import EventsIn
@@ -39,6 +40,10 @@ def _economy() -> dict:
             "login_calendar": eco.LOGIN_CALENDAR, "login_envelope": [min(eco.LOGIN_ENVELOPE), max(eco.LOGIN_ENVELOPE)],
             "freeze_cost": eco.FREEZE_COST, "max_freezes": eco.MAX_FREEZES,
             "streak_badges": list(eco.STREAK_BADGES),
+            "streak_milestones": list(eco.STREAK_MILESTONES),
+            "streak_cosmetic_milestones": list(eco.STREAK_COSMETIC_MILESTONES),
+            "streak_repair": {"enabled": get_settings().streak_repair_enabled, "min_streak": eco.REPAIR_MIN_STREAK,
+                              "base": eco.REPAIR_BASE, "per_day": eco.REPAIR_PER_DAY, "cap": eco.REPAIR_CAP},
             "riddles_per_day": eco.RIDDLES_PER_DAY, "riddle_free": eco.RIDDLE_FREE,
             "riddle_unlock_cost": eco.RIDDLE_UNLOCK_COST, "riddle_reward": eco.RIDDLE_REWARD,
             "riddle_seconds": eco.RIDDLE_SECONDS, "chest_coins": eco.CHEST_COINS,

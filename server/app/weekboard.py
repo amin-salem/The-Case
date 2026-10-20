@@ -140,12 +140,13 @@ async def my_standing(session: AsyncSession, ws: date, player: Player, league: i
 
 async def cached_rows(session: AsyncSession, ws: date, league: int | None, limit: int) -> list[dict]:
     """The top rows as plain dicts, cached per worker for BOARD_TTL seconds (the data is the same for everybody)."""
-    from . import avatars
+    from . import avatars, streakrepair
     from .routers.common import rank_title
 
     async def load():
         rows = await standings(session, ws, league=league, limit=limit)
-        return [{"id": s.player.id, "nickname": s.player.nickname, "avatar": s.player.avatar,
+        live = streakrepair.LiveStreak()
+        return [{"streak": live.of(s.player), "id": s.player.id, "nickname": s.player.nickname, "avatar": s.player.avatar,
                  "avatar_id": avatars.avatar_key(s.player), "avatar_frame": avatars.frame_key(s.player),
                  "points": s.points, "rank_title": rank_title(s.player)} for s in rows]
     return await _boards.get_or_load((ws.isoformat(), league, limit), load, now_wall=content.now_local(),

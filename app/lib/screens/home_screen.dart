@@ -115,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
       unawaited(_loadExtras());
+      unawaited(_maybeOfferRepair());
       await Reminders.i.plan(
           nextCaseAt: c.nextCaseAt, tonightSolved: c.today?.solved ?? false, streak: Api.i.profile?.streak ?? 0,
           plan: Api.i.notifyPlan, tonightTitle: c.today?.title);
@@ -126,6 +127,19 @@ class _HomeScreenState extends State<HomeScreen> {
     } finally {
       _loading = false;
     }
+  }
+
+  bool _repairShown = false;
+
+  /// A streak that broke in the last 24 h: the server may offer a paid repair. Shown ONCE per break (a tap anywhere
+  /// closes it for good) and it never blocks tonight's case.
+  Future<void> _maybeOfferRepair() async {
+    final offer = Api.i.profile?.streakRepair;
+    if (_repairShown || offer == null || Api.i.repairOfferClosed(offer)) return;
+    _repairShown = true;
+    await Future<void>.delayed(const Duration(milliseconds: 800));
+    if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+    await showStreakRepairOffer(context, offer);
   }
 
   /// The smaller daily things on the home page (missions); a failure just hides them.

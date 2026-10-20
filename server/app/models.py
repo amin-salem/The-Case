@@ -63,6 +63,9 @@ class Player(Base):
     last_login_reward: Mapped[str] = mapped_column(String(10), default="")
     login_day: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # 1..7 in the calendar
     streak_freezes: Mapped[int] = mapped_column(Integer, default=0, server_default="0")  # streak insurance held
+    # the last_daily_solved value a streak repair wrote; while it is unchanged the player has not played since the
+    # repair, so no second repair is offered (app/streakrepair.py)
+    streak_repair_mark: Mapped[str] = mapped_column(String(10), default="", server_default="")
     ad_day: Mapped[str] = mapped_column(String(10), default="")
     ad_count: Mapped[int] = mapped_column(Integer, default=0)
     cases_solved: Mapped[int] = mapped_column(Integer, default=0)
@@ -278,6 +281,20 @@ class PlayerAvatar(Base):
     kind: Mapped[str] = mapped_column(String(8), default="avatar", server_default="avatar")
     avatar_id: Mapped[str] = mapped_column(String(24))
     how: Mapped[str] = mapped_column(String(8), default="goal")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class StreakRepair(Base):
+    """One paid streak repair. UNIQUE (player, broken_after): the same break can never be repaired, or charged, twice."""
+
+    __tablename__ = "streak_repairs"
+    __table_args__ = (UniqueConstraint("player_id", "broken_after", name="uq_streak_repair"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    broken_after: Mapped[str] = mapped_column(String(10))   # last_daily_solved (publish date) before the missed case
+    streak: Mapped[int] = mapped_column(Integer, default=0)  # the streak that was mended
+    price: Mapped[int] = mapped_column(Integer, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 

@@ -24,7 +24,8 @@ def test_catalog_matches_prices_and_frames():
     assert eco.FRAME_PRICE == {"frame_fingerprint": 300, "frame_blinds": 400, "frame_cuffs": 600,
                                "frame_stamp": 600, "frame_neon": 900, "frame_royal": 1500}
     assert [i.id for i in avatars.FRAMES if i.how == "goal"] == [
-        "frame_bronze", "frame_silver", "frame_gold", "frame_ember", "frame_tape", "frame_loupe"]
+        "frame_bronze", "frame_silver", "frame_gold", "frame_ember", "frame_blaze", "frame_inferno", "frame_eternal",
+        "frame_tape", "frame_loupe"]
     assert len(avatars.BY_ID) == len(avatars.AVATARS) + len(avatars.FRAMES)
 
 

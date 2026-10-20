@@ -1,5 +1,11 @@
 # Changelog
 
+## server 1.32.0, app 1.32.0 (build 65): the streak has a long-term goal (Amin, 16 Oct 2026; asked as Normal, built 20 Oct)
+- **Ladder:** 3, 7, 14, 30, 60, 100, 200, 365 nights (`economy.STREAK_MILESTONES`). Existing rewards are unchanged (no new free coins or warrants). 60, 200 and 365 give permanent frames only: «شعله» (`frame_blaze`), «آتشفشان» (`frame_inferno`), «شعله‌ی جاودان» (`frame_eternal`), all drawn in code with flames (`avatar_frame.dart`), plus achievements `streak_60/200/365` with XP and 0 coins. The streak card says «۱۲ شب مونده تا «قاب «شعله»»» and keeps «بهترین زنجیره».
+- **Flame:** a small flame with the live streak next to the nickname on all leaderboards and on the profile (`LeaderRow.streak`, 0 for a broken streak, bounded, no extra query).
+- **Streak repair:** a streak that broke last night (exactly one missed daily case, no insurance, at least 3 nights) can be mended once per break: `POST /v1/wallet/streak-repair`, price `min(500, 200 + 5 x nights)` (215 at 3, 350 at 30, 500 from 60), atomic and idempotent (player lock + unique row), strict `wallet` rate limit, kill switch `STREAK_REPAIR_ENABLED=false`, one log line per decision. The app shows it once (a sheet on the home screen that closes with one tap, and a button on the streak card); it never blocks tonight's case. Revenue: a coin sink above the insurance price that makes players with a long streak top up coins at the moment they care most.
+- Old apps keep working: new fields are optional (`streak_repair`, `streak`, `streak_milestone`); `badge` and `streak_badges` stay 7/30/100. Migration 0028 (additive). Docs: `docs/operations.md`.
+
 ## server 1.31.2, app 1.31.2 (build 64): ChatGPT batch merged (Amin, 20 Oct 2026)
 - Merged: read-only analytics access, private content-dir prep, result prompts after the explanation, personal claim notes, Android screen-capture protection. Details are in the entries below.
 
