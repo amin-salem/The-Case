@@ -43,6 +43,10 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(63, '۱.۳۱', '2026-10-20', [
+    WhatsNewItem('lost_reopen', 'پرونده‌ای که باختی بسته می‌شه؛ با سکه (دو برابر قیمت عادی) می‌تونی یه فرصت دوباره بگیری', WhatsNewTarget.archive),
+    WhatsNewItem('difficulty_prices', 'قیمت بایگانی و پاداش حل حالا به سختی پرونده بستگی داره: هرچی سخت‌تر، قیمت و پاداش بیشتر', WhatsNewTarget.archive),
+  ]),
   WhatsNewRelease(62, '۱.۳۱', '2026-10-19', [
     WhatsNewItem('archive_popular', '«محبوب‌ترین» درست شد: پرونده‌هایی که کارآگاه‌های بیشتری بهشون امتیاز خوب دادن اول میان، بدون امتیازها آخر', WhatsNewTarget.archive),
     WhatsNewItem('archive_search', 'توی بایگانی می‌تونی جست‌وجو کنی و روی هر فیلتر تعداد پرونده‌ها رو ببینی', WhatsNewTarget.archive),
