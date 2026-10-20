@@ -94,12 +94,19 @@ h2{font-weight:900}
 .quick{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
 .quick button{flex:1 1 140px;padding:11px 12px;border-radius:14px;font-weight:700;background:#25262a}
 .quick button.hot{background:linear-gradient(135deg,#f0bd45,#d99a1c);color:#1a1a1a;border-color:transparent;font-weight:900}
-@media(max-width:700px){
-  header{flex-wrap:wrap}
-  header h1{flex:1}
-  nav{order:3;flex:1 0 100%;flex-wrap:wrap;overflow:visible;gap:6px}
-  nav button{flex:1 1 calc(33.3% - 6px);padding:8px 6px;font-size:13px;text-align:center}
-}
+/* A bounded, scrollable menu keeps every section reachable on narrow screens. */
+header{flex-wrap:wrap}
+header h1{flex:1}
+#admin-menu{position:relative;flex:none}
+#menu-toggle{display:flex;align-items:center;gap:8px;min-height:44px;padding:7px 12px;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:12px;background:var(--bg3)}
+#menu-toggle::-webkit-details-marker{display:none}
+#menu-toggle:focus-visible,nav button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.menu-icon{display:inline-flex;flex-direction:column;gap:4px;width:20px}
+.menu-icon i{height:2px;width:100%;background:currentColor;border-radius:2px}
+#admin-menu:not([open])>nav{display:none}
+#admin-menu>nav{position:absolute;inset-inline-start:0;top:calc(100% + 8px);display:flex;flex-direction:column;flex-wrap:nowrap;width:min(22rem,calc(100vw - 24px));max-height:70vh;max-height:70dvh;overflow-y:auto;overflow-x:hidden;gap:6px;padding:10px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px #0008;scrollbar-width:auto}
+#admin-menu nav button{flex:none;min-height:44px;white-space:normal;overflow-wrap:anywhere;text-align:start;border-radius:10px;padding:10px 12px}
+@media(max-width:700px){header h1{font-size:15px}header .hbtn{min-height:44px}}
 
 /* funnel screen */
 .fbar{display:block;height:10px;min-width:60px;background:var(--bg3);border-radius:5px;overflow:hidden;direction:ltr}.fbar i{display:block;height:100%;background:var(--brass)}
@@ -118,9 +125,11 @@ td.na{color:var(--soft)}td.num,th.num{white-space:nowrap}
 </div>
 <div id="app" hidden>
 <header>
+  <details id="admin-menu">
+    <summary id="menu-toggle" aria-label="منوی بخش‌های پنل" aria-controls="nav"><span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span><span>منو</span></summary>
+    <nav id="nav" aria-label="بخش‌های پنل مدیریت"></nav>
+  </details>
   <h1>پنل «پرونده»</h1>
-  <nav id="nav"></nav>
-  <span style="flex:1"></span>
   <button id="refresh" class="hbtn">⟳ تازه</button>
   <button id="logout" class="hbtn">خروج</button>
 </header>
@@ -163,9 +172,11 @@ const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت ز�
 // remember the open tab (per browser tab / app session) so a reload or a refresh never jumps elsewhere
 let tab = 'overview', timer = null;
 try { const t = sessionStorage.getItem('adminTab'); if (TABS.some(x => x[0] === t)) tab = t; } catch (e) {}
-function buildNav() { try { sessionStorage.setItem('adminTab', tab); } catch (e) {} $('#nav').innerHTML = TABS.map(([k, n]) => `<button data-k="${k}" class="${k===tab?'on':''}">${n}</button>`).join(''); }
-$('#nav').onclick = e => { const b = e.target.closest('button[data-k]'); if (b) { go(b.dataset.k); b.scrollIntoView({inline: 'center', block: 'nearest'}); } };
-function go(k, arg) { tab = k; buildNav(); clearInterval(timer); timer = null; render(arg); }
+function buildNav() { try { sessionStorage.setItem('adminTab', tab); } catch (e) {} $('#nav').innerHTML = TABS.map(([k, n]) => `<button type="button" data-k="${k}" class="${k===tab?'on':''}"${k===tab?' aria-current="page"':''}>${n}</button>`).join(''); }
+$('#nav').onclick = e => { const b = e.target.closest('button[data-k]'); if (b) { go(b.dataset.k); $('#menu-toggle').focus(); } };
+document.addEventListener('click', e => { if (!$('#admin-menu').contains(e.target)) $('#admin-menu').open = false; });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#admin-menu').open) { e.preventDefault(); $('#admin-menu').open = false; $('#menu-toggle').focus(); } });
+function go(k, arg) { $('#admin-menu').open = false; tab = k; buildNav(); clearInterval(timer); timer = null; render(arg); }
 async function render(arg) {
   const m = document.createElement('div'); $('#main').replaceChildren(m); // a fresh box per render: a late answer of an old tab writes into a detached box
   m.innerHTML = '<p class="muted">در حال بارگذاری…</p>';
@@ -419,9 +430,10 @@ $('#enter').onclick = enter; $('#key').onkeydown = e => { if (e.key === 'Enter')
 $('#refresh').onclick = () => render(); $('#logout').onclick = logout;
 // pull down at the top of the page to refresh (touch screens, also in the admin app)
 (() => { let y0 = null; const top = () => (window.scrollY || document.documentElement.scrollTop) <= 0;
-  addEventListener('touchstart', e => { y0 = top() && e.touches.length === 1 ? e.touches[0].clientY : null; }, {passive: true});
-  addEventListener('touchend', e => { if (y0 !== null && e.changedTouches[0].clientY - y0 > 120 && !$('#app').hidden && !$('#dlg').open) render(); y0 = null; }, {passive: true}); })();
+  addEventListener('touchstart', e => { y0 = !$('#admin-menu').open && top() && e.touches.length === 1 ? e.touches[0].clientY : null; }, {passive: true});
+  addEventListener('touchend', e => { if (y0 !== null && e.changedTouches[0].clientY - y0 > 120 && !$('#app').hidden && !$('#dlg').open && !$('#admin-menu').open) render(); y0 = null; }, {passive: true}); })();
 if (KEY) enter();
 </script>
 </body>
 </html>
+
