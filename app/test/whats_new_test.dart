@@ -21,7 +21,7 @@ void main() {
   });
 
   test('list: newest first, titles for this release, no «نفر»', () {
-    expect(kWhatsNew.first.id, 62);
+    expect(kWhatsNew.first.id, 63);
     expect(kWhatsNew.first.items.length, 2);
     for (final r in kWhatsNew) {
       for (final it in r.items) {
