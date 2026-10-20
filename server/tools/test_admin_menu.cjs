@@ -35,6 +35,7 @@ const {chromium} = require('playwright');
       const box = await nav.boundingBox();
       assert.ok(box.x >= -1 && box.x + box.width <= width + 1, 'menu must stay within screen width');
       assert.ok(box.height <= height * .71, 'short screens must get a scrollable menu');
+      assert.ok(box.y + box.height <= height, 'menu must end inside the screen, even below a wrapped header');
       await nav.locator('[data-k="funnel"]').click();
       await page.waitForSelector('#fbody h2');
       assert.ok(requests.includes('/admin/api/funnel'), 'real funnel navigation must request its data');

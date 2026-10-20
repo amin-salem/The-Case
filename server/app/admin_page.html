@@ -97,14 +97,14 @@ h2{font-weight:900}
 /* A bounded, scrollable menu keeps every section reachable on narrow screens. */
 header{flex-wrap:wrap}
 header h1{flex:1}
-#admin-menu{position:relative;flex:none}
+#admin-menu{flex:none}
 #menu-toggle{display:flex;align-items:center;gap:8px;min-height:44px;padding:7px 12px;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:12px;background:var(--bg3)}
 #menu-toggle::-webkit-details-marker{display:none}
 #menu-toggle:focus-visible,nav button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .menu-icon{display:inline-flex;flex-direction:column;gap:4px;width:20px}
 .menu-icon i{height:2px;width:100%;background:currentColor;border-radius:2px}
 #admin-menu:not([open])>nav{display:none}
-#admin-menu>nav{position:absolute;inset-inline-start:0;top:calc(100% + 8px);display:flex;flex-direction:column;flex-wrap:nowrap;width:min(22rem,calc(100vw - 24px));max-height:70vh;max-height:70dvh;overflow-y:auto;overflow-x:hidden;gap:6px;padding:10px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px #0008;scrollbar-width:auto}
+#admin-menu>nav{position:absolute;inset-inline-start:12px;top:calc(100% + 8px);display:flex;flex-direction:column;flex-wrap:nowrap;width:min(22rem,calc(100vw - 24px));max-height:min(70vh,calc(100vh - 100% - 24px));max-height:min(70dvh,calc(100dvh - 100% - 24px));overflow-y:auto;overflow-x:hidden;gap:6px;padding:10px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px #0008;scrollbar-width:auto}
 #admin-menu nav button{flex:none;min-height:44px;white-space:normal;overflow-wrap:anywhere;text-align:start;border-radius:10px;padding:10px 12px}
 @media(max-width:700px){header h1{font-size:15px}header .hbtn{min-height:44px}}
 
