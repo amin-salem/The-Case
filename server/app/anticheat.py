@@ -97,7 +97,13 @@ async def maybe_pay_referral(player_id: str) -> bool:
     from . import db
 
     async with db.SessionLocal() as session:
+        await db.begin_write(session)
         player = await session.get(Player, player_id)
+        if player is None or not player.referred_by:
+            return False
+        inviter_id = player.referred_by
+        locked = await db.lock_players(session, [player_id, inviter_id])
+        player = locked.get(player_id)
         if player is None or not player.referred_by or player.referral_paid:
             return False
         days = int(await session.scalar(select(func.count(func.distinct(CaseProgress.day))).where(
@@ -109,7 +115,7 @@ async def maybe_pay_referral(player_id: str) -> bool:
         if claim.rowcount != 1:  # another request paid (or refused) it at the same moment
             await session.rollback()
             return False
-        inviter = await session.get(Player, player.referred_by)
+        inviter = locked.get(inviter_id)
         week = gameclock.week_of(content.now_local()).isoformat()
         if inviter is None or inviter.banned or inviter.invites_rewarded >= eco.MAX_REWARDED_INVITES:
             await session.commit()

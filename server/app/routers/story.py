@@ -147,7 +147,7 @@ async def skip_wait(chapter: int, player: Player = Depends(current_player),
         cost = eco.story_skip_cost((at - utcnow()).total_seconds())
         if player.coins < cost:
             raise HTTPException(402, {"error": "not_enough_coins", "need": cost})
-        add_coins(session, player, -cost, f"story_skip:{c.id}")
+        await add_coins(session, player, -cost, f"story_skip:{c.id}")
     if state in ("ready", "waiting"):
         await _begin(session, player, c)
         await session.commit()

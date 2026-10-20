@@ -105,7 +105,7 @@ async def check_achievements(session: AsyncSession, player: Player, gains: Gains
             earned.add(a.id)
             session.add(PlayerAchievement(player_id=player.id, achievement_id=a.id))
             if a.coins:
-                add_coins(session, player, a.coins, f"achievement:{a.id}")
+                await add_coins(session, player, a.coins, f"achievement:{a.id}")
             add_xp(player, a.xp, gains)
             gains.achievements.append({"id": a.id, "title": a.title, "coins": a.coins})
     if (player.stats or {}).get("achievements_earned") != len(earned):
@@ -124,4 +124,3 @@ async def _missions(session: AsyncSession, player: Player, events: dict[str, int
         if before.get(m.event, 0) < m.target <= after.get(m.event, 0):
             gains.missions_done.append(m.title)
     # (until 17 Oct 2026 finishing all of a day's missions also paid a warrant; free warrants are scarce now)
-

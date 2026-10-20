@@ -14,7 +14,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import economy as eco
-from ..db import get_session
+from ..db import get_session, lock_players
 from ..models import PhoneCode, Player, utcnow
 from ..schemas import PhoneLoginIn, PhoneSendIn, PhoneSentOut, PhoneVerifyIn, RegisterOut, SecureOut
 from ..security import current_player
@@ -105,6 +105,8 @@ async def verify(body: PhoneVerifyIn, player: Player = Depends(current_player),
     phone = _phone(body.phone)
     phash = sms.phone_hash(phone)
     await _check(session, phash, body.code, "secure", player.id)
+    # OTP verification commits deliberately (burns the code). Reload eligibility under a new lock.
+    player = (await lock_players(session, [player.id]))[player.id]
     player.phone_hash = phash
     player.phone_last4 = phone[-4:]
     player.phone_verified_at = utcnow()
@@ -112,7 +114,7 @@ async def verify(body: PhoneVerifyIn, player: Player = Depends(current_player),
     if not player.secure_rewarded:
         player.secure_rewarded = True
         reward = eco.SECURE_REWARD
-        add_coins(session, player, reward, "secure_account")
+        await add_coins(session, player, reward, "secure_account")
     try:
         await session.commit()
     except IntegrityError:

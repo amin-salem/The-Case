@@ -48,7 +48,7 @@ async def register(body: RegisterIn, session: AsyncSession = Depends(get_session
                     token_gen=0, coins=0)
     session.add(player)
     await session.flush()
-    add_coins(session, player, eco.START_COINS, "welcome")
+    await add_coins(session, player, eco.START_COINS, "welcome")
     await session.commit()
     token, exp = make_token(player.id, 0)
     return RegisterOut(player_id=player.id, secret=secret, token=token, expires_at=exp)
@@ -92,7 +92,7 @@ async def set_email(body: EmailIn, player: Player = Depends(current_player),
     if not player.secure_rewarded:
         player.secure_rewarded = True
         reward = eco.SECURE_REWARD
-        add_coins(session, player, reward, "secure_account")
+        await add_coins(session, player, reward, "secure_account")
     try:
         await session.commit()
     except IntegrityError:

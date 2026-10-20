@@ -1,9 +1,12 @@
 """Database connection (SQLAlchemy 2, async)."""
 import os
+import asyncio
+from weakref import WeakKeyDictionary
 from collections.abc import AsyncIterator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import event
+from sqlalchemy.orm import DeclarativeBase, Session
 
 from .config import get_settings
 
@@ -57,3 +60,51 @@ async def create_tables() -> None:
 async def get_session() -> AsyncIterator[AsyncSession]:
     async with SessionLocal() as session:
         yield session
+
+
+
+# SQLite is a single-process development/test backend. Do not reserve its SQL writer
+# before rate-limit checks: DBStore uses a separate transaction in the same database.
+# PostgreSQL correctness never depends on this process-local fallback.
+_sqlite_writers = WeakKeyDictionary()
+
+
+@event.listens_for(Session, "after_transaction_end")
+def _release_sqlite_writer(session, transaction) -> None:
+    if transaction.parent is None:
+        lock = session.info.pop("wallet_sqlite_writer", None)
+        if lock is not None:
+            lock.release()
+
+
+async def begin_write(session: AsyncSession) -> None:
+    """Serialize SQLite game transactions without blocking independent rate-limit writes.
+
+    Released by commit/rollback/close, including error paths. PostgreSQL uses row locks.
+    """
+    bind = session.get_bind()
+    if bind.dialect.name != "sqlite" or "wallet_sqlite_writer" in session.info:
+        return
+    lock = _sqlite_writers.setdefault(bind, asyncio.Lock())
+    await lock.acquire()
+    try:
+        if not session.in_transaction():
+            await session.begin()
+        session.info["wallet_sqlite_writer"] = lock
+    except BaseException:
+        lock.release()
+        raise
+
+
+async def lock_players(session: AsyncSession, ids: list[str]) -> dict:
+    """Lock accounts in deterministic order and refresh any already-loaded ORM state.
+
+    Caller owns the transaction. Reacquire after any intermediate commit before more mutations.
+    Multi-account jobs must acquire the complete set at once (never actor then inviter).
+    """
+    from sqlalchemy import select
+    from .models import Player
+    await begin_write(session)
+    rows = (await session.scalars(select(Player).where(Player.id.in_(ids)).order_by(Player.id)
+                                  .with_for_update().execution_options(populate_existing=True))).all()
+    return {p.id: p for p in rows}

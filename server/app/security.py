@@ -3,14 +3,15 @@ import hashlib
 import hmac
 import secrets
 from datetime import datetime, timedelta, timezone
+from collections.abc import AsyncIterator
 
 import jwt
-from fastapi import Depends, Header, HTTPException, status
+from fastapi import Depends, Header, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .config import get_settings
-from .db import get_session
+from .db import get_session, lock_players
 from .models import Player, utcnow
 
 _bearer = HTTPBearer(auto_error=False)
@@ -56,22 +57,40 @@ def read_token(token: str) -> tuple[str, int]:
 
 
 async def current_player(
+    request: Request,
     cred: HTTPAuthorizationCredentials | None = Depends(_bearer),
     session: AsyncSession = Depends(get_session),
-) -> Player:
+) -> AsyncIterator[Player]:
     if cred is None:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "no_token")
     player_id, gen = read_token(cred.credentials)
-    player = await session.get(Player, player_id)
+    # Every authenticated mutation locks BEFORE reading one-time claims/counters/progress.
+    # These two GETs grant rewards too. Inbox settlement locks its complete winner set itself.
+    writing = request.method not in ("GET", "HEAD", "OPTIONS") or request.url.path.rstrip("/") in (
+        "/v1/me", "/v1/avatars") or (request.method == "GET" and
+        request.url.path.startswith("/v1/cases/") and request.url.path.count("/") == 3)
+    player = ((await lock_players(session, [player_id])).get(player_id) if writing
+              else await session.get(Player, player_id))
     if player is None or gen != player.token_gen:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "no_player")
     if player.banned:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "banned")
     now = utcnow()
-    if (now - player.last_seen).total_seconds() > 300:
+    touch = (now - player.last_seen).total_seconds() > 300
+    if touch and not writing:
         player.last_seen = now
         await session.commit()
-    return player
+    try:
+        yield player
+        if writing:
+            # Defer this write: rate-limit checks inside handlers use an independent
+            # transaction and must not wait on a SQLite writer held by last_seen.
+            if touch:
+                player.last_seen = now
+            await session.commit()
+    except Exception:
+        await session.rollback()
+        raise
 
 
 async def require_admin(x_admin_key: str = Header(default="")) -> None:

@@ -28,7 +28,7 @@ async def me(player: Player = Depends(current_player), session: AsyncSession = D
         player.login_day = (player.login_day or 0) % 7 + 1 if in_a_row else 1
         player.last_login_reward = today
         reward = eco.login_reward(player.login_day)
-        add_coins(session, player, reward, f"daily_login:{player.login_day}")
+        await add_coins(session, player, reward, f"daily_login:{player.login_day}")
         gains = await progress.record(session, player, full_week=int(player.login_day == 7))
         await session.commit()
     else:
@@ -61,7 +61,7 @@ async def buy_streak_freeze(player: Player = Depends(current_player), session: A
         raise HTTPException(409, "max_freezes")
     if player.coins < eco.FREEZE_COST:
         raise HTTPException(402, {"error": "not_enough_coins", "need": eco.FREEZE_COST})
-    add_coins(session, player, -eco.FREEZE_COST, "streak_freeze")
+    await add_coins(session, player, -eco.FREEZE_COST, "streak_freeze")
     player.streak_freezes = (player.streak_freezes or 0) + 1
     await session.commit()
     return profile_out(player)
@@ -133,6 +133,6 @@ async def ad_reward(player: Player = Depends(current_player), session: AsyncSess
     if player.ad_count >= eco.AD_PER_DAY:
         raise HTTPException(429, "ad_limit")
     player.ad_count += 1
-    add_coins(session, player, eco.AD_REWARD, "ad")
+    await add_coins(session, player, eco.AD_REWARD, "ad")
     await session.commit()
     return CoinsOut(coins=player.coins, added=eco.AD_REWARD)

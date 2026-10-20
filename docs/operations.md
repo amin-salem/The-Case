@@ -424,3 +424,43 @@ must already be linked to one account; the answer `no_player` means nobody verif
 - New column `case_progress.night1` (migration 0027, additive, listed in `.github/workflows/ci.yml`). New route `POST /v1/cases/{id}/liar` shares the strict
   `accuse` rate-limit policy. New numbers in `economy.py`: `WEEKLY_EARLY_BONUS` 80, `WEEKEND_LIAR_REWARD` 10. New achievement `weekend_night1`.
 - Nothing to set on Liara. Deploy the server from the panel (version 1.31.0). Old apps keep working (all new fields are optional).
+
+
+
+## Wallet transactions and concurrent claims
+
+`await util.add_coins(session, player, delta, reason)` uses an SQL increment with
+`RETURNING coins`; a debit additionally requires `coins >= cost`. Insufficient funds
+return HTTP 402 without clamping the balance or writing a ledger entry. The delta,
+its resulting-balance log, and the purchase/reward state commit together; the helper
+never commits. All economy amounts and eligibility rules are unchanged.
+
+The authenticated-player dependency locks the account row **before** a mutating
+request reads eligibility, balances, progress, one-time flags, counters or XP.
+`GET /v1/me` and `GET /v1/avatars` grant rewards, so they also take that lock;
+case-detail GETs lock while creating progress. PostgreSQL uses `SELECT FOR UPDATE`
+with a fresh ORM snapshot. Different accounts remain independent. Requests for one
+account queue, including store-verification latency (existing network timeouts apply).
+SQLite single-process development requests use a transaction-scoped process lock,
+released on commit/rollback/close. They do not reserve the database writer before
+in-handler rate-limit checks (those use an independent transaction). `last_seen`
+writes are deferred until those checks finish. This fallback is not suitable for
+multiple SQLite workers and is not proof of PostgreSQL concurrency correctness.
+
+Every new wallet/grant caller must acquire `db.lock_players` before its first
+eligibility read, keep flags and ledger in the same transaction, and reacquire after
+any intermediate commit. Phone verification does this after burning its OTP.
+Background referral jobs lock invitee and inviter together in sorted ID order;
+weekly settlement locks its complete winner set before changing player statistics.
+Existing unique purchase tokens, broadcast claims, achievements, referral devices /
+slots and weekly settlement markers remain the final idempotency barriers.
+
+CI's `wallet-postgres` job provisions a disposable PostgreSQL 16 service and runs
+`tests/test_wallet_concurrency.py` on independent connections. It covers stale-wallet
+updates, insufficient funds, rollback, spending/reward races, repeated claims,
+archive/hints/solves, missions, secure-account grants (including the OTP commit gap),
+ads, riddles, purchase tokens and referral slots. The fixture drops/recreates only
+the isolated `wallet_test` database schema provided by `WALLET_TEST_DATABASE_URL`;
+never set this variable to a live database. Regular CI tests still run on SQLite;
+the PostgreSQL tests skip when that explicit test URL is absent. No new production
+variables, schema migration or economy configuration are required.

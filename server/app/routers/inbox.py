@@ -17,10 +17,10 @@ from .common import fast_json
 router = APIRouter(prefix="/v1", tags=["inbox"])
 
 
-def apply_grants(session: AsyncSession, player: Player, grants: list[dict], reason: str) -> None:
+async def apply_grants(session: AsyncSession, player: Player, grants: list[dict], reason: str) -> None:
     for g in grants:
         if g.get("type") == "coins":
-            add_coins(session, player, int(g["amount"]), reason)
+            await add_coins(session, player, int(g["amount"]), reason)
         elif g.get("type") == "no_ads":
             player.no_ads = True
         elif g.get("type") == "vip_until":
@@ -81,7 +81,7 @@ async def claim(item_id: str, player: Player = Depends(current_player), session:
         if item.expires_at is not None and item.expires_at < now:
             raise HTTPException(410, "expired")
         item.claimed_at = now
-        apply_grants(session, player, item.grants, f"gift:{item.id}")
+        await apply_grants(session, player, item.grants, f"gift:{item.id}")
         await session.commit()
         return ClaimOut(grants=item.grants, coins=player.coins)
     b = await session.get(Broadcast, num)
@@ -90,7 +90,7 @@ async def claim(item_id: str, player: Player = Depends(current_player), session:
     if b.expires_at is not None and b.expires_at < now:
         raise HTTPException(410, "expired")
     session.add(BroadcastClaim(broadcast_id=b.id, player_id=player.id))
-    apply_grants(session, player, b.grants, f"broadcast:{b.id}")
+    await apply_grants(session, player, b.grants, f"broadcast:{b.id}")
     try:
         await session.commit()
     except IntegrityError:
@@ -144,6 +144,6 @@ async def redeem(body: RedeemIn, player: Player = Depends(current_player), sessi
         raise HTTPException(409, "same_device")
     player.referred_by = inviter.id  # the inviter is paid later, see anticheat.maybe_pay_referral
     grants = [{"type": "coins", "amount": eco.INVITE_NEW_PLAYER}]
-    apply_grants(session, player, grants, "invited")
+    await apply_grants(session, player, grants, "invited")
     await session.commit()
     return ClaimOut(grants=grants, coins=player.coins)

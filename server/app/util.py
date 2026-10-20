@@ -3,7 +3,9 @@ import re
 import secrets
 from datetime import datetime, timezone
 
-from sqlalchemy import select
+from fastapi import HTTPException
+from sqlalchemy import select, update
+from sqlalchemy.orm.attributes import set_committed_value
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .models import CoinLog, Player
@@ -48,7 +50,20 @@ def clean_nickname(name: str) -> str | None:
     return name
 
 
-def add_coins(session: AsyncSession, player: Player, amount: int, reason: str) -> None:
-    """Changes the wallet and writes a log line (caller commits)."""
-    player.coins = max(0, player.coins + amount)
-    session.add(CoinLog(player_id=player.id, amount=amount, reason=reason[:48], balance=player.coins))
+async def add_coins(session: AsyncSession, player: Player, amount: int, reason: str) -> None:
+    """Atomic delta + ledger in the caller's transaction; never commit or silently clamp a debit.
+
+    Eligibility/one-time flags must be read under db.lock_players before calling this helper.
+    The SQL expression also protects callers holding a stale ORM balance.
+    """
+    await session.flush([player])  # new players need their defaults/id; defer unrelated unique claims to caller
+    stmt = update(Player).where(Player.id == player.id)
+    if amount < 0:
+        stmt = stmt.where(Player.coins >= -amount)
+    with session.no_autoflush:
+        balance = await session.scalar(stmt.values(coins=Player.coins + amount).returning(Player.coins)
+                                       .execution_options(synchronize_session=False))
+    if balance is None:
+        raise HTTPException(402, {"error": "not_enough_coins", "need": -amount})
+    set_committed_value(player, "coins", balance)
+    session.add(CoinLog(player_id=player.id, amount=amount, reason=reason[:48], balance=balance))

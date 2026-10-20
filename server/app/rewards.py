@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import content, gameclock, weekboard
 from .models import InboxItem, Player, WeekSettlement, utcnow
+from .db import begin_write, lock_players
 
 # Weeks before this one were paid by the old rule (Saturday-to-Friday, archive solves counted) and are never touched.
 FIRST_FAIR_WEEK = date(2026, 10, 16)
@@ -49,6 +50,7 @@ async def settle_last_week(session: AsyncSession) -> int:
 
 
 async def settle_week(session: AsyncSession, ws: date) -> int:
+    await begin_write(session)  # SQLite fallback must precede the settlement claim write
     key = ws.isoformat()
     if await session.get(WeekSettlement, key) is not None:
         return 0
@@ -68,9 +70,10 @@ async def settle_week(session: AsyncSession, ws: date) -> int:
             winners += [(None, i, s) for i, s in enumerate(rows, start=1) if s.cases >= weekboard.MIN_CASES_FOR_PRIZE]
         # the champion avatar and the loupe frame (granted on the player's next visit) stay scarce: only the top 3 of
         # the board, or of the highest league that has winners
+        locked = await lock_players(session, [s.player.id for _, _, s in winners])
         top_league = max((lg for lg, _, _ in winners if lg is not None), default=None)
         for lg, rank, s in winners:
-            pl: Player = s.player
+            pl: Player = locked[s.player.id]
             coins = weekboard.prize_for(rank, league_mode)
             if coins <= 0:
                 continue
