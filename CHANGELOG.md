@@ -1,5 +1,8 @@
 # Changelog
 
+## server 1.34.1 (no app change): weekend case w003 reviewed and rewritten (21 Oct 2026)
+- **w003 «حراجِ ساعت‌های خاموش»** (opens Thu 22 Oct 09:00): the culprit was named by single cards, the motive options each named a suspect, the watch was never accounted for and several lies were never explained. Rewritten clue chain (clock stopped with the generator tag, theft before the ceremony, fake call from the locked management room, sale to the partner), every innocent's side secret explained, names that clashed with this week's cases changed (Iraj Mostofi, Malihe Roshan). Blind-tested: night 1 leaning (50%), full case 95% in 8 steps with no single giveaway card; difficulty set to **4** (was 5). Details in `docs/case-log.md`.
+
 ## server 1.34.0 (no app change): economy health screen and calmer prices (Amin, 21 Oct 2026)
 - **Admin tab «🪙 اقتصاد سکه»** (`/admin/api/economy`): coin flow by source and item, desire vs escape spending, balance buckets of active players, hints and tool use, what happens after a loss, first-day spenders vs the rest, plus plain-language notes. Details: `docs/operations.md` «Economy health». Read-only, no new tracking, no player data in the answer. Tests: `server/tests/test_economy_report.py`; the admin menu test now expects 10 tabs.
 - **Prices (final for now):** hints **40 / 80 / 120** (was 30/50/80; the 50/90/140 of 1.33.1 was too steep for a stuck player), tools **35 / 65 / 100**. Why: the free income is about 100 coins a day for an engaged player and a solved case pays 6-45, so the third hint at 120 is about a day of income and the first at 40 is one case's reward. Revenue: sinks stay meaningful without making the lost-case moment feel like a trap. Revisit after a week of the new screen.
