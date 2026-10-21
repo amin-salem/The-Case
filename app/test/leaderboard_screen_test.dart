@@ -129,7 +129,7 @@ void main() {
     for (final part in ['جمعه‌ها ساعت ۲۱', 'هفته‌ی منصفانه', 'اول ۱۲۰ سکه، دوم ۸۰ سکه، سوم ۵۰ سکه', 'اگه امتیازها برابر شد', 'از «بازرس» تا «سربازرس»']) {
       expect(find.textContaining(part, skipOffstage: false), findsOneWidget, reason: part);
     }
-    await t.tap(find.text('فهمیدم'));
+    await t.tap(find.byKey(const ValueKey('lb-info-close')));
     await pump(t);
     expect(find.byKey(const ValueKey('lb-info-sheet')), findsNothing);
   });
