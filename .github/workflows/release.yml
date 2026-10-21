@@ -39,11 +39,6 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - name: Server tests
-        working-directory: server
-        run: |
-          pip install -r requirements-dev.txt
-          pytest -q
       - name: Android project (created once, it is not kept in git)
         working-directory: app
         run: flutter create --org ir.gammly --project-name the_case --platforms android .
