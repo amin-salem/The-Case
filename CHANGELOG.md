@@ -1,5 +1,9 @@
 # Changelog
 
+## server 1.34.0 (no app change): economy health screen and calmer prices (Amin, 21 Oct 2026)
+- **Admin tab «🪙 اقتصاد سکه»** (`/admin/api/economy`): coin flow by source and item, desire vs escape spending, balance buckets of active players, hints and tool use, what happens after a loss, first-day spenders vs the rest, plus plain-language notes. Details: `docs/operations.md` «Economy health». Read-only, no new tracking, no player data in the answer. Tests: `server/tests/test_economy_report.py`; the admin menu test now expects 10 tabs.
+- **Prices (final for now):** hints **40 / 80 / 120** (was 30/50/80; the 50/90/140 of 1.33.1 was too steep for a stuck player), tools **35 / 65 / 100**. Why: the free income is about 100 coins a day for an engaged player and a solved case pays 6-45, so the third hint at 120 is about a day of income and the first at 40 is one case's reward. Revenue: sinks stay meaningful without making the lost-case moment feel like a trap. Revisit after a week of the new screen.
+
 ## server 1.33.1 (no app change): higher hint and tool prices (Amin, 21 Oct 2026)
 - Hints 30/50/80 -> **50/90/140**; detective tools 25/45/70 -> **40/70/110** (`economy.HINT_COSTS`, `economy.TOOL_PRICES`). The app reads both from the server (`hint_costs`, the tool tray), so no new APK is needed. Why: a hint cost less than one solve reward (6-45 coins), so nobody needed coins; tools stay a little under the hint beside them because they narrow the search without naming a card. A new player (100 coins) can still buy the first hint; the first tool of each kind stays free. Revenue: every hint and tool now takes a larger share of the free income, which is what sends players to the coin packs (400 / 1300 / 3600).
 

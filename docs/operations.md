@@ -476,6 +476,24 @@ variables, schema migration or economy configuration are required.
 - **Logs:** one line per decision, no player data: `streak_repair decision=repaired|not_eligible|not_enough_coins|already_repaired|disabled streak=N price=N` (logger `streak`). Count them in the Liara logs to see conversion.
 - Migration 0028 (`players.streak_repair_mark`, table `streak_repairs`), additive.
 
+## Economy health «اقتصاد سکه» (21 Oct 2026, server 1.34.0)
+Admin panel tab «🪙 اقتصاد سکه» (`GET /admin/api/economy?days=14`, 1-60 days, cached 60 s per worker, `app/services/economy_report.py`).
+It answers one question: is the coin economy fair enough that players stay AND pay? Derived from `coin_log`, `players`,
+`case_progress` and `case_tool_uses`; smoke-test and banned players are left out; no player id or nickname in the answer; a failing
+section returns `{"error": "section_failed"}` and the rest still works.
+- **Flow:** coins given (by source) and spent (by item), and the split of spending into *desire* (avatars/frames, archive, streak
+  insurance, story skips, riddle unlocks) and *escape* (hints, detective tools, reopening a lost case, mending a streak). Mostly
+  escape spending means the game earns from frustration; it feels like a trap and players leave.
+- **Balances:** coins of players active in the last 7 days in buckets, and the share who can afford the first hint. Many above 700 =
+  prices too low or nothing attractive to buy; many at 0 = pressure too high.
+- **Cases, hints, tools:** failed %, share of finished cases with 1/3 hints, average hints, tool uses by source (free / stock / coins).
+- **After a loss:** of the cases lost, how many players opened another case afterwards, and how many paid the second chance.
+- **First day:** new players who spent coins on a hint/tool/reopen in their first 24 h versus the others: did they come back later
+  (seen again 24 h+ after signup)? A sample of at most 5000 newest players.
+- **Notes:** a few plain sentences (`economy_report.notes`) such as "62 % of spending is escape". They are a guide; they need days of data.
+- **Prices set 21 Oct 2026 on this reading:** hints 40 / 80 / 120 (were 30/50/80), tools 35 / 65 / 100. The first hint stays within reach of a
+  new player (100 coins), the third is about one day of full free income. Review after a week of the screen's numbers.
+
 ## Detective tools «ابزارهای کارآگاهی» (20 Oct 2026, server 1.33.0, app 1.33.0+66)
 Three consumables on the daily case screen. They narrow the search, never solve it: no card is named, the culprit is never
 said, plaques and stars are untouched, and a tool never counts as investigation (active time and interrogated suspects are
@@ -487,7 +505,7 @@ what anti-cheat reads, so a solve with tools alone is still unranked).
   `POST /v1/cases/{id}/tools/{kind}/use` (stock or the one-time tutorial tool; 409 `no_tool {price}` otherwise) and
   `POST /v1/cases/{id}/tools/{kind}/buy` (coins; buys one and uses it in the same transaction). Body `{suspect}` for
   fingerprint and camera. Daily cases only: weekend/story answer 409 `tools_not_for_this_case` and the tray says so.
-- **Prices** (`economy.TOOL_PRICES`): magnifier 40, fingerprint 70, camera 110 (hints are 50/90/140; both raised on 21 Oct 2026, was 25/45/70 and 30/50/80). The first of each kind per
+- **Prices** (`economy.TOOL_PRICES`): magnifier 35, fingerprint 65, camera 100 (hints are 40/80/120; both raised on 21 Oct 2026, were 25/45/70 and 30/50/80). The first of each kind per
   player is free ONCE (`player_tools.free_used`, claimed by a guarded UPDATE). The only other free source is a rare drop at
   existing reward points: the 7th chest day in a row (`ChestOut.tool`, kind rotates) and the achievements in
   `economy.TOOL_DROP_ACHIEVEMENTS` (streak_30 fingerprint, cases_50 magnifier, interrogate_10 camera).

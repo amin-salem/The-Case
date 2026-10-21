@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .. import content
 from ..config import get_settings
 from ..cache import TTLCache
+from ..services import economy_report as economy_service
 from ..services import funnel as funnel_service
 from ..services import health as health_service
 from ..db import get_session
@@ -315,6 +316,22 @@ async def funnel_report(days: int = Query(30, ge=1, le=funnel_service.MAX_DAYS),
     out = await funnel_service.build(session, days)
     if not any(isinstance(v, dict) and v.get("error") for v in out.values()):  # never cache a partial answer
         _funnel_cache.put_sync(days, out)
+    return out
+
+
+_economy_cache = TTLCache("admin_economy", ttl=60, max_size=8)
+
+
+@router.get("/economy")
+async def economy_report(days: int = Query(14, ge=1, le=economy_service.MAX_DAYS), session: AsyncSession = Depends(get_session)):
+    """Coin economy health: flows, balances, hints and tools, what happens after a loss (docs/operations.md «Economy health»).
+    Cached 60 s per worker; a failing section comes back as {"error": "section_failed"}."""
+    hit = _economy_cache.get_sync(days)
+    if hit is not None:
+        return hit
+    out = await economy_service.build(session, days)
+    if not any(isinstance(v, dict) and v.get("error") for v in out.values()):
+        _economy_cache.put_sync(days, out)
     return out
 
 

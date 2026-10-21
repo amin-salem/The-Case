@@ -168,7 +168,7 @@ async function api(path, opts = {}) {
   if (!r.ok) throw new Error('خطا ' + r.status + ': ' + (await r.text()).slice(0, 200));
   return r.json();
 }
-const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت زنده'],['players','👥 بازیکن‌ها'],['cases','🗂 پرونده‌ها'],['comments','💬 نظرها'],['money','💰 پول و سکه'],['funnel','🧭 قیف و ماندگاری'],['health','🩺 سلامت'],['actions','⚙ اقدام‌ها']];
+const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت زنده'],['players','👥 بازیکن‌ها'],['cases','🗂 پرونده‌ها'],['comments','💬 نظرها'],['money','💰 پول و سکه'],['funnel','🧭 قیف و ماندگاری'],['economy','🪙 اقتصاد سکه'],['health','🩺 سلامت'],['actions','⚙ اقدام‌ها']];
 // remember the open tab (per browser tab / app session) so a reload or a refresh never jumps elsewhere
 let tab = 'overview', timer = null;
 try { const t = sessionStorage.getItem('adminTab'); if (TABS.some(x => x[0] === t)) tab = t; } catch (e) {}
@@ -356,6 +356,39 @@ const VIEWS = {
       try { await navigator.clipboard.writeText(data.text); note('کپی شد'); }
       catch (e) { const t = document.createElement('textarea'); t.value = data.text; t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); note('کپی شد'); } catch (e2) { note('کپی نشد'); } t.remove(); }
     };
+    await load();
+  },
+  async economy(m) {
+    const pc = v => v == null ? '—' : num(v) + '٪', n0 = v => v == null ? '—' : num(v);
+    const bar = (v, cls) => `<span class="fbar ${cls || ''}"><i style="width:${Math.max(0, Math.min(100, v || 0))}%"></i></span>`;
+    const sec = (d, k, f) => d[k] && d[k].error ? '<p class="err">این بخش الان خطا داد؛ بقیه‌ی صفحه سالم است. چند لحظه بعد دوباره بزن.</p>' : f(d[k]);
+    const tbl = (head, rows) => `<div class="scroll"><table><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr>${rows.join('')}</table></div>`;
+    const NAMES = {solve: 'حل پرونده', daily_login: 'ورود روزانه', chest: 'صندوقچه', achievement: 'نشان', welcome: 'سکه‌ی شروع', buy: 'خرید بسته', hint: 'سرنخ', tool: 'ابزار کارآگاهی', unlock: 'بایگانی', reopen: 'فرصت دوباره', avatar: 'آواتار و قاب', streak_freeze: 'محافظ زنجیره', streak_repair: 'ترمیم زنجیره', story_skip: 'رد کردن انتظار داستان', riddle_unlock: 'قفل معما', riddle: 'معما', ad: 'تبلیغ', liar: 'شب اول آخر هفته', secure_account: 'امن کردن حساب'};
+    const GROUP = {desire: 'میل بازیکن', escape: 'فرار از گیر', other: 'سایر'};
+    const nm = k => esc(NAMES[k] || k);
+    m.innerHTML = '<div class="row"><span class="muted">بازه:</span><span id="edays"></span><button id="ere">تازه‌سازی</button><span class="muted" id="eat"></span></div><div id="ebody"></div>';
+    let days = 14, data = null;
+    const show = () => {
+      $('#edays').innerHTML = [7, 14, 30, 60].map(x => `<button data-d="${x}" class="${x === days ? 'on' : ''}">${num(x)} روز</button>`).join(' ');
+      $('#edays').querySelectorAll('button').forEach(b => b.onclick = () => { days = +b.dataset.d; load(); });
+      const d = data; $('#eat').textContent = 'ساخته‌شده: ' + fmtT(d.generated_at);
+      const nt = '<div class="hcard"><h3>خلاصه‌ی عددها</h3>' + d.notes.map(x => '<p>• ' + esc(x) + '</p>').join('') + '<p class="muted">این‌ها راهنما هستند نه حکم؛ بعد از چند روز داده معنی می‌دهند.</p></div>';
+      const fl = sec(d, 'flows', f => {
+        const sp = f.spent_split_pct;
+        return `<div class="cards">${card(f.earned_total, 'سکه‌ی داده‌شده')}${card(f.spent_total, 'سکه‌ی خرج‌شده')}${card(f.spent_to_earned_pct == null ? 0 : f.spent_to_earned_pct, 'خرج ٪ از دریافتی')}<div class="card"><b>${pc(sp.desire)} / ${pc(sp.escape)}</b><span>خرج میل بازیکن / فرار از گیر</span></div></div>` +
+          '<h3>سکه از کجا می‌آید</h3>' + tbl(['منبع', 'سکه', 'سهم', ''], f.earned.map(r => `<tr><td>${nm(r.kind)}</td><td class="num">${n0(r.coins)}</td><td class="num">${pc(r.pct)}</td><td style="width:35%">${bar(r.pct, 'ok')}</td></tr>`)) +
+          '<h3>سکه کجا خرج می‌شود</h3>' + tbl(['خرج', 'نوع', 'سکه', 'سهم', 'تعداد', ''], f.spent.map(r => `<tr><td>${nm(r.kind)}</td><td>${GROUP[r.group]}</td><td class="num">${n0(r.coins)}</td><td class="num">${pc(r.pct)}</td><td class="num">${n0(r.times)}</td><td style="width:30%">${bar(r.pct, r.group === 'escape' ? 'bad' : 'ok')}</td></tr>`));
+      });
+      const bl = sec(d, 'balances', b => `<p class="muted">کارآگاه‌های فعال ${num(b.active_days)} روز اخیر: ${num(b.active_players)}. قیمت سرنخ‌ها: ${b.prices.hints.map(num).join(' / ')}؛ ابزارها: ${Object.values(b.prices.tools).map(num).join(' / ')}.</p><div class="cards">${card(b.can_afford_first_hint_pct == null ? 0 : b.can_afford_first_hint_pct, 'به قیمت اولین سرنخ (' + num(b.first_hint_price) + ') می‌رسند ٪')}</div>` +
+        tbl(['سکه‌ی موجود', 'کارآگاه', 'درصد', ''], b.buckets.map(x => `<tr><td>${esc(x.label)}</td><td class="num">${n0(x.players)}</td><td class="num">${pc(x.pct)}</td><td style="width:40%">${bar(x.pct)}</td></tr>`)));
+      const cs = sec(d, 'cases', c => `<div class="cards">${card(c.finished, 'پرونده‌ی تمام‌شده')}${card(c.failed_pct == null ? 0 : c.failed_pct, 'شکست ٪')}${card(c.with_hint_pct == null ? 0 : c.with_hint_pct, 'با حداقل یک سرنخ ٪')}${card(c.with_3_hints_pct == null ? 0 : c.with_3_hints_pct, 'با سه سرنخ ٪')}<div class="card"><b>${c.avg_hints == null ? '—' : num(c.avg_hints)}</b><span>میانگین سرنخ</span></div></div>` +
+        '<h3>ابزارهای کارآگاهی</h3>' + (c.tools.length ? tbl(['ابزار', 'رایگان (آموزشی)', 'از موجودی', 'با سکه'], c.tools.map(t => `<tr><td>${esc(t.kind)}</td><td class="num">${n0(t.free)}</td><td class="num">${n0(t.stock)}</td><td class="num">${n0(t.coins)}</td></tr>`)) : '<p class="muted">هنوز استفاده‌ای نبوده.</p>'));
+      const al = sec(d, 'after_loss', a => `<div class="cards">${card(a.lost_cases, 'پرونده‌ی باخته')}${card(a.came_back_pct == null ? 0 : a.came_back_pct, 'بعدش پرونده‌ی دیگری باز کردند ٪')}${card(a.paid_second_chance, 'فرصت دوباره‌ی پولی')}</div>`);
+      const fd = sec(d, 'first_day', x => x.players ? `<p class="muted">${num(x.players)} کارآگاه تازه (دست‌کم ۲ روز از ثبت‌نامشان گذشته). «برگشته» یعنی ۲۴ ساعت یا بیشتر بعد از ثبت‌نام دوباره دیده شده.</p><div class="cards">${card(x.spent_first_day, 'روز اول برای سرنخ/ابزار خرج کردند')}${card(x.spenders_came_back_pct == null ? 0 : x.spenders_came_back_pct, 'برگشتند ٪ (خرج‌کرده‌ها)')}${card(x.others_came_back_pct == null ? 0 : x.others_came_back_pct, 'برگشتند ٪ (بقیه)')}</div>` : '<p class="muted">هنوز داده‌ای نیست.</p>');
+      $('#ebody').innerHTML = nt + '<h2>۱. جریان سکه</h2>' + fl + '<h2>۲. موجودی فعال‌ها</h2>' + bl + '<h2>۳. پرونده، سرنخ و ابزار</h2>' + cs + '<h2>۴. بعد از باخت</h2>' + al + '<h2>۵. خرج روز اول و ماندن</h2>' + fd;
+    };
+    const load = async () => { $('#ere').disabled = true; try { data = await api('/admin/api/economy?days=' + days); show(); } catch (e) { $('#ebody').innerHTML = '<p class="err">' + esc(e.message) + '</p>'; } finally { $('#ere').disabled = false; } };
+    $('#ere').onclick = load;
     await load();
   },
   async money(m) {

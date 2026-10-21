@@ -34,7 +34,7 @@ const {chromium} = require('playwright');
       assert.equal(await nav.isVisible(), false);
       await toggle.click();
       assert.equal(await nav.isVisible(), true);
-      assert.equal(await nav.locator('button').count(), 9);
+      assert.equal(await nav.locator('button').count(), 10);
       const box = await nav.boundingBox();
       assert.ok(box.x >= -1 && box.x + box.width <= width + 1, 'menu must stay within screen width');
       assert.ok(box.height <= height * .71, 'short screens must get a scrollable menu');
