@@ -58,6 +58,9 @@ Future<void> pump(WidgetTester t, [int times = 4]) async {
 
 Future<void> openCase(WidgetTester t, Map<String, dynamic> json) async {
   serve(json);
+  t.view.physicalSize = const Size(800, 6000); // tall: every card is built (lists are lazy)
+  t.view.devicePixelRatio = 1;
+  addTearDown(t.view.reset);
   await t.pumpWidget(MaterialApp(theme: buildTheme(), home: CaseScreen(caseId: json['id'] as String)));
   await pump(t);
 }
