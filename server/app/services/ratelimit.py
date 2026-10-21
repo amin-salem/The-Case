@@ -36,7 +36,7 @@ UNAVAILABLE_MESSAGE = "الان نمی‌شود. کمی بعد دوباره ام
 RETENTION = 2 * 86400 + 3600  # seconds a counter row is kept (longest window is one day, plus the previous window)
 DEV_ADMIN_KEY = "change-me-admin-dev-only"
 
-EXEMPT_PATHS = {"/health", "/privacy", "/terms", "/delete-account", "/admin/ui", "/docs", "/openapi.json",
+EXEMPT_PATHS = {"/", "/health", "/privacy", "/terms", "/delete-account", "/support", "/admin/ui", "/docs", "/openapi.json",
                 "/docs/oauth2-redirect", "/favicon.ico", "/robots.txt"}
 EXEMPT_PREFIXES = ("/static/",)
 

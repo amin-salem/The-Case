@@ -13,6 +13,7 @@ import '../theme.dart';
 import '../widgets/cast_strip.dart';
 import '../widgets/claim_notes.dart';
 import '../widgets/category.dart';
+import '../widgets/chapter_ui.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/character.dart';
 import '../widgets/coach_marks.dart';
@@ -81,6 +82,12 @@ class _CaseScreenState extends State<CaseScreen> {
   int? _coach;
   bool _coachChecked = false;
   TabController? _tabs;
+  // weekend cases (chapters): what the player has opened, the chapter filter, the «فصل N باز شد» banner
+  ChapterSeen? _chSeen;
+  int? _chFilter; // null = all chapters
+  int _banner = 0; // the chapter whose banner is showing (0 = none)
+  Timer? _chapterTimer;
+  int _chapterRetries = 0;
   final _evidenceTabKey = GlobalKey();
   final _suspectsTabKey = GlobalKey();
   final _accuseKey = GlobalKey();
@@ -94,10 +101,51 @@ class _CaseScreenState extends State<CaseScreen> {
     CaseClock.i.start(widget.caseId); // solving time counts only while this screen is open
     _loadNotes();
     _load();
+    unawaited(_loadChapterSeen());
+  }
+
+  Future<void> _loadChapterSeen() async {
+    final seen = await ChapterSeen.load(widget.caseId);
+    if (!mounted) return;
+    setState(() => _chSeen = seen);
+    _updateBanner();
+  }
+
+  /// A weekend case: the banner for the newest chapter, when something in it has not been opened yet.
+  void _updateBanner() {
+    final c = _case, seen = _chSeen;
+    if (c == null || seen == null || !mounted) return;
+    final n = bannerChapter(c, seen);
+    if (n != _banner) setState(() => _banner = n ?? 0);
+  }
+
+  /// The next chapter opens while the player is still in the case: load it again a moment after it opens.
+  void _scheduleChapterReload(CaseData c) {
+    _chapterTimer?.cancel();
+    final at = c.nextChapterAt;
+    if (!isChaptered(c) || at == null) return;
+    final wait = at.difference(DateTime.now());
+    final delay = wait.isNegative ? Duration(seconds: 15 * (_chapterRetries < 4 ? 1 : 4)) : wait + const Duration(seconds: 2);
+    if (wait.isNegative) _chapterRetries++;
+    _chapterTimer = Timer(delay, () {
+      if (mounted) _load();
+    });
+  }
+
+  void _closeBanner({bool go = false}) {
+    final n = _banner;
+    if (n == 0) return;
+    setState(() {
+      _banner = 0;
+      if (go) _chFilter = n;
+    });
+    unawaited(_chSeen?.setBanner(n));
+    if (go) _tabs?.animateTo(1);
   }
 
   @override
   void dispose() {
+    _chapterTimer?.cancel();
     Api.i.removeListener(_noteAccountChanged);
     CaseClock.i.stop();
     super.dispose();
@@ -186,7 +234,14 @@ class _CaseScreenState extends State<CaseScreen> {
         _case = c;
         _progress = p;
         if (p.finished || p.hints.isNotEmpty || p.attempts > 0) _intro = false;
+        // a chapter that is open can be filtered; one that vanished (never expected) cannot stay selected
+        if (_chFilter != null && _chFilter! > openChapters(c)) _chFilter = null;
       });
+      if (isChaptered(c)) {
+        if (c.nextChapterAt == null || c.nextChapterAt!.isAfter(DateTime.now())) _chapterRetries = 0;
+        _scheduleChapterReload(c);
+        _updateBanner();
+      }
       unawaited(_loadTools());
       // the case file opens with its own sting and the sounds of the place
       if (_intro) {
@@ -541,6 +596,8 @@ class _CaseScreenState extends State<CaseScreen> {
             child: Column(children: [
               _header(c, p),
               const OfflineBanner(margin: EdgeInsets.fromLTRB(12, 8, 12, 0)),
+              if (_banner > 0 && isChaptered(c))
+                ChapterBanner(text: chapterBannerText(c, _banner), onGo: () => _closeBanner(go: true), onClose: _closeBanner),
               TabBar(
                 indicatorColor: K.stamp,
                 labelColor: K.text,
@@ -836,20 +893,36 @@ class _CaseScreenState extends State<CaseScreen> {
   }
 
   Widget _evidenceTab(CaseData c) {
+    final chaptered = isChaptered(c);
+    final seen = _chSeen ?? ChapterSeen(c.id);
+    final all = chapterEvidence(c); // a nightly case: exactly c.evidence
+    final shown = chaptered && _chFilter != null ? [for (final e in all) if (e.chapter == _chFilter) e] : all;
+    final fresh = {for (final e in newEvidence(c, seen)) e.id};
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      itemCount: c.evidence.length + 1,
+      itemCount: shown.length + 1 + (chaptered && shown.isEmpty ? 1 : 0),
       itemBuilder: (_, j) {
         if (j == 0) {
           return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           _evidenceHeader(c),
+          if (chaptered)
+            ChapterFilterRow(
+                chapters: openChapters(c), selected: _chFilter, newCounts: newCardsByChapter(c, seen),
+                onSelect: (n) => setState(() => _chFilter = n)),
           ClaimNotesPanel(caseData: c, links: _claimLinks, onAdd: () => _editClaim(),
             onEdit: (link) => _editClaim(existing: link), onRemove: _removeClaim),
           const SizedBox(height: 8),
           ]);
         }
-        final i = j - 1;
-        final e = c.evidence[i];
+        if (shown.isEmpty) {
+          return Padding(
+            key: const ValueKey('chap-empty'),
+            padding: const EdgeInsets.symmetric(vertical: 28),
+            child: Text('این فصل مدرک تازه‌ای نداره', textAlign: TextAlign.center, style: tBody(14, color: K.textSoft)),
+          );
+        }
+        final e = shown[j - 1];
+        final i = max(0, c.evidence.indexOf(e)); // the number on the card does not change with the filter
         final key = (_progress?.finished ?? false) && c.proof.contains(e.id);
         final pinned = _pins.contains(e.id);
         final irrelevant = _tray?.irrelevantCards.contains(e.id) ?? false;
@@ -863,6 +936,12 @@ class _CaseScreenState extends State<CaseScreen> {
                 _seen.add(e.id);
               });
               _saveNotes();
+              if (chaptered) {
+                unawaited(seen.markEvidence(e.id));
+                _chSeen ??= seen;
+                setState(() {});
+                _updateBanner();
+              }
             },
             child: AnimatedRotation(
             turns: pinned ? 0 : ((i % 3) - 1) * 0.0015,
@@ -885,6 +964,14 @@ class _CaseScreenState extends State<CaseScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    if (chaptered)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Wrap(spacing: 6, runSpacing: 4, children: [
+                          KeyedSubtree(key: ValueKey('chap-e-${e.id}'), child: ChapterBadge(e.chapter)),
+                          if (fresh.contains(e.id)) NewTag('تازه', key: ValueKey('new-e-${e.id}')),
+                        ]),
+                      ),
                     Row(children: [
                       Expanded(child: Text(e.title, style: tBody(15, color: K.ink, w: FontWeight.w900))),
                       const SizedBox(width: 6),
@@ -896,11 +983,6 @@ class _CaseScreenState extends State<CaseScreen> {
                     TextButton.icon(onPressed: () => _editClaim(evidence: e.id),
                       icon: const Icon(Icons.add_link_rounded, size: 18, color: K.stamp),
                       label: Text('پیوند به حرف مظنون', style: tBody(12.5, color: K.stamp))),
-                    if (c.twoNights && e.chapter >= 2)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text('تازه · شب دوم', key: ValueKey('night2-${e.id}'), style: tBody(11.5, color: K.stamp, w: FontWeight.w900)),
-                      ),
                     if (irrelevant)
                       Text('بی‌ربط · ذره‌بین', key: ValueKey('irrelevant-${e.id}'), style: tBody(12, color: K.inkSoft, w: FontWeight.w900)),
                     if (key) Text('مدرک کلیدی', style: tBody(12, color: K.stamp, w: FontWeight.w900)),
@@ -924,6 +1006,13 @@ class _CaseScreenState extends State<CaseScreen> {
   /// The full suspect sheet (interrogation); used by the Suspects tab, the cast strip and the chips.
   Future<void> _openSuspect(Suspect s) async {
     unawaited(Api.i.markSeen(widget.caseId, s.id));
+    final caseNow = _case;
+    if (caseNow != null && isChaptered(caseNow)) {
+      final seen = _chSeen ??= ChapterSeen(widget.caseId);
+      unawaited(seen.markSuspect(s.id));
+      if (mounted) setState(() {});
+      _updateBanner();
+    }
     void keep(SuspectMark m) {
       _marks[s.id] = m; // saved at once: closing the sheet any way must not lose it
       _saveNotes();
@@ -949,11 +1038,24 @@ class _CaseScreenState extends State<CaseScreen> {
   }
 
   Widget _suspectsTab(CaseData c) {
+    final chaptered = isChaptered(c);
+    final seen = _chSeen ?? ChapterSeen(c.id);
+    final fresh = {for (final s in newSuspects(c, seen)) s.id};
+    final list = chaptered ? newSuspectsFirst(chapterSuspects(c), c, seen) : c.suspects;
+    final header = chaptered && fresh.isNotEmpty ? 1 : 0;
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      itemCount: c.suspects.length,
-      itemBuilder: (_, i) {
-        final s = c.suspects[i];
+      itemCount: list.length + header,
+      itemBuilder: (_, k) {
+        if (header == 1 && k == 0) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text('${fa(fresh.length)} مظنون تازه', key: const ValueKey('sus-new-header'), style: tBody(13.5, color: K.stamp, w: FontWeight.w900)),
+          );
+        }
+        final i = k - header;
+        final s = list[i];
+        final isNew = fresh.contains(s.id);
         final mark = _marks[s.id] ?? SuspectMark.none;
         final culprit = (_progress?.finished ?? false) && c.culprit == s.id;
         return FadeSlideIn(
@@ -967,7 +1069,7 @@ class _CaseScreenState extends State<CaseScreen> {
                 color: K.night2,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                    color: culprit ? K.stamp : mark == SuspectMark.suspicious ? K.brass : K.night3, width: culprit ? 2 : 1),
+                    color: culprit ? K.stamp : isNew ? K.brass : mark == SuspectMark.suspicious ? K.brass : K.night3, width: culprit || isNew ? 2 : 1),
               ),
               child: Row(children: [
                 Container(
@@ -977,6 +1079,14 @@ class _CaseScreenState extends State<CaseScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    if (isNew)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: NewTag('مظنون تازه · فصل ${fa(suspectChapter(s))}', key: ValueKey('new-s-${s.id}'), onDark: true),
+                        ),
+                      ),
                     Row(children: [
                       Expanded(child: Text(s.name, style: tBody(16, w: FontWeight.w900))),
                       if (culprit) Text('مقصر', style: tBody(12, color: K.stamp, w: FontWeight.w900))

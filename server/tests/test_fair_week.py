@@ -305,3 +305,63 @@ async def test_leagues_kill_switch_falls_back_to_one_board(client, clock, single
     await solve(p["player_id"], wid(ws, 0), 3, T(2027, 5, 8, 10))
     b = await board(client, p["headers"])
     assert b["league"] is None and b["leagues"] == [] and b["me"]["rank"] == 1
+
+
+# ------------------------------------------------------------------ league names and rank titles agree (21 Oct 2026)
+def test_every_profile_rank_is_in_exactly_one_league():
+    """9 profile ranks, 4 leagues: each rank title belongs to one league, the ranges touch and nothing is left out."""
+    from app import economy as eco
+    seen = []
+    for i in range(len(weekboard.LEAGUES)):
+        a, b = weekboard.league_ranks(i)
+        assert a <= b
+        seen += list(range(a, b + 1))
+        info = weekboard.league_info(i)
+        assert info["name"] == weekboard.LEAGUES[i] and info["min_xp"] == eco.RANKS[a][0]
+        assert info["from_rank"] == eco.RANKS[a][1] and info["to_rank"] == eco.RANKS[b][1]
+    assert seen == list(range(len(eco.RANKS)))
+    for r in range(len(eco.RANKS)):
+        assert weekboard.league_for_xp(eco.RANKS[r][0]) == weekboard.LEAGUES.index(weekboard.league_name_of_rank(r))
+
+
+async def test_sarbazras_row_shows_profile_rank_and_league(client, clock, leagues, week_of_fake_cases):
+    """A player at the XP of «سربازرس» (the reyhoon case): the league is «بازرس» (the range بازرس..سربازرس), and his row
+    shows the title «سربازرس» exactly like his profile."""
+    from app import economy as eco
+    idx = next(i for i, (_, t) in enumerate(eco.RANKS) if t == "سربازرس")
+    ws = date(2027, 6, 11)
+    clock(T(2027, 6, 12, 12))
+    rey = await new_player(client, "fw-rey")
+    await set_player(rey["player_id"], xp=eco.RANKS[idx][0], cases_solved=20, nickname="reyhoon")
+    await solve(rey["player_id"], wid(ws, 0), 3, T(2027, 6, 12, 10))
+    prof = (await client.get("/v1/me", headers=rey["headers"])).json()
+    assert prof["rank_title"] == "سربازرس"
+    b = await board(client, rey["headers"])
+    assert b["my_league"] == b["league"] == 2 and b["me"]["rank"] == 1
+    row = next(r for r in b["top"] if r["nickname"] == "reyhoon")
+    assert row["rank_title"] == prof["rank_title"] == "سربازرس"
+    assert row["league_name"] == "بازرس" == b["leagues"][2]["name"]
+    info = b["leagues"][2]
+    assert (info["from_rank"], info["to_rank"]) == ("بازرس", "سربازرس") and info["min_xp"] == eco.RANKS[4][0]
+    assert "بازرس" in b["title"] and b["me"]["league_name"] == "بازرس"
+
+
+async def test_promoted_during_the_week_keeps_the_weeks_league_but_shows_the_current_rank(client, clock, leagues, week_of_fake_cases):
+    """XP of کارآگاه ارشد at the week's start, grows to سربازرس on Monday: league stays «کارآگاه», row title is the
+    NEW profile rank. This is the by-design difference that looked like a bug."""
+    from app import economy as eco
+    ws = date(2027, 6, 18)
+    clock(T(2027, 6, 19, 9))
+    p = await new_player(client, "fw-promo")
+    await set_player(p["player_id"], xp=eco.RANKS[3][0], cases_solved=9, nickname="promo")
+    async with db.SessionLocal() as s:
+        await weekboard.ensure_snapshot(s, ws)               # the week's start
+    await set_player(p["player_id"], xp=eco.RANKS[5][0])     # promoted to سربازرس later
+    clock(T(2027, 6, 21, 12))
+    await solve(p["player_id"], wid(ws, 0), 2, T(2027, 6, 21, 10))
+    b = await board(client, p["headers"])
+    row = next(r for r in b["top"] if r["me"])
+    assert b["my_league"] == 1 and row["league_name"] == "کارآگاه" and row["rank_title"] == "سربازرس"
+    # he is NOT on the board of the league «بازرس» this week
+    other = await board(client, p["headers"], league=2)
+    assert not any(r["me"] for r in other["top"])

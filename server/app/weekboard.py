@@ -30,9 +30,17 @@ from .models import CaseProgress, Player, WeekLeague
 
 log = logging.getLogger("weekboard")
 
-LEAGUES = ("تازه‌کار", "کارآگاه", "بازرس", "سرپرست")
-# a league starts at the XP of these ranks of economy.RANKS: تازه‌کار (دستیار) | کارآگاه (ارشد) | بازرس (سربازرس) | نخبه and up
-LEAGUE_FROM_RANK = (0, 2, 4, 6)
+# THE ONE PLACE where the league names and limits live (Amin, 21 Oct 2026: the board and the profile must agree).
+# A league is a RANGE of the 9 profile ranks of economy.RANKS and is decided by the XP the player had when the week's
+# snapshot was taken (the start of the week). The row of a player always shows his CURRENT profile rank title; the league
+# only says which board he plays on this week. Leagues are named by their range, not by one rank title:
+#   0 تازه‌کار  = تازه‌کار .. دستیار کارآگاه      (from 0 XP)
+#   1 کارآگاه   = کارآگاه .. کارآگاه ارشد         (from RANKS[2])
+#   2 بازرس     = بازرس .. سربازرس                (from RANKS[4])   <- «سربازرس» plays in the league «بازرس»
+#   3 سرپرست    = کارآگاه نخبه .. افسانه           (from RANKS[6])
+LEAGUE_DEFS = (("تازه‌کار", 0), ("کارآگاه", 2), ("بازرس", 4), ("سرپرست", 6))   # (name, first rank index of economy.RANKS)
+LEAGUES = tuple(n for n, _ in LEAGUE_DEFS)
+LEAGUE_FROM_RANK = tuple(r for _, r in LEAGUE_DEFS)
 MARKER = "*"          # WeekLeague row: «the snapshot of this week exists»
 MIN_CASES_FOR_PRIZE = 2   # a prize needs at least this many of the week's cases solved (an empty league is no free coins)
 BOARD_TTL = 45        # seconds a board is kept per worker
@@ -49,6 +57,24 @@ class Standing:
 
 def league_min_xp() -> tuple[int, ...]:
     return tuple(eco.RANKS[i][0] for i in LEAGUE_FROM_RANK)
+
+
+def league_ranks(i: int) -> tuple[int, int]:
+    """(first, last) index into economy.RANKS of league i."""
+    first = LEAGUE_FROM_RANK[i]
+    last = LEAGUE_FROM_RANK[i + 1] - 1 if i + 1 < len(LEAGUE_FROM_RANK) else len(eco.RANKS) - 1
+    return first, last
+
+
+def league_info(i: int) -> dict:
+    """What the app shows for league i: its name, the XP it starts at and the first/last profile rank title inside it."""
+    a, b = league_ranks(i)
+    return {"id": i, "name": LEAGUES[i], "min_xp": eco.RANKS[a][0], "from_rank": eco.RANKS[a][1], "to_rank": eco.RANKS[b][1]}
+
+
+def league_name_of_rank(rank_index: int) -> str:
+    """The league whose range holds this profile rank (every one of the 9 ranks is in exactly one league)."""
+    return LEAGUES[max(i for i in range(len(LEAGUES)) if LEAGUE_FROM_RANK[i] <= rank_index)]
 
 
 def league_for_xp(xp: int) -> int:

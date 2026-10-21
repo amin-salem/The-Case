@@ -48,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _deleteAccount() async {
     if (!needOnline(context)) return;
     final ok = await confirm(context, 'حذف حساب',
-        'حساب، پیشرفت، سکه‌ها و ایمیلت برای همیشه پاک می‌شه و برگشت‌پذیر نیست. مطمئنی؟', 'حذف برای همیشه');
+        'حساب، پیشرفت، سکه‌ها، نظرها و شماره یا ایمیلت برای همیشه پاک می‌شه و برگشت‌پذیر نیست. مطمئنی؟', 'حذف برای همیشه');
     if (!ok || !mounted) return;
     final err = await Api.i.deleteAccount();
     if (!mounted) return;

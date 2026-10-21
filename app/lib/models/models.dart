@@ -470,9 +470,12 @@ class LeaderRow {
         value = _i(j['value']),
         stars = _i(j['stars']),
         me = _b(j['me']),
-        rankTitle = _s(j['rank_title']);
+        rankTitle = _s(j['rank_title']),
+        leagueName = _s(j['league_name']);
   final int rank, avatar, value, stars, streak; // streak: the flame next to the name (0 = none)
   final String nickname, rankTitle, avatarId, avatarFrame;
+  /// Weekly board: the league this row plays in this week (empty on old servers / other boards).
+  final String leagueName;
   final bool me;
 }
 
@@ -485,7 +488,8 @@ class Leaderboard {
         weekEndsAt = j['week_ends_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['week_ends_at'] as num).toInt() * 1000) : null,
         league = j['league'] is num ? (j['league'] as num).toInt() : null,
         myLeague = j['my_league'] is num ? (j['my_league'] as num).toInt() : null,
-        leagues = [for (final l in _maps(j['leagues'])) _s(l['name'])];
+        leagues = [for (final l in _maps(j['leagues'])) _s(l['name'])],
+        leagueInfos = [for (final l in _maps(j['leagues'])) LeagueInfo(l)];
   final String period, title;
   final List<LeaderRow> top;
   final LeaderRow? me;
@@ -494,6 +498,19 @@ class Leaderboard {
   /// Weekly board: the league shown / the player's own league / league names (empty = one board for everybody).
   final int? league, myLeague;
   final List<String> leagues;
+  /// The same leagues with the profile ranks inside each (empty on old servers).
+  final List<LeagueInfo> leagueInfos;
+}
+
+/// One league of the weekly board: a RANGE of profile ranks, [fromRank] .. [toRank], starting at [minXp].
+class LeagueInfo {
+  LeagueInfo(Map<String, dynamic> j)
+      : name = _s(j['name']),
+        minXp = _i(j['min_xp']),
+        fromRank = _s(j['from_rank']),
+        toRank = _s(j['to_rank']);
+  final String name, fromRank, toRank;
+  final int minXp;
 }
 
 class InboxGift {

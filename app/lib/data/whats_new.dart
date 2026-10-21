@@ -43,6 +43,11 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(67, '۱.۳۵', '2026-10-21', [
+    WhatsNewItem('board_calm', 'جدول برترها آروم‌تره: فقط یه خط توضیح می‌بینی و بقیه‌اش پشت دکمه‌ی «i» کنار عنوانه؛ لیگ‌ها هم همیشه روی صفحه‌ان', WhatsNewTarget.leaderboard),
+    WhatsNewItem('board_leagues', 'لیگ هر کارآگاه و بازه‌ی رتبه‌هاش توی «i» نوشته شده؛ رتبه‌ی کنار اسم همیشه همون رتبه‌ی پروفایله', WhatsNewTarget.leaderboard),
+    WhatsNewItem('weekend_chapters', 'توی پرونده‌های آخر هفته هر مدرک و مظنون نشان فصل خودش رو داره، موارد تازه «تازه» دارن و می‌تونی بر اساس فصل فیلتر کنی', WhatsNewTarget.weekend, tags: ['weekend_chapters']),
+  ]),
   WhatsNewRelease(66, '۱.۳۳', '2026-10-20', [
     WhatsNewItem('tools_tray', 'ابزارهای کارآگاهی توی پرونده‌های روزانه: اثر انگشت‌خوان، ذره‌بین و دوربین مخفی (هر پرونده هر کدوم رو داشته باشه)؛ پلاکی کم نمی‌شه', WhatsNewTarget.caseToday),
     WhatsNewItem('tools_free', 'از هر ابزار اولیش رایگانه تا امتحانش کنی؛ بعدش با سکه می‌گیری یا گاهی از مأموریت‌ها و نشان‌ها هدیه می‌گیری', WhatsNewTarget.caseToday),

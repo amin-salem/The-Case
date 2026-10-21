@@ -645,3 +645,18 @@ only use that fallback intentionally after checking its content/version. No data
 migration is needed and this mechanism never rewrites existing player progress.
 
 
+
+
+## Leaderboard leagues and rank titles (21 Oct 2026, server 1.35.0, app 1.35.0+67)
+- 9 profile ranks (`economy.RANKS`), 4 leagues (`weekboard.LEAGUE_DEFS`: the only place with names and limits). A league is a range of ranks: تازه‌کار (تازه‌کار..دستیار کارآگاه, from 0 XP), کارآگاه (کارآگاه..کارآگاه ارشد, 600), بازرس (بازرس..سربازرس, 2500), سرپرست (کارآگاه نخبه..افسانه, 6500). The league comes from the XP at the week's snapshot and stays all week; the row always shows the CURRENT rank title (`economy.rank_of`, same as the profile). A promotion shows next week.
+- A player is missing from the weekly board when: no solved ranked case of the week's own cases, `tester`, `banned`, or younger than 48 h without phone/email (`anticheat.visible_player`).
+- The app shows one short line; the long text is behind the «i» (`showBoardInfo`). The league switch is always visible.
+
+## Weekend chapters in the app (21 Oct 2026, app 1.35.0+67)
+- Uses the existing fields only: card `chapter` (1-based), suspect `appears_chapter` (0 = from the start), `chapters` (opened ones). Seen state: `SharedPreferences` keys `chapter_seen_<case>` and `chapter_banner_<case>`. Code: `app/lib/widgets/chapter_ui.dart`, wiring in `case_screen.dart`. Nightly cases (`chapters_total < 2`) take none of these paths.
+
+## Public pages and the landing site (21 Oct 2026, server 1.35.0)
+- URLs for the Cafe Bazaar listing form: **privacy policy** `https://gaamly.ir/privacy`, **terms** `https://gaamly.ir/terms`, **support** `https://gaamly.ir/support` (contact e-mail on the page), account deletion `https://gaamly.ir/delete-account`. All are rate-limit exempt, built at start, cached 10 minutes.
+- The texts were written from the code (what is stored: nickname, avatar, hashed phone + last 4, legacy e-mail, device id, invite data, purchases, comments, app version/OS/model, hashed IP in rate counters only). When you change what the game stores or does, change `routers/pages.py` and `UPDATED` in the same push.
+- TODO Amin: the contact is `aminsaalem@gmail.com` (`pages.CONTACT` and the app default `support_email`); use a dedicated address when you have one.
+- `GET /` serves `app/web/index.html` (landing + demo case «نسخه‌ی گمشده»). The download link is `site.BAZAAR_URL` (TODO: put the real Bazaar page once the app is published). The demo is not in `app/content`, nothing loads it. To change the page, edit the file; there is no database access.

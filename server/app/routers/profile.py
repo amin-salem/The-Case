@@ -50,7 +50,9 @@ async def me(player: Player = Depends(current_player), session: AsyncSession = D
 @router.post("/me/delete")
 async def delete_me(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """Deletes the account and its progress for good (stores require an in-app way to do this)."""
-    await session.delete(player)
+    # every row of the player in every table (coin log, invite payouts, weekly league rows too), so the public
+    # «delete account» page is true (21 Oct 2026); one transaction
+    await purge.purge_players(session, [player.id])
     await session.commit()
     return {"deleted": True}
 

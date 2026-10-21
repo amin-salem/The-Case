@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>پرونده؛ بازی معمایی هر شب</title>
+<meta name="description" content="هر شب یک پرونده‌ی جنایی تازه: مدارک را بخوان، از مظنون‌ها بازجویی کن و مقصر را پیدا کن. رایگان. همین‌جا یک پرونده‌ی آزمایشی را حل کن.">
+<meta name="theme-color" content="#17181a">
+<style>
+@font-face{font-family:"Vazirmatn";font-weight:400;font-display:swap;src:url(/static/fonts/Vazirmatn-Regular.ttf) format("truetype")}
+@font-face{font-family:"Vazirmatn";font-weight:700;font-display:swap;src:url(/static/fonts/Vazirmatn-Bold.ttf) format("truetype")}
+@font-face{font-family:"Vazirmatn";font-weight:900;font-display:swap;src:url(/static/fonts/Vazirmatn-Black.ttf) format("truetype")}
+:root{--night:#17181a;--night2:#202124;--night3:#2b2d31;--paper:#e9e4d8;--ink:#222326;--inksoft:#4f4d48;--text:#e6e2da;--soft:#a3a199;--stamp:#d0543f;--brass:#e0a526;--ok:#5dae7e;--clue:#ffe08a}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--text);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.85;font-size:17px}
+a{color:var(--brass)}
+h1,h2,h3{margin:0;line-height:1.35;font-weight:900}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+section{padding:56px 0}
+h2{font-size:30px;color:var(--brass);margin-bottom:10px}
+.lead{color:var(--soft);margin:0 0 26px;max-width:640px}
+:focus-visible{outline:3px solid var(--clue);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;right:12px;top:-60px;background:var(--brass);color:var(--ink);padding:8px 14px;border-radius:8px;font-weight:900;z-index:9}
+.skip:focus{top:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:10px 26px;border:0;border-radius:14px;background:var(--stamp);color:#fff;font:900 18px Vazirmatn,Tahoma,sans-serif;text-decoration:none;cursor:pointer;box-shadow:0 6px 0 #8f3322;transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(2px);box-shadow:0 4px 0 #8f3322}
+.btn:active{transform:translateY(6px);box-shadow:0 0 0 #8f3322}
+.btn.alt{background:var(--night3);color:var(--text);box-shadow:0 6px 0 #17181a;border:1px solid #3a3c41}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+/* hero */
+.hero{position:relative;overflow:hidden;padding:0;background:radial-gradient(120% 90% at 70% 0%,#2a2c31 0%,var(--night) 62%)}
+.hero svg.scene{position:absolute;inset:auto 0 0 0;width:100%;height:56%;min-height:240px;opacity:.95}
+.moon{position:absolute;top:40px;left:max(20px,6%);width:58px;height:58px;border-radius:50%;background:var(--brass);box-shadow:inset -20px 7px 0 0 #202225}
+.hero .wrap{position:relative;padding-top:64px;padding-bottom:230px}
+.tape{height:16px;background:repeating-linear-gradient(135deg,var(--brass) 0 18px,#17181a 18px 36px)}
+.badge{display:inline-block;background:var(--night3);border:1px solid #3a3c41;color:var(--soft);padding:2px 14px;border-radius:99px;font-size:14px;margin-bottom:16px}
+.hero h1{font-size:clamp(44px,9vw,76px);color:var(--text);letter-spacing:-1px}
+.hero h1 span{color:var(--stamp)}
+.promise{font-size:clamp(19px,3.4vw,25px);max-width:560px;margin:14px 0 26px;color:#f0ece4}
+.cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.note{font-size:14px;color:var(--soft);margin-top:12px}
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px}
+.card{background:var(--night2);border:1px solid var(--night3);border-radius:18px;padding:22px}
+.card svg{width:46px;height:46px;margin-bottom:10px}
+.card h3{font-size:19px;margin-bottom:4px;color:var(--text)}
+.card p{margin:0;color:var(--soft);font-size:15.5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:center}
+@media(max-width:760px){.two{grid-template-columns:1fr}section{padding:42px 0}}
+.paper{background:var(--paper);color:var(--ink);border-radius:8px;padding:18px 20px;box-shadow:0 10px 24px rgba(0,0,0,.35);transform:rotate(-.6deg)}
+.paper h3{color:var(--ink);font-size:18px}
+.paper p{margin:6px 0 0;font-size:15.5px}
+.stampmark{display:inline-block;border:3px solid var(--stamp);color:var(--stamp);padding:0 12px;border-radius:6px;font-weight:900;transform:rotate(-6deg);margin-top:8px}
+.steps{display:flex;flex-wrap:wrap;gap:10px;padding:0;list-style:none;margin:18px 0 0}
+.steps li{background:var(--night3);border-radius:99px;padding:3px 16px;font-size:15px;color:var(--text)}
+.free{background:linear-gradient(180deg,var(--night2),var(--night));border-top:1px solid var(--night3);border-bottom:1px solid var(--night3)}
+.free ul{margin:12px 0 0;padding:0 20px 0 0;color:var(--soft)}
+.free li{margin:4px 0}
+/* demo */
+#demo{background:var(--night2);border-top:1px solid var(--night3)}
+.demo-box{background:var(--night);border:1px solid var(--night3);border-radius:22px;padding:22px;margin-top:18px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.tab{background:var(--night3);color:var(--text);border:1px solid #3a3c41;border-radius:99px;padding:6px 18px;font:700 15px Vazirmatn,Tahoma,sans-serif;cursor:pointer;min-height:44px}
+.tab[aria-selected=true]{background:var(--brass);color:var(--ink);border-color:var(--brass)}
+.intro{background:var(--paper);color:var(--ink);border-radius:8px;padding:16px 18px;font-size:16.5px}
+.intro b{color:#7a2a1b}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.ev{position:relative;background:var(--paper);color:var(--ink);border-radius:8px;padding:12px 14px;box-shadow:0 6px 14px rgba(0,0,0,.35)}
+.ev .head{display:block;width:100%;text-align:right;background:transparent;border:0;padding:2px 0;font:inherit;color:inherit;cursor:pointer}
+.ev .t{display:flex;justify-content:space-between;gap:8px;font-weight:900;font-size:16.5px}
+.ev .k{font-size:12.5px;color:var(--inksoft);font-weight:400}
+.ev .body{margin-top:8px;font-size:15.5px;line-height:1.8}
+.ev .hint{font-size:13.5px;color:var(--inksoft);margin-top:4px}
+.pin{margin-top:10px;background:transparent;border:1.5px solid var(--inksoft);color:var(--ink);border-radius:99px;padding:2px 14px;font:700 14px Vazirmatn,Tahoma,sans-serif;cursor:pointer;min-height:40px}
+.ev.pinned{background:var(--clue)}
+.ev.pinned .pin{background:var(--ink);color:var(--clue);border-color:var(--ink)}
+.sus{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.s{background:var(--night2);border:2px solid var(--night3);border-radius:16px;padding:14px;text-align:right;color:var(--text);font:inherit;cursor:pointer;width:100%}
+.s .face{width:62px;height:62px;border-radius:14px;background:var(--night3);display:grid;place-items:center;margin-bottom:6px}
+.s .n{font-weight:900;font-size:18px}.s .r{color:var(--soft);font-size:14px}
+.s .q{margin-top:8px;font-size:15.5px;color:#f0ece4}
+.s[aria-pressed=true]{border-color:var(--stamp);background:#2e2020}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:18px}
+.opts{display:grid;gap:10px;margin:12px 0 0;padding:0;border:0}
+.opt{display:block;background:var(--night2);border:2px solid var(--night3);border-radius:14px;padding:12px 16px;cursor:pointer;font-size:16px}
+.opt input{margin-left:10px;accent-color:var(--stamp)}
+.opt:has(input:checked){border-color:var(--brass);background:#2b2616}
+.res{border-radius:18px;padding:20px;margin-top:6px}
+.res.win{background:#16261d;border:2px solid var(--ok)}
+.res.lose{background:#2a1a17;border:2px solid var(--stamp)}
+.res h3{font-size:24px;margin-bottom:6px}
+.res p{margin:8px 0}
+.chain{margin:10px 0;padding:0 22px 0 0}
+.chain li{margin:6px 0}
+.hidden{display:none!important}
+footer{padding:36px 0 54px;border-top:1px solid var(--night3);color:var(--soft);font-size:15px}
+footer a{margin-left:18px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:no-preference){
+.moon{animation:glow 5s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.85}to{opacity:1}}
+.win-light{animation:blink 6s steps(1) infinite}
+.win-light:nth-child(2n){animation-delay:2s}.win-light:nth-child(3n){animation-delay:4s}
+@keyframes blink{0%,70%{opacity:1}75%,88%{opacity:.25}}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#demo">برو به پرونده‌ی آزمایشی</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-lens" viewBox="0 0 48 48"><circle cx="20" cy="20" r="12" fill="none" stroke="#e0a526" stroke-width="4"/><path d="M29 29l13 13" stroke="#e0a526" stroke-width="5" stroke-linecap="round"/><path d="M14 17a7 7 0 0 1 6-5" stroke="#ffe08a" stroke-width="3" fill="none" stroke-linecap="round"/></symbol>
+ <symbol id="i-talk" viewBox="0 0 48 48"><path d="M6 10h36v22H24l-9 8v-8H6z" fill="#2b2d31" stroke="#e0a526" stroke-width="3" stroke-linejoin="round"/><circle cx="16" cy="21" r="2.4" fill="#e0a526"/><circle cx="24" cy="21" r="2.4" fill="#e0a526"/><circle cx="32" cy="21" r="2.4" fill="#e0a526"/></symbol>
+ <symbol id="i-file" viewBox="0 0 48 48"><path d="M8 12h14l4 4h14v24H8z" fill="#c9a15e" stroke="#8a6a2e" stroke-width="2.5" stroke-linejoin="round"/><circle cx="34" cy="14" r="5" fill="#d0543f"/><path d="M34 19v6" stroke="#d0543f" stroke-width="2.5"/></symbol>
+ <symbol id="i-gavel" viewBox="0 0 48 48"><rect x="8" y="6" width="22" height="11" rx="3" transform="rotate(35 19 11)" fill="#e0a526"/><path d="M24 22l16 16" stroke="#c9a15e" stroke-width="6" stroke-linecap="round"/><path d="M6 42h20" stroke="#d0543f" stroke-width="4" stroke-linecap="round"/></symbol>
+ <symbol id="i-moon" viewBox="0 0 48 48"><path d="M32 6a18 18 0 1 0 10 30A15 15 0 0 1 32 6z" fill="#e0a526"/></symbol>
+ <symbol id="i-flame" viewBox="0 0 48 48"><path d="M24 4c2 9 11 13 11 24a11 11 0 0 1-22 0c0-6 3-8 5-12 1 3 3 4 4 4-1-6 0-11 2-16z" fill="#d0543f"/><path d="M24 24c1 4 5 6 5 10a5 5 0 0 1-10 0c0-3 3-4 5-10z" fill="#ffe08a"/></symbol>
+ <symbol id="i-coin" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" fill="#e0a526" stroke="#8a6a2e" stroke-width="3"/><path d="M17 24h14M24 17v14" stroke="#8a6a2e" stroke-width="3" stroke-linecap="round"/></symbol>
+</svg>
+
+<header class="hero">
+ <div class="tape" aria-hidden="true"></div>
+ <svg class="scene" viewBox="0 0 960 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+  <g fill="#0f1011">
+   <rect x="0" y="170" width="70" height="130"/><rect x="60" y="120" width="90" height="180"/><rect x="150" y="150" width="60" height="150"/>
+   <rect x="210" y="90" width="100" height="210"/><rect x="310" y="140" width="80" height="160"/><rect x="390" y="110" width="70" height="190"/>
+   <rect x="460" y="160" width="110" height="140"/><rect x="570" y="100" width="90" height="200"/><rect x="660" y="150" width="70" height="150"/>
+   <rect x="730" y="120" width="110" height="180"/><rect x="840" y="160" width="120" height="140"/>
+  </g>
+  <g fill="#e0a526">
+   <rect class="win-light" x="228" y="110" width="12" height="16"/><rect class="win-light" x="260" y="140" width="12" height="16"/><rect class="win-light" x="228" y="180" width="12" height="16"/>
+   <rect class="win-light" x="80" y="140" width="12" height="16"/><rect class="win-light" x="110" y="190" width="12" height="16"/><rect class="win-light" x="588" y="120" width="12" height="16"/>
+   <rect class="win-light" x="620" y="170" width="12" height="16"/><rect class="win-light" x="750" y="140" width="12" height="16"/><rect class="win-light" x="800" y="200" width="12" height="16"/><rect class="win-light" x="478" y="180" width="12" height="16"/>
+  </g>
+  <g transform="translate(150 190) rotate(-18)"><circle cx="0" cy="0" r="58" fill="rgba(224,165,38,.08)" stroke="#e0a526" stroke-width="9"/><path d="M42 42l54 54" stroke="#c9a15e" stroke-width="16" stroke-linecap="round"/></g>
+  <rect x="0" y="288" width="960" height="12" fill="#0f1011"/>
+ </svg>
+ <div class="moon" aria-hidden="true"></div>
+ <div class="wrap">
+  <span class="badge">بازی معمایی برای موبایل · فارسی</span>
+  <h1><span>پرونده</span></h1>
+  <p class="promise">هر شب یک جنایت تازه. مدارک را بخوان، مظنون‌ها را به حرف بیاور و مقصر را پیدا کن.</p>
+  <div class="cta">
+   <a class="btn" href="{{BAZAAR_URL}}" rel="noopener">دانلود از کافه بازار</a>
+   <a class="btn alt" href="#demo">اول یک پرونده‌ی آزمایشی حل کن</a>
+  </div>
+  <p class="note">رایگان است. پرونده‌ی شبانه هیچ‌وقت با سکه قفل نمی‌شود.</p>
+ </div>
+</header>
+
+<main id="top">
+<section id="how"><div class="wrap">
+ <h2>چطور بازی می‌شود؟</h2>
+ <p class="lead">هر شب ساعت ۲۱ یک پرونده‌ی تازه باز می‌شود. فقط با عقل و دقتت حلش می‌کنی.</p>
+ <div class="grid">
+  <div class="card"><svg aria-hidden="true"><use href="#i-file"/></svg><h3>پرونده‌ی هر شب</h3><p>یک ماجرای کوتاه با چند مظنون. هر پرونده یک جواب دارد و فقط یک نفرش دروغ گفته است.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-talk"/></svg><h3>بازجویی</h3><p>از هر مظنون بپرس. حرف‌هایشان را کنار هم بگذار؛ دروغ لابه‌لای جمله‌ها پیداست.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-lens"/></svg><h3>مدارک</h3><p>رسید، فیلم دوربین، پیام گوشی، گزارش. مدرک مهم را نشان کن و آن‌ها را با هم بسنج.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-gavel"/></svg><h3>متهم کردن</h3><p>مقصر را انتخاب کن و مدرکی را نشان بده که دروغش را ثابت می‌کند. سه فرصت داری.</p></div>
+ </div>
+</div></section>
+
+<section><div class="wrap two">
+ <div>
+  <h2>پرونده‌ی آخر هفته</h2>
+  <p class="lead" style="margin-bottom:12px">پنجشنبه صبح یک پرونده‌ی بزرگ‌تر باز می‌شود؛ با چند فصل. هر فصل مدرک‌های تازه می‌آورد و گاهی یک مظنون تازه.</p>
+  <ul class="steps"><li>فصل ۱</li><li>فصل ۲ · مدرک تازه</li><li>مظنون تازه</li><li>چرا و چطور؟</li></ul>
+ </div>
+ <div class="paper" role="img" aria-label="نمونه‌ی برگه‌ی پرونده: فصل دوم باز شد">
+  <h3>فصل ۲ باز شد</h3>
+  <p>سه مدرک و یک مظنون تازه به پرونده اضافه شد. هر مدرک نشان فصلش را دارد.</p>
+  <span class="stampmark">تازه</span>
+ </div>
+</div></section>
+
+<section><div class="wrap two">
+ <div class="card" style="display:flex;gap:18px;align-items:center">
+  <svg aria-hidden="true" style="width:74px;height:74px;flex:none"><use href="#i-flame"/></svg>
+  <div><h3>زنجیره‌ی شب‌ها</h3><p>هر شب که پرونده را حل کنی شعله‌ات بزرگ‌تر می‌شود و کنار اسمت در جدول می‌ماند.</p></div>
+ </div>
+ <div>
+  <h2>جدول کارآگاه‌های برتر</h2>
+  <p class="lead" style="margin-bottom:0">هر هفته در لیگ خودت (تازه‌کار، کارآگاه، بازرس، سرپرست) با بقیه‌ی کارآگاه‌ها رقابت کن. سه کارآگاه اول هر لیگ جایزه می‌گیرند.</p>
+ </div>
+</div></section>
+
+<section class="free"><div class="wrap two">
+ <div>
+  <h2>رایگان بازی کن</h2>
+  <p class="lead" style="margin-bottom:0">«پرونده» رایگان است و بدون ثبت‌نام شروع می‌شود. تبلیغ ندارد. اگر دوست داشتی، با سکه پرونده‌های قدیمی بایگانی یا سرنخ می‌گیری.</p>
+ </div>
+ <div class="card" style="display:flex;gap:16px;align-items:center">
+  <svg aria-hidden="true" style="width:58px;height:58px;flex:none"><use href="#i-coin"/></svg>
+  <ul style="margin:0;padding:0 18px 0 0;color:var(--soft)"><li>پرونده‌ی هر شب همیشه رایگان است</li><li>سکه را با بازی هم می‌گیری</li><li>بایگانی، سرنخ و ابزار با سکه</li></ul>
+ </div>
+</div></section>
+
+<section id="demo"><div class="wrap">
+ <h2>یه پرونده‌ی آزمایشی رو خودت حل کن</h2>
+ <p class="lead">چند دقیقه وقت بگذار. همه‌چیز همین‌جا انجام می‌شود، بدون اینترنت و بدون ثبت‌نام.</p>
+
+ <div class="demo-box" id="app" aria-live="polite">
+  <div id="v-intro">
+   <div class="intro" id="intro-text"></div>
+   <div class="row"><button class="btn" id="start" type="button">شروع تحقیق</button></div>
+  </div>
+
+  <div id="v-work" class="hidden">
+   <div class="tabs" role="tablist" aria-label="بخش‌های پرونده">
+    <button class="tab" role="tab" id="t-ev" aria-selected="true" aria-controls="p-ev" type="button">مدارک (۶)</button>
+    <button class="tab" role="tab" id="t-su" aria-selected="false" aria-controls="p-su" type="button">مظنون‌ها (۴)</button>
+   </div>
+   <div id="p-ev" role="tabpanel" aria-labelledby="t-ev"><div class="cards" id="cards"></div>
+    <p class="lead" style="margin:14px 0 0;font-size:15px">روی هر مدرک بزن تا باز شود. مدارک مهم را «نشان کن»؛ نشان‌شده‌ها زرد می‌شوند.</p></div>
+   <div id="p-su" role="tabpanel" aria-labelledby="t-su" class="hidden"><div class="sus" id="sus"></div></div>
+   <div class="row"><button class="btn" id="to-accuse" type="button">متهم می‌کنم</button><span id="read-count" class="note" style="margin:0"></span></div>
+  </div>
+
+  <div id="v-accuse" class="hidden">
+   <h3 style="margin-bottom:6px">مقصر کیست؟</h3>
+   <div class="sus" id="pick-sus" role="group" aria-label="انتخاب مقصر"></div>
+   <h3 style="margin:22px 0 4px">چرا و چطور؟</h3>
+   <fieldset class="opts" id="reasons"><legend class="sr">یکی از سه توضیح را انتخاب کن</legend></fieldset>
+   <div class="row"><button class="btn" id="submit" type="button" disabled>این است جواب من</button><button class="btn alt" id="back" type="button">برگشت به مدارک</button></div>
+   <p id="try-msg" class="note" role="status"></p>
+  </div>
+
+  <div id="v-result" class="hidden"></div>
+ </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+ <p><a href="{{BAZAAR_URL}}" rel="noopener">دانلود از کافه بازار</a><a href="/privacy">حریم خصوصی</a><a href="/terms">قوانین</a><a href="/support">پشتیبانی</a></p>
+ <p>داستان‌ها و شخصیت‌های «پرونده» خیالی‌اند.</p>
+</div></footer>
+
+<script>
+"use strict";
+/* The demo case «نسخه‌ی گمشده»: written only for this page. It is not a game case and the app never loads it. */
+var DEMO = {
+ title: "نسخه‌ی گمشده",
+ intro: "کتاب‌فروشی «شبنم» در خیابان انقلاب. ساعت ۱۹:۳۰ آقای رامین، صاحب مغازه، برای کار بانکی بیرون رفت و مغازه را به شیرین سپرد. نسخه‌ی خطی و کمیاب دیوان حافظ، داخل ویترین قفل‌دار کنار صندوق بود و همان موقع سر جایش دید. ساعت ۲۰:۰۵ که برگشت، ویترین بسته بود ولی نسخه نبود. <b>یکی از این چهار نفر دزد است.</b>",
+ evidence: [
+  {id:"e1",type:"سند",title:"گزارش ویترین",text:"قفل ویترین سالم است و خراش ندارد؛ با کلید باز شده. کلید اصلی همراه آقای رامین بود. کلید یدکی همیشه داخل کشوی صندوق، پشت پیشخوان است. بعد از دزدی، کلید یدکی را روی کشو پیدا کردند، نه داخلش."},
+  {id:"e2",type:"فاکتور",title:"گزارش صندوق",text:"۱۹:۳۸ فروش یک کتاب جیبی شعر، نقدی. ۱۹:۴۷ کشو باز شد، بدون هیچ فروشی. ۱۹:۵۳ ثبت دریافت یک بسته‌ی پستی، با امضای شیرین."},
+  {id:"e3",type:"دوربین",title:"دوربین کافه‌ی روبه‌رو",text:"۱۹:۳۹ بهمن از مغازه بیرون می‌آید و سوار تاکسی می‌شود. ۱۹:۴۶ سرور با یک کیف پارچه‌ای تاشده‌ی خالی وارد مغازه می‌شود. ۱۹:۴۸ بیرون می‌آید و کیف را با دو دست بغل کرده. ۱۹:۵۲ پیک موتوری با یک بسته وارد می‌شود و ۱۹:۵۴ بیرون می‌آید."},
+  {id:"e4",type:"سند",title:"چاپگر اتاق پشتی",text:"چاپگر برچسب‌های پستی فقط در اتاق پشتی است و با دکمه‌ی خودش کار می‌کند. چاپ چهار برچسب با کاغذ دستی انجام می‌شود و باید کنار دستگاه ماند. گزارش: شروع ۱۹:۴۵، پایان ۱۹:۴۹. آن را شیرین چاپ کرد."},
+  {id:"e5",type:"شاهد",title:"حرف آقای رامین",text:"ساعت ۱۹:۳۰ نسخه سر جایش بود. کلید اصلی من همراهم بود و رسید بانک ساعت ۱۹:۵۵ را دارم. بهمن‌خان چند بار نسخه را می‌خواست، ولی کارش همیشه با خریدن بود."},
+  {id:"e6",type:"گوشی",title:"پیام بهمن به رامین",text:"«قیمتت را قبول ندارم، ولی هر وقت بخواهی به همان قیمت می‌خرم. فقط نفروشش به کسی دیگر.» ارسال: ۱۹:۴۰، از داخل تاکسی."}
+ ],
+ suspects: [
+  {id:"s1",name:"شیرین",role:"فروشنده‌ی کتاب‌فروشی · ۲۶ ساله",statement:"تمام شب پشت صندوق بودم. فقط چهار پنج دقیقه رفتم اتاق پشتی برای چاپ برچسب پست. به ویترین دست نزدم.",
+   fine:"با شیرین مشکلی نیست: چاپگر او را در اتاق پشتی نشان می‌دهد."},
+  {id:"s2",name:"بهمن",role:"کلکسیونر کتاب · ۵۸ ساله",statement:"بله، سر قیمت با آقا رامین بحثم شد و گفتم این نسخه یک روز مال من می‌شود. ولی زود رفتم؛ یک کتاب جیبی خریدم و رفتم.",
+   fine:"بهمن پیش از ۱۹:۴۰ رفته است."},
+  {id:"s3",name:"سرور",role:"صاحب کافه‌ی روبه‌رو · ۴۱ ساله",statement:"فقط برای خرد پول آمدم. شیرین سر پیشخوان خردم را داد و رفتم. نه پشت پیشخوان رفتم، نه کاری به ویترین داشتم.",
+   fine:""},
+  {id:"s4",name:"پیمان",role:"پیک موتوری · ۲۳ ساله",statement:"نزدیک هشت کم، بسته را دادم دست شیرین، امضا گرفتم و رفتم. من اصلاً آن ویترین را ندیدم.",
+   fine:"پیمان بعد از باز شدن کشو آمده است."}
+ ],
+ culprit: "s3",
+ reasons: [
+  {id:"r1",text:"وقتی شیرین در اتاق پشتی بود، از پشت پیشخوان کلید یدکی را از کشو برداشت و ویترین را باز کرد."},
+  {id:"r2",text:"ویترین را با فشار باز کرد و نسخه را برداشت و فرار کرد."},
+  {id:"r3",text:"شیرین کلید را به او داد و عمداً به اتاق پشتی رفت."}
+ ],
+ reason: "r1",
+ hints: {
+  wrongSuspect: "این جواب با مدارک نمی‌خواند. به ساعت‌ها نگاه کن: کشو ساعت چند باز شد، و در آن لحظه چه کسی کنار پیشخوان بود و چه کسی نبود؟",
+  wrongReason: "مظنون درست است، ولی توضیحت با مدارک نمی‌خواند. قفل سالم است و کلید یدکی روی کشو بود."
+ },
+ explain: {
+  who: "مقصر سرور است.",
+  chain: [
+   "کلید یدکی داخل کشوی صندوق بود و بعد از دزدی روی کشو پیدا شد (گزارش ویترین). پس کسی کشو را باز کرد و کلید را برداشت، نه اینکه قفل را بشکند.",
+   "کشو ساعت ۱۹:۴۷ بدون فروش باز شد (گزارش صندوق). شیرین از ۱۹:۴۵ تا ۱۹:۴۹ کنار چاپگر در اتاق پشتی بود و نمی‌توانست جای دیگری باشد (چاپگر).",
+   "در همین چهار دقیقه فقط سرور در مغازه بود: ۱۹:۴۶ آمد و ۱۹:۴۸ با کیفی که حالا بغل کرده بود بیرون رفت (دوربین). بهمن پیش‌تر رفته بود و پیمان بعد آمد.",
+   "سرور گفت شیرین خردش را سر پیشخوان داد؛ ولی وقتی او رسید، شیرین در اتاق پشتی بود و پیشخوان خالی. دروغ او همین است."
+  ],
+  trail: "رد غلط، بهمن: عصبانی بود و نسخه را می‌خواست، ولی صندوق (۱۹:۳۸)، دوربین (۱۹:۳۹ سوار تاکسی) و پیامش از تاکسی نشان می‌دهند ساعت‌ها نمی‌خواند. او اهل خریدن بود، نه دزدی."
+ }
+};
+
+(function(){
+ var $ = function(id){return document.getElementById(id)};
+ var pinned = {}, opened = {}, selS = null, selR = null, tries = 0;
+ var faDigits = function(n){return String(n).replace(/[0-9]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹"[d]})};
+ function show(id){["v-intro","v-work","v-accuse","v-result"].forEach(function(v){$(v).classList.toggle("hidden",v!==id)});}
+ function mk(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
+ function face(color){
+  var w=mk("span");
+  w.innerHTML='<svg viewBox="0 0 48 48" width="46" height="46" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="'+color+'"/><path d="M6 44c0-11 8-17 18-17s18 6 18 17z" fill="'+color+'" opacity=".8"/></svg>';
+  return w}
+ var colors={s1:"#c9a15e",s2:"#8e97a8",s3:"#e0a526",s4:"#5dae7e"};
+
+ $("intro-text").innerHTML = "<b>پرونده‌ی آزمایشی · «"+DEMO.title+"»</b><br>"+DEMO.intro;
+
+ function renderCards(focusId,focusPin){
+  var box=$("cards");box.textContent="";
+  DEMO.evidence.forEach(function(e,i){
+   var c=mk("div","ev"+(pinned[e.id]?" pinned":""));
+   var h=mk("button","head");h.type="button";h.setAttribute("aria-expanded",opened[e.id]?"true":"false");h.setAttribute("data-id",e.id);
+   var t=mk("div","t");t.appendChild(mk("span","",faDigits(i+1)+". "+e.title));t.appendChild(mk("span","k",e.type));h.appendChild(t);
+   if(!opened[e.id])h.appendChild(mk("div","hint","برای خواندن بزن"));
+   h.addEventListener("click",function(){opened[e.id]=true;renderCards(e.id,false)});
+   c.appendChild(h);
+   if(opened[e.id]){
+    c.appendChild(mk("div","body",e.text));
+    var p=mk("button","pin",pinned[e.id]?"نشان‌شده ✓":"نشان کن");p.type="button";p.setAttribute("aria-pressed",pinned[e.id]?"true":"false");p.setAttribute("data-pin",e.id);
+    p.addEventListener("click",function(){pinned[e.id]=!pinned[e.id];renderCards(e.id,true)});
+    c.appendChild(p)}
+   box.appendChild(c);
+  });
+  if(focusId){var f=box.querySelector(focusPin?'[data-pin="'+focusId+'"]':'[data-id="'+focusId+'"]');if(f)f.focus()}
+  $("read-count").textContent=faDigits(Object.keys(opened).length)+" از ۶ مدرک خوانده شد";
+ }
+ function suspectButton(s,withStatement,pressed,onclick){
+  var b=mk("button","s");b.type="button";b.setAttribute("aria-pressed",pressed?"true":"false");
+  var f=mk("div","face");f.appendChild(face(colors[s.id]));b.appendChild(f);
+  b.appendChild(mk("div","n",s.name));b.appendChild(mk("div","r",s.role));
+  if(withStatement)b.appendChild(mk("div","q","«"+s.statement+"»"));
+  if(onclick)b.addEventListener("click",onclick);
+  return b}
+ function renderSus(){var box=$("sus");box.textContent="";DEMO.suspects.forEach(function(s){var b=suspectButton(s,true,false,null);b.removeAttribute("aria-pressed");b.style.cursor="default";box.appendChild(b)})}
+ function renderPick(){
+  var box=$("pick-sus");box.textContent="";
+  DEMO.suspects.forEach(function(s){box.appendChild(suspectButton(s,false,selS===s.id,function(){selS=s.id;renderPick();update()}))});
+ }
+ function renderReasons(){
+  var box=$("reasons");
+  DEMO.reasons.forEach(function(r){
+   var l=mk("label","opt");var i=document.createElement("input");i.type="radio";i.name="reason";i.value=r.id;
+   i.addEventListener("change",function(){selR=r.id;update()});
+   l.appendChild(i);l.appendChild(document.createTextNode(r.text));box.appendChild(l)});
+ }
+ function update(){$("submit").disabled=!(selS&&selR)}
+
+ function tab(which){
+  var ev=which==="ev";
+  $("t-ev").setAttribute("aria-selected",ev);$("t-su").setAttribute("aria-selected",!ev);
+  $("p-ev").classList.toggle("hidden",!ev);$("p-su").classList.toggle("hidden",ev);
+ }
+ $("t-ev").addEventListener("click",function(){tab("ev")});
+ $("t-su").addEventListener("click",function(){tab("su")});
+ $("start").addEventListener("click",function(){show("v-work");renderCards();renderSus();$("t-ev").focus()});
+ $("to-accuse").addEventListener("click",function(){show("v-accuse");renderPick();update();$("try-msg").textContent="";});
+ $("back").addEventListener("click",function(){show("v-work")});
+
+ function result(win,revealed){
+  show("v-result");
+  var box=$("v-result");box.textContent="";
+  var r=mk("div","res "+(win?"win":"lose"));
+  r.appendChild(mk("h3","",win?"آفرین، پرونده حل شد!":"پاسخ درست را ببین"));
+  r.appendChild(mk("p","",DEMO.explain.who));
+  var ol=mk("ol","chain");DEMO.explain.chain.forEach(function(c){ol.appendChild(mk("li","",c))});r.appendChild(ol);
+  r.appendChild(mk("p","",DEMO.explain.trail));
+  r.appendChild(mk("p","",win?"این یک پرونده‌ی کوچک بود. در بازی هر شب یکی تازه و سخت‌تر می‌آید، با مظنون و مدرک بیشتر.":"اشکالی ندارد؛ در بازی سه فرصت داری و بعد از هر اشتباه می‌توانی دوباره فکر کنی."));
+  var row=mk("div","row");
+  var dl=mk("a","btn","دانلود از کافه بازار");dl.href="{{BAZAAR_URL}}";dl.rel="noopener";row.appendChild(dl);
+  var again=mk("button","btn alt","دوباره بازی کن");again.type="button";again.addEventListener("click",reset);row.appendChild(again);
+  r.appendChild(row);box.appendChild(r);
+  r.setAttribute("tabindex","-1");r.focus();
+ }
+ $("submit").addEventListener("click",function(){
+  tries++;
+  if(selS===DEMO.culprit&&selR===DEMO.reason){result(true,false);return}
+  var msg=selS!==DEMO.culprit?DEMO.hints.wrongSuspect:DEMO.hints.wrongReason;
+  if(tries>=3){result(false,true);return}
+  $("try-msg").textContent="نه، "+msg+" ("+faDigits(3-tries)+" فرصت مانده)";
+ });
+ function reset(){pinned={};opened={};selS=null;selR=null;tries=0;
+  var r=$("reasons");Array.prototype.slice.call(r.querySelectorAll("label")).forEach(function(l){r.removeChild(l)});renderReasons();show("v-intro");$("start").focus()}
+ renderReasons();
+})();
+</script>
+</body>
+</html>

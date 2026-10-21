@@ -56,16 +56,17 @@ async def _weekly(player: Player, league: int | None, limit: int, session: Async
     mine = await weekboard.league_of(session, ws, player.id) if on else None
     shown = (league if league is not None else mine) if on else None
     rows = await weekboard.cached_rows(session, ws, shown, limit)
+    lname = weekboard.LEAGUES[shown] if shown is not None else ""
     out = [LeaderRow(rank=i + 1, nickname=r["nickname"], avatar=r["avatar"], avatar_id=r["avatar_id"],
                      avatar_frame=r["avatar_frame"], streak=r.get("streak", 0), value=r["points"], stars=r["points"], me=r["id"] == player.id,
-                     rank_title=r["rank_title"]) for i, r in enumerate(rows)]
+                     rank_title=r["rank_title"], league_name=lname) for i, r in enumerate(rows)]
     me = next((r for r in out if r.me), None)
     if me is None and (shown is None or shown == mine):
         st = await weekboard.my_standing(session, ws, player, shown)
         if st is not None and ac.is_visible(player):
             me = LeaderRow(rank=st[0], nickname=player.nickname, avatar=player.avatar, avatar_id=avatars.avatar_key(player),
-                           avatar_frame=avatars.frame_key(player), streak=live.of(player), value=st[1], stars=st[1], me=True, rank_title=rank_title(player))
+                           avatar_frame=avatars.frame_key(player), streak=live.of(player), value=st[1], stars=st[1], me=True, rank_title=rank_title(player), league_name=lname)
     title = "این هفته" + (f" · لیگ {weekboard.LEAGUES[shown]}" if shown is not None else "")
     return LeaderboardOut(period="weekly", title=title, top=out, me=me, week_ends_at=int(gameclock.week_end(ws).timestamp()),
                           league=shown, my_league=mine,
-                          leagues=[LeagueInfo(id=i, name=n) for i, n in enumerate(weekboard.LEAGUES)] if on else [])
+                          leagues=[LeagueInfo(**weekboard.league_info(i)) for i in range(len(weekboard.LEAGUES))] if on else [])

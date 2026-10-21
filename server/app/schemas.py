@@ -282,12 +282,16 @@ class LeaderRow(BaseModel):
     value: int        # stars (weekly/all) or seconds (daily)
     stars: int = 0
     me: bool = False
-    rank_title: str = ""      # the player's detective rank
+    rank_title: str = ""      # the player's CURRENT detective rank (same as the profile)
+    league_name: str = ""     # weekly board: the league this row plays in this week (decided at the week's start)
 
 
 class LeagueInfo(BaseModel):
     id: int
     name: str
+    min_xp: int = 0               # the XP the league starts at (its first profile rank)
+    from_rank: str = ""           # the profile rank titles inside the league: first .. last
+    to_rank: str = ""
 
 
 class LeaderboardOut(BaseModel):
