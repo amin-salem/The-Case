@@ -487,7 +487,7 @@ what anti-cheat reads, so a solve with tools alone is still unranked).
   `POST /v1/cases/{id}/tools/{kind}/use` (stock or the one-time tutorial tool; 409 `no_tool {price}` otherwise) and
   `POST /v1/cases/{id}/tools/{kind}/buy` (coins; buys one and uses it in the same transaction). Body `{suspect}` for
   fingerprint and camera. Daily cases only: weekend/story answer 409 `tools_not_for_this_case` and the tray says so.
-- **Prices** (`economy.TOOL_PRICES`): magnifier 25, fingerprint 45, camera 70 (hints are 30/50/80). The first of each kind per
+- **Prices** (`economy.TOOL_PRICES`): magnifier 40, fingerprint 70, camera 110 (hints are 50/90/140; both raised on 21 Oct 2026, was 25/45/70 and 30/50/80). The first of each kind per
   player is free ONCE (`player_tools.free_used`, claimed by a guarded UPDATE). The only other free source is a rare drop at
   existing reward points: the 7th chest day in a row (`ChestOut.tool`, kind rotates) and the achievements in
   `economy.TOOL_DROP_ACHIEVEMENTS` (streak_30 fingerprint, cases_50 magnifier, interrogate_10 camera).

@@ -1,5 +1,8 @@
 # Changelog
 
+## server 1.33.1 (no app change): higher hint and tool prices (Amin, 21 Oct 2026)
+- Hints 30/50/80 -> **50/90/140**; detective tools 25/45/70 -> **40/70/110** (`economy.HINT_COSTS`, `economy.TOOL_PRICES`). The app reads both from the server (`hint_costs`, the tool tray), so no new APK is needed. Why: a hint cost less than one solve reward (6-45 coins), so nobody needed coins; tools stay a little under the hint beside them because they narrow the search without naming a card. A new player (100 coins) can still buy the first hint; the first tool of each kind stays free. Revenue: every hint and tool now takes a larger share of the free income, which is what sends players to the coin packs (400 / 1300 / 3600).
+
 ## server 1.33.0, app 1.33.0 (build 66): detective tools «ابزارهای کارآگاهی» (Amin, 16 Oct 2026; asked as Normal, built 20 Oct)
 - **Three consumables on the daily case screen** (a tray above the hint/accuse bar): «ذره‌بین» marks one card «بی‌ربط»; «اثر انگشت‌خوان» says whether a chosen مظنون is touched by the main cards («توی مدارک اصلی نقش داره» / «نقش مهمی نداره»), never guilty/innocent; «دوربین مخفی» shows one extra neutral line about a chosen مظنون. Once per case per kind, results pinned on the case, plaques never change, and a tool never counts as investigation (a solve with tools alone stays unranked). Weekend and story cases: tools off, the tray says so.
 - **Prices** (`economy.TOOL_PRICES`): 25 / 45 / 70 coins (hints are 30 / 50 / 80). The first of each kind is free once per player (tutorial). Only other free source: a rare drop at existing reward points (7th chest day in a row; achievements streak_30, cases_50, interrogate_10).

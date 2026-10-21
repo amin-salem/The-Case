@@ -122,9 +122,11 @@ async def test_not_enough_coins_for_hint(client):
     h = p["headers"]
     c = content.todays_case()
     await client.get(f"/v1/cases/{c.id}", headers=h)
-    for _ in range(2):  # 30 + 50 of the 150 welcome coins
+    from .test_difficulty_economy import fund
+    await fund(p["player_id"], 200)
+    for _ in range(2):  # 50 + 90 of the 200 coins
         assert (await client.post(f"/v1/cases/{c.id}/hint", headers=h)).status_code == 200
-    r = await client.post(f"/v1/cases/{c.id}/hint", headers=h)  # 80 needed, 70 left
+    r = await client.post(f"/v1/cases/{c.id}/hint", headers=h)  # 140 needed, 60 left
     assert r.status_code == 402 and r.json()["detail"]["error"] == "not_enough_coins"
 
 
