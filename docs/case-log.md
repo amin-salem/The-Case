@@ -47,3 +47,21 @@ Rewritten in Claude's voice (spoken answers, people-first, surface motives) and 
 
 - c033 «کپه‌ی گونی در دودکش» (ChatGPT Plus rewrite imported 19 Oct; two-stage pipe swap with a watch 11 min fast + mirrored east/west; blind test Behnam 88%, difficulty 4), c034 «سایه‌ی شتر» (mirror photo + phone clock offset + shadow ratio + camel height; blind test Farhad 90%, difficulty 4), c035 «کیف شش‌صد میلیونی» (three bags matched by repair order and a star patch; blind test Abbasi 93%, difficulty 4), c036 «فلاسک HeLa-7» (blind codebook locked at baseline, background subtraction, version-0 orders; blind test Shima 93%, difficulty 4). ChatGPT rated all four 5; measured 4. Claude changes: category added, difficulty 4, c034/c036 notification teasers rewritten, one clarifying sentence in c036 e3 («اعمال انتخابِ نسخهٔ صفر» meaning). Known soft spots: dense cards, tester noted "left/right" mirror steps (c033/c034) and the cryptic A۱/B۲ notation (c036).
 - w003-w006 got their category (art, travel, art, travel).
+
+### 2026-10-21 — c037–c039 review branch (not published)
+
+Fresh main base: `cdf625768f65ad9b16e38b08d089e6bdc0d23dac`.
+Full dependency/elimination, custody and validation notes:
+[`reviews/c037-c039-review.md`](reviews/c037-c039-review.md).
+
+| case | publish | main type | culprit | actual public-only helper result |
+|---|---|---|---|---|
+| c037 «بارِ آخرِ تالار» | 2026-11-04 | 2 hidden relationship; rounded competing transport loads | s2 | 3 sequential solves; final solved through e1/e9 cash provenance + e4/e5 room/family identity, with e2/e8 resolving routes; measured 4. Removed direct witnessed appropriation and unsupported packing assertion; clarified box's location at search. |
+| c038 «شش نمره‌ی اضافه» | 2026-11-05 | 10 motive inversion; anonymous exam-paper stack | s1 | 3 sequential solves; final used e2/e3 mapping + e4 authorship + e1/e6 false claimed observation; measured 3. All requests now +6 and system receipt omits names/totals, removing the unique-increase shortcut; reconciled fourth lesson and closed the stated seat-error defense. |
+| c039 «کیفِ کنار پنجره» | 2026-11-06 | 8 the helpful witness is the liar | s5 | 5 sequential solves including a plot revision; final used e1/e2/e3 mass/labels + e4 independent delivery + e5 custody + e6/e8 identity, measured 4 with no material flaw. Resolved zipper, all-vs-part timing, tolerance, card continuity and physical volume; only e1/e5 carry machine records. |
+
+All three difficulty fields are the requested target 5; those helper estimates **do not
+validate difficulty 5**. Helpers saw public JSON only, without hints/solution, one at a
+time under the authoring rule. These are not Claude's requested independent review or
+human playtests. Owner/Claude review and publication decision remain pending. No merge,
+deploy, APK or changes to other cases are part of this branch.
