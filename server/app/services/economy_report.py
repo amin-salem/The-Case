@@ -135,7 +135,7 @@ async def _after_loss(s: AsyncSession, since: datetime) -> dict:
     came_back = select(later.id).where(later.player_id == CP.player_id, later.opened_at > CP.finished_at,
                                        later.case_id != CP.case_id).exists()
     row = (await s.execute(select(func.count(), func.sum(case((came_back, 1), else_=0)))
-                           .join(Player, Player.id == CP.player_id).where(lost, _valid_player()))).one()
+                           .select_from(CP).join(Player, Player.id == CP.player_id).where(lost, _valid_player()))).one()
     n, back = int(row[0] or 0), int(row[1] or 0)
     reopened = int((await s.scalar(select(func.count()).select_from(CoinLog).join(Player, Player.id == CoinLog.player_id)
                                    .where(CoinLog.at >= since, CoinLog.reason.like("reopen:%"), _valid_player()))) or 0)
