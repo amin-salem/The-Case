@@ -207,7 +207,7 @@ class _ResultScreenState extends State<ResultScreen> {
               child: StampButton(
                 label: solved ? 'پز بده' : 'به دوستات بگو',
                 icon: Icons.share_rounded,
-                onTap: () => SharePlus.instance.share(ShareParams(text: shortShareText(caseData, result))),
+                onTap: () => SharePlus.instance.share(ShareParams(text: spoilerFreeShareText(caseData, result))),
               ),
             ),
             if (!solved) ...[

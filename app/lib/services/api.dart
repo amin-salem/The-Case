@@ -68,6 +68,10 @@ enum FailKind {
 /// Everything that talks to the game server. Coins, cases and solutions live
 /// on the server; the last answers are kept on the phone so the game still
 /// opens (and opened cases can be read) without internet.
+/// The link in the share card and the share texts. TODO(Amin): put the real Cafe Bazaar address here once the app is
+/// published (the server's `share_url` in remote config overrides it without a new APK).
+const String kShareLinkPlaceholder = 'https://cafebazaar.ir/app/ir.gammly.parvandeh';
+
 class Api extends ChangeNotifier {
   Api._();
   static final Api i = Api._();
@@ -918,7 +922,7 @@ class Api extends ChangeNotifier {
   List<int> get streakBadges => [for (final v in (_economy['streak_badges'] as List? ?? const [7, 30, 100])) (v as num).toInt()];
   String get shareUrl => config['share_url'] is String
       ? config['share_url'] as String
-      : (config['update_url'] is String ? config['update_url'] as String : 'https://cafebazaar.ir/app/ir.gammly.parvandeh');
+      : (config['update_url'] is String ? config['update_url'] as String : kShareLinkPlaceholder);
 
   Future<Leaderboard> leaderboard(String period, {int? league}) async =>
       Leaderboard((await _call('GET', '/v1/leaderboard?period=$period${league != null ? '&league=$league' : ''}') as Map)

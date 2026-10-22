@@ -49,6 +49,21 @@ String shareText(CaseData c, AccuseResult r) {
   ].join('\n');
 }
 
+/// Wordle-style, spoiler-free card: only the case number and title, the plaques, how many evidence cards were opened and
+/// the minutes. It never names the culprit, a clue or a card. Example:
+/// «پرونده‌ی ۳۴ «عنوان» 🕵️ ۳ پلاک · ۴ مدرک · ۶ دقیقه — تو هم امتحان کن: لینک»
+String spoilerFreeShareText(CaseData c, AccuseResult r) {
+  final head = 'پرونده‌ی ${fa(c.number)} «${c.title}» 🕵️';
+  if (r.result != 'solved') return '$head این بار نشد — تو هم امتحان کن: ${Api.i.shareUrl}';
+  final minutes = r.seconds <= 0 ? 0 : (r.seconds / 60).round().clamp(1, 999);
+  final parts = <String>[
+    '${fa(r.stars)} پلاک',
+    if (r.evidenceOpened >= 0) '${fa(r.evidenceOpened)} مدرک',
+    if (minutes > 0) '${fa(minutes)} دقیقه',
+  ];
+  return '$head ${parts.join(' · ')} — تو هم امتحان کن: ${Api.i.shareUrl}';
+}
+
 /// The short brag for the result screen's «پز بده»: case number, stars and the app link.
 String shortShareText(CaseData c, AccuseResult r) {
   final solved = r.result == 'solved';

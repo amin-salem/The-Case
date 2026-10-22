@@ -358,6 +358,9 @@ class AccuseResult {
         rank = j['rank'] is int ? j['rank'] as int : null,
         progress = j['progress'] is Map ? Progress((j['progress'] as Map).cast<String, dynamic>()) : null,
         seconds = _i(j['seconds']),
+        evidenceOpened = j['depth'] is Map ? _i((j['depth'] as Map)['evidence'], -1) : -1,
+        ranked = j['ranked'] is bool ? j['ranked'] as bool : true,
+        unrankedReason = _s(j['unranked_reason']),
         hintsUsed = _i(j['hints_used']),
         freezesUsed = _i(j['freezes_used']),
         badge = j['badge'] is int ? j['badge'] as int : null,
@@ -373,6 +376,13 @@ class AccuseResult {
   final String result; // solved | wrong_suspect | wrong_proof | failed
   final int attemptsLeft, stars, reward, coins, streak;
   final int seconds, hintsUsed, freezesUsed;
+
+  /// How many distinct evidence cards the player opened (server count; -1 = the server did not say).
+  final int evidenceOpened;
+
+  /// False when the solve gives no leaderboard place (too little investigation); [unrankedReason] is a stable code.
+  final bool ranked;
+  final String unrankedReason;
   final int? badge; // a streak badge (7, 30, 100) reached right now
   final int? streakMilestone; // a step of the streak ladder (3, 7, 14, 30, 60, 100, 200, 365) reached right now
   final DateTime? answerAt; // lost: the answer (culprit, proof, explanation) is public from this time
