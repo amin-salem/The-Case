@@ -3,14 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:the_case/screens/archive_screen.dart';
 import 'package:the_case/screens/main_shell.dart';
-import 'package:the_case/services/api.dart';
 import 'home_fixtures.dart';
 
 const _navHeight = 66.0;
 
-Future<void> systemBack() async {
+Future<void> systemBack(WidgetTester t) async {
   final message = const JSONMethodCodec().encodeMethodCall(const MethodCall('popRoute'));
-  await ServicesBinding.instance.defaultBinaryMessenger.handlePlatformMessage('flutter/navigation', message, (_) {});
+  await t.binding.defaultBinaryMessenger.handlePlatformMessage('flutter/navigation', message, (_) {});
 }
 
 int selectedTab(WidgetTester t) => t.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex;
@@ -65,7 +64,7 @@ void main() {
       await t.tap(find.text('برترها').last);
       await t.pump(const Duration(milliseconds: 300));
       expect(selectedTab(t), MainShell.leaderboard);
-      await systemBack();
+      await systemBack(t);
       await t.pump(const Duration(milliseconds: 300));
       expect(selectedTab(t), MainShell.home);
       final popScope = t.widget<PopScope>(find.byType(PopScope).first);

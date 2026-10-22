@@ -21,6 +21,7 @@ import '../widgets/typewriter.dart';
 import '../widgets/whats_new_ui.dart';
 import '../data/whats_new.dart';
 import '../services/whats_new.dart';
+import 'archive_screen.dart';
 import 'main_shell.dart';
 import 'shop_screen.dart';
 
@@ -290,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final c = cs.today;
     final finished = c != null && (c.solved || c.failed);
     return [
-      if (!finished) FadeSlideIn(child: _hero(c)) else if (c!.solved) _solvedCard(c, cs) else _lostCard(c, cs),
+      if (!finished) FadeSlideIn(child: _hero(c)) else if (c.solved) _solvedCard(c, cs) else _lostCard(c, cs),
       const SizedBox(height: 10),
       if (finished) ...[
         _archiveInvite(cs),
