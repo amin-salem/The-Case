@@ -76,8 +76,10 @@ void main() {
       await pumpApp(t);
       expect(find.byType(NavigationBar), findsOneWidget);
       final ctx = t.element(find.byType(NavigationBar));
-      Navigator.of(ctx).push(MaterialPageRoute<void>(builder: (_) => const Scaffold(body: Text('داخل پرونده'))));
-      await t.pump(const Duration(milliseconds: 400));
+      Navigator.of(ctx, rootNavigator: true).push(MaterialPageRoute<void>(builder: (_) => const Scaffold(body: Text('داخل پرونده'))));
+      for (int i = 0; i < 5; i++) {
+        await t.pump(const Duration(milliseconds: 200));
+      }
       expect(find.text('داخل پرونده'), findsOneWidget);
       expect(find.byType(NavigationBar), findsNothing);
     });
@@ -108,6 +110,7 @@ void main() {
       expect(find.text('۳ پرونده منتظرته'), findsOneWidget); // 4 old cases, 1 solved
       expect(find.text('پرونده‌ی آخر هفته'), findsOneWidget);
       expect(find.textContaining('باز است'), findsOneWidget);
+      await t.scrollUntilVisible(find.text('مأموریت‌های امروز'), 200, scrollable: find.byType(Scrollable).first);
       expect(find.text('مأموریت‌های امروز'), findsOneWidget);
       expect(find.text('۱ از ۳'), findsOneWidget);
       expect(find.text('۴ شب پشت سر هم'), findsOneWidget);

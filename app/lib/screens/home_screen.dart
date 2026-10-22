@@ -445,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(17),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             SizedBox(
-              height: 104,
+              height: 80,
               child: Stack(fit: StackFit.expand, children: [
                 art,
                 const Positioned(left: 0, right: 0, bottom: 0, child: CrimeTape(height: 16)),
@@ -453,7 +453,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ]),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 8, 14, 12),
+              padding: const EdgeInsets.fromLTRB(14, 6, 14, 10),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
             ),
           ]),
@@ -596,8 +596,8 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(14),
         onTap: onTap,
         child: Container(
-          constraints: const BoxConstraints(minHeight: 88),
-          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          constraints: const BoxConstraints(minHeight: 76),
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), border: Border.all(color: K.night3)),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
             Row(children: [

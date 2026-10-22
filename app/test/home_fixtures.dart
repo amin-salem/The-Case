@@ -53,6 +53,7 @@ Future<void> seedHome({String tonight = 'open', String? weekend, bool online = t
   Api.i.online = online;
   Api.i.profile = Profile({'player_id': 'p', 'nickname': 'آرش', 'coins': 500, 'cases_solved': 5, 'streak': streak, 'secured': true});
   Api.i.httpClient = MockClient((r) async {
+    if (!online) throw http.ClientException('offline');
     if (r.url.path == '/v1/cases') return jsonResponse(casesBody(tonight: tonight, weekend: weekend));
     if (r.url.path == '/v1/missions') return jsonResponse(missionsBody());
     return jsonResponse({});
