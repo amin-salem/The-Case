@@ -159,9 +159,9 @@ class Api extends ChangeNotifier {
     if (seconds < 90) {
       span = '${_faDigits('$seconds')} ثانیه';
     } else if (seconds < 90 * 60) {
-      span = 'حدود ${_faDigits('${(seconds / 60).round()}')} دقیقه';
+      span = 'حدود ${_faDigits((seconds / 60).round().toString())} دقیقه';
     } else {
-      span = 'حدود ${_faDigits('${(seconds / 3600).round()}')} ساعت';
+      span = 'حدود ${_faDigits((seconds / 3600).round().toString())} ساعت';
     }
     return 'کمی صبر کن؛ $span‌ی دیگه دوباره امتحان کن';
   }
