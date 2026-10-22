@@ -48,7 +48,7 @@ const List<WhatsNewRelease> kWhatsNew = [
     WhatsNewItem('home_calm', 'صفحه‌ی خانه مرتب‌تر شد: پرونده‌ی امشب، بایگانی و آخر هفته کنار هم، مأموریت‌ها و زنجیره فشرده، و بقیه (داستان، دعوت، فروشگاه) توی «تازه‌ها»', WhatsNewTarget.caseToday),
     WhatsNewItem('rating_calm', 'امتیاز دادن به پرونده‌های بایگانی دیگه زود «کمی صبر کن» نمی‌ده؛ می‌تونی پشت سر هم به چندتا پرونده ستاره بدی', WhatsNewTarget.archive),
     WhatsNewItem('share_card', 'کارت اشتراک نتیجه حالا کوتاهه (پلاک، مدرک و دقیقه) و هیچ‌چیزی از جواب پرونده لو نمی‌ده', WhatsNewTarget.caseToday),
-    WhatsNewItem('fair_week', 'جدول هفته به پیوستگی جایزه می‌ده: اول شب‌های حل‌شده، بعد پلاک؛ هر شب هم بین حل‌کننده‌های ۳ پلاکیِ پرونده یک نفر قرعه‌کشی می‌شه', WhatsNewTarget.leaderboard),
+    WhatsNewItem('fair_week', 'جدول هفته به پیوستگی جایزه می‌ده: اول شب‌های حل‌شده، بعد پلاک؛ هر شب هم بین حل‌کننده‌های ۳ پلاکیِ پرونده یک کارآگاه قرعه‌کشی می‌شه', WhatsNewTarget.leaderboard),
   ]),
   WhatsNewRelease(67, '۱.۳۵', '2026-10-21', [
     WhatsNewItem('board_calm', 'جدول برترها آروم‌تره: فقط یه خط توضیح می‌بینی و بقیه‌اش پشت دکمه‌ی «i» کنار عنوانه؛ لیگ‌ها هم همیشه روی صفحه‌ان', WhatsNewTarget.leaderboard),

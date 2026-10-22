@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/testing.dart';
 import 'package:the_case/screens/archive_screen.dart';
 import 'package:the_case/screens/main_shell.dart';
 import 'package:the_case/services/api.dart';
 import 'home_fixtures.dart';
 
 const _navHeight = 66.0;
-
-Future<void> systemBack(WidgetTester t) async {
-  final message = const JSONMethodCodec().encodeMethodCall(const MethodCall('popRoute'));
-  await t.binding.defaultBinaryMessenger.handlePlatformMessage('flutter/navigation', message, (_) {});
-}
 
 int selectedTab(WidgetTester t) => t.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex;
 
@@ -49,7 +42,9 @@ void main() {
       await seedHome();
       await pumpApp(t);
       await t.tap(find.text('بایگانی').last);
-      await t.pump(const Duration(milliseconds: 400));
+      for (int i = 0; i < 6; i++) {
+        await t.pump(const Duration(milliseconds: 300));
+      }
       await t.enterText(find.byKey(const ValueKey('archive-search')), '۲۸');
       await t.pump();
       await t.tap(find.text('خانه').last);
@@ -66,7 +61,9 @@ void main() {
       await t.tap(find.text('برترها').last);
       await t.pump(const Duration(milliseconds: 300));
       expect(selectedTab(t), MainShell.leaderboard);
-      await systemBack(t);
+      final onTab = t.widget<PopScope>(find.byType(PopScope).first);
+      expect(onTab.canPop, isFalse, reason: 'on another tab, back must not leave the app');
+      onTab.onPopInvokedWithResult!(false, null);
       await t.pump(const Duration(milliseconds: 300));
       expect(selectedTab(t), MainShell.home);
       final popScope = t.widget<PopScope>(find.byType(PopScope).first);
@@ -180,12 +177,16 @@ void main() {
     });
 
     testWidgets('offline: the short strip says so', (t) async {
-      await seedHome(online: false);
+      await seedHome();
       await pumpApp(t);
+      expect(find.textContaining('آفلاینی'), findsNothing);
+      // flip the flag and nudge the banner's own listener (no retry timer is started this way)
+      Api.i.online = false;
+      Api.i.rateLimitedUntil.value = DateTime.now().add(const Duration(seconds: 1));
+      await t.pump(const Duration(milliseconds: 100));
       expect(find.textContaining('آفلاینی'), findsOneWidget);
-      // the retry timer of the offline state must not outlive the test
-      Api.i.httpClient = MockClient((r) async => jsonResponse({}));
-      await Api.i.reconnect();
+      Api.i.rateLimitedUntil.value = null;
+      Api.i.online = true;
       await t.pump(const Duration(milliseconds: 100));
     });
 
