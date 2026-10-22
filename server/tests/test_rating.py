@@ -25,9 +25,9 @@ async def rate(client, p, stars, case=CASE):
 
 
 def test_policy_and_routes():
-    pol = rl.POLICIES["rating"]
+    pol = rl.DEFAULTS["rating"]
     assert pol.tiers == ((5, 10), (200, 3600)) and pol.store == "mem" and pol.fail == "open"
-    assert rl.POLICIES["comment"].tiers == ((2, 20), (10, 3600)) and rl.POLICIES["comment"].store == "strict"
+    assert rl.DEFAULTS["comment"].tiers == ((2, 20), (10, 3600)) and rl.DEFAULTS["comment"].store == "strict"
 
     def policy_of(method, path):
         for m, rx, name in rl.ROUTES:

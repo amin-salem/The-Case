@@ -163,7 +163,7 @@ class Api extends ChangeNotifier {
     } else {
       span = 'حدود ${_faDigits('${(seconds / 3600).round()}')} ساعت';
     }
-    return 'کمی صبر کن؛ ${span}‌ی دیگه دوباره امتحان کن';
+    return 'کمی صبر کن؛ $span‌ی دیگه دوباره امتحان کن';
   }
 
   static String _faDigits(String s) =>
