@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#17181a"><title>پرونده · پیش‌نمایش طراحی</title><meta name="description" content="نمونهٔ خصوصی و تعاملی برای مرور پیشنهادهای طراحی پرونده؛ با داده‌های نمایشی."></head>
+<body>
+<header class="review-head"><div><span class="eyebrow">پرونده / بازبینی رابط</span><h1>همان فضا، مسیرهای روشن‌تر.</h1><p>نسخهٔ پیشنهادی برای بررسی تو · داده و پرداخت نمایشی</p></div><button class="outline small" id="review-toggle">راهنمای مرور و نظرها</button></header>
+<div class="workspace">
+<aside class="screen-list" id="screen-list"><div class="panel-label">صفحه‌ها و حالت‌ها</div><nav id="page-links" aria-label="فهرست صفحه‌های پیش‌نمایش"></nav><div class="aside-foot">این یک نمونهٔ HTML است؛ چیدمان پیشنهادی را نشان می‌دهد و به حساب یا سرور بازی وصل نیست.</div></aside>
+<section class="stage" aria-label="نمای موبایل پیشنهادی">
+<div class="preview-controls"><label class="mobile-picker">صفحه <select id="page-select" aria-label="انتخاب صفحه"></select></label><label>عرض <select id="phone-width" aria-label="عرض گوشی نمونه"><option value="410">۳۹۰+</option><option value="360">۳۶۰</option><option value="320">۳۲۰</option></select></label><label>اندازهٔ متن <select id="text-scale" aria-label="اندازهٔ متن نمونه"><option value="1">معمولی</option><option value="1.25">بزرگ</option><option value="1.5">خیلی بزرگ</option></select></label><button id="offline-toggle" class="quiet small" aria-pressed="false">آفلاین: خاموش</button></div>
+<div class="phone" id="phone"><div class="status-bar" aria-hidden="true"><span>۹:۴۱</span><span class="status-signals">▰ ▮▮▮</span></div><div id="app" class="app"></div><div id="overlays"></div><div id="toast" role="status" aria-live="polite"></div></div>
+<div class="stage-caption"><span class="dot"></span><span id="current-caption">خانه</span><span>· پیشنهاد طراحی</span></div>
+</section>
+<aside class="review-panel" id="review-panel"><div class="panel-label">دربارهٔ این تغییر</div><h2 id="review-title"></h2><p id="review-before"></p><ul id="review-changes"></ul><div class="review-divider"></div><p class="review-prompt">این صفحه به نظرت چطوره؟</p><div class="review-votes"><button id="vote-good" class="outline">خوبه</button><button id="vote-change" class="outline">اصلاح می‌خواد</button></div><label class="review-note-label" for="feedback">نکته یا اصلاح پیشنهادی تو</label><textarea id="feedback" rows="4" placeholder="مثلاً: بایگانی بالاتر باشه، یا این دکمه زیادی پررنگه…"></textarea><p id="feedback-status" class="subtle">نظرها در همین مرورگر ذخیره می‌شوند.</p><button id="export-feedback" class="outline full">دریافت همهٔ نظرها</button><button id="next-review" class="quiet full">صفحهٔ پیشنهادی بعدی ←</button><div class="review-divider"></div><p class="subtle">می‌توانی با دکمه‌های داخل نمونه بازی کنی: مدرک سنجاق کن، یادداشت بساز، متهم کن، پاسخ را بخوان و برگرد. نظرهای اینجا خودکار برای کسی ارسال نمی‌شوند.</p></aside>
+</div>
+
+</body></html>
