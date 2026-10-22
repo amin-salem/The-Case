@@ -9,7 +9,9 @@ rewards.py, so they can never disagree):
 - A solve counts only while the week is open: finished before the next week's first case is released. After that the
   case is archive for the board.
 - Only solved, ranked (investigated) solves of visible players count. Points = stars.
-- Order: points, then more cases solved (consistency), then less total time, then older account.
+- Order (WEEK_RANK_MODE=consistency, the default): nights solved, then nights solved ON their own night, then points
+  (stars), then less total time (speed only breaks ties), then older account. The old order (points first, then
+  cases, then time) is WEEK_RANK_MODE=points.
 """
 from __future__ import annotations
 
@@ -53,6 +55,7 @@ class Standing:
     points: int
     cases: int
     seconds: int
+    ontime: int = 0   # solved on the case's own night (a nightly case finished the night it was today's case)
 
 
 def league_min_xp() -> tuple[int, ...]:
@@ -129,11 +132,22 @@ async def league_of(session: AsyncSession, ws: date, player_id: str) -> int:
 
 
 # ------------------------------------------------------------------ standings
+def consistency_mode() -> bool:
+    return get_settings().week_rank_mode != "points"
+
+
+def _agg():
+    pts = func.sum(CaseProgress.stars)
+    n = func.count(CaseProgress.id)
+    secs = func.sum(CaseProgress.seconds)
+    ontime = func.sum(sql_case((CaseProgress.was_daily.is_(True), 1), else_=0))
+    return pts, n, secs, ontime
+
+
 def _base(ws: date, league: int | None):
-    pts = func.sum(CaseProgress.stars).label("pts")
-    n = func.count(CaseProgress.id).label("n")
-    secs = func.sum(CaseProgress.seconds).label("secs")
-    q = select(Player, pts, n, secs).join(CaseProgress, CaseProgress.player_id == Player.id)
+    pts, n, secs, ontime = _agg()
+    q = select(Player, pts.label("pts"), n.label("n"), secs.label("secs"), ontime.label("ontime")).join(
+        CaseProgress, CaseProgress.player_id == Player.id)
     if league is not None:
         q = q.outerjoin(WeekLeague, (WeekLeague.week == ws.isoformat()) & (WeekLeague.player_id == Player.id))
         q = q.where(func.coalesce(WeekLeague.league, 0) == league)
@@ -141,26 +155,38 @@ def _base(ws: date, league: int | None):
     return q.group_by(Player.id)
 
 
+def _order():
+    pts, n, secs, ontime = _agg()
+    if consistency_mode():
+        keys = [n.desc(), ontime.desc(), pts.desc(), secs.asc()]
+    else:
+        keys = [pts.desc(), n.desc(), secs.asc()]
+    return keys + [Player.created_at.asc(), Player.id.asc()]
+
+
 async def standings(session: AsyncSession, ws: date, *, league: int | None = None, limit: int = 100) -> list[Standing]:
     """The top `limit` players of the week (of one league, or of everybody when league is None)."""
-    q = _base(ws, league).order_by(func.sum(CaseProgress.stars).desc(), func.count(CaseProgress.id).desc(),
-                                   func.sum(CaseProgress.seconds).asc(), Player.created_at.asc(), Player.id.asc()).limit(limit)
-    return [Standing(pl, int(p), int(n), int(s or 0)) for pl, p, n, s in (await session.execute(q)).all()]
+    q = _base(ws, league).order_by(*_order()).limit(limit)
+    return [Standing(pl, int(p), int(n), int(s or 0), int(o or 0)) for pl, p, n, s, o in (await session.execute(q)).all()]
 
 
 async def my_standing(session: AsyncSession, ws: date, player: Player, league: int | None) -> tuple[int, int] | None:
-    """(rank, points) of one player, however far down: counts the players ahead of him (ties by points, cases, time)."""
-    q = select(func.sum(CaseProgress.stars), func.count(CaseProgress.id), func.sum(CaseProgress.seconds)).where(
-        *week_filters(ws), CaseProgress.player_id == player.id)
-    pts, n, secs = (await session.execute(q)).one()
+    """(rank, points) of one player, however far down: counts the players ahead of him (same order as standings)."""
+    pts_e, n_e, secs_e, ontime_e = _agg()
+    q = select(pts_e, n_e, secs_e, ontime_e).where(*week_filters(ws), CaseProgress.player_id == player.id)
+    pts, n, secs, ontime = (await session.execute(q)).one()
     if not n:
         return None
-    pts, n, secs = int(pts), int(n), int(secs or 0)
-    sub = _base(ws, league).with_only_columns(Player.id, func.sum(CaseProgress.stars).label("pts"),
-                                              func.count(CaseProgress.id).label("n"),
-                                              func.sum(CaseProgress.seconds).label("secs")).subquery()
-    ahead = await session.scalar(select(func.count()).select_from(sub).where(
-        (sub.c.pts > pts) | ((sub.c.pts == pts) & (sub.c.n > n)) | ((sub.c.pts == pts) & (sub.c.n == n) & (sub.c.secs < secs))))
+    pts, n, secs, ontime = int(pts), int(n), int(secs or 0), int(ontime or 0)
+    sub = _base(ws, league).with_only_columns(Player.id, pts_e.label("pts"), n_e.label("n"), secs_e.label("secs"),
+                                              ontime_e.label("ontime")).subquery()
+    c = sub.c
+    if consistency_mode():
+        better = ((c.n > n) | ((c.n == n) & (c.ontime > ontime)) | ((c.n == n) & (c.ontime == ontime) & (c.pts > pts))
+                  | ((c.n == n) & (c.ontime == ontime) & (c.pts == pts) & (c.secs < secs)))
+    else:
+        better = (c.pts > pts) | ((c.pts == pts) & (c.n > n)) | ((c.pts == pts) & (c.n == n) & (c.secs < secs))
+    ahead = await session.scalar(select(func.count()).select_from(sub).where(better))
     return int(ahead or 0) + 1, pts
 
 

@@ -148,6 +148,13 @@ async def cheat_report(days: int = Query(7, ge=1, le=60), session: AsyncSession 
     return await cheatreport.build(session, days)
 
 
+@router.get("/suspicious-solves")
+async def suspicious_solves(session: AsyncSession = Depends(get_session)):
+    """Last 24 h: solves with very low depth, solves far faster than the case median, clusters of accounts solving
+    within seconds after a quiet period. Flags only, never an automatic ban."""
+    return await cheatreport.suspicious_solves(session)
+
+
 @router.post("/cheat-report/weekly")
 async def cheat_report_weekly(session: AsyncSession = Depends(get_session)):
     """Writes this week's summary into the admin log now (it also happens by itself once a week)."""

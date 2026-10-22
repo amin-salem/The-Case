@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import re
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import and_, func, or_, select, update
@@ -73,6 +74,56 @@ def proof_ok(p: CaseProgress, c: content.Case) -> bool:
     (eco.min_active_seconds): a quick reader who reaches the clue on an easy case is not punished as a cheater."""
     need = eco.min_active_seconds(c.data.get("difficulty"))
     return (p.active_seconds or 0) >= need and len(p.seen or []) >= eco.MIN_SUSPECTS_SEEN
+
+
+# ---------------------------------------------------------------- investigation depth
+_ASK = re.compile(r"^[A-Za-z0-9_-]{1,16}:\d{1,2}$")
+DEPTH_CAP = 80
+
+
+def merge_depth(p: CaseProgress, c: content.Case, cards: list[str] | None, asks: list[str] | None) -> None:
+    """Adds what the app reports (evidence cards opened, "suspect:question" keys asked) to the progress row. Only ids
+    that exist in THIS case are kept, each list is a set bounded to DEPTH_CAP entries, so garbage cannot inflate it.
+    None for both = an old app: the columns stay None (= "never reported")."""
+    if cards is None and asks is None:
+        return
+    ev = {e["id"] for e in c.data.get("evidence", [])}
+    sus = {s["id"] for s in c.data.get("suspects", [])}
+    have_c = set(p.cards_opened or [])
+    have_q = set(p.questions_asked or [])
+    for x in cards or []:
+        if x in ev and len(have_c) < DEPTH_CAP:
+            have_c.add(x)
+    for x in asks or []:
+        if _ASK.match(x) and x.split(":", 1)[0] in sus and len(have_q) < DEPTH_CAP:
+            have_q.add(x)
+    p.cards_opened, p.questions_asked = sorted(have_c), sorted(have_q)
+
+
+def depth_summary(p: CaseProgress, c: content.Case) -> dict:
+    cards = set(p.cards_opened or [])
+    return {"evidence": len(cards), "questions": len(set(p.questions_asked or [])),
+            "proof_opened": bool(cards & set(c.proof)), "active": int(p.active_seconds or 0)}
+
+
+def depth_ok(p: CaseProgress, c: content.Case) -> tuple[bool, str]:
+    """Is the investigation deep enough for a leaderboard place? (ok, reason). Plain nightly and archive cases only
+    (weekend and story cases have their own formats). Never blocks solving; stars and coins do not depend on it."""
+    from .config import get_settings
+    st = get_settings()
+    if not st.depth_gate_enabled or content.is_weekly(c.id) or content.is_story(c.id):
+        return True, ""
+    if p.cards_opened is None and p.questions_asked is None:
+        return (not st.depth_require_report), ("no_report" if st.depth_require_report else "")
+    d = depth_summary(p, c)
+    need_cards = min(st.depth_min_cards, len(c.data.get("evidence", [])))
+    if d["evidence"] < need_cards:
+        return False, "cards"
+    if d["questions"] < st.depth_min_questions:
+        return False, "questions"
+    if st.depth_need_proof and not d["proof_opened"]:
+        return False, "proof"
+    return True, ""
 
 
 # ---------------------------------------------------------------- throwaway accounts

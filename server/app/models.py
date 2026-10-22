@@ -129,6 +129,10 @@ class CaseProgress(Base):
     last_tick_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     # anti-cheat: False = solved without enough investigation (1 star, no leaderboard place)
     ranked: Mapped[bool] = mapped_column(Boolean, default=True, server_default=true())
+    # investigation depth reported by the app: distinct evidence ids opened, and "suspect:question" keys asked.
+    # None = the app never reported (an old app). Bounded to 80 entries each (anticheat.merge_depth).
+    cards_opened: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    questions_asked: Mapped[list | None] = mapped_column(JSON, nullable=True)
     # a lost case shows its answer only from this time (UTC); None = at once
     reveal_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     # the player's wrong accusations in order: [{"s": suspect, "e": evidence, "m": motive|None, "r": kind}] (at most 10)
@@ -434,6 +438,18 @@ class WeekSettlement(Base):
     week: Mapped[str] = mapped_column(String(10), primary_key=True)
     at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     paid: Mapped[int] = mapped_column(Integer, default=0)        # how many players got a prize
+
+
+class DailyDraw(Base):
+    """One row per nightly case that has been drawn: the primary key makes a second draw impossible, even from two
+    workers. winner_id is None when nobody qualified."""
+
+    __tablename__ = "daily_draws"
+
+    case_id: Mapped[str] = mapped_column(String(16), primary_key=True)
+    winner_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    eligible: Mapped[int] = mapped_column(Integer, default=0)
+    at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
 class PlayerTool(Base):

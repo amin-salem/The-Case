@@ -55,6 +55,18 @@ class Settings(BaseSettings):
 
     detective_tools_enabled: bool = True  # DETECTIVE_TOOLS_ENABLED=false hides and refuses the detective tools (kill switch)
 
+    # Investigation depth (docs/operations.md «Leaked answers»): a solve is ranked only with enough real investigation.
+    depth_gate_enabled: bool = True   # DEPTH_GATE_ENABLED=false turns the whole gate off (kill switch)
+    depth_min_cards: int = 3          # distinct evidence cards opened (capped by the cards the case has)
+    depth_min_questions: int = 2      # distinct interrogation questions asked
+    depth_need_proof: bool = False    # DEPTH_NEED_PROOF=true: at least one card of solution.proof must have been opened
+    depth_require_report: bool = False  # true: an app that never reports depth (an old app) is gated too
+
+    # Fair daily reward (docs/operations.md «Leaked answers»): a small draw among ranked 3-plaque solvers, and a weekly
+    # board that rewards consistency (nights solved, then nights solved on time, then plaques, speed only breaks ties).
+    daily_draw_enabled: bool = True   # DAILY_DRAW_ENABLED=false stops new draws (kill switch)
+    week_rank_mode: str = "consistency"  # WEEK_RANK_MODE=points restores the old order (plaques first)
+
     # Rewarded ads pay coins only when a real ad network is in the app.
     ads_enabled: bool = False
 

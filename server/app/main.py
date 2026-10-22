@@ -42,6 +42,7 @@ async def lifespan(app: FastAPI):
                     if weekboard.leagues_on():  # the league snapshot of a new week is taken at its start, once
                         await weekboard.ensure_snapshot(ses, gameclock.week_of(content.now_local()))
                     await rewards.settle_last_week(ses)
+                    await rewards.settle_daily_draws(ses)
                     await cheatreport.store_weekly(ses)
             except Exception:
                 log.exception("weekly job failed")

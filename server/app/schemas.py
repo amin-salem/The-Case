@@ -211,6 +211,8 @@ class AccuseIn(BaseModel):
     evidence: str = Field(default="", max_length=16)          # not asked in the two-part weekend accusation
     motive: str | None = Field(default=None, max_length=16)   # the weekly case also asks "why"
     extra_seconds: int = Field(default=0, ge=0, le=3600)      # active time since the last tick
+    cards: list[str] | None = Field(default=None, max_length=80)  # evidence ids opened (depth; None = old app)
+    asks: list[str] | None = Field(default=None, max_length=80)   # "suspect:question" keys asked
 
 
 class LiarIn(BaseModel):
@@ -226,6 +228,8 @@ class LiarOut(BaseModel):
 
 class TickIn(BaseModel):
     seconds: int = Field(ge=0, le=3600)
+    cards: list[str] | None = Field(default=None, max_length=80)
+    asks: list[str] | None = Field(default=None, max_length=80)
 
 
 class TickOut(BaseModel):
@@ -253,6 +257,9 @@ class AccuseOut(BaseModel):
     answer_at: int | None = None   # lost case: the answer (culprit, proof, explanation) is public from this time
     unranked: bool = False         # solved without enough investigation: 1 star, no leaderboard place
     stars_capped: bool = False     # ... and it would have had more stars
+    ranked: bool = True            # False: no leaderboard place (unranked_reason says why: time | depth | retry)
+    unranked_reason: str = ""
+    depth: dict[str, Any] | None = None  # {"evidence": n, "questions": n, "proof_opened": bool, "active": seconds}
     story: dict[str, Any] | None = None  # story chapter finished: {season, chapter, outro, thread}
     early_bonus: int = 0           # weekend case solved before its last chapter: extra coins (already in reward)
     how_right: bool | None = None  # two-part weekend accusation: was the "why/how" part right (None = not asked)

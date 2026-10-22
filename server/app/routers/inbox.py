@@ -21,6 +21,8 @@ async def apply_grants(session: AsyncSession, player: Player, grants: list[dict]
     for g in grants:
         if g.get("type") == "coins":
             await add_coins(session, player, int(g["amount"]), reason)
+        elif g.get("type") == "warrants":
+            player.warrants = (player.warrants or 0) + max(0, min(int(g.get("amount", 0)), 5))
         elif g.get("type") == "no_ads":
             player.no_ads = True
         elif g.get("type") == "vip_until":

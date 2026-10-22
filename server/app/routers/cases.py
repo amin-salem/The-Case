@@ -337,6 +337,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
 
     explanation = c.data["solution"]["explanation"]
     add_active_time(p, body.extra_seconds, utcnow())  # once per accusation, before the judging below
+    ac.merge_depth(p, c, body.cards, body.asks)
     today_case = _is_today(c)
     today = gameclock.game_day(content.now_local()).isoformat()  # the GAME day it was finished (app/gameclock.py)
     if p.first_accused is None and body.suspect in {s["id"] for s in c.data["suspects"]}:
@@ -358,7 +359,14 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         # proof of investigation: without enough time and interrogations it is still solved, but 1 star, no place
         proven = ac.proof_ok(p, c)
         paid_retry = today_case and bool(p.unlocked)  # today's case played again after a loss: pays and counts, but no board place
-        p.stars, p.ranked = (natural if proven else 1), proven and not paid_retry
+        depth_pass, depth_why = ac.depth_ok(p, c)
+        p.stars, p.ranked = (natural if proven else 1), proven and not paid_retry and depth_pass
+        unranked_reason = "retry" if paid_retry else "time" if not proven else "depth" if not depth_pass else ""
+        if proven and not paid_retry and not depth_pass:
+            # solved with full stars and coins, but no board place: too little real investigation
+            d = ac.depth_summary(p, c)
+            log.info("anticheat depth_unranked case=%s why=%s cards=%d questions=%d proof=%s active=%s", c.id, depth_why,
+                     d["evidence"], d["questions"], d["proof_opened"], p.active_seconds)
         if not proven:
             log.info("anticheat unproven_solve case=%s active=%s seen=%d capped=%s", c.id, p.active_seconds,
                      len(p.seen or []), natural > 1)
@@ -417,6 +425,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         rank = (await _daily_rank(session, c.id, p.stars, p.seconds)
                 if today_case and p.ranked and ac.is_visible(player) else None)
         return AccuseOut(result="solved", unranked=not p.ranked, stars_capped=natural > p.stars,
+                         ranked=p.ranked, unranked_reason=unranked_reason, depth=ac.depth_summary(p, c),
                          attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,
                          reward=reward, coins=player.coins, streak=player.streak, explanation=explanation,
                          culprit=c.culprit, proof=sorted(c.proof), rank=rank, progress=_progress_out(c, p),
@@ -598,6 +607,7 @@ async def tick(case_id: str, body: TickIn, player: Player = Depends(current_play
         raise HTTPException(409, "open_case_first")
     if not (p.solved or p.failed):
         add_active_time(p, body.seconds, utcnow())
+        ac.merge_depth(p, c, body.cards, body.asks)
         await session.commit()
     return TickOut(active_seconds=p.active_seconds or 0)
 

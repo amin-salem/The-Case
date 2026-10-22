@@ -1,3 +1,4 @@
+import pytest
 from datetime import date, datetime
 from types import SimpleNamespace
 from zoneinfo import ZoneInfo
@@ -8,6 +9,12 @@ from app.models import CaseProgress
 from .conftest import new_player
 
 TEHRAN = ZoneInfo("Asia/Tehran")
+
+
+@pytest.fixture(autouse=True)
+def _points_order(monkeypatch):
+    from app.config import get_settings
+    monkeypatch.setattr(get_settings(), "week_rank_mode", "points")
 
 
 async def test_weekly_prize_paid_once_and_in_inbox(client, monkeypatch):

@@ -30,6 +30,13 @@ def week_of_fake_cases(monkeypatch):
     monkeypatch.setattr(content, "week_cases", lambda ws: [SimpleNamespace(id=wid(ws, i)) for i in range(7)])
 
 
+@pytest.fixture(autouse=True)
+def _points_order(monkeypatch):
+    """These tests describe the old order (plaques first); tests/test_leak_defence.py covers the consistency order."""
+    from app.config import get_settings
+    monkeypatch.setattr(get_settings(), "week_rank_mode", "points")
+
+
 @pytest.fixture
 def clock(monkeypatch):
     def set_to(dt):

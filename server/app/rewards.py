@@ -2,6 +2,8 @@
 minutes after it closed, from the SAME standings the board shows (weekboard.py): the best players of each league (or of
 the single board when leagues are off) get coins in their inbox, with a message.
 Safe to call any number of times and from any worker: the primary key of WeekSettlement lets exactly one caller pay."""
+import hashlib
+import logging
 from datetime import date, timedelta
 
 from sqlalchemy import select
@@ -9,7 +11,9 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import content, gameclock, weekboard
-from .models import InboxItem, Player, WeekSettlement, utcnow
+from . import anticheat as ac
+from .config import get_settings
+from .models import CaseProgress, DailyDraw, InboxItem, Player, WeekSettlement, utcnow
 from .db import begin_write, lock_players
 
 # Weeks before this one were paid by the old rule (Saturday-to-Friday, archive solves counted) and are never touched.
@@ -94,3 +98,58 @@ async def settle_week(session: AsyncSession, ws: date) -> int:
         await session.rollback()
         return 0
     return n_rows
+
+
+# ---------------------------------------------------------------- the daily draw
+log = logging.getLogger("rewards")
+DRAW_LOOKBACK = 2          # the last N closed nightly cases are drawn (a missed run catches up)
+DRAW_PRIZE = {"type": "warrants", "amount": 1}   # ONE story warrant: scarce, no coins, nothing that undercuts coin packs
+
+
+def draw_pick(case_id: str, eligible_ids: list[str]) -> str | None:
+    """The winner of a case's draw: deterministic from the case id and the sorted list of eligible player ids."""
+    if not eligible_ids:
+        return None
+    ids = sorted(eligible_ids)
+    return ids[int(hashlib.sha256(f"draw:{case_id}".encode()).hexdigest(), 16) % len(ids)]
+
+
+async def draw_case(session: AsyncSession, case: content.Case) -> str | None:
+    """Draws one closed nightly case once (primary key of DailyDraw = the claim; safe from any worker, any number of
+    times). Eligible: ranked, 3-plaque, visible players who solved it as the night's case. Returns the winner id."""
+    await begin_write(session)
+    if await session.get(DailyDraw, case.id) is not None:
+        return None
+    try:
+        ids = (await session.execute(
+            select(Player.id).join(CaseProgress, CaseProgress.player_id == Player.id).where(
+                CaseProgress.case_id == case.id, CaseProgress.solved.is_(True), CaseProgress.was_daily.is_(True),
+                CaseProgress.ranked.is_(True), CaseProgress.stars == 3, ac.visible_player()))).scalars().all()
+        winner = draw_pick(case.id, list(ids))
+        session.add(DailyDraw(case_id=case.id, winner_id=winner, eligible=len(ids), at=utcnow()))
+        await session.flush()  # the claim: a second caller fails here and pays nothing
+        if winner is not None:
+            session.add(InboxItem(
+                player_id=winner, source=f"draw:{case.id}"[:24],
+                title="برنده‌ی قرعه‌ی شب شدی 🎁",
+                message=f"بین کارآگاه‌هایی که پرونده‌ی «{case.data['title']}» رو با ۳ پلاک حل کردن، قرعه به نام تو افتاد. این هدیه‌ی توئه!",
+                grants=[dict(DRAW_PRIZE)]))
+        await session.commit()
+    except IntegrityError:
+        await session.rollback()
+        return None
+    log.info("daily_draw case=%s eligible=%d won=%s", case.id, len(ids), winner is not None)
+    return winner
+
+
+async def settle_daily_draws(session: AsyncSession) -> int:
+    """Draws the closed nightly cases that have no draw yet (kill switch: DAILY_DRAW_ENABLED=false). Returns winners."""
+    if not get_settings().daily_draw_enabled:
+        return 0
+    today = content.todays_case()
+    closed = [c for c in content.opened() if today is not None and c.id != today.id][-DRAW_LOOKBACK:]
+    won = 0
+    for c in closed:
+        if await draw_case(session, c) is not None:
+            won += 1
+    return won
