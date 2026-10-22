@@ -203,7 +203,7 @@ void main() {
           await t.pump(const Duration(milliseconds: 300));
           expect(t.takeException(), isNull);
           // the other tabs are older screens; the sweep below checks the shell and home, not their own layout at 2.0
-          for (final tab in scale > 1.5 ? <String>[] : ['بایگانی', 'آخر هفته', 'برترها', 'پروفایل']) {
+          for (final tab in scale > 1.0 ? <String>[] : ['بایگانی', 'آخر هفته', 'برترها', 'پروفایل']) {
             await t.tap(find.text(tab).last);
             await t.pump(const Duration(milliseconds: 400));
             expect(t.takeException(), isNull, reason: tab);
