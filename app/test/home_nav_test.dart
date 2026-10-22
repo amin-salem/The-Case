@@ -61,12 +61,12 @@ void main() {
       await t.tap(find.text('برترها').last);
       await t.pump(const Duration(milliseconds: 300));
       expect(selectedTab(t), MainShell.leaderboard);
-      final onTab = t.widget<PopScope>(find.byType(PopScope).first);
+      final onTab = t.widget<PopScope>(find.byWidgetPredicate((w) => w is PopScope).first);
       expect(onTab.canPop, isFalse, reason: 'on another tab, back must not leave the app');
       onTab.onPopInvokedWithResult!(false, null);
       await t.pump(const Duration(milliseconds: 300));
       expect(selectedTab(t), MainShell.home);
-      final popScope = t.widget<PopScope>(find.byType(PopScope).first);
+      final popScope = t.widget<PopScope>(find.byWidgetPredicate((w) => w is PopScope).first);
       expect(popScope.canPop, isTrue, reason: 'on home, back may leave the app');
     });
 
