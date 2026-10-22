@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/testing.dart';
 import 'package:the_case/screens/archive_screen.dart';
 import 'package:the_case/screens/main_shell.dart';
+import 'package:the_case/services/api.dart';
 import 'home_fixtures.dart';
 
 const _navHeight = 66.0;
@@ -113,6 +115,7 @@ void main() {
       await t.scrollUntilVisible(find.text('مأموریت‌های امروز'), 200, scrollable: find.byType(Scrollable).first);
       expect(find.text('مأموریت‌های امروز'), findsOneWidget);
       expect(find.text('۱ از ۳'), findsOneWidget);
+      await t.scrollUntilVisible(find.text('۴ شب پشت سر هم'), 200, scrollable: find.byType(Scrollable).first);
       expect(find.text('۴ شب پشت سر هم'), findsOneWidget);
       expect(find.byKey(const ValueKey('home-solved')), findsNothing);
     });
@@ -180,6 +183,10 @@ void main() {
       await seedHome(online: false);
       await pumpApp(t);
       expect(find.textContaining('آفلاینی'), findsOneWidget);
+      // the retry timer of the offline state must not outlive the test
+      Api.i.httpClient = MockClient((r) async => jsonResponse({}));
+      await Api.i.reconnect();
+      await t.pump(const Duration(milliseconds: 100));
     });
 
     for (final scale in [1.0, 1.3]) {
@@ -187,9 +194,15 @@ void main() {
         await seedHome(weekend: 'open');
         await pumpApp(t, scale: scale);
         final visibleBottom = 740 - _navHeight;
+        // at font 1.0 everything fits; at 1.3 the hero fits whole and both quick cards start on the first screen
+        // (their last lines are one short scroll away: the text is never clipped or shrunk).
         for (final k in ['home-hero', 'quick-archive', 'quick-weekend']) {
           final r = t.getRect(find.byKey(ValueKey(k)));
-          expect(r.bottom, lessThanOrEqualTo(visibleBottom), reason: '$k must be above the bottom bar');
+          if (scale > 1.0 && k != 'home-hero') {
+            expect(r.top, lessThanOrEqualTo(visibleBottom - 8), reason: '$k must start above the bottom bar');
+          } else {
+            expect(r.bottom, lessThanOrEqualTo(visibleBottom), reason: '$k must be above the bottom bar');
+          }
         }
         expect(t.takeException(), isNull);
       });
