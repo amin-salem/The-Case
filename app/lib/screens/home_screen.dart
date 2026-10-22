@@ -16,13 +16,11 @@ import '../widgets/engagement.dart';
 import '../widgets/missions_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/profile_bell.dart';
-import '../widgets/rate_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import '../widgets/whats_new_ui.dart';
 import '../data/whats_new.dart';
 import '../services/whats_new.dart';
-import 'archive_screen.dart';
 import 'main_shell.dart';
 import 'shop_screen.dart';
 
@@ -87,7 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _wasOnline = api.online;
     _account = api.account;
     if (!mounted) return;
-    if (switched) setState(() => _cases = null);
+    if (switched) {
+      setState(() => _cases = null);
+      MainShell.weekendOpen.value = false;
+    }
     if (cameBack || switched) {
       _load();
       _showCalendar();
@@ -113,6 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
           _cases = c;
           _error = null;
         });
+        // the dot on the weekend tab: a weekend case is open and not yet finished
+        MainShell.weekendOpen.value = c.weekly != null && !c.weekly!.solved && !c.weekly!.failed;
       }
       unawaited(_loadExtras());
       unawaited(_maybeOfferRepair());
@@ -247,10 +250,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) _load(); // also refreshes the missions
   }
 
-  Future<void> _openArchive() async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ArchiveScreen()));
-    if (mounted) _load();
-  }
+  /// The archive is a tab now.
+  void _openArchive() => MainShell.tab.value = MainShell.archive;
 
   @override
   Widget build(BuildContext context) {
@@ -264,31 +265,16 @@ class _HomeScreenState extends State<HomeScreen> {
               color: K.stamp,
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 28),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
                 children: [
                   _topBar(),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 10),
                   const WhatsNewBanner(),
-                  const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
+                  const OfflineBanner(margin: EdgeInsets.only(bottom: 10)),
                   if (_error != null && _cases == null) _errorBox(),
                   if (_cases == null && _error == null)
                     const Padding(padding: EdgeInsets.all(40), child: Center(child: CircularProgressIndicator(color: K.brass))),
-                  if (_cases != null) ...[
-                    FadeSlideIn(child: _hero(_cases!.today)),
-                    const SizedBox(height: 14),
-                    if (_missions != null)
-                      HomeMissionsCard(
-                        day: _missions!,
-                        onChanged: (m) {
-                          if (mounted) setState(() => _missions = m);
-                        },
-                        onGo: _goMission,
-                        onOpenSheet: _openMissions,
-                      ),
-                    _weekendRow(),
-                    _archiveRow(),
-                    _secureRow(),
-                  ],
+                  if (_cases != null) ..._content(_cases!),
                 ],
               ),
             ),
@@ -298,53 +284,57 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  /// Before tonight's case is solved: the hero and the two quick cards come first. After it is solved (or lost):
+  /// a short result card and a clear invitation to the archive.
+  List<Widget> _content(CasesList cs) {
+    final c = cs.today;
+    final finished = c != null && (c.solved || c.failed);
+    return [
+      if (!finished) FadeSlideIn(child: _hero(c)) else if (c!.solved) _solvedCard(c, cs) else _lostCard(c, cs),
+      const SizedBox(height: 10),
+      if (finished) ...[
+        _archiveInvite(cs),
+        _weekendRow(),
+      ] else
+        _quickCards(cs),
+      if (_missions != null) ...[const SizedBox(height: 10), _missionsCompact(_missions!)],
+      const SizedBox(height: 10),
+      _streakRow(),
+      _secureRow(),
+      _newsSection(),
+    ];
+  }
+
   // ---------------------------------------------------------------- top bar
 
   Widget _topBar() {
     final p = Api.i.profile;
+    final name = p?.nickname ?? '';
     // a crowded row on a small phone: a very large system font is capped here so nothing overflows
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.15,
       child: Row(children: [
-        const ProfileBell(),
+        const ProfileBell(), // the avatar, the bell and the unread count (opens the messages)
         const SizedBox(width: 6),
         Expanded(
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () => MainShell.tab.value = MainShell.profile,
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-              Text(p?.nickname ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900)),
+              Text(name.isEmpty ? 'سلام' : 'سلام، $name',
+                  maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900)),
               Text(p?.rankTitle ?? '',
                   maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.brass, w: FontWeight.w700)),
             ]),
           ),
         ),
         const SizedBox(width: 6),
-        _streakChip(p?.streak ?? 0),
-        const SizedBox(width: 6),
-        CoinChip(
-            coins: Api.i.coins,
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreen()))),
+        CoinChip(coins: Api.i.coins, onTap: _openShop),
       ]),
     );
   }
 
-  Widget _streakChip(int streak) => GestureDetector(
-        onTap: _openStreak,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(10, 6, 8, 6),
-          decoration: BoxDecoration(
-            color: K.stamp.withValues(alpha: 0.16),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: K.stamp.withValues(alpha: 0.7)),
-          ),
-          child: Row(mainAxisSize: MainAxisSize.min, children: [
-            const Icon(Icons.local_fire_department_rounded, size: 18, color: K.stamp),
-            const SizedBox(width: 3),
-            Text(fa(streak), style: tBody(15, w: FontWeight.w900)),
-          ]),
-        ),
-      );
+  void _openShop() => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreen()));
 
   /// Nothing to show yet. With no internet and nothing saved, explain the one-time need.
   Widget _errorBox() {
@@ -388,7 +378,9 @@ class _HomeScreenState extends State<HomeScreen> {
     ]);
   }
 
-  /// The one big card: tonight's case.
+  // ---------------------------------------------------------------- tonight's case
+
+  /// The one big card: tonight's case (not solved yet). Compact: the quick cards must fit below it on a small phone.
   Widget _hero(CaseRow? c) {
     if (c == null) {
       return _heroFrame(
@@ -403,70 +395,43 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       );
     }
-    final finished = c.solved || c.failed;
     return _heroFrame(
+      key: const ValueKey('home-hero'),
       onTap: () => _open(c),
       art: AnimatedScene(scene: c.scene, height: double.infinity),
-      badge: finished
-          ? StampMark(c.solved ? 'حل شد' : 'باخت', size: 22, color: c.solved ? K.brass : K.stamp)
-          : const _NewBadge(),
+      badge: const _NewBadge(),
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-          decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(999)),
-          child: Text('پرونده‌ی امشب · شماره‌ی ${fa(c.number)}', style: tBody(11.5, color: K.ink, w: FontWeight.w900)),
-        ),
-        const SizedBox(height: 8),
-        Text(c.title, style: tDisplay(24)),
-        const SizedBox(height: 2),
-        Row(children: [
-          const Icon(Icons.place_rounded, size: 15, color: K.brass),
-          const SizedBox(width: 3),
-          Expanded(
-            child: Text('${c.location} · ${fa(c.solvers)} کارآگاه حلش کردن',
-                maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(12.5, color: K.textSoft)),
+        Wrap(spacing: 8, runSpacing: 2, crossAxisAlignment: WrapCrossAlignment.center, children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+            decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(999)),
+            child: Text('پرونده‌ی امشب · رایگان', style: tBody(11.5, color: K.ink, w: FontWeight.w900)),
           ),
-        ]),
-        const SizedBox(height: 6),
-        Row(children: [
+          Text('شماره‌ی ${fa(c.number)}', style: tBody(11.5, color: K.textSoft, w: FontWeight.w700)),
           CategoryBadge(c.category),
-          if (c.category.isNotEmpty) const SizedBox(width: 10),
+        ]),
+        const SizedBox(height: 4),
+        Text(c.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: tDisplay(22).copyWith(height: 1.3)),
+        Text('${c.location} · ${fa(c.solvers)} کارآگاه حلش کردن',
+            maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(12.5, color: K.textSoft).copyWith(height: 1.5)),
+        const SizedBox(height: 4),
+        Row(children: [
           DifficultyBar(c.difficulty, compact: true),
           const SizedBox(width: 6),
-          Text(kDifficultyLabels[clampDifficulty(c.difficulty) - 1], style: tBody(11.5, color: K.textSoft)),
-        ]),
-        const SizedBox(height: 12),
-        if (!finished)
-          StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, onTap: () => _open(c))
-        else
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12)),
-            child: Row(children: [
-              if (c.solved) ...[Plaques(count: c.stars, size: 20), const SizedBox(width: 8)],
-              Expanded(
-                child: Text(
-                  c.solved ? 'امشب حلش کردی!' : 'این بار نشد؛ فردا شب جبران کن.',
-                  style: tBody(14, w: FontWeight.w900, color: c.solved ? K.brass : K.stamp),
-                ),
-              ),
-              Text(c.solved && c.myRating == 0 ? 'امتیاز بده' : 'دیدن پرونده',
-                  style: tBody(12.5, color: c.solved && c.myRating == 0 ? K.brass : K.textSoft, w: FontWeight.w700)),
-              const Icon(Icons.chevron_right_rounded, color: K.textSoft, size: 20),
-            ]),
+          Flexible(
+            child: Text(kDifficultyLabels[clampDifficulty(c.difficulty) - 1],
+                maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.textSoft)),
           ),
-        if (c.ratingCount > 0) ...[
-          const SizedBox(height: 8),
-          RatingChip(avg: c.ratingAvg, count: c.ratingCount, comments: c.commentCount, size: 13),
-        ],
+        ]),
         const SizedBox(height: 10),
-        _nextLine(),
+        StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, height: 50, onTap: () => _open(c)),
       ],
     );
   }
 
-  Widget _heroFrame({required VoidCallback? onTap, required Widget art, Widget? badge, required List<Widget> children}) {
+  Widget _heroFrame({Key? key, required VoidCallback? onTap, required Widget art, Widget? badge, required List<Widget> children}) {
     return GestureDetector(
+      key: key,
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -479,19 +444,426 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(17),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             SizedBox(
-              height: 168,
+              height: 104,
               child: Stack(fit: StackFit.expand, children: [
                 art,
                 const Positioned(left: 0, right: 0, bottom: 0, child: CrimeTape(height: 16)),
-                if (badge != null) Positioned(right: 12, top: 12, child: badge),
+                if (badge != null) Positioned(right: 12, top: 10, child: badge),
               ]),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+              padding: const EdgeInsets.fromLTRB(14, 8, 14, 12),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
             ),
           ]),
         ),
+      ),
+    );
+  }
+
+  /// Tonight is solved: a short summary and the way to the result.
+  Widget _solvedCard(CaseRow c, CasesList cs) {
+    return Container(
+      key: const ValueKey('home-solved'),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: K.night2,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: K.brass, width: 1.5),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Row(children: [
+          const Icon(Icons.check_circle_rounded, color: K.brass, size: 24),
+          const SizedBox(width: 8),
+          Expanded(child: Text('پرونده‌ی امشب حل شد', style: tDisplay(19, color: K.brass))),
+          Plaques(count: c.stars, size: 22),
+        ]),
+        const SizedBox(height: 4),
+        Text('«${c.title}» · شماره‌ی ${fa(c.number)}',
+            maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(13, color: K.textSoft)),
+        const SizedBox(height: 6),
+        _nextLine(),
+        const SizedBox(height: 10),
+        StampButton(
+            label: c.myRating == 0 ? 'مرور نتیجه و امتیاز دادن' : 'مرور نتیجه',
+            icon: Icons.fact_check_rounded,
+            color: K.night3,
+            height: 48,
+            onTap: () => _open(c)),
+      ]),
+    );
+  }
+
+  /// Tonight is lost: the case stays closed and the answer hidden; a second chance costs the real reopen price.
+  Widget _lostCard(CaseRow c, CasesList cs) {
+    return Container(
+      key: const ValueKey('home-lost'),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: K.night2,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: K.stamp, width: 1.5),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Row(children: [
+          const Icon(Icons.lock_rounded, color: K.stamp, size: 22),
+          const SizedBox(width: 8),
+          Expanded(child: Text('پرونده‌ی امشب بسته شد', style: tDisplay(19, color: K.stamp))),
+        ]),
+        const SizedBox(height: 4),
+        Text(
+          c.locked
+              ? 'این بار نشد. با ${fa(c.unlockCost)} سکه (دو برابر قیمت بایگانی) یه فرصت دوباره می‌گیری؛ جواب تا وقتی بازش نکنی پنهون می‌مونه.'
+              : 'این بار نشد؛ پرونده رو دوباره ببین.',
+          style: tBody(13, color: K.textSoft).copyWith(height: 1.6),
+        ),
+        const SizedBox(height: 6),
+        _nextLine(),
+        const SizedBox(height: 10),
+        StampButton(
+            label: c.locked ? 'فرصت دوباره · ${fa(c.unlockCost)} سکه' : 'دیدن پرونده',
+            icon: c.locked ? Icons.lock_open_rounded : Icons.visibility_rounded,
+            color: K.night3,
+            height: 48,
+            onTap: () => _open(c)),
+      ]),
+    );
+  }
+
+  int _unsolved(CasesList cs) => cs.archive.where((r) => !r.solved).length;
+
+  /// After tonight's case: the way to the archive, with the real number of old cases still waiting.
+  Widget _archiveInvite(CasesList cs) {
+    if (cs.archive.isEmpty) return const SizedBox.shrink();
+    final n = _unsolved(cs);
+    return Container(
+      key: const ValueKey('archive-invite'),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: K.night2,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: K.brass.withValues(alpha: 0.6)),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Row(children: [
+          const Icon(Icons.inventory_2_rounded, color: K.brass, size: 26),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('یک پرونده‌ی دیگر؟', style: tDisplay(18)),
+              Text(n > 0 ? '${fa(n)} پرونده‌ی بایگانی منتظرته' : 'همه‌ی پرونده‌های بایگانی رو حل کردی',
+                  style: tBody(12.5, color: K.textSoft)),
+            ]),
+          ),
+        ]),
+        if (n > 0) ...[
+          const SizedBox(height: 10),
+          StampButton(
+              label: 'برو به بایگانی',
+              icon: Icons.inventory_2_outlined,
+              height: 48,
+              onTap: () => MainShell.tab.value = MainShell.archive),
+        ],
+      ]),
+    );
+  }
+
+  // ---------------------------------------------------------------- the two quick cards
+
+  /// Archive and weekend case side by side (stacked on a very large font).
+  Widget _quickCards(CasesList cs) {
+    final a = _archiveCard(cs), w = _weekendCard(cs);
+    final big = MediaQuery.textScalerOf(context).scale(10) > 15;
+    if (big) return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [a, const SizedBox(height: 10), w]);
+    return IntrinsicHeight(
+      child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Expanded(child: a),
+        const SizedBox(width: 10),
+        Expanded(child: w),
+      ]),
+    );
+  }
+
+  Widget _quickCard({Key? key, required IconData icon, required String title, required String line, Color lineColor = K.textSoft,
+      Widget? badge, required VoidCallback onTap}) {
+    return Material(
+      key: key,
+      color: K.night2,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 88),
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), border: Border.all(color: K.night3)),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
+            Row(children: [
+              Icon(icon, color: K.brass, size: 22),
+              if (badge != null) ...[const SizedBox(width: 6), badge],
+            ]),
+            const SizedBox(height: 4),
+            Text(title, maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900).copyWith(height: 1.4)),
+            Text(line,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: tBody(12, color: lineColor, w: FontWeight.w700).copyWith(height: 1.5)),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _archiveCard(CasesList cs) {
+    final n = _unsolved(cs);
+    return _quickCard(
+      key: const ValueKey('quick-archive'),
+      icon: Icons.inventory_2_outlined,
+      title: 'بایگانی پرونده‌ها',
+      line: cs.archive.isEmpty
+          ? 'هنوز پرونده‌ی قدیمی نیست'
+          : n > 0
+              ? '${fa(n)} پرونده منتظرته'
+              : 'همه‌ی پرونده‌ها رو حل کردی',
+      lineColor: n > 0 ? K.brass : K.textSoft,
+      onTap: () => MainShell.tab.value = MainShell.archive,
+    );
+  }
+
+  Widget _weekendCard(CasesList cs) {
+    final (line, color) = _weekendState(cs);
+    return _quickCard(
+      key: const ValueKey('quick-weekend'),
+      icon: Icons.nightlight_round,
+      title: 'پرونده‌ی آخر هفته',
+      line: line,
+      lineColor: color,
+      badge: const NewTag('weekend_tab'),
+      onTap: () => MainShell.tab.value = MainShell.weekend,
+    );
+  }
+
+  String _longLeft(Duration d) =>
+      d.inHours >= 24 ? '${fa(d.inDays)} روز و ${fa(d.inHours % 24)} ساعت' : faClock(d);
+
+  /// The real state of the weekend case: open (with its chapters), solved, lost, or closed with the opening time.
+  (String, Color) _weekendState(CasesList cs) {
+    final w = cs.weekly;
+    final now = DateTime.now();
+    if (w != null) {
+      if (w.solved) return ('حلش کردی!', K.brass);
+      if (w.failed) return ('این بار نشد', K.stamp);
+      final next = cs.weeklyNextChapterAt;
+      if (cs.weeklyFormat == 3 && next != null && next.isAfter(now)) {
+        return ('باز است · فصل دوم: ${_longLeft(next.difference(now))} دیگه', K.brass);
+      }
+      final left = cs.weeklyClosesAt?.difference(now);
+      if (left == null || left.isNegative) return ('باز است', K.brass);
+      return ('باز است · ${_longLeft(left)} مونده', K.brass);
+    }
+    final at = Api.i.upcomingWeekend['opens_at'];
+    if (at is num) {
+      final d = DateTime.fromMillisecondsSinceEpoch(at.toInt() * 1000).difference(now);
+      if (!d.isNegative) return ('بسته · ${_longLeft(d)} دیگه باز می‌شه', K.textSoft);
+    }
+    return ('بسته · به‌زودی', K.textSoft);
+  }
+
+  // ---------------------------------------------------------------- missions, streak, news
+
+  /// Compact missions: done x of 3, a progress bar, the next mission and one button.
+  Widget _missionsCompact(MissionsDay d) {
+    final total = d.missions.length;
+    MissionRow? next;
+    for (final m in d.missions) {
+      if (!m.done) {
+        next = m;
+        break;
+      }
+    }
+    final ready = d.allDone && !d.claimed;
+    return Container(
+      key: const ValueKey('home-missions'),
+      padding: const EdgeInsets.fromLTRB(14, 10, 10, 8),
+      decoration: BoxDecoration(
+        color: K.night2,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: K.kraft.withValues(alpha: 0.55)),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: _openMissions,
+          child: Row(children: [
+            const Icon(Icons.assignment_turned_in_rounded, color: K.brass, size: 22),
+            const SizedBox(width: 8),
+            Expanded(child: Text('مأموریت‌های امروز', style: tBody(14, w: FontWeight.w900))),
+            Text('${fa(d.done)} از ${fa(total)}', style: tBody(13, color: K.brass, w: FontWeight.w900)),
+          ]),
+        ),
+        const SizedBox(height: 6),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+              key: const ValueKey('missions-bar'),
+              value: total == 0 ? 0 : d.done / total,
+              minHeight: 6,
+              backgroundColor: K.night3,
+              color: d.allDone ? K.ok : K.brass),
+        ),
+        const SizedBox(height: 4),
+        Row(children: [
+          Expanded(
+            child: Text(
+              d.claimed
+                  ? 'صندوقچه‌ی امروز باز شد'
+                  : ready
+                      ? 'همه‌ی مأموریت‌ها انجام شد؛ صندوقچه‌ات آماده‌ست'
+                      : (next?.title ?? ''),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: tBody(12.5, color: d.claimed ? K.ok : K.textSoft).copyWith(height: 1.5),
+            ),
+          ),
+          if (!d.claimed)
+            SizedBox(
+              height: 48,
+              child: TextButton(
+                key: ValueKey(ready ? 'missions-claim' : 'missions-go'),
+                onPressed: ready || next == null ? _openMissions : () => _goMission(next!),
+                child: Text(ready ? 'باز کردن' : 'ادامه', style: tBody(14, color: K.brass, w: FontWeight.w900)),
+              ),
+            ),
+        ]),
+      ]),
+    );
+  }
+
+  /// The streak: nights in a row, nights to the next milestone, and the repair offer when the server makes one.
+  Widget _streakRow() {
+    final p = Api.i.profile;
+    if (p == null) return const SizedBox.shrink();
+    final offer = p.streakRepair;
+    final showOffer = offer != null && !Api.i.repairOfferClosed(offer);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Container(
+        key: const ValueKey('home-streak'),
+        decoration: BoxDecoration(
+          color: K.night2,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: K.stamp.withValues(alpha: 0.4)),
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          InkWell(
+            borderRadius: BorderRadius.circular(14),
+            onTap: _openStreak,
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 52),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: Row(children: [
+                const Icon(Icons.local_fire_department_rounded, color: K.stamp, size: 26),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                    Text(p.streak > 0 ? '${fa(p.streak)} شب پشت سر هم' : 'زنجیره‌ی شبانه',
+                        maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900).copyWith(height: 1.4)),
+                    Text(p.streak > 0 ? nextMilestoneLine(p.streak, Api.i.streakMilestones) : 'امشب پرونده رو حل کن تا زنجیره شروع بشه',
+                        maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.textSoft).copyWith(height: 1.5)),
+                  ]),
+                ),
+                const Icon(Icons.chevron_right_rounded, color: K.textSoft),
+              ]),
+            ),
+          ),
+          if (showOffer)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 4, 6),
+              child: Row(children: [
+                Expanded(
+                  child: StampButton(
+                    key: const ValueKey('streak-repair'),
+                    label: 'ترمیم زنجیره · ${fa(offer.price)} سکه',
+                    icon: Icons.local_fire_department_rounded,
+                    height: 46,
+                    onTap: () async {
+                      await Api.i.closeRepairOffer(offer);
+                      if (mounted) await repairStreak(context, offer);
+                    },
+                  ),
+                ),
+                IconButton(
+                  key: const ValueKey('streak-repair-close'),
+                  tooltip: 'بستن',
+                  constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                  onPressed: () => Api.i.closeRepairOffer(offer),
+                  icon: const Icon(Icons.close_rounded, color: K.textSoft, size: 20),
+                ),
+              ]),
+            ),
+        ]),
+      ),
+    );
+  }
+
+  bool _newsOpen = false;
+
+  /// «تازه‌ها»: collapsed by default. What's new, the story, the invite, the leaderboard and the shop are one tap away.
+  Widget _newsSection() {
+    Widget row(IconData icon, String title, VoidCallback onTap, {String? sub, Widget? trailing}) => InkWell(
+          onTap: onTap,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 48),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: Row(children: [
+              Icon(icon, color: K.brass, size: 20),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                  Text(title, style: tBody(13.5, w: FontWeight.w700).copyWith(height: 1.5)),
+                  if (sub != null) Text(sub, style: tBody(11.5, color: K.textSoft).copyWith(height: 1.4)),
+                ]),
+              ),
+              if (trailing != null) trailing,
+              const Icon(Icons.chevron_right_rounded, color: K.textSoft, size: 20),
+            ]),
+          ),
+        );
+    return Container(
+      key: const ValueKey('home-news'),
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: K.night2,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: K.night3),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(14),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          InkWell(
+            key: const ValueKey('news-toggle'),
+            onTap: () => setState(() => _newsOpen = !_newsOpen),
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 48),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(children: [
+                const Icon(Icons.auto_awesome_rounded, color: K.brass, size: 20),
+                const SizedBox(width: 10),
+                Expanded(child: Text('تازه‌ها', style: tBody(14, w: FontWeight.w900))),
+                Icon(_newsOpen ? Icons.expand_less_rounded : Icons.expand_more_rounded, color: K.textSoft),
+              ]),
+            ),
+          ),
+          if (_newsOpen) ...[
+            row(Icons.auto_awesome_rounded, 'چی تازه شده؟', () => showWhatsNewSheet(context, all: true)),
+            row(Icons.menu_book_rounded, 'داستان', () => MainShell.openStory(context), sub: 'پرونده‌های سرگرد ناصری'),
+            row(Icons.group_add_rounded, 'دعوت دوستان', () => MainShell.tab.value = MainShell.profile,
+                sub: 'کد دعوتت توی پروفایله'),
+            row(Icons.emoji_events_rounded, 'جدول برترها', () => MainShell.tab.value = MainShell.leaderboard),
+            row(Icons.storefront_rounded, 'فروشگاه', _openShop),
+          ],
+        ]),
       ),
     );
   }
@@ -533,30 +905,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// The weekend case: open now (time left), or coming soon.
+  /// The weekend case as a one-line row (shown after tonight's case is finished).
   Widget _weekendRow() {
-    final w = _cases!.weekly;
-    final String title;
-    String sub;
-    Color color = K.textSoft;
-    if (w != null) {
-      title = 'آخر هفته: ${w.title}';
-      final left = _cases!.weeklyClosesAt?.difference(DateTime.now());
-      (sub, color) = w.solved
-          ? ('حلش کردی!', K.brass)
-          : w.failed
-              ? ('این بار نشد', K.stamp)
-              : (left == null || left.isNegative
-                      ? 'بازه'
-                      : left.inHours >= 24
-                          ? 'تا پایان: ${fa(left.inDays)} روز و ${fa(left.inHours % 24)} ساعت'
-                          : 'تا پایان: ${faClock(left)}',
-                  K.brass);
-    } else {
-      final t = Api.i.upcomingWeekend['title'];
-      title = t is String && t.isNotEmpty ? 'آخر هفته: $t' : 'آخر هفته';
-      sub = 'به‌زودی';
-    }
+    final cs = _cases!;
+    final w = cs.weekly;
+    final t = Api.i.upcomingWeekend['title'];
+    final title = w != null ? 'آخر هفته: ${w.title}' : (t is String && t.isNotEmpty ? 'آخر هفته: $t' : 'آخر هفته');
+    final (sub, color) = _weekendState(cs);
     return _line(
       icon: Icons.nightlight_round,
       title: title,
@@ -564,18 +919,6 @@ class _HomeScreenState extends State<HomeScreen> {
       subColor: color,
       trailing: const NewTag('weekend_tab'),
       onTap: () => MainShell.tab.value = MainShell.weekend,
-    );
-  }
-
-  Widget _archiveRow() {
-    final a = _cases!.archive;
-    if (a.isEmpty) return const SizedBox.shrink();
-    final solved = a.where((r) => r.solved).length;
-    return _line(
-      icon: Icons.inventory_2_outlined,
-      title: 'بایگانی پرونده‌ها',
-      sub: '${fa(solved)} از ${fa(a.length)} پرونده رو حل کردی',
-      onTap: _openArchive,
     );
   }
 

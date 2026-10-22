@@ -11,6 +11,7 @@ import '../widgets/archive_stats.dart';
 import '../widgets/scene.dart';
 import 'case_screen.dart';
 import 'dialogs.dart';
+import 'main_shell.dart';
 import 'shop_screen.dart';
 
 /// Opens a case from a list: an old locked case is unlocked with coins first (after asking).
@@ -72,7 +73,10 @@ Future<bool> unlockQuotedCase(BuildContext context, CaseRow row) async {
 /// Every earlier case: a progress header, filters and sorting, and wide cards with the scene, the state
 /// (stars / price / lost) and the detectives' rating.
 class ArchiveScreen extends StatefulWidget {
-  const ArchiveScreen({super.key});
+  const ArchiveScreen({super.key, this.embedded = false});
+
+  /// True inside the bottom navigation: the tab keeps its filters and reloads each time it is opened.
+  final bool embedded;
 
   @override
   State<ArchiveScreen> createState() => _ArchiveScreenState();
@@ -89,6 +93,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
 
   @override
   void dispose() {
+    if (widget.embedded) MainShell.tab.removeListener(_onTab);
     _searchCtl.dispose();
     super.dispose();
   }
@@ -97,6 +102,11 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
   void initState() {
     super.initState();
     _load();
+    if (widget.embedded) MainShell.tab.addListener(_onTab);
+  }
+
+  void _onTab() {
+    if (MainShell.tab.value == MainShell.archive && mounted) _load();
   }
 
   Future<void> _load() async {

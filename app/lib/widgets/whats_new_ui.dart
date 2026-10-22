@@ -100,10 +100,11 @@ void whatsNewGo(WhatsNewTarget t) {
       MainShell.tab.value = MainShell.profile;
     case WhatsNewTarget.leaderboard:
       MainShell.tab.value = MainShell.leaderboard;
+    case WhatsNewTarget.archive:
+      MainShell.tab.value = MainShell.archive;
     case WhatsNewTarget.comments:
     case WhatsNewTarget.caseToday:
     case WhatsNewTarget.missions:
-    case WhatsNewTarget.archive:
       MainShell.tab.value = MainShell.home;
       WhatsNew.i.homeAction.value = t; // the home screen opens the case / missions
   }

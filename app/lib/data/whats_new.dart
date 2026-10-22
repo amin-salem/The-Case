@@ -43,6 +43,10 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(68, '۱.۳۶', '2026-10-22', [
+    WhatsNewItem('nav_five_tabs', 'نوار پایین حالا پنج تب داره: خانه، بایگانی، آخر هفته، برترها و پروفایل؛ بایگانی یک ضربه بیشتر فاصله نداره', WhatsNewTarget.archive),
+    WhatsNewItem('home_calm', 'صفحه‌ی خانه مرتب‌تر شد: پرونده‌ی امشب، بایگانی و آخر هفته کنار هم، مأموریت‌ها و زنجیره فشرده، و بقیه (داستان، دعوت، فروشگاه) توی «تازه‌ها»', WhatsNewTarget.caseToday),
+  ]),
   WhatsNewRelease(67, '۱.۳۵', '2026-10-21', [
     WhatsNewItem('board_calm', 'جدول برترها آروم‌تره: فقط یه خط توضیح می‌بینی و بقیه‌اش پشت دکمه‌ی «i» کنار عنوانه؛ لیگ‌ها هم همیشه روی صفحه‌ان', WhatsNewTarget.leaderboard),
     WhatsNewItem('board_leagues', 'لیگ هر کارآگاه و بازه‌ی رتبه‌هاش توی «i» نوشته شده؛ رتبه‌ی کنار اسم همیشه همون رتبه‌ی پروفایله', WhatsNewTarget.leaderboard),
