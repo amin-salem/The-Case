@@ -103,7 +103,7 @@ class _RateCardState extends State<RateCard> {
       _err = null;
     });
     try {
-      await Api.i.sendComment(widget.caseId, '', rating: stars);
+      await Api.i.rateCase(widget.caseId, stars);
       if (!mounted) return;
       setState(() => _hasMine = true);
       _load();
@@ -327,7 +327,7 @@ class _RateSheetState extends State<RateSheet> {
       _err = null;
     });
     try {
-      await Api.i.sendComment(widget.caseId, '', rating: n);
+      await Api.i.rateCase(widget.caseId, n);
       if (mounted) setState(() => _done = true);
     } catch (e) {
       if (!mounted) return;

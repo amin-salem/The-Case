@@ -114,6 +114,20 @@ void main() {
       expect(Api.rateLimitedText(0), isNot(matches(RegExp(r'[A-Za-z0-9]'))));
       expect(Api.friendly(ApiException(429, {'error': 'rate_limited', 'retry_after': 12})), contains('۱۲'));
     });
+
+    test('the wait is shown in seconds, minutes or hours', () {
+      expect(Api.rateLimitedText(16), contains('۱۶ ثانیه'));
+      expect(Api.rateLimitedText(89), contains('۸۹ ثانیه'));
+      expect(Api.rateLimitedText(90), contains('حدود ۲ دقیقه'));
+      expect(Api.rateLimitedText(300), contains('حدود ۵ دقیقه'));
+      expect(Api.rateLimitedText(3300), contains('حدود ۵۵ دقیقه'));
+      expect(Api.rateLimitedText(5399), contains('دقیقه'));
+      expect(Api.rateLimitedText(5400), contains('حدود ۲ ساعت'));
+      expect(Api.rateLimitedText(7200), contains('حدود ۲ ساعت'));
+      expect(Api.rateLimitedText(0), isNot(contains('ثانیه')));
+      expect(Api.rateLimitedText(-4), isNot(contains('ثانیه')));
+      expect(Api.rateLimitedText(3300), isNot(matches(RegExp(r'[A-Za-z0-9]'))));
+    });
   });
 
   group('support block', () {

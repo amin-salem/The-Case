@@ -148,9 +148,19 @@ class Api extends ChangeNotifier {
   static const offlineText = 'به اینترنت وصل نیستی';
   static const serverDownText = 'الان به سرور دسترسی نداریم، چند دقیقه دیگه دوباره امتحان کن';
   static const genericText = 'یه مشکلی پیش اومد، دوباره امتحان کن';
-  static String rateLimitedText(int seconds) => seconds > 0
-      ? 'کمی صبر کن؛ ${_faDigits('$seconds')} ثانیه‌ی دیگه دوباره امتحان کن'
-      : 'خیلی سریع پیش رفتی، کمی صبر کن و دوباره امتحان کن';
+  /// Under 90 s: seconds; from 90 s: minutes («حدود ۵ دقیقه»); from 90 min: hours. 0 / unknown: a general sentence.
+  static String rateLimitedText(int seconds) {
+    if (seconds <= 0) return 'خیلی سریع پیش رفتی، کمی صبر کن و دوباره امتحان کن';
+    final String span;
+    if (seconds < 90) {
+      span = '${_faDigits('$seconds')} ثانیه';
+    } else if (seconds < 90 * 60) {
+      span = 'حدود ${_faDigits('${(seconds / 60).round()}')} دقیقه';
+    } else {
+      span = 'حدود ${_faDigits('${(seconds / 3600).round()}')} ساعت';
+    }
+    return 'کمی صبر کن؛ ${span}‌ی دیگه دوباره امتحان کن';
+  }
 
   static String _faDigits(String s) =>
       s.replaceAllMapped(RegExp(r'[0-9]'), (m) => '۰۱۲۳۴۵۶۷۸۹'[m[0]!.codeUnitAt(0) - 48]);
@@ -841,6 +851,23 @@ class Api extends ChangeNotifier {
   /// What everyone else guessed (only after the player finished the case).
   Future<Map<String, dynamic>> caseComments(String id, {int before = 0}) async =>
       ((await _call('GET', '/v1/cases/$id/comments${before > 0 ? '?before=$before' : ''}')) as Map).cast<String, dynamic>();
+
+  bool _ratingRouteMissing = false; // an older server has no /rating route: use the comment route
+
+  /// Stars only. Its own, more relaxed server limit; falls back to the comment route when the server answers 404
+  /// (an older server). An unknown case (`no_case`) is a real error and is not retried.
+  Future<void> rateCase(String id, int stars) async {
+    if (!_ratingRouteMissing) {
+      try {
+        await _call('POST', '/v1/cases/$id/rating', body: {'rating': stars});
+        return;
+      } on ApiException catch (e) {
+        if (e.status != 404 || e.code == 'no_case') rethrow;
+        _ratingRouteMissing = true;
+      }
+    }
+    await sendComment(id, '', rating: stars);
+  }
 
   Future<void> sendComment(String id, String body, {int rating = 0, int? parentId}) async {
     await _call('POST', '/v1/cases/$id/comments',

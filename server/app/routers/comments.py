@@ -52,6 +52,10 @@ class CommentIn(BaseModel):
     parent_id: int | None = None
 
 
+class RatingIn(BaseModel):
+    rating: int = Field(ge=1, le=5)
+
+
 def _item(c: CaseComment, nick: dict, mine: str) -> dict:
     n = nick.get(c.player_id) or ("", 0)
     return {"id": c.id, "nickname": n[0] or "کارآگاه", "avatar": n[1], "rating": c.rating, "body": c.body,
@@ -147,6 +151,46 @@ async def write_comment(case_id: str, body: CommentIn, player: Player = Depends(
         raise HTTPException(409, "already_commented")
     ratings.clear()
     return {"id": row.id, "status": row.status}
+
+
+@router.post("/{case_id}/rating")
+async def rate_case(case_id: str, body: RatingIn, player: Player = Depends(current_player),
+                    session: AsyncSession = Depends(get_session)):
+    """Stars only, with their own relaxed rate-limit policy (`rating`): a player who walks through the archive rating
+    old cases must not hit the strict text-comment limit. Idempotent: the same unique `slot=root` row as a comment;
+    a second call (double tap, retry) changes nothing and answers 200 with the stars already stored. A later text
+    comment keeps these stars (see write_comment). Needs a finished case, like a comment."""
+    _on()
+    _known_case(case_id)
+    C = CaseComment
+    done = (await session.execute(select(CaseProgress.id).where(
+        CaseProgress.player_id == player.id, CaseProgress.case_id == case_id,
+        CaseProgress.finished_at.is_not(None)))).first()
+    if done is None:
+        raise HTTPException(409, "finish_case_first")
+    old = (await session.execute(select(C).where(
+        C.case_id == case_id, C.player_id == player.id, C.slot == "root"))).scalar_one_or_none()
+    if old is not None and old.status != "rejected":
+        return {"id": old.id, "status": old.status, "rating": old.rating, "already": True}
+    if old is not None:  # a rejected text may be replaced by plain stars
+        old.rating, old.body, old.created_at = body.rating, "", utcnow()
+        old.status, old.reviewed_at = "approved", utcnow()
+        row = old
+    else:
+        row = C(case_id=case_id, player_id=player.id, slot="root", rating=body.rating, body="")
+        row.status, row.reviewed_at = "approved", utcnow()
+        session.add(row)
+    try:
+        await session.commit()
+    except IntegrityError:  # a parallel request stored the row first: that one wins, nothing is paid or doubled
+        await session.rollback()
+        again = (await session.execute(select(C).where(
+            C.case_id == case_id, C.player_id == player.id, C.slot == "root"))).scalar_one_or_none()
+        if again is None:
+            raise HTTPException(409, "already_commented")
+        return {"id": again.id, "status": again.status, "rating": again.rating, "already": True}
+    ratings.clear()
+    return {"id": row.id, "status": row.status, "rating": row.rating, "already": False}
 
 
 # ---------------------------------------------------------------- admin
