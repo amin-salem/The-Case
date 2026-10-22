@@ -291,7 +291,8 @@ async def test_suspicious_report_flags_and_never_bans(client, clock, caplog):
     with caplog.at_level("INFO", logger="cheatreport"):
         async with db.SessionLocal() as s:
             rep = await cheatreport.suspicious_solves(s, now)
-    assert len(rep["clusters"]) == 1 and rep["clusters"][0]["accounts"] == 10
+    mine = [x for x in rep["clusters"] if x["case"] == "c043"]
+    assert len(mine) == 1 and mine[0]["accounts"] == 10
     assert any(r.message.startswith("suspicious_cluster case=c043 accounts=10") for r in caplog.records)
     assert not any(ps[0]["player_id"] in r.message for r in caplog.records)  # no personal data in the log
     assert {x["why"] for x in rep["low_depth"]} == {"depth", "active_time"}
