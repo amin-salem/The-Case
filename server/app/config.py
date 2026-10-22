@@ -57,7 +57,7 @@ class Settings(BaseSettings):
 
     # Investigation depth (docs/operations.md «Leaked answers»): a solve is ranked only with enough real investigation.
     depth_gate_enabled: bool = True   # DEPTH_GATE_ENABLED=false turns the whole gate off (kill switch)
-    depth_min_cards: int = 3          # distinct evidence cards opened (capped by the cards the case has)
+    depth_min_cards: int = 0          # distinct evidence cards TAPPED (capped by the cards the case has). 0 = only recorded: the app counts taps/pins, and a card can be read without a tap, so raise this only after looking at the real numbers
     depth_min_questions: int = 2      # distinct interrogation questions asked
     depth_need_proof: bool = False    # DEPTH_NEED_PROOF=true: at least one card of solution.proof must have been opened
     depth_require_report: bool = False  # true: an app that never reports depth (an old app) is gated too

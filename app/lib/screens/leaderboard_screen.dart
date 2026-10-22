@@ -61,7 +61,7 @@ const _kPrizeText = 'اول ۱۲۰ سکه، دوم ۸۰ سکه، سوم ۵۰ س�
 /// The full explanation of the boards, in a bottom sheet (opens from the «i» next to the title, closes in one tap).
 /// [tab] 0 = today's case, 1 = this week, 2 = all time; the sheet shows that tab's part first.
 Future<void> showBoardInfo(BuildContext context, int tab, {List<LeagueInfo> leagues = const []}) {
-  final daily = _infoBlock('پرونده‌ی امروز', 'کارآگاه‌هایی که پرونده‌ی امروز رو همون روز حل کردن؛ بیشترین پلاک و بعد کمترین زمان بالاتره.');
+  final daily = _infoBlock('پرونده‌ی امروز', 'کارآگاه‌هایی که پرونده‌ی امروز رو همون روز حل کردن؛ بیشترین پلاک و بعد کمترین زمان بالاتره. برای جایگاه جدول باید پرونده رو واقعاً بررسی کرده باشی (بازجویی و مدارک)؛ پلاک و جایزه‌ات در هر حال مال خودته.');
   final all = _infoBlock('همیشه', 'جمع همه‌ی پلاک‌هایی که هر کارآگاه از اول تا حالا گرفته.');
   final weekly = <Widget>[
     _infoBlock('این هفته', 'فقط پرونده‌های همین هفته حساب می‌شن. بایگانی پلاک می‌ده، ولی توی جدول هفتگی نیست.'),
@@ -77,7 +77,9 @@ Future<void> showBoardInfo(BuildContext context, int tab, {List<LeagueInfo> leag
           child: Text('لیگ ${l.name}: از «${l.fromRank}» تا «${l.toRank}»', style: tBody(12.5, color: K.textSoft)),
         ),
     _infoBlock('جایزه‌ها', 'به ۳ کارآگاه اولِ هر لیگ جایزه می‌رسه: $_kPrizeText. برای جایزه باید دست‌کم ۲ پرونده‌ی همین هفته رو حل کرده باشی.'),
-    _infoBlock('اگه امتیازها برابر شد', 'اول پلاک بیشتر، بعد پرونده‌ی حل‌شده‌ی بیشتر، بعد زمان کمتر، و بعد حسابِ قدیمی‌تر بالاتره.'),
+    _infoBlock('ترتیب جدول هفته', 'جدول هفته به پیوستگی جایزه می‌ده، نه به عجله: اول تعداد شب‌هایی که پرونده حل کردی، بعد شب‌هایی که همون شب حل کردی، بعد پلاک بیشتر. سرعت فقط وقتی حساب می‌شه که همه‌چیز برابر باشه.'),
+    _infoBlock('اگه امتیازها برابر شد', 'اول شب‌های حل‌شده‌ی بیشتر، بعد شب‌های حل‌شده در همون شب، بعد پلاک بیشتر، بعد زمان کمتر، و بعد حسابِ قدیمی‌تر بالاتره.'),
+    _infoBlock('قرعه‌ی شبانه', 'بین کارآگاه‌هایی که پرونده‌ی هر شب رو با ۳ پلاک و بررسی کامل حل کنن، فردا یک نفر قرعه‌کشی می‌شه و یک حکم بازرسی هدیه می‌گیره. سرعت توی قرعه نقشی نداره.'),
   ];
   final order = tab == 1 ? [...weekly, daily, all] : tab == 2 ? [all, daily, ...weekly] : [daily, all, ...weekly];
   return showModalBottomSheet<void>(

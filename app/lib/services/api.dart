@@ -802,6 +802,8 @@ class Api extends ChangeNotifier {
       if (evidenceId.isNotEmpty) 'evidence': evidenceId,
       if (motive != null) 'motive': motive,
       'extra_seconds': CaseClock.i.take(caseId),
+      if (CaseClock.i.isOn(caseId)) 'cards': CaseClock.i.cards,
+      if (CaseClock.i.isOn(caseId)) 'asks': CaseClock.i.asks,
     }) as Map)
         .cast<String, dynamic>();
     final r = AccuseResult(j);
@@ -840,10 +842,11 @@ class Api extends ChangeNotifier {
   }
 
   /// Reports how long the case screen was open. Quiet: returns false when it didn't reach the server.
-  Future<bool> tickCase(String caseId, int seconds) async {
+  Future<bool> tickCase(String caseId, int seconds, {List<String>? cards, List<String>? asks}) async {
     if (!online) return false;
     try {
-      await _call('POST', '/v1/cases/$caseId/tick', body: {'seconds': seconds});
+      await _call('POST', '/v1/cases/$caseId/tick',
+          body: {'seconds': seconds, if (cards != null) 'cards': cards, if (asks != null) 'asks': asks});
       return true;
     } on ApiException {
       return true; // the server answered (e.g. the case is finished): nothing to retry

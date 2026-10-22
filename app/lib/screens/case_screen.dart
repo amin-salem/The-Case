@@ -935,6 +935,7 @@ class _CaseScreenState extends State<CaseScreen> {
                 pinned ? _pins.remove(e.id) : _pins.add(e.id);
                 _seen.add(e.id);
               });
+              CaseClock.i.card(e.id);
               _saveNotes();
               if (chaptered) {
                 unawaited(seen.markEvidence(e.id));

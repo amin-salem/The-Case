@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
+import '../services/case_clock.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/whats_new_ui.dart';
@@ -122,7 +123,12 @@ class _SuspectSheetState extends State<_SuspectSheet> {
   // Everyone gets nervous on the second question, so the face never gives the culprit away.
   Mood get _mood => _talking ? (_asked == 1 ? Mood.nervous : Mood.calm) : (_asked == 1 ? Mood.nervous : Mood.calm);
 
-  void _ask(int i) => setState(() {
+  void _ask(int i) {
+    CaseClock.i.asked(widget.s.id, i);
+    _askState(i);
+  }
+
+  void _askState(int i) => setState(() {
         _asked = i;
         _showLine = _showTitle = null;
         _talking = true;

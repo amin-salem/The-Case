@@ -94,9 +94,9 @@ class _ResultScreenState extends State<ResultScreen> {
                 _noteCard(Icons.help_outline_rounded, K.textSoft,
                     'مظنون درست بود، ولی «چرا و چطور» نه؛ برای همین دو پلاک. توضیح پایین رو بخون.'),
               ],
-              if (result.unranked) ...[
+              if (result.unranked && !_unrankedClosed) ...[
                 const SizedBox(height: 10),
-                _proofNote(),
+                _unrankedNote(),
               ],
               if ((result.streakMilestone ?? result.badge) != null) ...[
                 const SizedBox(height: 10),
@@ -232,20 +232,48 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   /// Solved, but without enough investigation: 1 star and no leaderboard place (anti-cheat).
-  Widget _proofNote() => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+  bool _unrankedClosed = false;
+
+  /// Why this solve has no leaderboard place, in plain words. Plaques and coins are never touched. One tap closes it.
+  Widget _unrankedNote() {
+    final (title, body) = switch (result.unrankedReason) {
+      'depth' => (
+          'این بار توی جدول امشب حساب نشد',
+          'بازجویی و بررسی مدارک کم بود. پلاک و جایزه‌ات سر جاشه؛ دفعه‌ی بعد از چند مظنون سؤال بپرس تا جایگاه جدول هم مال توئه.'
+        ),
+      'retry' => (
+          'این دور فرصت دوباره بود',
+          'پلاک و جایزه‌ات مال توئه، ولی این دور توی جدول حساب نمی‌شه.'
+        ),
+      _ => (
+          'برای ۳ پلاک، پرونده رو کامل بررسی کن',
+          'از چند مظنون سؤال بپرس و کمی وقت بذار؛ بعدش پلاک و جایگاه جدول مال توئه.'
+        ),
+    };
+    return GestureDetector(
+      key: const ValueKey('unranked-note'),
+      behavior: HitTestBehavior.opaque,
+      onTap: () => setState(() => _unrankedClosed = true),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
         decoration: BoxDecoration(
           color: K.brass.withValues(alpha: 0.14),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: K.brass.withValues(alpha: 0.5)),
         ),
-        child: Column(children: [
-          Text('برای ۳ پلاک، پرونده رو کامل بررسی کن', textAlign: TextAlign.center, style: tBody(14, color: K.brass, w: FontWeight.w900)),
-          const SizedBox(height: 2),
-          Text('از چند مظنون سؤال بپرس و کمی وقت بذار؛ بعدش پلاک و جایگاه جدول مال توئه.',
-              textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(
+            child: Column(children: [
+              Text(title, textAlign: TextAlign.center, style: tBody(14, color: K.brass, w: FontWeight.w900)),
+              const SizedBox(height: 2),
+              Text(body, textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
+            ]),
+          ),
+          const Padding(padding: EdgeInsets.all(8), child: Icon(Icons.close_rounded, size: 18, color: K.textSoft)),
         ]),
-      );
+      ),
+    );
+  }
 
   Widget _warrantNote(int n) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

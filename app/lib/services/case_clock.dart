@@ -14,6 +14,24 @@ class CaseClock with WidgetsBindingObserver {
   static final CaseClock i = CaseClock._();
 
   String? _case;
+
+  // Investigation depth, reported with every tick and with the accusation (the server keeps the union, so a lost
+  // report costs nothing): evidence cards the player tapped, and the interrogation questions asked ("suspect:index").
+  final Set<String> _cards = {}, _asks = {};
+  static const _depthCap = 80;
+  List<String> get cards => _cards.toList();
+  List<String> get asks => _asks.toList();
+
+  /// The player opened (tapped) an evidence card of the current case.
+  void card(String evidenceId) {
+    if (_case != null && _cards.length < _depthCap) _cards.add(evidenceId);
+  }
+
+  /// The player asked question [index] of a suspect.
+  void asked(String suspectId, int index) {
+    if (_case != null && _asks.length < _depthCap) _asks.add('$suspectId:$index');
+  }
+
   final Stopwatch _sw = Stopwatch();
   int _pending = 0; // seconds measured but not reported yet
   Timer? _flush;
@@ -21,6 +39,10 @@ class CaseClock with WidgetsBindingObserver {
   /// The case screen opened.
   void start(String caseId) {
     if (_case != null && _case != caseId) stop();
+    if (_case != caseId) {
+      _cards.clear();
+      _asks.clear();
+    }
     _case = caseId;
     _sw
       ..reset()
@@ -39,6 +61,9 @@ class CaseClock with WidgetsBindingObserver {
     _flush = null;
     _case = null;
   }
+
+  /// Is this the case whose screen is open right now?
+  bool isOn(String caseId) => _case == caseId;
 
   /// Time not reported yet, handed to the accusation (the server adds it to the case's time).
   int take(String caseId) {
@@ -60,7 +85,7 @@ class CaseClock with WidgetsBindingObserver {
     if (id == null || _pending <= 0) return;
     final s = _pending;
     _pending = 0;
-    if (!await Api.i.tickCase(id, s)) _pending += s; // offline: try again next time
+    if (!await Api.i.tickCase(id, s, cards: cards, asks: asks)) _pending += s; // offline: try again next time
   }
 
   @override

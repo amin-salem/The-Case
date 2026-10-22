@@ -22,7 +22,7 @@ void main() {
 
   test('list: newest first, titles for this release, no «نفر»', () {
     expect(kWhatsNew.first.id, 68);
-    expect(kWhatsNew.first.items.length, 2);
+    expect(kWhatsNew.first.items.length, 5);
     for (final r in kWhatsNew) {
       for (final it in r.items) {
         expect(it.title.contains('نفر'), isFalse);

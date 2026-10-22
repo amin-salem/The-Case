@@ -122,7 +122,19 @@ async def test_kill_switch_and_thresholds(client, clock, monkeypatch):
     nop = await start(client, "ld-noproof", c)
     others = [e["id"] for e in c.data["evidence"] if e["id"] not in c.proof][:1]
     r = await accuse(client, nop, c, cards=others, asks=[])
-    assert r["ranked"] is False and r["unranked_reason"] == "proof" or r["unranked_reason"] == "depth"
+    assert r["ranked"] is False and r["unranked_reason"] == "depth"
+
+
+async def test_card_threshold_when_switched_on(client, clock, monkeypatch):
+    c = content.by_id("c041")
+    clock(night("c041"))
+    monkeypatch.setattr(get_settings(), "depth_min_cards", 3)
+    two = await start(client, "ld-two", c)
+    sid = c.data["suspects"][0]["id"]
+    r = await accuse(client, two, c, cards=[e["id"] for e in c.data["evidence"][:2]], asks=[f"{sid}:0", f"{sid}:1"])
+    assert r["ranked"] is False and r["unranked_reason"] == "depth" and r["stars"] == 3
+    three = await start(client, "ld-three", c)
+    assert (await accuse(client, three, c, **deep(c)))["ranked"] is True
 
 
 def test_depth_ok_is_pure_and_skips_weekend_and_story(monkeypatch):
@@ -232,7 +244,7 @@ async def test_weekly_order_nights_then_on_time_then_plaques_then_speed(client, 
     assert order[0] == ids["three1"]                              # most nights
     # among the two-night players: 2-plaque solves beat 1-plaque unless on time counts first
     assert order.index(ids["pun"]) < order.index(ids["quick"]) < order.index(ids["slow"])
-    assert order.index(ids["quick"]) < order.index(ids["late"]) or True
+    assert order.index(ids["quick"]) < order.index(ids["late"])
     assert order.index(ids["slow"]) < order.index(ids["one3"])   # two nights beat one night, even with more plaques each
     # the player's own rank uses the same order
     async with db.SessionLocal() as s:
@@ -273,7 +285,7 @@ async def test_suspicious_report_flags_and_never_bans(client, clock, caplog):
         for i, p in enumerate(ps):
             s.add(CaseProgress(player_id=p["player_id"], case_id=c.id, solved=True, stars=3, ranked=True, was_daily=True,
                                finished_at=now - timedelta(hours=2) + timedelta(seconds=5 * i),
-                               active_seconds=40 if i < 6 else 400, cards_opened=[] if i < 5 else None,
+                               active_seconds=10 if i < 3 else (30 if i == 5 else 200), cards_opened=[] if i < 5 else None,
                                questions_asked=[] if i < 5 else None))
         await s.commit()
     with caplog.at_level("INFO", logger="cheatreport"):
