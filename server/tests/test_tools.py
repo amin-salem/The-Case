@@ -32,6 +32,8 @@ def tooled(case_id="c020"):
     d = copy.deepcopy(base.data)
     d["solution"]["irrelevant"] = spare_cards(d)[:1]
     assert d["solution"]["irrelevant"], "pick a case with a spare card"
+    for s in d["suspects"]:
+        s["print"] = [f"روی دستگیره‌ی در راهرو ردِ دستکش چرمیِ {s['name']} پیدا شد؛ همونی که هر روز می‌پوشه."]
     for s in d["suspects"][:2]:
         s["camera"] = [f"{s['name']} هنگام انتظار چند بار به ساعت مچی‌اش نگاه کرد و بعد دوباره نشست."]
     content.validate(d)
@@ -75,22 +77,20 @@ async def give(pid, kind, n=1, free_used=False):
 
 # ---- the logic on the REAL case files ---------------------------------------------------------------------------------
 
-def test_fingerprint_is_a_fact_about_the_file_never_a_verdict():
-    offered = 0
+def test_fingerprint_shows_only_authored_traces_and_never_a_verdict():
     for c in REAL:
         d = c.data
         for sp in d["suspects"]:
-            n = tools.mention_count(d, sp)
+            lines = tools.print_lines(sp)
             r = tools.compute("fingerprint", d, "p", sp["id"])
-            if n == 0:
-                assert r is None, c.id  # nothing to say: not consumed
+            if not lines:
+                assert r is None, c.id  # nothing authored: the tool is simply not offered, nothing is charged
                 continue
-            offered += 1
-            assert r["count"] == n and "main" not in r
+            assert r["text"].endswith(tuple(lines)) and "main" not in r and "count" not in r
             for bad in ("گناهکار", "مقصر هست", "نقش داره", "نقش مهمی"):
                 assert bad not in r["text"], (c.id, bad)
-            assert "نه اینکه مقصره" in r["text"]  # the answer itself says it is not a verdict
-    assert offered >= 150, offered
+        av = tools.availability(d)["fingerprint"]
+        assert av["available"] == any(tools.print_lines(sp) for sp in d["suspects"]), c.id
 
 
 def test_real_cases_have_a_magnifier_but_no_camera_until_authored():
@@ -127,6 +127,8 @@ def test_tool_data_validation_refuses_unsafe_files():
     bad(lambda d: d["solution"].__setitem__("irrelevant", [cited]))                          # cited by the explanation
     bad(lambda d: d["solution"].__setitem__("irrelevant", ["e99"]))                          # unknown card
     bad(lambda d: d["solution"].__setitem__("irrelevant", spare_cards(d) * 3))               # too many / duplicates
+    bad(lambda d: d["suspects"][0].__setitem__("print", "کوتاه"))                             # too short
+    bad(lambda d: d["suspects"][0].__setitem__("print", ["x" * 30] * 4))                     # too many lines
     bad(lambda d: d["suspects"][0].__setitem__("camera", "کوتاه"))                            # too short
     bad(lambda d: d["suspects"][0].__setitem__("camera", ["x" * 30] * 4))                    # too many lines
 
@@ -134,7 +136,7 @@ def test_tool_data_validation_refuses_unsafe_files():
 def test_public_case_never_carries_tool_secrets(today):
     pub = today.public()
     assert "solution" not in pub
-    assert all("camera" not in s for s in pub["suspects"])
+    assert all("camera" not in s and "print" not in s for s in pub["suspects"])
     assert any("camera" in s for s in today.data["suspects"])  # the private copy keeps them
 
 
@@ -326,6 +328,9 @@ async def test_weekend_tools_work_per_night_and_only_on_visible_things(client, m
     tray = (await client.get(f"/v1/cases/{w.id}/tools", headers=h)).json()
     assert tray["enabled"] and tray["night"] == 1 and tray["how"]["fingerprint"]["get"]
     hidden = set(w.data["chapters"][1].get("evidence", []))
+    for sp_ in w.data["suspects"]:
+        monkeypatch.setitem(sp_, "print", ["روی دستگیره‌ی در راهرو ردِ دستکشِ چرمی پیدا شد؛ همونی که هر روز می‌پوشه."])
+    tray = (await client.get(f"/v1/cases/{w.id}/tools", headers=h)).json()
     fp = next(t for t in tray["tools"] if t["kind"] == "fingerprint")
     sp = fp["suspects"][0]
     r = await client.post(url(w, "magnifier", "buy"), headers=h, json={})

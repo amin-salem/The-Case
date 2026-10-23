@@ -142,4 +142,4 @@ natural place for it; never force it. The server refuses a file that breaks thes
 - `suspect.camera`: one line (or up to 3), 20-160 characters, a **neutral observation** about the person's behaviour or a small
   fact («چند بار به ساعت مچی‌اش نگاه کرد»). It names no guilt, no motive, no lie, and does not repeat a statement or an answer.
   It must not make the culprit stand out compared with the others (give every suspect with a camera line a line of the same weight).
-- The fingerprint needs no data. Do not rely on it: it says which suspects the proof cards name, never who is guilty.
+- The fingerprint reader shows `suspect.print` (a string or 1-3 lines, 20-160 chars): a small physical trace the suspect left on some object (print, fibre, smudge, wear) that NO card shows. Same rules as camera: innocent-looking and explainable for everybody (culprit included), equal tone and length across suspects, never proof or exclusion by itself, never a new event, not a repeat of a card or of the camera line. A case without `print` simply does not offer the tool.

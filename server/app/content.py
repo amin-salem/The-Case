@@ -68,8 +68,8 @@ class Case:
     def public(self) -> dict:
         """Everything except the hints and the solution (and the detective tools' private lines, app/tools.py)."""
         out = {k: v for k, v in self.data.items() if k not in SECRET_KEYS}
-        if any("camera" in s for s in out.get("suspects", ())):
-            out["suspects"] = [{k: v for k, v in s.items() if k != "camera"} for s in out["suspects"]]
+        if any(k in s for s in out.get("suspects", ()) for k in TOOL_SUSPECT_KEYS):
+            out["suspects"] = [{k: v for k, v in s.items() if k not in TOOL_SUSPECT_KEYS} for s in out["suspects"]]
         return out
 
     def summary(self) -> dict:
@@ -125,6 +125,7 @@ def validate(d: dict, max_suspects: int = 6) -> None:
     date.fromisoformat(d["publish"])
 
 
+TOOL_SUSPECT_KEYS = ("camera", "print")  # private per-suspect tool lines, never in the public case
 CAMERA_MIN, CAMERA_MAX, CAMERA_LINES = 20, 160, 3
 IRRELEVANT_MAX = 2
 
@@ -134,6 +135,7 @@ def _validate_tool_data(d: dict, eids: set) -> None:
     simply does not offer that tool.
     - solution.irrelevant: evidence ids the author certifies as NOT needed for the solution (at most 2); never a proof
       card and never a card the explanation cites by id.
+    - suspect.print: the fingerprint reader's trace line(s), same limits as camera.
     - suspect.camera: a short neutral observation (a string or up to 3), 20-160 characters, that adds a small fact and
       names no guilt."""
     sol = d["solution"]
@@ -149,15 +151,16 @@ def _validate_tool_data(d: dict, eids: set) -> None:
             if re.search(rf"\b{re.escape(i)}\b", sol.get("explanation", "")):
                 raise CaseError(f"{d['id']}: solution.irrelevant {i!r} is cited in the explanation")
     for s in d["suspects"]:
-        cam = s.get("camera")
-        if cam is None:
-            continue
-        lines = [cam] if isinstance(cam, str) else cam
-        if not isinstance(lines, list) or not 1 <= len(lines) <= CAMERA_LINES:
-            raise CaseError(f"{d['id']}/{s['id']}: camera must be a line or 1-{CAMERA_LINES} lines")
-        for ln in lines:
-            if not isinstance(ln, str) or not CAMERA_MIN <= len(ln.strip()) <= CAMERA_MAX:
-                raise CaseError(f"{d['id']}/{s['id']}: a camera line must be {CAMERA_MIN}-{CAMERA_MAX} characters")
+        for key in TOOL_SUSPECT_KEYS:
+            cam = s.get(key)
+            if cam is None:
+                continue
+            lines = [cam] if isinstance(cam, str) else cam
+            if not isinstance(lines, list) or not 1 <= len(lines) <= CAMERA_LINES:
+                raise CaseError(f"{d['id']}/{s['id']}: {key} must be a line or 1-{CAMERA_LINES} lines")
+            for ln in lines:
+                if not isinstance(ln, str) or not CAMERA_MIN <= len(ln.strip()) <= CAMERA_MAX:
+                    raise CaseError(f"{d['id']}/{s['id']}: a {key} line must be {CAMERA_MIN}-{CAMERA_MAX} characters")
 
 
 @lru_cache

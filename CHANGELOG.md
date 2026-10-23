@@ -1,5 +1,7 @@
 # Changelog
 
+## server 1.37.1, app 1.37.1 (build 70): fingerprint reader rebuilt (Amin, 23 Oct 2026)
+- The 1.37.0 fingerprint ("your name appears in N cards") told players nothing they cannot already see under every card, so it is replaced: it now shows an authored physical trace per suspect, `suspect.print` (string or 1-3 lines, 20-160 chars, validated like `camera`, never in the public case). A case without `print` does not offer the tool; "nothing new" costs nothing. `mention_count` is gone. Traces were written for all cases (branch `content/prints`, rules in `docs/case-writing-rules.md` §10).
 ## server 1.37.0, app 1.37.0 (build 69): detective tools v2 (Amin, 23 Oct 2026, urgent)
 - **Fingerprint no longer misleads.** It used to say «توی مدارک اصلی نقش داره» for any suspect named in a proof card, so an innocent could get "yes" and a player paid coins for a wrong lead. Now it only says in how many cards the suspect's name appears and that this is neither guilt nor innocence (`tools.mention_count`); a suspect named in no card gives "nothing new" and costs nothing. `touched_ids`/`fingerprint_safe` are gone.
 - **Magnifier works on every case** (also the 35 real cases without `solution.irrelevant`): it falls back to a card that is not a proof card (preferring one the explanation does not cite) with honest wording «جزو مدارک اصلی نیست؛ مکمله». An authored `irrelevant` list still wins and keeps its «بی‌ربط» wording.

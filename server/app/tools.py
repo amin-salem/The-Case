@@ -3,7 +3,7 @@ solving the case. The server decides every answer from the case file; the phone 
 
 - magnifier «ذره‌بین»: marks ONE card as irrelevant. Uses `solution.irrelevant` when authored, else any card that is not proof,
   not cited and does not name the culprit.
-- fingerprint «اثر انگشت‌خوان»: for one suspect, in how many cards his name appears (a fact, never a verdict).
+- fingerprint «اثر انگشت‌خوان»: for one suspect, one authored physical trace (`suspect.print`) that no card shows; never a verdict.
 - camera «دوربین مخفی»: one extra neutral line about a suspect. Needs `suspect.camera` lines in the case file.
 
 Once per case per kind (CaseToolUse is unique). Never touches plaques, never counts as investigation (active time and
@@ -28,7 +28,7 @@ log = logging.getLogger("tools")
 KINDS = ("magnifier", "fingerprint", "camera")
 INFO = {
     "magnifier": {"title": "ذره‌بین", "desc": "یکی از مدارک پرونده رو که برای حل لازم نیست علامت می‌زنه تا وقتت رو تلف نکنی."},
-    "fingerprint": {"title": "اثر انگشت‌خوان", "desc": "برای یک مظنون می‌گه اسمش توی چند تا از مدارک اومده. حکم گناه نیست؛ فقط نشون می‌ده کجاها دنبالش بگردی."},
+    "fingerprint": {"title": "اثر انگشت‌خوان", "desc": "برای یک مظنون یه ردِ فیزیکیِ تازه رو نشون می‌ده؛ مثلاً اثرش روی یه وسیله. حکم گناه نیست، فقط یه سرنخ مکمله."},
     "camera": {"title": "دوربین مخفی", "desc": "یک مشاهده‌ی تازه درباره‌ی یک مظنون رو نشونت می‌ده."},
 }
 NOT_FOR_MODE = "ابزارهای کارآگاهی توی پرونده‌های داستانی کار نمی‌کنن."
@@ -43,28 +43,23 @@ def _pick(seed: str, n: int) -> int:
     return int(hashlib.sha256(seed.encode()).hexdigest(), 16) % n
 
 
-def mention_count(data: dict, suspect: dict, cards: set[str] | None = None) -> int:
-    """How many case cards name this suspect. A fact about the file, never a verdict: a name appears in a card for many
-    reasons (an alibi, a witness, a dull errand), so it says nothing about guilt."""
-    toks = [_norm(t) for t in _norm_split(suspect["name"])]
-    n = 0
-    for e in data["evidence"]:
-        if cards is not None and e["id"] not in cards:
-            continue
-        text = _norm(f"{e['title']} {e['text']}")
-        if any(t and t in text for t in toks):
-            n += 1
-    return n
-
-
 def _norm_split(name: str) -> list[str]:
     return [t for t in name.replace("‌", " ").split() if len(t) >= 3 and t not in _TITLES]
 
 
-def camera_lines(suspect: dict) -> list[str]:
-    cam = suspect.get("camera")
-    lines = [cam] if isinstance(cam, str) else list(cam or [])
+def _lines(suspect: dict, key: str) -> list[str]:
+    raw = suspect.get(key)
+    lines = [raw] if isinstance(raw, str) else list(raw or [])
     return [ln.strip() for ln in lines if isinstance(ln, str) and ln.strip()]
+
+
+def camera_lines(suspect: dict) -> list[str]:
+    return _lines(suspect, "camera")
+
+
+def print_lines(suspect: dict) -> list[str]:
+    """Authored physical traces (`suspect.print`) for the fingerprint reader."""
+    return _lines(suspect, "print")
 
 
 def magnifier_pool(data: dict, cards: set[str] | None = None) -> tuple[list[str], bool]:
@@ -87,7 +82,7 @@ def availability(data: dict, cards: set[str] | None = None, suspects: set[str] |
     limit it to what the player can see now (weekend chapters)."""
     vis = [s for s in data["suspects"] if suspects is None or s["id"] in suspects]
     cam = [s["id"] for s in vis if camera_lines(s)]
-    fp = [s["id"] for s in vis if mention_count(data, s, cards) > 0]
+    fp = [s["id"] for s in vis if print_lines(s)]
     return {"magnifier": {"available": bool(magnifier_pool(data, cards)[0]), "suspects": None},
             "fingerprint": {"available": bool(fp), "suspects": fp},
             "camera": {"available": bool(cam), "suspects": cam}}
@@ -109,12 +104,10 @@ def compute(kind: str, data: dict, player_id: str, suspect_id: str | None, cards
     if s is None:
         return None
     if kind == "fingerprint":
-        n = mention_count(data, s, cards)
-        if n == 0:
+        lines = print_lines(s)
+        if not lines:
             return None
-        return {"suspect": s["id"], "count": n, "text": (
-            f"اثر انگشت‌خوان: اسم {s['name']} توی {n} تا از مدارک پرونده اومده. "
-            "این فقط می‌گه کجاها پیداش می‌شه؛ نه اینکه مقصره، نه اینکه بی‌گناهه. خودِ مدارک رو بخون و بسنج.")}
+        return {"suspect": s["id"], "text": f"اثر انگشت‌خوان ({s['name']}): {lines[_pick(seed + ':' + s['id'], len(lines))]}"}
     lines = camera_lines(s)
     if not lines:
         return None

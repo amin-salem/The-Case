@@ -43,10 +43,10 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
-  WhatsNewRelease(69, '۱.۳۷', '2026-10-23', [
+  WhatsNewRelease(70, '۱.۳۷', '2026-10-23', [
     WhatsNewItem('tools_v2', 'ابزارهای کارآگاهی پررنگ‌تر شدن و حالا توی پرونده‌های آخر هفته هم کار می‌کنن (هر شب یک بار از هر کدوم)', WhatsNewTarget.weekend),
     WhatsNewItem('tools_help', 'دکمه‌ی «چطور کار می‌کنن؟» بالای ابزارها می‌گه هر کدوم چطور به دست میاد، چقدره و کجا استفاده می‌شه؛ قبل از هر استفاده هم می‌بینی چی نشونت می‌ده', WhatsNewTarget.caseToday),
-    WhatsNewItem('tools_fingerprint', 'اثر انگشت‌خوان دیگه نمی‌گه کسی «نقش داره»؛ فقط می‌گه اسمش توی چند مدرک اومده و حکم گناه نمی‌ده. اگه چیزی پیدا نشه، سکه‌ای کم نمی‌شه', WhatsNewTarget.caseToday),
+    WhatsNewItem('tools_fingerprint', 'اثر انگشت‌خوان حالا برای هر مظنون یه ردِ فیزیکیِ تازه (مثلاً اثرش روی یه وسیله) نشون می‌ده و حکم گناه نمی‌ده؛ فقط برای پرونده‌هایی که ردها نوشته شده ظاهر می‌شه', WhatsNewTarget.caseToday),
     WhatsNewItem('tools_magnifier', 'ذره‌بین حالا روی همه‌ی پرونده‌ها کار می‌کنه و یکی از مدارک غیراصلی رو علامت می‌زنه تا وقتت تلف نشه', WhatsNewTarget.caseToday),
     WhatsNewItem('tools_camera', 'دوربین مخفی برای پرونده‌های تازه و آخر هفته مشاهده‌ی بی‌طرف درباره‌ی هر مظنون نشون می‌ده', WhatsNewTarget.weekend),
   ]),
