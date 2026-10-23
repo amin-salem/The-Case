@@ -22,7 +22,7 @@ void main() {
   test('model: pinned results, irrelevant cards and who can be looked at', () {
     final tray = ToolTray(_tray(tools: [
       _tool('magnifier', used: true, usable: false, result: {'text': 'بی‌ربطه', 'card': 'e3'}),
-      _tool('fingerprint', suspects: ['s1', 's2'], used: true, usable: false, result: {'text': 'نقش داره', 'suspect': 's1'}),
+      _tool('fingerprint', suspects: ['s1', 's2'], used: true, usable: false, result: {'text': 'اسمش توی ۲ مدرک اومده', 'suspect': 's1'}),
       _tool('camera', available: false),
     ]));
     expect(tray.irrelevantCards, {'e3'});
@@ -70,11 +70,35 @@ void main() {
     expect(find.text('انجام شد ✓'), findsOneWidget);
   });
 
-  testWidgets('tray: weekend and story cases say tools are for daily cases; a closed switch shows nothing', (t) async {
+  testWidgets('tray: story chapters say tools do not work there; a closed switch shows nothing', (t) async {
     await _pump(t, ToolTray(_tray(daily: false, enabled: false, tools: [])), (_) {});
     expect(find.byKey(const ValueKey('tools-daily-only')), findsOneWidget);
     await _pump(t, ToolTray(_tray(enabled: false)), (_) {});
     expect(find.byKey(const ValueKey('tool-fingerprint')), findsNothing);
     expect(find.byKey(const ValueKey('tools-daily-only')), findsNothing);
+  });
+
+  test('model: weekend night, earlier results and the how-to text', () {
+    final tray = ToolTray({
+      ..._tray(),
+      'night': 2,
+      'how': {'camera': {'get': 'از جایزه‌ها', 'use': 'بالای تب‌ها'}},
+      'earlier': [{'kind': 'magnifier', 'text': 'شب قبل', 'card': 'e5'}],
+    });
+    expect(tray.night, 2);
+    expect(tray.how['camera']!.$1, 'از جایزه‌ها');
+    expect(tray.earlier.single.kind, 'magnifier');
+    expect(tray.irrelevantCards, {'e5'});
+  });
+
+  testWidgets('tray: the help button is there and reports a tap; the night is named on night two', (t) async {
+    var helped = false;
+    await t.pumpWidget(MaterialApp(
+        home: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Scaffold(body: ToolTrayBar(tray: ToolTray({..._tray(), 'night': 2}), onTap: (_) {}, onHelp: () => helped = true)))));
+    expect(find.textContaining('شب ۲'), findsOneWidget);
+    await t.tap(find.byKey(const ValueKey('tools-help')));
+    expect(helped, isTrue);
   });
 }

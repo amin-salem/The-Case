@@ -13,10 +13,11 @@ IconData toolIcon(String kind) => switch (kind) {
 /// The tool tray of a daily case: up to three icons with a count or a price. One tap uses (or, with none in hand, asks
 /// once to buy). Only tools the case file supports are drawn; a weekend or story case just says tools are for daily cases.
 class ToolTrayBar extends StatelessWidget {
-  const ToolTrayBar({super.key, required this.tray, required this.onTap, this.busy = false});
+  const ToolTrayBar({super.key, required this.tray, required this.onTap, this.onHelp, this.busy = false});
   final ToolTray tray;
   final void Function(ToolInfo) onTap;
   final bool busy;
+  final VoidCallback? onHelp;
 
   String _sub(ToolInfo t) {
     if (t.used) return 'انجام شد ✓';
@@ -30,7 +31,7 @@ class ToolTrayBar extends StatelessWidget {
     if (!tray.daily) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 8),
-        child: Text(tray.message.isNotEmpty ? tray.message : 'ابزارهای کارآگاهی فقط توی پرونده‌های روزانه کار می‌کنن.',
+        child: Text(tray.message.isNotEmpty ? tray.message : 'ابزارهای کارآگاهی توی پرونده‌های داستانی کار نمی‌کنن.',
             key: const ValueKey('tools-daily-only'), textAlign: TextAlign.center, style: tBody(12, color: K.textSoft)),
       );
     }
@@ -38,11 +39,33 @@ class ToolTrayBar extends StatelessWidget {
     if (!tray.enabled || shown.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Row(children: [
-        for (int i = 0; i < shown.length; i++) ...[
-          if (i > 0) const SizedBox(width: 8),
-          Expanded(child: _ToolButton(tool: shown[i], sub: _sub(shown[i]), busy: busy, onTap: () => onTap(shown[i]))),
-        ],
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Row(children: [
+          Expanded(
+            child: Text('ابزارهای کارآگاهی${tray.night > 1 ? ' · شب ${fa(tray.night)}' : ''}',
+                style: tBody(12.5, w: FontWeight.w900, color: K.brass)),
+          ),
+          InkWell(
+            key: const ValueKey('tools-help'),
+            borderRadius: BorderRadius.circular(14),
+            onTap: onHelp,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                const Icon(Icons.info_outline_rounded, size: 16, color: K.textSoft),
+                const SizedBox(width: 4),
+                Text('چطور کار می‌کنن؟', style: tBody(11.5, color: K.textSoft)),
+              ]),
+            ),
+          ),
+        ]),
+        const SizedBox(height: 4),
+        Row(children: [
+          for (int i = 0; i < shown.length; i++) ...[
+            if (i > 0) const SizedBox(width: 8),
+            Expanded(child: _ToolButton(tool: shown[i], sub: _sub(shown[i]), busy: busy, onTap: () => onTap(shown[i]))),
+          ],
+        ]),
       ]),
     );
   }
@@ -67,22 +90,18 @@ class _ToolButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         onTap: busy || off ? null : onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 6),
+          padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 6),
           decoration: BoxDecoration(
             color: K.night3.withValues(alpha: off ? 0.5 : 1),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: done ? K.ok.withValues(alpha: 0.7) : K.brass.withValues(alpha: 0.45)),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: done ? K.ok.withValues(alpha: 0.7) : K.brass.withValues(alpha: 0.6), width: 1.4),
           ),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Icon(toolIcon(tool.kind), size: 20, color: done ? K.ok : K.brass),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(tool.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, w: FontWeight.w900)),
-                Text(sub, maxLines: 1, overflow: TextOverflow.ellipsis,
-                    style: tBody(10.5, color: tool.freeAvailable && !done ? K.ok : K.textSoft)),
-              ]),
-            ),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Icon(toolIcon(tool.kind), size: 26, color: done ? K.ok : K.brass),
+            const SizedBox(height: 3),
+            Text(tool.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, w: FontWeight.w900)),
+            Text(sub, maxLines: 1, overflow: TextOverflow.ellipsis,
+                style: tBody(11, color: tool.freeAvailable && !done ? K.ok : K.textSoft)),
           ]),
         ),
       ),

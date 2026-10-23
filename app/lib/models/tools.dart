@@ -9,9 +9,13 @@ class ToolResult {
   ToolResult(Map<String, dynamic> j)
       : text = _s(j['text']),
         card = _s(j['card']),
-        suspect = _s(j['suspect']);
+        suspect = _s(j['suspect']),
+        kind = _s(j['kind']);
 
   final String text;
+
+  /// only set on `earlier` results (a previous night of a weekend case)
+  final String kind;
 
   /// magnifier: the evidence card marked «بی‌ربط» ('' for the other tools)
   final String card;
@@ -62,6 +66,16 @@ class ToolTray {
         daily = j['daily'] != false,
         message = _s(j['message']),
         coins = _i(j['coins']),
+        night = _i(j['night'], 1),
+        how = {
+          if (j['how'] is Map)
+            for (final e in (j['how'] as Map).entries)
+              if (e.value is Map) '${e.key}': (_s((e.value as Map)['get']), _s((e.value as Map)['use']))
+        },
+        earlier = [
+          for (final r in (j['earlier'] as List? ?? const []))
+            if (r is Map) ToolResult(r.cast<String, dynamic>())
+        ],
         tools = [
           for (final t in (j['tools'] as List? ?? const []))
             if (t is Map) ToolInfo(t.cast<String, dynamic>())
@@ -73,6 +87,15 @@ class ToolTray {
   final bool daily;
   final String message;
   final int coins;
+
+  /// the weekend night (1, 2); daily cases are always 1
+  final int night;
+
+  /// kind -> (how to get it, where to use it): the help sheet's text comes from the server
+  final Map<String, (String, String)> how;
+
+  /// results of earlier nights of a weekend case
+  final List<ToolResult> earlier;
   final List<ToolInfo> tools;
 
   ToolInfo? byKind(String kind) {
@@ -85,7 +108,9 @@ class ToolTray {
   /// Evidence ids the magnifier marked as irrelevant.
   Set<String> get irrelevantCards => {
         for (final t in tools)
-          if (t.result != null && t.result!.card.isNotEmpty) t.result!.card
+          if (t.result != null && t.result!.card.isNotEmpty) t.result!.card,
+        for (final r in earlier)
+          if (r.card.isNotEmpty) r.card
       };
 
   /// Results to show pinned on the case, in tool order.

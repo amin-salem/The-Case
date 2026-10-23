@@ -331,12 +331,16 @@ class _CaseScreenState extends State<CaseScreen> {
       if (suspect == null || !mounted) return;
     }
     var buy = !t.hasOne;
-    if (buy) {
-      final ok = await confirm(context, t.title,
-          '${t.desc}\nهزینه: ${fa(t.price)} سکه. پلاکی کم نمی‌شه، و برای هر پرونده فقط یک بار می‌تونی ازش استفاده کنی.',
-          'بخر و استفاده کن');
-      if (!ok || !mounted) return;
-    }
+    final who = suspect == null ? '' : ' روی ${_case!.suspects.firstWhere((x) => x.id == suspect).name}';
+    final ok = await confirm(
+        context,
+        '${t.title}$who',
+        '${_toolDoes(t.kind)}\n${_toolNever(t.kind)}\n'
+        '${buy ? 'هزینه: ${fa(t.price)} سکه (الان ${fa(_tray?.coins ?? 0)} سکه داری).' : (t.freeAvailable && t.count == 0 ? 'این بار رایگانه.' : 'یکی از ابزارهات مصرف می‌شه.')} '
+        'پلاکی کم نمی‌شه و ${(_tray?.night ?? 1) > 1 || _case!.weekly ? 'برای هر شب' : 'برای هر پرونده'} فقط یک بار می‌شه. '
+        'اگه چیز تازه‌ای پیدا نشه، چیزی ازت کم نمی‌شه.',
+        buy ? 'بخر و استفاده کن' : 'استفاده کن');
+    if (!ok || !mounted) return;
     setState(() => _toolBusy = true);
     try {
       final out = await Api.i.useTool(_case!.id, t.kind, suspect: suspect, buy: buy);
@@ -363,10 +367,62 @@ class _CaseScreenState extends State<CaseScreen> {
     }
   }
 
+  String _toolDoes(String kind) => switch (kind) {
+        'magnifier' => 'ذره‌بین یکی از مدارک رو که جزو اصلی حل پرونده نیست علامت می‌زنه.',
+        'fingerprint' => 'اثر انگشت‌خوان می‌گه اسم این مظنون توی چند تا از مدارک اومده.',
+        'camera' => 'دوربین مخفی یک مشاهده‌ی تازه و بی‌طرف درباره‌ی این مظنون نشون می‌ده.',
+        _ => '',
+      };
+
+  String _toolNever(String kind) => switch (kind) {
+        'fingerprint' => 'حکم گناه یا بی‌گناهی نمی‌ده؛ فقط راهنماست.',
+        _ => 'مقصر رو لو نمی‌ده و پرونده رو حل نمی‌کنه.',
+      };
+
+  Future<void> _showToolHelp() async {
+    final tray = _tray;
+    if (tray == null) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: K.night2,
+      builder: (ctx) => SafeArea(
+        child: SingleChildScrollView(
+          key: const ValueKey('tools-help-sheet'),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Text('ابزارها چطور کار می‌کنن؟', style: tDisplay(18)),
+            const SizedBox(height: 4),
+            Text('کمک‌های کوچیک برای تنگ‌تر کردن جستجو. هیچ‌کدوم مقصر رو لو نمی‌دن و هیچ‌کدوم امتیاز و پلاک رو عوض نمی‌کنن.',
+                style: tBody(12.5, color: K.textSoft)),
+            for (final t in tray.tools) ...[
+              const SizedBox(height: 14),
+              Row(children: [
+                Icon(toolIcon(t.kind), color: K.brass, size: 22),
+                const SizedBox(width: 8),
+                Text('${t.title} · ${fa(t.price)} سکه', style: tBody(14.5, w: FontWeight.w900)),
+              ]),
+              const SizedBox(height: 4),
+              Text(t.desc, style: tBody(13)),
+              if (tray.how[t.kind] != null) ...[
+                const SizedBox(height: 4),
+                Text('چطور به دست میاد: ${tray.how[t.kind]!.$1}', style: tBody(12.5, color: K.textSoft)),
+                Text('کجا استفاده می‌شه: ${tray.how[t.kind]!.$2}', style: tBody(12.5, color: K.textSoft)),
+              ],
+            ],
+            const SizedBox(height: 14),
+            StampButton(label: 'باشه', height: 44, onTap: () => Navigator.pop(ctx)),
+          ]),
+        ),
+      ),
+    );
+  }
+
   /// What the tools found, pinned on the case so reopening it does not lose it.
   Widget _toolFindings() {
     final pinned = _tray?.pinned ?? const <ToolInfo>[];
-    if (pinned.isEmpty) return const SizedBox.shrink();
+    final earlier = _tray?.earlier ?? const <ToolResult>[];
+    if (pinned.isEmpty && earlier.isEmpty) return const SizedBox.shrink();
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       const SizedBox(height: 14),
       for (final t in pinned)
@@ -379,6 +435,17 @@ class _CaseScreenState extends State<CaseScreen> {
             Icon(toolIcon(t.kind), color: K.ink, size: 20),
             const SizedBox(width: 8),
             Expanded(child: Text(t.result!.text, style: tBody(14, color: K.ink, w: FontWeight.w700))),
+          ]),
+        ),
+      for (final r in earlier)
+        Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: K.clue.withValues(alpha: 0.8), borderRadius: BorderRadius.circular(6)),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Icon(toolIcon(r.kind), color: K.ink, size: 20),
+            const SizedBox(width: 8),
+            Expanded(child: Text('شب قبل: ${r.text}', style: tBody(14, color: K.ink, w: FontWeight.w700))),
           ]),
         ),
     ]);
@@ -1119,7 +1186,7 @@ class _CaseScreenState extends State<CaseScreen> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            if (_tray != null) ToolTrayBar(tray: _tray!, busy: _toolBusy, onTap: _useTool),
+            if (_tray != null) ToolTrayBar(tray: _tray!, busy: _toolBusy, onTap: _useTool, onHelp: _showToolHelp),
             Row(children: [
               Expanded(
                 flex: 2,

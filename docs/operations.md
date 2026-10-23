@@ -496,7 +496,11 @@ section returns `{"error": "section_failed"}` and the rest still works.
 - **Prices set 21 Oct 2026 on this reading:** hints 40 / 80 / 120 (were 30/50/80), tools 35 / 65 / 100. The first hint stays within reach of a
   new player (100 coins), the third is about one day of full free income. Review after a week of the screen's numbers.
 
-## Detective tools «ابزارهای کارآگاهی» (20 Oct 2026, server 1.33.0, app 1.33.0+66)
+## Detective tools «ابزارهای کارآگاهی» (20 Oct 2026, server 1.33.0, app 1.33.0+66; v2 23 Oct 2026, server 1.37.0)
+**v2 (23 Oct):** fingerprint now answers "the name appears in N cards" (never a verdict); magnifier falls back to any non-proof card when
+`solution.irrelevant` is missing; weekend cases have tools once per kind per night (`kind@2` key, no migration; story chapters
+none); the tray payload has `night`, `how`, `earlier`. The older lines below that say "weekend answers 409" or "fingerprint says
+whether touched by the main cards" are superseded. Players learn where tools come from in the app (help sheet), source `tools.how_to()`.
 Three consumables on the daily case screen. They narrow the search, never solve it: no card is named, the culprit is never
 said, plaques and stars are untouched, and a tool never counts as investigation (active time and interrogated suspects are
 what anti-cheat reads, so a solve with tools alone is still unranked).

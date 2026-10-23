@@ -1,9 +1,9 @@
 """Detective tools «ابزارهای کارآگاهی» (Amin, 16 Oct 2026): three small consumables that narrow the search without
 solving the case. The server decides every answer from the case file; the phone only asks.
 
-- magnifier «ذره‌بین»: marks ONE card as irrelevant. Needs `solution.irrelevant` (authors certify the cards; a card the
-  proof or the explanation uses can never be listed, see content._validate_tool_data).
-- fingerprint «اثر انگشت‌خوان»: for one suspect, whether he is touched by the main (proof) cards.
+- magnifier «ذره‌بین»: marks ONE card as irrelevant. Uses `solution.irrelevant` when authored, else any card that is not proof,
+  not cited and does not name the culprit.
+- fingerprint «اثر انگشت‌خوان»: for one suspect, in how many cards his name appears (a fact, never a verdict).
 - camera «دوربین مخفی»: one extra neutral line about a suspect. Needs `suspect.camera` lines in the case file.
 
 Once per case per kind (CaseToolUse is unique). Never touches plaques, never counts as investigation (active time and
@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import re
 
 from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
@@ -26,11 +27,11 @@ log = logging.getLogger("tools")
 
 KINDS = ("magnifier", "fingerprint", "camera")
 INFO = {
-    "magnifier": {"title": "ذره‌بین", "desc": "یکی از مدارک پرونده رو که برای حل لازم نیست «بی‌ربط» علامت می‌زنه."},
-    "fingerprint": {"title": "اثر انگشت‌خوان", "desc": "برای یک مظنون می‌گه توی مدارک اصلی نقش داره یا نه."},
+    "magnifier": {"title": "ذره‌بین", "desc": "یکی از مدارک پرونده رو که برای حل لازم نیست علامت می‌زنه تا وقتت رو تلف نکنی."},
+    "fingerprint": {"title": "اثر انگشت‌خوان", "desc": "برای یک مظنون می‌گه اسمش توی چند تا از مدارک اومده. حکم گناه نیست؛ فقط نشون می‌ده کجاها دنبالش بگردی."},
     "camera": {"title": "دوربین مخفی", "desc": "یک مشاهده‌ی تازه درباره‌ی یک مظنون رو نشونت می‌ده."},
 }
-NOT_FOR_MODE = "ابزارهای کارآگاهی فقط توی پرونده‌های روزانه کار می‌کنن."
+NOT_FOR_MODE = "ابزارهای کارآگاهی توی پرونده‌های داستانی کار نمی‌کنن."
 _TITLES = ("آقای", "خانم", "دکتر", "حاج", "سرهنگ", "استاد", "مهندس", "سردار", "سرگرد", "حاجی", "سید", "خانوم")
 
 
@@ -42,28 +43,22 @@ def _pick(seed: str, n: int) -> int:
     return int(hashlib.sha256(seed.encode()).hexdigest(), 16) % n
 
 
-def touched_ids(data: dict) -> set[str]:
-    """Suspects touched by the main (proof) cards: the culprit (the proof contradicts his own words) and everybody whose
-    name appears in a proof card."""
-    ev = {e["id"]: e for e in data["evidence"]}
-    text = _norm(" ".join(f"{ev[i]['title']} {ev[i]['text']}" for i in data["solution"]["proof"]))
-    out = {data["solution"]["culprit"]}
-    for s in data["suspects"]:
-        toks = [_norm(t) for t in _norm_split(s["name"])]
+def mention_count(data: dict, suspect: dict, cards: set[str] | None = None) -> int:
+    """How many case cards name this suspect. A fact about the file, never a verdict: a name appears in a card for many
+    reasons (an alibi, a witness, a dull errand), so it says nothing about guilt."""
+    toks = [_norm(t) for t in _norm_split(suspect["name"])]
+    n = 0
+    for e in data["evidence"]:
+        if cards is not None and e["id"] not in cards:
+            continue
+        text = _norm(f"{e['title']} {e['text']}")
         if any(t and t in text for t in toks):
-            out.add(s["id"])
-    return out
+            n += 1
+    return n
 
 
 def _norm_split(name: str) -> list[str]:
     return [t for t in name.replace("‌", " ").split() if len(t) >= 3 and t not in _TITLES]
-
-
-def fingerprint_safe(data: dict) -> bool:
-    """The answer must never single out the culprit: offered only when at least two suspects are touched and at least one
-    is not (so "yes" is never "guilty" and the tool is never a coin flip between everybody and nobody)."""
-    n = len(data["suspects"])
-    return 2 <= len(touched_ids(data)) <= n - 1
 
 
 def camera_lines(suspect: dict) -> list[str]:
@@ -72,34 +67,54 @@ def camera_lines(suspect: dict) -> list[str]:
     return [ln.strip() for ln in lines if isinstance(ln, str) and ln.strip()]
 
 
-def availability(data: dict) -> dict[str, dict]:
-    """What each tool can do on this case: {kind: {"available": bool, "suspects": [ids] | None}}."""
-    irr = data["solution"].get("irrelevant") or []
-    cam = [s["id"] for s in data["suspects"] if camera_lines(s)]
-    return {"magnifier": {"available": bool(irr), "suspects": None},
-            "fingerprint": {"available": fingerprint_safe(data), "suspects": [s["id"] for s in data["suspects"]]},
+def magnifier_pool(data: dict, cards: set[str] | None = None) -> tuple[list[str], bool]:
+    """(card ids, authored). The author's `solution.irrelevant` when present; otherwise a card that is not a proof card (one the explanation does not cite by id when there is such a card)."""
+    sol = data["solution"]
+    irr = [i for i in (sol.get("irrelevant") or []) if cards is None or i in cards]
+    if sol.get("irrelevant"):
+        return irr, True
+    cited = set(re.findall(r"\be\d+\b", sol.get("explanation", "")))
+    out = [e["id"] for e in data["evidence"]
+           if e["id"] not in sol["proof"] and e["id"] not in cited and (cards is None or e["id"] in cards)]
+    if not out:  # an explanation that cites every spare card: they are still not the main proof, so say only that
+        out = [e["id"] for e in data["evidence"]
+               if e["id"] not in sol["proof"] and (cards is None or e["id"] in cards)]
+    return out, False
+
+
+def availability(data: dict, cards: set[str] | None = None, suspects: set[str] | None = None) -> dict[str, dict]:
+    """What each tool can do on this case: {kind: {"available": bool, "suspects": [ids] | None}}. `cards`/`suspects`
+    limit it to what the player can see now (weekend chapters)."""
+    vis = [s for s in data["suspects"] if suspects is None or s["id"] in suspects]
+    cam = [s["id"] for s in vis if camera_lines(s)]
+    fp = [s["id"] for s in vis if mention_count(data, s, cards) > 0]
+    return {"magnifier": {"available": bool(magnifier_pool(data, cards)[0]), "suspects": None},
+            "fingerprint": {"available": bool(fp), "suspects": fp},
             "camera": {"available": bool(cam), "suspects": cam}}
 
 
-def compute(kind: str, data: dict, player_id: str, suspect_id: str | None) -> dict | None:
+def compute(kind: str, data: dict, player_id: str, suspect_id: str | None, cards: set[str] | None = None) -> dict | None:
     """The answer, or None when the tool has nothing new for this case/suspect (then it is not consumed)."""
     seed = f"{kind}:{player_id}:{data['id']}"
     if kind == "magnifier":
-        irr = data["solution"].get("irrelevant") or []
-        if not irr:
+        pool, authored = magnifier_pool(data, cards)
+        if not pool:
             return None
-        card = irr[_pick(seed, len(irr))]
+        card = pool[_pick(seed, len(pool))]
         title = next(e["title"] for e in data["evidence"] if e["id"] == card)
-        return {"card": card, "text": f"ذره‌بین نشون داد «{title}» برای حل این پرونده لازم نیست؛ بی‌ربطه."}
+        if authored:
+            return {"card": card, "text": f"ذره‌بین نشون داد «{title}» برای حل این پرونده لازم نیست؛ بی‌ربطه."}
+        return {"card": card, "text": f"ذره‌بین نشون داد «{title}» جزو مدارک اصلیِ حل پرونده نیست؛ بیشتر مکمل و پس‌زمینه‌ست. اول سراغ بقیه برو."}
     s = next((x for x in data["suspects"] if x["id"] == suspect_id), None)
     if s is None:
         return None
     if kind == "fingerprint":
-        if not fingerprint_safe(data):
+        n = mention_count(data, s, cards)
+        if n == 0:
             return None
-        main = s["id"] in touched_ids(data)
-        verdict = "توی مدارک اصلی نقش داره" if main else "توی مدارک اصلی نقش مهمی نداره"
-        return {"suspect": s["id"], "main": main, "text": f"اثر انگشت‌خوان: {s['name']} {verdict}."}
+        return {"suspect": s["id"], "count": n, "text": (
+            f"اثر انگشت‌خوان: اسم {s['name']} توی {n} تا از مدارک پرونده اومده. "
+            "این فقط می‌گه کجاها پیداش می‌شه؛ نه اینکه مقصره، نه اینکه بی‌گناهه. خودِ مدارک رو بخون و بسنج.")}
     lines = camera_lines(s)
     if not lines:
         return None
@@ -155,3 +170,16 @@ async def claim_free(session: AsyncSession, player_id: str, kind: str) -> bool:
 
 def price(kind: str) -> int:
     return eco.TOOL_PRICES[kind]
+
+
+def how_to() -> dict:
+    """Where each tool comes from and where it is used: shown in the app's help sheet (one source of truth)."""
+    return {kind: {"get": (f"اولین بار رایگانه. بعدش گاهی از جایزه‌ها (دستاوردها، گنجینه‌ی روز هفتم) درمیاد یا با {eco.TOOL_PRICES[kind]} سکه "
+                           "همون‌جا موقع استفاده می‌خری."),
+                   "use": "روی صفحه‌ی پرونده، بالای تب‌ها. برای هر پرونده فقط یک بار (توی پرونده‌ی آخر هفته، هر شب یک بار). اگه چیز تازه‌ای پیدا نشه، چیزی ازت کم نمی‌شه."}
+            for kind in KINDS}
+
+
+def slot(kind: str, chapter: int) -> str:
+    """The CaseToolUse key: once per case per kind; weekend cases once per night (`kind@2` from the second night)."""
+    return kind if chapter <= 1 else f"{kind}@{chapter}"

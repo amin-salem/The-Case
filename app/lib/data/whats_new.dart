@@ -43,6 +43,11 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(69, '۱.۳۷', '2026-10-23', [
+    WhatsNewItem('tools_v2', 'ابزارهای کارآگاهی پررنگ‌تر شدن و حالا توی پرونده‌های آخر هفته هم کار می‌کنن (هر شب یک بار از هر کدوم)', WhatsNewTarget.weekend),
+    WhatsNewItem('tools_help', 'دکمه‌ی «چطور کار می‌کنن؟» بالای ابزارها می‌گه هر کدوم چطور به دست میاد، چقدره و کجا استفاده می‌شه؛ قبل از هر استفاده هم می‌بینی چی نشونت می‌ده', WhatsNewTarget.caseToday),
+    WhatsNewItem('tools_fingerprint', 'اثر انگشت‌خوان دیگه نمی‌گه کسی «نقش داره»؛ فقط می‌گه اسمش توی چند مدرک اومده و حکم گناه نمی‌ده. اگه چیزی پیدا نشه، سکه‌ای کم نمی‌شه', WhatsNewTarget.caseToday),
+  ]),
   WhatsNewRelease(68, '۱.۳۶', '2026-10-22', [
     WhatsNewItem('nav_five_tabs', 'نوار پایین حالا پنج تب داره: خانه، بایگانی، آخر هفته، برترها و پروفایل؛ بایگانی یک ضربه بیشتر فاصله نداره', WhatsNewTarget.archive),
     WhatsNewItem('home_calm', 'صفحه‌ی خانه مرتب‌تر شد: پرونده‌ی امشب، بایگانی و آخر هفته کنار هم، مأموریت‌ها و زنجیره فشرده، و بقیه (داستان، دعوت، فروشگاه) توی «تازه‌ها»', WhatsNewTarget.caseToday),

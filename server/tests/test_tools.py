@@ -75,29 +75,33 @@ async def give(pid, kind, n=1, free_used=False):
 
 # ---- the logic on the REAL case files ---------------------------------------------------------------------------------
 
-def test_fingerprint_on_every_real_case_never_singles_out_the_culprit():
+def test_fingerprint_is_a_fact_about_the_file_never_a_verdict():
     offered = 0
     for c in REAL:
         d = c.data
-        if not tools.fingerprint_safe(d):
-            continue
-        offered += 1
-        touched = tools.touched_ids(d)
-        assert d["solution"]["culprit"] in touched
-        assert 2 <= len(touched) <= len(d["suspects"]) - 1, c.id
-        answers = {s["id"]: tools.compute("fingerprint", d, "p", s["id"]) for s in d["suspects"]}
-        assert all(a is not None and a["main"] == (sid in touched) for sid, a in answers.items())
-        assert sum(a["main"] for a in answers.values()) >= 2  # a "yes" is never "this is the culprit"
-        assert "گناهکار" not in str(answers) and "بی‌گناه" not in str(answers)
-    assert offered >= 25, offered  # the tool is on offer in most of the archive
+        for sp in d["suspects"]:
+            n = tools.mention_count(d, sp)
+            r = tools.compute("fingerprint", d, "p", sp["id"])
+            if n == 0:
+                assert r is None, c.id  # nothing to say: not consumed
+                continue
+            offered += 1
+            assert r["count"] == n and "main" not in r
+            for bad in ("گناهکار", "مقصر هست", "نقش داره", "نقش مهمی"):
+                assert bad not in r["text"], (c.id, bad)
+            assert "نه اینکه مقصره" in r["text"]  # the answer itself says it is not a verdict
+    assert offered >= 150, offered
 
 
-def test_real_cases_without_authored_data_offer_neither_magnifier_nor_camera():
+def test_real_cases_have_a_magnifier_but_no_camera_until_authored():
     for c in REAL:
         av = tools.availability(c.data)
-        assert not av["magnifier"]["available"] and not av["camera"]["available"], c.id
-        assert tools.compute("magnifier", c.data, "p", None) is None
-        assert tools.compute("camera", c.data, "p", c.data["suspects"][0]["id"]) is None
+        assert not av["camera"]["available"] or any(tools.camera_lines(s) for s in c.data["suspects"]), c.id
+        pool, authored = tools.magnifier_pool(c.data)
+        assert pool and not authored or authored, c.id
+        assert not set(pool) & set(c.data["solution"]["proof"]), c.id  # never a proof card
+        r = tools.compute("magnifier", c.data, "p", None)
+        assert r["card"] in pool and "بی‌ربط" not in r["text"] or authored
 
 
 def test_magnifier_never_marks_a_proof_or_cited_card(today):
@@ -302,14 +306,43 @@ async def tools_drop_check(s, pid):
 
 
 async def test_weekend_and_story_cases_have_no_tools(client, monkeypatch):
-    w = content.weekly_cases()[0]
-    monkeypatch.setattr(content, "now_local", lambda: content.opens_at(w) + timedelta(hours=1))
-    p = await new_player(client, "weekend-tools")
+    sid = "s01ch01"
+    p = await new_player(client, "story-tools")
     h = p["headers"]
+    r = await client.post(url(type("C", (), {"id": sid}), "fingerprint", "use"), headers=h, json={"suspect": "s1"})
+    assert r.status_code in (404, 409)  # a story chapter is never reachable for tools
+    assert tools.NOT_FOR_MODE
+
+
+async def test_weekend_tools_work_per_night_and_only_on_visible_things(client, monkeypatch):
+    w = next(c for c in content.weekly_cases() if len(c.data.get("chapters") or []) == 2)
+    start = content.opens_at(w)
+    clock_ = {"t": start + timedelta(hours=1)}
+    monkeypatch.setattr(content, "now_local", lambda: clock_["t"])
+    p = await new_player(client, "weekend-tools")
+    h, pid = p["headers"], p["player_id"]
+    await fund(pid, 1000)
+    assert (await client.get(f"/v1/cases/{w.id}", headers=h)).status_code == 200
     tray = (await client.get(f"/v1/cases/{w.id}/tools", headers=h)).json()
-    assert tray["enabled"] is False and tray["tools"] == [] and "روزانه" in tray["message"]
-    r = await client.post(url(w, "fingerprint", "use"), headers=h, json={"suspect": "s1"})
-    assert r.status_code == 409 and r.json()["detail"] == "tools_not_for_this_case"
+    assert tray["enabled"] and tray["night"] == 1 and tray["how"]["fingerprint"]["get"]
+    hidden = set(w.data["chapters"][1].get("evidence", []))
+    fp = next(t for t in tray["tools"] if t["kind"] == "fingerprint")
+    sp = fp["suspects"][0]
+    r = await client.post(url(w, "magnifier", "buy"), headers=h, json={})
+    assert r.status_code == 200
+    if r.json()["consumed"]:
+        assert r.json()["result"]["card"] not in hidden  # never a card of a night that has not opened
+    r1 = await client.post(url(w, "fingerprint", "buy"), headers=h, json={"suspect": sp})
+    assert r1.status_code == 200 and r1.json()["consumed"]
+    again = await client.post(url(w, "fingerprint", "buy"), headers=h, json={"suspect": sp})
+    assert again.status_code == 409 and again.json()["detail"]["error"] == "already_used"  # once per night
+    clock_["t"] = start + timedelta(hours=w.data["chapters"][1]["at_hours"] + 1)
+    t2 = (await client.get(f"/v1/cases/{w.id}/tools", headers=h)).json()
+    assert t2["night"] == 2 and len(t2["earlier"]) >= 1
+    assert next(t for t in t2["tools"] if t["kind"] == "fingerprint")["usable"] is True
+    sp2 = next(t for t in t2["tools"] if t["kind"] == "fingerprint")["suspects"][0]
+    r2 = await client.post(url(w, "fingerprint", "buy"), headers=h, json={"suspect": sp2})
+    assert r2.status_code == 200 and r2.json()["consumed"]  # the second night has its own use
 
 
 async def test_bad_requests(client, today):
