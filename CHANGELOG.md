@@ -1,5 +1,10 @@
 # Changelog
 
+## Server: weekend stars on the weekly board (23 Oct 2026)
+- Confirmed the existing rule: ranked live weekend solves add their stars alongside the publication week's nightly cases, using the same standings for the board and weekly prizes. No historical payouts or economy amounts change.
+- Fixed a stale-board path: after committing a solve, invalidate this worker's weekly board cache. A player already present in a warmed board no longer keeps the pre-weekend star total until the cache expires. Other workers retain the existing maximum 45-second TTL.
+- API regressions cover both ranking modes, leagues on/off, combined nightly/weekend stars, repeated accusations, prize eligibility, unranked/old-weekend exclusions and the exact Friday 21:00 boundary.
+
 ## server 1.37.1, app 1.37.1 (build 70): fingerprint reader rebuilt (Amin, 23 Oct 2026)
 - The 1.37.0 fingerprint ("your name appears in N cards") told players nothing they cannot already see under every card, so it is replaced: it now shows an authored physical trace per suspect, `suspect.print` (string or 1-3 lines, 20-160 chars, validated like `camera`, never in the public case). A case without `print` does not offer the tool; "nothing new" costs nothing. `mention_count` is gone. Traces were written for all cases (branch `content/prints`, rules in `docs/case-writing-rules.md` §10).
 ## server 1.37.0, app 1.37.0 (build 69): detective tools v2 (Amin, 23 Oct 2026, urgent)

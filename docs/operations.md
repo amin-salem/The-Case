@@ -397,6 +397,12 @@ older account. Archive purchases never count. The query is bounded by `case_id I
 `ix_progress_case_solved (case_id, solved)`; the board is limited (50/100 rows) and cached 45 s per worker. A player below the limit gets his
 own rank by a count query.
 
+After a committed case solve (nightly or weekend), `weekboard.invalidate()` clears the board cache in that worker so
+a player already in its cached top rows sees the added stars on the next read. Other workers can still serve the old
+rows for at most the existing 45-second TTL. This requires only the server update: no setting, migration, backfill,
+APK or replay of settled prizes. The current week's already-recorded eligible weekend solves are included by the
+same query; older archived cases and unranked solves remain excluded. Regression tests: `tests/test_weekend_weekboard.py`.
+
 **Prizes (`server/app/rewards.py`).** Settled once per week from the same standings. The primary key of `week_settlements` is the claim, so two
 workers can never pay twice (a second caller fails and pays nothing). A prize needs at least 2 cases solved in the week. Leagues on: top 3 of each league get
 120/80/50 coins (4 leagues = at most 1000 coins a week; the old single board paid up to 1175); the champion avatar/loupe frame (`weekly_top3`) goes only

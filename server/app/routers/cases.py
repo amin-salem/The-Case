@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
-from .. import content, gameclock, progress, ratings, streakrepair
+from .. import content, gameclock, progress, ratings, streakrepair, weekboard
 from ..cache import TTLCache
 from .. import economy as eco
 from ..content import Case
@@ -421,6 +421,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         await story_finish(session, player.id, c.id, p)
         await session.commit()
         _solvers.clear()  # this worker shows the new solver count at once; the others within 30 s
+        weekboard.invalidate()  # include the new nightly/weekend stars even when this player's row was cached
         await ac.maybe_pay_referral(player.id)
         rank = (await _daily_rank(session, c.id, p.stars, p.seconds)
                 if today_case and p.ranked and ac.is_visible(player) else None)

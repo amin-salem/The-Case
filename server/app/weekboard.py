@@ -49,6 +49,14 @@ BOARD_TTL = 45        # seconds a board is kept per worker
 _boards = TTLCache("weekly_board", ttl=BOARD_TTL, max_size=64)
 
 
+def invalidate() -> None:
+    """A committed solve changes points/order: refresh this worker's boards on the next read.
+
+    Other workers still expire within BOARD_TTL; this is not a cross-worker notification.
+    """
+    _boards.clear()
+
+
 @dataclass(frozen=True)
 class Standing:
     player: Player
