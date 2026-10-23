@@ -49,3 +49,13 @@ Rewritten in Claude's voice (spoken answers, people-first, surface motives) and 
 - c033 «کپه‌ی گونی در دودکش» (ChatGPT Plus rewrite imported 19 Oct; two-stage pipe swap with a watch 11 min fast + mirrored east/west; blind test Behnam 88%, difficulty 4), c034 «سایه‌ی شتر» (mirror photo + phone clock offset + shadow ratio + camel height; blind test Farhad 90%, difficulty 4), c035 «کیف شش‌صد میلیونی» (three bags matched by repair order and a star patch; blind test Abbasi 93%, difficulty 4), c036 «فلاسک HeLa-7» (blind codebook locked at baseline, background subtraction, version-0 orders; blind test Shima 93%, difficulty 4). ChatGPT rated all four 5; measured 4. Claude changes: category added, difficulty 4, c034/c036 notification teasers rewritten, one clarifying sentence in c036 e3 («اعمال انتخابِ نسخهٔ صفر» meaning). Known soft spots: dense cards, tester noted "left/right" mirror steps (c033/c034) and the cryptic A۱/B۲ notation (c036).
 - w003-w006 got their category (art, travel, art, travel).
 - 23 Oct 2026: hidden-camera lines (`suspect.camera`, one neutral line per suspect, all suspects) added to w004-w006 and c025-c050 (156 lines, nothing skipped). Lines describe harmless behaviour outside the crime windows (mostly earlier in the day) so they add no timeline facts; c050 lines are after 22:00 so they reveal nothing about the arrival order. No `solution.irrelevant` added.
+
+## Fingerprint reader data (`suspect.print`), 23 Oct 2026
+Branch `content/prints`: one physical trace per suspect added to every case (w006-w001, c050-c001): 56 files, 296 lines,
+each 20-160 characters, only `print` keys added. Every trace sits on a peripheral object (door handle, kettle, chair arm,
+water tap) with a job-related residue, and never touches the key object, the crime window or a clue material.
+- Skipped: w003 s8 (محسن عمادی, the phone buyer) — he was in Tabriz and never in the mansion, so any trace there would add a new event.
+- Old traces («اثر انگشت کهنه») only for people who were not on site that night (c006 s2/s4, c016 s1/s4, c026 s5, c040 s3, c041 s1, c045 s2, c046 s1); in c045 the culprit's old trace is explained by his visit two weeks earlier (his camera line), so it does not place him there that night.
+- Blind check (public file + prints, no solution) on w006, c045, c040, c022: no single print proves or clears anyone. Fixed after a
+  clue-material scan: w006 s6 (glove powder echoed the glove clue), c013 s3 (wool fibre echoed the wool sock), c014 s1 (kahgel
+  echoed the roof/tower soil), c029 s1 (ink echoed the stamp ink), w002 s7 (tea glass echoed the cold tea glasses).
