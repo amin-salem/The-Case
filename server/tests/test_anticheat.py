@@ -355,7 +355,7 @@ async def test_suspects_and_evidence_are_shuffled_per_player(client, clock):
         assert [s["id"] for s in case["suspects"]] == [s["id"] for s in again["suspects"]]  # stable per player
         assert {s["id"] for s in case["suspects"]} == {s["id"] for s in c.data["suspects"]}
         assert {e["id"] for e in case["evidence"]} == {e["id"] for e in c.data["evidence"]}
-        assert case["suspects"][0].keys() == c.data["suspects"][0].keys()
+        assert case["suspects"][0].keys() == c.data["suspects"][0].keys() - {"camera"}  # tool secrets are never public
         orders.add(tuple(s["id"] for s in case["suspects"]))
         ev_orders.add(tuple(e["id"] for e in case["evidence"]))
     assert len(orders) >= 2 and len(ev_orders) >= 2
