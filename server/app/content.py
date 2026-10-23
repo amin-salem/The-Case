@@ -163,6 +163,12 @@ def _validate_tool_data(d: dict, eids: set) -> None:
                     raise CaseError(f"{d['id']}/{s['id']}: a {key} line must be {CAMERA_MIN}-{CAMERA_MAX} characters")
 
 
+def readable(text: str, data: dict) -> str:
+    """Authors cite cards by id in explanations («e5»); players must never see ids: each becomes «card title»."""
+    titles = {e["id"]: str(e.get("title", "")).strip() for e in data.get("evidence", [])}
+    return re.sub(r"\be\d+\b", lambda m: f"«{titles[m.group(0)]}»" if titles.get(m.group(0)) else "یکی از مدارک", text or "")
+
+
 @lru_cache
 def all_cases() -> tuple[Case, ...]:
     cases = []

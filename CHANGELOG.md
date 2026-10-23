@@ -1,5 +1,8 @@
 # Changelog
 
+## server 1.37.2 (no app change): no card ids in explanations (Amin, 23 Oct 2026)
+- The solution summary showed author references like «e5» (20 cases: c017-c036, w003-w006). `content.readable` now turns every `eN` in `solution.explanation` and `night1.explanation` into «card title» when the server sends it (accuse result, answer call); the case files keep the ids for authors, and future cases are covered. Test: `server/tests/test_explanation_readable.py`.
+
 ## Server: weekend stars on the weekly board (23 Oct 2026)
 - Confirmed the existing rule: ranked live weekend solves add their stars alongside the publication week's nightly cases, using the same standings for the board and weekly prizes. No historical payouts or economy amounts change.
 - Fixed a stale-board path: after committing a solve, invalidate this worker's weekly board cache. A player already present in a warmed board no longer keeps the pre-weekend star total until the cache expires. Other workers retain the existing maximum 45-second TTL.

@@ -108,7 +108,7 @@ def _night1_out(c: Case, p: CaseProgress | None) -> dict | None:
     n1 = c.data.get("night1")
     if not p or not p.night1 or not isinstance(n1, dict):
         return None
-    return {**p.night1, "liar": n1["liar"], "card": n1["card"], "explanation": n1["explanation"]}
+    return {**p.night1, "liar": n1["liar"], "card": n1["card"], "explanation": content.readable(n1["explanation"], c.data)}
 
 
 async def _progress(session: AsyncSession, player_id: str, case_id: str) -> CaseProgress | None:
@@ -335,7 +335,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     if fmt2 and not body.motive:
         raise HTTPException(422, "how_needed")
 
-    explanation = c.data["solution"]["explanation"]
+    explanation = content.readable(c.data["solution"]["explanation"], c.data)
     add_active_time(p, body.extra_seconds, utcnow())  # once per accusation, before the judging below
     ac.merge_depth(p, c, body.cards, body.asks)
     today_case = _is_today(c)
