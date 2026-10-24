@@ -121,3 +121,18 @@ idle-engine excuse is now rebutted in the explanation. Fixed in c028: Farideh no
 suspect is cleared and the 40-minute correction really matters; removed wheelchair/parking/«concealment» leftovers, intro now matches her
 answers, Mazyar says he did not go near the bed, explanations cut by half. Blind tests (public file only): c027 culprit s1, difficulty 4;
 c028 culprit s3, difficulty 4, not solvable by alibi elimination at 03:10. Soft spots they named were closed afterwards.
+
+### 2026-10-24 c027, c028 second pass (Opus)
+
+- c027: e6 no longer names Kourosh (the lookout sees one boat 22:40-03:25, no face/name); identity now comes from the meter
+  arithmetic plus the key (spares stayed in the safe, Kourosh says his own key never left his pocket). Max speed 14 -> 15 km/h:
+  minimum trip 4 h 20 min vs 4.8 h for Toofan and 3.8 h for Sadaf (slack no longer within meter error). e7 now says both engines
+  were switched off after the tests (rebuts the "idle for the fridge" claim). Suspect s4 renamed Naser -> Yousef (clashed with Nader);
+  removed the dangling "Nader keeps naming my truck", "seller changed the first sheet", hospital/clinic mismatch, cart in intro.
+  Cards rewritten in plain spoken Persian. Proof e3, e6, e7.
+- c028: removed the shortcut "label intact 02:25 / torn 02:40 while Farideh wore it" (it named her without the clock). New coat
+  custody: Farideh 01:40-02:33, Mazyar 02:35-02:50, sealed bag from 02:50. Read naively, the only open cover after cleaning while
+  the coat was out is the 02:35 record -> Mazyar (false trail); with the 40-minute correction that record is the service and the
+  change is 02:30 -> Farideh. Renamed Farzin -> Keyvan (vs Farideh), Negar -> Leila (vs Narges). Explanation 206 words.
+- Blind test: no sub-agent tool was available in this run; a full public-only self-check was done instead (all suspects checked
+  at real and naive times). A fresh-agent blind test is still recommended before publish.
