@@ -112,3 +112,12 @@ byte-identical. No other field changed. Reasons: **echo** = the line uses the ca
 - c042 (new culprit s2): s2 camera (made the culprit stand out with the tender file); s5 camera (echo: network cables vs the shared internet line).
 
 Checked with `_validate_tool_data` (20–160 chars) and a scan for «نفر».
+
+### 2026-10-24 c027, c028 re-review after the Astra rewrite (Claude)
+
+Amin: c025-c042 were written by Astra, so each is re-read like c026 (two per night). Fixed in c027: dangling «تسمه», «پاکت تاجر»,
+«کلیدِ قرضی», a question presuming a wash, a weight ledger no card shows, watcher «ناصرین» renamed «قاسم» (clashed with «ناصر»), the
+idle-engine excuse is now rebutted in the explanation. Fixed in c028: Farideh now has a witness for 02:40-03:30 so at the naive 03:10 every
+suspect is cleared and the 40-minute correction really matters; removed wheelchair/parking/«concealment» leftovers, intro now matches her
+answers, Mazyar says he did not go near the bed, explanations cut by half. Blind tests (public file only): c027 culprit s1, difficulty 4;
+c028 culprit s3, difficulty 4, not solvable by alibi elimination at 03:10. Soft spots they named were closed afterwards.
