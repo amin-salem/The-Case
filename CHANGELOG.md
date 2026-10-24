@@ -9,6 +9,9 @@
 
 # Changelog
 
+## server 1.37.5 (no app change): camera and print lines re-checked after the ChatGPT rewrites (Amin, 24 Oct 2026)
+- c025-c030 and c037-c042 were rewritten (new titles, roles, in four of them a new culprit), so the tool lines written for the old versions were re-read against the current files: 41 lines rewritten (clue echoes such as wool, ink, tape or exam sheets; events the new story does not have; a line that made the new culprit stand out); all other lines are untouched. Only `camera`/`print` values changed. Details in `docs/case-log.md`.
+
 ## server 1.37.4 (no app change): nightly draw switched off (Amin, 24 Oct 2026)
 - Amin does not want the «برنده‌ی قرعه‌ی شب» message sent to players. `DAILY_DRAW_ENABLED` now defaults to **false**: no draw runs and no inbox message or warrant is created (code, table and tests stay; set `DAILY_DRAW_ENABLED=true` to bring it back). Already-sent messages stay in the inbox. The leaderboard «i» sheet and the 1.36 «چی تازه شده؟» line still mention the draw; they are app texts and go in the next APK. Test: `test_draw_is_off_by_default`.
 
