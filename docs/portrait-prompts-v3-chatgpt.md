@@ -8,7 +8,7 @@ You are generating a set of character portraits for a noir detective game. Rules
 4. If an image drifts from the style, redo it silently in the same style as the first image.
 5. Characters are Iranian, realistic ages, every woman wears a loose headscarf with a visible part of her hair showing (not a fully covering hijab), in a different color and draping each time; natural unglamorous faces (tired, worn, expressive), as real people, not models.
 
-Places first, then women, then the role variants. Start with item 1 and continue in order. Total items: 74.
+Places first, then women. Start with item 1 and continue in order. Total items: 68.
 
 ## Part 1: places (no people)
 ### 1. `airport_b.png`
@@ -283,29 +283,4 @@ Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amb
 ### 68. `f_old_rich_b.png`
 ```
 Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 70-year-old Iranian woman, emerald brooch, dark silk dress, imperious calm, looking at the camera, modest neckline. Face: a short face with a small upturned nose and bright small eyes, freckled skin; no makeup, natural skin. She wears a black chiffon headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-## Part 3: new faces for the roles we use most (men, 6 left)
-### 69. `m_young_worker_c.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 21-year-old Iranian factory worker, thin face, orange vest, short hair, wary eyes, long nose; facing the camera straight on. Plain dark navy background. No text, no logos.
-```
-### 70. `m_mid_teacher_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 44-year-old Iranian teacher, receding hair, round glasses, cardigan, chalk dust on his sleeve, kind tired smile, prominent cheekbones; head turned slightly right, eyes toward the camera. Plain dark navy background. No text, no logos.
-```
-### 71. `m_mid_officer_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 46-year-old Iranian police officer, thick mustache, uniform cap, stern square face, freckles; chin slightly lowered, looking up at the camera. Plain dark navy background. No text, no logos.
-```
-### 72. `m_mid_officer_c.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 34-year-old Iranian police officer, clean-shaven, short hair, crisp uniform, ambitious hard look, a small scar near the lip; head tilted a little, looking past the camera. Plain dark navy background. No text, no logos.
-```
-### 73. `m_mid_artist_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 45-year-old Iranian painter, wild grey hair, paint on his cheek, loose linen shirt, dreamy intense eyes, dimples; head turned three-quarters to the left, looking at the camera. Plain dark navy background. No text, no logos.
-```
-### 74. `m_mid_artist_c.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 33-year-old Iranian sculptor, shaved sides, beard, dusty apron, proud defiant look, heavy eyelids; facing the camera straight on. Plain dark navy background. No text, no logos.
 ```
