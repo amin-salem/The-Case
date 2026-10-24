@@ -9,6 +9,9 @@
 
 # Changelog
 
+## server 1.38.1: nightly #1, cases c051 and c052 (24 Oct 2026)
+- Content only (`server/app/content`): c051 «چهار ویالِ شیفتِ شب» (publish 2026-11-18, difficulty 4, hospital/medical) and c052 «قفسه‌ی دوم» (publish 2026-11-19, difficulty 5, lab/science), with camera/print lines and notification teasers. Test counts raised to 52 cases. No app change, no APK.
+
 ## server 1.38.0, app 1.38.0 (build 71): culprit album and first guess (Amin, 24 Oct 2026; asked 16 Oct, priority Normal)
 - **آلبوم مجرم‌ها** (`GET /v1/album`, `server/app/album.py`): every case a player SOLVES (daily, archive or weekend; not story chapters) puts its culprit into an album card (name, role, the culprit's one-line intro, case number, title, plaques; the portrait or the code-drawn character). Unsolved cases arrive as silhouettes with NO title and NO culprit (`tests/test_album.py` checks the abuse path), only the number, the price hint and "open for you". The app opens the archive flow on that case with one tap (it asks before charging). Grouping lives in ONE function, `album.group_of` (today: `category`, scene as fallback).
 - **Reward** for completing a group of at least 2 published cases: permanent code-drawn FRAMES (`frame_album` at 1 completed group, `frame_album_noir` at 4), through the existing goal system (`avatars.check_goals`, insert-or-ignore, so once and atomic). No coins, no warrants. Stat `album_groups` only grows, so a case published later never takes a frame away. Opening the album pays players who finished a group before the feature (`GET /v1/album` is a locking GET like `/v1/me`).

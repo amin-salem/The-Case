@@ -145,3 +145,11 @@ mouth lies, «آزمون مسیرِ همان شب» wording; c028 Mazyar said he
 (removed, the coat never returns to him), Habib «با روپوش» (removed), Farideh gave it back at 02:40 not 02:30 (answer aligned), explanation
 «سه دقیقه بعد» fixed to «ده دقیقه بعد، ۰۲:۴۰». Known and accepted: c027 e6 identifies Kourosh by face (needs the engine arithmetic to
 prove the boat); c028 Mazyar is unobserved before 02:36 and is cleared only by the coat chain (e4).
+
+### 2026-10-24 nightly #1 (Sonnet coordinator, Opus writer, Sonnet blind tests)
+| id | publish | type | culprit | result |
+|---|---|---|---|---|
+| c051 «چهار ویالِ شیفتِ شب» | 2026-11-18 | 8 witness is the liar (hospital/medical) | s4 | blind test 1: solved, 4; fix round (Elham's insulin visit explained, 02:38 opener excluded, lunch-bag plan e10, wife link in e8); retest: solved via e4+e7+e9, no single-card giveaway, difficulty 3.5-4 |
+| c052 «قفسه‌ی دوم» | 2026-11-19 | 4 wrong victim (lab/science) | s2 | blind test 1: solved, 4; fix round (early leavers proven, ink-colour sign-out book, car decoy, access and flight stated); retest: solved, needs ink + car + unaware-culprit chain, difficulty 4-5 (kept 5) |
+
+Named soft spots left on purpose: c051 Kiarash's «before he left» is separated from 02:35 only by e4 (fair); c052 the link of the 22:35 barrier opening to Zhaleh is inferred from the car (fair, tied to e5+e6).
