@@ -132,7 +132,10 @@ async def draw_case(session: AsyncSession, case: content.Case) -> str | None:
             session.add(InboxItem(
                 player_id=winner, source=f"draw:{case.id}"[:24],
                 title="برنده‌ی قرعه‌ی شب شدی 🎁",
-                message=f"بین کارآگاه‌هایی که پرونده‌ی «{case.data['title']}» رو با ۳ پلاک حل کردن، قرعه به نام تو افتاد. این هدیه‌ی توئه!",
+                message=(f"هر شب بین کارآگاه‌هایی که پرونده‌ی همون شب رو با ۳ پلاک و بررسی کامل حل می‌کنن، یک نفر قرعه‌کشی می‌شه؛ "
+                         f"دیشب پرونده‌ی «{case.data['title']}» بود و قرعه به نام تو افتاد. "
+                         "هدیه‌ات یک «حکم بازرسی» است: با اون یکی از فصل‌های قفل‌شده‌ی بخش داستانی رو بدون انتظار باز می‌کنی. "
+                         "هر شب فقط برای پرونده‌ی همون شب قرعه‌کشی می‌شه و حکم توی حساب تو می‌مونه؛ خرج نمی‌شه مگه خودت بخوای."),
                 grants=[dict(DRAW_PRIZE)]))
         await session.commit()
     except IntegrityError:

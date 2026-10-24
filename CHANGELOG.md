@@ -9,6 +9,9 @@
 
 # Changelog
 
+## server 1.37.3 (no app change): the daily-draw message explains itself (Amin, 24 Oct 2026)
+- A player who won the nightly draw did not understand the inbox message. It now says what the draw is (one winner per night among detectives who solved that night's case with 3 plaques and a full investigation, nothing to do with speed), what the gift is (one story warrant «حکم بازرسی» that opens a locked story chapter without waiting) and that it stays in the account until used. The draw itself is unchanged (built in the 22 Oct slot, item 3 of the leaked-answer defence, see 1.36.0).
+
 ## server 1.37.2 (no app change): no card ids in explanations (Amin, 23 Oct 2026)
 - The solution summary showed author references like «e5» (20 cases: c017-c036, w003-w006). `content.readable` now turns every `eN` in `solution.explanation` and `night1.explanation` into «card title» when the server sends it (accuse result, answer call); the case files keep the ids for authors, and future cases are covered. Test: `server/tests/test_explanation_readable.py`.
 
