@@ -91,3 +91,24 @@ c025–c036 already present on main `b5bc35bdb63ea4891dd6e354c1e37071e188a924`; 
 All six use difficulty4, preserve publication metadata and portraits. Two fresh sequential helpers reviewed public-only snapshots; the failed earlier shortcuts were not accepted. c037 received an additional fresh blind review after the pooled-return repair (recorded next).
 
 - c037 «بارِ آخرِ تالار» — publish2026-11-04; type2 hidden relationship; culprit s2. Third fresh public-only Astra review: **4/5, pass**. Pooled sealed return bags no longer disclose room; capacity plus verified device isolates12, two family documents identify guest, custody establishes unpacking. All earlier difficulty shortcuts resolved; no claim that Nasrin could not have assisted.
+
+## 24 October 2026 — detective-tool lines re-checked after the c025–c030 / c037–c042 rewrite
+
+Every `camera`/`print` line was re-read against the current file (§10). Only failing lines were rewritten; the rest are
+byte-identical. No other field changed. Reasons: **echo** = the line uses the case's clue material/key object;
+**story** = contradicts or adds an event; **style** = written, not spoken Persian; **overlap** = camera and print on the same fact.
+
+- c025: s1 camera (story: he never went inside on Wednesday, so no look at the fireplace frame); s5 camera (echo: writing in a notebook in a forged-writing case).
+- c026: s2 camera (echo: forklift/pallets); s4 camera (echo: distribution slips in a printed-slip case).
+- c027: s2 print (story: he was in the clinic, not a hospital); s3 camera (echo: cargo under a tarp, the e6 detail); s5 camera (echo: his parts package from e5).
+- c028: s4 camera (echo: the coat is the key object); s5 camera (echo: the borrowed wheelchair from e6).
+- c029: s4 camera (echo: her mother's notebook and a book cover); s5 print (echo: old paper dust in a manuscript case).
+- c030: s1 print (echo: marker ink vs the purple-pen tape); s2 camera (echo: sewing a hem, the decisive act); s2 print (echo: fabric fluff).
+- c037 (new culprit s2): s2 camera (made the culprit stand out at the main table with flowers); s5 camera and print (echo: tape, the box/bag seals).
+- c038 (new culprit s1): s1 print, s4 print (echo: pen/marker ink in a written-request case); s3 print (echo: tape/glue of the sealed envelope); s4 camera (echo: armful of exam sheets); s5 camera (echo: grading papers); s5 print (echo: old paper).
+- c039: s2 print (echo: the weighed luggage cart); s5 camera (echo: newspaper = paper bundles, and the culprit placed by «the window»).
+- c040: s1 camera and print (echo: the folder that hid the table; ink); s6 print (echo: tea stain in a poisoned-tea case); s2, s3, s4, s5, s6 camera (style; s3 also story: "evening" and a talk with the guard had no card; s4 overlap with the tool-bag print).
+- c041 (new culprit s3): s1 camera (story: an invented trip); s1 print, s4 print, s5 print (echo: wool fluff / carpet dust in a wool-sample case); s2 print (echo: dye vs the colour sample); s4 camera (echo: handling the contract carpet itself).
+- c042 (new culprit s2): s2 camera (made the culprit stand out with the tender file); s5 camera (echo: network cables vs the shared internet line).
+
+Checked with `_validate_tool_data` (20–160 chars) and a scan for «نفر».
