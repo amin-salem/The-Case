@@ -139,7 +139,7 @@ Square 1024x1024 illustration (same size as our current scenes). Moody noir pain
 ```
 Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A ferry deck in fog: railings, lifebelts, a lone bench, foghorn glow. No people, no text, no logos.
 ```
-## Part 2: women (face-diverse rewrite; skip any you already have and like)
+## Part 2: women, 22 roles + 14 role variants (face-diverse rewrite; skip any you already have and like)
 ### 33. `f_young_dancer.png`
 ```
 Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 26-year-old Iranian woman dancer, long neck, plain black top, proud guarded posture, eyes toward the camera, modest neckline. Face: a long narrow face with a high forehead and thin straight brows, fine lines at the eyes; light natural makeup. She wears a deep burgundy headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
@@ -284,7 +284,7 @@ Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amb
 ```
 Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 70-year-old Iranian woman, emerald brooch, dark silk dress, imperious calm, looking at the camera, modest neckline. Face: a short face with a small upturned nose and bright small eyes, freckled skin; no makeup, natural skin. She wears a black chiffon headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-## Part 3: new faces for the roles we use most (men, then women)
+## Part 3: new faces for the roles we use most (men)
 ### 69. `m_mid_business_b.png`
 ```
 Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 48-year-old Iranian businessman, bald, clean-shaven, heavy jaw, navy suit without tie, cold calculating stare, dimples; facing the camera straight on. Plain dark navy background. No text, no logos.
