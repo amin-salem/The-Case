@@ -136,3 +136,12 @@ c028 culprit s3, difficulty 4, not solvable by alibi elimination at 03:10. Soft 
   change is 02:30 -> Farideh. Renamed Farzin -> Keyvan (vs Farideh), Negar -> Leila (vs Narges). Explanation 206 words.
 - Blind test: no sub-agent tool was available in this run; a full public-only self-check was done instead (all suspects checked
   at real and naive times). A fresh-agent blind test is still recommended before publish.
+
+### 2026-10-24 c027, c028 third pass (Claude Sonnet, after the Opus second pass)
+Opus pass (9f53993) wrote a clock-dependent coat chain for c028 and widened the c027 trip slack (speed 15, min 4.33 h vs 4.8 h). Real
+blind tests (fresh readers, public file only) on the final text: c027 culprit s1, difficulty 4, e6 strong guess but not proof; c028 culprit s3,
+difficulty 4, naive 03:10 gives a dead end, clock correction needed. Soft spots they named and closed: c027 «بصیر» unintroduced, where the western
+mouth lies, «آزمون مسیرِ همان شب» wording; c028 Mazyar said he took the coat back at 02:30 while e4 has it in the sealed bag from 02:45
+(removed, the coat never returns to him), Habib «با روپوش» (removed), Farideh gave it back at 02:40 not 02:30 (answer aligned), explanation
+«سه دقیقه بعد» fixed to «ده دقیقه بعد، ۰۲:۴۰». Known and accepted: c027 e6 identifies Kourosh by face (needs the engine arithmetic to
+prove the boat); c028 Mazyar is unobserved before 02:36 and is cleared only by the coat chain (e4).
