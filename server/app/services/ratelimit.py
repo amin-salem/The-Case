@@ -121,6 +121,7 @@ ROUTES: list[tuple[str, re.Pattern, str]] = [(m, re.compile(rx), pol) for m, rx,
     ("POST", r"^/v1/inbox/[^/]+/claim$", "claim"),
     ("POST", r"^/v1/referrals/redeem$", "referral"),
     ("POST", r"^/v1/cases/[^/]+/rating$", "rating"),
+    ("POST", r"^/v1/cases/[^/]+/guess$", "read"),  # one tiny row per player and case: the cheap read policy
     ("POST", r"^/v1/cases/[^/]+/comments$", "comment"),
     ("POST", r"^/v1/me/client$", "client_info"),
     ("*", r"^/v1/analytics(/|$)", "analytics"),

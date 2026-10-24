@@ -478,3 +478,18 @@ class CaseToolUse(Base):
     source: Mapped[str] = mapped_column(String(8))  # free | stock | coins
     result: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class CaseGuess(Base):
+    """The player's first guess on a case, given BEFORE opening the evidence («به نظر تو کیه؟»): one row per player and
+    case (unique, so it is written once and never changed), `suspect` is a suspect id or "?" for «نمی‌دونم». No text,
+    no personal data; counted per case for the community percentages (app/guess.py)."""
+
+    __tablename__ = "case_guesses"
+    __table_args__ = (UniqueConstraint("player_id", "case_id", name="uq_case_guess"), Index("ix_case_guess_case", "case_id"))
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    case_id: Mapped[str] = mapped_column(String(16))
+    suspect: Mapped[str] = mapped_column(String(16))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

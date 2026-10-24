@@ -65,9 +65,9 @@ async def current_player(
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "no_token")
     player_id, gen = read_token(cred.credentials)
     # Every authenticated mutation locks BEFORE reading one-time claims/counters/progress.
-    # These two GETs grant rewards too. Inbox settlement locks its complete winner set itself.
+    # These GETs grant rewards too (the album pays a completed group). Inbox settlement locks its complete winner set itself.
     writing = request.method not in ("GET", "HEAD", "OPTIONS") or request.url.path.rstrip("/") in (
-        "/v1/me", "/v1/avatars") or (request.method == "GET" and
+        "/v1/me", "/v1/avatars", "/v1/album") or (request.method == "GET" and
         request.url.path.startswith("/v1/cases/") and request.url.path.count("/") == 3)
     player = ((await lock_players(session, [player_id])).get(player_id) if writing
               else await session.get(Player, player_id))

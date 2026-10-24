@@ -14,7 +14,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import achievements, avatars, content, missions, tools
+from . import achievements, album, avatars, content, missions, tools
 from .config import get_settings
 from . import economy as eco
 from .models import MissionDay, Player, PlayerAchievement
@@ -83,6 +83,8 @@ async def record(session: AsyncSession, player: Player, xp: int = 0, warrants: i
             stats[k] = stats.get(k, 0) + v
         player.stats = stats  # a new dict, so the change is saved
         await _missions(session, player, events, gains)
+    if events.get("case_solved"):
+        await album.refresh_stat(session, player)  # completed album groups unlock the album frames below
     await check_achievements(session, player, gains)
     return gains
 

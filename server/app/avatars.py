@@ -90,6 +90,11 @@ FRAMES: list[Item] = [
          "۵۰ پرونده حل کن"),
     Item("frame_loupe", "frame", "ذره‌بین طلایی", "برای ۳ کارآگاه اول هفته.", "goal", "legendary", "weekly_top3", 1,
          "جزو ۳ کارآگاه اول هفته شو"),
+    # culprit album (Amin, 16 Oct 2026): permanent, never sold, drawn in code; one per number of completed album groups
+    Item("frame_album", "frame", "قاب آلبوم", "قاب اولین گروه کامل‌شده‌ی آلبوم مجرم‌ها.", "goal", "rare", "album_groups", 1,
+         "یک گروه از آلبوم مجرم‌ها را کامل کن"),
+    Item("frame_album_noir", "frame", "قاب نوآر آلبوم", "چهار گروه کامل از آلبوم مجرم‌ها؛ هر قاب یک پرونده‌ی بسته.", "goal", "epic",
+         "album_groups", 4, "چهار گروه از آلبوم مجرم‌ها را کامل کن"),
     Item("frame_fingerprint", "frame", "اثر انگشت", "حلقه‌ای از خط‌های شکسته‌ی اثر انگشت.", "shop", "rare",
          price=eco.FRAME_PRICE["frame_fingerprint"]),
     Item("frame_blinds", "frame", "پرده‌ی کرکره‌ای", "نور نوآر از لابه‌لای کرکره.", "shop", "rare",
@@ -121,7 +126,8 @@ def metrics(p: Player, story_chapter: int = 0) -> dict[str, int]:
     return {"cases_solved": p.cases_solved or 0, "best_streak": max(p.best_streak or 0, p.streak or 0),
             "rank": eco.rank_of(p.xp or 0) + 1, "case_3stars": int(st.get("case_3stars", 0)),
             "case_no_hint": int(st.get("case_no_hint", 0)), "weekly_solved": int(st.get("weekly_solved", 0)),
-            "weekly_top3": int(st.get("weekly_top3", 0)), "story_chapter": story_chapter}
+            "weekly_top3": int(st.get("weekly_top3", 0)), "album_groups": int(st.get("album_groups", 0)),
+            "story_chapter": story_chapter}
 
 
 async def story_chapter_done(session: AsyncSession, p: Player) -> int:
