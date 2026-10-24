@@ -303,3 +303,8 @@ async def test_suspicious_report_flags_and_never_bans(client, clock, caplog):
     r = await client.get("/admin/suspicious-solves", headers=ADMIN)
     assert r.status_code == 200 and set(r.json()) >= {"low_depth", "far_faster", "clusters"}
     assert (await client.get("/admin/suspicious-solves")).status_code in (401, 403)
+
+
+def test_draw_is_off_by_default():
+    from app.config import Settings
+    assert Settings.model_fields["daily_draw_enabled"].default is False

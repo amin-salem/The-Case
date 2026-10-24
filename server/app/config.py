@@ -64,7 +64,7 @@ class Settings(BaseSettings):
 
     # Fair daily reward (docs/operations.md «Leaked answers»): a small draw among ranked 3-plaque solvers, and a weekly
     # board that rewards consistency (nights solved, then nights solved on time, then plaques, speed only breaks ties).
-    daily_draw_enabled: bool = True   # DAILY_DRAW_ENABLED=false stops new draws (kill switch)
+    daily_draw_enabled: bool = False  # OFF since 24 Oct 2026 (Amin): no draws, no winner messages. DAILY_DRAW_ENABLED=true turns it back on
     week_rank_mode: str = "consistency"  # WEEK_RANK_MODE=points restores the old order (plaques first)
 
     # Rewarded ads pay coins only when a real ad network is in the app.

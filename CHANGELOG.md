@@ -9,6 +9,9 @@
 
 # Changelog
 
+## server 1.37.4 (no app change): nightly draw switched off (Amin, 24 Oct 2026)
+- Amin does not want the «برنده‌ی قرعه‌ی شب» message sent to players. `DAILY_DRAW_ENABLED` now defaults to **false**: no draw runs and no inbox message or warrant is created (code, table and tests stay; set `DAILY_DRAW_ENABLED=true` to bring it back). Already-sent messages stay in the inbox. The leaderboard «i» sheet and the 1.36 «چی تازه شده؟» line still mention the draw; they are app texts and go in the next APK. Test: `test_draw_is_off_by_default`.
+
 ## server 1.37.3 (no app change): the daily-draw message explains itself (Amin, 24 Oct 2026)
 - A player who won the nightly draw did not understand the inbox message. It now says what the draw is (one winner per night among detectives who solved that night's case with 3 plaques and a full investigation, nothing to do with speed), what the gift is (one story warrant «حکم بازرسی» that opens a locked story chapter without waiting) and that it stays in the account until used. The draw itself is unchanged (built in the 22 Oct slot, item 3 of the leaked-answer defence, see 1.36.0).
 
