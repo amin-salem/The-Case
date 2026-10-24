@@ -44,7 +44,7 @@ jobs:
       - name: Install
         working-directory: server
         run: pip install -r requirements-dev.txt
-      - name: Tests (all 50 cases are played through the API)
+      - name: Tests (all 52 cases are played through the API)
         working-directory: server
         run: |
           set -o pipefail
