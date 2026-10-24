@@ -74,3 +74,20 @@ Details and calculations: `docs/reviews/c025-c030-review.md`.
 | c028 | 2026-10-26 | 5 time trick; secondary borrowed garment | s3 | Blind 4.2 found successive-user gap; targeted review passed after spring closure and sole simultaneous user were stated. New independent final public-only blind check: PASS 4/5. |
 | c029 | 2026-10-27 | 6 staged scene: lending form on the book lining | s5 | Fresh blind 4.5; counter sequence + continuous partial imprint + intact seal + bounded custody. |
 | c030 | 2026-10-28 | 3 not what it seemed: trace predates the apparent quick-change transfer | s2 | Blind 4.1 found pre-sewing custody gap; targeted review passed after clean surface and uninterrupted custody through sewing. New independent final public-only blind check: PASS 4/5. |
+
+
+## 24 October 2026 — main integration, c037–c042
+
+c025–c036 already present on main `b5bc35bdb63ea4891dd6e354c1e37071e188a924`; left unchanged. Imported and repaired c037–c039 from review branch `10b005559cd60fade7f15d4eef3ba652df16623c`, preserving later paid-tool observations. Rewrote c040–c042. Full clue/custody review: `docs/reviews/c037-c042-main-review.md`.
+
+| case | publish | type | culprit | blind test |
+|---|---|---|---|---|
+| c038 «شش نمره‌ی اضافه» | 2026-11-05 | 10 motive inversion | s1 | fresh public-only Astra:4; two collection stacks + carbon-edge/signature map + unchanged blank answers; refund contract, not shared login |
+| c039 «کیفِ کنار پنجره» | 2026-11-06 | 8 witness is liar | s5 | fresh public-only Astra:4; pre-scale mass deficit + closed room interval + card identity; later access remains possible, not falsely excluded |
+| c040 «لیوانِ رزروشده» | 2026-11-07 | 4 wrong victim | s1 | fresh public-only Astra:3.5; fatal seal shape + staggered closure + two access windows; terminal drinking custody fixed, visible unchanged flags close intended-target ambiguity |
+| c041 «نمونه‌ای که از فرش نبود» | 2026-11-08 | 3 not what it seemed | s3 | fresh public-only Astra:3.5; physical sample edge + packaging order/letter/recipient + private interval + reciprocal recovery; false refund claim |
+| c042 «پیوستِ نسخهٔ چهار» | 2026-11-09 | 9 object biography | s2 | fresh public-only Astra:4; version timing + credential→disk→post-repair body→borrower + local session; account/IP not identity |
+
+All six use difficulty4, preserve publication metadata and portraits. Two fresh sequential helpers reviewed public-only snapshots; the failed earlier shortcuts were not accepted. c037 received an additional fresh blind review after the pooled-return repair (recorded next).
+
+- c037 «بارِ آخرِ تالار» — publish2026-11-04; type2 hidden relationship; culprit s2. Third fresh public-only Astra review: **4/5, pass**. Pooled sealed return bags no longer disclose room; capacity plus verified device isolates12, two family documents identify guest, custody establishes unpacking. All earlier difficulty shortcuts resolved; no claim that Nasrin could not have assisted.

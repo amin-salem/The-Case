@@ -1,3 +1,8 @@
+# Nightly c037–c042 integration — 2026-10-24
+
+- Confirm c025–c036 rewrites are already on main and leave them unchanged. Integrate c037–c039 from their review branch while preserving current detective-tool data; close blind-review shortcuts. Fully rewrite c040–c042 with distinct multi-clue deductions and matching notification teasers. Opening dates, portraits and runtime format stay unchanged. All six are calibrated to difficulty 4.
+- Review and validation: `docs/reviews/c037-c042-main-review.md`. Content-only; no APK/release workflow or production database access.
+
 # Nightly content revision — 2026-10-24
 
 - Correct family/name inconsistencies and strengthen multi-clue deductions in c025–c030. Preserve opening dates, portraits and culprit slots; refresh teasers. Details: `docs/reviews/c025-c030-review.md`. c026 is difficulty 5; the other five remain 4.
