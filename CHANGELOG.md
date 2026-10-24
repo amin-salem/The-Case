@@ -9,6 +9,10 @@
 
 # Changelog
 
+## server 1.37.6 (no app change): tonight's case c026 cleaned up (Amin, 24 Oct 2026)
+- c026 (live tonight; culprit and proof cards unchanged): clear summary (the phone pallets left, sand pallets with the same labels stayed), the spare key goes from Kiyan back to Sohrab's aunt downstairs before Afshar takes it, the knee brace reaches the clinic by a courier Kiyan ordered at 02:58, Sohrab has a futsal alibi for the truck time, the labels were printed on the home printer and carried to the warehouse, Afshar's meeting (21:00-01:30) and the guarantor Bahman are written out, the clock offset is stated as 40 minutes, the explanation ends with a clear conclusion.
+- No place is called «خیالی» any more (c025, c026, c027, c028, c040); a test keeps it out of titles, locations and intros.
+
 ## server 1.37.5 (no app change): camera and print lines re-checked after the ChatGPT rewrites (Amin, 24 Oct 2026)
 - c025-c030 and c037-c042 were rewritten (new titles, roles, in four of them a new culprit), so the tool lines written for the old versions were re-read against the current files: 41 lines rewritten (clue echoes such as wool, ink, tape or exam sheets; events the new story does not have; a line that made the new culprit stand out); all other lines are untouched. Only `camera`/`print` values changed. Details in `docs/case-log.md`.
 
