@@ -1,7 +1,7 @@
 # Portrait & place prompt kit v2 (Amin, 24 Oct 2026)
 
 Why: 297 suspects share only 48 faces, and 5 suspects have no portrait file at all, so the album shows the same face under different names.
-Goal of this kit: (A) fill the 5 holes, (B) add 72 new, clearly different faces, (C) add scene variants and new places.
+Goal of this kit: (A) fill the 5 holes, (B) add 70 new, clearly different faces, (C) add scene variants and new places.
 
 ## How to use (same rules as docs/portrait-prompts.md)
 - One prompt per message, all in ONE ChatGPT chat (style stays the same). If an image drifts, reply: *same style as the first image*.
@@ -35,7 +35,7 @@ Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amb
 Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 32-year-old Iranian woman, hotel room-service and restaurant attendant, dark headscarf, neat black uniform with white collar, composed polite look hiding unease. Plain dark navy background. No text, no logos.
 ```
 
-## B1. New men (36)
+## B1. New men (34)
 ### 1. `m_young_courier.png`
 ```
 Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 24-year-old Iranian motorbike courier, messy black hair, thin beard, helmet strap hanging at his neck, windbreaker, restless eyes, narrow face. Plain dark navy background. No text, no logos.
