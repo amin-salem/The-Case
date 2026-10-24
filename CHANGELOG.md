@@ -1,3 +1,7 @@
+# Nightly content revision — 2026-10-24
+
+- Correct family/name inconsistencies and strengthen multi-clue deductions in c025–c030. Preserve opening dates, portraits and culprit slots; refresh teasers. Details: `docs/reviews/c025-c030-review.md`. c026 is difficulty 5; the other five remain 4.
+
 # Changelog
 
 ## server 1.37.2 (no app change): no card ids in explanations (Amin, 23 Oct 2026)

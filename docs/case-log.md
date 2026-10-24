@@ -59,3 +59,18 @@ water tap) with a job-related residue, and never touches the key object, the cri
 - Blind check (public file + prints, no solution) on w006, c045, c040, c022: no single print proves or clears anyone. Fixed after a
   clue-material scan: w006 s6 (glove powder echoed the glove clue), c013 s3 (wool fibre echoed the wool sock), c014 s1 (kahgel
   echoed the roof/tower soil), c029 s1 (ink echoed the stamp ink), w002 s7 (tea glass echoed the cold tea glasses).
+
+### 2026-10-24 c025–c030 semantic and deduction revision (Astra)
+
+Earlier review rows are historical; these entries supersede their contents for this batch.
+Public-only helpers ran sequentially, never in parallel. Early easy drafts were rejected.
+Details and calculations: `docs/reviews/c025-c030-review.md`.
+
+| case | publish | primary type | culprit | final review |
+|---|---|---|---|---|
+| c025 | 2026-10-23 | 6 staged document: forged will and carbon receipt | s2 | Fresh blind 4.0; exact transfer + signature continuation + bounded writing custody. Fixed father/son surname and younger-sister age relation. |
+| c026 | 2026-10-24 | 8 helpful witness is the liar; secondary home-clock correction | s3 | Fresh blind 4.5; request confirmation + corrected time + visitor intervals + replacement-pallet link. Clarified automatic session reconnect. |
+| c027 | 2026-10-25 | 9 object biography: gauge unit → engine → hull | s1 | Fresh blind 4.3; mapping + dock-test subtraction + route lower bound + independent captain sighting. |
+| c028 | 2026-10-26 | 5 time trick; secondary borrowed garment | s3 | Blind 4.2 found successive-user gap; targeted review passed after spring closure and sole simultaneous user were stated. New independent final public-only blind check: PASS 4/5. |
+| c029 | 2026-10-27 | 6 staged scene: lending form on the book lining | s5 | Fresh blind 4.5; counter sequence + continuous partial imprint + intact seal + bounded custody. |
+| c030 | 2026-10-28 | 3 not what it seemed: trace predates the apparent quick-change transfer | s2 | Blind 4.1 found pre-sewing custody gap; targeted review passed after clean surface and uninterrupted custody through sewing. New independent final public-only blind check: PASS 4/5. |
