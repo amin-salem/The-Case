@@ -72,6 +72,14 @@ void main() {
     expect(lost, isNot(contains('پلاک')));
   });
 
+  test('share card adds «حدس اولم درست بود» only when true, never the name', () {
+    final r = AccuseResult({'result': 'solved', 'stars': 2, 'seconds': 120, 'culprit': 's3', 'depth': {'evidence': 5}});
+    final yes = spoilerFreeShareText(caseData, r, firstGuessRight: true);
+    expect(yes, contains('حدس اولم درست بود'));
+    expect(yes, isNot(contains('کوروش')));
+    expect(spoilerFreeShareText(caseData, r), isNot(contains('حدس اولم')));
+  });
+
   test('the share link has one home: the constant', () {
     expect(kShareLinkPlaceholder, startsWith('https://'));
   });

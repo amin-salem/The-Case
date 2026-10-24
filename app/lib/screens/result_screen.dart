@@ -2,12 +2,14 @@ import 'account_sheets.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../models/album.dart';
 import '../models/models.dart';
 import '../services/api.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
+import '../widgets/first_guess.dart';
 import '../widgets/fx.dart';
 import '../widgets/mistakes_card.dart';
 import '../widgets/partner_card.dart';
@@ -32,9 +34,14 @@ class _ResultScreenState extends State<ResultScreen> {
   AccuseResult get result => widget.result;
   bool get solved => result.result == 'solved';
 
+  FirstGuess? _guess; // the first guess given before the evidence (null: none / offline / old server)
+
   @override
   void initState() {
     super.initState();
+    Api.i.firstGuess(caseData.id).then((g) {
+      if (mounted) setState(() => _guess = g);
+    });
     // stamp, then the verdict music
     Sfx.i.duck();
     Future<void>.delayed(const Duration(milliseconds: 200), () => Sfx.i.play('stamp', volume: 0.8));
@@ -187,6 +194,10 @@ class _ResultScreenState extends State<ResultScreen> {
             if (solved || result.culprit != null) ...[
               const SizedBox(height: 14),
               GuessStatsCard(caseData: caseData),
+              if (_guess?.guess != null) ...[
+                const SizedBox(height: 14),
+                FirstGuessCard(caseData: caseData, guess: _guess),
+              ],
             ],
             // only for a case the player solved, and only when there was something to learn from
             if (solved && (result.progress?.wrongTries.isNotEmpty ?? false)) ...[
@@ -207,7 +218,7 @@ class _ResultScreenState extends State<ResultScreen> {
               child: StampButton(
                 label: solved ? 'پز بده' : 'به دوستات بگو',
                 icon: Icons.share_rounded,
-                onTap: () => SharePlus.instance.share(ShareParams(text: spoilerFreeShareText(caseData, result))),
+                onTap: () => SharePlus.instance.share(ShareParams(text: spoilerFreeShareText(caseData, result, firstGuessRight: solved && _guess?.correct == true))),
               ),
             ),
             if (!solved) ...[

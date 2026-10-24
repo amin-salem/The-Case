@@ -25,7 +25,7 @@ def test_catalog_matches_prices_and_frames():
                                "frame_stamp": 600, "frame_neon": 900, "frame_royal": 1500}
     assert [i.id for i in avatars.FRAMES if i.how == "goal"] == [
         "frame_bronze", "frame_silver", "frame_gold", "frame_ember", "frame_blaze", "frame_inferno", "frame_eternal",
-        "frame_album", "frame_album_noir", "frame_tape", "frame_loupe"]
+        "frame_tape", "frame_loupe", "frame_album", "frame_album_noir"]
     assert len(avatars.BY_ID) == len(avatars.AVATARS) + len(avatars.FRAMES)
 
 

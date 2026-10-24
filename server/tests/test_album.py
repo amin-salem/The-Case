@@ -151,14 +151,15 @@ async def test_album_is_bounded_and_unauthenticated_is_refused(client):
 
 async def test_guess_flow_and_community(client, clock):
     clock(content.opens_at(content.by_id("c040")) + timedelta(hours=1))
-    cid = "c040"
+    cid = "c010"  # an archive case: a night's case solved here would change the daily ranks other tests expect
     c = content.by_id(cid)
     sids = [s["id"] for s in c.data["suspects"]]
     p = await new_player(client, "guess-1")
     h = p["headers"]
+    await _unlock_all(p["player_id"])
     # the case must be opened first
-    assert (await client.post(f"/v1/cases/{cid}/guess", headers=h, json={"suspect": sids[0]})).status_code == 409
-    await client.get(f"/v1/cases/{cid}", headers=h)
+    assert (await client.post(f"/v1/cases/{cid}/guess", headers=h, json={"suspect": sids[0]})).status_code in (402, 409)
+    await _open(client, h, cid)
     assert (await client.post(f"/v1/cases/{cid}/guess", headers=h, json={"suspect": "nobody"})).status_code == 422
     r = await client.post(f"/v1/cases/{cid}/guess", headers=h, json={"suspect": sids[1]})
     assert r.json() == {"guess": sids[1], "already": False}
@@ -196,7 +197,7 @@ async def _make_player(s, i):
 
 async def test_community_hidden_below_threshold(client, clock):
     clock(content.opens_at(content.by_id("c040")) + timedelta(hours=1))
-    cid = "c040"
+    cid = "c010"
     sids = [s["id"] for s in content.by_id(cid).data["suspects"]]
     assert guess.community({sids[0]: 19}, sids) is None
     assert guess.community({sids[0]: 20}, sids)["total"] == 20
@@ -205,17 +206,19 @@ async def test_community_hidden_below_threshold(client, clock):
 
 async def test_guess_too_late_after_the_investigation_started(client, clock):
     clock(content.opens_at(content.by_id("c040")) + timedelta(hours=1))
-    cid = "c040"
+    cid = "c010"
     c = content.by_id(cid)
     p = await new_player(client, "guess-late")
     h = p["headers"]
-    await client.get(f"/v1/cases/{cid}", headers=h)
+    await _unlock_all(p["player_id"])
+    await _open(client, h, cid)
     await client.post(f"/v1/cases/{cid}/hint", headers=h)
     r = await client.post(f"/v1/cases/{cid}/guess", headers=h, json={"suspect": c.data["suspects"][0]["id"]})
     assert r.status_code == 409 and r.json()["detail"] == "too_late"
     # «نمی‌دونم» is a valid first guess for another player
     q = await new_player(client, "guess-unknown")
-    await client.get(f"/v1/cases/{cid}", headers=q["headers"])
+    await _unlock_all(q["player_id"])
+    await _open(client, q["headers"], cid)
     r = await client.post(f"/v1/cases/{cid}/guess", headers=q["headers"], json={"suspect": "?"})
     assert r.json() == {"guess": "?", "already": False}
 

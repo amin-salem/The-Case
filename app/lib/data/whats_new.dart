@@ -43,6 +43,11 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(71, '۱.۳۸', '2026-10-24', [
+    WhatsNewItem('album', 'آلبوم مجرم‌ها: هر پرونده‌ای که حل کنی، مجرمش یه کارت توی آلبومت می‌شه؛ پرونده‌های حل‌نشده سایه‌ی تاریک‌ان و با یه ضربه بازشون می‌کنی', WhatsNewTarget.archive),
+    WhatsNewItem('album_frame', 'یه گروه کامل از آلبوم رو که ببندی، قاب مخصوص می‌گیری؛ چهارتا گروه که کامل بشه، قاب نوآر هم مال توئه', WhatsNewTarget.avatars),
+    WhatsNewItem('first_guess', 'به نظر تو کیه؟ قبل از شروع تحقیقات یه حدس اول بزن (یه ضربه، و می‌شه ردش کرد)؛ آخرش می‌بینی چقدر درست بود و بقیه‌ی کارآگاه‌ها اول به کی شک کردن', WhatsNewTarget.caseToday),
+  ]),
   WhatsNewRelease(70, '۱.۳۷', '2026-10-23', [
     WhatsNewItem('tools_v2', 'ابزارهای کارآگاهی پررنگ‌تر شدن و حالا توی پرونده‌های آخر هفته هم کار می‌کنن (هر شب یک بار از هر کدوم)', WhatsNewTarget.weekend),
     WhatsNewItem('tools_help', 'دکمه‌ی «چطور کار می‌کنن؟» بالای ابزارها می‌گه هر کدوم چطور به دست میاد، چقدره و کجا استفاده می‌شه؛ قبل از هر استفاده هم می‌بینی چی نشونت می‌ده', WhatsNewTarget.caseToday),

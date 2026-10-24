@@ -52,7 +52,7 @@ String shareText(CaseData c, AccuseResult r) {
 /// Wordle-style, spoiler-free card: only the case number and title, the plaques, how many evidence cards were opened and
 /// the minutes. It never names the culprit, a clue or a card. Example:
 /// «پرونده‌ی ۳۴ «عنوان» 🕵️ ۳ پلاک · ۴ مدرک · ۶ دقیقه — تو هم امتحان کن: لینک»
-String spoilerFreeShareText(CaseData c, AccuseResult r) {
+String spoilerFreeShareText(CaseData c, AccuseResult r, {bool firstGuessRight = false}) {
   final head = 'پرونده‌ی ${fa(c.number)} «${c.title}» 🕵️';
   if (r.result != 'solved') return '$head این بار نشد — تو هم امتحان کن: ${Api.i.shareUrl}';
   final minutes = r.seconds <= 0 ? 0 : (r.seconds / 60).round().clamp(1, 999);
@@ -60,6 +60,7 @@ String spoilerFreeShareText(CaseData c, AccuseResult r) {
     '${fa(r.stars)} پلاک',
     if (r.evidenceOpened >= 0) '${fa(r.evidenceOpened)} مدرک',
     if (minutes > 0) '${fa(minutes)} دقیقه',
+    if (firstGuessRight) 'حدس اولم درست بود', // never says WHO
   ];
   return '$head ${parts.join(' · ')} — تو هم امتحان کن: ${Api.i.shareUrl}';
 }

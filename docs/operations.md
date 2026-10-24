@@ -689,3 +689,11 @@ Problem: the daily answer is shared in groups, so the daily ranking prize lost i
 - **Suspicious solves** (admin, `GET /admin/suspicious-solves`, last 24 h, at most 5000 rows read, lists cut to 50): solves with very low depth or under 60 s of active time; solves with active time at most 25% of that case's median (needs 8+ solves); clusters of 4+ accounts solving within 60 s of each other, inside 300 s, right after 10 quiet minutes. It only flags: ban by hand with `POST /admin/players/{id}/ban`. One log line per cluster: `suspicious_cluster case=… accounts=… span=…s` (no player ids).
 - Rate limits: nothing new; the existing limiter is reused.
 
+
+
+## Culprit album and first guess (24 Oct 2026, server 1.38.0, app 1.38.0+71)
+- **Nothing to set.** Migration 0031 adds only the table `case_guesses` (also created by `create_all`); no new env variable.
+- `GET /v1/album` builds the album from the player's own CaseProgress rows (one query) and a per-worker cache of the published cases (30 s, dropped when the next case opens). It is bounded to 600 cards. It also grants the album frames to a player who already finished a group (that is why it locks the player like `/v1/me`).
+- Change the grouping in ONE place: `album.group_of`. Frames: `avatars.py` (`frame_album` at 1 group, `frame_album_noir` at 4), drawn in `app/lib/widgets/avatar_frame.dart`.
+- Guess percentages: `guess.MIN_PUBLIC = 20` guesses, counts cached 60 s per worker (`guess_counts`, visible in the cache stats). Nothing personal is stored beyond player id, case id and suspect id.
+- If the album shows nothing for a player, check that the app is 1.38.0+ (older apps simply do not have the screen); old apps keep working because every new field is optional.

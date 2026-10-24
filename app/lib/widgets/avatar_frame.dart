@@ -227,6 +227,15 @@ class FramePainter extends CustomPainter {
         canvas.drawLine(const Offset(92, 92), const Offset(112, 112),
             _ring(9, color: const Color(0xFF5A3B1E))..strokeCap = StrokeCap.round);
         canvas.drawLine(const Offset(88, 88), const Offset(96, 96), _ring(10, color: K.brass)..strokeCap = StrokeCap.round);
+      case 'frame_album':
+        _circle(canvas, 43, _ring(6, color: K.brass));
+        _dashed(canvas, 38, _ring(1.6, color: const Color(0xFFFFF3C4)), const [5, 4]);
+      case 'frame_album_noir':
+        _circle(canvas, 43, _ring(8, color: K.night3));
+        _circle(canvas, 46.5, _ring(2, grad: _gold));
+        _dashed(canvas, 38, _ring(1.6, color: K.brass), const [3, 5]);
+        _diamond(canvas, const Offset(60, 12), 4, 5);
+        _diamond(canvas, const Offset(60, 108), 4, 5);
       case 'frame_fingerprint':
         final c = _ring(1.6, color: const Color(0xFFB9B5AA));
         _dashed(canvas, 41, c, const [60, 12, 30, 8]);

@@ -8,6 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/models.dart';
+import '../models/album.dart';
 import '../models/avatars.dart';
 import '../models/progress.dart';
 import '../models/story.dart';
@@ -728,6 +729,33 @@ class Api extends ChangeNotifier {
   Future<void> unlockCase(String id, {int? expectedCost}) async {
     await _call('POST', '/v1/cases/$id/unlock', body: expectedCost == null ? null : {'expected_cost': expectedCost});
     await _refreshProfileQuietly();
+  }
+
+  // ---------------------------------------------------------------- culprit album and first guess
+
+  /// The culprit album. Throws like every call (the screen shows a calm message).
+  Future<Album> album() async => Album((await _call('GET', '/v1/album') as Map).cast<String, dynamic>());
+
+  /// The player's first guess on a case (and, after solving, the crowd). Null when offline, an old server or failing.
+  Future<FirstGuess?> firstGuess(String caseId) async {
+    if (!online) return null;
+    try {
+      return FirstGuess((await _call('GET', '/v1/cases/$caseId/guess') as Map).cast<String, dynamic>());
+    } catch (e) {
+      debugPrint('first guess: $e');
+      return null;
+    }
+  }
+
+  /// Saves the first guess ([suspect] is a suspect id or '?'). Never throws: a guess must not get in the player's way.
+  Future<bool> giveGuess(String caseId, String suspect) async {
+    try {
+      await _call('POST', '/v1/cases/$caseId/guess', body: {'suspect': suspect});
+      return true;
+    } catch (e) {
+      debugPrint('give guess: $e');
+      return false;
+    }
   }
 
   // ---------------------------------------------------------------- story
