@@ -7,6 +7,7 @@ import '../models/models.dart';
 import '../services/api.dart';
 import '../services/sound.dart';
 import '../theme.dart';
+import '../widgets/album_strip.dart';
 import '../widgets/character.dart';
 import '../widgets/engagement.dart';
 import '../widgets/first_guess.dart';
@@ -16,6 +17,7 @@ import '../widgets/partner_card.dart';
 import '../widgets/rate_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
+import 'album_screen.dart';
 import 'comments_screen.dart';
 import 'leaderboard_screen.dart';
 
@@ -34,6 +36,7 @@ class _ResultScreenState extends State<ResultScreen> {
   AccuseResult get result => widget.result;
   bool get solved => result.result == 'solved';
 
+  Album? _album; // the album after this solve (null: offline / old server / not solved)
   FirstGuess? _guess; // the first guess given before the evidence (null: none / offline / old server)
 
   @override
@@ -42,6 +45,11 @@ class _ResultScreenState extends State<ResultScreen> {
     Api.i.firstGuess(caseData.id).then((g) {
       if (mounted) setState(() => _guess = g);
     });
+    if (solved) {
+      Api.i.album().then((a) {
+        if (mounted) setState(() => _album = a);
+      }).catchError((Object e) => debugPrint('album: $e'));
+    }
     // stamp, then the verdict music
     Sfx.i.duck();
     Future<void>.delayed(const Duration(milliseconds: 200), () => Sfx.i.play('stamp', volume: 0.8));
@@ -92,6 +100,18 @@ class _ResultScreenState extends State<ResultScreen> {
               Center(child: StampIn(delay: const Duration(milliseconds: 700), child: Plaques(count: result.stars, size: 44))),
               const SizedBox(height: 12),
               FadeSlideIn(delay: const Duration(milliseconds: 1000), child: _rewards()),
+              if (_album != null) ...[
+                const SizedBox(height: 10),
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 1200),
+                  child: AlbumEarnedCard(
+                    album: _album!,
+                    caseId: caseData.id,
+                    culprit: culprit,
+                    onOpen: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AlbumScreen())),
+                  ),
+                ),
+              ],
               if (result.earlyBonus > 0) ...[
                 const SizedBox(height: 10),
                 _noteCard(Icons.bolt_rounded, K.brass, 'حل زودهنگام! +${fa(result.earlyBonus)} سکه‌ی اضافه، قبل از باز شدن فصل آخر.'),

@@ -43,6 +43,9 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(72, '۱.۳۸', '2026-10-24', [
+    WhatsNewItem('album_home', 'آلبوم مجرم‌ها حالا از صفحه‌ی اصلی پیداست: چند مجرم جمع کردی، کدوم گروه نزدیک کامل شدنه، و بعد از هر پرونده کارت مجرمش جلوی چشمته', WhatsNewTarget.archive),
+  ]),
   WhatsNewRelease(71, '۱.۳۸', '2026-10-24', [
     WhatsNewItem('album', 'آلبوم مجرم‌ها: هر پرونده‌ای که حل کنی، مجرمش یه کارت توی آلبومت می‌شه؛ پرونده‌های حل‌نشده سایه‌ی تاریک‌ان و با یه ضربه بازشون می‌کنی', WhatsNewTarget.archive),
     WhatsNewItem('album_frame', 'یه گروه کامل از آلبوم رو که ببندی، قاب مخصوص می‌گیری؛ چهارتا گروه که کامل بشه، قاب نوآر هم مال توئه', WhatsNewTarget.avatars),

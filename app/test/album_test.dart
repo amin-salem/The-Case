@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:the_case/models/album.dart';
 import 'package:the_case/models/models.dart';
+import 'package:the_case/widgets/album_strip.dart';
 import 'package:the_case/widgets/first_guess.dart';
 
 Map<String, dynamic> _album() => {
@@ -92,5 +93,60 @@ void main() {
     expect(find.textContaining('مظنون s2'), findsOneWidget);
     expect(find.textContaining('درست نبود'), findsOneWidget);
     await tester.pumpWidget(const SizedBox());
+  });
+
+  test('album strip line: next small goal, honest about the frame', () {
+    // one case left in «پزشکی»; the frame (need 1) is owned and the next one needs 4 groups: no frame promise
+    expect(albumStripLine(Album(_album())), 'فقط ۱ پرونده تا کامل شدن گروه «پزشکی»');
+    // nothing finished yet and the first frame is not owned: the last case of the group earns it
+    final fresh = _album()
+      ..['groups_done'] = 0
+      ..['groups'] = [
+        {'key': 'cat:medical', 'title': 'پزشکی', 'icon': 'x', 'total': 2, 'solved': 1, 'complete': false}
+      ]
+      ..['rewards'] = [
+        {'id': 'frame_album', 'title': 'قاب آلبوم', 'need': 1, 'owned': false}
+      ];
+    expect(albumStripLine(Album(fresh)), 'فقط ۱ پرونده تا «قاب آلبوم» · گروه «پزشکی»');
+    // two cases left: progress only
+    final far = _album()
+      ..['groups'] = [
+        {'key': 'cat:medical', 'title': 'پزشکی', 'icon': 'x', 'total': 3, 'solved': 1, 'complete': false}
+      ];
+    expect(albumStripLine(Album(far)), 'گروه «پزشکی»: ۱ از ۳');
+    // no solved case at all: an invitation, no numbers game
+    final none = {'cards': [], 'groups': [], 'rewards': [], 'solved': 0, 'total': 5};
+    expect(albumStripLine(Album(none)), contains('کارت'));
+  });
+
+  testWidgets('album strip shows the count and opens on tap; the earned card shows the group line', (tester) async {
+    var taps = 0, opens = 0;
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: Column(children: [
+          AlbumStrip(album: Album(_album()), onTap: () => taps++),
+          AlbumEarnedCard(album: Album(_album()), caseId: 'c002', culprit: null, onOpen: () => opens++),
+        ]),
+      ),
+    ));
+    expect(find.textContaining('آلبوم مجرم‌ها · ۱ از ۲'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('album-strip')));
+    expect(taps, 1);
+    expect(find.text('کارت مجرم به آلبومت اضافه شد'), findsOneWidget);
+    expect(find.text('گروه «پزشکی»: فقط ۱ پرونده مونده'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('album-earned-open')));
+    expect(opens, 1);
+  });
+
+  testWidgets('earned card: a completed group says so and names the frame the player owns', (tester) async {
+    final done = _album()
+      ..['groups'] = [
+        {'key': 'cat:medical', 'title': 'پزشکی', 'icon': 'x', 'total': 2, 'solved': 2, 'complete': true}
+      ];
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(body: AlbumEarnedCard(album: Album(done), caseId: 'c002', culprit: null, onOpen: () {})),
+    ));
+    expect(find.textContaining('گروه «پزشکی» کامل شد!'), findsOneWidget);
+    expect(find.textContaining('قاب آلبوم مال توئه'), findsOneWidget);
   });
 }
