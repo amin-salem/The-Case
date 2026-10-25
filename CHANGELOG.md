@@ -9,6 +9,9 @@
 
 # Changelog
 
+## server 1.38.4: detective-tool lines c051-c052 rewritten (Amin, 25 Oct 2026)
+- c051 and c052 had `camera`/`print` lines written under the old "neutral" rule. They now follow §10b like c001-c028: a sighting with time and place (camera) and a touched object (print) per suspect, equal weight, none decisive alone. No camera is placed where it would have filmed the theft/poisoning itself. c052: Pouyan's answer "یه ساعت بعد" became "کمی بعد" to match the 16:55 sighting. Content only.
+
 ## server 1.38.3: detective-tool lines c008-c028 rewritten (Amin, 25 Oct 2026, urgent)
 - Same change as 1.38.2 for the remaining 21 cases: every suspect of c008-c028 now has a `camera` line (a sighting with time and place) and a `print` line (what was touched) that answer one concrete question and give the player a next step; none names the culprit alone, all suspects get equal weight, and trace ages the story cannot support say so. Content only (`server/app/content/cases/c008-c028.json`), prices and code untouched.
 - Text fixes found while placing the lines on the true timelines: c008 (Amir's "quarter hour" answer vs phone messages until 01:14, Fereshteh's 02:45 vs the fridge sensor at 02:41, evidence e3 "main door" vs the cafe) and c019 (Sahar's 02:15 vs the coffee card at 02:12).
