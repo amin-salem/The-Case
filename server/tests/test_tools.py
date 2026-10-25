@@ -33,6 +33,7 @@ def tooled(case_id="c020"):
     d["solution"]["irrelevant"] = spare_cards(d)[:1]
     assert d["solution"]["irrelevant"], "pick a case with a spare card"
     for s in d["suspects"]:
+        s.pop("camera", None)  # real cases now carry camera lines; the test sets its own
         s["print"] = [f"روی دستگیره‌ی در راهرو ردِ دستکش چرمیِ {s['name']} پیدا شد؛ همونی که هر روز می‌پوشه."]
     for s in d["suspects"][:2]:
         s["camera"] = [f"{s['name']} هنگام انتظار چند بار به ساعت مچی‌اش نگاه کرد و بعد دوباره نشست."]
