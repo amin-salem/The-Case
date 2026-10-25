@@ -140,3 +140,22 @@ async def test_category_in_the_case_list_and_detail(client, monkeypatch):
     assert cs["today"]["category"] in content.CATEGORIES
     detail = (await client.get(f"/v1/cases/{cs['today']['id']}", headers=p["headers"])).json()
     assert detail["case"]["category"] == cs["today"]["category"]
+
+
+def test_culprit_portraits_are_unique():
+    """The culprit album must not show a face twice while an unused face of that gender is still in the app (docs/case-writing-rules.md §8)."""
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2] / "app" / "assets" / "portraits"
+    if not root.is_dir():
+        return
+    pool = {p.stem for p in root.glob("*.webp")}
+    count: Counter = Counter()
+    for c in (*content.all_cases(), *content.weekly_cases()):
+        s = next(x for x in c.data["suspects"] if x["id"] == c.culprit)
+        p = s["avatar"].get("portrait")
+        if p in pool:  # a portrait drawn by code is unique by construction
+            count[p] += 1
+    for g in ("m", "f"):
+        reused = sorted(p for p, n in count.items() if p[0] == g and n > 1)
+        unused = sorted(p for p in pool if p[0] == g and p not in count)
+        assert not (reused and unused), f"culprit faces reused ({reused}) while unused {g} faces exist ({unused}); spread them"

@@ -166,3 +166,6 @@ New `camera` and `print` lines for every suspect of c008-c028 (rules §10b), eac
 
 ### 2026-10-25 tool lines c051, c052 (Claude Sonnet, rules 10b)
 Rewrote camera/print for all suspects of c051 (5) and c052 (6) from the true timelines. Cameras only cover the station desk, elevator, pharmacy door, basement corridor, greenhouse stair and department corridors; none covers the medicine room (c051) or the growth chamber (c052), so no line shows the act itself. The culprit's lines (c051 s4 leaves the desk at 02:20 toward the lifts; c052 s2 leaves her office at 21:35 toward the stairs) fit their statements on the surface and fail only against e4/e7 (c051) and the red-ink entry (c052). No fresh-reader blind test was run.
+
+### 2026-10-25 unique culprit faces (Claude Sonnet)
+Assignment by minimum cost (gender fixed; age distance, job keywords, small bonus for keeping the old face; each face may be used up to 3 times at growing cost) over 58 culprits. Result: 47 distinct faces; 11 male faces used twice (not enough male faces: 38 male culprits, 26 male portraits). w005's culprit uses a code-drawn face (no shipped file) and stays. After c043-c050 are rewritten, assign their culprit faces again with the same rule (and prefer new male faces when they arrive).

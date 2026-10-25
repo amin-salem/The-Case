@@ -81,6 +81,16 @@ why. Then judge:
 - Every suspect's `avatar` has a `portrait` from `app/assets/portraits/*.webp` (file name without
   `.webp`) that fits gender, age and job; no repeated portrait inside a case (twins may share).
   Women always have `"hair": "hijab"`.
+- **The culprit's portrait is unique across ALL cases** (Amin, 25 Oct 2026: the culprit album must not show the same face
+  twice). Before you choose the culprit's portrait, list the culprit portraits already used in `cases/` and `weekly/` and take
+  one that no culprit uses yet, of the right gender, close in age and job. Only when every portrait of that gender is already a
+  culprit's may you reuse one, and then say so in the case log (the real fix is to ask Amin for new faces: need roughly one new
+  portrait per new case of that gender; today men are short: 38 male culprits vs 26 male faces).
+  To keep the face from betraying the culprit: the OTHER suspects take any portrait of the pool (a face that was a culprit's
+  elsewhere is fine), chosen without looking at who is guilty, never the culprit's face, never repeated inside the case.
+  Never reserve "special" faces for culprits and never give innocent suspects only the faces that already were culprits.
+  A culprit whose `portrait` is not a shipped file is drawn by code and counts as unique.
+- `server/tests/test_content.py::test_culprit_portraits_are_unique` enforces the culprit rule while unused faces exist.
 - Every suspect needs an `intro` (required; 20–90 characters, spoken-friendly Persian, one line). It is shown on the
   case's «آدم‌های پرونده» strip and on the portrait chips, **before** the player has read any statement, so it says only
   WHO the person is relative to the case: role, relationship to the victim/place, what they were doing there at a

@@ -9,6 +9,10 @@
 
 # Changelog
 
+## server 1.38.5: unique culprit faces in the album (Amin, 25 Oct 2026)
+- The culprit album showed the same face for different cases (52 culprits used only 31 faces). Now all 58 culprits (daily + weekend) are spread over the 48 shipped portraits by gender, age and job: 47 distinct faces, no APK change (portraits are already in the app). Only men repeat (38 male culprits vs 26 male faces, 11 faces used twice) until Amin sends new male faces; women are all unique. 4 other suspects got a new face only where they would have shared the culprit's face. Other suspects keep their old faces, so a face carries no hint about guilt.
+- Rule added to `docs/case-writing-rules.md` §8 and test `test_culprit_portraits_are_unique` (fails if a culprit face is reused while an unused face of that gender exists). Needed: about one new portrait per new case, men first. c043-c050 get a new check when Astra's rewrites arrive.
+
 ## server 1.38.4: detective-tool lines c051-c052 rewritten (Amin, 25 Oct 2026)
 - c051 and c052 had `camera`/`print` lines written under the old "neutral" rule. They now follow §10b like c001-c028: a sighting with time and place (camera) and a touched object (print) per suspect, equal weight, none decisive alone. No camera is placed where it would have filmed the theft/poisoning itself. c052: Pouyan's answer "یه ساعت بعد" became "کمی بعد" to match the 16:55 sighting. Content only.
 
