@@ -17,8 +17,11 @@ case writing is the one job CLAUDE.md reserves for Opus. The blind test is a **S
 3. Brief for the Opus writer: difficulty 4 and 5; puzzle types and settings different from the last 10 cases and from each other;
    `category`/`scene` like the others; 5-6 suspects, 8-12 cards; LOGIC PLAN first (culprit, trick, clue chain with card ids, two
    false trails each cleared by a card, alibis with exact times, motive, every object/bag/phone accounted for), then the JSON in
-   the house voice (c020-c024), then for EVERY suspect `camera` and `print` lines (§10: neutral, equal tone, culprit as harmless
-   as the others, 20-160 chars, no clue material, print != camera).
+   the house voice (c020-c024), then for EVERY suspect `camera` and `print` lines (rules §10b, Amin 25 Oct 2026, REPLACES the old «neutral» rule: each line is a
+   useful, TRUE, checkable fact placed on the true timeline: camera = a sighting with time and place, print = which named object he touched;
+   equal weight and length for every suspect incl. the culprit, never decisive alone, never naming the culprit, 20-160 chars, spoken Persian,
+   print != camera, no repeat of a card/answer; see c001-c028 for style). The blind-test reader gets these lines and reports whether any single
+   line decides the case and whether each told him something useful; rewrite and retest if either answer is bad).
 4. Checks by the coordinator: validator / `server/tools/import_case.py` (CI is the final judge), the story errors Amin hates
    (culprit named by one card, impossible timeline, alibi never checked, leftover names, contradicting clue, unaccounted object),
    wording «کارآگاه»/«مظنون». Blind test with a Sonnet helper on the public case: solvable in ~6-10 steps, no single giveaway card,
