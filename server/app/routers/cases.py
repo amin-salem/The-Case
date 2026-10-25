@@ -240,7 +240,8 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
             data.pop(k, None)
         data["story"] = story_extra(c, p)
     if ac.answer_visible(p):
-        data["solution"] = c.data["solution"]  # solved, or lost and the answer is public now
+        # solved, or lost and the answer is public now; card ids («e5») in the explanation become card titles
+        data["solution"] = {**c.data["solution"], "explanation": content.readable(c.data["solution"].get("explanation", ""), c.data)}
     # every player sees suspects and evidence in their own order (ids unchanged)
     seed = f"{player.id}:{c.id}"
     for k in ("suspects", "evidence"):

@@ -9,6 +9,9 @@
 
 # Changelog
 
+## server 1.38.6 (no app change): card ids really gone from the solution text (Amin, 25 Oct 2026)
+- 1.37.2 cleaned the accuse result, but the case-detail route (opening a solved case again, or a lost case once its answer is public) still sent the raw `solution.explanation` with «e4، e5». That route now uses `content.readable` too (c026 and every other case). Test added in `test_explanation_readable.py`.
+
 ## server 1.38.5: unique culprit faces in the album (Amin, 25 Oct 2026)
 - The culprit album showed the same face for different cases (52 culprits used only 31 faces). Now all 58 culprits (daily + weekend) are spread over the 48 shipped portraits by gender, age and job: 47 distinct faces, no APK change (portraits are already in the app). Only men repeat (38 male culprits vs 26 male faces, 11 faces used twice) until Amin sends new male faces; women are all unique. 4 other suspects got a new face only where they would have shared the culprit's face. Other suspects keep their old faces, so a face carries no hint about guilt.
 - Rule added to `docs/case-writing-rules.md` §8 and test `test_culprit_portraits_are_unique` (fails if a culprit face is reused while an unused face of that gender exists). Needed: about one new portrait per new case, men first. c043-c050 get a new check when Astra's rewrites arrive.
