@@ -9,6 +9,10 @@
 
 # Changelog
 
+## server 1.38.2: detective-tool lines c001-c007 rewritten (Amin, 25 Oct 2026, urgent)
+- Players said the tools were "بی‌فایده بود و چیزی نگفت": the old `camera`/`print` lines were deliberately neutral, so they told nothing. c001-c007 now have a **useful true fact per suspect**: `camera` = a sighting with a time and place, `print` = what was touched. Each fact moves a statement or an alibi, none decides the case alone, every suspect (culprit too) gets a line of equal weight, and trace ages that the story cannot support say "سنِ اثرها معلوم نیست". Content only (`server/app/content/cases/c001-c007.json`), prices and code untouched.
+- New rule `docs/case-writing-rules.md` §10b: tool lines must be useful true facts, written with the case and blind-tested. Next: c008-c028 in three more batches.
+
 ## server 1.38.1: nightly #1, cases c051 and c052 (24 Oct 2026)
 - Content only (`server/app/content`): c051 «چهار ویالِ شیفتِ شب» (publish 2026-11-18, difficulty 4, hospital/medical) and c052 «قفسه‌ی دوم» (publish 2026-11-19, difficulty 5, lab/science), with camera/print lines and notification teasers. Test counts raised to 52 cases. No app change, no APK.
 

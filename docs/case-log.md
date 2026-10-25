@@ -153,3 +153,10 @@ prove the boat); c028 Mazyar is unobserved before 02:36 and is cleared only by t
 | c052 «قفسه‌ی دوم» | 2026-11-19 | 4 wrong victim (lab/science) | s2 | blind test 1: solved, 4; fix round (early leavers proven, ink-colour sign-out book, car decoy, access and flight stated); retest: solved, needs ink + car + unaware-culprit chain, difficulty 4-5 (kept 5) |
 
 Named soft spots left on purpose: c051 Kiarash's «before he left» is separated from 02:35 only by e4 (fair); c052 the link of the 22:35 barrier opening to Zhaleh is inferred from the car (fair, tied to e5+e6).
+
+### 2026-10-25 tool lines c001-c007 (Claude, urgent, after player feedback "بی‌فایده بود و چیزی نگفت")
+New `camera` and `print` lines for every suspect of c001-c007 (rules §10b). Amin tried c001 in an interactive test: camera/print lines 4/4 rated «مفید»;
+the proposed card-detail magnifier 1 useful, 1 weak (decorative detail), so the magnifier is unchanged. Checks: every line 20-160 characters, no
+verdict words, each fact placed on the true timeline of its case, trace ages stated as unknowable where the culprit touched the object
+(c001 s3, c002 s1/s3, c007 s1). No fresh-reader blind test was run (no sub-agent in this run); the lines are facts, not clues, and none names a culprit.
+Known and left on purpose: c004 Ali's answer about the big box on Sunday does not fit his 16:00 departure (older text, not a tool line) is logged for the c004 review.
