@@ -143,3 +143,24 @@ natural place for it; never force it. The server refuses a file that breaks thes
   fact («چند بار به ساعت مچی‌اش نگاه کرد»). It names no guilt, no motive, no lie, and does not repeat a statement or an answer.
   It must not make the culprit stand out compared with the others (give every suspect with a camera line a line of the same weight).
 - The fingerprint reader shows `suspect.print` (a string or 1-3 lines, 20-160 chars): a small physical trace the suspect left on some object (print, fibre, smudge, wear) that NO card shows. Same rules as camera: innocent-looking and explainable for everybody (culprit included), equal tone and length across suspects, never proof or exclusion by itself, never a new event, not a repeat of a card or of the camera line. A case without `print` simply does not offer the tool.
+
+### 10b. Tool lines must be worth the coins (Amin, 25 Oct 2026; replaces the "neutral" wording above where they differ)
+Players said the tools were «بی‌فایده بود و چیزی نگفت». A line that tells the player nothing is a coin wasted, and a player who
+got «nothing» once stops buying anything. From now on every `camera` and `print` line is a **useful, true fact**:
+- **One checkable fact, no filler.** `camera` = what was SEEN (a sighting with a time and a place, who was with whom, who carried
+  what in or out: «ساعت ۲۱:۴۰ جلوی آسانسور دیده شد، یه کیف دستش بود»). `print` = what was TOUCHED or left (which named object a
+  suspect handled, or a trace on it, and roughly when). The two never repeat each other, a card or an answer.
+- **It must move the player's thinking.** After reading it the player can confirm a statement, weaken a statement, close an
+  alibi window or open a new question, and then combine it with cards. If the line would not change what any reader believes
+  about any statement, rewrite it.
+- **Never decisive alone.** No line names the culprit, clears everybody else, or hands over the decisive trick of the case. The
+  solution must still need the card combination. Tool facts are extra help, never required for fair play.
+- **One truth.** Add every line to the true timeline (rules §9, step 1) and check it against every card, answer and the
+  explanation before accepting it. A line that contradicts anything, or adds an event the story does not have, is an error.
+- **Equal weight and tone.** Every suspect gets a fact of the same kind and about the same length. The culprit's line must be a
+  true fact that looks as informative as the others (for example his real whereabouts, which fit his statement on the surface and
+  fail only in combination). A dull line for the culprit gives him away by elimination.
+- **Spoken, short Persian**, 20-160 characters (the server limit), no accusation words, no motive.
+- **Written in the same pass as the case**, never added afterwards. The blind-test reader also gets the tool lines and must report
+  (1) whether any single line decides the case, (2) whether each line told him something useful. Either answer "yes decides" or
+  "told me nothing" means rewrite and test again.
