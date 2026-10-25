@@ -159,4 +159,4 @@ New `camera` and `print` lines for every suspect of c001-c007 (rules §10b). Ami
 the proposed card-detail magnifier 1 useful, 1 weak (decorative detail), so the magnifier is unchanged. Checks: every line 20-160 characters, no
 verdict words, each fact placed on the true timeline of its case, trace ages stated as unknowable where the culprit touched the object
 (c001 s3, c002 s1/s3, c007 s1). No fresh-reader blind test was run (no sub-agent in this run); the lines are facts, not clues, and none names a culprit.
-Known and left on purpose: c004 Ali's answer about the big box on Sunday does not fit his 16:00 departure (older text, not a tool line) is logged for the c004 review.
+Also fixed (found while writing c004): Ali's answer about the big flat box said «یکشنبه» although he left at 16:00 and Sima entered after closing; it now says «ظهر»  (she carried it in at noon, before he left).
