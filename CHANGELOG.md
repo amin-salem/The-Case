@@ -9,6 +9,10 @@
 
 # Changelog
 
+## server 1.38.3: detective-tool lines c008-c028 rewritten (Amin, 25 Oct 2026, urgent)
+- Same change as 1.38.2 for the remaining 21 cases: every suspect of c008-c028 now has a `camera` line (a sighting with time and place) and a `print` line (what was touched) that answer one concrete question and give the player a next step; none names the culprit alone, all suspects get equal weight, and trace ages the story cannot support say so. Content only (`server/app/content/cases/c008-c028.json`), prices and code untouched.
+- Text fixes found while placing the lines on the true timelines: c008 (Amir's "quarter hour" answer vs phone messages until 01:14, Fereshteh's 02:45 vs the fridge sensor at 02:41, evidence e3 "main door" vs the cafe) and c019 (Sahar's 02:15 vs the coffee card at 02:12).
+
 ## server 1.38.2: detective-tool lines c001-c007 rewritten (Amin, 25 Oct 2026, urgent)
 - Players said the tools were "بی‌فایده بود و چیزی نگفت": the old `camera`/`print` lines were deliberately neutral, so they told nothing. c001-c007 now have a **useful true fact per suspect**: `camera` = a sighting with a time and place, `print` = what was touched. Each fact moves a statement or an alibi, none decides the case alone, every suspect (culprit too) gets a line of equal weight, and trace ages that the story cannot support say "سنِ اثرها معلوم نیست". Content only (`server/app/content/cases/c001-c007.json`), prices and code untouched.
 - New rule `docs/case-writing-rules.md` §10b: tool lines must be useful true facts, written with the case and blind-tested. Next: c008-c028 in three more batches.

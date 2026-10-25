@@ -160,3 +160,6 @@ the proposed card-detail magnifier 1 useful, 1 weak (decorative detail), so the 
 verdict words, each fact placed on the true timeline of its case, trace ages stated as unknowable where the culprit touched the object
 (c001 s3, c002 s1/s3, c007 s1). No fresh-reader blind test was run (no sub-agent in this run); the lines are facts, not clues, and none names a culprit.
 Also clarified in c004 (found while placing Sima's line on the timeline): Ali's answer about the big flat box now says «ظهر خانم رادمنش»; so it is clear he saw the box before he left at 16:00, and Sima's 18:55 re-entry (e3) does not contradict it.
+
+### 2026-10-25 tool lines c008-c028 (Claude Sonnet, urgent, same method as c001-c007)
+New `camera` and `print` lines for every suspect of c008-c028 (rules §10b), each placed on the case's single true timeline; cameras avoid places that would give the case away. Text fixes made on the way: c008 (Amir "تا نزدیک ساعت یک", Fereshteh "حدود ۲:۴۰", e3 rewritten so it matches the cafe) and c019 (Sahar "ساعت ۲:۱۰ رفتم استراحتگاه", coffee card 2:12). Checks: every line 20-160 characters, no verdict words, no Latin digits. No fresh-reader blind test was run on c001-c028; the lines are facts, not clues.
