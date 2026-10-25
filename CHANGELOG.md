@@ -9,6 +9,10 @@
 
 # Changelog
 
+## server 1.38.7: c029 and c030 re-reviewed (Amin, 25 Oct 2026)
+- c029: the 14:15 shelf sighting made the stamp-counter trick unnecessary (folder custody alone named Babak); removed, so the naive reading points at Fazeli (10:08 stamp, folder at 09:55). Shakouri's watch is its own card (e10, proof). Leftover «قانون خیالی» sentence, a real actor's name (cashier), the "unchained stamp" and Maryam's unexplained 11:00 folder entry fixed; cards simplified; new tool lines (§10b).
+- c030: intro's unexplained «تور پاره» removed; Elham's hem check is its own card (e11, proof); jeweller renamed (Farzan vs Faraji); Omid's unseen «دفتر اجرا», the two invoices and the box's visibility clarified; Elham's whereabouts stated; new tool lines (§10b). Explanations rewritten in plain Persian. Content only.
+
 ## server 1.38.6 (no app change): card ids really gone from the solution text (Amin, 25 Oct 2026)
 - 1.37.2 cleaned the accuse result, but the case-detail route (opening a solved case again, or a lost case once its answer is public) still sent the raw `solution.explanation` with «e4، e5». That route now uses `content.readable` too (c026 and every other case). Test added in `test_explanation_readable.py`.
 
