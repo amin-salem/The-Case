@@ -4,267 +4,138 @@
 You are generating a set of character portraits for a noir detective game. Rules:
 1. Make ONE image per message, in this exact order. After each image write only the file name (for example `f_mid_novelist.png`), then wait. I will answer "next".
 2. Keep the exact same style for every image: moody noir painterly illustration, warm amber light from one side, deep navy shadows, subtle film grain, plain dark navy background, square 1024x1024, head and shoulders, no text, no logos.
-3. EVERY FACE MUST BE CLEARLY DIFFERENT from every other image in this chat (different face shape, nose, eyes, brows, jaw, age lines). Do not reuse a face with a new outfit. Avoid defaulting to the same look (curly hair, mustache and goatee, side glance). Follow the pose and the facial hair written in each prompt; if a prompt says clean-shaven, make him clean-shaven.
+3. EVERY FACE MUST BE CLEARLY DIFFERENT from every other image in this chat (different face shape, nose, eyes, brows, jaw, age lines). Do not reuse a face with a new outfit. Follow the face description written in each prompt exactly; it is different for every image.
 4. If an image drifts from the style, redo it silently in the same style as the first image.
 5. Characters are Iranian, realistic ages, every woman wears a loose headscarf with a visible part of her hair showing (not a fully covering hijab), in a different color and draping each time; natural unglamorous faces (tired, worn, expressive), as real people, not models.
 
-Places first, then women. Start with item 1 and continue in order. Total items: 64.
+Start with item 1 and continue in order. Total items: 32.
 
-## Part 1: places (no people)
-### 1. `hospital_b.png`
+
+### 1. `f_mid_actress.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A hospital corridor at 3 a.m.: green-tinted light, a gurney against the wall, one door ajar, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 40-year-old Iranian actress, wounded pride, modest neckline. Face: an angular face with sharp cheekbones, deep-set dark eyes, a hooked nose, prominent ears under the scarf; light natural makeup. She wears a plum headscarf worn loosely so a good part of her chestnut hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 2. `hotel_b.png`
+### 2. `f_mid_pilot.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A grand old hotel lobby after midnight: reception desk, brass bell, velvet armchairs, a stairway into shadow, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 38-year-old Iranian woman flight attendant, neat uniform collar, a polite smile that does not reach her eyes, modest neckline. Face: a broad face with a low nose bridge, thick uneven brows, a wide flat nose, warm brown skin; no makeup. She wears a muted teal headscarf worn loosely so a good part of her dark hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 3. `kitchen_b.png`
+### 3. `f_mid_widow.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A restaurant kitchen after closing: steel counters, hanging pans, steam, one open walk-in fridge door, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 45-year-old Iranian widow, red-rimmed eyes, rigid dignified mouth, modest neckline. Face: a thin oval face with a prominent nose, thin lips, a very wide forehead, hollow cheeks; no makeup. She wears a black headscarf draped loosely so a good part of her dark hair with first grey streaks shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 4. `lab_b.png`
+### 4. `f_mid_police.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A university chemistry lab at night: glassware, a fume hood glowing, papers scattered on a bench, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 36-year-old Iranian policewoman, dark uniform collar, serious steady look, modest neckline. Face: a long face with a strong straight nose, heavy-lidded eyes, a mole near the cheek, a firm chin; no makeup. She wears a dark navy headscarf worn loosely so a good part of her black hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 5. `library_b.png`
+### 5. `f_mid_gallery.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. An old reading room: tall shelves, a green reading lamp, a ladder, a book left open on a table, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 41-year-old Iranian gallery owner, large earrings, black blazer, cool appraising gaze, modest neckline. Face: a short face with a small upturned nose, bright small green eyes, freckled pale skin, a gap between the front teeth; light natural makeup. She wears a mustard-yellow headscarf worn loosely so a good part of her copper-brown hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 6. `museum_b.png`
+### 6. `f_mid_driver.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A museum gallery after hours: a lit empty display case, ropes, a painting in shadow, polished floor, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 39-year-old Iranian taxi driver, leather jacket, wry half smile, modest neckline. Face: a rugged square face with a thick neck, a crooked nose that was once broken, a weathered tan, short eyebrows; no makeup. She wears a dusty-blue headscarf worn loosely so a good part of her short cropped dark hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 7. `office_b.png`
+### 7. `f_mid_scientist.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. An open-plan office at night: blinking monitors, a glass meeting room, one desk lamp, scattered files, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 43-year-old Iranian woman chemist, safety glasses pushed up on her forehead, white lab coat, brisk intelligent look, modest neckline. Face: a narrow pointed chin, a high nose bridge, large round dark eyes, thin pale lips, pale skin; no makeup. She wears a pale grey headscarf worn loosely so a good part of her straight black hair shows at the front and sides; head turned three-quarters to the right, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 8. `school_b.png`
+### 8. `f_mid_hairdresser.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. An empty school corridor: lockers, a chalkboard in an open classroom, moonlight through tall windows, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 37-year-old Iranian hairdresser, bright earrings, black smock, gossipy conspiratorial smile, modest neckline. Face: a full cheeky face with dimples, a wide smiling mouth, arched dark brows, a rounded nose tip; bold but tidy makeup. She wears a coral-pink headscarf worn loosely so a good part of her highlighted wavy hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 9. `snow_lodge_b.png`
+### 9. `f_old_widow_rich.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A mountain lodge in a snowstorm: a fireplace, wooden beams, snow against the window, boots by the door, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 68-year-old Iranian woman, pearl necklace, elegant dark dress, cold aristocratic stare, modest neckline. Face: a fine-boned face with a long straight nose, high thin cheekbones, pale eyes with heavy lids, thin pressed lips, powdered skin; light natural makeup. She wears a dark brown headscarf with a subtle pattern worn loosely so a good part of her silver hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 10. `subway_b.png`
+### 10. `f_old_midwife.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A subway platform at night: tiled walls, a last train's red lights, a lone bench, a dropped bag, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 71-year-old Iranian woman midwife, wrinkled kind face, strong tired hands folded in front, steady eyes, modest neckline. Face: a soft rounded face with many deep wrinkles, a wide nose, drooping eyelids, a double chin, an age spot on the temple; no makeup. She wears a plum headscarf worn loosely so a good part of her white hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 11. `theater_b.png`
+### 11. `f_old_seamstress.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A theater stage after the show: curtains half open, a prop chair, a single ghost light, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 66-year-old Iranian seamstress, thick glasses that shrink her eyes, a needle in her lapel, sharp gentle look, modest neckline. Face: a small face with a pointed nose, thin dry lips, deep lines around the mouth, bony cheeks; no makeup. She wears a faded rose headscarf worn loosely so a good part of her grey hair pinned in a bun shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 12. `tower_b.png`
+### 12. `f_old_professor.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A high-rise rooftop: city lights below, a water tank, antennas, wind-blown plastic sheet, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 69-year-old Iranian woman professor, large round glasses, wool blazer, severe intelligent gaze, modest neckline. Face: a long strong face with a big straight nose, deep nasolabial folds, bushy grey brows, a firm square chin; no makeup. She wears a black chiffon headscarf worn loosely so a good part of her short silver hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 13. `train_b.png`
+### 13. `f_old_neighbor.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A night train compartment: narrow corridor, curtain drawn, a suitcase on the rack, passing lights outside, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 73-year-old Iranian woman neighbor, knitted shawl, curious bright eyes, a small suspicious frown, modest neckline. Face: a tiny wizened face with a sharp nose, sunken cheeks, bright round black eyes, a toothless slightly open mouth; no makeup. She wears a flowered brown headscarf knotted loosely so a good part of her thin white hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 14. `villa_rain_b.png`
+### 14. `f_old_singer.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A walled villa garden in the rain: a lit study window, wet roses, a pool with ripples, stone path, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 67-year-old Iranian former singer, heavy earrings, faded glamour, proud wistful smile, modest neckline. Face: a strong jaw, a full lower lip, large arched penciled brows, faded lipstick, high cheekbones, a beauty spot above the lip; dramatic makeup worn down. She wears a deep teal silk headscarf worn loosely so a good part of her dyed auburn hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 15. `warehouse_b.png`
+### 15. `f_old_farmer.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A customs warehouse: stacked crates, a forklift, a swinging bulb, a stenciled box opened, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 65-year-old Iranian village woman, sun-lined face, calloused hands, quiet stubborn look, modest neckline. Face: a sun-darkened leathery face, a broad flat nose, narrow squinting eyes, cracked lips, deep crow's feet; no makeup. She wears a faded orange-brown headscarf worn loosely so a good part of her braided grey hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 16. `wedding_b.png`
+### 16. `f_old_housekeeper.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A wedding hall after the guests have left: long tables, wilted flowers, a cake cut unevenly, fallen confetti, different angle and composition from the standard version. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 62-year-old Iranian housekeeper, apron, tired watchful eyes, lips pressed tight, modest neckline. Face: a heavy tired face with sagging jowls, a thick nose, puffy eyelids, a dark mole on the cheek, thick grey brows; no makeup. She wears an olive-green headscarf worn loosely so a good part of her thick grey-black hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 17. `mosque_courtyard.png`
+### 17. `f_old_fortune.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A quiet mosque courtyard at night: a tiled pool reflecting a lit dome, empty prayer rugs. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 70-year-old Iranian woman fortune teller, deep-set eyes, a cup-reader's mysterious half smile, modest neckline. Face: a gaunt face with hollow cheeks, a long chin, very dark deep-set eyes under heavy brows, a hooked nose, a tiny henna dot on the forehead; no makeup. She wears a dark violet headscarf worn loosely so a good part of her hennaed orange hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 18. `caravanserai.png`
+### 18. `f_old_judge_widow.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A ruined caravanserai in the desert: arches, a campfire dying, saddlebags. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 64-year-old Iranian woman, black coat, brooch, grief held under control, modest neckline. Face: a long dignified face with a high straight nose, grey-blue eyes, thin straight brows, a firm mouth, fine vertical lines on the lips; no makeup. She wears a cream headscarf worn loosely so a good part of her smooth silver hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 19. `tea_house.png`
+### 19. `f_mid_guest_b.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. An old iranian tea house after closing: samovar, low tables, patterned rugs, steam. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 34-year-old Iranian woman hotel guest, elegant coat, polite restless smile, modest neckline. Face: a diamond-shaped face with a pointed chin, wide cheekbones, almond-shaped light brown eyes, a delicate straight nose, glossy lips; light natural makeup. She wears a pale lavender headscarf worn loosely so a good part of her long wavy honey-brown hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 20. `pharmacy.png`
+### 20. `f_mid_guest_c.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A small-town pharmacy at night: glass jars, a neon cross, a prescription pad on the counter. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 52-year-old Iranian woman hotel guest, glasses on a chain, wool coat, impatient stare, modest neckline. Face: a heavy-set face with a double chin, small close-set eyes, a short wide nose, pursed lips, rosy cheeks; no makeup. She wears a mustard-gold headscarf worn loosely so a good part of her short permed grey hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 21. `car_park.png`
+### 21. `f_mid_guest_d.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. An underground car park: concrete pillars, flickering tube light, a single parked car with its door open. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 29-year-old Iranian woman guest, trench coat, nervous eyes, modest neckline. Face: a young narrow face with large wide-open dark eyes, a pointed small nose, a thin neck, chapped lips, pale tired skin with acne scars; no makeup. She wears a light sage-green headscarf worn loosely so a good part of her messy dark brown hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 22. `rooftop_pool.png`
+### 22. `f_mid_guest_e.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A hotel rooftop pool at night: empty loungers, blue underwater glow, a towel left behind. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 45-year-old Iranian woman guest, pearl earrings, camel coat, controlled expression, modest neckline. Face: a long elegant face with high flat cheekbones, a long straight nose, heavy-lidded grey-green eyes, a thin upper lip, a faint scar through the left eyebrow; light natural makeup. She wears a black chiffon headscarf worn loosely so a good part of her sleek dark bob shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 23. `fishmarket.png`
+### 23. `f_mid_business_b.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A fish market at 5 a.m.: ice, crates, wet tiles, hanging scales. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 40-year-old Iranian businesswoman, dark blazer, direct cold gaze, modest neckline. Face: a strong oval face with a prominent aquiline nose, thick straight black brows, a firm mouth, deep smile-line creases, tan skin; no makeup. She wears a black headscarf draped loosely so a good part of her thick dark hair with a white streak shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 24. `press_room.png`
+### 24. `f_mid_business_c.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A newspaper office at night: typewriter-era desks, cork board with photos and strings, cold coffee. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 56-year-old Iranian businesswoman, bold glasses, tailored suit, amused superior smile, modest neckline. Face: a broad mature face with a soft jaw, sparkling narrow eyes, a button nose, deep laugh lines and a visible chin dimple; bold lipstick. She wears a dark navy headscarf worn loosely so a good part of her short silver-blonde hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 25. `cinema.png`
+### 25. `f_mid_teacher_b.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. An old cinema auditorium: rows of red seats, the projector beam through dust, a forgotten coat. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 50-year-old Iranian woman teacher, cardigan, reading glasses, firm kind eyes, modest neckline. Face: a motherly oval face with soft round cheeks, warm brown eyes, a medium rounded nose, gentle forehead lines, a hint of a double chin; no makeup. She wears a deep burgundy headscarf worn loosely so a good part of her greying brown hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 26. `clinic_garden.png`
+### 26. `f_mid_officer_b.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A clinic courtyard garden: bench, fountain, hedges, fog. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 41-year-old Iranian woman officer, crisp uniform collar, calm authority, modest neckline. Face: an angular tough face with a wide jaw, a strong prominent chin, narrow dark eyes, a flat nose with a slight bump, scar-free dark skin, minimal eyebrows; no makeup. She wears an olive-green headscarf worn loosely so a good part of her tight dark hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 27. `gym.png`
+### 27. `f_mid_lawyer_b.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A boxing gym at night: heavy bags, a ring under one lamp, a locker left open. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 47-year-old Iranian woman lawyer, dark suit, sharp assessing eyes, modest neckline. Face: a slim triangular face with high cheekbones, sharp light-brown eyes, a narrow nose, thin arched brows, tight lips with vertical lines; subtle makeup. She wears a charcoal-grey headscarf worn loosely so a good part of her straight auburn hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 28. `ferry.png`
+### 28. `f_mid_manager_b.png`
 ```
-Square 1024x1024 illustration (same size as our current scenes). Moody noir painterly illustration, cinematic warm amber light, deep navy shadows, subtle film grain. A ferry deck in fog: railings, lifebelts, a lone bench, foghorn glow. No people, no text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 43-year-old Iranian woman manager, blouse and blazer, tired professional smile, modest neckline. Face: a soft tired face with under-eye bags, a snub nose, full lips, freckles across the nose, slightly sagging cheeks, dark brown eyes with crow's feet; no makeup. She wears a cream headscarf worn loosely so a good part of her curly reddish-brown hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-## Part 2: women, 22 roles + 14 role variants (face-diverse rewrite; skip any you already have and like)
-### 29. `f_young_dancer.png`
+### 29. `f_young_student_b.png`
 ```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 26-year-old Iranian woman dancer, long neck, plain black top, proud guarded posture, eyes toward the camera, modest neckline. Face: a long narrow face with a high forehead and thin straight brows, fine lines at the eyes; light natural makeup. She wears a deep burgundy headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 21-year-old Iranian woman student, backpack strap, ink on her fingers, hopeful anxious look, modest neckline. Face: a youthful round face with big round dark eyes, thick natural eyebrows that almost meet, a small nose, braces glinting on her teeth, clear brown skin; no makeup. She wears a bright teal headscarf worn loosely so a good part of her thick black hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 30. `f_young_model.png`
+### 30. `f_young_artist_b.png`
 ```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 25-year-old Iranian woman fashion model, high cheekbones, cold bored stare, looking past the camera, modest neckline. Face: a round soft face with full cheeks and light brows, a small scar on the chin; no makeup, natural skin. She wears a charcoal-grey headscarf worn loosely so a good part of her hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 25-year-old Iranian woman artist, paint-stained shirt, bold curious stare, modest neckline. Face: an unusual face with a long upper lip, wide-set pale grey-green eyes, a large nose with a bump, a small streak of blue paint on the cheek, a nose stud; no makeup. She wears a mismatched patterned scarf in red and indigo worn loosely so a good part of her short messy bleached-brown hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 31. `f_young_lawyer.png`
+### 31. `f_old_grandma_b.png`
 ```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 30-year-old Iranian woman lawyer, tailored blazer, composed determined expression, looking at the camera, modest neckline. Face: a square jaw with strong straight brows, visible laugh lines; no makeup, natural skin. She wears a cream headscarf worn loosely so a good part of her hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 76-year-old Iranian grandmother, deeply lined kind face, shrewd twinkling eyes, modest neckline. Face: a plump grandmotherly face with rosy sagging cheeks, a smiling toothy mouth with a missing tooth, small bright eyes in folds of skin, a short rounded nose; no makeup. She wears a muted green headscarf with tiny flowers knotted loosely so a good part of her thin white hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
-### 32. `f_mid_judge.png`
+### 32. `f_old_rich_b.png`
 ```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 49-year-old Iranian woman judge, dark formal coat, stern composed face, looking up at the camera, modest neckline. Face: a heart-shaped face with a small chin and wide-set eyes, dark under-eye circles; no makeup, natural skin. She wears an olive-green headscarf worn loosely so a good part of her hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 33. `f_mid_actress.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 40-year-old Iranian actress, dramatic dark eyes, wounded pride, eyes toward the camera, modest neckline. Face: an angular face with sharp cheekbones and deep-set eyes, prominent ears under the scarf; light natural makeup. She wears a plum headscarf worn loosely so a good part of her hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 34. `f_mid_pilot.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 38-year-old Iranian woman flight attendant, immaculate smile that does not reach her eyes, looking up at the camera, modest neckline. Face: a broad face with a low nose bridge and thick brows, slightly uneven eyebrows; no makeup, natural skin. She wears a muted teal headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 35. `f_mid_widow.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 45-year-old Iranian widow, red-rimmed eyes, rigid dignified mouth, looking at the camera, modest neckline. Face: an oval face with a prominent nose and thin lips, a wide forehead; no makeup, natural skin. She wears a black headscarf draped loosely worn loosely so a good part of her hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 36. `f_mid_police.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 36-year-old Iranian policewoman, serious steady look, modest neckline. Face: a long face with a strong nose and heavy-lidded eyes, a mole near the cheek; no makeup, natural skin. She wears a dark navy headscarf worn loosely so a good part of her hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 37. `f_mid_gallery.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 41-year-old Iranian gallery owner, large earrings, black blazer, cool appraising gaze, eyes toward the camera, modest neckline. Face: a short face with a small upturned nose and bright small eyes, freckled skin; light natural makeup. She wears a deep burgundy headscarf worn loosely so a good part of her hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 38. `f_mid_driver.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 39-year-old Iranian taxi driver, leather jacket, wry half smile, looking up at the camera, modest neckline. Face: a long narrow face with a high forehead and thin straight brows, fine lines at the eyes; no makeup, natural skin. She wears an olive-green headscarf worn loosely so a good part of her hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 39. `f_mid_scientist.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 43-year-old Iranian woman chemist, safety glasses on her forehead, white lab coat, brisk intelligent look, looking past the camera, modest neckline. Face: a round soft face with full cheeks and light brows, a small scar on the chin; no makeup, natural skin. She wears a charcoal-grey headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 40. `f_mid_hairdresser.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of bright earrings, black smock, gossipy conspiratorial smile, looking at the camera, modest neckline. Face: a square jaw with strong straight brows, visible laugh lines; no makeup, natural skin. She wears a cream headscarf worn loosely so a good part of her hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 41. `f_old_widow_rich.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 68-year-old Iranian woman, pearl necklace, elegant dark dress, cold aristocratic stare, modest neckline. Face: a heart-shaped face with a small chin and wide-set eyes, dark under-eye circles; light natural makeup. She wears a dark brown headscarf with a subtle pattern worn loosely so a good part of her hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 42. `f_old_midwife.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 71-year-old Iranian woman, wrinkled kind face, strong tired hands folded in front, steady eyes, eyes toward the camera, modest neckline. Face: an angular face with sharp cheekbones and deep-set eyes, prominent ears under the scarf; no makeup, natural skin. She wears a plum headscarf worn loosely so a good part of her hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 43. `f_old_seamstress.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 66-year-old Iranian woman, thick glasses, needle in her lapel, sharp gentle look, looking up at the camera, modest neckline. Face: a broad face with a low nose bridge and thick brows, slightly uneven eyebrows; no makeup, natural skin. She wears a muted teal headscarf worn loosely so a good part of her hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 44. `f_old_professor.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 69-year-old Iranian woman professor, large glasses, wool blazer, severe intelligent gaze, looking past the camera, modest neckline. Face: an oval face with a prominent nose and thin lips, a wide forehead; no makeup, natural skin. She wears a black chiffon headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 45. `f_old_neighbor.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 73-year-old Iranian woman neighbor, shawl, curious bright eyes, small suspicious frown, looking at the camera, modest neckline. Face: a long face with a strong nose and heavy-lidded eyes, a mole near the cheek; light natural makeup. She wears a black headscarf draped loosely worn loosely so a good part of her hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 46. `f_old_singer.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 67-year-old Iranian former singer, heavy earrings, faded glamour, proud wistful smile, modest neckline. Face: a short face with a small upturned nose and bright small eyes, freckled skin; no makeup, natural skin. She wears a dark navy headscarf worn loosely so a good part of her hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 47. `f_old_farmer.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 65-year-old Iranian village woman, sun-lined face, calloused hands, quiet stubborn look, eyes toward the camera, modest neckline. Face: a long narrow face with a high forehead and thin straight brows, fine lines at the eyes; no makeup, natural skin. She wears a deep burgundy headscarf worn loosely so a good part of her hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 48. `f_old_housekeeper.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 62-year-old Iranian housekeeper, apron, tired watchful eyes, lips pressed tight, looking up at the camera, modest neckline. Face: a round soft face with full cheeks and light brows, a small scar on the chin; no makeup, natural skin. She wears an olive-green headscarf worn loosely so a good part of her hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 49. `f_old_fortune.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 70-year-old Iranian woman, deep-set eyes, cup-reader's mysterious half smile, looking past the camera, modest neckline. Face: a square jaw with strong straight brows, visible laugh lines; light natural makeup. She wears a charcoal-grey headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 50. `f_old_judge_widow.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 64-year-old Iranian woman, black coat, brooch, grief held under control, looking at the camera, modest neckline. Face: a heart-shaped face with a small chin and wide-set eyes, dark under-eye circles; no makeup, natural skin. She wears a cream headscarf worn loosely so a good part of her hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 51. `f_mid_guest_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 34-year-old Iranian woman hotel guest, elegant coat, polite restless smile, eyes toward the camera, modest neckline. Face: an angular face with sharp cheekbones and deep-set eyes, prominent ears under the scarf; no makeup, natural skin. She wears a dark brown headscarf with a subtle pattern worn loosely so a good part of her hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 52. `f_mid_guest_c.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 52-year-old Iranian woman hotel guest, glasses on a chain, wool coat, impatient stare, looking up at the camera, modest neckline. Face: a broad face with a low nose bridge and thick brows, slightly uneven eyebrows; no makeup, natural skin. She wears a plum headscarf worn loosely so a good part of her hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 53. `f_mid_guest_d.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 29-year-old Iranian woman guest, trench coat, nervous eyes, looking past the camera, modest neckline. Face: an oval face with a prominent nose and thin lips, a wide forehead; light natural makeup. She wears a muted teal headscarf worn loosely so a good part of her hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 54. `f_mid_guest_e.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 45-year-old Iranian woman guest, pearl earrings, camel coat, controlled expression, looking at the camera, modest neckline. Face: a long face with a strong nose and heavy-lidded eyes, a mole near the cheek; no makeup, natural skin. She wears a black chiffon headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 55. `f_mid_business_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 40-year-old Iranian businesswoman, dark blazer, direct cold gaze, modest neckline. Face: a short face with a small upturned nose and bright small eyes, freckled skin; no makeup, natural skin. She wears a black headscarf draped loosely worn loosely so a good part of her hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 56. `f_mid_business_c.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 56-year-old Iranian businesswoman, bold glasses, tailored suit, amused superior smile, eyes toward the camera, modest neckline. Face: a long narrow face with a high forehead and thin straight brows, fine lines at the eyes; no makeup, natural skin. She wears a dark navy headscarf worn loosely so a good part of her hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 57. `f_mid_teacher_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 50-year-old Iranian woman teacher, cardigan, reading glasses, firm kind eyes, looking up at the camera, modest neckline. Face: a round soft face with full cheeks and light brows, a small scar on the chin; light natural makeup. She wears a deep burgundy headscarf worn loosely so a good part of her hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 58. `f_mid_officer_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 41-year-old Iranian woman officer, crisp uniform, calm authority, looking past the camera, modest neckline. Face: a square jaw with strong straight brows, visible laugh lines; no makeup, natural skin. She wears an olive-green headscarf worn loosely so a good part of her hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 59. `f_mid_lawyer_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 47-year-old Iranian woman lawyer, dark suit, sharp assessing eyes, looking at the camera, modest neckline. Face: a heart-shaped face with a small chin and wide-set eyes, dark under-eye circles; no makeup, natural skin. She wears a charcoal-grey headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 60. `f_mid_manager_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 43-year-old Iranian woman manager, blouse and blazer, tired professional smile, modest neckline. Face: an angular face with sharp cheekbones and deep-set eyes, prominent ears under the scarf; no makeup, natural skin. She wears a cream headscarf worn loosely so a good part of her hair shows at the front and sides; facing the camera straight on. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 61. `f_young_student_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 21-year-old Iranian woman student, backpack strap, ink on her fingers, hopeful anxious look, eyes toward the camera, modest neckline. Face: a broad face with a low nose bridge and thick brows, slightly uneven eyebrows; light natural makeup. She wears a dark brown headscarf with a subtle pattern worn loosely so a good part of her hair shows at the front and sides; head turned slightly right, eyes toward the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 62. `f_young_artist_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 25-year-old Iranian woman artist, paint-stained shirt, bold curious stare, looking up at the camera, modest neckline. Face: an oval face with a prominent nose and thin lips, a wide forehead; no makeup, natural skin. She wears a plum headscarf worn loosely so a good part of her hair shows at the front and sides; chin slightly lowered, looking up at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 63. `f_old_grandma_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the left, deep navy shadows, subtle film grain. Head and shoulders of a 76-year-old Iranian grandmother, deeply lined kind face, shrewd twinkling eyes, looking past the camera, modest neckline. Face: a long face with a strong nose and heavy-lidded eyes, a mole near the cheek; no makeup, natural skin. She wears a muted teal headscarf worn loosely so a good part of her hair shows at the front and sides; head tilted a little, looking past the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
-```
-### 64. `f_old_rich_b.png`
-```
-Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 70-year-old Iranian woman, emerald brooch, dark silk dress, imperious calm, looking at the camera, modest neckline. Face: a short face with a small upturned nose and bright small eyes, freckled skin; no makeup, natural skin. She wears a black chiffon headscarf worn loosely so a good part of her hair shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
+Square 1024x1024 portrait. Moody noir painterly illustration, cinematic warm amber light from the right, deep navy shadows, subtle film grain. Head and shoulders of a 70-year-old Iranian woman, emerald brooch, dark silk dress, imperious calm, modest neckline. Face: a lean imperious face with a sharp chin, a tall forehead, thin plucked brows raised in disdain, a long thin nose, pale powdered skin with fine wrinkles, ruby-red lipstick; refined makeup. She wears a black chiffon headscarf worn loosely so a good part of her immaculate platinum-white hair set in waves shows at the front and sides; head turned three-quarters to the left, looking at the camera. Must look like a clearly different person from every earlier image in this chat. Plain dark navy background. No text, no logos.
 ```
