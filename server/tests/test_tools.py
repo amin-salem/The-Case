@@ -253,6 +253,8 @@ async def test_nothing_new_is_not_consumed(client, today):
 async def test_tools_never_change_stars_and_never_count_as_investigation(client, today, monkeypatch):
     monkeypatch.setattr(eco, "MIN_ACTIVE_SECONDS", 90)
     monkeypatch.setattr(eco, "MIN_SUSPECTS_SEEN", 2)
+    from app.config import get_settings
+    monkeypatch.setattr(get_settings(), "active_time_scale", 1.0)
     p = await start(client, today, "ranked")
     h = p["headers"]
     for kind, body in (("magnifier", {}), ("fingerprint", {"suspect": "s1"}), ("camera", {"suspect": "s1"})):

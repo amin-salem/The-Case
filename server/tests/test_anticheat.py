@@ -34,6 +34,9 @@ def strict_rules(monkeypatch):
     """The real proof-of-investigation numbers (the other tests switch them off)."""
     monkeypatch.setattr(eco, "MIN_ACTIVE_SECONDS", 90)
     monkeypatch.setattr(eco, "MIN_SUSPECTS_SEEN", 2)
+    st = get_settings()   # the live defaults are relaxed since 25 Oct 2026; these tests are about the strict values
+    monkeypatch.setattr(st, "active_time_scale", 1.0)
+    monkeypatch.setattr(st, "depth_min_questions", 2)
 
 
 def night(case_id: str, hours: int = 1) -> datetime:

@@ -113,6 +113,12 @@ header h1{flex:1}
 .fbar.ok i{background:var(--ok)}.fbar.bad i{background:var(--bad)}
 .spark{display:inline-flex;gap:1px;align-items:flex-end;height:22px;direction:ltr}.spark i{display:block;width:5px;background:var(--brass);opacity:.8;min-height:1px}
 td.na{color:var(--soft)}td.num,th.num{white-space:nowrap}
+/* anti-cheat watcher card */
+.ac{background:linear-gradient(180deg,#232427,#1d1e21);border:1px solid var(--line);border-right:6px solid var(--c,var(--soft));border-radius:14px;padding:12px 14px;margin:0 0 14px}
+.ac.green{--c:var(--ok)}.ac.amber{--c:var(--brass)}.ac.red{--c:var(--bad)}
+.ac h3{margin:0 0 4px;font-size:15px;color:var(--c,var(--text))}.ac p{margin:4px 0}
+.ac details{margin-top:6px}.ac summary{cursor:pointer;color:var(--soft)}
+.ac .box{background:var(--bg3);border-radius:10px;padding:8px 10px;margin-top:8px}
 </style>
 </head>
 <body>
@@ -232,16 +238,62 @@ function healthHtml(h, lb) {
   ${liaraHtml(lb)}
   <div class="hcard"><h3>GitHub watch</h3><p class="muted">نتیجه‌ی این‌ها برای سرور در دسترس نیست؛ در GitHub → Actions ببین:</p><table>${(h.watch || []).map(w => `<tr><td class="ltr">${esc(w.name)}</td><td>${esc(w.schedule)}</td></tr>`).join('')}</table></div></div>`;
 }
+function acHtml(w) {
+  const t = w.total_solves, st = w.strict, r = st.by_reason, lr = w.live_rules;
+  const head = t ? `آنتی‌چیت: ${num(st.pct)} درصد حل‌ها با قانون سخت ۱ ستاره می‌شدند` : 'آنتی‌چیت: در این بازه هنوز پرونده‌ی حل‌شده‌ای نیست';
+  const diff = Object.entries(st.by_difficulty).map(([d, x]) => `<tr><td>${num(+d)}</td><td class="num">${num(x.solves)}</td><td class="num">${num(x.affected)}</td><td class="num">${num(x.time)}</td><td class="num">${num(x.suspects)}</td><td class="num">${num(x.depth)}</td><td class="num">${w.median_active_seconds[d] == null ? '—' : num(w.median_active_seconds[d]) + ' ث'}</td></tr>`).join('');
+  const days = w.per_day.map(x => `<tr><td>${esc(dayName(x.day))}</td><td class="num">${num(x.solves)}</td><td class="num">${num(x.affected)}</td><td class="num">${num(x.pct)}٪</td></tr>`).join('');
+  return `<div class="ac ${esc(w.level)}" id="accard"><h3>${esc(head)}</h3>
+  ${t ? `<p>از ${num(t)} حل در ${num(w.days)} روز اخیر: ${num(st.affected)} تا با قانون سخت آسیب می‌دیدند (زمان ${num(r.time)} · مظنون ${num(r.suspects)} · عمق ${num(r.depth)}). قانون فعلی ${num(st.kept_full_stars_by_relaxed)} تا از آن‌ها را با ستاره‌ی کامل نگه می‌دارد؛ ${num(st.still_hurt_by_relaxed)} تا هنوز ۱ ستاره می‌مانند.</p>` : ''}
+  <p class="muted">قانون فعلی: زمان ×${num(lr.active_time_scale)} · مظنون ${num(lr.min_suspects_seen)} · سؤال ${num(lr.depth_min_questions)}. برای سخت‌گیری دوباره در لیارا بگذار: <span class="ltr">ACTIVE_TIME_SCALE=1 · MIN_SUSPECTS_SEEN=2 · DEPTH_MIN_QUESTIONS=2</span></p>
+  <details><summary>جزئیات (سختی، روند روزانه، میانه‌ی زمان فعال)</summary>
+    <div class="scroll"><table><tr><th>سختی</th><th>حل</th><th>آسیب با قانون سخت</th><th>زمان</th><th>مظنون</th><th>عمق</th><th>میانه‌ی زمان فعال</th></tr>${diff}</table></div>
+    <div class="scroll"><table><tr><th>روز</th><th>حل</th><th>آسیب‌دیده</th><th>درصد</th></tr>${days}</table></div>${w.truncated ? '<p class="muted">فقط جدیدترین ردیف‌ها خوانده شد.</p>' : ''}</details>
+  <div class="row"><button id="acrestore">⭐ برگرداندن ستاره‌ها</button><span class="muted">اول فقط شمارش نشان می‌دهد؛ چیزی تا تأیید دوم عوض نمی‌شود.</span></div><div id="acbox"></div></div>`;
+}
+async function acRestoreRun(dry) {
+  let after = 0, sum = {candidates: 0, stars: 0, ranked: 0, restored: 0, given: 0, by: {}};
+  for (let i = 0; i < 400; i++) {   // 400 batches of 300 rows at most
+    const r = await api('/admin/anticheat-restore', {method: 'POST', body: JSON.stringify({dry_run: dry, after, limit: 300})});
+    sum.candidates += r.candidates; sum.stars += r.stars_to_give; sum.ranked += r.ranked_to_restore;
+    sum.restored += r.restored || 0; sum.given += r.stars_given || 0;
+    for (const [d, x] of Object.entries(r.by_difficulty)) { const b = sum.by[d] || (sum.by[d] = {solves: 0, stars: 0}); b.solves += x.solves; b.stars += x.stars; }
+    after = r.next_after;
+    if (r.done) return sum;
+  }
+  throw new Error('خیلی طول کشید؛ دوباره بزن (کار انجام‌شده سر جایش می‌ماند)');
+}
+function acWire() {
+  const btn = $('#acrestore'); if (!btn) return;
+  btn.onclick = async () => {
+    const box = $('#acbox'); btn.disabled = true; box.innerHTML = '<p class="muted">در حال شمارش…</p>';
+    try {
+      const s = await acRestoreRun(true);
+      if (!s.candidates) { box.innerHTML = '<div class="box">چیزی برای برگرداندن نیست (یا قبلاً برگردانده شده).</div>'; btn.disabled = false; return; }
+      const by = Object.entries(s.by).map(([d, x]) => `سختی ${num(+d)}: ${num(x.solves)} حل / ${num(x.stars)} ستاره`).join(' · ');
+      box.innerHTML = `<div class="box"><p><b>${num(s.candidates)}</b> حل‌شده‌ی درست ستاره‌ی کم گرفته‌اند؛ جمعاً <b>${num(s.stars)}</b> ستاره برمی‌گردد و ${num(s.ranked)} تا دوباره در جدول می‌آیند.</p><p class="muted">${esc(by)}<br>سکه، XP و نشان‌ها دست نمی‌خورند. بازیکن‌های بن‌شده و پرونده‌های آخر هفته/داستان هم نه.</p><div class="row"><button id="acgo" class="danger">بله، ستاره‌ها را برگردان</button><button id="accancel">فعلاً نه</button></div></div>`;
+      $('#accancel').onclick = () => { box.innerHTML = ''; btn.disabled = false; };
+      $('#acgo').onclick = async () => {
+        $('#acgo').disabled = true; box.insertAdjacentHTML('beforeend', '<p class="muted" id="acwork">در حال برگرداندن…</p>');
+        try { const d = await acRestoreRun(false); box.innerHTML = `<div class="box"><p>انجام شد: ${num(d.restored)} حل، ${num(d.given)} ستاره برگشت. اجرای دوباره چیزی نمی‌دهد.</p></div>`; }
+        catch (e) { box.innerHTML = '<p class="err">' + esc(e.message) + '</p>'; }
+        btn.disabled = false;
+      };
+    } catch (e) { box.innerHTML = '<p class="err">' + esc(e.message) + '</p>'; btn.disabled = false; }
+  };
+}
 const VIEWS = {
   async overview(m) {
     const d = await api('/admin/api/overview?days=14'), t = d.totals;
     const pend = await api('/admin/api/comments/cases').then(x => x.pending).catch(() => 0);
-    m.innerHTML = `<div class="quick"><button class="${pend ? 'hot' : ''}" id="qc">💬 نظرهای در انتظار (${num(pend)})</button><button id="qm">✉ پیام / هدیه به همه</button><button id="qp">👥 بازیکن‌ها (بن، سکه)</button></div><div class="cards">${card(t.players,'کل بازیکن‌ها','👥','#e0a526')}${card(t.active_24h,'فعال ۲۴ ساعت','⚡','#5dae7e')}${card(t.active_7d,'فعال ۷ روز','📅','#8ab4f8')}${card(t.secured,'حساب امن‌شده (ایمیل)','🔒','#b48ead')}${card(t.cases_solved,'پرونده‌ی حل‌شده','✅','#5dae7e')}${card(t.coins_in_circulation,'سکه‌ی در گردش','🪙','#e0a526')}${card(t.banned,'بن‌شده','⛔','#d0543f')}</div>` +
+    const acw = await api('/admin/anticheat-watch?days=7').then(acHtml).catch(() => '<div class="ac"><h3>آنتی‌چیت: الان خوانده نشد</h3><p class="muted">چند لحظه بعد دوباره بزن.</p></div>');
+    m.innerHTML = acw + `<div class="quick"><button class="${pend ? 'hot' : ''}" id="qc">💬 نظرهای در انتظار (${num(pend)})</button><button id="qm">✉ پیام / هدیه به همه</button><button id="qp">👥 بازیکن‌ها (بن، سکه)</button></div><div class="cards">${card(t.players,'کل بازیکن‌ها','👥','#e0a526')}${card(t.active_24h,'فعال ۲۴ ساعت','⚡','#5dae7e')}${card(t.active_7d,'فعال ۷ روز','📅','#8ab4f8')}${card(t.secured,'حساب امن‌شده (ایمیل)','🔒','#b48ead')}${card(t.cases_solved,'پرونده‌ی حل‌شده','✅','#5dae7e')}${card(t.coins_in_circulation,'سکه‌ی در گردش','🪙','#e0a526')}${card(t.banned,'بن‌شده','⛔','#d0543f')}</div>` +
       chart('بازیکن‌های فعال در روز', d.days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', d.days, 'new', '#e0a526') +
       chart('پرونده‌ی باز شده', d.days, 'opened', '#8ab4f8') + chart('حل‌شده', d.days, 'solved', '#5dae7e') + chart('شکست', d.days, 'failed', '#d0543f') +
       chart('خرید موفق', d.days, 'purchases', '#e0a526') + chart('سکه‌ی دریافتی', d.days, 'coins_in', '#5dae7e') + chart('سکه‌ی خرج‌شده', d.days, 'coins_out', '#d0543f') +
       '<h2>نسخه‌ی برنامه‌ی بازیکن‌ها</h2><div class="scroll"><table><tr><th>نسخه</th><th>بیلد</th><th>تعداد بازیکن</th></tr>' + (d.versions || []).map(v => `<tr><td class="ltr">${esc(v.version)}</td><td>${num(v.build)}</td><td>${num(v.players)}</td></tr>`).join('') + '</table></div><p class="muted">«؟» یعنی هنوز نسخه‌اش را گزارش نکرده (نسخه‌ی قدیمی برنامه).</p>';
 
+    acWire();
     $('#qc').onclick = () => go('comments'); $('#qm').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها'); $('#qp').onclick = () => go('players');
   },
   async feed(m) {

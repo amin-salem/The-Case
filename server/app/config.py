@@ -55,10 +55,16 @@ class Settings(BaseSettings):
 
     detective_tools_enabled: bool = True  # DETECTIVE_TOOLS_ENABLED=false hides and refuses the detective tools (kill switch)
 
+    # Proof of investigation, relaxed 25 Oct 2026 (Amin). Strict (the old rules) = ACTIVE_TIME_SCALE=1, MIN_SUSPECTS_SEEN=2,
+    # DEPTH_MIN_QUESTIONS=2. The admin watcher (GET /admin/anticheat-watch) always measures the strict rules.
+    active_time_scale: float = 0.3    # ACTIVE_TIME_SCALE: multiplies the active time needed (90 s x difficulty factor); 0.3 = about 18/22/27/33/39 s
+    min_suspects_seen: int = 1        # MIN_SUSPECTS_SEEN: suspects that must be interrogated for 3 stars and a board place
+    anticheat_restore_enabled: bool = True  # ANTICHEAT_RESTORE_ENABLED=false refuses POST /admin/anticheat-restore (kill switch)
+
     # Investigation depth (docs/operations.md «Leaked answers»): a solve is ranked only with enough real investigation.
     depth_gate_enabled: bool = True   # DEPTH_GATE_ENABLED=false turns the whole gate off (kill switch)
     depth_min_cards: int = 0          # distinct evidence cards TAPPED (capped by the cards the case has). 0 = only recorded: the app counts taps/pins, and a card can be read without a tap, so raise this only after looking at the real numbers
-    depth_min_questions: int = 2      # distinct interrogation questions asked
+    depth_min_questions: int = 1      # (relaxed from 2 on 25 Oct 2026; strict = 2) distinct interrogation questions asked
     depth_need_proof: bool = False    # DEPTH_NEED_PROOF=true: at least one card of solution.proof must have been opened
     depth_require_report: bool = False  # true: an app that never reports depth (an old app) is gated too
 

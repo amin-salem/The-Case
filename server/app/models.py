@@ -141,6 +141,9 @@ class CaseProgress(Base):
     shows: Mapped[list | None] = mapped_column(JSON, nullable=True)
     # weekend format 3, night 1: the one try at «کی دروغ می‌گه؟»: {"pick": suspect id, "ok": bool, "reward": coins}
     night1: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    # 25 Oct 2026: stars given back once to an honest solve that the old strict anti-cheat had capped to 1 star
+    # (POST /admin/anticheat-restore). Set in the same UPDATE ... WHERE stars_restored = false, so it can only happen once.
+    stars_restored: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
 
 
 class Purchase(Base):
