@@ -169,3 +169,14 @@ Rewrote camera/print for all suspects of c051 (5) and c052 (6) from the true tim
 
 ### 2026-10-25 unique culprit faces (Claude Sonnet)
 Assignment by minimum cost (gender fixed; age distance, job keywords, small bonus for keeping the old face; each face may be used up to 3 times at growing cost) over 58 culprits. Result: 47 distinct faces; 11 male faces used twice (not enough male faces: 38 male culprits, 26 male portraits). w005's culprit uses a code-drawn face (no shipped file) and stays. After c043-c050 are rewritten, assign their culprit faces again with the same rule (and prefer new male faces when they arrive).
+
+### 2026-10-25 c043–c046 rewrite saved for Claude review (Amin requested main)
+
+| case | publish | type | culprit | independent public-only model reading |
+|---|---|---|---|---|
+| c043 | 2026-11-10 | 1 guilty knowledge | s4 | fair; 4/5; stale locations + closed transfer window |
+| c044 | 2026-11-11 | 6 staged scene | s1 | fair; 3/5; sculpture/wrapper/label chain; owner asked to save without more polishing |
+| c045 | 2026-11-12 | 10 motive inversion | s5 | fair; 3.5–4/5; fragment and packet-maker attribution |
+| c046 | 2026-11-13 | 2 hidden relationship | s2 | fair; 3.5/5; private prior selection + packaging marks + partner identity |
+
+All 40 camera/print lines rewritten under §10b; no paid fact is necessary, no standalone tool oracle. Full truth/tool audit: docs/reviews/c043-c046-tools.md. Further independent Claude review pending.
