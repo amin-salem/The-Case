@@ -111,13 +111,14 @@ def test_strict_verdict_ignores_the_environment(live_rules, monkeypatch):
     assert ac.strict_verdict(1, 0, 0, 3, solved=False)["reason"] == ""  # not solved: nothing to judge
 
 
-async def test_a_quick_honest_solve_now_keeps_its_stars(client, live_rules):
-    c = case_with(3)
+async def test_a_quick_honest_solve_now_keeps_its_stars(client, live_rules, monkeypatch):
+    c = content.by_id("c047")
+    monkeypatch.setattr(content, "now_local", lambda: content.opens_at(c) + timedelta(hours=1))
     p = await new_player(client, "relax-live")
     await client.get(f"/v1/cases/{c.id}", headers=p["headers"])
     async with db.SessionLocal() as s:
         await s.execute(update(CaseProgress).where(CaseProgress.player_id == p["player_id"])
-                        .values(active_seconds=eco.min_active_seconds(3), seen=[c.data["suspects"][0]["id"]]))
+                        .values(active_seconds=eco.min_active_seconds(c.data['difficulty']), seen=[c.data["suspects"][0]["id"]]))
         await s.commit()
     r = await client.post(f"/v1/cases/{c.id}/accuse", headers=p["headers"],
                           json={"suspect": c.culprit, "evidence": sorted(c.proof)[0],
@@ -184,7 +185,7 @@ async def test_restore_needs_admin_and_dry_run_changes_nothing(client, live_rule
 
 
 async def test_only_honest_rows_are_restored_and_everything_else_is_untouched(client, live_rules):
-    honest, cheat, banned, tester = (await new_player(client, f"rest-{n}") for n in ("h", "c", "b", "t"))
+    honest, cheat, banned, tester = [await new_player(client, f"rest-{n}") for n in ("h", "c", "b", "t")]
     c3, c2, c4 = case_with(3), case_with(2), case_with(4)
     await row(honest["player_id"], c3.id, hints=0)                                          # 40 s, 1 suspect -> 3 stars
     await row(honest["player_id"], c2.id, hints=2, active_seconds=30)                       # natural 2 -> +1, not 3
