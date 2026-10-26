@@ -11,7 +11,7 @@
 
 ## server 1.39.2 + app: faces now match the age of the character (Amin, 26 Oct 2026) [on branch]
 - A 59-year-old had a 30-year-old face. Every face now has an apparent age (`docs/portrait-ages.json`) and ALL 304 suspects were re-matched: young 20-33, mid 34-52, old 54+ (a stated age such as «۶۸ ساله» wins). Only 5 near misses are left and all are men (old men: 51 needed, 4 old faces). Test `test_portrait_age_matches_the_character`.
-- Image prompts for 44 new faces, 10 avatars and 8 frames: `docs/portrait-prompts.md`. Release workflow: the live check no longer fails on a missing `httpx`.
+- Image prompts for 44 new faces, 10 avatars and 8 frames: `docs/new-faces-avatars-frames-prompts.md`. Release workflow: the live check no longer fails on a missing `httpx`.
 
 ## server 1.39.2 + app: 12 more women faces, all women suspects re-spread (Amin, 26 Oct 2026) [on branch, not yet on main]
 - 12 more faces (pool now 80: women 54). All woman suspects (not only culprits) were re-spread over the pool, balanced by age, no face twice in one case: 69 suspects changed, 44 of 54 women faces are in use, none more than 3 times. Culprit faces are unchanged. Must ship together with the APK that carries the images.
