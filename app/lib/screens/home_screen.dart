@@ -3,10 +3,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../models/album.dart';
 import '../models/models.dart';
 import '../models/progress.dart';
 import '../services/api.dart';
 import '../services/billing.dart';
+import '../widgets/album_strip.dart';
 import '../widgets/category.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
@@ -21,6 +23,7 @@ import '../widgets/typewriter.dart';
 import '../widgets/whats_new_ui.dart';
 import '../data/whats_new.dart';
 import '../services/whats_new.dart';
+import 'album_screen.dart';
 import 'archive_screen.dart';
 import 'main_shell.dart';
 import 'shop_screen.dart';
@@ -35,6 +38,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   CasesList? _cases;
   MissionsDay? _missions;
+  Album? _album;
+  DateTime? _albumAt;
   String? _error;
   bool _loading = false;
   Timer? _tick;
@@ -155,6 +160,27 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       debugPrint('missions: $e');
     }
+    await _loadAlbum();
+  }
+
+  /// The album strip: at most one request a minute from here (the album screen itself always asks fresh); a failure hides it.
+  Future<void> _loadAlbum({bool force = false}) async {
+    final last = _albumAt;
+    if (!Api.i.online || (!force && last != null && DateTime.now().difference(last).inSeconds < 60)) return;
+    try {
+      final a = await Api.i.album();
+      _albumAt = DateTime.now();
+      if (!mounted) return;
+      setState(() => _album = a);
+      if (a.newRewards.isNotEmpty) toast(context, 'قاب تازه گرفتی: ${a.newRewards.join('، ')}');
+    } catch (e) {
+      debugPrint('album: $e');
+    }
+  }
+
+  Future<void> _openAlbum() async {
+    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AlbumScreen()));
+    if (mounted) unawaited(_loadAlbum(force: true));
   }
 
   void _openMissions() {
@@ -298,6 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _weekendRow(),
       ] else
         _quickCards(cs),
+      if (_album != null && _album!.total > 0) ...[const SizedBox(height: 10), AlbumStrip(album: _album!, onTap: _openAlbum)],
       if (_missions != null) ...[const SizedBox(height: 10), _missionsCompact(_missions!)],
       const SizedBox(height: 10),
       _streakRow(),

@@ -83,6 +83,30 @@ class Album {
   List<AlbumCard> inGroup(String key) => [for (final c in cards) if (c.group == key) c];
 }
 
+/// What the album says about progress, for the home strip and the card after a solve. Pure functions of the answer.
+extension AlbumProgress on Album {
+  /// The frame the next completed group would earn, if completing ONE more group reaches it (frames come at 1 and 4 groups).
+  AlbumReward? get frameWithinReach {
+    final left = [for (final r in rewards) if (!r.owned) r]..sort((a, b) => a.need.compareTo(b.need));
+    return left.isNotEmpty && groupsDone + 1 >= left.first.need ? left.first : null;
+  }
+
+  /// The unfinished group that is closest to done (needs at least one solved card, so it is a real next step).
+  AlbumGroup? get nextGroup {
+    final open = [for (final g in groups) if (!g.complete && g.total >= 2 && g.solved > 0) g]
+      ..sort((a, b) {
+        final m = (a.total - a.solved).compareTo(b.total - b.solved);
+        return m != 0 ? m : b.solved.compareTo(a.solved);
+      });
+    return open.firstOrNull;
+  }
+
+  AlbumGroup? groupOfCase(String caseId) {
+    final card = cards.where((c) => c.id == caseId).firstOrNull;
+    return card == null ? null : groups.where((g) => g.key == card.group).firstOrNull;
+  }
+}
+
 /// «به نظر تو کیه؟»: the player's first guess ('' / null = none, '?' = «نمی‌دونم») and, once the answer is theirs to see,
 /// the crowd's percentages.
 class FirstGuess {
