@@ -199,9 +199,9 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
         if (l != null) ...[
           const SizedBox(height: 12),
           Row(children: [
-            _stat('${fa(l.earned)}', 'دستاورد گرفته‌ای'),
+            _stat(fa(l.earned), 'دستاورد گرفته‌ای'),
             const SizedBox(width: 8),
-            _stat('${fa(l.total - l.earned)}', 'تا همه‌اش'),
+            _stat(fa(l.total - l.earned), 'تا همه‌اش'),
             const SizedBox(width: 8),
             _stat(nearest.isEmpty ? '—' : fa(nearest.first), 'تا دستاورد بعدی'),
           ]),
