@@ -9,6 +9,10 @@
 
 # Changelog
 
+## server 1.39.1 + app: 20 new women portraits (Amin, 26 Oct 2026)
+- 20 new women faces (11 old, 9 middle-aged) added to `app/assets/portraits` (512 px WebP, 645 KB) and to `kPortraits`; the pool is now 68 faces (women: 7 young, 21 mid, 14 old). Needs a new APK (the images ship inside it).
+- Culprit faces re-spread over the bigger pool: 9 cases changed their culprit portrait (c008, c033, c034, c037, c039, c044, c052, w001, w003). Every woman culprit now has her own face; only the 9 male faces still repeat (need new male portraits).
+
 ## server 1.39.0: anti-cheat relaxed, admin watcher, lost stars given back (Amin, 25 Oct 2026; priority Important)
 - **Why:** honest players solved cases correctly but got 1 star and no board place (active time and suspects rules too strict). **Relaxed, env-tunable:** `ACTIVE_TIME_SCALE=0.3` (needed active time about 18/22/27/33/39 s for difficulty 1-5, was 60/75/90/110/130), `MIN_SUSPECTS_SEEN=1` (was 2), `DEPTH_MIN_QUESTIONS=1` (was 2). **Strict values stay reachable by env only:** `ACTIVE_TIME_SCALE=1`, `MIN_SUSPECTS_SEEN=2`, `DEPTH_MIN_QUESTIONS=2`. Everything else (new-account hiding, device/cluster reports, kill switches, delayed answers) is unchanged.
 - **Watcher:** `anticheat.strict_verdict` is a pure function with the OLD constants (independent of the env). `GET /admin/anticheat-watch?days=7` (admin only, read-only, 60 s cache, at most 20 000 rows, no player ids) reports the share of solves the strict rules would have made 1-star/unranked (reasons time/suspects/depth, per difficulty, per day, median active seconds, how many the live rules keep). Shown as a green (<5 %) / amber (5-15 %) / red (>15 %) card on the admin panel home, with the Liara values to tighten again. The admin app is a web view of this panel, so there is no new admin APK.
@@ -18,10 +22,6 @@
 ## server 1.38.7: c029 and c030 re-reviewed (Amin, 25 Oct 2026)
 - c029: the 14:15 shelf sighting made the stamp-counter trick unnecessary (folder custody alone named Babak); removed, so the naive reading points at Fazeli (10:08 stamp, folder at 09:55). Shakouri's watch is its own card (e10, proof). Leftover «قانون خیالی» sentence, a real actor's name (cashier), the "unchained stamp" and Maryam's unexplained 11:00 folder entry fixed; cards simplified; new tool lines (§10b).
 - c030: intro's unexplained «تور پاره» removed; Elham's hem check is its own card (e11, proof); jeweller renamed (Farzan vs Faraji); Omid's unseen «دفتر اجرا», the two invoices and the box's visibility clarified; Elham's whereabouts stated; new tool lines (§10b). Explanations rewritten in plain Persian. Content only.
-
-## server 1.38.7 + app: 20 new women portraits (Amin, 26 Oct 2026)
-- 20 new women faces (11 old, 9 middle-aged) added to `app/assets/portraits` (512 px WebP, 645 KB) and to `kPortraits`; the pool is now 68 faces (women: 7 young, 21 mid, 14 old). Needs a new APK (the images ship inside it).
-- Culprit faces re-spread over the bigger pool: 9 cases changed their culprit portrait (c008, c033, c034, c037, c039, c044, c052, w001, w003). Every woman culprit now has her own face; only the 9 male faces still repeat (need new male portraits).
 
 ## server 1.38.6 (no app change): card ids really gone from the solution text (Amin, 25 Oct 2026)
 - 1.37.2 cleaned the accuse result, but the case-detail route (opening a solved case again, or a lost case once its answer is public) still sent the raw `solution.explanation` with «e4، e5». That route now uses `content.readable` too (c026 and every other case). Test added in `test_explanation_readable.py`.
