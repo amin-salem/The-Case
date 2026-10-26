@@ -114,3 +114,7 @@ and "back" arrows point right. In Flutter use the ambient `Directionality` (neve
 ## Check the code before you build (Amin, 25 Oct 2026)
 Before building anything he asks for, look at the code, CHANGELOG and git log: it may already be done (for example as
 an urgent earlier request).
+
+## Store texts (Amin, 26 Oct 2026)
+Cafe Bazaar release notes and store descriptions are written in a professional, general voice, like any studio's. Never mention
+AI, Claude, prompts or "generated"; no technical details (builds, servers, anti-cheat, file sizes); no promises that are not in the app.

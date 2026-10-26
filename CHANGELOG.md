@@ -9,9 +9,11 @@
 
 # Changelog
 
-## app build 75 (1.40.1): bottom bar, shorter news list (Amin, 26 Oct 2026; app only, no server change)
-- Samsung (Android 15 edge to edge): the bottom of every screen slid under the phone's navigation bar. The app now takes the largest bottom inset the phone reports (padding, view padding, gesture insets) when the keyboard is closed (`_KeepAboveSystemBar` in `main.dart`).
-- «چه خبر؟» in Settings lists the last 2 releases (was 5).
+## server 1.40.1 + app build 76 (1.40.2): bottom bar, about card, public texts (Amin, 26 Oct 2026)
+- **Bottom of the screen under the phone's bar (Samsung, three-button navigation, Android 15 edge to edge):** the Dart-side attempt of build 75 did not help, so it is removed. The fix is native: `app/tools/android/EdgeInsetsFix.java` (copied by `patch_android.py`, called from `SecureFlutterActivity.onCreate`). Only when the phone uses three-button navigation (`navigation_mode == 0`, Android 11+) it keeps the bar's height as padding under the app and removes it from the insets Flutter sees (nothing counted twice). Gesture-navigation phones and older Android are not touched. Covered by the javac contract test in `tools/tests/test_capture_policy.py`.
+- «درباره‌ی برنامه»: every value is on the same edge (Persian and Latin values were on opposite sides).
+- «چه خبر؟» lists the last 2 releases.
+- Public pages (`/terms`, `/privacy`, `/support`) rewritten in a more formal voice; the terms now say what coins/warrants/avatars buy, the suitable age, availability and that content may change; the daily lottery no longer says «نفر». Facts re-checked against the code (SMS code, hashed phone, 48 h hidden accounts, 400-character comments, local reminders).
 
 ## server 1.40.0 + app build 74: the final Cafe Bazaar version (Amin, 26 Oct 2026)
 - **Images:** 44 new faces (pool 124: 68 women, 56 men), 10 new avatars (shop, 600-2400 coins), 8 new picture frames (shop, 400-1800 coins; `assets/frames`, hole position in `kImageFrames`). All faces re-matched to the age and job of the suspect (6 near misses, all middle-aged men). **Size:** every image re-encoded (faces 448 px q72, avatars 384 px q74, scenes q70, logo WebP): assets 8.6 MB -> 8.4 MB although 62 images were added (the 124 faces alone: 1.5 MB).

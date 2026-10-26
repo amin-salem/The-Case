@@ -47,7 +47,7 @@ class CapturePolicyTests(unittest.TestCase):
         self.assertIn('com.farsitel.bazaar', patch.MANIFEST.read_text())
         self.assertIn('android.permission.INTERNET', patch.MANIFEST.read_text())
         self.assertEqual({p.name for p in self.java.glob('*.java')},
-            {'SecureGameWindows.java', 'SecureGameApplication.java', 'SecureFlutterActivity.java'})
+            {'SecureGameWindows.java', 'SecureGameApplication.java', 'SecureFlutterActivity.java', 'EdgeInsetsFix.java'})
         self.assertIn('patch_screen_capture()', (TOOLS / 'patch_android.py').read_text())
         for p in self.java.glob('*.java'):
             self.assertNotIn('BuildConfig.DEBUG', p.read_text())
@@ -103,12 +103,38 @@ dependencies { }
             'android/os/Bundle.java': 'package android.os; public class Bundle {}',
             'android/os/Build.java': 'package android.os; public class Build { public static class VERSION { public static int SDK_INT = 26; } }',
             'android/view/WindowManager.java': 'package android.view; public interface WindowManager { class LayoutParams { public static final int FLAG_SECURE = 8192; } }',
-            'android/view/Window.java': 'package android.view; public class Window { public int flags = 1; public void addFlags(int value) { flags |= value; } public void clearSecure() { flags &= ~8192; } }',
+            'android/view/View.java': '''package android.view;
+public class View {
+  public interface OnApplyWindowInsetsListener { WindowInsets onApplyWindowInsets(View v, WindowInsets insets); }
+  public int bottomPadding = -1; public int background = 0; public OnApplyWindowInsetsListener listener;
+  public View findViewById(int id) { return this; }
+  public void setBackgroundColor(int c) { background = c; }
+  public void setPadding(int l, int t, int r, int b) { bottomPadding = b; }
+  public void setOnApplyWindowInsetsListener(OnApplyWindowInsetsListener l) { listener = l; }
+  public void requestApplyInsets() { if (listener != null) listener.onApplyWindowInsets(this, new WindowInsets(48)); }
+}''',
+            'android/graphics/Insets.java': 'package android.graphics; public class Insets { public static final Insets NONE = new Insets(0); public final int bottom; public Insets(int b) { bottom = b; } }',
+            'android/view/WindowInsets.java': '''package android.view;
+import android.graphics.Insets;
+public class WindowInsets {
+  public final int nav; public WindowInsets(int nav) { this.nav = nav; }
+  public static final class Type { public static int navigationBars() { return 2; } }
+  public Insets getInsets(int types) { return new Insets(nav); }
+  public static final class Builder {
+    int nav; public Builder(WindowInsets i) { nav = i.nav; }
+    public Builder setInsets(int types, Insets v) { nav = v.bottom; return this; }
+    public WindowInsets build() { return new WindowInsets(nav); }
+  }
+}''',
+            'android/content/ContentResolver.java': 'package android.content; public class ContentResolver {}',
+            'android/provider/Settings.java': 'package android.provider; import android.content.ContentResolver; public class Settings { public static class Secure { public static int getInt(ContentResolver r, String name, int d) { return 0; } } }',
+            'android/view/Window.java': 'package android.view; public class Window { public int flags = 1; private final View decor = new View(); public View getDecorView() { return decor; } public void addFlags(int value) { flags |= value; } public void clearSecure() { flags &= ~8192; } }',
             'android/app/Activity.java': '''package android.app;
 import android.os.Bundle; import android.view.Window;
 public class Activity {
   private final Window window = new Window(); public boolean recents = true;
   public Window getWindow() { return window; }
+  public android.content.ContentResolver getContentResolver() { return new android.content.ContentResolver(); }
   public void setRecentsScreenshotEnabled(boolean value) { recents = value; }
   public void onCreate(Bundle state) {} public void onResume() {} public void onWindowFocusChanged(boolean focus) {}
 }''',
@@ -144,6 +170,11 @@ public class CaptureContract {
       Build.VERSION.SDK_INT = sdk;
       SecureFlutterActivity host = new SecureFlutterActivity();
       host.onCreate(null); protectedWindow(host);
+      if (sdk >= 30) {  // the three-button bar height (48) is kept as padding and not passed on to Flutter
+        android.view.View content = host.getWindow().getDecorView();
+        if (content.bottomPadding != 48) throw new AssertionError("bar height not kept: " + content.bottomPadding);
+        if (content.background != 0xFF17181A) throw new AssertionError("background not set");
+      } else if (host.getWindow().getDecorView().bottomPadding != -1) throw new AssertionError("old Android was touched");
       host.getWindow().clearSecure(); host.onResume(); protectedWindow(host);
       host.onWindowFocusChanged(false); protectedWindow(host);
       host.onWindowFocusChanged(true); protectedWindow(host);

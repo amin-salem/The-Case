@@ -107,8 +107,9 @@ def patch_screen_capture() -> None:
                      tag.group().replace("<application", f'<application android:name="{secure_name}"', 1))
     templates = Path(__file__).resolve().parent / "android"
     generated = {p.name: p.read_text(encoding="utf-8").replace("__PACKAGE__", namespace)
-                 for p in templates.glob("Secure*.java")}
-    if set(generated) != {"SecureGameWindows.java", "SecureGameApplication.java", "SecureFlutterActivity.java"}:
+                 for p in [*templates.glob("Secure*.java"), templates / "EdgeInsetsFix.java"]}
+    if set(generated) != {"SecureGameWindows.java", "SecureGameApplication.java", "SecureFlutterActivity.java",
+                          "EdgeInsetsFix.java"}:
         raise RuntimeError("Secure-window source templates missing")
     destination = main / "java" / Path(*namespace.split("."))
     destination.mkdir(parents=True, exist_ok=True)

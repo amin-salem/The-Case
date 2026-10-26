@@ -21,8 +21,8 @@ void main() {
   });
 
   test('list: newest first, titles for this release, no «نفر»', () {
-    expect(kWhatsNew.first.id, 75);
-    expect(kWhatsNew.first.items.length, 1);
+    expect(kWhatsNew.first.id, 76);
+    expect(kWhatsNew.first.items.length, 2);
     for (final r in kWhatsNew) {
       for (final it in r.items) {
         expect(it.title.contains('نفر'), isFalse);

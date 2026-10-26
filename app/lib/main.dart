@@ -92,30 +92,10 @@ class _TheCaseAppState extends State<TheCaseApp> with WidgetsBindingObserver {
         title: 'پرونده',
         debugShowCheckedModeBanner: false,
         theme: buildTheme(),
-        builder: (context, child) => Directionality(
-            textDirection: TextDirection.rtl, child: _KeepAboveSystemBar(child: FontScope(child: child!))),
+        builder: (context, child) =>
+            Directionality(textDirection: TextDirection.rtl, child: FontScope(child: child!)),
         home: const StartScreen(),
       ),
-    );
-  }
-}
-
-/// Some Samsung phones (Android 15 draws apps edge to edge) report no bottom padding for their 3-button bar or gesture
-/// line, so the bottom of every screen slid under it. The bottom inset is the largest of what the phone reports (padding,
-/// view padding, gesture insets). With the keyboard open nothing is added.
-class _KeepAboveSystemBar extends StatelessWidget {
-  const _KeepAboveSystemBar({required this.child});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    if (mq.viewInsets.bottom > 0) return child;
-    final b = [mq.padding.bottom, mq.viewPadding.bottom, mq.systemGestureInsets.bottom].reduce((a, c) => a > c ? a : c);
-    if (b <= mq.padding.bottom) return child;
-    return MediaQuery(
-      data: mq.copyWith(padding: mq.padding.copyWith(bottom: b), viewPadding: mq.viewPadding.copyWith(bottom: b)),
-      child: child,
     );
   }
 }
