@@ -9,6 +9,9 @@
 
 # Changelog
 
+## server 1.39.2 + app: 12 more women faces, all women suspects re-spread (Amin, 26 Oct 2026) [on branch, not yet on main]
+- 12 more faces (pool now 80: women 54). All woman suspects (not only culprits) were re-spread over the pool, balanced by age, no face twice in one case: 69 suspects changed, 44 of 54 women faces are in use, none more than 3 times. Culprit faces are unchanged. Must ship together with the APK that carries the images.
+
 ## server 1.39.1 + app: 20 new women portraits (Amin, 26 Oct 2026)
 - 20 new women faces (11 old, 9 middle-aged) added to `app/assets/portraits` (512 px WebP, 645 KB) and to `kPortraits`; the pool is now 68 faces (women: 7 young, 21 mid, 14 old). Needs a new APK (the images ship inside it).
 - Culprit faces re-spread over the bigger pool: 9 cases changed their culprit portrait (c008, c033, c034, c037, c039, c044, c052, w001, w003). Every woman culprit now has her own face; only the 9 male faces still repeat (need new male portraits).
