@@ -25,7 +25,7 @@
     "glasses": false,
     "outfit": "#7a5c2e",
     "accessory": "none",
-    "portrait": "m_young_worker"
+    "portrait": "m_mid_nurse"
    },
    "motive": "بدهکار قماره.",
    "statement": "من چمدان‌ها رو از نوار تا هواپیما می‌برم. بازشون نمی‌کنم و نمی‌تونم هم.",
@@ -58,7 +58,7 @@
     "glasses": false,
     "outfit": "#5d4037",
     "accessory": "badge",
-    "portrait": "m_mid_guard"
+    "portrait": "m_mid_conductor"
    },
    "motive": "ارشدترین فرد شیفت و وام بزرگ داره.",
    "statement": "ساعت ۱:۱۰ تا ۱:۱۸ یه چمدان دیگه رو بازبینی کردم و بعد دیگه وارد اتاق دستی نشدم.",
@@ -91,7 +91,7 @@
     "glasses": true,
     "outfit": "#2c3e50",
     "accessory": "tie",
-    "portrait": "m_mid_business"
+    "portrait": "m_old_rich"
    },
    "motive": "نمی‌خواد بابت یه سفر تجاری دردسر داشته باشه.",
    "statement": "چمدانم رو ساعت ۰:۵۰ تحویل دادم. بعدش رفتم سالن انتظار و تا ۳ صبح اونجا بودم.",
@@ -124,7 +124,7 @@
     "glasses": false,
     "outfit": "#2c3e50",
     "accessory": "scarf",
-    "portrait": "f_young_bookworm"
+    "portrait": "f_young_receptionist"
    },
    "motive": "با هاشمی قبلاً بحث داشت.",
    "statement": "ساعت ۰:۵۰ چمدان رو وزن کردم و تحویل نوار دادم. ۱۹٫۲ بود، نوشتم.",

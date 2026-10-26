@@ -71,6 +71,7 @@ jobs:
       - name: Live server check (the result goes into the release notes)
         continue-on-error: true
         run: |
+          pip install httpx==0.28.1 >/dev/null 2>&1 || true
           cd server
           {
             echo "## Live server check: https://gaamly.ir"

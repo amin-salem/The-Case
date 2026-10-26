@@ -25,7 +25,7 @@
     "glasses": false,
     "outfit": "#7a5c2e",
     "accessory": "none",
-    "portrait": "m_mid_chef"
+    "portrait": "m_mid_teacher"
    },
    "motive": "نسخه‌ها رو سال‌ها نگه‌داری کرده و تازه به او اخطار داده شده.",
    "statement": "ساعت ۱۹:۴۰ کارتم رو زدم و رفتم خونه. بعدش به کتابخونه برنگشتم.",
@@ -58,7 +58,7 @@
     "glasses": false,
     "outfit": "#4e342e",
     "accessory": "none",
-    "portrait": "f_mid_banker"
+    "portrait": "f_mid_scientist"
    },
    "motive": "ازش خواسته بودن نسخه‌ها رو تحویل بده.",
    "statement": "ساعت ۱۹:۵۰ خارج شدم و تا شب تو خوابگاه بودم.",
@@ -124,7 +124,7 @@
     "glasses": false,
     "outfit": "#6a1b1b",
     "accessory": "none",
-    "portrait": "f_mid_teacher"
+    "portrait": "f_mid_gallery"
    },
    "motive": "از صالحی ناراضیه.",
    "statement": "ساعت ۱۹:۳۲ رفتم. اون موقع بهرام تو اتاق بود.",

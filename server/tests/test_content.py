@@ -159,3 +159,26 @@ def test_culprit_portraits_are_unique():
         reused = sorted(p for p, n in count.items() if p[0] == g and n > 1)
         unused = sorted(p for p in pool if p[0] == g and p not in count)
         assert not (reused and unused), f"culprit faces reused ({reused}) while unused {g} faces exist ({unused}); spread them"
+
+
+def test_portrait_age_matches_the_character():
+    """A face must look the age of the character (Amin, 26 Oct 2026: a 59-year-old had a 30-year-old face).
+    docs/portrait-ages.json holds the apparent age of every face; young = up to 35, mid = 32-54, old = 50 and up.
+    The male old faces are still too few (see docs/case-writing-rules.md §8), so a handful of near misses is allowed;
+    the number may only go down."""
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2]
+    ages = json.loads((root / "docs" / "portrait-ages.json").read_text(encoding="utf-8"))
+    shipped = {p.stem for p in (root / "app" / "assets" / "portraits").glob("*.webp")}
+    assert shipped == set(ages), f"portrait-ages.json out of date: {sorted(shipped ^ set(ages))}"
+    lo_hi = {"young": (0, 35), "mid": (32, 54), "old": (50, 99)}
+    misses = []
+    for c in (*content.all_cases(), *content.weekly_cases()):
+        for s in c.data["suspects"]:
+            p = s["avatar"].get("portrait")
+            if p in ages:
+                lo, hi = lo_hi[s["avatar"]["age"]]
+                if not lo <= ages[p] <= hi:
+                    misses.append((c.id, s["id"], s["avatar"]["age"], p))
+    assert len(misses) <= 8, misses
