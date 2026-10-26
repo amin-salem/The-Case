@@ -59,8 +59,8 @@ class WhatsNew extends ChangeNotifier {
 
   WhatsNewRelease? get latest => releases.isEmpty ? null : releases.first;
 
-  /// The latest releases for Settings, newest first.
-  List<WhatsNewRelease> recent([int n = 5]) => releases.take(n).toList();
+  /// The last two releases for Settings, newest first.
+  List<WhatsNewRelease> recent([int n = 2]) => releases.take(n).toList();
 
   /// Closing the banner or opening the list.
   Future<void> markSeen() async {

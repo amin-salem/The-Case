@@ -9,6 +9,10 @@
 
 # Changelog
 
+## app build 75 (1.40.1): bottom bar, shorter news list (Amin, 26 Oct 2026; app only, no server change)
+- Samsung (Android 15 edge to edge): the bottom of every screen slid under the phone's navigation bar. The app now takes the largest bottom inset the phone reports (padding, view padding, gesture insets) when the keyboard is closed (`_KeepAboveSystemBar` in `main.dart`).
+- «چه خبر؟» in Settings lists the last 2 releases (was 5).
+
 ## server 1.40.0 + app build 74: the final Cafe Bazaar version (Amin, 26 Oct 2026)
 - **Images:** 44 new faces (pool 124: 68 women, 56 men), 10 new avatars (shop, 600-2400 coins), 8 new picture frames (shop, 400-1800 coins; `assets/frames`, hole position in `kImageFrames`). All faces re-matched to the age and job of the suspect (6 near misses, all middle-aged men). **Size:** every image re-encoded (faces 448 px q72, avatars 384 px q74, scenes q70, logo WebP): assets 8.6 MB -> 8.4 MB although 62 images were added (the 124 faces alone: 1.5 MB).
 - **Achievements:** 90 tiers in 23 chains (`achievements.CHAINS`); all old ids, titles and rewards are unchanged. New metrics `weekly_solved`, `weekly_top3`, `album_groups`. Early tiers pay a few coins, tiers from 7 up pay XP only. Each tier is paid automatically, once (no claim button, nothing can be lost). `/v1/achievements` rows carry `chain`, `chain_title`, `unit`, `tier` (old apps ignore them).

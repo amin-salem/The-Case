@@ -21,8 +21,8 @@ void main() {
   });
 
   test('list: newest first, titles for this release, no «نفر»', () {
-    expect(kWhatsNew.first.id, 74);
-    expect(kWhatsNew.first.items.length, 5);
+    expect(kWhatsNew.first.id, 75);
+    expect(kWhatsNew.first.items.length, 1);
     for (final r in kWhatsNew) {
       for (final it in r.items) {
         expect(it.title.contains('نفر'), isFalse);
@@ -31,7 +31,7 @@ void main() {
     for (int i = 1; i < kWhatsNew.length; i++) {
       expect(kWhatsNew[i - 1].id > kWhatsNew[i].id, isTrue);
     }
-    expect(WhatsNew.i.recent(5).length <= 5, isTrue);
+    expect(WhatsNew.i.recent().length <= 2, isTrue);
   });
 
   test('fresh install: nothing is new', () async {

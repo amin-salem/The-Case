@@ -233,7 +233,7 @@ the weekend price is higher on purpose). The new column `case_progress.shows` is
 ## What's new («چی تازه شده؟», 14 Oct 2026)
 The list is data in `app/lib/data/whats_new.dart` (`kWhatsNew`, newest first). To announce a release: add one `WhatsNewRelease(<build number>, '<version>', '<yyyy-mm-dd>', [WhatsNewItem(id, title, target, tags: [...])])` at the TOP of the list, in the same commit that bumps the build number in `pubspec.yaml`.
 - Titles only, in the players' voice («کارآگاه», never «نفر»). `target` is one of weekend, avatars, comments, caseToday, missions (add a case in `whatsNewGo` for a new place).
-- The banner shows once per build (prefs `wn_seen`); a fresh install (no saved player) shows nothing. Settings «چه خبر؟» lists the last 5 releases.
+- The banner shows once per build (prefs `wn_seen`); a fresh install (no saved player) shows nothing. Settings «چه خبر؟» lists the last 2 releases.
 - Red «تازه» tags: put `NewTag('<tag id>')` next to the place and list the id in the item's `tags`; call `WhatsNew.i.tagOpened('<id>')` when the player opens that place. A tag disappears when opened or 7 days after the first start of the new build.
 
 ## Warrants, rating sheet, rate nudge, weekend schedule (17 Oct 2026, server 1.29.0, app 1.28.0+57)

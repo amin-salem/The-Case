@@ -110,13 +110,13 @@ void whatsNewGo(WhatsNewTarget t) {
   }
 }
 
-/// «چی تازه شده؟». [all]: the Settings list, the last 5 releases; otherwise the newest release only.
+/// «چی تازه شده؟». [all]: the Settings list, the last 2 releases; otherwise the newest release only.
 Future<void> showWhatsNewSheet(BuildContext context, {bool all = false}) {
   final before = WhatsNew.i.latestId;
   final seenBefore = WhatsNew.i.pending;
   WhatsNew.i.markSeen(); // opening the list counts as seen
   final nav = Navigator.of(context);
-  final releases = all ? WhatsNew.i.recent(5) : [if (WhatsNew.i.latest != null) WhatsNew.i.latest!];
+  final releases = all ? WhatsNew.i.recent(2) : [if (WhatsNew.i.latest != null) WhatsNew.i.latest!];
   return showModalBottomSheet<void>(
     context: context,
     backgroundColor: K.night2,

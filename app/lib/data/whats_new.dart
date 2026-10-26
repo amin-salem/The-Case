@@ -43,6 +43,9 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(75, '۱.۴۰', '2026-10-26', [
+    WhatsNewItem('bottom_bar', 'پایین صفحه‌ها دیگه زیر نوار پایینی گوشی (مثلاً سامسونگ) نمی‌ره', WhatsNewTarget.archive),
+  ]),
   WhatsNewRelease(74, '۱.۴۰', '2026-10-26', [
     WhatsNewItem('ach_chains', 'دستاوردهای تازه: بیش از ۹۰ پله در زنجیره‌های مرتب، با نوار پیشرفت و مدال؛ هر پله جایزه‌ی خودش رو داره', WhatsNewTarget.avatars),
     WhatsNewItem('ranks19', '۱۹ درجه‌ی کارآگاهی: از «کارآگاه تازه‌کار» تا «اسطوره‌ی کارآگاهی»، هر درجه با مدال خودش', WhatsNewTarget.avatars),
