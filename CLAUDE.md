@@ -105,3 +105,12 @@ card, impossible timelines, an alibi never checked, leftover names, a clue that 
 unaccounted for) must never reach him again: check for them yourself on every case.
 Cases written by Gemini are rewritten into the house voice and reviewed with the checklist in `docs/case-writing-rules.md` section 9
 (Amin, 19 Oct 2026) before the blind test; Amin wants them to read like c020-c024, not like Gemini's flat prose.
+
+## Persian, right to left, in every design (Amin, 26 Oct 2026)
+The app is Persian and RTL. Every mockup or screen I design must be RTL: progress bars, rings, tier segments and
+carousels fill and start from the RIGHT (rings turn counter-clockwise from the top), the first item sits on the right,
+and "back" arrows point right. In Flutter use the ambient `Directionality` (never hard-code left/right).
+
+## Check the code before you build (Amin, 25 Oct 2026)
+Before building anything he asks for, look at the code, CHANGELOG and git log: it may already be done (for example as
+an urgent earlier request).
