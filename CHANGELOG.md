@@ -9,6 +9,10 @@
 
 # Changelog
 
+## server 1.40.2: new landing page (Amin, 26 Oct 2026)
+- `gaamly.ir/` redesigned: hero with the logo and a scene, a strip of 12 scenes, suspect "photo" cards, the rank path (19 ranks), achievements/album/league/streak cards, avatar + frame showcase, final call to action. The demo case is unchanged.
+- Pictures are our own small webp files in `server/app/web/img` (about 600 KB in total, lazy loaded), served only from a fixed list at `/site-img/{name}` (week cache); CSP now allows `img-src 'self' data:`. No external host. The game app is unchanged (no APK).
+
 ## server 1.40.1 + app build 76 (1.40.2): bottom bar, about card, public texts (Amin, 26 Oct 2026)
 - **Bottom of the screen under the phone's bar (Samsung, three-button navigation, Android 15 edge to edge):** the Dart-side attempt of build 75 did not help, so it is removed. The fix is native: `app/tools/android/EdgeInsetsFix.java` (copied by `patch_android.py`, called from `SecureFlutterActivity.onCreate`). Only when the phone uses three-button navigation (`navigation_mode == 0`, Android 11+) it keeps the bar's height as padding under the app and removes it from the insets Flutter sees (nothing counted twice). Gesture-navigation phones and older Android are not touched. Covered by the javac contract test in `tools/tests/test_capture_policy.py`.
 - «درباره‌ی برنامه»: every value is on the same edge (Persian and Latin values were on opposite sides).
