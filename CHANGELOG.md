@@ -9,6 +9,12 @@
 
 # Changelog
 
+## server 1.40.0 + app build 74: the final Cafe Bazaar version (Amin, 26 Oct 2026)
+- **Images:** 44 new faces (pool 124: 74 women, 50 men), 10 new avatars (shop, 600-2400 coins), 8 new picture frames (shop, 400-1800 coins; `assets/frames`, hole position in `kImageFrames`). All faces re-matched to the age and job of the suspect (6 near misses, all middle-aged men). **Size:** every image re-encoded (faces 448 px q72, avatars 384 px q74, scenes q70, logo WebP): assets 8.6 MB -> about 7.4 MB although 62 images were added.
+- **Achievements:** 90 tiers in 25 chains (`achievements.CHAINS`); all old ids, titles and rewards are unchanged. New metrics `weekly_solved`, `weekly_top3`, `album_groups`. Early tiers pay a few coins, tiers from 7 up pay XP only. Each tier is paid automatically, once (no claim button, nothing can be lost). `/v1/achievements` rows carry `chain`, `chain_title`, `unit`, `tier` (old apps ignore them).
+- **Ranks:** 9 -> 19 (`economy.RANKS`); the old thresholds are kept for the old titles. Leagues now start at rank index 0/4/8/12 (same XP as before: 0/600/2500/6500). Frames bronze/silver/gold follow the rank titles (now index 5/11/17). Rank badges look up the rank by title.
+- **App:** new achievements screen (chains, tier bars that fill right to left, medals, rank ladder tab), new album screen (ring, next goal, frames, filters, big cards), `Medal` widget; the RTL rule applies everywhere.
+
 ## server 1.39.2 + app: faces now match the age of the character (Amin, 26 Oct 2026) [on branch]
 - A 59-year-old had a 30-year-old face. Every face now has an apparent age (`docs/portrait-ages.json`) and ALL 304 suspects were re-matched: young 20-33, mid 34-52, old 54+ (a stated age such as «۶۸ ساله» wins). Only 5 near misses are left and all are men (old men: 51 needed, 4 old faces). Test `test_portrait_age_matches_the_character`.
 - Image prompts for 44 new faces, 10 avatars and 8 frames: `docs/new-faces-avatars-frames-prompts.md`. Release workflow: the live check no longer fails on a missing `httpx`.

@@ -224,7 +224,7 @@ async def test_a_prize_needs_two_cases(client, clock, single_board, week_of_fake
 # ------------------------------------------------------------------ leagues
 def test_league_thresholds_follow_the_rank_titles():
     from app import economy as eco
-    assert weekboard.league_min_xp() == (0, eco.RANKS[2][0], eco.RANKS[4][0], eco.RANKS[6][0])
+    assert weekboard.league_min_xp() == (0, eco.RANKS[4][0], eco.RANKS[8][0], eco.RANKS[12][0])
     assert [weekboard.league_for_xp(x) for x in (0, 599, 600, 2499, 2500, 6499, 6500, 99999)] == [0, 0, 1, 1, 2, 2, 3, 3]
 
 
@@ -316,7 +316,7 @@ async def test_leagues_kill_switch_falls_back_to_one_board(client, clock, single
 
 # ------------------------------------------------------------------ league names and rank titles agree (21 Oct 2026)
 def test_every_profile_rank_is_in_exactly_one_league():
-    """9 profile ranks, 4 leagues: each rank title belongs to one league, the ranges touch and nothing is left out."""
+    """19 profile ranks, 4 leagues: each rank title belongs to one league, the ranges touch and nothing is left out."""
     from app import economy as eco
     seen = []
     for i in range(len(weekboard.LEAGUES)):
@@ -349,7 +349,7 @@ async def test_sarbazras_row_shows_profile_rank_and_league(client, clock, league
     assert row["rank_title"] == prof["rank_title"] == "سربازرس"
     assert row["league_name"] == "بازرس" == b["leagues"][2]["name"]
     info = b["leagues"][2]
-    assert (info["from_rank"], info["to_rank"]) == ("بازرس", "سربازرس") and info["min_xp"] == eco.RANKS[4][0]
+    assert (info["from_rank"], info["to_rank"]) == ("بازرس", "سرپرست پرونده‌ها") and info["min_xp"] == eco.RANKS[8][0]
     assert "بازرس" in b["title"] and b["me"]["league_name"] == "بازرس"
 
 
@@ -360,10 +360,10 @@ async def test_promoted_during_the_week_keeps_the_weeks_league_but_shows_the_cur
     ws = date(2027, 6, 18)
     clock(T(2027, 6, 19, 9))
     p = await new_player(client, "fw-promo")
-    await set_player(p["player_id"], xp=eco.RANKS[3][0], cases_solved=9, nickname="promo")
+    await set_player(p["player_id"], xp=next(x for x, t in eco.RANKS if t == "کارآگاه ارشد"), cases_solved=9, nickname="promo")
     async with db.SessionLocal() as s:
         await weekboard.ensure_snapshot(s, ws)               # the week's start
-    await set_player(p["player_id"], xp=eco.RANKS[5][0])     # promoted to سربازرس later
+    await set_player(p["player_id"], xp=next(x for x, t in eco.RANKS if t == "سربازرس"))     # promoted to سربازرس later
     clock(T(2027, 6, 21, 12))
     await solve(p["player_id"], wid(ws, 0), 2, T(2027, 6, 21, 10))
     b = await board(client, p["headers"])

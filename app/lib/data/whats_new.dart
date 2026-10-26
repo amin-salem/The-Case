@@ -43,6 +43,13 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(74, '۱.۴۰', '2026-10-26', [
+    WhatsNewItem('ach_chains', 'دستاوردهای تازه: بیش از ۹۰ پله در زنجیره‌های مرتب، با نوار پیشرفت و مدال؛ هر پله جایزه‌ی خودش رو داره', WhatsNewTarget.avatars),
+    WhatsNewItem('ranks19', '۱۹ درجه‌ی کارآگاهی: از «کارآگاه تازه‌کار» تا «اسطوره‌ی کارآگاهی»، هر درجه با مدال خودش', WhatsNewTarget.avatars),
+    WhatsNewItem('album_new', 'آلبوم مجرم‌ها قیافه‌ی تازه گرفت: حلقه‌ی پیشرفت، هدف بعدی، و کارت‌های بزرگ‌تر با چهره‌ی مجرم', WhatsNewTarget.archive),
+    WhatsNewItem('faces44', '۴۴ چهره‌ی تازه و چهره‌ها حالا با سن و شغل شخصیت جور شدن', WhatsNewTarget.archive),
+    WhatsNewItem('shop_new', '۱۰ آواتار و ۸ قاب نقاشی‌شده‌ی تازه تو فروشگاه پروفایل', WhatsNewTarget.avatars),
+  ]),
   WhatsNewRelease(73, '۱.۳۸', '2026-10-26', [
     WhatsNewItem('new_faces', 'چهره‌های تازه: ۲۰ چهره‌ی جدید به پرونده‌ها اضافه شد و حالا هر مجرم تو آلبوم چهره‌ی خودش رو داره', WhatsNewTarget.archive),
   ]),

@@ -94,9 +94,9 @@ AVATARS: list[Item] = _free() + [
 
 FRAMES: list[Item] = [
     Item("frame_brass", "frame", "برنجی", "حلقه‌ی ساده‌ی برنجی، برای همه.", "free"),
-    Item("frame_bronze", "frame", "برنزی", "نشان کارآگاهِ باتجربه.", "goal", "rare", "rank", 3, "به درجه‌ی «کارآگاه» برس"),
-    Item("frame_silver", "frame", "نقره‌ای", "نشان سربازرس‌ها.", "goal", "epic", "rank", 6, "به درجه‌ی «سربازرس» برس"),
-    Item("frame_gold", "frame", "طلایی", "چهار الماس برای افسانه‌ها.", "goal", "legendary", "rank", 9, "به درجه‌ی «افسانه» برس"),
+    Item("frame_bronze", "frame", "برنزی", "نشان کارآگاهِ باتجربه.", "goal", "rare", "rank", 5, "به درجه‌ی «کارآگاه» برس"),
+    Item("frame_silver", "frame", "نقره‌ای", "نشان سربازرس‌ها.", "goal", "epic", "rank", 11, "به درجه‌ی «سربازرس» برس"),
+    Item("frame_gold", "frame", "طلایی", "چهار الماس برای افسانه‌ها.", "goal", "legendary", "rank", 17, "به درجه‌ی «افسانه» برس"),
     Item("frame_ember", "frame", "اخگر", "شعله‌ای که شب‌های پیاپی روشن مانده.", "goal", "epic", "best_streak", 14,
          "۱۴ شب پشت سر هم پرونده‌ی روز را حل کن"),
     # long streak rewards (Amin, 16 Oct 2026): permanent, never sold, drawn in code (app/lib/widgets/avatar_frame.dart)

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/api.dart';
 import '../theme.dart';
+import 'medal.dart';
 
-/// The rank's badge: more stripes for higher ranks.
+/// The rank's badge: a medal whose metal rises with the rank (bronze, silver, gold, royal at the top).
 class RankIcon extends StatelessWidget {
   const RankIcon({super.key, required this.rank, this.size = 30});
   final int rank;
@@ -12,19 +13,8 @@ class RankIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final top = rank >= Api.i.ranks.length - 1;
-    return Container(
-      width: size,
-      height: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: top ? K.brass : K.night3,
-        border: Border.all(color: K.brass, width: 1.6),
-      ),
-      child: Icon(top ? Icons.auto_awesome_rounded : Icons.workspace_premium_rounded,
-          size: size * 0.62, color: top ? K.ink : K.brass),
-    );
+    final m = metalFor(rank, Api.i.ranks.length);
+    return Medal(metal: m, size: size, child: Icon(Icons.workspace_premium_rounded, size: size * 0.46, color: medalInk(m)));
   }
 }
 

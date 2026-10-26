@@ -97,7 +97,7 @@ async def test_locked_pick_refused(client):
 async def test_unlock_by_goal_with_gains(client):
     p = await new_player(client, "av-goal-1")
     h = p["headers"]
-    await _set(p["player_id"], cases_solved=10, best_streak=14, xp=eco.RANKS[5][0])
+    await _set(p["player_id"], cases_solved=10, best_streak=14, xp=next(x for x, t in eco.RANKS if t == "سربازرس"))
     r = (await client.get("/v1/avatars", headers=h)).json()
     assert {g["id"] for g in r["gains"]["avatars"]} == {"ex_rookie", "ex_nightowl", "frame_ember", "frame_bronze", "frame_silver"}
     assert _by_id(r["avatars"], "ex_rookie")["owned"] and not _by_id(r["avatars"], "ex_ironstreak")["owned"]

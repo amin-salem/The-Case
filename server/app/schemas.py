@@ -497,6 +497,10 @@ class AchievementRow(BaseModel):
     earned_at: int | None = None
     coins: int
     xp: int
+    chain: str = ""          # the chain the tier belongs to, its title and what it counts (older apps ignore these)
+    chain_title: str = ""
+    unit: str = ""
+    tier: int = 0
 
 
 class AchievementsOut(BaseModel):
