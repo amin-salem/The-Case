@@ -21,8 +21,11 @@ def _by_id(lst, i):
 def test_catalog_matches_prices_and_frames():
     assert {i.id for i in avatars.AVATARS if i.how == "shop"} == set(eco.AVATAR_PRICE)
     assert {i.id for i in avatars.FRAMES if i.how == "shop"} == set(eco.FRAME_PRICE)
-    assert eco.FRAME_PRICE == {"frame_fingerprint": 300, "frame_blinds": 400, "frame_cuffs": 600,
-                               "frame_stamp": 600, "frame_neon": 900, "frame_royal": 1500}
+    assert {k: v for k, v in eco.FRAME_PRICE.items() if k in (
+        "frame_fingerprint", "frame_blinds", "frame_cuffs", "frame_stamp", "frame_neon", "frame_royal")} == {
+        "frame_fingerprint": 300, "frame_blinds": 400, "frame_cuffs": 600, "frame_stamp": 600, "frame_neon": 900,
+        "frame_royal": 1500}
+    assert len(eco.AVATAR_PRICE) == 18 and len(eco.FRAME_PRICE) == 14
     assert [i.id for i in avatars.FRAMES if i.how == "goal"] == [
         "frame_bronze", "frame_silver", "frame_gold", "frame_ember", "frame_blaze", "frame_inferno", "frame_eternal",
         "frame_tape", "frame_loupe", "frame_album", "frame_album_noir"]

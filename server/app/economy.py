@@ -279,7 +279,12 @@ def story_skip_cost(remaining_seconds: float) -> int:
 
 # profile avatars and frames (docs/avatars-plan.md): the shop sells each one once, forever
 AVATAR_PRICE = {"ex_alchemist": 600, "ex_journalist": 600, "ex_qajar": 800, "ex_cat": 800, "ex_chef": 900,
-                "ex_shadow": 1800, "ex_diva": 2200, "ex_gold": 2500}
+                "ex_shadow": 1800, "ex_diva": 2200, "ex_gold": 2500,
+                # Oct 2026 batch (Amin): the more striking the picture, the higher the price
+                "ex_fisherman": 600, "ex_taxi": 600, "ex_librarian": 700, "ex_keeper": 800, "ex_writer": 900,
+                "ex_watchmaker": 1000, "ex_forensic": 1200, "ex_rainman": 1400, "ex_masked": 1900, "ex_cyber": 2400}
 FRAME_PRICE = {"frame_fingerprint": 300, "frame_blinds": 400, "frame_cuffs": 600, "frame_stamp": 600,
-               "frame_neon": 900, "frame_royal": 1500}
+               "frame_neon": 900, "frame_royal": 1500,
+               "frame_scroll": 400, "frame_chain": 700, "frame_piano": 800, "frame_siren": 1000, "frame_ice": 1100,
+               "frame_laurel": 1300, "frame_moon": 1600, "frame_persian": 1800}
 

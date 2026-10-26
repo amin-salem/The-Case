@@ -7,6 +7,20 @@ import '../theme.dart';
 /// Frames that move (embers drift, neon pulses). Everything else is drawn still.
 const Set<String> kAnimatedFrames = {'frame_ember', 'frame_neon', 'frame_blaze', 'frame_inferno', 'frame_eternal'};
 
+/// Frames painted as pictures (`assets/frames/ID.webp`, transparent). Each value is the hole for the portrait
+/// as fractions of the picture: centre x, centre y and radius. The portrait is drawn a little larger than the hole
+/// and the frame lies over its edge, so no gap shows.
+const Map<String, (double, double, double)> kImageFrames = {
+  'frame_piano': (0.4996, 0.4924, 0.3339),
+  'frame_laurel': (0.4541, 0.5024, 0.3121),
+  'frame_persian': (0.4785, 0.4817, 0.287),
+  'frame_siren': (0.4801, 0.5, 0.3415),
+  'frame_ice': (0.4992, 0.4928, 0.2967),
+  'frame_moon': (0.5485, 0.5113, 0.3183),
+  'frame_chain': (0.4972, 0.4484, 0.3195),
+  'frame_scroll': (0.4992, 0.5064, 0.3308),
+};
+
 /// A player's portrait: `assets/avatars/ID.webp` in a circle. If the file cannot be loaded, a drawn silhouette.
 class AvatarFace extends StatelessWidget {
   const AvatarFace(this.id, {super.key, required this.size});
@@ -82,6 +96,22 @@ class _AvatarWithFrameState extends State<AvatarWithFrame> with SingleTickerProv
     final size = widget.size;
     final frame = widget.frame;
     if (frame == null) return AvatarFace(widget.avatar, size: size);
+    final img = kImageFrames[frame];
+    if (img != null) {
+      final d = img.$3 * 2 * size * 1.06;
+      return SizedBox(
+        width: size,
+        height: size,
+        child: Stack(children: [
+          Positioned(left: img.$1 * size - d / 2, top: img.$2 * size - d / 2, child: AvatarFace(widget.avatar, size: d)),
+          Positioned.fill(
+              child: Image.asset('assets/frames/$frame.webp',
+                  fit: BoxFit.fill,
+                  filterQuality: FilterQuality.medium,
+                  errorBuilder: (_, __, ___) => const SizedBox.shrink())),
+        ]),
+      );
+    }
     return SizedBox(
       width: size,
       height: size,

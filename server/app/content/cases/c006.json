@@ -25,7 +25,7 @@
     "glasses": false,
     "outfit": "#3e4a3e",
     "accessory": "badge",
-    "portrait": "m_old_captain"
+    "portrait": "m_old_grandpa"
    },
    "motive": "توکلی سه ماهه حقوقش رو نداده.",
    "statement": "ساعت ۳ دور زدم، همه‌چی عادی بود. ساعت ۳:۱۰ آژیر زد و از پشت انبار دود دیدم.",
@@ -58,7 +58,7 @@
     "glasses": false,
     "outfit": "#212121",
     "accessory": "none",
-    "portrait": "m_young_dj"
+    "portrait": "m_young_boxer"
    },
    "motive": "هفته‌ی پیش با دعوا اخراج شد و هنوز کلید انبار رو پس نداده.",
    "statement": "از وقتی اخراجم کردن پام رو اونجا نذاشتم. اون شب تا ۴ صبح عروسی پسرخاله‌ام بودم.",
@@ -91,7 +91,7 @@
     "glasses": true,
     "outfit": "#4e342e",
     "accessory": "none",
-    "portrait": "m_mid_merchant"
+    "portrait": "m_old_painter"
    },
    "motive": "بدهی بانکی سنگین. بیمه‌نامه‌ی ۲۰ میلیاردی انبار ماه پیش تمدید شد.",
    "statement": "خونه خواب بودم. ساعت سه و بیست‌وپنج دقیقه شرکت دزدگیر زنگ زد و از خواب بیدارم کرد. تازه اونجا فهمیدم.",
@@ -124,7 +124,7 @@
     "glasses": true,
     "outfit": "#1a237e",
     "accessory": "tie",
-    "portrait": "m_mid_business"
+    "portrait": "m_mid_merchant"
    },
    "motive": "سال‌هاست با توکلی سر بازار فرش صادراتی رقابت داره.",
    "statement": "اون شب مشهد بودم، برای نمایشگاه فرش. اصلاً تهران نبودم.",

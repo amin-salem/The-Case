@@ -36,6 +36,7 @@ flutter:
     - assets/portraits/
     - assets/scenes/
     - assets/avatars/
+    - assets/frames/
     - assets/banners/
     - assets/story/s01ch02/
   fonts:

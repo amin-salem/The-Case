@@ -91,7 +91,7 @@
     "glasses": true,
     "outfit": "#263238",
     "accessory": "none",
-    "portrait": "m_old_gardener"
+    "portrait": "m_old_flatcap"
    },
    "motive": "کم‌درآمد.",
    "statement": "ساعت ۲۰:۰۵ تمیزکاری رو تموم کردم و رفتم. اتاق نسخه‌ها رو ساعت ۱۹:۵۰ تمیز کردم، هیچ شمعی نبود.",
@@ -124,7 +124,7 @@
     "glasses": false,
     "outfit": "#6a1b1b",
     "accessory": "none",
-    "portrait": "f_mid_gallery"
+    "portrait": "f_mid_director"
    },
    "motive": "از صالحی ناراضیه.",
    "statement": "ساعت ۱۹:۳۲ رفتم. اون موقع بهرام تو اتاق بود.",
@@ -157,7 +157,7 @@
     "glasses": false,
     "outfit": "#5a2a3a",
     "accessory": "badge",
-    "portrait": "m_mid_guard"
+    "portrait": "m_mid_policeman"
    },
    "motive": "حقوق کم و بیمار.",
    "statement": "ساعت ۲۰:۴۰ شروع گشتم. تا اون موقع تو اتاق نگهبانی بودم و درهای اتاق نسخه‌ها بسته بود.",

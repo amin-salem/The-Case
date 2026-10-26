@@ -25,7 +25,7 @@
     "glasses": true,
     "outfit": "#2e4a4a",
     "accessory": "badge",
-    "portrait": "m_mid_officer"
+    "portrait": "m_mid_policeman"
    },
    "motive": "کم‌حقوقه و اخیراً ماشین گرونی خریده.",
    "statement": "چهارشنبه ساعت ۴ بعدازظهر کانتینر ۱۷ رو بازرسی کردم، گزارش رو همون موقع نوشتم و تحویل دادم، بعد رفتم خونه.",
@@ -91,7 +91,7 @@
     "glasses": true,
     "outfit": "#33463a",
     "accessory": "badge",
-    "portrait": "f_mid_guest"
+    "portrait": "f_mid_journalist"
    },
    "motive": "حقوق ثابت داره و ۱۷ سال سابقه.",
    "statement": "همه‌ی ورودی و خروجی‌ها رو ثبت می‌کنم. عکس پلمب هم هر کانتینری که وارد می‌شه گرفته می‌شه.",
@@ -124,7 +124,7 @@
     "glasses": false,
     "outfit": "#33463a",
     "accessory": "scarf",
-    "portrait": "f_mid_witness"
+    "portrait": "f_mid_archaeologist"
    },
    "motive": "شرکتش ورشکسته‌ی بدهی بانکیه و محموله بیمه داره.",
    "statement": "کانتینر رو تا ساعت ۵ همراهی کردم و بعد رفتم هتل. شب فقط با خریدار دبی تلفنی صحبت کردم.",
