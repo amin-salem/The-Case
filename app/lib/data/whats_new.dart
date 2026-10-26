@@ -43,6 +43,9 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(73, '۱.۳۸', '2026-10-26', [
+    WhatsNewItem('new_faces', 'چهره‌های تازه: ۲۰ چهره‌ی جدید به پرونده‌ها اضافه شد و حالا هر مجرم تو آلبوم چهره‌ی خودش رو داره', WhatsNewTarget.archive),
+  ]),
   WhatsNewRelease(72, '۱.۳۸', '2026-10-24', [
     WhatsNewItem('album_home', 'آلبوم مجرم‌ها حالا از صفحه‌ی اصلی پیداست: چند مجرم جمع کردی، کدوم گروه نزدیک کامل شدنه، و بعد از هر پرونده کارت مجرمش جلوی چشمته', WhatsNewTarget.archive),
   ]),
