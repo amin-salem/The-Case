@@ -9,6 +9,9 @@
 
 # Changelog
 
+## server 1.40.6: c035, c036 re-reviewed (Astra cases, 27 Oct 2026)
+- c035 «کیف شش‌صد میلیونی» and c036 «فلاسک HeLa-7»: dense, lawyer-style puzzles rebuilt into one plain true timeline each (c035: bag swap shown by lily pollen; c036: swap time read from the medium colour), dangling references removed, explanations about 230-260 words, tool lines rewritten under rules §10b, fresh blind tests (c035 final 4/5, c036 final 3.5/5). Details in `docs/case-log.md`. Culprits and publish dates unchanged; c036 notification body updated.
+
 ## server 1.40.5: c033, c034 re-reviewed (Astra cases, 27 Oct 2026)
 - c033 «کپه‌ی گونی در دودکش» and c034 «سایه‌ی شتر»: story errors fixed (one true timeline, dangling references removed, plain cards, shorter explanations), tool lines rewritten under rules §10b, fresh blind tests passed (both difficulty 4). Details in `docs/case-log.md`. Culprits and publish dates unchanged.
 
