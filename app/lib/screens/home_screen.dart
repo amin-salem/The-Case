@@ -16,6 +16,7 @@ import '../theme.dart';
 import '../widgets/crime_tape.dart';
 import '../widgets/engagement.dart';
 import '../widgets/missions_card.dart';
+import '../widgets/notifications_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/scene.dart';
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Api.i.addListener(_onApi);
     MainShell.tab.addListener(_onTab);
     WhatsNew.i.homeAction.addListener(_onWhatsNewJump);
+    Reminders.i.onResume = _onResume;
     _load();
     Sfx.i.ambient('amb_home', volume: Sfx.homeVolume);
     _tick = Timer.periodic(const Duration(seconds: 1), (_) {
@@ -101,8 +103,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /// Back in the foreground (also after the phone's settings screen): fresh cases and a fresh reminder plan.
+  Future<void> _onResume() async {
+    final now = DateTime.now();
+    if (now.difference(_lastReload).inMinutes >= 2) {
+      _lastReload = now;
+      await _load();
+    } else {
+      await Reminders.i.replanLast();
+    }
+  }
+
   @override
   void dispose() {
+    if (Reminders.i.onResume == _onResume) Reminders.i.onResume = null;
     Api.i.removeListener(_onApi);
     MainShell.tab.removeListener(_onTab);
     WhatsNew.i.homeAction.removeListener(_onWhatsNewJump);
@@ -297,6 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _topBar(),
                   const SizedBox(height: 10),
                   const WhatsNewBanner(),
+                  const NotificationsOffCard(),
                   const OfflineBanner(margin: EdgeInsets.only(bottom: 10)),
                   if (_error != null && _cases == null) _errorBox(),
                   if (_cases == null && _error == null)

@@ -46,8 +46,10 @@ class CapturePolicyTests(unittest.TestCase):
         self.assertIn('android:name="ir.gammly.the_case.SecureGameApplication"', patch.MANIFEST.read_text())
         self.assertIn('com.farsitel.bazaar', patch.MANIFEST.read_text())
         self.assertIn('android.permission.INTERNET', patch.MANIFEST.read_text())
+        self.assertIn('android.intent.action.MY_PACKAGE_REPLACED', patch.MANIFEST.read_text())
+        self.assertIn('android.intent.action.BOOT_COMPLETED', patch.MANIFEST.read_text())
         self.assertEqual({p.name for p in self.java.glob('*.java')},
-            {'SecureGameWindows.java', 'SecureGameApplication.java', 'SecureFlutterActivity.java', 'EdgeInsetsFix.java'})
+            {'SecureGameWindows.java', 'SecureGameApplication.java', 'SecureFlutterActivity.java', 'EdgeInsetsFix.java', 'SystemSettingsBridge.java'})
         self.assertIn('patch_screen_capture()', (TOOLS / 'patch_android.py').read_text())
         for p in self.java.glob('*.java'):
             self.assertNotIn('BuildConfig.DEBUG', p.read_text())
@@ -127,7 +129,33 @@ public class WindowInsets {
   }
 }''',
             'android/content/ContentResolver.java': 'package android.content; public class ContentResolver {}',
-            'android/provider/Settings.java': 'package android.provider; import android.content.ContentResolver; public class Settings { public static class Secure { public static int getInt(ContentResolver r, String name, int d) { return 0; } } }',
+            'android/net/Uri.java': 'package android.net; public class Uri { public final String s; Uri(String s) { this.s = s; } public static Uri parse(String s) { return new Uri(s); } }',
+            'android/content/Intent.java': '''package android.content;
+public class Intent {
+  public static final int FLAG_ACTIVITY_NEW_TASK = 268435456;
+  public final String action; public String extraKey, extraValue; public android.net.Uri data;
+  public Intent(String action) { this.action = action; }
+  public Intent putExtra(String k, String v) { extraKey = k; extraValue = v; return this; }
+  public Intent setData(android.net.Uri u) { data = u; return this; }
+  public Intent addFlags(int f) { return this; }
+}''',
+            'android/provider/Settings.java': '''package android.provider; import android.content.ContentResolver;
+public class Settings {
+  public static final String ACTION_APP_NOTIFICATION_SETTINGS = "notif", ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS = "battery",
+      ACTION_APPLICATION_DETAILS_SETTINGS = "details", EXTRA_APP_PACKAGE = "pkg";
+  public static class Secure { public static int getInt(ContentResolver r, String name, int d) { return 0; } }
+}''',
+            'io/flutter/embedding/engine/FlutterEngine.java': 'package io.flutter.embedding.engine; public class FlutterEngine { public io.flutter.plugin.common.BinaryMessenger getDartExecutor() { return new io.flutter.plugin.common.BinaryMessenger(); } }',
+            'io/flutter/plugin/common/BinaryMessenger.java': 'package io.flutter.plugin.common; public class BinaryMessenger { public BinaryMessenger getBinaryMessenger() { return this; } }',
+            'io/flutter/plugin/common/MethodCall.java': 'package io.flutter.plugin.common; public class MethodCall { public final String method; public final Object arguments; public MethodCall(String m, Object a) { method = m; arguments = a; } }',
+            'io/flutter/plugin/common/MethodChannel.java': '''package io.flutter.plugin.common;
+public class MethodChannel {
+  public interface Result { void success(Object o); void notImplemented(); }
+  public interface MethodCallHandler { void onMethodCall(MethodCall c, Result r); }
+  public static MethodCallHandler last; public static String name;
+  public MethodChannel(BinaryMessenger m, String n) { name = n; }
+  public void setMethodCallHandler(MethodCallHandler h) { last = h; }
+}''',
             'android/view/Window.java': 'package android.view; public class Window { public int flags = 1; private final View decor = new View(); public View getDecorView() { return decor; } public void addFlags(int value) { flags |= value; } public void clearSecure() { flags &= ~8192; } }',
             'android/app/Activity.java': '''package android.app;
 import android.os.Bundle; import android.view.Window;
@@ -136,6 +164,10 @@ public class Activity {
   public Window getWindow() { return window; }
   public android.content.ContentResolver getContentResolver() { return new android.content.ContentResolver(); }
   public void setRecentsScreenshotEnabled(boolean value) { recents = value; }
+  public String getPackageName() { return "ir.gammly.parvandeh"; }
+  public static android.content.Intent started; public static boolean fail;
+  public void startActivity(android.content.Intent i) { if (fail) throw new RuntimeException("no screen"); started = i; }
+
   public void onCreate(Bundle state) {} public void onResume() {} public void onWindowFocusChanged(boolean focus) {}
 }''',
             'android/app/Application.java': '''package android.app;
@@ -155,6 +187,7 @@ public class Application {
 import android.app.Activity; import android.os.Bundle;
 public class FlutterActivity extends Activity {
   @Override public void onCreate(Bundle state) { if ((getWindow().flags & 8192) == 0) throw new AssertionError("first frame unprotected"); }
+  public void configureFlutterEngine(io.flutter.embedding.engine.FlutterEngine e) {}
   @Override public void onResume() { getWindow().clearSecure(); }
   @Override public void onWindowFocusChanged(boolean focus) { getWindow().clearSecure(); }
 }''',
@@ -175,6 +208,23 @@ public class CaptureContract {
         if (content.bottomPadding != 48) throw new AssertionError("bar height not kept: " + content.bottomPadding);
         if (content.background != 0xFF17181A) throw new AssertionError("background not set");
       } else if (host.getWindow().getDecorView().bottomPadding != -1) throw new AssertionError("old Android was touched");
+      // the settings shortcut: right screen per request, fallback to app details, and a failure never throws
+      host.configureFlutterEngine(new io.flutter.embedding.engine.FlutterEngine());
+      if (!io.flutter.plugin.common.MethodChannel.name.equals("ir.gammly.parvandeh/system")) throw new AssertionError("channel name");
+      final Object[] answer = new Object[1];
+      io.flutter.plugin.common.MethodChannel.Result res = new io.flutter.plugin.common.MethodChannel.Result() {
+        public void success(Object o) { answer[0] = o; } public void notImplemented() { answer[0] = "ni"; } };
+      io.flutter.plugin.common.MethodChannel.last.onMethodCall(new io.flutter.plugin.common.MethodCall("open", "notifications"), res);
+      if (!Boolean.TRUE.equals(answer[0]) || !"notif".equals(Activity.started.action) || !"ir.gammly.parvandeh".equals(Activity.started.extraValue)) throw new AssertionError("notification screen");
+      io.flutter.plugin.common.MethodChannel.last.onMethodCall(new io.flutter.plugin.common.MethodCall("open", "battery"), res);
+      if (!"battery".equals(Activity.started.action)) throw new AssertionError("battery screen");
+      io.flutter.plugin.common.MethodChannel.last.onMethodCall(new io.flutter.plugin.common.MethodCall("open", null), res);
+      if (!"details".equals(Activity.started.action) || !"package:ir.gammly.parvandeh".equals(Activity.started.data.s)) throw new AssertionError("app details");
+      io.flutter.plugin.common.MethodChannel.last.onMethodCall(new io.flutter.plugin.common.MethodCall("nope", null), res);
+      if (!"ni".equals(answer[0])) throw new AssertionError("unknown method");
+      Activity.fail = true;
+      io.flutter.plugin.common.MethodChannel.last.onMethodCall(new io.flutter.plugin.common.MethodCall("open", "notifications"), res);
+      if (!Boolean.FALSE.equals(answer[0])) throw new AssertionError("failure must answer false"); Activity.fail = false;
       host.getWindow().clearSecure(); host.onResume(); protectedWindow(host);
       host.onWindowFocusChanged(false); protectedWindow(host);
       host.onWindowFocusChanged(true); protectedWindow(host);

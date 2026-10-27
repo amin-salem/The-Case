@@ -1,6 +1,8 @@
 import 'dart:ui' show Color;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show MethodChannel;
+import 'package:flutter/widgets.dart' show AppLifecycleState, WidgetsBinding, WidgetsBindingObserver;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
@@ -12,13 +14,37 @@ import '../theme.dart' show fa;
 /// - 21:00 every night: "tonight's case is open"
 /// - 22:30 on nights the player hasn't solved yet: "your streak is in danger"
 /// Times come from the server's next_case_at, so the phone's time zone doesn't matter.
-class Reminders extends ChangeNotifier {
+class Reminders extends ChangeNotifier with WidgetsBindingObserver {
   Reminders._();
   static final Reminders i = Reminders._();
 
   final FlutterLocalNotificationsPlugin _plugin = FlutterLocalNotificationsPlugin();
   SharedPreferences? _prefs;
   bool _ready = false;
+  static const _system = MethodChannel('ir.gammly.parvandeh/system');
+
+  /// Whether Android lets the app show notifications at all (the system switch, separate from our own «یادآوری» switch).
+  /// Stays true until a real check says otherwise, so nothing flashes on startup or on other platforms.
+  bool systemOn = true;
+
+  /// Set by the home screen: reload the cases and re-plan when the app returns to the foreground.
+  Future<void> Function()? onResume;
+  Map<String, dynamic>? _last;
+
+  /// Reminders are wanted in the app but the phone blocks them: the home card and the settings line show.
+  bool get blocked => _ready && enabled && !systemOn;
+
+  static const _bannerDays = 7;
+  bool get bannerVisible {
+    if (!blocked) return false;
+    final ms = _prefs?.getInt('notif_banner_closed') ?? 0;
+    return DateTime.now().millisecondsSinceEpoch - ms > const Duration(days: _bannerDays).inMilliseconds;
+  }
+
+  Future<void> closeBanner() async {
+    await _prefs?.setInt('notif_banner_closed', DateTime.now().millisecondsSinceEpoch);
+    notifyListeners();
+  }
 
   bool get enabled => _prefs?.getBool('reminders_on') ?? true;
 
@@ -50,21 +76,108 @@ class Reminders extends ChangeNotifier {
         );
       }
       _ready = true;
+      WidgetsBinding.instance.addObserver(this);
+      await refreshSystem();
     } catch (e) {
       debugPrint('reminders init: $e');
     }
   }
 
-  /// Asks for the Android 13+ notification permission, once.
+  AndroidFlutterLocalNotificationsPlugin? get _android =>
+      _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+
+  /// Reads the real system state (permission AND the app's notification switch in Android settings).
+  Future<bool> refreshSystem() async {
+    if (!_ready) return true;
+    try {
+      final on = await _android?.areNotificationsEnabled() ?? true;
+      if (on != systemOn) {
+        systemOn = on;
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('reminders check: $e');
+    }
+    return systemOn;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed || !_ready) return;
+    () async {
+      await refreshSystem();
+      final reload = onResume;
+      if (reload != null) {
+        await reload();
+      } else {
+        await replanLast();
+      }
+    }();
+  }
+
+  /// Plans again with the last known facts (used when the app returns to the foreground without a fresh load).
+  Future<void> replanLast() async {
+    final l = _last;
+    if (l == null) return;
+    await plan(
+        nextCaseAt: l['next'] as DateTime, tonightSolved: l['solved'] as bool, streak: l['streak'] as int,
+        plan: (l['plan'] as List).cast<Map<String, dynamic>>(), tonightTitle: l['title'] as String?);
+  }
+
+  /// Asks for the Android 13+ notification permission, once (the first start of the home screen).
   Future<void> askOnce() async {
-    if (!_ready || (_prefs?.getBool('reminders_asked') ?? false)) return;
+    if (!_ready) return;
+    if (await refreshSystem()) return;
+    if (_prefs?.getBool('reminders_asked') ?? false) return;
     await _prefs?.setBool('reminders_asked', true);
     try {
-      await _plugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestNotificationsPermission();
+      await _android?.requestNotificationsPermission();
     } catch (e) {
       debugPrint('reminders permission: $e');
+    }
+    await refreshSystem();
+  }
+
+  /// Fixes switched-off notifications: asks again; when Android shows no dialog any more (denied twice, or switched off
+  /// in the phone's settings) it opens the app's notification settings. Returns true when notifications are on.
+  Future<bool> fix() async {
+    if (!_ready) return true;
+    if (await refreshSystem()) return true;
+    final started = DateTime.now();
+    try {
+      await _android?.requestNotificationsPermission();
+    } catch (e) {
+      debugPrint('reminders permission: $e');
+    }
+    if (await refreshSystem()) {
+      await replanLast();
+      return true;
+    }
+    // a real dialog takes the player a moment to answer; an instant "no" means Android did not show it
+    if (DateTime.now().difference(started) < const Duration(milliseconds: 900)) await openSystem('notifications');
+    return false;
+  }
+
+  /// Opens a phone settings screen: "notifications", "battery" or "app". False when the phone has no such screen.
+  Future<bool> openSystem(String what) async {
+    try {
+      return (await _system.invokeMethod<bool>('open', what)) ?? false;
+    } catch (e) {
+      debugPrint('reminders open settings: $e');
+      return false;
+    }
+  }
+
+  /// Shows one notification right now, so the player can see that his phone lets the app notify.
+  Future<bool> test() async {
+    if (!_ready) return false;
+    try {
+      await _plugin.show(
+          id: 900, title: 'اعلان آزمایشی ✅', body: 'اعلان‌های پرونده روی گوشی تو کار می‌کنه.', notificationDetails: _details);
+      return await refreshSystem();
+    } catch (e) {
+      debugPrint('reminders test: $e');
+      return false;
     }
   }
 
@@ -76,7 +189,9 @@ class Reminders extends ChangeNotifier {
         await _plugin.cancelAll();
       } catch (_) {}
     } else if (on) {
-      await askOnce();
+      // the player asked for reminders: re-ask / open the phone's settings if they are blocked
+      await fix();
+      await replanLast();
     }
   }
 
@@ -90,6 +205,7 @@ class Reminders extends ChangeNotifier {
     String? tonightTitle,
   }) async {
     if (!_ready) return;
+    _last = {'next': nextCaseAt, 'solved': tonightSolved, 'streak': streak, 'plan': plan, 'title': tonightTitle};
     try {
       await _plugin.cancelAll();
       if (!enabled) return;

@@ -230,6 +230,9 @@ New weekend cases follow `docs/weekend-format.md`. Numbers (all in `server/app/e
 shows `WEEKEND_SHOWS_PER_CHAPTER` 3 per opened chapter, archive price `WEEKEND_ARCHIVE_COST` 250 (a normal archive case is 150,
 the weekend price is higher on purpose). The new column `case_progress.shows` is additive (migration 0021, listed in the CI check).
 
+## Checking notifications on a phone (27 Oct 2026, app 1.40.4+78)
+If nightly/weekend notifications stop: open the app → ⚙ → «صدا و اعلان». A line «اعلان‌ها روی گوشی خاموشه» means Android blocks them; tap it (it re-asks, or opens the app's notification settings). Then tap «اعلان آزمایشی»: a notification must appear at once. If it does but nightly ones come late or never (Samsung), open «اگه اعلان‌ها دیر میاد» and set the app's battery to Unrestricted and switch off «Put unused apps to sleep». The server side (`notify.json` teasers, `/v1/config` `notify` plan) is unchanged; the phone schedules a week ahead and again each time the app opens or returns to the foreground.
+
 ## What's new («چی تازه شده؟», 14 Oct 2026)
 The list is data in `app/lib/data/whats_new.dart` (`kWhatsNew`, newest first). To announce a release: add one `WhatsNewRelease(<build number>, '<version>', '<yyyy-mm-dd>', [WhatsNewItem(id, title, target, tags: [...])])` at the TOP of the list, in the same commit that bumps the build number in `pubspec.yaml`.
 - Titles only, in the players' voice («کارآگاه», never «نفر»). `target` is one of weekend, avatars, comments, caseToday, missions (add a case in `whatsNewGo` for a new place).

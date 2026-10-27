@@ -11,6 +11,7 @@ import '../services/font_pref.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
 import '../theme.dart';
+import '../widgets/notifications_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/whats_new_ui.dart';
 import 'account_sheets.dart';
@@ -132,6 +133,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     sub: 'ساعت ۹ شب؛ و ساعت ۱۰:۳۰ اگه زنجیره‌ات در خطر باشه',
                     end: _switch(Reminders.i.enabled, (v) => Reminders.i.setEnabled(v)),
                     onTap: () => Reminders.i.setEnabled(!Reminders.i.enabled),
+                  ),
+                  if (!Reminders.i.systemOn)
+                    SettingsRow(
+                      icon: Icons.notifications_off_rounded,
+                      iconColor: K.brass,
+                      title: 'اعلان‌ها روی گوشی خاموشه؛ بزن تا روشنش کنی',
+                      onTap: () async {
+                        final ok = await Reminders.i.fix();
+                        if (ok && mounted) toast(context, 'اعلان‌ها روشن شد ✅');
+                      },
+                    ),
+                  SettingsRow(
+                    icon: Icons.notification_add_rounded,
+                    title: 'اعلان آزمایشی',
+                    sub: 'همین الان یه اعلان نشون بده تا ببینی گوشیت اجازه می‌ده',
+                    onTap: () async {
+                      final on = await Reminders.i.refreshSystem();
+                      if (!on) {
+                        final ok = await Reminders.i.fix();
+                        if (!ok) return;
+                      }
+                      final shown = await Reminders.i.test();
+                      if (mounted && !shown) toast(context, 'اعلان نشون داده نشد؛ اعلان‌ها روی گوشی خاموشه');
+                    },
+                  ),
+                  SettingsRow(
+                    icon: Icons.battery_alert_rounded,
+                    title: 'اگه اعلان‌ها دیر میاد',
+                    sub: 'تنظیم باتری گوشی (سامسونگ و مشابه)',
+                    onTap: () => showBatteryHelpSheet(context),
                   ),
                 ]),
                 _group('پشتیبانی و قوانین', [

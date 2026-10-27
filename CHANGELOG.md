@@ -9,6 +9,10 @@
 
 # Changelog
 
+## app 1.40.4+78: reliable notifications (27 Oct 2026, app only)
+- Turning «یادآوری» on re-asks the Android 13+ permission and, when Android shows no dialog any more, opens the app's notification settings (small channel in the patched `SecureFlutterActivity`, no new permission). Settings shows a line when the phone blocks notifications, a row «اعلان آزمایشی» (shows one notification now) and «اگه اعلان‌ها دیر میاد» (Samsung battery steps + a button to the battery screen; no REQUEST_IGNORE_BATTERY_OPTIMIZATIONS). The home screen shows a dismissible card (closed for 7 days) while reminders are on but the phone blocks them.
+- Reminders are planned again whenever the app returns to the foreground; the boot receiver already listens to MY_PACKAGE_REPLACED (now covered by the android-capture-policy test), so an update does not drop the schedule. Enabling reminders in Settings now plans immediately instead of at the next home load. whats_new release 78.
+
 ## server 1.40.6: c035, c036 re-reviewed (Astra cases, 27 Oct 2026)
 - c035 «کیف شش‌صد میلیونی» and c036 «فلاسک HeLa-7»: dense, lawyer-style puzzles rebuilt into one plain true timeline each (c035: bag swap shown by lily pollen; c036: swap time read from the medium colour), dangling references removed, explanations about 230-260 words, tool lines rewritten under rules §10b, fresh blind tests (c035 final 4/5, c036 final 3.5/5). Details in `docs/case-log.md`. Culprits and publish dates unchanged; c036 notification body updated.
 
