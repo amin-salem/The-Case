@@ -165,10 +165,18 @@ public class Activity {
   public android.content.ContentResolver getContentResolver() { return new android.content.ContentResolver(); }
   public void setRecentsScreenshotEnabled(boolean value) { recents = value; }
   public String getPackageName() { return "ir.gammly.parvandeh"; }
+  public android.content.pm.PackageManager getPackageManager() { return new android.content.pm.PackageManager(); }
   public static android.content.Intent started; public static boolean fail;
   public void startActivity(android.content.Intent i) { if (fail) throw new RuntimeException("no screen"); started = i; }
 
   public void onCreate(Bundle state) {} public void onResume() {} public void onWindowFocusChanged(boolean focus) {}
+}''',
+            'android/content/pm/InstallSourceInfo.java': 'package android.content.pm; public class InstallSourceInfo { public String getInstallingPackageName() { return PackageManager.installer; } }',
+            'android/content/pm/PackageManager.java': '''package android.content.pm;
+public class PackageManager {
+  public static String installer; public static boolean fail; public static String used;
+  public InstallSourceInfo getInstallSourceInfo(String pkg) { used = "new"; if (fail) throw new RuntimeException("gone"); return new InstallSourceInfo(); }
+  public String getInstallerPackageName(String pkg) { used = "old"; if (fail) throw new RuntimeException("gone"); return installer; }
 }''',
             'android/app/Application.java': '''package android.app;
 import android.os.Bundle;
@@ -225,6 +233,16 @@ public class CaptureContract {
       Activity.fail = true;
       io.flutter.plugin.common.MethodChannel.last.onMethodCall(new io.flutter.plugin.common.MethodCall("open", "notifications"), res);
       if (!Boolean.FALSE.equals(answer[0])) throw new AssertionError("failure must answer false"); Activity.fail = false;
+      // the install source: new API on 30+, old one below, "" when unknown or the phone throws
+      android.content.pm.PackageManager.installer = "com.farsitel.bazaar";
+      io.flutter.plugin.common.MethodChannel.last.onMethodCall(new io.flutter.plugin.common.MethodCall("installer", null), res);
+      if (!"com.farsitel.bazaar".equals(answer[0]) || !(sdk >= 30 ? "new" : "old").equals(android.content.pm.PackageManager.used)) throw new AssertionError("installer");
+      android.content.pm.PackageManager.installer = null;
+      io.flutter.plugin.common.MethodChannel.last.onMethodCall(new io.flutter.plugin.common.MethodCall("installer", null), res);
+      if (!"".equals(answer[0])) throw new AssertionError("unknown installer must be empty");
+      android.content.pm.PackageManager.fail = true;
+      io.flutter.plugin.common.MethodChannel.last.onMethodCall(new io.flutter.plugin.common.MethodCall("installer", null), res);
+      if (!"".equals(answer[0])) throw new AssertionError("installer failure must be empty"); android.content.pm.PackageManager.fail = false;
       host.getWindow().clearSecure(); host.onResume(); protectedWindow(host);
       host.onWindowFocusChanged(false); protectedWindow(host);
       host.onWindowFocusChanged(true); protectedWindow(host);

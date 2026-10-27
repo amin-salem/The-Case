@@ -153,6 +153,8 @@ async def report_client(body: ClientInfoIn, player: Player = Depends(current_pla
     player.platform = body.platform
     player.os_version = body.os_version.strip()
     player.device_model = body.device_model.strip()
+    if body.installer:  # an old app (or an unknown source) sends none: keep what we knew
+        player.install_source = body.installer
     player.client_at = utcnow()
     await session.commit()
     return {"ok": True}

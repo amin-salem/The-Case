@@ -12,6 +12,7 @@ import io.flutter.plugin.common.MethodChannel;
  * a switched-off notification permission with one tap. It needs no manifest permission: these are plain settings
  * screens, not REQUEST_IGNORE_BATTERY_OPTIMIZATIONS. Channel: ir.gammly.parvandeh/system, method "open",
  * argument "notifications" | "battery" | "app". Always answers true/false and never throws into Flutter.
+ * Method "installer" answers the installer package name (the store the app came from) or "".
  */
 final class SystemSettingsBridge {
     static final String CHANNEL = "ir.gammly.parvandeh/system";
@@ -21,6 +22,10 @@ final class SystemSettingsBridge {
     static void install(final Activity activity, FlutterEngine engine) {
         try {
             new MethodChannel(engine.getDartExecutor().getBinaryMessenger(), CHANNEL).setMethodCallHandler((call, result) -> {
+                if ("installer".equals(call.method)) {
+                    result.success(installer(activity));
+                    return;
+                }
                 if (!"open".equals(call.method)) {
                     result.notImplemented();
                     return;
@@ -29,6 +34,19 @@ final class SystemSettingsBridge {
             });
         } catch (Throwable ignored) {
             // the app works without the shortcut; Flutter then shows the written steps
+        }
+    }
+
+    /** The package name of the store that installed the app («com.farsitel.bazaar»); "" when unknown. Never throws. */
+    static String installer(Activity activity) {
+        try {
+            String pkg = activity.getPackageName();
+            String name = android.os.Build.VERSION.SDK_INT >= 30
+                    ? activity.getPackageManager().getInstallSourceInfo(pkg).getInstallingPackageName()
+                    : activity.getPackageManager().getInstallerPackageName(pkg);
+            return name == null ? "" : name;
+        } catch (Throwable e) {
+            return "";
         }
     }
 

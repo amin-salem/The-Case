@@ -702,3 +702,13 @@ Problem: the daily answer is shared in groups, so the daily ranking prize lost i
 - Change the grouping in ONE place: `album.group_of`. Frames: `avatars.py` (`frame_album` at 1 group, `frame_album_noir` at 4), drawn in `app/lib/widgets/avatar_frame.dart`.
 - Guess percentages: `guess.MIN_PUBLIC = 20` guesses, counts cached 60 s per worker (`guess_counts`, visible in the cache stats). Nothing personal is stored beyond player id, case id and suspect id.
 - If the album shows nothing for a player, check that the app is 1.38.0+ (older apps simply do not have the screen); old apps keep working because every new field is optional.
+
+
+## Update banner and install source (app 1.40.5+79, server 1.41.0; 27 Oct 2026)
+**Update notice.** The app reads two numbers from the remote config (admin panel → config, `PUT /admin/config`, keys `latest_version`, `min_version`, optional `update_url`; defaults 1 / 1 and the Bazaar page):
+- `latest_version`: the newest build number that is live on Cafe Bazaar. Players whose build is lower see a dismissible card on the home screen with a button to the store (closed for 3 days; a higher `latest_version` shows it again). Set it only AFTER the new build is accepted on Bazaar (for example 79 once 1.40.5+79 is published).
+- `min_version`: builds below it get a full-screen page «برای ادامه باید برنامه رو از کافه بازار آپدیت کنی» and cannot play. Use it only for a real emergency (a broken old build); leave it at 1 normally.
+- The check fails open: if the config cannot be read, nobody sees a banner or a block. Only players who install build 79 or newer can show it; older installs do not have the code.
+- Nothing is set in the database by the release: the defaults show nothing until you raise the numbers.
+
+**Install source.** The app (build 79+) sends the installer package once per start with `POST /v1/me/client` (`installer`, stored in `players.install_source`). The admin overview shows the counts: `com.farsitel.bazaar` = «کافه بازار», `ir.mservices.market` = «مایکت», empty or any other value = «مستقیم/نامشخص». Only players who opened build 79 or newer report it; everyone else counts as «مستقیم/نامشخص» until they update, so the Bazaar number grows as players update.

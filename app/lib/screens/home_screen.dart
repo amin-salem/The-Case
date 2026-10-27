@@ -17,6 +17,7 @@ import '../widgets/crime_tape.dart';
 import '../widgets/engagement.dart';
 import '../widgets/missions_card.dart';
 import '../widgets/notifications_card.dart';
+import '../widgets/update_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/scene.dart';
@@ -311,6 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _topBar(),
                   const SizedBox(height: 10),
                   const WhatsNewBanner(),
+                  const UpdateCard(),
                   const NotificationsOffCard(),
                   const OfflineBanner(margin: EdgeInsets.only(bottom: 10)),
                   if (_error != null && _cases == null) _errorBox(),

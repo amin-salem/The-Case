@@ -86,6 +86,7 @@ class Player(Base):
     platform: Mapped[str] = mapped_column(String(16), default="", server_default="")
     os_version: Mapped[str] = mapped_column(String(32), default="", server_default="")
     device_model: Mapped[str] = mapped_column(String(48), default="", server_default="")
+    install_source: Mapped[str] = mapped_column(String(64), default="", server_default="")  # installer package, build 79+
     client_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     banned: Mapped[bool] = mapped_column(Boolean, default=False)

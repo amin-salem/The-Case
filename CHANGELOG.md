@@ -9,6 +9,11 @@
 
 # Changelog
 
+## app 1.40.5+79 / server 1.41.0: update notice and install source (27 Oct 2026)
+- App: reads `latest_version` / `min_version` / `update_url` from /v1/config (ints may be strings). Build below `latest_version`: a dismissible home card «نسخه‌ی تازه‌ی پرونده توی کافه بازار منتشر شده…» with a button to the store (closed for 3 days, per `latest_version`). Build below `min_version`: a full-screen page with the same single button. Fails open: no config, offline or an unreadable value shows nothing. Defaults 1/1 mean nothing shows until the admin raises them. whats_new release 79.
+- App reports the installer package (`installer`, small `installer` method in the patched `SystemSettingsBridge`, `PackageManager.getInstallSourceInfo` on API 30+) once per start inside POST /v1/me/client; never blocks.
+- Server: `players.install_source` (additive migration 0033, listed in CI COLUMNS); `ClientInfoIn.installer` optional (a bad value is dropped, the version report still lands); admin overview returns and shows `install_sources` (کافه بازار / مایکت / مستقیم یا نامشخص). Old apps without `installer` work unchanged.
+
 ## app 1.40.4+78: reliable notifications (27 Oct 2026, app only)
 - Turning «یادآوری» on re-asks the Android 13+ permission and, when Android shows no dialog any more, opens the app's notification settings (small channel in the patched `SecureFlutterActivity`, no new permission). Settings shows a line when the phone blocks notifications, a row «اعلان آزمایشی» (shows one notification now) and «اگه اعلان‌ها دیر میاد» (Samsung battery steps + a button to the battery screen; no REQUEST_IGNORE_BATTERY_OPTIMIZATIONS). The home screen shows a dismissible card (closed for 7 days) while reminders are on but the phone blocks them.
 - Reminders are planned again whenever the app returns to the foreground; the boot receiver already listens to MY_PACKAGE_REPLACED (now covered by the android-capture-policy test), so an update does not drop the schedule. Enabling reminders in Settings now plans immediately instead of at the next home load. whats_new release 78.

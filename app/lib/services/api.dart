@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show MethodChannel;
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -322,13 +323,28 @@ class Api extends ChangeNotifier {
     _clientReported = true;
     try {
       final info = await PackageInfo.fromPlatform();
+      final installer = await _installer();
       await _call('POST', '/v1/me/client', body: {
+        if (installer.isNotEmpty) 'installer': installer,
         'app_version': info.version,
         'build': int.tryParse(info.buildNumber) ?? kAppBuild,
         'platform': defaultTargetPlatform == TargetPlatform.iOS ? 'ios' : 'android',
       });
     } catch (e) {
       debugPrint('report client: $e');
+    }
+  }
+
+  /// The store that installed the app («com.farsitel.bazaar»), asked from the patched Android activity. Empty when
+  /// unknown, on other platforms, or if the phone is slow to answer (never blocks anything).
+  Future<String> _installer() async {
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return '';
+    try {
+      final v = await const MethodChannel('ir.gammly.parvandeh/system').invokeMethod<String>('installer').timeout(const Duration(seconds: 2));
+      final s = (v ?? '').trim();
+      return RegExp(r'^[A-Za-z0-9._-]{1,64}$').hasMatch(s) ? s : '';
+    } catch (_) {
+      return '';
     }
   }
 

@@ -80,7 +80,7 @@ jobs:
                      ("players", "warrants"),
                      ("players", "referral_paid"), ("case_progress", "ranked"), ("case_progress", "reveal_at"),
                      ("players", "client_version"), ("players", "client_build"), ("players", "platform"),
-                     ("players", "os_version"), ("players", "device_model"), ("players", "client_at"),
+                     ("players", "os_version"), ("players", "device_model"), ("players", "client_at"), ("players", "install_source"),
                      ("players", "phone_last4"), ("players", "phone_verified_at"), ("players", "feed_seen_at"), ("case_progress", "wrong_tries"), ("case_progress", "shows"),
                      ("players", "avatar_id"), ("players", "avatar_frame"), ("players", "tester"),
                      ("case_progress", "night1"), ("players", "streak_repair_mark"),

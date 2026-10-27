@@ -291,7 +291,8 @@ const VIEWS = {
       chart('بازیکن‌های فعال در روز', d.days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', d.days, 'new', '#e0a526') +
       chart('پرونده‌ی باز شده', d.days, 'opened', '#8ab4f8') + chart('حل‌شده', d.days, 'solved', '#5dae7e') + chart('شکست', d.days, 'failed', '#d0543f') +
       chart('خرید موفق', d.days, 'purchases', '#e0a526') + chart('سکه‌ی دریافتی', d.days, 'coins_in', '#5dae7e') + chart('سکه‌ی خرج‌شده', d.days, 'coins_out', '#d0543f') +
-      '<h2>نسخه‌ی برنامه‌ی بازیکن‌ها</h2><div class="scroll"><table><tr><th>نسخه</th><th>بیلد</th><th>تعداد بازیکن</th></tr>' + (d.versions || []).map(v => `<tr><td class="ltr">${esc(v.version)}</td><td>${num(v.build)}</td><td>${num(v.players)}</td></tr>`).join('') + '</table></div><p class="muted">«؟» یعنی هنوز نسخه‌اش را گزارش نکرده (نسخه‌ی قدیمی برنامه).</p>';
+      '<h2>نسخه‌ی برنامه‌ی بازیکن‌ها</h2><div class="scroll"><table><tr><th>نسخه</th><th>بیلد</th><th>تعداد بازیکن</th></tr>' + (d.versions || []).map(v => `<tr><td class="ltr">${esc(v.version)}</td><td>${num(v.build)}</td><td>${num(v.players)}</td></tr>`).join('') + '</table></div><p class="muted">«؟» یعنی هنوز نسخه‌اش را گزارش نکرده (نسخه‌ی قدیمی برنامه).</p>'
+        + (d.install_sources ? '<h2>نصب از کجا</h2><div class="scroll"><table><tr><th>منبع</th><th>تعداد بازیکن</th></tr><tr><td>کافه بازار</td><td>' + num(d.install_sources.bazaar) + '</td></tr><tr><td>مایکت</td><td>' + num(d.install_sources.myket) + '</td></tr><tr><td>مستقیم/نامشخص</td><td>' + num(d.install_sources.other) + '</td></tr></table></div><p class="muted">فقط بازیکن‌هایی که نسخه‌ی ۷۹ یا جدیدتر را باز کرده‌اند منبع را گزارش می‌کنند؛ بقیه در «مستقیم/نامشخص» می‌آیند.</p>' : '');
 
     acWire();
     $('#qc').onclick = () => go('comments'); $('#qm').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها'); $('#qp').onclick = () => go('players');

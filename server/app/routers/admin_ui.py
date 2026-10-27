@@ -24,6 +24,11 @@ from ..services.ratelimit import limiter
 from ..util import ts
 from ..version import VERSION
 
+
+def install_group(source: str | None) -> str:
+    """Which store an installer package name means: «bazaar», «myket» or «other» (empty, unknown, sideloaded)."""
+    return {"com.farsitel.bazaar": "bazaar", "ir.mservices.market": "myket"}.get((source or "").strip(), "other")
+
 page_router = APIRouter(tags=["admin"])
 router = APIRouter(prefix="/admin/api", tags=["admin"], dependencies=[Depends(require_admin)])
 
@@ -126,7 +131,10 @@ async def overview(days: int = Query(14, ge=1, le=60), session: AsyncSession = D
     versions = [{"version": v or "؟", "build": int(b or 0), "players": int(n)} for v, b, n in (await session.execute(
         select(Player.client_version, Player.client_build, func.count()).group_by(Player.client_version, Player.client_build)
         .order_by(func.count().desc()).limit(30))).all()]
-    return {"days": out, "totals": totals, "versions": versions}
+    sources = {"bazaar": 0, "myket": 0, "other": 0}
+    for src, n in (await session.execute(select(Player.install_source, func.count()).group_by(Player.install_source))).all():
+        sources[install_group(src)] += int(n)
+    return {"days": out, "totals": totals, "versions": versions, "install_sources": sources}
 
 
 @router.get("/feed")

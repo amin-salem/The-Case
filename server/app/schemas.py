@@ -1,7 +1,8 @@
 """Shapes of the JSON the app sends and receives."""
+import re
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 # ---- auth
@@ -127,6 +128,16 @@ class ClientInfoIn(BaseModel):
     platform: str = Field(default="android", max_length=16, pattern=r"^[a-z]+$")
     os_version: str = Field(default="", max_length=32, pattern=_SAFE)
     device_model: str = Field(default="", max_length=48, pattern=_SAFE)
+    # package name of the store that installed the app («com.farsitel.bazaar»); an old app sends none, and a bad value
+    # is dropped (not a 422) so the version report itself is never lost
+    installer: str = Field(default="", max_length=64)
+
+    @field_validator("installer", mode="before")
+    @classmethod
+    def _installer_or_empty(cls, v):
+        if isinstance(v, str) and re.fullmatch(r"[A-Za-z0-9._-]{0,64}", v):
+            return v
+        return ""
 
 
 class CoinsOut(BaseModel):

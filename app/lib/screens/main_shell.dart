@@ -4,6 +4,8 @@ import '../services/sound.dart';
 import '../theme.dart';
 import '../services/whats_new.dart';
 import '../services/api.dart';
+import '../services/app_update.dart';
+import '../widgets/update_card.dart';
 import 'account_sheets.dart';
 import 'archive_screen.dart';
 import 'account_screen.dart';
@@ -111,7 +113,13 @@ class _MainShellState extends State<MainShell> {
       };
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => ListenableBuilder(
+        listenable: Api.i,
+        // older than the server's min_version: only the update page (fails open without a config)
+        builder: (context, _) => AppUpdate.i.mustUpdate ? const UpdateRequiredScreen() : _shell(context),
+      );
+
+  Widget _shell(BuildContext context) {
     return ValueListenableBuilder<int>(
       valueListenable: MainShell.tab,
       builder: (context, current, _) => PopScope(

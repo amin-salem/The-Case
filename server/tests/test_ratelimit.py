@@ -342,3 +342,28 @@ async def test_client_info_is_stored_validated_and_shown_to_admin(client):
                 {**good, "os_version": "a" * 33}, {**good, "build": -1}, {**good, "platform": "Android 1"}):
         assert (await client.post("/v1/me/client", json=bad, headers=p["headers"])).status_code == 422
     assert (await client.post("/v1/me/client", json=good)).status_code == 401
+
+
+# ---- install source (build 79+)
+async def test_install_source_stored_counted_and_bad_value_dropped(client):
+    from app.schemas import ClientInfoIn
+    base = {"app_version": "1.40.5", "build": 79, "platform": "android"}
+    # schema: default empty, valid kept, invalid/oversized/odd types become empty (never a 422)
+    assert ClientInfoIn(**base).installer == ""
+    assert ClientInfoIn(**base, installer="com.farsitel.bazaar").installer == "com.farsitel.bazaar"
+    for bad in ("<script>", "a" * 65, "x y", 5, None):
+        assert ClientInfoIn(**base, installer=bad).installer == ""
+    a = await new_player(client, "device-src-1")
+    b = await new_player(client, "device-src-2")
+    c = await new_player(client, "device-src-3")
+    d = await new_player(client, "device-src-4")
+    assert (await client.post("/v1/me/client", json={**base, "installer": "com.farsitel.bazaar"}, headers=a["headers"])).status_code == 200
+    assert (await client.post("/v1/me/client", json={**base, "installer": "ir.mservices.market"}, headers=b["headers"])).status_code == 200
+    # an old app sends no installer; a bad one is ignored but the version report still lands
+    assert (await client.post("/v1/me/client", json={k: v for k, v in base.items()}, headers=c["headers"])).status_code == 200
+    assert (await client.post("/v1/me/client", json={**base, "installer": "<b>"}, headers=d["headers"])).status_code == 200
+    # a later report without installer keeps what was known
+    assert (await client.post("/v1/me/client", json=base, headers=a["headers"])).status_code == 200
+    ov = (await client.get("/admin/api/overview", headers=ADMIN)).json()
+    assert ov["install_sources"] == {"bazaar": 1, "myket": 1, "other": 2}
+    assert {"version": "1.40.5", "build": 79, "players": 4} in ov["versions"]
