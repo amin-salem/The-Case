@@ -9,6 +9,10 @@
 
 # Changelog
 
+## server 1.40.4: weekend case w004 rewritten in format 3 (Amin, 27 Oct 2026)
+- «کاروانسرای آخر خط» (opens Thursday 29 Oct 09:00, night 2 at 21:00, closes Friday 21:00) rewritten by Claude Opus from scratch: format 3 (newcomer Arash on night 2, night-1 question «کی می‌گه کل شب تو اتاقش بوده، ولی نبوده؟» → Roya/e5), 8 suspects, 18 cards, difficulty 5, culprit s5 with an accomplice (two people, one plan + motive inversion: the letter, not the map). Old errors fixed: the "hospital" with the road closed, chapter-2 text about Wednesday night, format 2 without the night-1 parts.
+- Blind tests (fresh agents, public file + tool lines, shows answered one by one): night 1 four rounds, hardened each time, last full-run reader rated night 1 alone 4/5 (50–60% on the culprit); two full runs, solved through the intended chain (e3+e4, e10+e11, e18, e12+e17), every lie explained by a card. Notification text updated.
+
 ## server 1.40.3 + app build 77 (1.40.3): frame fit, c004 faces (Amin, 27 Oct 2026)
 - **Image frames:** the portrait circle was centred on the largest inscribed circle of each frame's opening, which sits off-centre when the ornament is uneven (worst: «تاج برگ و ذره‌بین», also «ماه و ستاره»). `kImageFrames` is now measured from the pictures: centre = middle of the opening, radius = the smallest circle that covers the whole opening without showing outside it (checked on the alpha channel for all 8 frames). The landing page uses the same numbers.
 - **c004 «تابلوی گمشده»:** the museum director (s3) and the retired man (s2) used `m_old_flatcap` and `m_old_fisher`, which are practically the same face. s3 now uses `m_old_professor`. No other case has both portraits.
