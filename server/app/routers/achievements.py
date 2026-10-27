@@ -19,6 +19,8 @@ async def list_achievements(player: Player = Depends(current_player), session: A
         PlayerAchievement.player_id == player.id))).all())
     items = [AchievementRow(id=a.id, title=a.title, desc=a.desc, group=a.group, target=a.target,
                             progress=min(a.target, a.value(player)), earned=a.id in earned,
-                            earned_at=ts(earned.get(a.id)), coins=a.coins, xp=a.xp) for a in achievements.ALL
+                            earned_at=ts(earned.get(a.id)), coins=a.coins, xp=a.xp, chain=a.chain,
+                            chain_title=achievements.CHAIN_BY_ID[a.chain].title, unit=achievements.CHAIN_BY_ID[a.chain].unit,
+                            tier=a.tier) for a in achievements.ALL
                             if missions.RIDDLES_ON or a.group != "riddles"]
     return AchievementsOut(earned=sum(1 for i in items if i.earned), total=len(items), items=items)

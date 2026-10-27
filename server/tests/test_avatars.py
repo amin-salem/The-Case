@@ -21,11 +21,14 @@ def _by_id(lst, i):
 def test_catalog_matches_prices_and_frames():
     assert {i.id for i in avatars.AVATARS if i.how == "shop"} == set(eco.AVATAR_PRICE)
     assert {i.id for i in avatars.FRAMES if i.how == "shop"} == set(eco.FRAME_PRICE)
-    assert eco.FRAME_PRICE == {"frame_fingerprint": 300, "frame_blinds": 400, "frame_cuffs": 600,
-                               "frame_stamp": 600, "frame_neon": 900, "frame_royal": 1500}
+    assert {k: v for k, v in eco.FRAME_PRICE.items() if k in (
+        "frame_fingerprint", "frame_blinds", "frame_cuffs", "frame_stamp", "frame_neon", "frame_royal")} == {
+        "frame_fingerprint": 300, "frame_blinds": 400, "frame_cuffs": 600, "frame_stamp": 600, "frame_neon": 900,
+        "frame_royal": 1500}
+    assert len(eco.AVATAR_PRICE) == 18 and len(eco.FRAME_PRICE) == 14
     assert [i.id for i in avatars.FRAMES if i.how == "goal"] == [
         "frame_bronze", "frame_silver", "frame_gold", "frame_ember", "frame_blaze", "frame_inferno", "frame_eternal",
-        "frame_tape", "frame_loupe"]
+        "frame_tape", "frame_loupe", "frame_album", "frame_album_noir"]
     assert len(avatars.BY_ID) == len(avatars.AVATARS) + len(avatars.FRAMES)
 
 
@@ -94,7 +97,7 @@ async def test_locked_pick_refused(client):
 async def test_unlock_by_goal_with_gains(client):
     p = await new_player(client, "av-goal-1")
     h = p["headers"]
-    await _set(p["player_id"], cases_solved=10, best_streak=14, xp=eco.RANKS[5][0])
+    await _set(p["player_id"], cases_solved=10, best_streak=14, xp=next(x for x, t in eco.RANKS if t == "سربازرس"))
     r = (await client.get("/v1/avatars", headers=h)).json()
     assert {g["id"] for g in r["gains"]["avatars"]} == {"ex_rookie", "ex_nightowl", "frame_ember", "frame_bronze", "frame_silver"}
     assert _by_id(r["avatars"], "ex_rookie")["owned"] and not _by_id(r["avatars"], "ex_ironstreak")["owned"]

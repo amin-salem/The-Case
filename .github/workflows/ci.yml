@@ -44,7 +44,7 @@ jobs:
       - name: Install
         working-directory: server
         run: pip install -r requirements-dev.txt
-      - name: Tests (all 50 cases are played through the API)
+      - name: Tests (all 52 cases are played through the API)
         working-directory: server
         run: |
           set -o pipefail
@@ -84,8 +84,9 @@ jobs:
                      ("players", "phone_last4"), ("players", "phone_verified_at"), ("players", "feed_seen_at"), ("case_progress", "wrong_tries"), ("case_progress", "shows"),
                      ("players", "avatar_id"), ("players", "avatar_frame"), ("players", "tester"),
                      ("case_progress", "night1"), ("players", "streak_repair_mark"),
-                     ("case_progress", "cards_opened"), ("case_progress", "questions_asked")]
-          TABLES = ["riddle_answers", "mission_days", "player_achievements", "story_progress", "story_state", "admin_log", "rate_hits", "case_comments", "referral_payouts", "phone_codes", "player_avatars", "week_leagues", "week_settlements", "streak_repairs", "player_tools", "case_tool_uses", "daily_draws"]
+                     ("case_progress", "cards_opened"), ("case_progress", "questions_asked"),
+                     ("case_progress", "stars_restored")]
+          TABLES = ["riddle_answers", "mission_days", "player_achievements", "story_progress", "story_state", "admin_log", "rate_hits", "case_comments", "referral_payouts", "phone_codes", "player_avatars", "week_leagues", "week_settlements", "streak_repairs", "player_tools", "case_tool_uses", "daily_draws", "case_guesses"]
           EOF
           python - <<'EOF'
           import sqlite3, sys

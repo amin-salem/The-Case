@@ -25,7 +25,7 @@
     "glasses": false,
     "outfit": "#212121",
     "accessory": "tie",
-    "portrait": "m_mid_doctor"
+    "portrait": "m_old_physician"
    },
    "motive": "کمالی از او شکایت پزشکی کرده بود.",
    "statement": "من قبل از ندا رسیدم.",
@@ -124,7 +124,7 @@
     "glasses": false,
     "outfit": "#3e4a3e",
     "accessory": "scarf",
-    "portrait": "f_mid_guest"
+    "portrait": "f_mid_inspector"
    },
    "motive": "کمالی تصمیم داشت طلاقش بده.",
    "statement": "من درست قبل از دکتر فتحی رسیدم.",
@@ -157,7 +157,7 @@
     "glasses": false,
     "outfit": "#212121",
     "accessory": "none",
-    "portrait": "f_mid_manager"
+    "portrait": "f_mid_banker"
    },
    "motive": "کمالی ازش خواسته بود از حساب‌های مجموعه کنار بره.",
    "statement": "من درست بعد از دکتر فتحی رسیدم.",
@@ -190,7 +190,7 @@
     "glasses": false,
     "outfit": "#3e4a3e",
     "accessory": "none",
-    "portrait": "m_young_casual"
+    "portrait": "m_young_athlete"
    },
    "motive": "قماربازه و پدرش دیگه پولی بهش نمی‌داد.",
    "statement": "من بعد از ندا رسیدم.",

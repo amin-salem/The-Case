@@ -86,6 +86,34 @@ void main() {
     expect(l.items.last.progress, 3);
   });
 
+  test('achievement tiers group into chains; an old server gives one-tier chains', () {
+    Map<String, dynamic> row(String id, int tier, int target, int progress, bool earned) => {
+          'id': id, 'title': id, 'desc': 'd', 'group': 'cases', 'target': target, 'progress': progress, 'earned': earned,
+          'coins': 0, 'xp': 10, 'chain': 'cases', 'chain_title': 'پرونده‌خوان', 'unit': 'پرونده', 'tier': tier,
+        };
+    final l = AchievementsList({
+      'earned': 1,
+      'total': 3,
+      'items': [row('c10', 2, 10, 4, false), row('c1', 1, 1, 1, true), row('c25', 3, 25, 4, false)],
+    });
+    final c = l.chains.single;
+    expect(c.tiers.map((t) => t.id), ['c1', 'c10', 'c25']);
+    expect(c.reached, 1);
+    expect(c.next!.id, 'c10');
+    expect(c.value, 4);
+    expect(c.remaining, 6);
+    expect(c.stepFraction, closeTo(3 / 9, 0.001));
+    expect(c.complete, isFalse);
+    final old = AchievementsList({
+      'items': [
+        {'id': 'a', 'title': 'الف', 'group': 'cases', 'target': 1, 'progress': 1, 'earned': true},
+        {'id': 'b', 'title': 'ب', 'group': 'cases', 'target': 5, 'progress': 2, 'earned': false},
+      ],
+    });
+    expect(old.chains.length, 2);
+    expect(old.chains.first.complete, isTrue);
+  });
+
   test('weekly case data: chapters, next chapter, motives', () {
     final c = CaseData({
       'id': 'w001',

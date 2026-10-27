@@ -21,14 +21,23 @@ def clock(monkeypatch):
 
 
 def test_definitions():
-    assert 28 <= len(achievements.ALL) <= 40
+    assert 80 <= len(achievements.ALL) <= 110
     assert len(achievements.BY_ID) == len(achievements.ALL)
     assert len({a.title for a in achievements.ALL}) == len(achievements.ALL)
     for a in achievements.ALL:
         assert a.metric in achievements.METRICS and a.target > 0 and a.coins >= 0
     # the rank badges point at the right ranks
     assert eco.RANKS[achievements.BY_ID["rank_inspector"].target][1] == "بازرس"
-    assert achievements.BY_ID["rank_legend"].target == len(eco.RANKS) - 1
+    assert eco.RANKS[achievements.BY_ID["rank_legend"].target][1] == "افسانه"
+    assert eco.RANKS[achievements.BY_ID["rank_myth"].target][1] == "اسطوره‌ی کارآگاهی"
+    # every chain climbs: targets strictly rise, tiers are numbered 1..n, and each chain has one metric
+    for ch in achievements.CHAINS:
+        tiers = [a for a in achievements.ALL if a.chain == ch.id]
+        assert [a.tier for a in tiers] == list(range(1, len(tiers) + 1))
+        assert [a.target for a in tiers] == sorted({a.target for a in tiers})
+        assert {a.metric for a in tiers} == {ch.metric}
+    # later tiers pay XP, not coins: nothing from the long end of a chain gives away what the shop sells
+    assert sum(a.coins for a in achievements.ALL if a.tier >= 7) == 0
 
 
 async def test_earned_once_with_rewards(client, clock, monkeypatch):

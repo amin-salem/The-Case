@@ -8,8 +8,10 @@ from pydantic import BaseModel, Field
 from sqlalchemy import case, delete, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import cheatreport, content, purge
+from .. import anticheat_admin, cheatreport, content, purge
 from .. import economy as eco
+from ..cache import TTLCache
+from ..config import get_settings
 from ..db import get_session
 from ..models import AdminLog, Broadcast, CaseProgress, CoinLog, ConfigValue, InboxItem, Player, Purchase, utcnow
 from ..schemas import ConfigIn, GiftIn
@@ -159,6 +161,35 @@ async def suspicious_solves(session: AsyncSession = Depends(get_session)):
 async def cheat_report_weekly(session: AsyncSession = Depends(get_session)):
     """Writes this week's summary into the admin log now (it also happens by itself once a week)."""
     return {"stored": await cheatreport.store_weekly(session)}
+
+
+_watch_cache = TTLCache("anticheat_watch", ttl=60, max_size=8)
+
+
+@router.get("/anticheat-watch")
+async def anticheat_watch(days: int = Query(7, ge=1, le=30), session: AsyncSession = Depends(get_session)):
+    """What the OLD strict anti-cheat rules would do to the solves of the last N days (read-only, no player ids), what
+    the live relaxed rules keep, per reason, difficulty and day. Cached 60 s per worker; rows read are capped."""
+    return await _watch_cache.get_or_load(days, lambda: anticheat_admin.watch(session, days))
+
+
+class RestoreIn(BaseModel):
+    dry_run: bool = True                           # default: only count, change nothing
+    after: int = Field(0, ge=0)                    # cursor: continue after this case_progress id
+    limit: int = Field(anticheat_admin.RESTORE_BATCH, ge=1, le=anticheat_admin.RESTORE_BATCH_MAX)
+
+
+@router.post("/anticheat-restore")
+async def anticheat_restore(body: RestoreIn, session: AsyncSession = Depends(get_session)):
+    """Gives back the stars the strict proof of investigation took from honest players (solved daily/archive cases whose
+    stored work passes the relaxed rules). One batch per call, ONE transaction each; call again with next_after until
+    done=true. dry_run=true (default) returns counts only. Coins/XP/achievements are not touched. Idempotent."""
+    if not body.dry_run and not get_settings().anticheat_restore_enabled:
+        raise HTTPException(409, "restore_disabled")
+    out = await anticheat_admin.restore(session, body.dry_run, body.after, body.limit)
+    if not body.dry_run:
+        _watch_cache.clear()
+    return out
 
 
 @router.get("/config")

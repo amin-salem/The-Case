@@ -70,13 +70,33 @@ AVATARS: list[Item] = _free() + [
          price=eco.AVATAR_PRICE["ex_diva"]),
     Item("ex_gold", "avatar", "کارآگاه طلایی", "کت سرمه‌ای و منگوله‌های زر؛ بالاترین نشان شهر.", "shop", "legendary",
          price=eco.AVATAR_PRICE["ex_gold"]),
+    Item("ex_fisherman", "avatar", "ماهیگیر بندر", "فانوس دستش است و شب را از روی موج‌ها می‌خواند.", "shop", "rare",
+         price=eco.AVATAR_PRICE["ex_fisherman"]),
+    Item("ex_taxi", "avatar", "راننده‌ی تاکسی شب", "فلاسک چای و شهری که همه‌ی رازهایش را پشت شیشه دیده.", "shop", "rare",
+         price=eco.AVATAR_PRICE["ex_taxi"]),
+    Item("ex_librarian", "avatar", "کتابدار قدیمی", "کتابی روی دستش باز است و جواب هر معما لای یکی از صفحه‌هاست.", "shop", "rare",
+         price=eco.AVATAR_PRICE["ex_librarian"]),
+    Item("ex_keeper", "avatar", "نگهبان کلیدها", "دسته‌کلید و فانوس؛ هر دری که بسته شد، او می‌داند چرا.", "shop", "epic",
+         price=eco.AVATAR_PRICE["ex_keeper"]),
+    Item("ex_writer", "avatar", "نویسنده‌ی شب", "کاغذهای مچاله، پیپ و ماه؛ پایان داستان را همیشه او زودتر می‌داند.", "shop", "epic",
+         price=eco.AVATAR_PRICE["ex_writer"]),
+    Item("ex_watchmaker", "avatar", "ساعت‌ساز", "هر چرخ‌دنده یک ساعت است و هر ساعت یک شاهد.", "shop", "epic",
+         price=eco.AVATAR_PRICE["ex_watchmaker"]),
+    Item("ex_forensic", "avatar", "پزشکی‌قانونی", "ذره‌بین و اثر انگشت؛ دروغ را از روی خطوط انگشت می‌خواند.", "shop", "epic",
+         price=eco.AVATAR_PRICE["ex_forensic"]),
+    Item("ex_rainman", "avatar", "مرد زیر باران", "کاپشن خیس و چراغ کوچه؛ پرونده‌ها شب‌های بارانی باز می‌شوند.", "shop", "epic",
+         price=eco.AVATAR_PRICE["ex_rainman"]),
+    Item("ex_masked", "avatar", "مرد نقاب‌دار", "نقابش را برنداشته، ولی همه‌ی نقاب‌های دیگر را برداشته است.", "shop", "legendary",
+         price=eco.AVATAR_PRICE["ex_masked"]),
+    Item("ex_cyber", "avatar", "کارآگاه آینده", "عینک هوشمند و پهپاد؛ شهر فردا هم رازهایی دارد.", "shop", "legendary",
+         price=eco.AVATAR_PRICE["ex_cyber"]),
 ]
 
 FRAMES: list[Item] = [
     Item("frame_brass", "frame", "برنجی", "حلقه‌ی ساده‌ی برنجی، برای همه.", "free"),
-    Item("frame_bronze", "frame", "برنزی", "نشان کارآگاهِ باتجربه.", "goal", "rare", "rank", 3, "به درجه‌ی «کارآگاه» برس"),
-    Item("frame_silver", "frame", "نقره‌ای", "نشان سربازرس‌ها.", "goal", "epic", "rank", 6, "به درجه‌ی «سربازرس» برس"),
-    Item("frame_gold", "frame", "طلایی", "چهار الماس برای افسانه‌ها.", "goal", "legendary", "rank", 9, "به درجه‌ی «افسانه» برس"),
+    Item("frame_bronze", "frame", "برنزی", "نشان کارآگاهِ باتجربه.", "goal", "rare", "rank", 5, "به درجه‌ی «کارآگاه» برس"),
+    Item("frame_silver", "frame", "نقره‌ای", "نشان سربازرس‌ها.", "goal", "epic", "rank", 11, "به درجه‌ی «سربازرس» برس"),
+    Item("frame_gold", "frame", "طلایی", "چهار الماس برای افسانه‌ها.", "goal", "legendary", "rank", 17, "به درجه‌ی «افسانه» برس"),
     Item("frame_ember", "frame", "اخگر", "شعله‌ای که شب‌های پیاپی روشن مانده.", "goal", "epic", "best_streak", 14,
          "۱۴ شب پشت سر هم پرونده‌ی روز را حل کن"),
     # long streak rewards (Amin, 16 Oct 2026): permanent, never sold, drawn in code (app/lib/widgets/avatar_frame.dart)
@@ -90,6 +110,11 @@ FRAMES: list[Item] = [
          "۵۰ پرونده حل کن"),
     Item("frame_loupe", "frame", "ذره‌بین طلایی", "برای ۳ کارآگاه اول هفته.", "goal", "legendary", "weekly_top3", 1,
          "جزو ۳ کارآگاه اول هفته شو"),
+    # culprit album (Amin, 16 Oct 2026): permanent, never sold, drawn in code; one per number of completed album groups
+    Item("frame_album", "frame", "قاب آلبوم", "قاب اولین گروه کامل‌شده‌ی آلبوم مجرم‌ها.", "goal", "rare", "album_groups", 1,
+         "یک گروه از آلبوم مجرم‌ها را کامل کن"),
+    Item("frame_album_noir", "frame", "قاب نوآر آلبوم", "چهار گروه کامل از آلبوم مجرم‌ها؛ هر قاب یک پرونده‌ی بسته.", "goal", "epic",
+         "album_groups", 4, "چهار گروه از آلبوم مجرم‌ها را کامل کن"),
     Item("frame_fingerprint", "frame", "اثر انگشت", "حلقه‌ای از خط‌های شکسته‌ی اثر انگشت.", "shop", "rare",
          price=eco.FRAME_PRICE["frame_fingerprint"]),
     Item("frame_blinds", "frame", "پرده‌ی کرکره‌ای", "نور نوآر از لابه‌لای کرکره.", "shop", "rare",
@@ -102,6 +127,22 @@ FRAMES: list[Item] = [
          price=eco.FRAME_PRICE["frame_neon"]),
     Item("frame_royal", "frame", "سلطنتی", "حلقه‌ی زر، تاج و جواهر.", "shop", "legendary",
          price=eco.FRAME_PRICE["frame_royal"]),
+    Item("frame_scroll", "frame", "طومار مهرشده", "طومار کهنه با مهر موم قرمز.", "shop", "rare",
+         price=eco.FRAME_PRICE["frame_scroll"]),
+    Item("frame_chain", "frame", "زنجیر و قفل", "زنجیر سنگین و قفلی که فقط کارآگاه کلیدش را دارد.", "shop", "epic",
+         price=eco.FRAME_PRICE["frame_chain"]),
+    Item("frame_piano", "frame", "پیانو", "کلیدهای سیاه و سفید دور یک صورت‌حساب شبانه.", "shop", "epic",
+         price=eco.FRAME_PRICE["frame_piano"]),
+    Item("frame_siren", "frame", "آژیر", "چراغ‌های قرمز و آبی پلیس.", "shop", "epic",
+         price=eco.FRAME_PRICE["frame_siren"]),
+    Item("frame_ice", "frame", "یخ", "کریستال‌های یخ‌زده و دانه‌های برف.", "shop", "epic",
+         price=eco.FRAME_PRICE["frame_ice"]),
+    Item("frame_laurel", "frame", "تاج برگ و ذره‌بین", "تاج برگ طلایی با ذره‌بین بالای سر.", "shop", "legendary",
+         price=eco.FRAME_PRICE["frame_laurel"]),
+    Item("frame_moon", "frame", "ماه و ستاره", "هلال ماه و ستاره‌های آسمان شب.", "shop", "legendary",
+         price=eco.FRAME_PRICE["frame_moon"]),
+    Item("frame_persian", "frame", "نگارگری فیروزه‌ای", "گل و بوته‌ی ایرانی با فیروزه و زر.", "shop", "legendary",
+         price=eco.FRAME_PRICE["frame_persian"]),
 ]
 BY_ID = {i.id: i for i in AVATARS + FRAMES}
 FREE_IDS = {i.id for i in AVATARS + FRAMES if i.how == "free"}
@@ -121,7 +162,8 @@ def metrics(p: Player, story_chapter: int = 0) -> dict[str, int]:
     return {"cases_solved": p.cases_solved or 0, "best_streak": max(p.best_streak or 0, p.streak or 0),
             "rank": eco.rank_of(p.xp or 0) + 1, "case_3stars": int(st.get("case_3stars", 0)),
             "case_no_hint": int(st.get("case_no_hint", 0)), "weekly_solved": int(st.get("weekly_solved", 0)),
-            "weekly_top3": int(st.get("weekly_top3", 0)), "story_chapter": story_chapter}
+            "weekly_top3": int(st.get("weekly_top3", 0)), "album_groups": int(st.get("album_groups", 0)),
+            "story_chapter": story_chapter}
 
 
 async def story_chapter_done(session: AsyncSession, p: Player) -> int:

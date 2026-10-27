@@ -32,6 +32,7 @@ case id · date · main puzzle type (number from section 2) · culprit slot · b
 | w003 «حراجِ ساعت‌های خاموش» (weekend, Gemini v3 after FIX1/FIX2 + Claude fixes; opens Thursday 2026-10-22 09:00, ch2 21:00, closes Friday 21:00) | 2026-10-22 | 5 time trick (spring wall clock really stopped 20:37, hands pushed to 20:42; staged call via forwarded line), with 7 two people one plan (weak) | s1 | ch1-only run: s1 38%, s2 18%, s6 12% (leaning, not provable); full run: solved s1 via e2/e3 (spring clock, real time 20:37) + e14 (watch left 19:30-20:15) + e8/e13 (male voice 20:38 from management room, only Kamran male in the log) + e10; rated 4. Open notes (optional): accomplice (s5) and who pulled the hands not proven; e9 purpose unstated; e13 ledger ends 20:30. Claude fixed: hint 3 named the culprit, s8 statement short, renamed duplicate «سهراب کیانی» (c026) to «ایرج کیانی», notify body spoiler |
 | w003 «حراجِ ساعت‌های خاموش» (weekend review 21 Oct, Claude Opus; format 2, opens Thu 2026-10-22 09:00, ch2 21:00, closes Fri 21:00) | 2026-10-22 | 5 time trick (spring clock set 5 min fast, stopped at real 20:37 with the generator tag) with 7 two people one plan (manager + partner buyer) | s1 | Review found: Kamran named by e13 alone («no other man entered») and by e2 alone (clock opened with HIS ring); motive options each named a suspect (pick the motive = pick the man); watch never accounted for; generator switch, folded paper, «sound in the dark», Iraj's alibi at the clock, Parnaz/Pouya lies never explained; e4/e8 and e9/e10 duplicated; e13 logged entries after it was closed; camera recorded 20:39 yet missed the theft; names clashing with the same week (فریبا c024, کیانی c024-c026); Pouya's intro hinted at trouble. Rewritten: theft window 19:34-20:12 (photographer e14), only Kamran's ring opens the vitrine (e11 + his own statement), clock stopped by the generator tag (e1+e2+e3), Iraj cleared by the gardener (e16) with his kit, fake call from the locked management room (e8+e13+e12), sale to the partner (e9+e10), watch traced to Behrouz's car and found (e15); every innocent has an explained side secret (Iraj smoking, Parnaz paid Pouya's cheque, Pouya asked for an advance, Golrokh phoned her son, Malihe hid the broken camera); motives no longer name people. 16 cards (6 night 1, 10 night 2), 8 suspects, 25 answers, 24 reactions. Blind tests (Sonnet, public file only): ch1-only s1 50% / s5 20% / s2 8% / s4 8%, rated 3 (leaning, not provable); full run 1 s1 90%, ~9 steps, rated 4; after fixes (watch found, Iraj's kit, generator reason, call display) full run 2 s1 95%, 8 steps, no single card names him, rated 3.5-4, 25-45 min. Difficulty set 5 → **4** (measured). Picky points from run 2 fixed in wording (spare pendulum key, door open until 20:30, Parnaz left the table 20:10); no open notes. |
 | w004 «کاروانسرای آخر خط» (weekend, Gemini v3 after FIX1/FIX2 + Claude fixes; opens Thursday 2026-10-29 09:00, ch2 21:00, closes Friday 21:00) | 2026-10-29 | 2 hidden relationship (cousins pretend to be strangers) with 9 object biography (map marks: dust, cardamom tea, fold, resin smoke) | s3 | ch1-only run: s3 62% by elimination (too strong) → e4 (doctor/cook cover) moved to ch2; full run: solved s3 via e3 (gap 00:50-01:25) + e9/e10/e11 (map order, wood-stove rooms 4 and 7, cardamom tea) + e8 (s1 covered 01:00-01:10) + e12 (photo), rated 4. Not re-run after the e4 move. Open notes (optional): s1 role as accomplice only inferred; who took the key at 22:10 not stated; e16 timing; hammer resin weak. Claude fixed: duplicate q key, typo, short statements |
+| w004 «کاروانسرای آخر خط» (weekend, full rewrite by Claude Opus 27 Oct 2026, format 3; opens Thu 2026-10-29 09:00, night 2 21:00, closes Fri 21:00; replaces the row above) | 2026-10-29 | 7 two people, one plan (guide strikes through the pantry the cook opens; each vouches for the other) with 10 motive inversion (the letter to the heritage office, not the map) | s5 | night-1 runs ×4 (70%, 82% after shows, 80%, then harder: board key unwatched twice, dark kitchen back, light time only on night 2, no name on the burnt letter) → last reader: night 1 alone 4/5, 50–60% on s5; full runs ×2: s5 90% / 92% via e3+e4, e10+e11 (two pairs of boots, cook in slippers), e18 (man in dark jacket 00:56:40), e9 (light off 01:00), e12+e17 motive; difficulty 5 set (readers 3–4 with all cards). Fixed from the tests: cook's floury boots explained, slipper marks under the flour, Kian reacts to e11, Taraneh's toilet trip, m1/m2 wording. Night-1 question: Roya/e5 (stable with Arash). |
 | w005 «نسخه‌ی خطی که دو بار گم شد» (weekend, Gemini v2 after FIX1 + Claude fixes; opens Thursday 2026-11-05 09:00, ch2 21:00, closes Friday 21:00) | 2026-11-05 | 3 not what it seemed (the stolen item is a fake; the original was swapped three weeks ago) with 1 guilty knowledge (pencil note «1317» on folio 20, in no catalogue) | s3 | ch1-only run: s3 45%, s5 25% (leaning, not provable); full run: solved s3 via e3 + e10 + e16 (knowledge) + e11 (swap window 19:55 three weeks ago) + e9 (fake in reading-hall bin); no single card names him; rated 4. Open notes (optional): nothing places s3 in the building 22:40-23:00; who moved the key not stated; where the original is now not stated. Claude fixed: notify body spoiler, typo, short statements |
 | w006 «میهمان اتاق ۴۰۸» (weekend, Gemini v3 after FIX1/FIX2 + Claude fix: «408» removed from police report e1 so the slip in e16 is really guilty knowledge; opens Thursday 2026-11-12 09:00, ch2 21:00, closes Friday 21:00) | 2026-11-12 | 1 guilty knowledge (Nima names the inner folder number 408) with 8 enabler who looks guilty (receptionist/cleaner) | s7 | ch1-only run (before the e1 fix): s3 30%, s2 15%, s7 15% (culprit too low: blue folder fits two people); full run solved via e16+e12+e7+e14, difficulty 4. Soft spots: Nima's hall alibi never checked by a card, bag itself not accounted for, e16 near-decisive; not re-tested after the e1 edit Resolved 18 Oct: all logged soft spots fixed in the stored file, re-validated; w004/w005/w006 re-blind-tested (ch1 ≈40-60%, full 50-92%). | |
 | c028 «پمپ انسولین ساعت سه» (rewrite, type 3 not what it seemed: pump clock 40 min fast, real change 02:30; Gemini v3 after FIX1/FIX2 + Claude mechanical fixes: names, e3 range, e2 «left» removed, e5+e10 merged) | 2026-10-26 | 3 not what it seemed | s3 | blind test on v3: s3 85% (clock offset + watch awake 02:18-02:45 + unlogged back door + knowledge slip about lock button/wrist strap), no single card names her; Mazyar only partly cleared (guard sighting 02:35); difficulty 4. Notes: offset assumed constant, slip wording hedged («به نظرم»), alarm 03:38 vs resus end 03:25 unexplained Resolved 18 Oct: all logged soft spots fixed in the stored file, re-validated; w004/w005/w006 re-blind-tested (ch1 ≈40-60%, full 50-92%). | |
@@ -59,3 +60,141 @@ water tap) with a job-related residue, and never touches the key object, the cri
 - Blind check (public file + prints, no solution) on w006, c045, c040, c022: no single print proves or clears anyone. Fixed after a
   clue-material scan: w006 s6 (glove powder echoed the glove clue), c013 s3 (wool fibre echoed the wool sock), c014 s1 (kahgel
   echoed the roof/tower soil), c029 s1 (ink echoed the stamp ink), w002 s7 (tea glass echoed the cold tea glasses).
+
+### 2026-10-24 c025–c030 semantic and deduction revision (Astra)
+
+Earlier review rows are historical; these entries supersede their contents for this batch.
+Public-only helpers ran sequentially, never in parallel. Early easy drafts were rejected.
+Details and calculations: `docs/reviews/c025-c030-review.md`.
+
+| case | publish | primary type | culprit | final review |
+|---|---|---|---|---|
+| c025 | 2026-10-23 | 6 staged document: forged will and carbon receipt | s2 | Fresh blind 4.0; exact transfer + signature continuation + bounded writing custody. Fixed father/son surname and younger-sister age relation. |
+| c026 | 2026-10-24 | 8 helpful witness is the liar; secondary home-clock correction | s3 | Fresh blind 4.5; request confirmation + corrected time + visitor intervals + replacement-pallet link. Clarified automatic session reconnect. |
+| c027 | 2026-10-25 | 9 object biography: gauge unit → engine → hull | s1 | Fresh blind 4.3; mapping + dock-test subtraction + route lower bound + independent captain sighting. |
+| c028 | 2026-10-26 | 5 time trick; secondary borrowed garment | s3 | Blind 4.2 found successive-user gap; targeted review passed after spring closure and sole simultaneous user were stated. New independent final public-only blind check: PASS 4/5. |
+| c029 | 2026-10-27 | 6 staged scene: lending form on the book lining | s5 | Fresh blind 4.5; counter sequence + continuous partial imprint + intact seal + bounded custody. |
+| c030 | 2026-10-28 | 3 not what it seemed: trace predates the apparent quick-change transfer | s2 | Blind 4.1 found pre-sewing custody gap; targeted review passed after clean surface and uninterrupted custody through sewing. New independent final public-only blind check: PASS 4/5. |
+
+
+## 24 October 2026 — main integration, c037–c042
+
+c025–c036 already present on main `b5bc35bdb63ea4891dd6e354c1e37071e188a924`; left unchanged. Imported and repaired c037–c039 from review branch `10b005559cd60fade7f15d4eef3ba652df16623c`, preserving later paid-tool observations. Rewrote c040–c042. Full clue/custody review: `docs/reviews/c037-c042-main-review.md`.
+
+| case | publish | type | culprit | blind test |
+|---|---|---|---|---|
+| c038 «شش نمره‌ی اضافه» | 2026-11-05 | 10 motive inversion | s1 | fresh public-only Astra:4; two collection stacks + carbon-edge/signature map + unchanged blank answers; refund contract, not shared login |
+| c039 «کیفِ کنار پنجره» | 2026-11-06 | 8 witness is liar | s5 | fresh public-only Astra:4; pre-scale mass deficit + closed room interval + card identity; later access remains possible, not falsely excluded |
+| c040 «لیوانِ رزروشده» | 2026-11-07 | 4 wrong victim | s1 | fresh public-only Astra:3.5; fatal seal shape + staggered closure + two access windows; terminal drinking custody fixed, visible unchanged flags close intended-target ambiguity |
+| c041 «نمونه‌ای که از فرش نبود» | 2026-11-08 | 3 not what it seemed | s3 | fresh public-only Astra:3.5; physical sample edge + packaging order/letter/recipient + private interval + reciprocal recovery; false refund claim |
+| c042 «پیوستِ نسخهٔ چهار» | 2026-11-09 | 9 object biography | s2 | fresh public-only Astra:4; version timing + credential→disk→post-repair body→borrower + local session; account/IP not identity |
+
+All six use difficulty4, preserve publication metadata and portraits. Two fresh sequential helpers reviewed public-only snapshots; the failed earlier shortcuts were not accepted. c037 received an additional fresh blind review after the pooled-return repair (recorded next).
+
+- c037 «بارِ آخرِ تالار» — publish2026-11-04; type2 hidden relationship; culprit s2. Third fresh public-only Astra review: **4/5, pass**. Pooled sealed return bags no longer disclose room; capacity plus verified device isolates12, two family documents identify guest, custody establishes unpacking. All earlier difficulty shortcuts resolved; no claim that Nasrin could not have assisted.
+
+## 24 October 2026 — detective-tool lines re-checked after the c025–c030 / c037–c042 rewrite
+
+Every `camera`/`print` line was re-read against the current file (§10). Only failing lines were rewritten; the rest are
+byte-identical. No other field changed. Reasons: **echo** = the line uses the case's clue material/key object;
+**story** = contradicts or adds an event; **style** = written, not spoken Persian; **overlap** = camera and print on the same fact.
+
+- c025: s1 camera (story: he never went inside on Wednesday, so no look at the fireplace frame); s5 camera (echo: writing in a notebook in a forged-writing case).
+- c026: s2 camera (echo: forklift/pallets); s4 camera (echo: distribution slips in a printed-slip case).
+- c027: s2 print (story: he was in the clinic, not a hospital); s3 camera (echo: cargo under a tarp, the e6 detail); s5 camera (echo: his parts package from e5).
+- c028: s4 camera (echo: the coat is the key object); s5 camera (echo: the borrowed wheelchair from e6).
+- c029: s4 camera (echo: her mother's notebook and a book cover); s5 print (echo: old paper dust in a manuscript case).
+- c030: s1 print (echo: marker ink vs the purple-pen tape); s2 camera (echo: sewing a hem, the decisive act); s2 print (echo: fabric fluff).
+- c037 (new culprit s2): s2 camera (made the culprit stand out at the main table with flowers); s5 camera and print (echo: tape, the box/bag seals).
+- c038 (new culprit s1): s1 print, s4 print (echo: pen/marker ink in a written-request case); s3 print (echo: tape/glue of the sealed envelope); s4 camera (echo: armful of exam sheets); s5 camera (echo: grading papers); s5 print (echo: old paper).
+- c039: s2 print (echo: the weighed luggage cart); s5 camera (echo: newspaper = paper bundles, and the culprit placed by «the window»).
+- c040: s1 camera and print (echo: the folder that hid the table; ink); s6 print (echo: tea stain in a poisoned-tea case); s2, s3, s4, s5, s6 camera (style; s3 also story: "evening" and a talk with the guard had no card; s4 overlap with the tool-bag print).
+- c041 (new culprit s3): s1 camera (story: an invented trip); s1 print, s4 print, s5 print (echo: wool fluff / carpet dust in a wool-sample case); s2 print (echo: dye vs the colour sample); s4 camera (echo: handling the contract carpet itself).
+- c042 (new culprit s2): s2 camera (made the culprit stand out with the tender file); s5 camera (echo: network cables vs the shared internet line).
+
+Checked with `_validate_tool_data` (20–160 chars) and a scan for «نفر».
+
+### 2026-10-24 c027, c028 re-review after the Astra rewrite (Claude)
+
+Amin: c025-c042 were written by Astra, so each is re-read like c026 (two per night). Fixed in c027: dangling «تسمه», «پاکت تاجر»,
+«کلیدِ قرضی», a question presuming a wash, a weight ledger no card shows, watcher «ناصرین» renamed «قاسم» (clashed with «ناصر»), the
+idle-engine excuse is now rebutted in the explanation. Fixed in c028: Farideh now has a witness for 02:40-03:30 so at the naive 03:10 every
+suspect is cleared and the 40-minute correction really matters; removed wheelchair/parking/«concealment» leftovers, intro now matches her
+answers, Mazyar says he did not go near the bed, explanations cut by half. Blind tests (public file only): c027 culprit s1, difficulty 4;
+c028 culprit s3, difficulty 4, not solvable by alibi elimination at 03:10. Soft spots they named were closed afterwards.
+
+### 2026-10-24 c027, c028 second pass (Opus)
+
+- c027: e6 no longer names Kourosh (the lookout sees one boat 22:40-03:25, no face/name); identity now comes from the meter
+  arithmetic plus the key (spares stayed in the safe, Kourosh says his own key never left his pocket). Max speed 14 -> 15 km/h:
+  minimum trip 4 h 20 min vs 4.8 h for Toofan and 3.8 h for Sadaf (slack no longer within meter error). e7 now says both engines
+  were switched off after the tests (rebuts the "idle for the fridge" claim). Suspect s4 renamed Naser -> Yousef (clashed with Nader);
+  removed the dangling "Nader keeps naming my truck", "seller changed the first sheet", hospital/clinic mismatch, cart in intro.
+  Cards rewritten in plain spoken Persian. Proof e3, e6, e7.
+- c028: removed the shortcut "label intact 02:25 / torn 02:40 while Farideh wore it" (it named her without the clock). New coat
+  custody: Farideh 01:40-02:33, Mazyar 02:35-02:50, sealed bag from 02:50. Read naively, the only open cover after cleaning while
+  the coat was out is the 02:35 record -> Mazyar (false trail); with the 40-minute correction that record is the service and the
+  change is 02:30 -> Farideh. Renamed Farzin -> Keyvan (vs Farideh), Negar -> Leila (vs Narges). Explanation 206 words.
+- Blind test: no sub-agent tool was available in this run; a full public-only self-check was done instead (all suspects checked
+  at real and naive times). A fresh-agent blind test is still recommended before publish.
+
+### 2026-10-24 c027, c028 third pass (Claude Sonnet, after the Opus second pass)
+Opus pass (9f53993) wrote a clock-dependent coat chain for c028 and widened the c027 trip slack (speed 15, min 4.33 h vs 4.8 h). Real
+blind tests (fresh readers, public file only) on the final text: c027 culprit s1, difficulty 4, e6 strong guess but not proof; c028 culprit s3,
+difficulty 4, naive 03:10 gives a dead end, clock correction needed. Soft spots they named and closed: c027 «بصیر» unintroduced, where the western
+mouth lies, «آزمون مسیرِ همان شب» wording; c028 Mazyar said he took the coat back at 02:30 while e4 has it in the sealed bag from 02:45
+(removed, the coat never returns to him), Habib «با روپوش» (removed), Farideh gave it back at 02:40 not 02:30 (answer aligned), explanation
+«سه دقیقه بعد» fixed to «ده دقیقه بعد، ۰۲:۴۰». Known and accepted: c027 e6 identifies Kourosh by face (needs the engine arithmetic to
+prove the boat); c028 Mazyar is unobserved before 02:36 and is cleared only by the coat chain (e4).
+
+### 2026-10-24 nightly #1 (Sonnet coordinator, Opus writer, Sonnet blind tests)
+| id | publish | type | culprit | result |
+|---|---|---|---|---|
+| c051 «چهار ویالِ شیفتِ شب» | 2026-11-18 | 8 witness is the liar (hospital/medical) | s4 | blind test 1: solved, 4; fix round (Elham's insulin visit explained, 02:38 opener excluded, lunch-bag plan e10, wife link in e8); retest: solved via e4+e7+e9, no single-card giveaway, difficulty 3.5-4 |
+| c052 «قفسه‌ی دوم» | 2026-11-19 | 4 wrong victim (lab/science) | s2 | blind test 1: solved, 4; fix round (early leavers proven, ink-colour sign-out book, car decoy, access and flight stated); retest: solved, needs ink + car + unaware-culprit chain, difficulty 4-5 (kept 5) |
+
+Named soft spots left on purpose: c051 Kiarash's «before he left» is separated from 02:35 only by e4 (fair); c052 the link of the 22:35 barrier opening to Zhaleh is inferred from the car (fair, tied to e5+e6).
+
+### 2026-10-25 tool lines c001-c007 (Claude, urgent, after player feedback "بی‌فایده بود و چیزی نگفت")
+New `camera` and `print` lines for every suspect of c001-c007 (rules §10b). Amin tried c001 in an interactive test: camera/print lines 4/4 rated «مفید»;
+the proposed card-detail magnifier 1 useful, 1 weak (decorative detail), so the magnifier is unchanged. Checks: every line 20-160 characters, no
+verdict words, each fact placed on the true timeline of its case, trace ages stated as unknowable where the culprit touched the object
+(c001 s3, c002 s1/s3, c007 s1). No fresh-reader blind test was run (no sub-agent in this run); the lines are facts, not clues, and none names a culprit.
+Also clarified in c004 (found while placing Sima's line on the timeline): Ali's answer about the big flat box now says «ظهر خانم رادمنش»; so it is clear he saw the box before he left at 16:00, and Sima's 18:55 re-entry (e3) does not contradict it.
+
+### 2026-10-25 tool lines c008-c028 (Claude Sonnet, urgent, same method as c001-c007)
+New `camera` and `print` lines for every suspect of c008-c028 (rules §10b), each placed on the case's single true timeline; cameras avoid places that would give the case away. Text fixes made on the way: c008 (Amir "تا نزدیک ساعت یک", Fereshteh "حدود ۲:۴۰", e3 rewritten so it matches the cafe) and c019 (Sahar "ساعت ۲:۱۰ رفتم استراحتگاه", coffee card 2:12). Checks: every line 20-160 characters, no verdict words, no Latin digits. No fresh-reader blind test was run on c001-c028; the lines are facts, not clues.
+
+### 2026-10-25 tool lines c051, c052 (Claude Sonnet, rules 10b)
+Rewrote camera/print for all suspects of c051 (5) and c052 (6) from the true timelines. Cameras only cover the station desk, elevator, pharmacy door, basement corridor, greenhouse stair and department corridors; none covers the medicine room (c051) or the growth chamber (c052), so no line shows the act itself. The culprit's lines (c051 s4 leaves the desk at 02:20 toward the lifts; c052 s2 leaves her office at 21:35 toward the stairs) fit their statements on the surface and fail only against e4/e7 (c051) and the red-ink entry (c052). No fresh-reader blind test was run.
+
+### 2026-10-25 unique culprit faces (Claude Sonnet)
+Assignment by minimum cost (gender fixed; age distance, job keywords, small bonus for keeping the old face; each face may be used up to 3 times at growing cost) over 58 culprits. Result: 47 distinct faces; 11 male faces used twice (not enough male faces: 38 male culprits, 26 male portraits). w005's culprit uses a code-drawn face (no shipped file) and stays. After c043-c050 are rewritten, assign their culprit faces again with the same rule (and prefer new male faces when they arrive).
+
+### 2026-10-25 c043–c046 rewrite saved for Claude review (Amin requested main)
+
+| case | publish | type | culprit | independent public-only model reading |
+|---|---|---|---|---|
+| c043 | 2026-11-10 | 1 guilty knowledge | s4 | fair; 4/5; stale locations + closed transfer window |
+| c044 | 2026-11-11 | 6 staged scene | s1 | fair; 3/5; sculpture/wrapper/label chain; owner asked to save without more polishing |
+| c045 | 2026-11-12 | 10 motive inversion | s5 | fair; 3.5–4/5; fragment and packet-maker attribution |
+| c046 | 2026-11-13 | 2 hidden relationship | s2 | fair; 3.5/5; private prior selection + packaging marks + partner identity |
+
+All 40 camera/print lines rewritten under §10b; no paid fact is necessary, no standalone tool oracle. Full truth/tool audit: docs/reviews/c043-c046-tools.md. Further independent Claude review pending.
+
+### 2026-10-25 c029, c030 re-review (Claude, after Astra; same method as c026-c028)
+- c029 «برگه‌ی امانت شماره‌ی ۴۱۸» (culprit s5, difficulty 4). Wrong: e7 had Shakouri see the book on the shelf at 14:15, so book-in-folder + folder custody (Babak 13:45-14:40) named Babak without the stamp-counter trick (shortcut); explanation still argued against a «قانون خیالی» that no card mentions; cashier «لیلا حاتمی» (real actress); Hasan said the stamp has no chain while e1 says it never leaves the counter; Maryam's 11:00 folder entry unexplained; Fazeli said originals are never lent while the plot is a fake loan; Zohreh's/Babak's answers placed the blank form differently; the 14:24 counter look clashed with Nahid guarding the door at 14:25; no word on who reset the stamp clock. Fixed: 14:15 sighting removed (naive reading now Fazeli: 10:08 stamp + folder at 09:55), look moved to 14:22, receipt printed 14:50, folder untaped until 14:40, Shakouri's watch split into e10 «آنچه شکوری از کارگاه دید» (proof e1 e5 e8 e9 e10), answers aligned, cards shortened, explanation 240 words. Tool lines rewritten (§10b).
+- c030 «تعویض سریع لباس» (culprit s2, difficulty 4). Wrong: intro's «تور پارهٔ لباس دوم» explained nowhere; e3 crammed Kazemi, Elham's hem check, the collars and the courier into one card; jeweller «فرزان» vs suspect «فرجی»; Omid cited a «دفتر اجرا» no card shows; «فاکتور افشار» confusable with the shared costume invoice; how the necklace reached the box unseen and how the tape got into the hem unexplained; Elham's own whereabouts at 21:11-21:14 open. Fixed: intro rewritten, e3 (Kazemi + courier) / new e11 «سجافی که خالی بود» (Elham, alibi from 21:05) / collars to e9, jeweller «پیمان وکیلی», tape «sticks to fingers» (e7), box not visible from the control room (e2), code sheet never erased (e1), proof e3 e4 e8 e10 e11, explanation 245 words. Tool lines rewritten (§10b); Mahtab's print (cold iron) weakens her iron errand without proving the theft.
+- Blind tests (fresh sub-agents, public copy with tool lines, one at a time): c029 three rounds, final s5 95%, difficulty 4, naive reading Fazeli then Zohreh, no single card or tool line decides; c030 three rounds, final s2 90%, difficulty 4, naive Niloufar then Omid, no single line decides. Every soft spot they named was closed (see above). Known and accepted: c030 alibis leave two (Mahtab, Omid) and Mahtab's lies point at her early, but only the hem chain excludes Omid; c029 Babak's 13:50 storage camera line is the strongest tool hint, not proof.
+
+
+### 2026-10-26 c031, c032 re-review (Claude, after Astra; same method as c026-c030)
+- c031 «شیشه‌ی شکسته به سمت باغ» (culprit s4, difficulty 4). Wrong: the sheet under the umbrella tip had no reason to be on the window (printer place never said); the two form types were not told apart clearly enough (the «دریافت» balance could be read as the balance at print time, which killed the 23:14 lock); who took the 1.9 bn to the bank was never said; Hashem's tray went to «آلاچیق» in one card and to the awning in another, with no times; Bahareh's answer had her visiting the cold room (never on the timeline); questions presumed things never said («چرا با سرآشپز هماهنگ کردید؟», «برای چه کاری به باغ برگشتید؟»); a narrator conclusion inside e6; Zamani's own answer «پول تازه‌ای نیاوردیم» made the money angle a shortcut; the explanation was 350 words. Fixed: true timeline (16:30 receipt, 16:50 courier, 17:00 petty cash to reception, 18:10 receipt print, 21:50-22:05 Parviz, 22:20-22:27 Bahareh's call, 22:28-22:40 Hashem, 23:10 car, 23:11 umbrella, 23:14 day-close print on the window ledge, 23:18 report); e2 now says the receipt form has two lines ending with the balance right after that receipt and the day-close form three lines; e1 the whole sheet is under the tip; e8 glass fell both sides (direction tells nothing), safe not locked; e9 printer sits on the window ledge; Zamani now claims private cash outside the books (no card supports it) and denies touching the printer tonight; new question on the printer; explanation 246 words. Tool lines rewritten (§10b).
+- c032 «برنج سمی ساعت نه» (culprit s3, difficulty 4). Wrong: the inspector's sample of Mino's bottle at 20:50 plus «bottle never left her pocket» plus M4 in the bottle named her without the tray turn (shortcut); inspector «آقای مدیری» confusable with «مدیر»; Saeed's question had the red card going the wrong way; «شریک سوم» never introduced; Hamid's «contract» question had no card; three names for one door; Soheila had no role; Ebrahim «دو دقیقه» vs card 3 minutes; Hamid said the plate was taken without him while e3 says he allowed it; notify text said «چلومرغ». Fixed: inspector «آقای توانا»; sample and pocket custody removed; bag on the corridor rack (open to all); bottle found rinsed (only water) under Azita's 21:00 peels, tap wet; e8 Farid sees every hand on the tray (only Saeed's turn 20:56, ends swapped, and the navy-cover pour 20:57; tap and bin hidden from him); e4 Soheila is the cashier and sees Saeed carry the plate with both hands straight to table 7 at 21:02; e9 names a pre-lease for Hamid's new restaurant and the tax auditor; one door name (درِ خدماتی); proof e1 e5 e6 e8; explanation about 250 words. Tool lines rewritten (§10b).
+- Blind tests (fresh sub-agents, public copy with tool lines, one at a time): c031 three rounds, final s4 95%, reader difficulty 3, naive Nasrin/Parviz; c032 four rounds, final s3 92%, reader difficulty 2-3, naive Saeed. No single tool line decides either case. Every soft spot they named was closed (see above). Known and accepted: c032 Mino admits the 20:57 pour by design (her defence is «my own bowl»), so a careful reader reaches her fast once he sees the half turn; the expert readers rate both lower than 4, the field stays 4 like c029/c030 (Amin may lower it; it changes archive price).
+
+### 2026-10-26 c031, c032 made harder (Amin: «سختیش رو زیاد و پیچیده‌ترش کن؛ نظر خواننده برام مهمه», urgent)
+The earlier fix left fresh blind readers at 3 (c031) and 2-3 (c032). Amin did not want the field set to 4 by hand, so the clue chains were rebuilt until a fresh reader rated them 4 on his own.
+- c031: Zamani now has a real personal cash withdrawal (e4), so «no money existed» no longer names him; the morning balance is about the hotel books only (e2); the insurance raise was Nasrin's written proposal (e7); the printer takes jobs over the network from the office PC or Nasrin's laptop and does not log the sender (e9), so the 23:14 print does not place Zamani by itself; Nasrin hands a heavy bag over at 20:10 (e3) and admits a remote login (strong false trail); the sheet shows only the top figure and «مانده» (e1), so the player must work out the form type from the books (e2); Zamani's 18:15 camera line (which let readers skip e2) replaced; Roya's porch visit removed (an open thread). Proof unchanged: e1 e2 e5 e9. Blind tests on this version: 4, 3.5-4, 3, 3, 4 (last run 4/5, 90%, naive Nasrin then Hashem); each soft spot named was closed.
+- c032: two people now say they put something on Mino's abgoosht (Mino her seasoning, Azita fried onion at 20:58, e8); the tray has one handle and only the 21:20 photo (new e11) plus Saeed's «turned it so the handle came to me» show it was turned, so without the turn Azita (motive: Hamid's note and his guarantee threat, e7) looks guilty; the rinsed bottle in the bin was removed: the bottle in Mino's bag is clean but has a flat base, while her own bottle was chipped that morning (e4, e6), the chipped one turns up broken in the alley scraps. Proof e1 e4 e6 e8 e11. Blind tests on this version: 3, 3, 2, 3, 4, 3.5, 4 (last run 4/5, 95%, naive Azita then Saeed); every soft spot named was closed.
+- Known and accepted: c031 genre-savvy readers still suspect the owner from motive, but no card proves it without the umbrella/printer chain; c032 the chip swap (e4+e6) is a second, subtler route to Mino that does not explain which dish she poured on.

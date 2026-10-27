@@ -33,20 +33,28 @@ from .models import CaseProgress, Player, WeekLeague
 log = logging.getLogger("weekboard")
 
 # THE ONE PLACE where the league names and limits live (Amin, 21 Oct 2026: the board and the profile must agree).
-# A league is a RANGE of the 9 profile ranks of economy.RANKS and is decided by the XP the player had when the week's
+# A league is a RANGE of the 19 profile ranks of economy.RANKS and is decided by the XP the player had when the week's
 # snapshot was taken (the start of the week). The row of a player always shows his CURRENT profile rank title; the league
 # only says which board he plays on this week. Leagues are named by their range, not by one rank title:
-#   0 تازه‌کار  = تازه‌کار .. دستیار کارآگاه      (from 0 XP)
-#   1 کارآگاه   = کارآگاه .. کارآگاه ارشد         (from RANKS[2])
-#   2 بازرس     = بازرس .. سربازرس                (from RANKS[4])   <- «سربازرس» plays in the league «بازرس»
-#   3 سرپرست    = کارآگاه نخبه .. افسانه           (from RANKS[6])
-LEAGUE_DEFS = (("تازه‌کار", 0), ("کارآگاه", 2), ("بازرس", 4), ("سرپرست", 6))   # (name, first rank index of economy.RANKS)
+#   0 تازه‌کار  = تازه‌کار .. کارآگاه کارآموز     (from 0 XP)
+#   1 کارآگاه   = کارآگاه .. بازپرس               (from RANKS[4], 600 XP)
+#   2 بازرس     = بازرس .. سرپرست پرونده‌ها        (from RANKS[8], 2500 XP)
+#   3 سرپرست    = کارآگاه نخبه .. اسطوره‌ی کارآگاهی (from RANKS[12], 6500 XP)
+LEAGUE_DEFS = (("تازه‌کار", 0), ("کارآگاه", 4), ("بازرس", 8), ("سرپرست", 12))   # (name, first rank index of economy.RANKS)
 LEAGUES = tuple(n for n, _ in LEAGUE_DEFS)
 LEAGUE_FROM_RANK = tuple(r for _, r in LEAGUE_DEFS)
 MARKER = "*"          # WeekLeague row: «the snapshot of this week exists»
 MIN_CASES_FOR_PRIZE = 2   # a prize needs at least this many of the week's cases solved (an empty league is no free coins)
 BOARD_TTL = 45        # seconds a board is kept per worker
 _boards = TTLCache("weekly_board", ttl=BOARD_TTL, max_size=64)
+
+
+def invalidate() -> None:
+    """A committed solve changes points/order: refresh this worker's boards on the next read.
+
+    Other workers still expire within BOARD_TTL; this is not a cross-worker notification.
+    """
+    _boards.clear()
 
 
 @dataclass(frozen=True)

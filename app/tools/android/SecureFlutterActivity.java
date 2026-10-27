@@ -9,6 +9,7 @@ public class SecureFlutterActivity extends FlutterActivity {
         SecureGameWindows.apply(this);
         super.onCreate(state);
         SecureGameWindows.apply(this);
+        EdgeInsetsFix.install(this);
     }
 
     @Override public void onResume() {

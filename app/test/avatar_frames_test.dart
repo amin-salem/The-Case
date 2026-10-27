@@ -34,7 +34,8 @@ void main() {
     const frames = [
       'frame_brass', 'frame_bronze', 'frame_silver', 'frame_gold', 'frame_ember', 'frame_tape', 'frame_loupe',
       'frame_fingerprint', 'frame_blinds', 'frame_cuffs', 'frame_stamp', 'frame_neon', 'frame_royal',
-      'frame_blaze', 'frame_inferno', 'frame_eternal', null,
+      'frame_blaze', 'frame_inferno', 'frame_eternal', 'frame_album', 'frame_album_noir', 'frame_piano', 'frame_laurel', 'frame_persian', 'frame_siren',
+      'frame_ice', 'frame_moon', 'frame_chain', 'frame_scroll', null,
     ];
     await tester.pumpWidget(Directionality(
       textDirection: TextDirection.rtl,

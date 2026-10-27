@@ -45,6 +45,18 @@ async def test_landing_page_has_the_demo_and_no_external_host(client):
     assert (await client.get("/health")).status_code == 200
 
 
+async def test_landing_images_are_served_and_only_from_the_list(client):
+    html = (await client.get("/")).text
+    names = set(re.findall(r"/site-img/([\w.]+)", html))
+    assert len(names) >= 20
+    for n in names:
+        r = await client.get(f"/site-img/{n}")
+        assert r.status_code == 200 and r.headers["content-type"] == "image/webp", n
+        assert "max-age" in r.headers["cache-control"]
+    assert (await client.get("/site-img/..%2Fsite.py")).status_code == 404
+    assert (await client.get("/site-img/nothing.webp")).status_code == 404
+
+
 def test_demo_case_is_not_part_of_the_game():
     from app import content
     ids = {c.id for c in content.all_cases()} | {c.id for c in content.weekly_cases()}

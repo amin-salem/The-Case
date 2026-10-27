@@ -43,6 +43,31 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(77, '۱.۴۰', '2026-10-27', [
+    WhatsNewItem('frames_fit', 'قاب‌های تصویری دقیق‌تر دور چهره می‌شینن', WhatsNewTarget.avatars),
+  ]),
+  WhatsNewRelease(76, '۱.۴۰', '2026-10-26', [
+    WhatsNewItem('bottom_bar', 'پایین صفحه‌ها در گوشی‌هایی که دکمه‌های سه‌گانه‌ی پایین دارن دیگه زیر نوار گوشی نمی‌ره', WhatsNewTarget.archive),
+    WhatsNewItem('texts', 'متن قوانین، حریم خصوصی و پشتیبانی به‌روز و شفاف‌تر شد', WhatsNewTarget.archive),
+  ]),
+  WhatsNewRelease(74, '۱.۴۰', '2026-10-26', [
+    WhatsNewItem('ach_chains', 'دستاوردهای تازه: بیش از ۹۰ پله در زنجیره‌های مرتب، با نوار پیشرفت و مدال؛ هر پله جایزه‌ی خودش رو داره', WhatsNewTarget.avatars),
+    WhatsNewItem('ranks19', '۱۹ درجه‌ی کارآگاهی: از «کارآگاه تازه‌کار» تا «اسطوره‌ی کارآگاهی»، هر درجه با مدال خودش', WhatsNewTarget.avatars),
+    WhatsNewItem('album_new', 'آلبوم مجرم‌ها قیافه‌ی تازه گرفت: حلقه‌ی پیشرفت، هدف بعدی، و کارت‌های بزرگ‌تر با چهره‌ی مجرم', WhatsNewTarget.archive),
+    WhatsNewItem('faces44', '۴۴ چهره‌ی تازه و چهره‌ها حالا با سن و شغل شخصیت جور شدن', WhatsNewTarget.archive),
+    WhatsNewItem('shop_new', '۱۰ آواتار و ۸ قاب نقاشی‌شده‌ی تازه تو فروشگاه پروفایل', WhatsNewTarget.avatars),
+  ]),
+  WhatsNewRelease(73, '۱.۳۸', '2026-10-26', [
+    WhatsNewItem('new_faces', 'چهره‌های تازه: ۲۰ چهره‌ی جدید به پرونده‌ها اضافه شد و حالا هر مجرم تو آلبوم چهره‌ی خودش رو داره', WhatsNewTarget.archive),
+  ]),
+  WhatsNewRelease(72, '۱.۳۸', '2026-10-24', [
+    WhatsNewItem('album_home', 'آلبوم مجرم‌ها حالا از صفحه‌ی اصلی پیداست: چند مجرم جمع کردی، کدوم گروه نزدیک کامل شدنه، و بعد از هر پرونده کارت مجرمش جلوی چشمته', WhatsNewTarget.archive),
+  ]),
+  WhatsNewRelease(71, '۱.۳۸', '2026-10-24', [
+    WhatsNewItem('album', 'آلبوم مجرم‌ها: هر پرونده‌ای که حل کنی، مجرمش یه کارت توی آلبومت می‌شه؛ پرونده‌های حل‌نشده سایه‌ی تاریک‌ان و با یه ضربه بازشون می‌کنی', WhatsNewTarget.archive),
+    WhatsNewItem('album_frame', 'یه گروه کامل از آلبوم رو که ببندی، قاب مخصوص می‌گیری؛ چهارتا گروه که کامل بشه، قاب نوآر هم مال توئه', WhatsNewTarget.avatars),
+    WhatsNewItem('first_guess', 'به نظر تو کیه؟ قبل از شروع تحقیقات یه حدس اول بزن (یه ضربه، و می‌شه ردش کرد)؛ آخرش می‌بینی چقدر درست بود و بقیه‌ی کارآگاه‌ها اول به کی شک کردن', WhatsNewTarget.caseToday),
+  ]),
   WhatsNewRelease(70, '۱.۳۷', '2026-10-23', [
     WhatsNewItem('tools_v2', 'ابزارهای کارآگاهی پررنگ‌تر شدن و حالا توی پرونده‌های آخر هفته هم کار می‌کنن (هر شب یک بار از هر کدوم)', WhatsNewTarget.weekend),
     WhatsNewItem('tools_help', 'دکمه‌ی «چطور کار می‌کنن؟» بالای ابزارها می‌گه هر کدوم چطور به دست میاد، چقدره و کجا استفاده می‌شه؛ قبل از هر استفاده هم می‌بینی چی نشونت می‌ده', WhatsNewTarget.caseToday),

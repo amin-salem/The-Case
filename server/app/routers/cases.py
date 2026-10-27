@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
-from .. import content, gameclock, progress, ratings, streakrepair
+from .. import content, gameclock, progress, ratings, streakrepair, weekboard
 from ..cache import TTLCache
 from .. import economy as eco
 from ..content import Case
@@ -108,7 +108,7 @@ def _night1_out(c: Case, p: CaseProgress | None) -> dict | None:
     n1 = c.data.get("night1")
     if not p or not p.night1 or not isinstance(n1, dict):
         return None
-    return {**p.night1, "liar": n1["liar"], "card": n1["card"], "explanation": n1["explanation"]}
+    return {**p.night1, "liar": n1["liar"], "card": n1["card"], "explanation": content.readable(n1["explanation"], c.data)}
 
 
 async def _progress(session: AsyncSession, player_id: str, case_id: str) -> CaseProgress | None:
@@ -240,7 +240,8 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
             data.pop(k, None)
         data["story"] = story_extra(c, p)
     if ac.answer_visible(p):
-        data["solution"] = c.data["solution"]  # solved, or lost and the answer is public now
+        # solved, or lost and the answer is public now; card ids («e5») in the explanation become card titles
+        data["solution"] = {**c.data["solution"], "explanation": content.readable(c.data["solution"].get("explanation", ""), c.data)}
     # every player sees suspects and evidence in their own order (ids unchanged)
     seed = f"{player.id}:{c.id}"
     for k in ("suspects", "evidence"):
@@ -335,7 +336,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
     if fmt2 and not body.motive:
         raise HTTPException(422, "how_needed")
 
-    explanation = c.data["solution"]["explanation"]
+    explanation = content.readable(c.data["solution"]["explanation"], c.data)
     add_active_time(p, body.extra_seconds, utcnow())  # once per accusation, before the judging below
     ac.merge_depth(p, c, body.cards, body.asks)
     today_case = _is_today(c)
@@ -421,6 +422,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         await story_finish(session, player.id, c.id, p)
         await session.commit()
         _solvers.clear()  # this worker shows the new solver count at once; the others within 30 s
+        weekboard.invalidate()  # include the new nightly/weekend stars even when this player's row was cached
         await ac.maybe_pay_referral(player.id)
         rank = (await _daily_rank(session, c.id, p.stars, p.seconds)
                 if today_case and p.ranked and ac.is_visible(player) else None)

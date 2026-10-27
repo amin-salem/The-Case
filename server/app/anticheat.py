@@ -73,7 +73,23 @@ def proof_ok(p: CaseProgress, c: content.Case) -> bool:
     """Enough real work on the case for 3 stars and a leaderboard place? The needed time follows the case's difficulty
     (eco.min_active_seconds): a quick reader who reaches the clue on an easy case is not punished as a cheater."""
     need = eco.min_active_seconds(c.data.get("difficulty"))
-    return (p.active_seconds or 0) >= need and len(p.seen or []) >= eco.MIN_SUSPECTS_SEEN
+    return (p.active_seconds or 0) >= need and len(p.seen or []) >= eco.min_suspects_seen()
+
+
+def strict_verdict(active_seconds: int | None, seen: int | None, questions_asked: int | None, difficulty: int | None,
+                   solved: bool = True) -> dict:
+    """What the OLD (strict) rules would have decided for a solve, computed from stored fields only and independent of
+    the environment (90 s base x 0.67/0.83/1/1.22/1.44, 2 suspects, 2 questions). Used by the admin watcher.
+    `seen` = number of suspects interrogated; `questions_asked` = number of distinct questions, None = the app never
+    reported depth (an old app: the depth rule does not apply then, like depth_ok with DEPTH_REQUIRE_REPORT=false).
+    Returns {"solved", "time_ok", "suspects_ok", "depth_ok", "proof_ok", "reason"}; reason is the first failing rule
+    in the order time, suspects, depth ("" when everything passes or the case is not solved)."""
+    time_ok = int(active_seconds or 0) >= eco.strict_min_active_seconds(difficulty)
+    suspects_ok = int(seen or 0) >= eco.STRICT_MIN_SUSPECTS
+    depth = questions_asked is None or int(questions_asked) >= eco.STRICT_MIN_QUESTIONS
+    reason = "" if not solved else "time" if not time_ok else "suspects" if not suspects_ok else "depth" if not depth else ""
+    return {"solved": bool(solved), "time_ok": time_ok, "suspects_ok": suspects_ok, "depth_ok": depth,
+            "proof_ok": time_ok and suspects_ok, "reason": reason}
 
 
 # ---------------------------------------------------------------- investigation depth

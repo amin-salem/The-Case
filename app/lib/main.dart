@@ -146,7 +146,7 @@ class _StartScreenState extends State<StartScreen> {
                 FadeSlideIn(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(28),
-                    child: Image.asset('assets/icon/logo.png', width: 120, height: 120, filterQuality: FilterQuality.medium),
+                    child: Image.asset('assets/icon/logo.webp', width: 120, height: 120, filterQuality: FilterQuality.medium),
                   ),
                 ),
                 const SizedBox(height: 18),

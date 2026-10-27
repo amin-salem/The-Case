@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>پرونده؛ بازی معمایی هر شب</title>
 <meta name="description" content="هر شب یک پرونده‌ی جنایی تازه: مدارک را بخوان، از مظنون‌ها بازجویی کن و مقصر را پیدا کن. رایگان. همین‌جا یک پرونده‌ی آزمایشی را حل کن.">
+<link rel="icon" href="/site-img/logo.webp" type="image/webp">
 <meta name="theme-color" content="#17181a">
 <style>
 @font-face{font-family:"Vazirmatn";font-weight:400;font-display:swap;src:url(/static/fonts/Vazirmatn-Regular.ttf) format("truetype")}
@@ -105,6 +106,48 @@ footer a{margin-left:18px}
 @keyframes blink{0%,70%{opacity:1}75%,88%{opacity:.25}}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* v2 look (26 Oct 2026) */
+.hero .wrap.herogrid{padding-top:56px;padding-bottom:64px}
+@media(max-width:760px){.hero .wrap.herogrid{padding-top:36px;padding-bottom:40px}}
+.hero{min-height:0}
+.herobg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;opacity:.85;transform:scale(1.04)}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(23,24,26,.1) 0%,rgba(23,24,26,.7) 60%,rgba(23,24,26,.88) 100%),linear-gradient(0deg,var(--night) 0%,transparent 22%)}
+.herogrid{position:relative;display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:center;padding-top:56px;padding-bottom:64px}
+.herologo{position:relative;justify-self:center;text-align:center}
+.herologo img{width:min(300px,70vw);height:auto;aspect-ratio:1;border-radius:34px;border:3px solid var(--brass);box-shadow:0 18px 50px rgba(0,0,0,.6),0 0 60px rgba(224,165,38,.25);transform:rotate(3deg)}
+.stamp2{position:absolute;bottom:-14px;right:-6px;background:var(--stamp);color:#fff;font-weight:900;padding:2px 16px;border-radius:8px;transform:rotate(-7deg);box-shadow:0 6px 16px rgba(0,0,0,.5);font-size:15px;white-space:nowrap}
+@media(max-width:760px){.herogrid{grid-template-columns:1fr;padding-bottom:40px;padding-top:36px}.herologo{order:-1}.herologo img{width:150px}.shade{background:linear-gradient(0deg,var(--night) 0%,rgba(23,24,26,.7) 100%)}}
+.stats{padding:0;background:var(--night2);border-bottom:1px solid var(--night3)}
+.statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;padding-top:20px;padding-bottom:20px;text-align:center}
+.statrow b{display:block;font-size:26px;color:var(--brass);line-height:1.4}.statrow span{color:var(--soft);font-size:14.5px}
+.scenes{padding-bottom:30px}
+.strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;padding:6px 20px 18px;-webkit-overflow-scrolling:touch}
+.sc{margin:0;flex:none;width:min(300px,72vw);scroll-snap-align:center;position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--night3);background:var(--night2)}
+.sc img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;transition:transform .5s}
+.sc:hover img{transform:scale(1.06)}
+.sc figcaption{position:absolute;inset:auto 0 0 0;padding:26px 14px 10px;background:linear-gradient(0deg,rgba(15,16,17,.92),transparent);font-weight:900}
+.faces{background:var(--night2);border-top:1px solid var(--night3);border-bottom:1px solid var(--night3)}
+.sprow{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:16px}
+.sp{margin:0;background:var(--paper);color:var(--ink);border-radius:8px;padding:10px 10px 12px;box-shadow:0 10px 24px rgba(0,0,0,.4);transition:transform .25s}
+.sp:nth-child(odd){transform:rotate(-1.4deg)}.sp:nth-child(even){transform:rotate(1.2deg)}
+.sp:hover{transform:rotate(0) translateY(-4px)}
+.sp img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:4px;filter:sepia(.15)}
+.sp figcaption{display:block;margin-top:8px;line-height:1.6}.sp b{display:block;font-size:16px}.sp span{display:block;font-size:13.5px;color:var(--inksoft)}
+.ranks{list-style:none;display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0}
+.ranks li{background:var(--night3);border:1px solid #3a3c41;border-radius:99px;padding:2px 15px;font-size:14.5px;color:var(--text)}
+.ranks li:not(:last-child)::after{content:"‹";margin-right:10px;color:var(--brass)}
+.ranks li.top{background:var(--brass);color:var(--ink);border-color:var(--brass);font-weight:900}
+.look{background:radial-gradient(90% 120% at 50% 0%,#2a2c31,var(--night))}
+.frrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;justify-items:center}
+.fr{margin:0;text-align:center}.fr figcaption{color:var(--soft);font-size:14.5px;margin-top:4px}
+.frbox{position:relative;width:min(170px,40vw);aspect-ratio:1}
+.frbox .av{position:absolute;height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover}
+.frbox .fm{position:absolute;inset:0;width:100%;height:100%}
+.final{text-align:center;background:radial-gradient(80% 100% at 50% 100%,#3a2a12 0%,var(--night) 70%);border-top:1px solid var(--night3)}
+.final img{width:110px;height:auto;border-radius:26px;border:2px solid var(--brass);margin-bottom:12px}
+.final h2{color:var(--text)}
+@media(prefers-reduced-motion:no-preference){.herobg{animation:kb 24s ease-in-out infinite alternate}@keyframes kb{to{transform:scale(1.14) translateX(-2%)}}.herologo img{animation:fl 6s ease-in-out infinite alternate}@keyframes fl{to{transform:rotate(1deg) translateY(-8px)}}}
 </style>
 </head>
 <body>
@@ -121,44 +164,53 @@ footer a{margin-left:18px}
 
 <header class="hero">
  <div class="tape" aria-hidden="true"></div>
- <svg class="scene" viewBox="0 0 960 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-  <g fill="#0f1011">
-   <rect x="0" y="170" width="70" height="130"/><rect x="60" y="120" width="90" height="180"/><rect x="150" y="150" width="60" height="150"/>
-   <rect x="210" y="90" width="100" height="210"/><rect x="310" y="140" width="80" height="160"/><rect x="390" y="110" width="70" height="190"/>
-   <rect x="460" y="160" width="110" height="140"/><rect x="570" y="100" width="90" height="200"/><rect x="660" y="150" width="70" height="150"/>
-   <rect x="730" y="120" width="110" height="180"/><rect x="840" y="160" width="120" height="140"/>
-  </g>
-  <g fill="#e0a526">
-   <rect class="win-light" x="228" y="110" width="12" height="16"/><rect class="win-light" x="260" y="140" width="12" height="16"/><rect class="win-light" x="228" y="180" width="12" height="16"/>
-   <rect class="win-light" x="80" y="140" width="12" height="16"/><rect class="win-light" x="110" y="190" width="12" height="16"/><rect class="win-light" x="588" y="120" width="12" height="16"/>
-   <rect class="win-light" x="620" y="170" width="12" height="16"/><rect class="win-light" x="750" y="140" width="12" height="16"/><rect class="win-light" x="800" y="200" width="12" height="16"/><rect class="win-light" x="478" y="180" width="12" height="16"/>
-  </g>
-  <g transform="translate(150 190) rotate(-18)"><circle cx="0" cy="0" r="58" fill="rgba(224,165,38,.08)" stroke="#e0a526" stroke-width="9"/><path d="M42 42l54 54" stroke="#c9a15e" stroke-width="16" stroke-linecap="round"/></g>
-  <rect x="0" y="288" width="960" height="12" fill="#0f1011"/>
- </svg>
- <div class="moon" aria-hidden="true"></div>
- <div class="wrap">
-  <span class="badge">بازی معمایی برای موبایل · فارسی</span>
-  <h1><span>پرونده</span></h1>
-  <p class="promise">هر شب یک جنایت تازه. مدارک را بخوان، مظنون‌ها را به حرف بیاور و مقصر را پیدا کن.</p>
-  <div class="cta">
-   <a class="btn" href="{{BAZAAR_URL}}" rel="noopener">دانلود از کافه بازار</a>
-   <a class="btn alt" href="#demo">اول یک پرونده‌ی آزمایشی حل کن</a>
+ <img class="herobg" src="/site-img/hero.webp" alt="" width="1024" height="1024" decoding="async" fetchpriority="high">
+ <div class="shade" aria-hidden="true"></div>
+ <div class="wrap herogrid">
+  <div class="herotext">
+   <span class="badge">بازی معمایی برای موبایل · فارسی</span>
+   <h1><span>پرونده</span></h1>
+   <p class="promise">هر شب یک جنایت تازه. مدارک را بخوان، مظنون‌ها را به حرف بیاور و مقصر را پیدا کن.</p>
+   <div class="cta">
+    <a class="btn" href="{{BAZAAR_URL}}" rel="noopener">دانلود از کافه بازار</a>
+    <a class="btn alt" href="#demo">اول یک پرونده‌ی آزمایشی حل کن</a>
+   </div>
+   <p class="note">رایگان است. پرونده‌ی شبانه هیچ‌وقت با سکه قفل نمی‌شود.</p>
   </div>
-  <p class="note">رایگان است. پرونده‌ی شبانه هیچ‌وقت با سکه قفل نمی‌شود.</p>
+  <div class="herologo"><img src="/site-img/logo.webp" alt="لوگوی پرونده: کارآگاهی با ذره‌بین" width="256" height="256" decoding="async"><span class="stamp2">پرونده‌ی امشب باز است</span></div>
  </div>
 </header>
 
 <main id="top">
+<section class="stats"><div class="wrap statrow">
+ <div><b>هر شب</b><span>یک پرونده‌ی تازه</span></div>
+ <div><b>+۱۲۰</b><span>چهره‌ی مظنون</span></div>
+ <div><b>۱۹</b><span>درجه از تازه‌کار تا اسطوره</span></div>
+ <div><b>رایگان</b><span>بدون تبلیغ</span></div>
+</div></section>
+
+<section class="scenes"><div class="wrap">
+ <h2>هر پرونده یک صحنه‌ی جنایت دارد</h2>
+ <p class="lead">از بازار شبانه تا کلبه‌ی برفی. وارد صحنه شو، دقیق نگاه کن و ردپا را پیدا کن.</p>
+</div>
+<div class="strip" tabindex="0" role="region" aria-label="صحنه‌های بازی؛ با کشیدن به کنار ببین"><figure class="sc"><img src="/site-img/bazaar_night.webp" alt="صحنه‌ی بازار شبانه" width="640" height="640" loading="lazy" decoding="async"><figcaption>بازار شبانه</figcaption></figure><figure class="sc"><img src="/site-img/library.webp" alt="صحنه‌ی کتابخانه‌ی قدیمی" width="640" height="640" loading="lazy" decoding="async"><figcaption>کتابخانه‌ی قدیمی</figcaption></figure><figure class="sc"><img src="/site-img/villa_rain.webp" alt="صحنه‌ی ویلا زیر رعد و برق" width="640" height="640" loading="lazy" decoding="async"><figcaption>ویلا زیر رعد و برق</figcaption></figure><figure class="sc"><img src="/site-img/snow_lodge.webp" alt="صحنه‌ی کلبه‌ی برفی" width="640" height="640" loading="lazy" decoding="async"><figcaption>کلبه‌ی برفی</figcaption></figure><figure class="sc"><img src="/site-img/subway.webp" alt="صحنه‌ی ایستگاه مترو" width="640" height="640" loading="lazy" decoding="async"><figcaption>ایستگاه مترو</figcaption></figure><figure class="sc"><img src="/site-img/theater.webp" alt="صحنه‌ی پشت صحنه‌ی تئاتر" width="640" height="640" loading="lazy" decoding="async"><figcaption>پشت صحنه‌ی تئاتر</figcaption></figure><figure class="sc"><img src="/site-img/museum.webp" alt="صحنه‌ی موزه‌ی ساکت" width="640" height="640" loading="lazy" decoding="async"><figcaption>موزه‌ی ساکت</figcaption></figure><figure class="sc"><img src="/site-img/train.webp" alt="صحنه‌ی قطار شبانه" width="640" height="640" loading="lazy" decoding="async"><figcaption>قطار شبانه</figcaption></figure><figure class="sc"><img src="/site-img/harbor.webp" alt="صحنه‌ی بندر مه‌گرفته" width="640" height="640" loading="lazy" decoding="async"><figcaption>بندر مه‌گرفته</figcaption></figure><figure class="sc"><img src="/site-img/lab.webp" alt="صحنه‌ی آزمایشگاه" width="640" height="640" loading="lazy" decoding="async"><figcaption>آزمایشگاه</figcaption></figure><figure class="sc"><img src="/site-img/hotel.webp" alt="صحنه‌ی راهروی هتل" width="640" height="640" loading="lazy" decoding="async"><figcaption>راهروی هتل</figcaption></figure><figure class="sc"><img src="/site-img/wedding.webp" alt="صحنه‌ی سالن عروسی" width="640" height="640" loading="lazy" decoding="async"><figcaption>سالن عروسی</figcaption></figure></div>
+</section>
+
 <section id="how"><div class="wrap">
  <h2>چطور بازی می‌شود؟</h2>
  <p class="lead">هر شب ساعت ۲۱ یک پرونده‌ی تازه باز می‌شود. فقط با عقل و دقتت حلش می‌کنی.</p>
  <div class="grid">
-  <div class="card"><svg aria-hidden="true"><use href="#i-file"/></svg><h3>پرونده‌ی هر شب</h3><p>یک ماجرای کوتاه با چند مظنون. هر پرونده یک جواب دارد و فقط یک نفرش دروغ گفته است.</p></div>
-  <div class="card"><svg aria-hidden="true"><use href="#i-talk"/></svg><h3>بازجویی</h3><p>از هر مظنون بپرس. حرف‌هایشان را کنار هم بگذار؛ دروغ لابه‌لای جمله‌ها پیداست.</p></div>
-  <div class="card"><svg aria-hidden="true"><use href="#i-lens"/></svg><h3>مدارک</h3><p>رسید، فیلم دوربین، پیام گوشی، گزارش. مدرک مهم را نشان کن و آن‌ها را با هم بسنج.</p></div>
-  <div class="card"><svg aria-hidden="true"><use href="#i-gavel"/></svg><h3>متهم کردن</h3><p>مقصر را انتخاب کن و مدرکی را نشان بده که دروغش را ثابت می‌کند. سه فرصت داری.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-file"/></svg><h3>پرونده‌ی هر شب</h3><p>یک ماجرای کوتاه با چند مظنون. هر پرونده یک جواب دارد و فقط یک نفر مقصر است.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-talk"/></svg><h3>بازجویی</h3><p>از هر مظنون بپرس. حرف‌هایشان را کنار هم بگذار؛ دروغ لابه‌لای جمله‌ها پیدا می‌شود.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-lens"/></svg><h3>مدارک</h3><p>رسید، فیلم دوربین، پیام گوشی، گزارش. مدرک مهم را نشان کن و آن‌ها را با هم مقایسه کن.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-gavel"/></svg><h3>متهم کردن</h3><p>مقصر را انتخاب کن و بگو چرا و چطور. هر چه زودتر و دقیق‌تر، ستاره‌ی بیشتر.</p></div>
  </div>
+</div></section>
+
+<section class="faces"><div class="wrap">
+ <h2>هر مظنون یک چهره و یک دروغ دارد</h2>
+ <p class="lead">بیش از صد و بیست چهره‌ی متفاوت؛ از پیرزن اشرافی تا رهبر ارکستر. چهره‌ها را یادت بماند، ولی به حرفشان اعتماد نکن.</p>
+ <div class="sprow"><figure class="sp"><img src="/site-img/f_old_countess.webp" alt="مظنون: بانوی قدیمی" width="320" height="320" loading="lazy" decoding="async"><figcaption><b>بانوی قدیمی</b><span>«گفتنش سخت است، ولی دروغ نمی‌گوید.»</span></figcaption></figure><figure class="sp"><img src="/site-img/m_mid_captain.webp" alt="مظنون: ناخدا" width="320" height="320" loading="lazy" decoding="async"><figcaption><b>ناخدا</b><span>«ساعت ده روی عرشه بودم. قسم می‌خورم.»</span></figcaption></figure><figure class="sp"><img src="/site-img/f_young_artist.webp" alt="مظنون: نقاش جوان" width="320" height="320" loading="lazy" decoding="async"><figcaption><b>نقاش جوان</b><span>«من فقط آن شب آنجا رنگ می‌خریدم.»</span></figcaption></figure><figure class="sp"><img src="/site-img/m_old_professor.webp" alt="مظنون: استاد" width="320" height="320" loading="lazy" decoding="async"><figcaption><b>استاد</b><span>«یادداشت‌ها را من نگذاشتم آنجا.»</span></figcaption></figure><figure class="sp"><img src="/site-img/f_mid_singer.webp" alt="مظنون: خواننده" width="320" height="320" loading="lazy" decoding="async"><figcaption><b>خواننده</b><span>«پشت پرده بودم، کسی ندیدم.»</span></figcaption></figure><figure class="sp"><img src="/site-img/m_mid_conductor.webp" alt="مظنون: رهبر ارکستر" width="320" height="320" loading="lazy" decoding="async"><figcaption><b>رهبر ارکستر</b><span>«نت‌ها کنار پیانو بود، همین.»</span></figcaption></figure></div>
 </div></section>
 
 <section><div class="wrap two">
@@ -174,25 +226,32 @@ footer a{margin-left:18px}
  </div>
 </div></section>
 
-<section><div class="wrap two">
- <div class="card" style="display:flex;gap:18px;align-items:center">
-  <svg aria-hidden="true" style="width:74px;height:74px;flex:none"><use href="#i-flame"/></svg>
-  <div><h3>زنجیره‌ی شب‌ها</h3><p>هر شب که پرونده را حل کنی شعله‌ات بزرگ‌تر می‌شود و کنار اسمت در جدول می‌ماند.</p></div>
+<section class="prog"><div class="wrap">
+ <h2>از تازه‌کار تا اسطوره‌ی کارآگاهی</h2>
+ <p class="lead">با هر پرونده تجربه می‌گیری و درجه‌ات بالا می‌رود. دستاوردها مدال می‌شوند و پرونده‌های حل‌شده در آلبوم جرم‌هایت جمع می‌شوند.</p>
+ <ol class="ranks"><li>کارآگاه تازه‌کار</li><li>شاگرد کارآگاه</li><li>کارآگاه</li><li>بازپرس</li><li>بازرس ارشد</li><li>سرپرست پرونده‌ها</li><li>استاد معما</li><li>افسانه</li><li class=top>اسطوره‌ی کارآگاهی</li></ol>
+ <div class="grid" style="margin-top:22px">
+  <div class="card"><svg aria-hidden="true"><use href="#i-flame"/></svg><h3>زنجیره‌ی شب‌ها</h3><p>هر شب که پرونده را حل کنی شعله‌ات بزرگ‌تر می‌شود و کنار اسمت می‌ماند.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-moon"/></svg><h3>جدول هفتگی</h3><p>در لیگ خودت (تازه‌کار، کارآگاه، بازرس، سرپرست) با بقیه‌ی کارآگاه‌ها رقابت کن.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-file"/></svg><h3>آلبوم جرم‌ها</h3><p>هر پرونده‌ای که حل کنی به مجموعه‌ات اضافه می‌شود؛ مثل آلبومی از ماجراهایی که خودت بستی.</p></div>
+  <div class="card"><svg aria-hidden="true"><use href="#i-gavel"/></svg><h3>دستاوردها</h3><p>مدال برنز، نقره و طلا برای دقت، سرعت و پشتکار؛ هر کدام با پاداش خودش.</p></div>
  </div>
- <div>
-  <h2>جدول کارآگاه‌های برتر</h2>
-  <p class="lead" style="margin-bottom:0">هر هفته در لیگ خودت (تازه‌کار، کارآگاه، بازرس، سرپرست) با بقیه‌ی کارآگاه‌ها رقابت کن. سه کارآگاه اول هر لیگ جایزه می‌گیرند.</p>
- </div>
+</div></section>
+
+<section class="look"><div class="wrap">
+ <h2>کارآگاه خودت را بساز</h2>
+ <p class="lead">آواتار و قاب انتخاب کن تا در جدول و کنار اسمت دیده شوی. بعضی را با بازی می‌گیری و بعضی را می‌توانی با سکه بخری.</p>
+ <div class="frrow"><figure class="fr"><div class="frbox"><img class="av" src="/site-img/ex_gold.webp" alt="" width="256" height="256" loading="lazy" decoding="async" style="width:72.99%;left:13.30%;top:14.42%"><img class="fm" src="/site-img/frame_laurel.webp" alt="" width="360" height="360" loading="lazy" decoding="async"></div><figcaption>قاب برگ غار</figcaption></figure><figure class="fr"><div class="frbox"><img class="av" src="/site-img/ex_masked.webp" alt="" width="256" height="256" loading="lazy" decoding="async" style="width:74.01%;left:12.91%;top:14.21%"><img class="fm" src="/site-img/frame_moon.webp" alt="" width="360" height="360" loading="lazy" decoding="async"></div><figcaption>قاب ماه</figcaption></figure><figure class="fr"><div class="frbox"><img class="av" src="/site-img/det_03.webp" alt="" width="256" height="256" loading="lazy" decoding="async" style="width:75.01%;left:12.38%;top:12.31%"><img class="fm" src="/site-img/frame_siren.webp" alt="" width="360" height="360" loading="lazy" decoding="async"></div><figcaption>قاب آژیر</figcaption></figure><figure class="fr"><div class="frbox"><img class="av" src="/site-img/det_07.webp" alt="" width="256" height="256" loading="lazy" decoding="async" style="width:69.01%;left:15.40%;top:14.90%"><img class="fm" src="/site-img/frame_persian.webp" alt="" width="360" height="360" loading="lazy" decoding="async"></div><figcaption>قاب ایرانی</figcaption></figure></div>
 </div></section>
 
 <section class="free"><div class="wrap two">
  <div>
   <h2>رایگان بازی کن</h2>
-  <p class="lead" style="margin-bottom:0">«پرونده» رایگان است و بدون ثبت‌نام شروع می‌شود. تبلیغ ندارد. اگر دوست داشتی، با سکه پرونده‌های قدیمی بایگانی یا سرنخ می‌گیری.</p>
+  <p class="lead" style="margin-bottom:0">«پرونده» رایگان است و بدون ثبت‌نام شروع می‌شود. تبلیغ ندارد. اگر دوست داشتی، با سکه پرونده‌های قدیمی، سرنخ و ظاهر کارآگاهت را بخر.</p>
  </div>
  <div class="card" style="display:flex;gap:16px;align-items:center">
   <svg aria-hidden="true" style="width:58px;height:58px;flex:none"><use href="#i-coin"/></svg>
-  <ul style="margin:0;padding:0 18px 0 0;color:var(--soft)"><li>پرونده‌ی هر شب همیشه رایگان است</li><li>سکه را با بازی هم می‌گیری</li><li>بایگانی، سرنخ و ابزار با سکه</li></ul>
+  <ul style="margin:0;padding:0 18px 0 0;color:var(--soft)"><li>پرونده‌ی هر شب همیشه رایگان است</li><li>سکه را با بازی هم می‌گیری</li><li>بایگانی، سرنخ و آواتار با سکه</li></ul>
  </div>
 </div></section>
 
@@ -229,6 +288,7 @@ footer a{margin-left:18px}
   <div id="v-result" class="hidden"></div>
  </div>
 </div></section>
+<section class="final"><div class="wrap"><img src="/site-img/logo.webp" alt="" width="256" height="256" loading="lazy" decoding="async"><h2>پرونده‌ی امشب منتظر توست</h2><p class="lead" style="margin:0 auto 22px">یک شب، یک معما، یک متهم. حاضری؟</p><a class="btn" href="{{BAZAAR_URL}}" rel="noopener">دانلود از کافه بازار</a></div></section>
 </main>
 
 <footer><div class="wrap">

@@ -9,6 +9,7 @@ import '../widgets/category.dart';
 import '../widgets/offline.dart';
 import '../widgets/archive_stats.dart';
 import '../widgets/scene.dart';
+import 'album_screen.dart';
 import 'case_screen.dart';
 import 'dialogs.dart';
 import 'main_shell.dart';
@@ -159,6 +160,12 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
         backgroundColor: K.night,
         title: Text('بایگانی', style: tDisplay(20)),
         actions: [
+          IconButton(
+            key: const ValueKey('open-album'),
+            tooltip: 'آلبوم مجرم‌ها',
+            icon: const Icon(Icons.collections_bookmark_rounded, color: K.brass),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AlbumScreen())),
+          ),
           ListenableBuilder(
             listenable: Api.i,
             builder: (_, __) => Padding(

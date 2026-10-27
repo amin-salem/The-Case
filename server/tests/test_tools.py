@@ -33,6 +33,7 @@ def tooled(case_id="c020"):
     d["solution"]["irrelevant"] = spare_cards(d)[:1]
     assert d["solution"]["irrelevant"], "pick a case with a spare card"
     for s in d["suspects"]:
+        s.pop("camera", None)  # real cases now carry camera lines; the test sets its own
         s["print"] = [f"روی دستگیره‌ی در راهرو ردِ دستکش چرمیِ {s['name']} پیدا شد؛ همونی که هر روز می‌پوشه."]
     for s in d["suspects"][:2]:
         s["camera"] = [f"{s['name']} هنگام انتظار چند بار به ساعت مچی‌اش نگاه کرد و بعد دوباره نشست."]
@@ -252,6 +253,8 @@ async def test_nothing_new_is_not_consumed(client, today):
 async def test_tools_never_change_stars_and_never_count_as_investigation(client, today, monkeypatch):
     monkeypatch.setattr(eco, "MIN_ACTIVE_SECONDS", 90)
     monkeypatch.setattr(eco, "MIN_SUSPECTS_SEEN", 2)
+    from app.config import get_settings
+    monkeypatch.setattr(get_settings(), "active_time_scale", 1.0)
     p = await start(client, today, "ranked")
     h = p["headers"]
     for kind, body in (("magnifier", {}), ("fingerprint", {"suspect": "s1"}), ("camera", {"suspect": "s1"})):

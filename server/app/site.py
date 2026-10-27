@@ -7,8 +7,8 @@ it is not in app/content and no validator or the app ever loads it."""
 import hashlib
 from pathlib import Path
 
-from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse, Response
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import FileResponse, HTMLResponse, Response
 
 router = APIRouter(tags=["site"], include_in_schema=False)
 
@@ -29,7 +29,7 @@ def _build() -> tuple[str, str]:
 _HTML, _ETAG = _build()
 _HEADERS = {"Cache-Control": "public, max-age=300", "ETag": _ETAG, "X-Content-Type-Options": "nosniff",
             "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; "
-                                       "font-src 'self'; img-src data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"}
+                                       "font-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"}
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -37,3 +37,15 @@ async def landing(request: Request):
     if request.headers.get("if-none-match") == _ETAG:
         return Response(status_code=304, headers={"ETag": _ETAG, "Cache-Control": _HEADERS["Cache-Control"]})
     return HTMLResponse(_HTML, headers=_HEADERS)
+
+
+_IMG_DIR = Path(__file__).resolve().parent / "web" / "img"
+_IMAGES = {f.name for f in _IMG_DIR.glob("*.webp")}   # a fixed list read once: nothing else is ever served from here
+
+
+@router.get("/site-img/{name}")
+async def site_image(name: str):
+    """The pictures of the landing page (scenes, faces, frames, logo): our own files, cached for a week."""
+    if name not in _IMAGES:
+        raise HTTPException(404, "no_image")
+    return FileResponse(_IMG_DIR / name, media_type="image/webp", headers={"Cache-Control": "public, max-age=604800"})

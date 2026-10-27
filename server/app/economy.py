@@ -94,17 +94,48 @@ INVITE_MIN_DAYS = 3              # the inviter is paid after the invited player 
 INVITE_PAID_PER_WEEK = 5         # paid invites per inviter per week (Saturday to Friday); also 1 paid invite per device
 
 # anti-cheat (docs/operations.md): proof of investigation and delayed answers
-MIN_ACTIVE_SECONDS = 90          # 3 stars and a leaderboard place need this much active time on a difficulty-3 case ...
-# ... scaled by the case's difficulty (1-5): an easy case asks for less, a hard one for more (60/75/90/110/130 s)
+# Relaxed 25 Oct 2026 (Amin): honest players got 1 star. The live numbers come from the environment
+# (ACTIVE_TIME_SCALE, MIN_SUSPECTS_SEEN, DEPTH_MIN_QUESTIONS in app/config.py); the strict ones below never change and
+# are used by the admin watcher (anticheat.strict_verdict) to measure what the old rules WOULD do.
+MIN_ACTIVE_SECONDS = 90          # base active time of a difficulty-3 case, before ACTIVE_TIME_SCALE ...
+# ... scaled by the case's difficulty (1-5): an easy case asks for less, a hard one for more (x1: 60/75/90/110/130 s)
 ACTIVE_TIME_FACTOR = {1: 0.67, 2: 0.83, 3: 1.0, 4: 1.22, 5: 1.44}
-MIN_SUSPECTS_SEEN = 2            # ... and at least this many suspects interrogated
+MIN_SUSPECTS_SEEN: int | None = None   # None = the MIN_SUSPECTS_SEEN setting (default 1); tests may pin a number
+# the OLD (strict) rules, frozen: independent of the environment
+STRICT_ACTIVE_SECONDS = 90
+STRICT_ACTIVE_FACTOR = {1: 0.67, 2: 0.83, 3: 1.0, 4: 1.22, 5: 1.44}
+STRICT_MIN_SUSPECTS = 2
+STRICT_MIN_QUESTIONS = 2
 STORY_ANSWER_DELAY_HOURS = 24    # a failed story chapter shows its answer this long after the failure
 HIDE_NEW_ACCOUNT_HOURS = 48      # accounts younger than this and without email are hidden from the leaderboards
 
 
+def active_time_scale() -> float:
+    from .config import get_settings
+    return min(3.0, max(0.0, float(get_settings().active_time_scale)))
+
+
 def min_active_seconds(difficulty: int | None) -> int:
-    """Active time a case of this difficulty needs for 3 stars and a leaderboard place (an unknown difficulty counts as 3)."""
-    return round(MIN_ACTIVE_SECONDS * ACTIVE_TIME_FACTOR.get(int(difficulty or 3), 1.0))
+    """Active time a case of this difficulty needs for 3 stars and a leaderboard place (an unknown difficulty counts as 3).
+    Live value = base x difficulty factor x ACTIVE_TIME_SCALE (default 0.3: about 18/22/27/33/39 s)."""
+    return round(MIN_ACTIVE_SECONDS * ACTIVE_TIME_FACTOR.get(int(difficulty or 3), 1.0) * active_time_scale())
+
+
+def min_suspects_seen() -> int:
+    """Suspects a player must have interrogated (live value, MIN_SUSPECTS_SEEN setting, default 1)."""
+    if MIN_SUSPECTS_SEEN is not None:
+        return MIN_SUSPECTS_SEEN
+    from .config import get_settings
+    return max(0, int(get_settings().min_suspects_seen))
+
+
+def strict_min_active_seconds(difficulty: int | None) -> int:
+    """The OLD need (90 s base, factor 0.67/0.83/1/1.22/1.44), whatever the environment says."""
+    try:
+        d = int(difficulty or 3)
+    except (TypeError, ValueError):
+        d = 3
+    return round(STRICT_ACTIVE_SECONDS * STRICT_ACTIVE_FACTOR.get(d, 1.0))
 
 
 def login_reward(day: int, pick=None) -> int:
@@ -195,16 +226,26 @@ XP_CASE_FAILED = 5               # lost, but learned something
 XP_RIDDLE_RIGHT = 10
 XP_RIDDLE_WRONG = 2
 XP_CHEST = 40                    # all daily missions done
-RANKS = [                        # (XP needed, title)
+RANKS = [                        # (XP needed, title). 19 ranks (Oct 2026); the first nine thresholds are the old ones
     (0, "کارآگاه تازه‌کار"),
+    (100, "شاگرد کارآگاه"),
     (200, "دستیار کارآگاه"),
+    (400, "کارآگاه کارآموز"),
     (600, "کارآگاه"),
+    (900, "کارآگاه کاردان"),
     (1300, "کارآگاه ارشد"),
+    (1900, "بازپرس"),
     (2500, "بازرس"),
+    (3300, "بازرس ارشد"),
     (4200, "سربازرس"),
+    (5300, "سرپرست پرونده‌ها"),
     (6500, "کارآگاه نخبه"),
+    (8000, "کارآگاه نابغه"),
     (10000, "استاد معما"),
+    (12500, "استاد بزرگ"),
     (15000, "افسانه"),
+    (20000, "افسانه‌ی زنده"),
+    (30000, "اسطوره‌ی کارآگاهی"),
 ]
 
 
@@ -248,7 +289,12 @@ def story_skip_cost(remaining_seconds: float) -> int:
 
 # profile avatars and frames (docs/avatars-plan.md): the shop sells each one once, forever
 AVATAR_PRICE = {"ex_alchemist": 600, "ex_journalist": 600, "ex_qajar": 800, "ex_cat": 800, "ex_chef": 900,
-                "ex_shadow": 1800, "ex_diva": 2200, "ex_gold": 2500}
+                "ex_shadow": 1800, "ex_diva": 2200, "ex_gold": 2500,
+                # Oct 2026 batch (Amin): the more striking the picture, the higher the price
+                "ex_fisherman": 600, "ex_taxi": 600, "ex_librarian": 700, "ex_keeper": 800, "ex_writer": 900,
+                "ex_watchmaker": 1000, "ex_forensic": 1200, "ex_rainman": 1400, "ex_masked": 1900, "ex_cyber": 2400}
 FRAME_PRICE = {"frame_fingerprint": 300, "frame_blinds": 400, "frame_cuffs": 600, "frame_stamp": 600,
-               "frame_neon": 900, "frame_royal": 1500}
+               "frame_neon": 900, "frame_royal": 1500,
+               "frame_scroll": 400, "frame_chain": 700, "frame_piano": 800, "frame_siren": 1000, "frame_ice": 1100,
+               "frame_laurel": 1300, "frame_moon": 1600, "frame_persian": 1800}
 

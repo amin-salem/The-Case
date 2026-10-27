@@ -10,6 +10,7 @@ import '../services/api.dart';
 import '../services/case_clock.dart';
 import '../services/sound.dart';
 import '../theme.dart';
+import '../widgets/first_guess.dart';
 import '../widgets/cast_strip.dart';
 import '../widgets/claim_notes.dart';
 import '../widgets/category.dart';
@@ -538,6 +539,26 @@ class _CaseScreenState extends State<CaseScreen> {
 
   // ---------------------------------------------------------------- intro
 
+  bool _guessBusy = false;
+
+  /// «شروع تحقیقات»: a case that is new to the player first offers the one-tap «به نظر تو کیه؟» sheet (skippable,
+  /// asked once per case on this phone), then the evidence opens.
+  Future<void> _startInvestigation() async {
+    final c = _case, p = _progress;
+    if (_guessBusy) return;
+    if (c != null && p != null && !p.finished && p.hints.isEmpty && p.attempts == 0) {
+      _guessBusy = true;
+      try {
+        await askFirstGuess(context, c);
+      } catch (e) {
+        debugPrint('first guess: $e');
+      } finally {
+        _guessBusy = false;
+      }
+    }
+    if (mounted) setState(() => _intro = false);
+  }
+
   Widget _introView(CaseData c) {
     return Scaffold(
       body: Stack(children: [
@@ -591,7 +612,7 @@ class _CaseScreenState extends State<CaseScreen> {
                         ),
                       ),
                       const SizedBox(height: 18),
-                      StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, onTap: () => setState(() => _intro = false)),
+                      StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, onTap: _startInvestigation),
                   ]),
                 ),
               ),

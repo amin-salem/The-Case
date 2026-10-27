@@ -1,4 +1,106 @@
+# Nightly c037–c042 integration — 2026-10-24
+
+- Confirm c025–c036 rewrites are already on main and leave them unchanged. Integrate c037–c039 from their review branch while preserving current detective-tool data; close blind-review shortcuts. Fully rewrite c040–c042 with distinct multi-clue deductions and matching notification teasers. Opening dates, portraits and runtime format stay unchanged. All six are calibrated to difficulty 4.
+- Review and validation: `docs/reviews/c037-c042-main-review.md`. Content-only; no APK/release workflow or production database access.
+
+# Nightly content revision — 2026-10-24
+
+- Correct family/name inconsistencies and strengthen multi-clue deductions in c025–c030. Preserve opening dates, portraits and culprit slots; refresh teasers. Details: `docs/reviews/c025-c030-review.md`. c026 is difficulty 5; the other five remain 4.
+
 # Changelog
+
+## server 1.40.4: weekend case w004 rewritten in format 3 (Amin, 27 Oct 2026)
+- «کاروانسرای آخر خط» (opens Thursday 29 Oct 09:00, night 2 at 21:00, closes Friday 21:00) rewritten by Claude Opus from scratch: format 3 (newcomer Arash on night 2, night-1 question «کی می‌گه کل شب تو اتاقش بوده، ولی نبوده؟» → Roya/e5), 8 suspects, 18 cards, difficulty 5, culprit s5 with an accomplice (two people, one plan + motive inversion: the letter, not the map). Old errors fixed: the "hospital" with the road closed, chapter-2 text about Wednesday night, format 2 without the night-1 parts.
+- Blind tests (fresh agents, public file + tool lines, shows answered one by one): night 1 four rounds, hardened each time, last full-run reader rated night 1 alone 4/5 (50–60% on the culprit); two full runs, solved through the intended chain (e3+e4, e10+e11, e18, e12+e17), every lie explained by a card. Notification text updated.
+
+## server 1.40.3 + app build 77 (1.40.3): frame fit, c004 faces (Amin, 27 Oct 2026)
+- **Image frames:** the portrait circle was centred on the largest inscribed circle of each frame's opening, which sits off-centre when the ornament is uneven (worst: «تاج برگ و ذره‌بین», also «ماه و ستاره»). `kImageFrames` is now measured from the pictures: centre = middle of the opening, radius = the smallest circle that covers the whole opening without showing outside it (checked on the alpha channel for all 8 frames). The landing page uses the same numbers.
+- **c004 «تابلوی گمشده»:** the museum director (s3) and the retired man (s2) used `m_old_flatcap` and `m_old_fisher`, which are practically the same face. s3 now uses `m_old_professor`. No other case has both portraits.
+
+## server 1.40.2: new landing page (Amin, 26 Oct 2026)
+- `gaamly.ir/` redesigned: hero with the logo and a scene, a strip of 12 scenes, suspect "photo" cards, the rank path (19 ranks), achievements/album/league/streak cards, avatar + frame showcase, final call to action. The demo case is unchanged.
+- Pictures are our own small webp files in `server/app/web/img` (about 600 KB in total, lazy loaded), served only from a fixed list at `/site-img/{name}` (week cache); CSP now allows `img-src 'self' data:`. No external host. The game app is unchanged (no APK).
+
+## server 1.40.1 + app build 76 (1.40.2): bottom bar, about card, public texts (Amin, 26 Oct 2026)
+- **Bottom of the screen under the phone's bar (Samsung, three-button navigation, Android 15 edge to edge):** the Dart-side attempt of build 75 did not help, so it is removed. The fix is native: `app/tools/android/EdgeInsetsFix.java` (copied by `patch_android.py`, called from `SecureFlutterActivity.onCreate`). Only when the phone uses three-button navigation (`navigation_mode == 0`, Android 11+) it keeps the bar's height as padding under the app and removes it from the insets Flutter sees (nothing counted twice). Gesture-navigation phones and older Android are not touched. Covered by the javac contract test in `tools/tests/test_capture_policy.py`.
+- «درباره‌ی برنامه»: every value is on the same edge (Persian and Latin values were on opposite sides).
+- «چه خبر؟» lists the last 2 releases.
+- Public pages (`/terms`, `/privacy`, `/support`) rewritten in a more formal voice; the terms now say what coins/warrants/avatars buy, the suitable age, availability and that content may change; the daily lottery no longer says «نفر». Facts re-checked against the code (SMS code, hashed phone, 48 h hidden accounts, 400-character comments, local reminders).
+
+## server 1.40.0 + app build 74: the final Cafe Bazaar version (Amin, 26 Oct 2026)
+- **Images:** 44 new faces (pool 124: 68 women, 56 men), 10 new avatars (shop, 600-2400 coins), 8 new picture frames (shop, 400-1800 coins; `assets/frames`, hole position in `kImageFrames`). All faces re-matched to the age and job of the suspect (6 near misses, all middle-aged men). **Size:** every image re-encoded (faces 448 px q72, avatars 384 px q74, scenes q70, logo WebP): assets 8.6 MB -> 8.4 MB although 62 images were added (the 124 faces alone: 1.5 MB).
+- **Achievements:** 90 tiers in 23 chains (`achievements.CHAINS`); all old ids, titles and rewards are unchanged. New metrics `weekly_solved`, `weekly_top3`, `album_groups`. Early tiers pay a few coins, tiers from 7 up pay XP only. Each tier is paid automatically, once (no claim button, nothing can be lost). `/v1/achievements` rows carry `chain`, `chain_title`, `unit`, `tier` (old apps ignore them).
+- **Ranks:** 9 -> 19 (`economy.RANKS`); the old thresholds are kept for the old titles. Leagues now start at rank index 0/4/8/12 (same XP as before: 0/600/2500/6500). Frames bronze/silver/gold follow the rank titles (now index 5/11/17). Rank badges look up the rank by title.
+- **App:** new achievements screen (chains, tier bars that fill right to left, medals, rank ladder tab), new album screen (ring, next goal, frames, filters, big cards), `Medal` widget; the RTL rule applies everywhere.
+
+## server 1.39.2 + app: faces now match the age of the character (Amin, 26 Oct 2026) [on branch]
+- A 59-year-old had a 30-year-old face. Every face now has an apparent age (`docs/portrait-ages.json`) and ALL 304 suspects were re-matched: young 20-33, mid 34-52, old 54+ (a stated age such as «۶۸ ساله» wins). Only 5 near misses are left and all are men (old men: 51 needed, 4 old faces). Test `test_portrait_age_matches_the_character`.
+- Image prompts for 44 new faces, 10 avatars and 8 frames: `docs/new-faces-avatars-frames-prompts.md`. Release workflow: the live check no longer fails on a missing `httpx`.
+
+## server 1.39.2 + app: 12 more women faces, all women suspects re-spread (Amin, 26 Oct 2026) [on branch, not yet on main]
+- 12 more faces (pool now 80: women 54). All woman suspects (not only culprits) were re-spread over the pool, balanced by age, no face twice in one case: 69 suspects changed, 44 of 54 women faces are in use, none more than 3 times. Culprit faces are unchanged. Must ship together with the APK that carries the images.
+
+## server 1.39.1 + app: 20 new women portraits (Amin, 26 Oct 2026)
+- 20 new women faces (11 old, 9 middle-aged) added to `app/assets/portraits` (512 px WebP, 645 KB) and to `kPortraits`; the pool is now 68 faces (women: 7 young, 21 mid, 14 old). Needs a new APK (the images ship inside it).
+- Culprit faces re-spread over the bigger pool: 9 cases changed their culprit portrait (c008, c033, c034, c037, c039, c044, c052, w001, w003). Every woman culprit now has her own face; only the 9 male faces still repeat (need new male portraits).
+
+## server 1.39.0: anti-cheat relaxed, admin watcher, lost stars given back (Amin, 25 Oct 2026; priority Important)
+- **Why:** honest players solved cases correctly but got 1 star and no board place (active time and suspects rules too strict). **Relaxed, env-tunable:** `ACTIVE_TIME_SCALE=0.3` (needed active time about 18/22/27/33/39 s for difficulty 1-5, was 60/75/90/110/130), `MIN_SUSPECTS_SEEN=1` (was 2), `DEPTH_MIN_QUESTIONS=1` (was 2). **Strict values stay reachable by env only:** `ACTIVE_TIME_SCALE=1`, `MIN_SUSPECTS_SEEN=2`, `DEPTH_MIN_QUESTIONS=2`. Everything else (new-account hiding, device/cluster reports, kill switches, delayed answers) is unchanged.
+- **Watcher:** `anticheat.strict_verdict` is a pure function with the OLD constants (independent of the env). `GET /admin/anticheat-watch?days=7` (admin only, read-only, 60 s cache, at most 20 000 rows, no player ids) reports the share of solves the strict rules would have made 1-star/unranked (reasons time/suspects/depth, per difficulty, per day, median active seconds, how many the live rules keep). Shown as a green (<5 %) / amber (5-15 %) / red (>15 %) card on the admin panel home, with the Liara values to tighten again. The admin app is a web view of this panel, so there is no new admin APK.
+- **Lost stars given back:** `POST /admin/anticheat-restore` (dry run by default; batches of 300; cursor; idempotent through the new column `case_progress.stars_restored`, migration 0032, listed in `ci.yml`; atomic `stars_total` increments; kill switch `ANTICHEAT_RESTORE_ENABLED`). Honest solves that the old rules capped and the relaxed rules accept get their natural stars, `stars_total` and (when depth passes and it is not a paid retry) their board place. Coins, XP and achievements are NOT touched. Button «برگرداندن ستاره‌ها» on the panel home: preview first, second tap applies. See `docs/operations.md` «Anti-cheat».
+- Tests: `tests/test_anticheat_relax.py`; the strict tests pin the strict env values.
+
+## server 1.38.7: c029 and c030 re-reviewed (Amin, 25 Oct 2026)
+- c029: the 14:15 shelf sighting made the stamp-counter trick unnecessary (folder custody alone named Babak); removed, so the naive reading points at Fazeli (10:08 stamp, folder at 09:55). Shakouri's watch is its own card (e10, proof). Leftover «قانون خیالی» sentence, a real actor's name (cashier), the "unchained stamp" and Maryam's unexplained 11:00 folder entry fixed; cards simplified; new tool lines (§10b).
+- c030: intro's unexplained «تور پاره» removed; Elham's hem check is its own card (e11, proof); jeweller renamed (Farzan vs Faraji); Omid's unseen «دفتر اجرا», the two invoices and the box's visibility clarified; Elham's whereabouts stated; new tool lines (§10b). Explanations rewritten in plain Persian. Content only.
+
+## server 1.38.6 (no app change): card ids really gone from the solution text (Amin, 25 Oct 2026)
+- 1.37.2 cleaned the accuse result, but the case-detail route (opening a solved case again, or a lost case once its answer is public) still sent the raw `solution.explanation` with «e4، e5». That route now uses `content.readable` too (c026 and every other case). Test added in `test_explanation_readable.py`.
+
+## server 1.38.5: unique culprit faces in the album (Amin, 25 Oct 2026)
+- The culprit album showed the same face for different cases (52 culprits used only 31 faces). Now all 58 culprits (daily + weekend) are spread over the 48 shipped portraits by gender, age and job: 47 distinct faces, no APK change (portraits are already in the app). Only men repeat (38 male culprits vs 26 male faces, 11 faces used twice) until Amin sends new male faces; women are all unique. 4 other suspects got a new face only where they would have shared the culprit's face. Other suspects keep their old faces, so a face carries no hint about guilt.
+- Rule added to `docs/case-writing-rules.md` §8 and test `test_culprit_portraits_are_unique` (fails if a culprit face is reused while an unused face of that gender exists). Needed: about one new portrait per new case, men first. c043-c050 get a new check when Astra's rewrites arrive.
+
+## server 1.38.4: detective-tool lines c051-c052 rewritten (Amin, 25 Oct 2026)
+- c051 and c052 had `camera`/`print` lines written under the old "neutral" rule. They now follow §10b like c001-c028: a sighting with time and place (camera) and a touched object (print) per suspect, equal weight, none decisive alone. No camera is placed where it would have filmed the theft/poisoning itself. c052: Pouyan's answer "یه ساعت بعد" became "کمی بعد" to match the 16:55 sighting. Content only.
+
+## server 1.38.3: detective-tool lines c008-c028 rewritten (Amin, 25 Oct 2026, urgent)
+- Same change as 1.38.2 for the remaining 21 cases: every suspect of c008-c028 now has a `camera` line (a sighting with time and place) and a `print` line (what was touched) that answer one concrete question and give the player a next step; none names the culprit alone, all suspects get equal weight, and trace ages the story cannot support say so. Content only (`server/app/content/cases/c008-c028.json`), prices and code untouched.
+- Text fixes found while placing the lines on the true timelines: c008 (Amir's "quarter hour" answer vs phone messages until 01:14, Fereshteh's 02:45 vs the fridge sensor at 02:41, evidence e3 "main door" vs the cafe) and c019 (Sahar's 02:15 vs the coffee card at 02:12).
+
+## server 1.38.2: detective-tool lines c001-c007 rewritten (Amin, 25 Oct 2026, urgent)
+- Players said the tools were "بی‌فایده بود و چیزی نگفت": the old `camera`/`print` lines were deliberately neutral, so they told nothing. c001-c007 now have a **useful true fact per suspect**: `camera` = a sighting with a time and place, `print` = what was touched. Each fact moves a statement or an alibi, none decides the case alone, every suspect (culprit too) gets a line of equal weight, and trace ages that the story cannot support say "سنِ اثرها معلوم نیست". Content only (`server/app/content/cases/c001-c007.json`), prices and code untouched.
+- New rule `docs/case-writing-rules.md` §10b: tool lines must be useful true facts, written with the case and blind-tested. Next: c008-c028 in three more batches.
+
+## server 1.38.1: nightly #1, cases c051 and c052 (24 Oct 2026)
+- Content only (`server/app/content`): c051 «چهار ویالِ شیفتِ شب» (publish 2026-11-18, difficulty 4, hospital/medical) and c052 «قفسه‌ی دوم» (publish 2026-11-19, difficulty 5, lab/science), with camera/print lines and notification teasers. Test counts raised to 52 cases. No app change, no APK.
+
+## server 1.38.0, app 1.38.0 (build 71): culprit album and first guess (Amin, 24 Oct 2026; asked 16 Oct, priority Normal)
+- **آلبوم مجرم‌ها** (`GET /v1/album`, `server/app/album.py`): every case a player SOLVES (daily, archive or weekend; not story chapters) puts its culprit into an album card (name, role, the culprit's one-line intro, case number, title, plaques; the portrait or the code-drawn character). Unsolved cases arrive as silhouettes with NO title and NO culprit (`tests/test_album.py` checks the abuse path), only the number, the price hint and "open for you". The app opens the archive flow on that case with one tap (it asks before charging). Grouping lives in ONE function, `album.group_of` (today: `category`, scene as fallback).
+- **Reward** for completing a group of at least 2 published cases: permanent code-drawn FRAMES (`frame_album` at 1 completed group, `frame_album_noir` at 4), through the existing goal system (`avatars.check_goals`, insert-or-ignore, so once and atomic). No coins, no warrants. Stat `album_groups` only grows, so a case published later never takes a frame away. Opening the album pays players who finished a group before the feature (`GET /v1/album` is a locking GET like `/v1/me`).
+- **به نظر تو کیه؟** (`POST/GET /v1/cases/{id}/guess`, `server/app/guess.py`, table `case_guesses`, migration 0031 listed in ci.yml): before the evidence opens the app offers a one-tap first guess (a suspect or «نمی‌دونم», skippable, asked once per case on the phone). One row per player and case (unique, insert-or-ignore, never changed; a second guess returns the first). Refused with `too_late` once hints/questions/evidence/accusations exist. After solving (or a lost case whose answer is public) the result screen shows the first guess next to the truth and the share of detectives who guessed each suspect (grouped counts cached 60 s per worker, bounded; hidden below 20 guesses; never before the player may see the answer). The spoiler-free share text may add «حدس اولم درست بود» (never who). POST uses the cheap `read` rate policy.
+- Tests: `server/tests/test_album.py`, `app/test/album_test.dart`, frame list and «چی تازه شده؟» release 71 updated.
+
+## server 1.37.6 (no app change): tonight's case c026 cleaned up (Amin, 24 Oct 2026)
+- c026 (live tonight; culprit and proof cards unchanged): clear summary (the phone pallets left, sand pallets with the same labels stayed), the spare key goes from Kiyan back to Sohrab's aunt downstairs before Afshar takes it, the knee brace reaches the clinic by a courier Kiyan ordered at 02:58, Sohrab has a futsal alibi for the truck time, the labels were printed on the home printer and carried to the warehouse, Afshar's meeting (21:00-01:30) and the guarantor Bahman are written out, the clock offset is stated as 40 minutes, the explanation ends with a clear conclusion.
+- No place is called «خیالی» any more (c025, c026, c027, c028, c040); a test keeps it out of titles, locations and intros.
+
+## server 1.37.5 (no app change): camera and print lines re-checked after the ChatGPT rewrites (Amin, 24 Oct 2026)
+- c025-c030 and c037-c042 were rewritten (new titles, roles, in four of them a new culprit), so the tool lines written for the old versions were re-read against the current files: 41 lines rewritten (clue echoes such as wool, ink, tape or exam sheets; events the new story does not have; a line that made the new culprit stand out); all other lines are untouched. Only `camera`/`print` values changed. Details in `docs/case-log.md`.
+
+## server 1.37.4 (no app change): nightly draw switched off (Amin, 24 Oct 2026)
+- Amin does not want the «برنده‌ی قرعه‌ی شب» message sent to players. `DAILY_DRAW_ENABLED` now defaults to **false**: no draw runs and no inbox message or warrant is created (code, table and tests stay; set `DAILY_DRAW_ENABLED=true` to bring it back). Already-sent messages stay in the inbox. The leaderboard «i» sheet and the 1.36 «چی تازه شده؟» line still mention the draw; they are app texts and go in the next APK. Test: `test_draw_is_off_by_default`.
+
+## server 1.37.3 (no app change): the daily-draw message explains itself (Amin, 24 Oct 2026)
+- A player who won the nightly draw did not understand the inbox message. It now says what the draw is (one winner per night among detectives who solved that night's case with 3 plaques and a full investigation, nothing to do with speed), what the gift is (one story warrant «حکم بازرسی» that opens a locked story chapter without waiting) and that it stays in the account until used. The draw itself is unchanged (built in the 22 Oct slot, item 3 of the leaked-answer defence, see 1.36.0).
+
+## server 1.37.2 (no app change): no card ids in explanations (Amin, 23 Oct 2026)
+- The solution summary showed author references like «e5» (20 cases: c017-c036, w003-w006). `content.readable` now turns every `eN` in `solution.explanation` and `night1.explanation` into «card title» when the server sends it (accuse result, answer call); the case files keep the ids for authors, and future cases are covered. Test: `server/tests/test_explanation_readable.py`.
+
+## Server: weekend stars on the weekly board (23 Oct 2026)
+- Confirmed the existing rule: ranked live weekend solves add their stars alongside the publication week's nightly cases, using the same standings for the board and weekly prizes. No historical payouts or economy amounts change.
+- Fixed a stale-board path: after committing a solve, invalidate this worker's weekly board cache. A player already present in a warmed board no longer keeps the pre-weekend star total until the cache expires. Other workers retain the existing maximum 45-second TTL.
+- API regressions cover both ranking modes, leagues on/off, combined nightly/weekend stars, repeated accusations, prize eligibility, unranked/old-weekend exclusions and the exact Friday 21:00 boundary.
 
 ## server 1.37.1, app 1.37.1 (build 70): fingerprint reader rebuilt (Amin, 23 Oct 2026)
 - The 1.37.0 fingerprint ("your name appears in N cards") told players nothing they cannot already see under every card, so it is replaced: it now shows an authored physical trace per suspect, `suspect.print` (string or 1-3 lines, 20-160 chars, validated like `camera`, never in the public case). A case without `print` does not offer the tool; "nothing new" costs nothing. `mention_count` is gone. Traces were written for all cases (branch `content/prints`, rules in `docs/case-writing-rules.md` §10).

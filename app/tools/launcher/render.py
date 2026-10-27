@@ -89,7 +89,9 @@ def main() -> None:
         '<resources xmlns:tools="http://schemas.android.com/tools"\n'
         '    tools:keep="@drawable/ic_stat_case,@mipmap/ic_launcher_foreground,@mipmap/ic_launcher_monochrome" />\n')
     art(512, HERE / "store" / "icon_512.png")  # Cafe Bazaar listing
-    art(512, APP / "assets" / "icon" / "logo.png")  # in-app logo
+    art(512, HERE / "store" / "logo_512.png")
+    from PIL import Image  # the in-app logo ships as WebP (a tenth of the PNG size)
+    Image.open(HERE / "store" / "logo_512.png").save(APP / "assets" / "icon" / "logo.webp", "WEBP", quality=88, method=6)
     print("rendered into", RES)
 
 

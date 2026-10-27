@@ -144,10 +144,14 @@ class AchievementRow {
         earned = _b(j['earned']),
         earnedAt = j['earned_at'] is num ? DateTime.fromMillisecondsSinceEpoch((j['earned_at'] as num).toInt() * 1000) : null,
         coins = _i(j['coins']),
-        xp = _i(j['xp']);
+        xp = _i(j['xp']),
+        chain = _s(j['chain']).isEmpty ? _s(j['id']) : _s(j['chain']),
+        chainTitle = _s(j['chain_title']).isEmpty ? _s(j['title']) : _s(j['chain_title']),
+        unit = _s(j['unit']),
+        tier = _i(j['tier'], 1);
 
-  final String id, title, desc, group;
-  final int target, progress, coins, xp;
+  final String id, title, desc, group, chain, chainTitle, unit;
+  final int target, progress, coins, xp, tier;
   final bool earned;
   final DateTime? earnedAt;
 }
@@ -160,6 +164,45 @@ class AchievementsList {
 
   final int earned, total;
   final List<AchievementRow> items;
+
+  /// The tiers grouped into chains, in the order the server lists them (an old server without chains gives one-tier chains).
+  List<AchievementChain> get chains {
+    final by = <String, List<AchievementRow>>{};
+    for (final a in items) {
+      by.putIfAbsent(a.chain, () => []).add(a);
+    }
+    return [for (final e in by.entries) AchievementChain(e.value..sort((a, b) => a.tier.compareTo(b.tier)))];
+  }
+}
+
+/// One chain of tiers that count the same thing (e.g. cases solved: 1, 5, 10, 25 ...).
+class AchievementChain {
+  AchievementChain(this.tiers);
+  final List<AchievementRow> tiers;
+
+  String get id => tiers.first.chain;
+  String get title => tiers.first.chainTitle;
+  String get unit => tiers.first.unit;
+  String get group => tiers.first.group;
+  int get reached => tiers.where((t) => t.earned).length;
+  bool get complete => reached == tiers.length;
+
+  /// The next tier to earn (null when the chain is complete).
+  AchievementRow? get next => tiers.where((t) => !t.earned).firstOrNull;
+
+  /// How much is counted so far: the progress of the next tier, or the last target when complete.
+  int get value => next?.progress ?? tiers.last.target;
+
+  /// 0..1 inside the step towards the next tier.
+  double get stepFraction {
+    final n = next;
+    if (n == null) return 1;
+    final from = reached == 0 ? 0 : tiers[reached - 1].target;
+    final span = n.target - from;
+    return span <= 0 ? 0 : ((n.progress - from) / span).clamp(0.0, 1.0);
+  }
+
+  int get remaining => next == null ? 0 : (next!.target - next!.progress).clamp(0, 1 << 30);
 }
 
 /// One line of the messages hub (gift, badge, opening, announcement).

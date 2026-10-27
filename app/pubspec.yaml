@@ -1,7 +1,7 @@
 name: the_case
 description: "پرونده - a daily Persian crime-mystery game."
 publish_to: 'none'
-version: 1.37.1+70
+version: 1.40.3+77
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -36,6 +36,7 @@ flutter:
     - assets/portraits/
     - assets/scenes/
     - assets/avatars/
+    - assets/frames/
     - assets/banners/
     - assets/story/s01ch02/
   fonts:

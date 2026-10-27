@@ -26,7 +26,9 @@ def clock(monkeypatch):
 
 def test_rank_table():
     assert eco.rank_of(0) == 0 and eco.RANKS[0][1] == "کارآگاه تازه‌کار"
-    assert eco.RANKS[-1][1] == "افسانه"
+    assert eco.RANKS[-1][1] == "اسطوره‌ی کارآگاهی" and len(eco.RANKS) == 19
+    # the first nine thresholds are the old ones: nobody lost a title when ranks were added
+    assert [x for x, t in eco.RANKS if t in ("کارآگاه", "کارآگاه ارشد", "بازرس", "سربازرس", "افسانه")] == [600, 1300, 2500, 4200, 15000]
     assert [x for x, _ in eco.RANKS] == sorted({x for x, _ in eco.RANKS})
     for i, (need, _) in enumerate(eco.RANKS):
         assert eco.rank_of(need) == i

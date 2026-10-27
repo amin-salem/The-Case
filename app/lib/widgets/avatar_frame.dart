@@ -7,6 +7,21 @@ import '../theme.dart';
 /// Frames that move (embers drift, neon pulses). Everything else is drawn still.
 const Set<String> kAnimatedFrames = {'frame_ember', 'frame_neon', 'frame_blaze', 'frame_inferno', 'frame_eternal'};
 
+/// Frames painted as pictures (`assets/frames/ID.webp`, transparent). Each value is the hole for the portrait
+/// as fractions of the picture: centre x, centre y and radius. The portrait is drawn a little larger than the hole
+/// and the frame lies over its edge, so no gap shows. Centre = the middle of the opening (not the largest inscribed circle,
+/// which sits off-centre in frames with uneven leaves/ornaments); radius is the smallest that covers the whole opening.
+const Map<String, (double, double, double)> kImageFrames = {
+  'frame_piano': (0.4988, 0.4963, 0.3255),
+  'frame_laurel': (0.498, 0.5092, 0.3443),
+  'frame_persian': (0.499, 0.494, 0.3255),
+  'frame_siren': (0.4988, 0.4981, 0.3538),
+  'frame_ice': (0.4991, 0.4952, 0.3349),
+  'frame_moon': (0.4991, 0.5121, 0.3491),
+  'frame_chain': (0.4981, 0.4569, 0.3443),
+  'frame_scroll': (0.498, 0.4872, 0.3491),
+};
+
 /// A player's portrait: `assets/avatars/ID.webp` in a circle. If the file cannot be loaded, a drawn silhouette.
 class AvatarFace extends StatelessWidget {
   const AvatarFace(this.id, {super.key, required this.size});
@@ -82,6 +97,22 @@ class _AvatarWithFrameState extends State<AvatarWithFrame> with SingleTickerProv
     final size = widget.size;
     final frame = widget.frame;
     if (frame == null) return AvatarFace(widget.avatar, size: size);
+    final img = kImageFrames[frame];
+    if (img != null) {
+      final d = img.$3 * 2 * size * 1.06;
+      return SizedBox(
+        width: size,
+        height: size,
+        child: Stack(children: [
+          Positioned(left: img.$1 * size - d / 2, top: img.$2 * size - d / 2, child: AvatarFace(widget.avatar, size: d)),
+          Positioned.fill(
+              child: Image.asset('assets/frames/$frame.webp',
+                  fit: BoxFit.fill,
+                  filterQuality: FilterQuality.medium,
+                  errorBuilder: (_, __, ___) => const SizedBox.shrink())),
+        ]),
+      );
+    }
     return SizedBox(
       width: size,
       height: size,
@@ -227,6 +258,15 @@ class FramePainter extends CustomPainter {
         canvas.drawLine(const Offset(92, 92), const Offset(112, 112),
             _ring(9, color: const Color(0xFF5A3B1E))..strokeCap = StrokeCap.round);
         canvas.drawLine(const Offset(88, 88), const Offset(96, 96), _ring(10, color: K.brass)..strokeCap = StrokeCap.round);
+      case 'frame_album':
+        _circle(canvas, 43, _ring(6, color: K.brass));
+        _dashed(canvas, 38, _ring(1.6, color: const Color(0xFFFFF3C4)), const [5, 4]);
+      case 'frame_album_noir':
+        _circle(canvas, 43, _ring(8, color: K.night3));
+        _circle(canvas, 46.5, _ring(2, grad: _gold));
+        _dashed(canvas, 38, _ring(1.6, color: K.brass), const [3, 5]);
+        _diamond(canvas, const Offset(60, 12), 4, 5);
+        _diamond(canvas, const Offset(60, 108), 4, 5);
       case 'frame_fingerprint':
         final c = _ring(1.6, color: const Color(0xFFB9B5AA));
         _dashed(canvas, 41, c, const [60, 12, 30, 8]);

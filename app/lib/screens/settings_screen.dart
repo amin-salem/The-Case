@@ -398,8 +398,9 @@ class _AboutCardState extends State<AboutCard> {
             Text(k, style: tBody(13, color: K.textSoft)),
             const SizedBox(width: 12),
             Expanded(
+              // every value on the same (left) edge, whether it is Persian or a Latin code
               child: Text(v.isEmpty ? '—' : v,
-                  textAlign: TextAlign.end,
+                  textAlign: TextAlign.left,
                   textDirection: ltr ? TextDirection.ltr : null,
                   style: tBody(13, color: color ?? K.text, w: FontWeight.w700)),
             ),

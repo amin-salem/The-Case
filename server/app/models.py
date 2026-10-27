@@ -141,6 +141,9 @@ class CaseProgress(Base):
     shows: Mapped[list | None] = mapped_column(JSON, nullable=True)
     # weekend format 3, night 1: the one try at «کی دروغ می‌گه؟»: {"pick": suspect id, "ok": bool, "reward": coins}
     night1: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    # 25 Oct 2026: stars given back once to an honest solve that the old strict anti-cheat had capped to 1 star
+    # (POST /admin/anticheat-restore). Set in the same UPDATE ... WHERE stars_restored = false, so it can only happen once.
+    stars_restored: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
 
 
 class Purchase(Base):
@@ -477,4 +480,19 @@ class CaseToolUse(Base):
     kind: Mapped[str] = mapped_column(String(16))
     source: Mapped[str] = mapped_column(String(8))  # free | stock | coins
     result: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class CaseGuess(Base):
+    """The player's first guess on a case, given BEFORE opening the evidence («به نظر تو کیه؟»): one row per player and
+    case (unique, so it is written once and never changed), `suspect` is a suspect id or "?" for «نمی‌دونم». No text,
+    no personal data; counted per case for the community percentages (app/guess.py)."""
+
+    __tablename__ = "case_guesses"
+    __table_args__ = (UniqueConstraint("player_id", "case_id", name="uq_case_guess"), Index("ix_case_guess_case", "case_id"))
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    case_id: Mapped[str] = mapped_column(String(16))
+    suspect: Mapped[str] = mapped_column(String(16))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
