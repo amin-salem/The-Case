@@ -43,6 +43,9 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(77, '۱.۴۰', '2026-10-27', [
+    WhatsNewItem('frames_fit', 'قاب‌های تصویری دقیق‌تر دور چهره می‌شینن', WhatsNewTarget.avatars),
+  ]),
   WhatsNewRelease(76, '۱.۴۰', '2026-10-26', [
     WhatsNewItem('bottom_bar', 'پایین صفحه‌ها در گوشی‌هایی که دکمه‌های سه‌گانه‌ی پایین دارن دیگه زیر نوار گوشی نمی‌ره', WhatsNewTarget.archive),
     WhatsNewItem('texts', 'متن قوانین، حریم خصوصی و پشتیبانی به‌روز و شفاف‌تر شد', WhatsNewTarget.archive),

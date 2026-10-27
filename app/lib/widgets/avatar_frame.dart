@@ -9,16 +9,17 @@ const Set<String> kAnimatedFrames = {'frame_ember', 'frame_neon', 'frame_blaze',
 
 /// Frames painted as pictures (`assets/frames/ID.webp`, transparent). Each value is the hole for the portrait
 /// as fractions of the picture: centre x, centre y and radius. The portrait is drawn a little larger than the hole
-/// and the frame lies over its edge, so no gap shows.
+/// and the frame lies over its edge, so no gap shows. Centre = the middle of the opening (not the largest inscribed circle,
+/// which sits off-centre in frames with uneven leaves/ornaments); radius is the smallest that covers the whole opening.
 const Map<String, (double, double, double)> kImageFrames = {
-  'frame_piano': (0.4996, 0.4924, 0.3339),
-  'frame_laurel': (0.4541, 0.5024, 0.3121),
-  'frame_persian': (0.4785, 0.4817, 0.287),
-  'frame_siren': (0.4801, 0.5, 0.3415),
-  'frame_ice': (0.4992, 0.4928, 0.2967),
-  'frame_moon': (0.5485, 0.5113, 0.3183),
-  'frame_chain': (0.4972, 0.4484, 0.3195),
-  'frame_scroll': (0.4992, 0.5064, 0.3308),
+  'frame_piano': (0.4988, 0.4963, 0.3255),
+  'frame_laurel': (0.498, 0.5092, 0.3443),
+  'frame_persian': (0.499, 0.494, 0.3255),
+  'frame_siren': (0.4988, 0.4981, 0.3538),
+  'frame_ice': (0.4991, 0.4952, 0.3349),
+  'frame_moon': (0.4991, 0.5121, 0.3491),
+  'frame_chain': (0.4981, 0.4569, 0.3443),
+  'frame_scroll': (0.498, 0.4872, 0.3491),
 };
 
 /// A player's portrait: `assets/avatars/ID.webp` in a circle. If the file cannot be loaded, a drawn silhouette.

@@ -9,6 +9,10 @@
 
 # Changelog
 
+## server 1.40.3 + app build 77 (1.40.3): frame fit, c004 faces (Amin, 27 Oct 2026)
+- **Image frames:** the portrait circle was centred on the largest inscribed circle of each frame's opening, which sits off-centre when the ornament is uneven (worst: «تاج برگ و ذره‌بین», also «ماه و ستاره»). `kImageFrames` is now measured from the pictures: centre = middle of the opening, radius = the smallest circle that covers the whole opening without showing outside it (checked on the alpha channel for all 8 frames). The landing page uses the same numbers.
+- **c004 «تابلوی گمشده»:** the museum director (s3) and the retired man (s2) used `m_old_flatcap` and `m_old_fisher`, which are practically the same face. s3 now uses `m_old_professor`. No other case has both portraits.
+
 ## server 1.40.2: new landing page (Amin, 26 Oct 2026)
 - `gaamly.ir/` redesigned: hero with the logo and a scene, a strip of 12 scenes, suspect "photo" cards, the rank path (19 ranks), achievements/album/league/streak cards, avatar + frame showcase, final call to action. The demo case is unchanged.
 - Pictures are our own small webp files in `server/app/web/img` (about 600 KB in total, lazy loaded), served only from a fixed list at `/site-img/{name}` (week cache); CSP now allows `img-src 'self' data:`. No external host. The game app is unchanged (no APK).
