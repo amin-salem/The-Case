@@ -5,6 +5,18 @@ Thu, Fri for three weeks from Sat 24 Oct 2026; two cases each = 12 per week) and
 4 Nov, 11 Nov; one weekend case each, released Thursday 09:00). Stock when this was written: c001-c050 (last publish 17 Nov
 2026) and w001-w006 (last publish Thu 12 Nov 2026).
 
+## Idea bank (Amin, 27 Oct 2026) — overrides "pick puzzle types and settings" below
+Since 27 Oct every session writes from `docs/case-ideas-batch1.md` (read it from this branch:
+`git show origin/docs/writing-plan:docs/case-ideas-batch1.md`; the brief that produced it is `docs/case-ideas-brief.md`).
+- Nightly: idea k → c(52+k) (ideas 1-30 → c053-c082). A session writes the two lowest-numbered ideas whose case file does not
+  exist yet. Publish dates stay contiguous after the highest existing case.
+- Weekend: idea 31 → w007, 32 → w008 … 36 → w012, the lowest idea whose file does not exist; **always format 3** (night-1 liar,
+  one newcomer, two nights at_hours 0 and 12, open_hour 9, closes_hours 36), publish = highest weekend publish + 7 days.
+- Hand the Opus writer the idea text verbatim plus the style definition from the brief (S1-S7). Keep premise, style, puzzle type,
+  scene, category and culprit; fix every weakness against docs/case-writing-rules.md (the ideas are outlines, not checked cases).
+  Vary how false trails are cleared: at most two receipts/forms clear people in one case; use people, objects and answers for the rest.
+- Log in docs/case-log.md: «idea #k, style Sx, puzzle type N».
+
 ## Roles (cheap model rule from CLAUDE.md)
 The scheduled session itself is a Sonnet COORDINATOR: it reads the rules, picks the slots, runs the checks, CI, git and the push.
 The WRITING (logic plan + JSON + camera/print lines + fixes) is done by an **Opus subagent** (Agent tool, model opus), because
@@ -32,8 +44,8 @@ case writing is the one job CLAUDE.md reserves for Opus. The blind test is a **S
 
 ## Weekend session (one case, Wednesdays)
 Same roles and steps, with docs/weekend-format.md and the last weekend files as the model. Slot: highest `w` number M, publish
-date P (a Thursday) -> w(M+1) with publish P+7 days, open_hour 9, closes_hours like w006. Format: alternate with the previous
-case (w006 is format 2 -> w007 format 3 -> w008 format 2 -> w009 format 3). VERY hard (difficulty 5 on the 1-5 scale, as Amin wants
+date P (a Thursday) -> w(M+1) with publish P+7 days, open_hour 9, closes_hours like w006. Format: **always format 3** since
+27 Oct 2026 (see Idea bank; the old alternation 2/3 is dropped, w004 was rewritten in format 3). VERY hard (difficulty 5 on the 1-5 scale, as Amin wants
 weekend cases to be: deep, several false trails, chapter-2 cards that change the picture, the motive asked at the end), chapter
 cards so a player always knows what is new (`chapters[].evidence`, format 3 `appears_chapter`), `camera`/`print` for every
 suspect (the tools work on weekend cases once per night). Blind test must show: night 1 leaves a leaning but no certainty;
