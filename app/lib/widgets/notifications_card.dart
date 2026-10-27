@@ -27,7 +27,8 @@ class NotificationsOffCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               onTap: () async {
                 final ok = await Reminders.i.fix();
-                if (ok && context.mounted) toast(context, 'اعلان‌ها روشن شد ✅');
+                if (!context.mounted) return;
+                if (ok) toast(context, 'اعلان‌ها روشن شد ✅');
               },
               child: Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(12, 4, 4, 4),
@@ -88,7 +89,8 @@ Future<void> showBatteryHelpSheet(BuildContext context) {
         OutlinedButton.icon(
           onPressed: () async {
             final ok = await Reminders.i.openSystem('battery');
-            if (!ok && context.mounted) toast(context, 'صفحه باز نشد؛ مراحل بالا رو دستی برو');
+            if (!context.mounted) return;
+            if (!ok) toast(context, 'صفحه باز نشد؛ مراحل بالا رو دستی برو');
           },
           icon: const Icon(Icons.battery_charging_full_rounded, size: 18),
           label: const Text('باز کردن تنظیمات باتری'),

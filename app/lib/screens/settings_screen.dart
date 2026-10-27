@@ -141,7 +141,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: 'اعلان‌ها روی گوشی خاموشه؛ بزن تا روشنش کنی',
                       onTap: () async {
                         final ok = await Reminders.i.fix();
-                        if (ok && mounted) toast(context, 'اعلان‌ها روشن شد ✅');
+                        if (!mounted) return;
+                        if (ok) toast(context, 'اعلان‌ها روشن شد ✅');
                       },
                     ),
                   SettingsRow(
@@ -155,7 +156,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         if (!ok) return;
                       }
                       final shown = await Reminders.i.test();
-                      if (mounted && !shown) toast(context, 'اعلان نشون داده نشد؛ اعلان‌ها روی گوشی خاموشه');
+                      if (!mounted) return;
+                      if (!shown) toast(context, 'اعلان نشون داده نشد؛ اعلان‌ها روی گوشی خاموشه');
                     },
                   ),
                   SettingsRow(
