@@ -353,6 +353,7 @@ async def test_install_source_stored_counted_and_bad_value_dropped(client):
     assert ClientInfoIn(**base, installer="com.farsitel.bazaar").installer == "com.farsitel.bazaar"
     for bad in ("<script>", "a" * 65, "x y", 5, None):
         assert ClientInfoIn(**base, installer=bad).installer == ""
+    before = (await client.get("/admin/api/overview", headers=ADMIN)).json()["install_sources"]  # the test DB is shared
     a = await new_player(client, "device-src-1")
     b = await new_player(client, "device-src-2")
     c = await new_player(client, "device-src-3")
@@ -365,5 +366,7 @@ async def test_install_source_stored_counted_and_bad_value_dropped(client):
     # a later report without installer keeps what was known
     assert (await client.post("/v1/me/client", json=base, headers=a["headers"])).status_code == 200
     ov = (await client.get("/admin/api/overview", headers=ADMIN)).json()
-    assert ov["install_sources"] == {"bazaar": 1, "myket": 1, "other": 2}
-    assert {"version": "1.40.5", "build": 79, "players": 4} in ov["versions"]
+    now = ov["install_sources"]
+    assert (now["bazaar"] - before["bazaar"], now["myket"] - before["myket"]) == (1, 1)
+    assert sum(now.values()) - sum(before.values()) == 4  # the four new players: bazaar, myket and two unknown
+    assert any(v["build"] == 79 and v["players"] >= 4 for v in ov["versions"])
