@@ -43,56 +43,43 @@ def test_rewrite_keeps_publication_and_supported_nightly_contract(number, publis
     assert {e["type"] for e in d["evidence"]} <= {"object", "document", "witness", "cctv"}
 
 
-def test_c037_rounded_weights_do_not_uniquely_pick_a_destination():
-    gifts, empty_box = numbers(clue("c037", "e1"))[:2]
-    rounding_step, error, *readings = numbers(clue("c037", "e2"))
-    assert rounding_step == 2 * error
-    # Room numbers appear before each pair of readings in the actual card.
-    flower_gross, flower_base, room_a, a_gross, a_base, room_b, b_gross, b_base = readings
-    assert (room_a, room_b) == (12, 18)
-    assert flower_gross == flower_base
-    device = numbers(clue("c037", "e8"))[0]
-    for excess in (a_gross - a_base, b_gross - b_base):
-        assert excess - 2 * error <= gifts + empty_box <= excess + 2 * error
-        assert excess - 2 * error <= device <= excess + 2 * error
-    assert gifts + empty_box != device
-    # The recovered return bags do not identify a room: the load capacity must.
-    # Even the maximum possible gross room-18 load cannot contain both items.
-    assert device + gifts + empty_box > b_gross + error
-    assert gifts + empty_box > flower_gross + error
-    assert "در سبد دیگر قابل تشخیص از هم نبوده‌اند" in clue("c037", "e3")
-    assert "برچسبِ اتاق نخورده" in clue("c037", "e3")
-    # Amount equality is not serial-number provenance; the public cards must
-    # agree on the specifically traceable subset, not pretend to trace all cash.
-    serial_in = numbers(clue("c037", "e1"))[-3:]
-    serial_out = numbers(clue("c037", "e9"))[-3:]
-    assert serial_in == serial_out
-    assert serial_in[2] - serial_in[1] + 1 == 50
-    assert 50 * 100_000 < 260_000_000
+def _minutes(hhmm):
+    h, m = hhmm.split(":")
+    t = int(h) * 60 + int(m)
+    return t + 24 * 60 if t < 6 * 60 else t  # after midnight belongs to the same wedding night
 
 
-def test_c038_actual_submission_stack_maps_all_three_requests():
-    text = clue("c038", "e2")
-    window = re.search(r"میزِ پنجره به ترتیب (.*?)؛", text).group(1).split("، ")
-    door = re.search(r"میزِ در به ترتیب (.*?)\.", text).group(1).split("، ")
-    first, second, last = numbers(clue("c038", "e3"))
-    assert second == first + 1 and last - first + 1 == len(window) + len(door)
-    order = []
-    while window or door:
-        if window:
-            order.append(window.pop())
-        if door:
-            order.append(door.pop())
-    papers = dict(enumerate(order, first))
-    assert papers[43] == "آرمین"
-    assert papers[45] == "یاسمن" and papers[46] == "کسری"
-    # Each registered adjustment is exactly its authenticated request; the
-    # request, not the shared login, is the source of the fabricated six points.
-    # Equal increases deliberately avoid revealing Armin's code from the
-    # opening's 12->18 alone. Stack reconstruction is required.
-    assert numbers(clue("c038", "e5")) == [20, 15, 43, 6, 45, 6, 46, 6]
-    assert numbers(clue("c038", "e6")) == [10, 16, 9, 15]
-    assert 12 + 6 == 18 and 10 + 6 == 16 and 9 + 6 == 15
+def _times(text):
+    return [_minutes(x) for x in re.findall(r"\d+:\d+", text)]
+
+
+def test_c037_glitter_window_and_room_log_agree():
+    last_seen = _times(clue("c037", "e1"))[-2]          # 23:02, lights out
+    shot = _times(clue("c037", "e2"))[0]                # 23:15 glitter
+    assert last_seen < shot
+    log = clue("c037", "e5")
+    room12 = _times(log.split("اتاقِ ۱۲")[1].split("اتاقِ ۱۸")[0])
+    room18 = _times(log.split("اتاقِ ۱۸")[1].split("خودِ درِ خدمات")[0])
+    assert last_seen < room12[0] < shot                 # the culprit's room opens inside the true window
+    assert all(t > shot for t in room18)                # the false trail is after the window
+    film = _times(clue("c037", "e6"))
+    assert film[0] <= last_seen and film[1] >= shot
+    assert "یک‌دست آبی" in clue("c037", "e4") and "روبالشی" in clue("c037", "e4")
+    assert "پنج مظنون" in content.by_id("c037").data["intro"]
+
+
+def test_c038_stack_order_reverses_writing_order():
+    written = re.findall(r"(\d+:\d+) (\S+) فرم داد", clue("c038", "e3"))
+    writers = [w for _, w in sorted(written, key=lambda x: _minutes(x[0]))]
+    assert writers == ["مرادی", "راستی", "رحیمی"]
+    entered = [int(n) for n in re.findall(r"برگه‌ی (\d+)، ۶\+", clue("c038", "e5"))]
+    assert entered == [45, 46, 43]
+    # each new form went on top, the stack was entered from the top: last written = first entered
+    owner = dict(zip(entered, reversed(writers)))
+    assert owner[43] == "مرادی" and owner[45] == "رحیمی" and owner[46] == "راستی"
+    assert "۴۳" in clue("c038", "e1") and "آرمین" in clue("c038", "e1")
+    assert all(n in numbers(clue("c038", "e2")) for n in (10, 16, 9, 15))
+    assert content.by_id("c038").culprit == "s1"
 
 
 def test_c039_cash_impossible_at_entry_even_at_worst_scale_tolerances():

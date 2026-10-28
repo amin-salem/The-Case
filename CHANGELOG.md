@@ -1,6 +1,10 @@
-# server 1.41.5: unique detective names (28 Oct 2026, urgent)
+# server 1.41.6: unique detective names (28 Oct 2026, urgent)
 
 - Two detectives can no longer have the same name. A name is compared by a key (`app/nicknames.py`): case, spaces, punctuation, zero-width joiners, Arabic/Persian letter variants and digit scripts are ignored, so «علی»، «علي»، «Ali» and «ali » are the same name. New table `nickname_claims` (key is the primary key, so two simultaneous requests cannot both win); changing a name frees the old one; deleting the account frees it too. A refused name answers 422 `bad_nickname`, which every app build already shows as «این اسم قابل قبول نیست», so no new APK is needed. The random default names «کارآگاه1234» are never claimed. Existing duplicates keep their names: the migration (0034, additive) claims each existing name for the oldest account that has it; the others rename whenever they like.
+
+# server 1.41.5: c037, c038 re-reviewed (Astra cases, 28 Oct 2026)
+
+- c037 (now «جعبه‌ی روبان‌آبی») and c038 «شش نمره‌ی اضافه»: both had dense, lawyer-style puzzles, and c038 had a shortcut that named the culprit. Each is rebuilt into one plain, true timeline. c037: a glitter cannon at 23:15 shows the gift box left during the dance, not during packing. c038: the order of the stacked review forms shows who wrote the fake request. Dangling references are removed and the explanations run to about 240-250 words. The tool lines are rewritten under rules §10b. Fresh blind tests rate both 3/5. Details are in `docs/case-log.md`. Culprits and publish dates are unchanged; the notification texts are updated, and the c037 title changed.
 
 # server 1.41.4: a refused purchase no longer locks the token (28 Oct 2026, urgent)
 
