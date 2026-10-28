@@ -179,6 +179,7 @@ Assignment by minimum cost (gender fixed; age distance, job keywords, small bonu
 | c044 | 2026-11-11 | 6 staged scene | s1 | fair; 3/5; sculpture/wrapper/label chain; owner asked to save without more polishing |
 | c045 | 2026-11-12 | 10 motive inversion | s5 | fair; 3.5–4/5; fragment and packet-maker attribution |
 | c046 | 2026-11-13 | 2 hidden relationship | s2 | fair; 3.5/5; private prior selection + packaging marks + partner identity |
+| w007 «جای سخنران» (weekend, format 3; idea #31, style S6, puzzle type 4 wrong victim: the stage leg was released for the old first speaker, the stage manager never heard of the order swap; Opus writer + 2 fix rounds) | 2026-11-19 | 4 wrong victim | s5 | night 1 (2 runs): leaning 80-85%, no single giveaway, liar Delaram found; full: s5/m3 at 93%, difficulty 4 by the helper (field kept at 5). Fixes after tests: dates, skirt timeline, Shahnam/Aria walking times, typo, amounts, liar question wording. |
 
 All 40 camera/print lines rewritten under §10b; no paid fact is necessary, no standalone tool oracle. Full truth/tool audit: docs/reviews/c043-c046-tools.md. Further independent Claude review pending.
 

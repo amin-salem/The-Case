@@ -1,3 +1,8 @@
+# server 1.42.1: weekend case w007 «جای سخنران» (28 Oct 2026)
+
+- New weekend case w007, format 3, Thursday 19 Nov 2026 (publish 2026-11-19, opens 09:00, 36 h). Idea 31 of the idea bank, style S6 (contradicting narratives), puzzle type 4 (wrong victim), scene hotel, category art, difficulty 5. Eight suspects (one newcomer in night 2), 16 cards, night-1 question «کی دروغ می‌گه؟», four «چرا و چطور» options. Push notification text added to `notify.json`.
+- Deploy: redeploy the server from the Liara panel to publish it. No app change, no migration.
+
 # app 1.40.6+80 / server 1.42.0: names from home, Bazaar helpers (28 Oct 2026, urgent)
 
 - App: the name in the home header opens the name sheet (pencil icon, brass while the name is still the random «کارآگاه1234»); the dice button suggests names («روباه تیزبین»…); a one-time home card after the first solved case asks for a name; the profile uses the same sheet; a taken name says «این اسم قبلاً انتخاب شده…». No coins are paid for choosing a name.
