@@ -21,9 +21,9 @@ void main() {
   });
 
   test('list: newest first, titles for this release, no «نفر»', () {
-    expect(kWhatsNew.first.id, 79);
+    expect(kWhatsNew.first.id, 80);
     expect(kWhatsNew.first.items.length, 1);
-    expect(kWhatsNew.first.items.first.title, 'اگه نسخه‌ی تازه‌ای توی کافه بازار باشه، خبرت می‌کنیم');
+    expect(kWhatsNew.first.items.first.title, 'اتصال به سرور در گوشی‌هایی که اینترنتشون خوب بود ولی برنامه آفلاین نشون می‌داد درست شد');
     for (final r in kWhatsNew) {
       for (final it in r.items) {
         expect(it.title.contains('نفر'), isFalse);
