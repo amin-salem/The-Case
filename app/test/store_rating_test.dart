@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_case/models/models.dart';
 import 'package:the_case/services/api.dart';
 import 'package:the_case/services/app_update.dart';
 import 'package:the_case/services/store_rating.dart';
@@ -42,19 +43,25 @@ void main() {
   });
 
   test('later hides it for 30 days; the button hides it for good', () async {
+    Api.i.profile = Profile({'player_id': 'p', 'cases_solved': 5});
     await solved3(5);
-    await StoreRating.i.load();
-    // visible needs the profile too; with no profile it stays hidden (fails closed)
-    expect(StoreRating.i.visible, isFalse);
+    expect(StoreRating.i.visible, isTrue);
     await StoreRating.i.later();
-    await solved3(5);
+    expect(StoreRating.i.visible, isFalse);
+    await solved3(5); // armed again by the next good solve, but the 30 days have not passed
     clock = clock.add(const Duration(days: 10));
     expect(StoreRating.i.visible, isFalse);
+    clock = clock.add(const Duration(days: 21));
+    expect(StoreRating.i.visible, isTrue);
+    Api.i.profile = Profile({'player_id': 'p', 'cases_solved': 2});
+    expect(StoreRating.i.visible, isFalse, reason: 'fewer than 3 solved cases');
+    Api.i.profile = Profile({'player_id': 'p', 'cases_solved': 5});
     expect(await StoreRating.i.rate(), isTrue);
     expect(opened.single, StoreRating.bazaarPage);
     await solved3(5);
     clock = clock.add(const Duration(days: 90));
     expect(StoreRating.i.visible, isFalse, reason: 'never again after the button');
+    Api.i.profile = null;
   });
 
   test('the review links fall through: Bazaar page, then the web page', () async {
