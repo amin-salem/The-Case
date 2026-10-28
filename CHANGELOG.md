@@ -1,3 +1,9 @@
+# server 1.41.1: Cafe Bazaar purchases paid but refused (28 Oct 2026, urgent)
+
+- Players paid in Bazaar but the app said «خرید انجام نشد»: the server's check with Bazaar refused the token. With `BAZAAR_MODE=api_secret` the server now calls Bazaar's current endpoint (`POST /devapi/v2/api/validate/inapp/purchases/`, body `{"token"}`, header `CAFEBAZAAR-PISHKHAN-API-SECRET`) and falls back to the old GET path only when that does not answer 2xx. A Bazaar 5xx now counts as «try later» (the app keeps the purchase unconsumed and credits it on the next start) instead of a refusal. An answer without `purchaseState` never grants.
+- Visible: one log line per decision (`purchase verify store=... product=... valid=... reason=... bazaar_status=...`, no personal data); the admin activity shows the reason of a refused purchase («خرید coins_small (rejected: bazaar_error:401)»); Health is «bad» when a real `BAZAAR_MODE` has no credentials (`bazaar_credentials_set`).
+- Refused purchases stay unconsumed in Bazaar, so once the check works each player gets his coins automatically the next time the app opens (the token is credited once). No migration, no APK.
+
 # Nightly c037–c042 integration — 2026-10-24
 
 - Confirm c025–c036 rewrites are already on main and leave them unchanged. Integrate c037–c039 from their review branch while preserving current detective-tool data; close blind-review shortcuts. Fully rewrite c040–c042 with distinct multi-clue deductions and matching notification teasers. Opening dates, portraits and runtime format stay unchanged. All six are calibrated to difficulty 4.

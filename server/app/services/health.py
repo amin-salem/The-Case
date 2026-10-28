@@ -235,6 +235,11 @@ async def _security() -> dict:
         status = "warn" if status == "ok" else status
     if prod and s.bazaar_mode == "fake":  # Myket is off for now (12 Oct 2026): Bazaar is the only store
         status = "bad"
+    bazaar_ready = s.bazaar_mode == "fake" or (
+        bool(s.bazaar_api_secret) if s.bazaar_mode == "api_secret"
+        else bool(s.bazaar_client_id and s.bazaar_client_secret and s.bazaar_refresh_token))
+    if prod and not bazaar_ready:  # a real mode without its credentials refuses every purchase
+        status = "bad"
     blocked = None
     if s.rate_limit:
         try:
@@ -244,7 +249,7 @@ async def _security() -> dict:
             blocked = None
     return {"status": status, "env": s.env, "admin_key_real": admin_ok, "jwt_secret_real": jwt_ok,
             "rate_limit": bool(s.rate_limit), "rate_limit_blocked_1h": blocked,
-            "ads_enabled": bool(s.ads_enabled), "bazaar_mode": s.bazaar_mode,
+            "ads_enabled": bool(s.ads_enabled), "bazaar_mode": s.bazaar_mode, "bazaar_credentials_set": bazaar_ready and s.bazaar_mode != "fake",
             "myket_token_set": bool(s.myket_access_token),
             "sms_enabled": bool(s.sms_enabled), "sms_mode": s.sms_mode, "sms_ready": sms_ok}
 

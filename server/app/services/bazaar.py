@@ -68,22 +68,27 @@ class BazaarClient:
             return PurchaseCheck(valid=ok, reason="" if ok else "fake_mode_needs_test_token",
                                  raw={"fake": True})
         pkg = self.s.bazaar_package_name
-        url = f"{self.s.bazaar_base_url}/api/validate/{pkg}/inapp/{product_id}/purchases/{token}/"
+        old_url = f"{self.s.bazaar_base_url}/api/validate/{pkg}/inapp/{product_id}/purchases/{token}/"
         try:
             headers, params = await self._auth()
-            r = await self.http.get(url, headers=headers, params=params)
+            if self.s.bazaar_mode == "api_secret":
+                # 28 Oct 2026: purchases were paid in Bazaar but refused here. With the API secret Bazaar's current
+                # endpoint is a POST with the token in the body; the old GET path is tried only when that one
+                # does not answer 2xx, so either form of the API works.
+                r = await self.http.post(f"{self.s.bazaar_base_url}/api/validate/inapp/purchases/",
+                                         headers=headers, json={"token": token})
+                if r.status_code >= 300:
+                    first = r.status_code
+                    r = await self.http.get(old_url, headers=headers)
+                    if r.status_code >= 300:
+                        return _refused(r, extra={"post_status": first})
+                return _parsed(r)
+            r = await self.http.get(old_url, headers=headers, params=params)
         except httpx.HTTPError as e:
             return PurchaseCheck(valid=False, reason=f"bazaar_unreachable:{type(e).__name__}")
-        body = _json(r)
-        if r.status_code == 404:
-            return PurchaseCheck(valid=False, reason="not_found", raw=body)
-        if r.status_code >= 400:
-            return PurchaseCheck(valid=False, reason=f"bazaar_error:{r.status_code}", raw=body)
-        # purchaseState: 0 = bought, 1 = refunded. consumptionState: 0 = consumed
-        refunded = int(body.get("purchaseState", 0)) != 0
-        consumed = int(body.get("consumptionState", 1)) == 0
-        return PurchaseCheck(valid=not refunded, refunded=refunded, consumed=consumed,
-                             reason="refunded" if refunded else "", raw=body)
+        if r.status_code >= 300:
+            return _refused(r)
+        return _parsed(r)
 
     async def check_subscription(self, product_id: str, token: str) -> PurchaseCheck:
         if self.s.bazaar_mode == "fake":
@@ -105,6 +110,30 @@ class BazaarClient:
         active = until > time.time() * 1000
         return PurchaseCheck(valid=active, reason="" if active else "expired", raw=body,
                              valid_until_ms=until)
+
+
+def _refused(r: httpx.Response, extra: dict | None = None) -> PurchaseCheck:
+    """A non-2xx answer. 5xx = Bazaar is having trouble: the app keeps the purchase unconsumed and retries later."""
+    body = {**_json(r), **(extra or {})}
+    if r.status_code >= 500:
+        return PurchaseCheck(valid=False, reason=f"bazaar_unreachable:http{r.status_code}", raw=body)
+    if r.status_code == 404:
+        return PurchaseCheck(valid=False, reason="not_found", raw=body)
+    return PurchaseCheck(valid=False, reason=f"bazaar_error:{r.status_code}", raw=body)
+
+
+def _parsed(r: httpx.Response) -> PurchaseCheck:
+    body = _json(r)
+    if "purchaseState" not in body:  # never grant on an answer that is not a purchase (an error page with 200)
+        return PurchaseCheck(valid=False, reason="bazaar_bad_answer", raw=body)
+    # purchaseState: 0 = bought, 1 = refunded. consumptionState: 0 = consumed
+    try:
+        refunded = int(body.get("purchaseState", 0)) != 0
+        consumed = int(body.get("consumptionState", 1)) == 0
+    except (TypeError, ValueError):
+        return PurchaseCheck(valid=False, reason="bazaar_bad_answer", raw=body)
+    return PurchaseCheck(valid=not refunded, refunded=refunded, consumed=consumed,
+                         reason="refunded" if refunded else "", raw=body)
 
 
 def _json(r: httpx.Response) -> dict:

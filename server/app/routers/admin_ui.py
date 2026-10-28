@@ -156,7 +156,8 @@ async def feed(limit: int = Query(60, ge=1, le=200), session: AsyncSession = Dep
     for c in (await session.execute(select(CoinLog).order_by(CoinLog.id.desc()).limit(n))).scalars().all():
         items.append({"t": ts(c.at), "kind": "coins", "pid": c.player_id, "text": f"سکه {c.amount:+d} ({c.reason}) → {c.balance}"})
     for x in (await session.execute(select(Purchase).order_by(Purchase.id.desc()).limit(n))).scalars().all():
-        items.append({"t": ts(x.created_at), "kind": "purchase", "pid": x.player_id, "text": f"خرید {x.product_id} ({x.status})"})
+        items.append({"t": ts(x.created_at), "kind": "purchase", "pid": x.player_id, "text": f"خرید {x.product_id} ({x.status}"
+                      + (f": {(x.raw or {}).get('reason')}" if x.status != "granted" and (x.raw or {}).get("reason") else "") + ")"})
     for e in (await session.execute(select(Event).order_by(Event.id.desc()).limit(n))).scalars().all():
         items.append({"t": ts(e.ts), "kind": "event", "pid": e.player_id, "text": f"رویداد {e.name}"})
     items.sort(key=lambda i: i["t"] or 0, reverse=True)
@@ -211,7 +212,8 @@ async def player(player_id: str, session: AsyncSession = Depends(get_session)):
             timeline.append({"t": ts(x.finished_at), "kind": "solved" if x.solved else "failed",
                              "text": f"{'حل' if x.solved else 'شکست'}: {_title(x.case_id)} — {x.stars}★، {x.seconds}ث"})
     for x in (await session.execute(select(Purchase).where(Purchase.player_id == p.id))).scalars():
-        timeline.append({"t": ts(x.created_at), "kind": "purchase", "text": f"خرید {x.product_id} ({x.status})"})
+        timeline.append({"t": ts(x.created_at), "kind": "purchase", "text": f"خرید {x.product_id} ({x.status}"
+                      + (f": {(x.raw or {}).get('reason')}" if x.status != "granted" and (x.raw or {}).get("reason") else "") + ")"})
     for x in (await session.execute(select(InboxItem).where(InboxItem.player_id == p.id).order_by(InboxItem.id.desc()).limit(30))).scalars():
         timeline.append({"t": ts(x.created_at), "kind": "inbox", "text": f"پیام: {x.title}" + (" (دریافت شد)" if x.claimed_at else "")})
     for a in ach:

@@ -154,6 +154,14 @@ The app pays through Cafe Bazaar (Poolakey) and sends the purchase token to `POS
 3. On Liara set `BAZAAR_MODE` to `api_secret` (plus `BAZAAR_API_SECRET`) or `oauth` (plus `BAZAAR_CLIENT_ID`, `BAZAAR_CLIENT_SECRET`, `BAZAAR_REFRESH_TOKEN`). `fake` is refused in production (`store_not_configured`) and shown as bad on the Health page.
 4. Test one real purchase on a test device before publishing.
 
+### Paid but «خرید انجام نشد» (28 Oct 2026, server 1.41.1)
+Check in this order: Liara env `BAZAAR_MODE` is `api_secret` (not `fake`) and `BAZAAR_API_SECRET` is the secret from the Bazaar panel
+(«API پیشخوان»); admin Health shows `bazaar_mode` and `bazaar_credentials_set`; the admin activity line «خرید … (rejected: REASON)» and
+the Liara log line `purchase verify … reason=…` say why: `store_not_configured` = still fake; `bazaar_error:401/403` = wrong or revoked
+secret; `not_found` = the token or product id is unknown to Bazaar (wrong package/product id); `bazaar_bad_answer` = Bazaar answered
+something that is not a purchase. Refused purchases are not consumed, so players are credited automatically on their next app start once
+the check works.
+
 ### Testing a purchase on a phone (Amin; 18 Oct 2026, after Bazaar rejected version code 55)
 Bazaar rejected build 55 with «after starting an in-app purchase the message «برای خرید، اپ کافه‌بازار باید روی گوشی نصب و به‌روز باشه» is shown».
 **Cause:** the vendored Poolakey plugin never answered the `connect` call, so `await FlutterPoolakey.connect(...)` in `Billing.init()` never

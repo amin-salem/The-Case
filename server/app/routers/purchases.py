@@ -1,5 +1,6 @@
 """Real-money purchases: the app sends the store's purchase token (Myket or Bazaar); the server
 checks it with that store and adds coins / perks to the server wallet."""
+import logging
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -19,6 +20,7 @@ from ..util import add_coins, from_ts, ts
 from .common import vip_active
 
 router = APIRouter(prefix="/v1/purchases", tags=["purchases"])
+log = logging.getLogger("purchases")
 
 
 def _out(player: Player, status: str, added: int = 0, consume: bool = False, reason: str = "") -> VerifyOut:
@@ -49,6 +51,9 @@ async def verify(body: VerifyIn, player: Player = Depends(current_player),
     else:
         check = (await bazaar.check_subscription(body.product_id, body.purchase_token) if prod.kind == "subscription"
                  else await bazaar.check_inapp(body.product_id, body.purchase_token))
+    # one line per decision, no personal data (28 Oct 2026: paid purchases were refused and nobody could see why)
+    log.info("purchase verify store=%s product=%s valid=%s reason=%s bazaar_status=%s", body.store, body.product_id,
+             check.valid, check.reason or "-", (check.raw or {}).get("post_status", "-"))
     if check.reason.startswith(("bazaar_unreachable", "store_unreachable")):
         raise HTTPException(503, "store_unreachable_try_later")
     if check.valid and check.consumed and existing is None and body.store == "myket":
@@ -60,7 +65,7 @@ async def verify(body: VerifyIn, player: Player = Depends(current_player),
                                 purchase_token=body.purchase_token, status="rejected")
             session.add(existing)
         existing.status = "refunded" if check.refunded else "rejected"
-        existing.raw = check.raw
+        existing.raw = {**(check.raw or {}), "reason": check.reason or "invalid"}
         await session.commit()
         return _out(player, "rejected", reason=check.reason or "invalid")
 
