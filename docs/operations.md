@@ -723,3 +723,6 @@ Problem: the daily answer is shared in groups, so the daily ranking prize lost i
 - Nothing is set in the database by the release: the defaults show nothing until you raise the numbers.
 
 **Install source.** The app (build 79+) sends the installer package once per start with `POST /v1/me/client` (`installer`, stored in `players.install_source`). The admin overview shows the counts: `com.farsitel.bazaar` = «کافه بازار», `ir.mservices.market` = «مایکت», empty or any other value = «مستقیم/نامشخص». Only players who opened build 79 or newer report it; everyone else counts as «مستقیم/نامشخص» until they update, so the Bazaar number grows as players update.
+
+## First-days offers query on PostgreSQL (server 1.41.7; 28 Oct 2026)
+- 1.41.3 to 1.41.6 returned 500 for accounts younger than 3 days (case list, album, case, unlock) on Liara. In the Liara logs it looks like `welcome.py ... offers_for ... session.execute` ending in a PostgreSQL «must appear in the GROUP BY clause» error. Fixed in 1.41.7; deploy it by hand. Players who saw «هنوز پرونده‌ای روی گوشیت نیست» (new accounts, 28 Oct) just need to reopen the app. Never GROUP BY a bound expression such as `func.substr(col, 1, 7)`; test new queries in the wallet-postgres job.

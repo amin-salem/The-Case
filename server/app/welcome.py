@@ -12,7 +12,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from sqlalchemy import func, select
+from sqlalchemy import case, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import economy as eco
@@ -38,11 +38,14 @@ async def offers_for(session: AsyncSession, player: Player, now: datetime | None
     now = now or utcnow()
     if player.created_at is None or player.created_at < now - timedelta(days=NEWBIE_DAYS):
         return NONE
-    rows = dict((await session.execute(
-        select(func.substr(CoinLog.reason, 1, 7), func.count()).where(
-            CoinLog.player_id == player.id, CoinLog.reason.like("reopen:%") | CoinLog.reason.like("unlock:%"))
-        .group_by(func.substr(CoinLog.reason, 1, 7)))).all())
-    return Offers(reopen=not rows.get("reopen:"), archive=not rows.get("unlock:"))
+    # Two plain aggregates, no GROUP BY on a bound expression: PostgreSQL (asyncpg) sees substr(reason, $1, $2) in the
+    # select list and substr(reason, $3, $4) in GROUP BY as two different expressions and fails (28 Oct 2026, 500 on
+    # /v1/cases for every account younger than 3 days). SQLite hid it.
+    reopened, unlocked = (await session.execute(
+        select(func.coalesce(func.sum(case((CoinLog.reason.like("reopen:%"), 1), else_=0)), 0),
+               func.coalesce(func.sum(case((CoinLog.reason.like("unlock:%"), 1), else_=0)), 0))
+        .where(CoinLog.player_id == player.id, CoinLog.reason.like("reopen:%") | CoinLog.reason.like("unlock:%")))).one()
+    return Offers(reopen=not reopened, archive=not unlocked)
 
 
 def reopen_cost(base: int, offers: Offers) -> int:
