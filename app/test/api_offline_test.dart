@@ -16,6 +16,18 @@ enum _Net { up, offline, down }
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test('failure codes tell why the server was not reached, with no address in them', () {
+    expect(Api.failureCode(TimeoutException('slow')), 'timeout');
+    expect(Api.failureCode(ApiException(503, null)), 'http503');
+    expect(Api.failureCode(const FormatException('<html>')), 'html');
+    expect(Api.failureCode(Exception('HandshakeException: CERTIFICATE_VERIFY_FAILED')), 'tls');
+    expect(Api.failureCode(http.ClientException('Failed host lookup: gaamly.ir')), 'dns');
+    expect(Api.failureCode(Exception('SocketException: Connection refused')), 'refused');
+    expect(Api.failureCode(Exception('SocketException: Network is unreachable')), 'network');
+    expect(Api.failureCode(Exception('weird')), 'other');
+    expect(Api.failureCode(http.ClientException('Failed host lookup: gaamly.ir')).contains('gaamly'), isFalse);
+  });
+
   group('friendly messages (no technical text for the player)', () {
     test('no internet', () {
       expect(Api.friendly(http.ClientException('Failed host lookup: gaamly.ir')), Api.offlineText);

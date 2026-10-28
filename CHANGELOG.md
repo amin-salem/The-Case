@@ -10,10 +10,11 @@
 
 - Bug from 1.41.3 (first-days offers): for every account younger than 3 days `GET /v1/cases` (and the album, unlock and case calls that price a case) failed with a 500 on PostgreSQL, so a new player saw «هنوز پرونده‌ای روی گوشیت نیست» as if offline. Cause: `welcome.offers_for` grouped by `substr(reason, 1, 7)`; asyncpg binds the numbers as different parameters in the select list and in GROUP BY, PostgreSQL treats them as two expressions and refuses. SQLite (CI) accepts it, and the Postgres wallet tests used 100-hour-old accounts, so nothing caught it. Now two plain SUM(CASE) aggregates; new test `tests/test_welcome_pg.py` runs in the wallet-postgres CI job with a brand-new account. No migration, no APK.
 =======
-# app 1.40.6+80: connection fallback for phones that show «offline» (28 Oct 2026, urgent)
+# app 1.40.7+81: public-DNS fallback removed, failure code on the offline page (28 Oct 2026, urgent)
 
-- Some phones (seen on Xiaomi/Huawei and some operators) showed the «هنوز پرونده‌ای روی گوشیت نیست» page although the browser opened the site. Suspected cause (not reproduced): the phone's own DNS or IPv6 route fails for the app while the browser uses a public DNS over HTTPS. New `services/net_fallback.dart`: the normal path stays first; only when the phone's DNS fails or answers a private/filter address, the app asks a public DNS over HTTPS (1.1.1.1, then 8.8.8.8), connects to that address (TLS still checks the name `gaamly.ir`), keeps it for 10 minutes and remembers the last good address. Phones that already work are not touched. whats_new release 80. App only: no server change.
->>>>>>> fix/net-fallback
+- Amin's phone showed the offline page again on build 80 although the server was fine. Build 80 had one networking change (a custom connection factory that asked a public DNS over HTTPS when the phone's DNS failed). It could not be proved to be the cause and could not be tested here, so it is REMOVED completely (`net_fallback.dart` and its test are gone; the app uses the plain HTTP client again).
+- Real cause of the «هنوز پرونده‌ای روی گوشیت نیست» reports found earlier the same day: server 1.41.3-1.41.6 answered 500 on GET /v1/cases for every account younger than 3 days on PostgreSQL (fixed in server 1.41.7). A new account is exactly who opens the app for the first time, so it looked like «no internet». The Xiaomi/Huawei theory was not confirmed.
+- New: under the offline message on the home page a small line «کد خطا: dns / tls / timeout / refused / network / html / http503 / other» shows why the server was not reached (no address or personal data). Ask the player for that code.
 
 # server 1.41.6: unique detective names (28 Oct 2026, urgent)
 

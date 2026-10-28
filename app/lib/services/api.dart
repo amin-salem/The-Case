@@ -15,7 +15,6 @@ import '../models/progress.dart';
 import '../models/story.dart';
 import '../models/tools.dart';
 import 'case_clock.dart';
-import 'net_fallback.dart';
 import 'store_rating.dart';
 import 'claim_note_store.dart';
 import 'reminders.dart';
@@ -85,7 +84,7 @@ class Api extends ChangeNotifier {
 
   /// The server address in use right now.
   String get apiBase => kApiUrls[_baseIx];
-  http.Client _http = NetFallback.client();
+  http.Client _http = http.Client();
   String? _playerId, _secret, _token;
   int _tokenExp = 0;
 
@@ -361,8 +360,28 @@ class Api extends ChangeNotifier {
   }
 
 
+  /// A short English code for WHY the server could not be reached («dns», «tls», «timeout», «refused», «network»,
+  /// «html», «http503», «other»): the home page shows it under the offline message so a player can send it to support.
+  /// It never contains an address or any personal data.
+  static String failureCode(Object e) {
+    if (e is TimeoutException) return 'timeout';
+    if (e is ApiException) return 'http${e.status}';
+    if (e is FormatException) return 'html';
+    final t = e.toString();
+    if (t.contains('HandshakeException') || t.contains('TlsException') || t.contains('CertificateException')) return 'tls';
+    if (t.contains('Failed host lookup')) return 'dns';
+    if (t.contains('Connection refused')) return 'refused';
+    if (t.contains('Connection timed out')) return 'timeout';
+    if (t.contains('Network is unreachable') || t.contains('SocketException') || e is http.ClientException) return 'network';
+    return 'other';
+  }
+
+  /// The code of the last failed connection ('' while connected).
+  String lastFailure = '';
+
   void _wentOffline(Object e) {
     debugPrint('Api: server not reachable: $e');
+    lastFailure = failureCode(e);
     _retry ??= Timer.periodic(const Duration(seconds: 20), (_) {
       if (!online) unawaited(reconnect());
     });
@@ -375,6 +394,7 @@ class Api extends ChangeNotifier {
   void _cameOnline() {
     _retry?.cancel();
     _retry = null;
+    lastFailure = '';
     if (!online) {
       online = true;
       notifyListeners();
