@@ -38,6 +38,8 @@ async def postgres(monkeypatch):
 
 
 async def account(coins=200, **values):
+    # older than the first-days offers (app/welcome.py): these tests are about the normal prices
+    values.setdefault("created_at", datetime.utcnow() - timedelta(hours=100))
     async with db.SessionLocal() as s:
         n = int(await s.scalar(select(func.count()).select_from(Player)) or 0)
         p = Player(secret_hash="test", device_id=f"device-{n}", invite_code=f"CODE{n}", coins=coins, **values)
