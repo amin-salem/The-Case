@@ -117,7 +117,7 @@ async def test_reply_201_sends_trimmed_text_and_clears_the_cache():
 
 
 @pytest.mark.parametrize("rid,text,code", [("x", "ممنون از نظرت", "bad_id"), (0, "ممنون از نظرت", "bad_id"),
-                                           (5, "کوتاه", "bad_reply"), (5, "ا" * 501, "bad_reply"), (5, "   ", "bad_reply")])
+                                           (5, "کم", "bad_reply"), (5, "ا" * 501, "bad_reply"), (5, "   ", "bad_reply")])
 async def test_reply_validates_before_sending(rid, text, code):
     def handler(req):
         raise AssertionError("must not be sent")

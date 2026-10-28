@@ -6,6 +6,7 @@ import '../screens/account_sheets.dart' show showNoirSheet;
 import '../services/api.dart';
 import '../services/name_ideas.dart';
 import '../theme.dart';
+import 'offline.dart';
 
 /// «اسم کارآگاه»: one sheet used by the home screen, the profile and the card after the first solved case.
 /// The dice button gives a new idea each tap; save sends it to the server (names are unique: a taken name says so).
