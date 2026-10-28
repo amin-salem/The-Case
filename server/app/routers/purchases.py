@@ -4,7 +4,7 @@ import logging
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -38,9 +38,24 @@ async def verify(body: VerifyIn, player: Player = Depends(current_player),
     consume = prod.kind == "consumable"
     existing = await session.scalar(select(Purchase).where(Purchase.purchase_token == body.purchase_token))
     if existing is not None and existing.player_id != player.id:
-        return _out(player, "rejected", reason="token_used")
+        # 28 Oct 2026: a REFUSED or refunded row (the store check failed at that time) must not lock a paid token to the
+        # account that tried first: the buyer may have reinstalled or signed in on another account. Only a granted
+        # token belongs to its owner. The take-over is one conditional UPDATE, so two accounts cannot both win.
+        took = 0
+        if existing.status != "granted":
+            took = (await session.execute(
+                update(Purchase).where(Purchase.id == existing.id, Purchase.player_id == existing.player_id,
+                                       Purchase.status != "granted").values(player_id=player.id)
+                .execution_options(synchronize_session=False))).rowcount
+            await session.commit()
+        if not took:
+            return _out(player, "rejected", reason="token_used")
+        log.info("purchase token moved from a refused attempt to the paying account product=%s", body.product_id)
+        await session.refresh(existing)
     if existing is not None and existing.product_id != body.product_id:
-        return _out(player, "rejected", reason="wrong_product")
+        if existing.status == "granted":
+            return _out(player, "rejected", reason="wrong_product")
+        existing.product_id = body.product_id   # a refused attempt under another product name: the store check decides now
     if existing is not None and existing.status == "granted" and prod.kind != "subscription":
         return _out(player, "already_granted", consume=consume)
 

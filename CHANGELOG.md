@@ -1,6 +1,10 @@
-# server 1.41.4: c037, c038 re-reviewed (Astra cases, 28 Oct 2026)
+# server 1.41.5: c037, c038 re-reviewed (Astra cases, 28 Oct 2026)
 
 - c037 (now «جعبه‌ی روبان‌آبی») and c038 «شش نمره‌ی اضافه»: both had dense, lawyer-style puzzles, and c038 had a shortcut that named the culprit. Each is rebuilt into one plain, true timeline. c037: a glitter cannon at 23:15 shows the gift box left during the dance, not during packing. c038: the order of the stacked review forms shows who wrote the fake request. Dangling references are removed and the explanations run to about 240-250 words. The tool lines are rewritten under rules §10b. Fresh blind tests rate both 3/5. Details are in `docs/case-log.md`. Culprits and publish dates are unchanged; the notification texts are updated, and the c037 title changed.
+
+# server 1.41.4: a refused purchase no longer locks the token (28 Oct 2026, urgent)
+
+- A player paid for `vip_monthly` in Bazaar (approved there) but the app kept saying rejected, after the 1.41.1 fix had already fixed it for the others. Likely cause found in the code: the earlier REFUSED attempt had stored the token as a `rejected` row under the account that tried first, and any other account (reinstall, new device, signing in again) then got `token_used` for ever. Now only a GRANTED token belongs to its account: a rejected/refunded row is handed to the paying account with one conditional UPDATE (two accounts cannot both win) and the store check runs again; a refused row stored under another product name is checked again too. No migration, no APK.
 
 # server 1.41.3: first-days offers for new players (28 Oct 2026, urgent)
 
