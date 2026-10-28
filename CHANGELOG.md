@@ -1,3 +1,7 @@
+# server 1.41.2: guests on the boards (28 Oct 2026, urgent)
+
+- New and guest accounts now appear on the daily, weekly and all-time boards at once (before: hidden for 48 h unless secured with email/phone). Banned players and testers stay hidden. The weekly prizes and the daily 3-star draw still skip unsecured accounts younger than 48 h. Switch back with `SHOW_NEW_ACCOUNTS_ON_BOARDS=false`. No migration, no APK.
+
 # server 1.41.1: Cafe Bazaar purchases paid but refused (28 Oct 2026, urgent)
 
 - Players paid in Bazaar but the app said «خرید انجام نشد»: the server's check with Bazaar refused the token. With `BAZAAR_MODE=api_secret` the server now calls Bazaar's current endpoint (`POST /devapi/v2/api/validate/inapp/purchases/`, body `{"token"}`, header `CAFEBAZAAR-PISHKHAN-API-SECRET`) and falls back to the old GET path only when that does not answer 2xx. A Bazaar 5xx now counts as «try later» (the app keeps the purchase unconsumed and credits it on the next start) instead of a refusal. An answer without `purchaseState` never grants.

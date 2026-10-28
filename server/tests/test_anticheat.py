@@ -187,33 +187,53 @@ async def test_time_alone_or_suspects_alone_is_not_enough(client, clock, strict_
 
 
 # ---------------------------------------------------------------- 3. throwaway accounts
-async def test_new_unsecured_accounts_are_hidden_from_leaderboards(client, clock):
+async def test_new_guest_accounts_are_on_the_boards_by_default(client, clock):
+    """28 Oct 2026 (Amin): a guest who solved a case is on the boards at once."""
     c = content.by_id("c049")
     clock(night("c049"))
-    fresh = await new_player(client, "young-1", aged=False)
+    fresh = await new_player(client, "young-0", aged=False)
     await client.get(f"/v1/cases/{c.id}", headers=fresh["headers"])
     r = await accuse(client, fresh["headers"], c, c.culprit)
-    assert r["result"] == "solved" and r["rank"] is None  # still plays and is paid
+    assert r["result"] == "solved" and r["rank"] is not None
     for period in ("daily", "weekly", "all"):
         lb = (await client.get(f"/v1/leaderboard?period={period}", headers=fresh["headers"])).json()
-        assert lb["me"] is None, period
-    # securing the account with an email shows it
-    r = await client.post("/v1/auth/email", headers=fresh["headers"],
-                          json={"email": "young1@example.com", "password": "secret-pass-1"})
-    assert r.status_code == 200, r.text
-    lb = (await client.get("/v1/leaderboard?period=daily", headers=fresh["headers"])).json()
-    assert lb["me"] is not None
-    # ... and so does time
-    other = await new_player(client, "young-2", aged=False)
-    async with db.SessionLocal() as s:
-        await s.execute(update(Player).where(Player.id == other["player_id"]).values(
-            created_at=utcnow() - timedelta(hours=eco.HIDE_NEW_ACCOUNT_HOURS + 1)))
-        await s.commit()
-        pl = await s.get(Player, other["player_id"])
-        assert ac.is_visible(pl)
+        assert lb["me"] is not None, period
 
 
-async def test_weekly_prizes_skip_hidden_accounts(client, monkeypatch):
+async def test_new_unsecured_accounts_are_hidden_when_the_switch_is_off(client, clock, monkeypatch):
+    from app.config import get_settings
+    monkeypatch.setenv("SHOW_NEW_ACCOUNTS_ON_BOARDS", "false")
+    get_settings.cache_clear()
+    try:
+        c = content.by_id("c049")
+        clock(night("c049"))
+        fresh = await new_player(client, "young-1", aged=False)
+        await client.get(f"/v1/cases/{c.id}", headers=fresh["headers"])
+        r = await accuse(client, fresh["headers"], c, c.culprit)
+        assert r["result"] == "solved" and r["rank"] is None  # still plays and is paid
+        for period in ("daily", "weekly", "all"):
+            lb = (await client.get(f"/v1/leaderboard?period={period}", headers=fresh["headers"])).json()
+            assert lb["me"] is None, period
+        # securing the account with an email shows it
+        r = await client.post("/v1/auth/email", headers=fresh["headers"],
+                              json={"email": "young1@example.com", "password": "secret-pass-1"})
+        assert r.status_code == 200, r.text
+        lb = (await client.get("/v1/leaderboard?period=daily", headers=fresh["headers"])).json()
+        assert lb["me"] is not None
+        # ... and so does time
+        other = await new_player(client, "young-2", aged=False)
+        async with db.SessionLocal() as s:
+            await s.execute(update(Player).where(Player.id == other["player_id"]).values(
+                created_at=utcnow() - timedelta(hours=eco.HIDE_NEW_ACCOUNT_HOURS + 1)))
+            await s.commit()
+            pl = await s.get(Player, other["player_id"])
+            assert ac.is_visible(pl)
+    finally:
+        monkeypatch.undo()
+        get_settings.cache_clear()
+
+
+async def test_weekly_prizes_skip_new_unsecured_accounts(client, monkeypatch):
     from types import SimpleNamespace
 
     from app import gameclock, rewards, weekboard

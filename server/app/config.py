@@ -83,6 +83,8 @@ class Settings(BaseSettings):
     week_start_weekday: int = 4
     # Weekly board: leagues by experience (False = one board for everybody)
     leagues_enabled: bool = True
+    # Boards show new/guest accounts too (28 Oct 2026). False = hide accounts younger than 48 h without email/phone again.
+    show_new_accounts_on_boards: bool = True
 
     cors_origins: str = "*"
     rate_limit: bool = True  # RATE_LIMIT=false is the kill switch (policies: RL_<NAME>, see docs/operations.md)

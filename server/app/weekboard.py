@@ -152,14 +152,14 @@ def _agg():
     return pts, n, secs, ontime
 
 
-def _base(ws: date, league: int | None):
+def _base(ws: date, league: int | None, prize: bool = False):
     pts, n, secs, ontime = _agg()
     q = select(Player, pts.label("pts"), n.label("n"), secs.label("secs"), ontime.label("ontime")).join(
         CaseProgress, CaseProgress.player_id == Player.id)
     if league is not None:
         q = q.outerjoin(WeekLeague, (WeekLeague.week == ws.isoformat()) & (WeekLeague.player_id == Player.id))
         q = q.where(func.coalesce(WeekLeague.league, 0) == league)
-    q = q.where(*week_filters(ws), ac.visible_player())
+    q = q.where(*week_filters(ws), ac.visible_player(prize))
     return q.group_by(Player.id)
 
 
@@ -172,9 +172,11 @@ def _order():
     return keys + [Player.created_at.asc(), Player.id.asc()]
 
 
-async def standings(session: AsyncSession, ws: date, *, league: int | None = None, limit: int = 100) -> list[Standing]:
-    """The top `limit` players of the week (of one league, or of everybody when league is None)."""
-    q = _base(ws, league).order_by(*_order()).limit(limit)
+async def standings(session: AsyncSession, ws: date, *, league: int | None = None, limit: int = 100,
+                    prize: bool = False) -> list[Standing]:
+    """The top `limit` players of the week (of one league, or of everybody when league is None). `prize=True` is the list the
+    prize settlement uses: it always skips new unsecured accounts (the board may show them)."""
+    q = _base(ws, league, prize).order_by(*_order()).limit(limit)
     return [Standing(pl, int(p), int(n), int(s or 0), int(o or 0)) for pl, p, n, s, o in (await session.execute(q)).all()]
 
 

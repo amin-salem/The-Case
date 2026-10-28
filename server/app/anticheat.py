@@ -143,16 +143,30 @@ def depth_ok(p: CaseProgress, c: content.Case) -> tuple[bool, str]:
 
 
 # ---------------------------------------------------------------- throwaway accounts
-def visible_player():
-    """SQL condition: players who may appear on the leaderboards and win weekly prizes. Banned players and accounts
-    younger than 48 hours that are not secured with an email are hidden (they still play)."""
+def _show_new() -> bool:
+    """Amin, 28 Oct 2026: new and guest accounts appear on the boards (SHOW_NEW_ACCOUNTS_ON_BOARDS=false brings the old
+    48-hour hiding back). Prizes never use this switch: see `visible_player(prize=True)`."""
+    from .config import get_settings
+    return bool(get_settings().show_new_accounts_on_boards)
+
+
+def visible_player(prize: bool = False):
+    """SQL condition: players who may appear on the leaderboards. Banned players and testers are always hidden.
+    Accounts younger than 48 hours that are not secured with an email or phone are hidden only when the switch
+    SHOW_NEW_ACCOUNTS_ON_BOARDS is off. With `prize=True` (weekly prizes, the daily draw) the 48-hour rule always applies,
+    so throw-away accounts cannot farm coins."""
+    base = and_(Player.banned.is_(False), Player.tester.is_(False))
+    if _show_new() and not prize:
+        return base
     cutoff = utcnow() - timedelta(hours=eco.HIDE_NEW_ACCOUNT_HOURS)
-    return and_(Player.banned.is_(False), Player.tester.is_(False), or_(Player.email.is_not(None), Player.phone_hash.is_not(None), Player.created_at <= cutoff))
+    return and_(base, or_(Player.email.is_not(None), Player.phone_hash.is_not(None), Player.created_at <= cutoff))
 
 
-def is_visible(pl: Player) -> bool:
+def is_visible(pl: Player, prize: bool = False) -> bool:
     if pl.banned or pl.tester:
         return False
+    if _show_new() and not prize:
+        return True
     return bool(pl.email or pl.phone_hash) or pl.created_at <= utcnow() - timedelta(hours=eco.HIDE_NEW_ACCOUNT_HOURS)
 
 

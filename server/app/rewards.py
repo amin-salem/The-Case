@@ -67,10 +67,10 @@ async def settle_week(session: AsyncSession, ws: date) -> int:
         if league_mode:
             await weekboard.ensure_snapshot(session, ws)
             for lg in range(len(weekboard.LEAGUES)):
-                rows = await weekboard.standings(session, ws, league=lg, limit=weekboard.prizes(True)[2])
+                rows = await weekboard.standings(session, ws, league=lg, limit=weekboard.prizes(True)[2], prize=True)
                 winners += [(lg, i, s) for i, s in enumerate(rows, start=1) if s.cases >= weekboard.MIN_CASES_FOR_PRIZE]
         else:
-            rows = await weekboard.standings(session, ws, limit=weekboard.prizes(False)[2])
+            rows = await weekboard.standings(session, ws, limit=weekboard.prizes(False)[2], prize=True)
             winners += [(None, i, s) for i, s in enumerate(rows, start=1) if s.cases >= weekboard.MIN_CASES_FOR_PRIZE]
         # the champion avatar and the loupe frame (granted on the player's next visit) stay scarce: only the top 3 of
         # the board, or of the highest league that has winners
@@ -124,7 +124,7 @@ async def draw_case(session: AsyncSession, case: content.Case) -> str | None:
         ids = (await session.execute(
             select(Player.id).join(CaseProgress, CaseProgress.player_id == Player.id).where(
                 CaseProgress.case_id == case.id, CaseProgress.solved.is_(True), CaseProgress.was_daily.is_(True),
-                CaseProgress.ranked.is_(True), CaseProgress.stars == 3, ac.visible_player()))).scalars().all()
+                CaseProgress.ranked.is_(True), CaseProgress.stars == 3, ac.visible_player(prize=True)))).scalars().all()
         winner = draw_pick(case.id, list(ids))
         session.add(DailyDraw(case_id=case.id, winner_id=winner, eligible=len(ids), at=utcnow()))
         await session.flush()  # the claim: a second caller fails here and pays nothing
