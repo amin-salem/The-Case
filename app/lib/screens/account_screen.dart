@@ -5,6 +5,7 @@ import '../models/models.dart';
 import '../models/progress.dart';
 import '../services/api.dart';
 import '../theme.dart';
+import '../widgets/name_sheet.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/avatar_frame.dart';
 import '../widgets/crime_tape.dart';
@@ -51,28 +52,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<void> _editName() async {
-    if (!needOnline(context)) return;
-    final c = TextEditingController(text: Api.i.profile?.nickname ?? '');
-    final name = await showDialog<String>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: K.paper,
-        title: Text('اسم کارآگاه', style: tDisplay(20, color: K.ink)),
-        content: TextField(controller: c, maxLength: 16, autofocus: true, style: tBody(16, color: K.ink)),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text('انصراف', style: tBody(14, color: K.inkSoft))),
-          FilledButton(style: FilledButton.styleFrom(backgroundColor: K.stamp), onPressed: () => Navigator.pop(ctx, c.text.trim()),
-              child: Text('ذخیره', style: tBody(14, color: Colors.white))),
-        ],
-      ),
-    );
-    c.dispose();
-    if (name == null || name.isEmpty || !mounted) return;
-    try {
-      await Api.i.updateProfile(nickname: name);
-    } catch (e) {
-      if (mounted) toast(context, Api.friendly(e));
-    }
+    await showNameSheet(context);
   }
 
   Future<void> _pickAvatar() async {

@@ -16,6 +16,7 @@ import '../models/story.dart';
 import '../models/tools.dart';
 import 'case_clock.dart';
 import 'net_fallback.dart';
+import 'store_rating.dart';
 import 'claim_note_store.dart';
 import 'reminders.dart';
 
@@ -856,6 +857,7 @@ class Api extends ChangeNotifier {
     await _saveProgress(caseId, j['progress']);
     if (r.result == 'solved') {
       await _refreshProfileQuietly();
+      unawaited(StoreRating.i.noteSolve(stars: r.stars, solved: profile?.casesSolved ?? 0));
     } else {
       _setCoins(r.coins);
     }
@@ -1267,7 +1269,7 @@ class Api extends ChangeNotifier {
         'only_for_new_players' => 'کد دعوت فقط برای بازیکن‌های تازه است',
         'same_device' => 'کد دعوت باید از گوشی یه کارآگاه دیگه باشه',
         'ad_limit' => 'امروز سهم تبلیغت تموم شد، فردا دوباره بیا',
-        'bad_nickname' => 'این اسم قابل قبول نیست',
+        'bad_nickname' => 'این اسم قبلاً انتخاب شده یا قابل قبول نیست؛ یکی دیگه امتحان کن',
         'banned' => 'این حساب مسدود شده',
         'rate_limited' => 'خیلی سریع پیش رفتی، کمی صبر کن و دوباره امتحان کن',
         'too_many_requests' => 'خیلی سریع امتحان کردی، کمی صبر کن',

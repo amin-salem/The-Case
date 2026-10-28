@@ -17,6 +17,9 @@ import '../widgets/crime_tape.dart';
 import '../widgets/engagement.dart';
 import '../widgets/missions_card.dart';
 import '../widgets/notifications_card.dart';
+import '../widgets/name_sheet.dart';
+import '../services/name_ideas.dart';
+import '../widgets/store_rating_card.dart';
 import '../widgets/update_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/profile_bell.dart';
@@ -313,6 +316,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 10),
                   const WhatsNewBanner(),
                   const UpdateCard(),
+                  const NamePromptCard(),
+                  const StoreRatingCard(),
                   const NotificationsOffCard(),
                   const OfflineBanner(margin: EdgeInsets.only(bottom: 10)),
                   if (_error != null && _cases == null) _errorBox(),
@@ -364,10 +369,19 @@ class _HomeScreenState extends State<HomeScreen> {
         Expanded(
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap: () => MainShell.tab.value = MainShell.profile,
+            key: const ValueKey('home_name'),
+            onTap: () => showNameSheet(context),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-              Text(name.isEmpty ? 'سلام' : 'سلام، $name',
-                  maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900)),
+              Row(mainAxisSize: MainAxisSize.min, children: [
+                Flexible(
+                  child: Text(name.isEmpty ? 'سلام' : 'سلام، $name',
+                      maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900)),
+                ),
+                if (name.isNotEmpty) ...[
+                  const SizedBox(width: 4),
+                  Icon(Icons.edit_rounded, size: 14, color: NameIdeas.isDefault(name) ? K.brass : K.textSoft),
+                ],
+              ]),
               Text(p?.rankTitle ?? '',
                   maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.brass, w: FontWeight.w700)),
             ]),

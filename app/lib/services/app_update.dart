@@ -77,12 +77,26 @@ class AppUpdate extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Opens the store page. Returns false when the phone could not open it.
+  /// Cafe Bazaar's own address of this app (the in-app update sheet first, then the app page).
+  static const bazaarModal = 'bazaar://details/modal?id=ir.gammly.parvandeh';
+  static const bazaarPage = 'bazaar://details?id=ir.gammly.parvandeh';
+
+  /// Opens a link; tests replace it so nothing touches the phone.
+  static Future<bool> Function(Uri) launcher = (u) => launchUrl(u, mode: LaunchMode.externalApplication);
+
+  /// What the button tries, in order: Bazaar's update sheet (newer Bazaar only), the Bazaar app page, then the web link.
+  List<Uri> get openOrder => [Uri.parse(bazaarModal), Uri.parse(bazaarPage), Uri.parse(url)];
+
+  /// Opens the store page. Returns false when the phone could not open any of them. A link nobody handles
+  /// (old Bazaar, no Bazaar) answers false or throws: the next one is tried.
   Future<bool> open() async {
-    try {
-      return await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-    } catch (_) {
-      return false;
+    for (final u in openOrder) {
+      try {
+        if (await launcher(u)) return true;
+      } catch (_) {
+        // try the next address
+      }
     }
+    return false;
   }
 }

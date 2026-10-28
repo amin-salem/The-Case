@@ -22,8 +22,8 @@ void main() {
 
   test('list: newest first, titles for this release, no «نفر»', () {
     expect(kWhatsNew.first.id, 80);
-    expect(kWhatsNew.first.items.length, 1);
-    expect(kWhatsNew.first.items.first.title, 'اتصال به سرور در گوشی‌هایی که اینترنتشون خوب بود ولی برنامه آفلاین نشون می‌داد درست شد');
+    expect(kWhatsNew.first.items.length, 3);
+    expect(kWhatsNew.first.items.first.title, 'اسمت رو از خونه عوض کن؛ با دکمه‌ی تاس اسم پیشنهادی می‌گیری');
     for (final r in kWhatsNew) {
       for (final it in r.items) {
         expect(it.title.contains('نفر'), isFalse);
