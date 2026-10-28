@@ -43,6 +43,9 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(80, '۱.۴۰', '2026-10-28', [
+    WhatsNewItem('net_fix', 'اتصال به سرور در گوشی‌هایی که اینترنتشون خوب بود ولی برنامه آفلاین نشون می‌داد درست شد', WhatsNewTarget.caseToday),
+  ]),
   WhatsNewRelease(79, '۱.۴۰', '2026-10-28', [
     WhatsNewItem('update_notice', 'اگه نسخه‌ی تازه‌ای توی کافه بازار باشه، خبرت می‌کنیم', WhatsNewTarget.caseToday),
   ]),

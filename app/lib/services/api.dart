@@ -15,6 +15,7 @@ import '../models/progress.dart';
 import '../models/story.dart';
 import '../models/tools.dart';
 import 'case_clock.dart';
+import 'net_fallback.dart';
 import 'claim_note_store.dart';
 import 'reminders.dart';
 
@@ -83,7 +84,7 @@ class Api extends ChangeNotifier {
 
   /// The server address in use right now.
   String get apiBase => kApiUrls[_baseIx];
-  http.Client _http = http.Client();
+  http.Client _http = NetFallback.client();
   String? _playerId, _secret, _token;
   int _tokenExp = 0;
 

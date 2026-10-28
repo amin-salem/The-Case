@@ -726,3 +726,8 @@ Problem: the daily answer is shared in groups, so the daily ranking prize lost i
 
 ## First-days offers query on PostgreSQL (server 1.41.7; 28 Oct 2026)
 - 1.41.3 to 1.41.6 returned 500 for accounts younger than 3 days (case list, album, case, unlock) on Liara. In the Liara logs it looks like `welcome.py ... offers_for ... session.execute` ending in a PostgreSQL «must appear in the GROUP BY clause» error. Fixed in 1.41.7; deploy it by hand. Players who saw «هنوز پرونده‌ای روی گوشیت نیست» (new accounts, 28 Oct) just need to reopen the app. Never GROUP BY a bound expression such as `func.substr(col, 1, 7)`; test new queries in the wallet-postgres job.
+
+## Connection fallback (app 1.40.6+80; 28 Oct 2026)
+- Symptom: a player has internet and the browser opens `https://gaamly.ir/health`, but the app shows «هنوز پرونده‌ای روی گوشیت نیست» / the offline banner. The app counts every failed connection (DNS, TLS, timeout) as «offline».
+- Build 80 asks a public DNS over HTTPS (1.1.1.1, then 8.8.8.8) only when the phone's DNS fails or returns a private/filter address, and connects to that address with the real host name for TLS. Nothing to set on the server.
+- If it still happens on build 80: ask for the phone's Android version and whether the app has «Restrict data usage» on (MIUI: Apps > Manage apps > the app), then tell Amin. Old Android (7.0 and lower) can also reject the Let's Encrypt chain; that needs a bundled root certificate (not done).

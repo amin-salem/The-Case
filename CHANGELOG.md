@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 # server 1.41.7: new players got a 500 on the case list (28 Oct 2026, urgent)
 
 - Bug from 1.41.3 (first-days offers): for every account younger than 3 days `GET /v1/cases` (and the album, unlock and case calls that price a case) failed with a 500 on PostgreSQL, so a new player saw «هنوز پرونده‌ای روی گوشیت نیست» as if offline. Cause: `welcome.offers_for` grouped by `substr(reason, 1, 7)`; asyncpg binds the numbers as different parameters in the select list and in GROUP BY, PostgreSQL treats them as two expressions and refuses. SQLite (CI) accepts it, and the Postgres wallet tests used 100-hour-old accounts, so nothing caught it. Now two plain SUM(CASE) aggregates; new test `tests/test_welcome_pg.py` runs in the wallet-postgres CI job with a brand-new account. No migration, no APK.
+=======
+# app 1.40.6+80: connection fallback for phones that show «offline» (28 Oct 2026, urgent)
+
+- Some phones (seen on Xiaomi/Huawei and some operators) showed the «هنوز پرونده‌ای روی گوشیت نیست» page although the browser opened the site. Suspected cause (not reproduced): the phone's own DNS or IPv6 route fails for the app while the browser uses a public DNS over HTTPS. New `services/net_fallback.dart`: the normal path stays first; only when the phone's DNS fails or answers a private/filter address, the app asks a public DNS over HTTPS (1.1.1.1, then 8.8.8.8), connects to that address (TLS still checks the name `gaamly.ir`), keeps it for 10 minutes and remembers the last good address. Phones that already work are not touched. whats_new release 80. App only: no server change.
+>>>>>>> fix/net-fallback
 
 # server 1.41.6: unique detective names (28 Oct 2026, urgent)
 
