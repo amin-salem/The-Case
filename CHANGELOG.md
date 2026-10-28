@@ -1,3 +1,10 @@
+# server 1.43.0: whole test suite on PostgreSQL, duplicate-accounts screen (28 Oct 2026)
+
+- CI: new job `server-postgres` runs the WHOLE server suite (`pytest -q`) on a PostgreSQL 16 service container, next to the unchanged SQLite run in job `server`. `wallet-postgres` keeps the concurrency races (`tests/test_wallet_concurrency.py`). Rule: every new query is tested on PostgreSQL in CI. Reason: on 28 Oct 2026 `GET /v1/cases` was a 500 for every new account on Liara (server 1.41.3-1.41.6) because SQLite accepted a GROUP BY that PostgreSQL refuses.
+- Tests: `new_player` now makes a brand-new guest by default (created just now, no email, no phone); tests that need the normal rules pass `aged=True`. New `tests/test_first_run_smoke.py` walks the first run of a new guest (config, case list, today's case, three leaderboards, me, album, inbox, feed, missions, achievements, avatars, referrals); every answer must be 2xx on both databases. Service tests that used a private SQLite file now use a private database of the same kind as the suite.
+- Admin: duplicate accounts (read only). A device id shared by 2+ player rows is probably one person counted twice (a secured player signs in on a new phone: the app first made a guest row, then the old account took the same device id). Overview cards «کارآگاه‌های واقعی (تخمین)» and «مهمان یتیم», and a list under «بازیکن‌ها» → «حساب‌های تکراری» with the groups (secured row, orphan guests, others). Nothing is deleted or merged. Bounded to 200 groups; `GET /admin/api/duplicate-accounts` and `/summary`.
+- Deploy: redeploy from the Liara panel. No migration, no APK.
+
 # server 1.42.1: weekend case w007 «جای سخنران» (28 Oct 2026)
 
 - New weekend case w007, format 3, Thursday 19 Nov 2026 (publish 2026-11-19, opens 09:00, 36 h). Idea 31 of the idea bank, style S6 (contradicting narratives), puzzle type 4 (wrong victim), scene hotel, category art, difficulty 5. Eight suspects (one newcomer in night 2), 16 cards, night-1 question «کی دروغ می‌گه؟», four «چرا و چطور» options. Push notification text added to `notify.json`.
@@ -10,15 +17,13 @@
 - Server/admin: «⭐ نظرات بازار» tab: the latest Bazaar reviews (filters «بدون پاسخ», «امتیاز ۱ تا ۳»), and a reply box (5-500 characters; Bazaar approves replies before players see them). Needs `BAZAAR_API_SECRET`. Bazaar problems show as a Persian line, never break the panel. Rate-limited (`admin_reply`), cached 60 s.
 - Release: after the APK is built the workflow sends it to Pishkhan as an unpublished release when the GitHub secret `PISHKHAN_API_TOKEN` exists (`app/tools/bazaar_upload.sh`, notes from `docs/bazaar-release-notes.md`). It never publishes; the step never fails the build.
 
-<<<<<<< HEAD
 # server 1.41.7: new players got a 500 on the case list (28 Oct 2026, urgent)
 
 - Bug from 1.41.3 (first-days offers): for every account younger than 3 days `GET /v1/cases` (and the album, unlock and case calls that price a case) failed with a 500 on PostgreSQL, so a new player saw «هنوز پرونده‌ای روی گوشیت نیست» as if offline. Cause: `welcome.offers_for` grouped by `substr(reason, 1, 7)`; asyncpg binds the numbers as different parameters in the select list and in GROUP BY, PostgreSQL treats them as two expressions and refuses. SQLite (CI) accepts it, and the Postgres wallet tests used 100-hour-old accounts, so nothing caught it. Now two plain SUM(CASE) aggregates; new test `tests/test_welcome_pg.py` runs in the wallet-postgres CI job with a brand-new account. No migration, no APK.
-=======
+
 # app 1.40.6+80: connection fallback for phones that show «offline» (28 Oct 2026, urgent)
 
 - Some phones (seen on Xiaomi/Huawei and some operators) showed the «هنوز پرونده‌ای روی گوشیت نیست» page although the browser opened the site. Suspected cause (not reproduced): the phone's own DNS or IPv6 route fails for the app while the browser uses a public DNS over HTTPS. New `services/net_fallback.dart`: the normal path stays first; only when the phone's DNS fails or answers a private/filter address, the app asks a public DNS over HTTPS (1.1.1.1, then 8.8.8.8), connects to that address (TLS still checks the name `gaamly.ir`), keeps it for 10 minutes and remembers the last good address. Phones that already work are not touched. whats_new release 80. App only: no server change.
->>>>>>> fix/net-fallback
 
 # server 1.41.6: unique detective names (28 Oct 2026, urgent)
 

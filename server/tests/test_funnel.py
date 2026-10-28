@@ -9,7 +9,7 @@ from app.db import Base
 from app.models import CaseProgress, Player, Purchase
 from app.services import funnel
 
-from .conftest import ADMIN, new_player
+from .conftest import ADMIN, private_engine, new_player
 
 NOW = datetime(2026, 9, 30, 12, 0)  # UTC; 15:30 on 30 Sep in Tehran. Ten days: 21 Sep .. 30 Sep (today is day 9)
 
@@ -21,9 +21,7 @@ def at(day: int, hour: int = 12, minute: int = 0) -> datetime:
 @pytest.fixture
 async def session(tmp_path):
     """A private database, so rows made by other tests never leak into the numbers."""
-    engine = create_async_engine(f"sqlite+aiosqlite:///{tmp_path}/funnel.db")
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    engine = await private_engine(tmp_path, "funnel")
     async with async_sessionmaker(engine, expire_on_commit=False)() as s:
         yield s
     await engine.dispose()

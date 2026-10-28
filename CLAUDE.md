@@ -53,6 +53,7 @@ push to `main`). Only server changes may use a Liara deployment.
   data. Anything an operator must watch belongs in the admin panel health screen or the GitHub watch workflows.
 - **Test the behaviour, not the code.** Deterministic clocks, no sleeps; cover the failure and the abuse path, not only
   the happy path. CI is the only test runner, so keep tests fast and independent.
+  **Every new query is tested on PostgreSQL in CI** (job `server-postgres` runs the whole suite there; SQLite accepts what PostgreSQL refuses).
 - **Small, reversible steps.** Feature flags/kill switches for risky behaviour, one push to `main` per task
   (see the deploy budget above), and a short note in `CHANGELOG.md` and `docs/operations.md` for anything an operator
   must know or set.

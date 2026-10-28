@@ -2,9 +2,16 @@ import os
 import tempfile
 
 _tmp = tempfile.mkdtemp()
+# The whole suite runs on SQLite (default) and, in CI job «server-postgres», on PostgreSQL: set TEST_DATABASE_URL to an
+# empty isolated database (postgresql+asyncpg://...) and TEST_AUX_DATABASE_URL to a second one for private-database tests.
+# PostgreSQL is what Liara runs, so a query SQLite accepts but PostgreSQL refuses (28 Oct 2026: GROUP BY on a bound
+# expression, a 500 for every new account) must fail in CI. Never point these at a real database: both are wiped.
+TEST_DB_URL = os.environ.get("TEST_DATABASE_URL", "")
+TEST_AUX_URL = os.environ.get("TEST_AUX_DATABASE_URL", "")
+ON_POSTGRES = TEST_DB_URL.startswith("postgresql")
 os.environ.update({
     "ENV": "dev",
-    "DATABASE_URL": f"sqlite+aiosqlite:///{_tmp}/test.db",
+    "DATABASE_URL": TEST_DB_URL if ON_POSTGRES else f"sqlite+aiosqlite:///{_tmp}/test.db",
     "BAZAAR_MODE": "fake",
     "EMAIL_SIGNUP_ENABLED": "true",  # old tests secure accounts with email; test_phone.py checks the closed switch
     "RATE_LIMIT": "false",
@@ -24,6 +31,11 @@ ADMIN = {"X-Admin-Key": "test-admin-key"}
 
 @pytest.fixture(scope="session", autouse=True)
 async def _tables():
+    if ON_POSTGRES:
+        assert TEST_DB_URL.rsplit("/", 1)[-1].endswith("_test"), "TEST_DATABASE_URL must name a database ending in _test"
+        from app import models  # noqa: F401
+        async with db.engine.begin() as conn:
+            await conn.run_sync(db.Base.metadata.drop_all)
     await db.create_tables()
     yield
     await db.engine.dispose()
@@ -53,9 +65,27 @@ def _no_proof_requirement(monkeypatch):
     monkeypatch.setattr(economy, "MIN_SUSPECTS_SEEN", 0)
 
 
-async def new_player(client, device="device-1234", aged=True):
-    """Registers a player. By default the account is made 100 hours old, so it is not hidden from the leaderboards
-    (new unsecured accounts are hidden for 48 hours); pass aged=False for a really new account."""
+async def private_engine(tmp_path, name: str):
+    """A private, empty database for service tests (SQLite file, or the auxiliary PostgreSQL database in the Postgres job),
+    so rows made by other tests never leak into the numbers. The caller disposes the engine."""
+    from sqlalchemy.ext.asyncio import create_async_engine
+    from app import models  # noqa: F401
+    if ON_POSTGRES:
+        assert TEST_AUX_URL.rsplit("/", 1)[-1].endswith("_test"), "TEST_AUX_DATABASE_URL must name a database ending in _test"
+        engine = create_async_engine(TEST_AUX_URL)
+        async with engine.begin() as conn:
+            await conn.run_sync(db.Base.metadata.drop_all)
+    else:
+        engine = create_async_engine(f"sqlite+aiosqlite:///{tmp_path}/{name}.db")
+    async with engine.begin() as conn:
+        await conn.run_sync(db.Base.metadata.create_all)
+    return engine
+
+
+async def new_player(client, device="device-1234", aged=False):
+    """Registers a player like a real new one: created just now, a guest (no email, no phone). The first days have their
+    own rules (hidden from the leaderboards for 48 hours, first-days prices for 3 days, young-account limits), so tests
+    that are about something else and need the normal rules pass aged=True: the account is then made 100 hours old."""
     r = await client.post("/v1/auth/register", json={"device_id": device, "app_version": 1})
     assert r.status_code == 200, r.text
     body = r.json()
@@ -73,6 +103,12 @@ async def new_player(client, device="device-1234", aged=True):
 
 def pytest_collection_modifyitems(items):
     import inspect
+
+    if ON_POSTGRES:
+        skip = pytest.mark.skip(reason="SQLite only (see docs/operations.md, «Tests on PostgreSQL»)")
+        for item in items:
+            if item.get_closest_marker("sqlite_only"):
+                item.add_marker(skip)
 
     session_loop = pytest.mark.asyncio(loop_scope="session")
     for item in items:

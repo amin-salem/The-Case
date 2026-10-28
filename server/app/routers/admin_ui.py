@@ -14,6 +14,7 @@ from .. import content
 from ..config import get_settings
 from ..cache import TTLCache
 from ..services import bazaar_reviews
+from ..services import duplicates as duplicates_service
 from ..services import economy_report as economy_service
 from ..services import funnel as funnel_service
 from ..services import health as health_service
@@ -189,6 +190,18 @@ async def players(q: str = Query("", max_length=60), sort: str = "last_seen", li
         "id": p.id, "nickname": p.nickname, "coins": p.coins, "solved": p.cases_solved, "stars": p.stars_total,
         "streak": p.streak, "secured": bool(p.email or p.phone_hash), "banned": p.banned, "app_version": p.app_version,
         "created": ts(p.created_at), "last_seen": ts(p.last_seen)} for p in rows]}
+
+
+@router.get("/duplicate-accounts")
+async def duplicate_accounts(limit: int = Query(50, ge=1, le=200), offset: int = Query(0, ge=0, le=200),
+                             session: AsyncSession = Depends(get_session)):
+    """READ ONLY. Device ids shared by 2+ player rows (one person counted twice), at most 200 groups, plus the numbers."""
+    return await duplicates_service.groups(session, limit, offset)
+
+
+@router.get("/duplicate-accounts/summary")
+async def duplicate_accounts_summary(session: AsyncSession = Depends(get_session)):
+    return await duplicates_service.summary(session)
 
 
 @router.get("/players/{player_id}")

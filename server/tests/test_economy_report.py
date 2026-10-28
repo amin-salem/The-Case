@@ -9,16 +9,14 @@ from app.db import Base
 from app.models import CaseProgress, CaseToolUse, CoinLog, Player
 from app.services import economy_report as er
 
-from .conftest import ADMIN
+from .conftest import ADMIN, private_engine
 
 NOW = datetime(2026, 10, 21, 12, 0)
 
 
 @pytest.fixture
 async def session(tmp_path):
-    engine = create_async_engine(f"sqlite+aiosqlite:///{tmp_path}/economy.db")
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    engine = await private_engine(tmp_path, "economy")
     async with async_sessionmaker(engine, expire_on_commit=False)() as s:
         yield s
     await engine.dispose()

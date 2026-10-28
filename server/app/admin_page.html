@@ -287,7 +287,9 @@ const VIEWS = {
     const d = await api('/admin/api/overview?days=14'), t = d.totals;
     const pend = await api('/admin/api/comments/cases').then(x => x.pending).catch(() => 0);
     const acw = await api('/admin/anticheat-watch?days=7').then(acHtml).catch(() => '<div class="ac"><h3>آنتی‌چیت: الان خوانده نشد</h3><p class="muted">چند لحظه بعد دوباره بزن.</p></div>');
+    const dup = await api('/admin/api/duplicate-accounts/summary').catch(() => null);
     m.innerHTML = acw + `<div class="quick"><button class="${pend ? 'hot' : ''}" id="qc">💬 نظرهای در انتظار (${num(pend)})</button><button id="qm">✉ پیام / هدیه به همه</button><button id="qp">👥 بازیکن‌ها (بن، سکه)</button></div><div class="cards">${card(t.players,'کل بازیکن‌ها','👥','#e0a526')}${card(t.active_24h,'فعال ۲۴ ساعت','⚡','#5dae7e')}${card(t.active_7d,'فعال ۷ روز','📅','#8ab4f8')}${card(t.secured,'حساب امن‌شده (ایمیل)','🔒','#b48ead')}${card(t.cases_solved,'پرونده‌ی حل‌شده','✅','#5dae7e')}${card(t.coins_in_circulation,'سکه‌ی در گردش','🪙','#e0a526')}${card(t.banned,'بن‌شده','⛔','#d0543f')}</div>` +
+      (dup ? `<div class="cards">${card(dup.real_people_estimate,'کارآگاه‌های واقعی (تخمین)','🕵️','#8ab4f8')}${card(dup.probable_orphans,'حساب مهمان‌ِ یتیم (احتمالاً تکراری)','🔁','#d0543f')}${card(dup.devices,'دستگاه متفاوت','📱','#b48ead')}</div><p class="muted">از ${num(dup.players)} ردیف، حدود ${num(dup.probable_orphans)} تا مهمانِ بی‌پرونده‌اند که روی دستگاه یک حساب امن‌شده ساخته شده‌اند. <a href="#" id="qdup">فهرست حساب‌های تکراری</a></p>` : '') +
       chart('بازیکن‌های فعال در روز', d.days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', d.days, 'new', '#e0a526') +
       chart('پرونده‌ی باز شده', d.days, 'opened', '#8ab4f8') + chart('حل‌شده', d.days, 'solved', '#5dae7e') + chart('شکست', d.days, 'failed', '#d0543f') +
       chart('خرید موفق', d.days, 'purchases', '#e0a526') + chart('سکه‌ی دریافتی', d.days, 'coins_in', '#5dae7e') + chart('سکه‌ی خرج‌شده', d.days, 'coins_out', '#d0543f') +
@@ -296,6 +298,7 @@ const VIEWS = {
 
     acWire();
     $('#qc').onclick = () => go('comments'); $('#qm').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها'); $('#qp').onclick = () => go('players');
+    const qd = $('#qdup'); if (qd) qd.onclick = e => { e.preventDefault(); go('players', {dups: true}); };
   },
   async feed(m) {
     const draw = async () => {
@@ -308,6 +311,7 @@ const VIEWS = {
   },
   async players(m, arg) {
     if (arg && arg.id) return VIEWS.player(m, arg.id);
+    if (arg && arg.dups) return VIEWS.dups(m);
     const st = VIEWS._pq || (VIEWS._pq = {q: '', sort: 'last_seen', banned: false});
     const load = async () => {
       const d = await api(`/admin/api/players?q=${encodeURIComponent(st.q)}&sort=${st.sort}&only_banned=${st.banned}&limit=100`);
@@ -315,9 +319,21 @@ const VIEWS = {
         d.items.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.id.slice(0,6))} ${p.banned ? '<span class="tag banned">بن</span>' : ''}</td><td>${num(p.coins)}</td><td>${num(p.solved)}</td><td>${num(p.stars)}</td><td>${num(p.streak)}</td><td>${p.secured ? 'امن' : 'مهمان'}</td><td>${num(p.app_version)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('') + '</table></div>';
       $('#plist').querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
     };
-    m.innerHTML = `<div class="row"><input id="pq" placeholder="نام، ایمیل، کد دعوت، شناسه یا دستگاه" value="${esc(st.q)}" style="flex:1;min-width:200px"><select id="ps">${[['last_seen','آخرین فعالیت'],['created','جدیدترین'],['coins','سکه'],['solved','حل‌شده'],['stars','ستاره'],['streak','استریک']].map(([k,n]) => `<option value="${k}" ${st.sort===k?'selected':''}>${n}</option>`).join('')}</select><label><input type="checkbox" id="pb" ${st.banned?'checked':''}> فقط بن‌شده‌ها</label></div><div id="plist"></div>`;
+    m.innerHTML = `<div class="row"><input id="pq" placeholder="نام، ایمیل، کد دعوت، شناسه یا دستگاه" value="${esc(st.q)}" style="flex:1;min-width:200px"><select id="ps">${[['last_seen','آخرین فعالیت'],['created','جدیدترین'],['coins','سکه'],['solved','حل‌شده'],['stars','ستاره'],['streak','استریک']].map(([k,n]) => `<option value="${k}" ${st.sort===k?'selected':''}>${n}</option>`).join('')}</select><label><input type="checkbox" id="pb" ${st.banned?'checked':''}> فقط بن‌شده‌ها</label><button id="pdup">🔁 حساب‌های تکراری</button></div><div id="plist"></div>`;
     $('#pq').onchange = e => { st.q = e.target.value.trim(); load(); }; $('#ps').onchange = e => { st.sort = e.target.value; load(); }; $('#pb').onchange = e => { st.banned = e.target.checked; load(); };
+    $('#pdup').onclick = () => go('players', {dups: true});
     await load();
+  },
+  async dups(m) {
+    const d = await api('/admin/api/duplicate-accounts?limit=200'), u = d.summary;
+    const ROLE = {secured: 'امن‌شده', orphan: 'مهمان یتیم', guest: 'مهمان'};
+    m.innerHTML = `<div class="row"><button id="back">← فهرست</button><h2 style="margin:0">حساب‌های تکراری</h2></div>
+    <div class="cards">${card(u.players,'کل ردیف‌ها','👥','#e0a526')}${card(u.devices,'دستگاه متفاوت','📱','#b48ead')}${card(u.groups,'دستگاه با چند حساب','🔁','#8ab4f8')}${card(u.probable_orphans,'مهمان یتیم (احتمالاً تکراری)','👻','#d0543f')}${card(u.real_people_estimate,'کارآگاه‌های واقعی (تخمین)','🕵️','#5dae7e')}</div>
+    <p class="muted">وقتی کارآگاهی با حساب امن‌شده‌اش روی گوشی جدید یا بعد از پاک کردن اطلاعات برنامه وارد می‌شود، برنامه اول یک حساب مهمان تازه می‌سازد و بعد او به حساب قدیمی‌اش می‌رود؛ مهمانِ تازه با همان دستگاه می‌ماند. «یتیم» یعنی مهمانی که پرونده‌ی حل‌شده و خرید ندارد و هم‌دستگاهش حساب امن‌شده است. این صفحه فقط نشان می‌دهد و چیزی را حذف یا ادغام نمی‌کند. حداکثر ${num(d.max_groups)} دستگاه نشان داده می‌شود.</p>` +
+    (d.groups.length ? d.groups.map(g => `<h3>دستگاه <span class="ltr">${esc(g.device)}</span> · ${num(g.rows)} حساب${g.shown < g.rows ? ' (فقط ' + num(g.shown) + ' نشان داده شد)' : ''}</h3><div class="scroll"><table><tr><th>نام</th><th>نوع</th><th>حل</th><th>سکه</th><th>خرید</th><th>ثبت‌نام</th><th>آخرین فعالیت</th></tr>` +
+      g.players.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.short_id)} <span class="muted ltr">${esc(p.short_id)}</span> ${p.banned ? '<span class="tag banned">بن</span>' : ''}${p.tester ? ' <span class="tag">تستر</span>' : ''}</td><td>${ROLE[p.role] || ''}${p.phone_last4 ? ' <span class="ltr">••••' + esc(p.phone_last4) + '</span>' : ''}${p.email ? ' ✉' : ''}</td><td>${num(p.solved)}</td><td>${num(p.coins)}</td><td>${num(p.purchases)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('') + '</table></div>').join('')
+      : '<p class="muted">هیچ دستگاهی بیش از یک حساب ندارد.</p>');
+    $('#back').onclick = () => go('players'); m.querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
   },
   async player(m, id) {
     const d = await api('/admin/api/players/' + encodeURIComponent(id)), p = d.player;
