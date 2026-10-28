@@ -114,3 +114,17 @@ jobs:
           files: |
             app/release/*.apk
             app/release/server_check.md
+      - name: Upload to Cafe Bazaar (Pishkhan), never published
+        # Only when the secret PISHKHAN_API_TOKEN exists. It never fails the APK build; Amin presses «انتشار» in Pishkhan.
+        continue-on-error: true
+        env:
+          PISHKHAN_API_TOKEN: ${{ secrets.PISHKHAN_API_TOKEN }}
+        run: |
+          if [ -z "$PISHKHAN_API_TOKEN" ]; then
+            echo "::notice::PISHKHAN_API_TOKEN is not set: the APK was not sent to Cafe Bazaar."
+            exit 0
+          fi
+          V=$(grep '^version:' app/pubspec.yaml | awk '{print $2}')
+          NAME="${V%%+*}"; BUILD="${V##*+}"
+          APK="app/release/the_case-$NAME-$BUILD.apk"
+          bash app/tools/bazaar_upload.sh "$APK" docs/bazaar-release-notes.md "$BUILD" || echo "::warning::Upload to Cafe Bazaar did not finish; upload the APK by hand in Pishkhan."

@@ -1,3 +1,10 @@
+# app 1.40.6+80 / server 1.42.0: names from home, Bazaar helpers (28 Oct 2026, urgent)
+
+- App: the name in the home header opens the name sheet (pencil icon, brass while the name is still the random «کارآگاه1234»); the dice button suggests names («روباه تیزبین»…); a one-time home card after the first solved case asks for a name; the profile uses the same sheet; a taken name says «این اسم قبلاً انتخاب شده…». No coins are paid for choosing a name.
+- App: the update button tries Bazaar's in-app update sheet (`bazaar://details/modal`), then the Bazaar page, then the web link. A rating card («از بازی راضی بودی؟») shows on the home screen only after a 3-star solve by a player with 3+ solved cases, at most once every 30 days, never again after the button; it opens the Bazaar app page (the direct review intent needs a native change and was left out). Bazaar build only.
+- Server/admin: «⭐ نظرات بازار» tab: the latest Bazaar reviews (filters «بدون پاسخ», «امتیاز ۱ تا ۳»), and a reply box (5-500 characters; Bazaar approves replies before players see them). Needs `BAZAAR_API_SECRET`. Bazaar problems show as a Persian line, never break the panel. Rate-limited (`admin_reply`), cached 60 s.
+- Release: after the APK is built the workflow sends it to Pishkhan as an unpublished release when the GitHub secret `PISHKHAN_API_TOKEN` exists (`app/tools/bazaar_upload.sh`, notes from `docs/bazaar-release-notes.md`). It never publishes; the step never fails the build.
+
 <<<<<<< HEAD
 # server 1.41.7: new players got a 500 on the case list (28 Oct 2026, urgent)
 

@@ -204,3 +204,13 @@ jobs:
           WALLET_TEST_DATABASE_URL: postgresql+asyncpg://wallet_ci:isolated-ci-only@localhost:5432/wallet_test
         run: pytest -q tests/test_wallet_concurrency.py tests/test_welcome_pg.py
 
+
+  bazaar-upload-script:
+    # The Pishkhan upload script must stay working: a dry run sends nothing and needs no token.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dry run with the release notes of the current build
+        run: |
+          B=$(grep '^version:' app/pubspec.yaml | sed 's/.*+//')
+          bash app/tools/bazaar_upload.sh --dry-run /tmp/none.apk docs/bazaar-release-notes.md "$B"
