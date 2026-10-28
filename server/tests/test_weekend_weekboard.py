@@ -70,7 +70,7 @@ async def board(client, player):
 async def test_weekend_solve_refreshes_warmed_board_without_double_counting(client, monkeypatch, board_cases, mode, leagues):
     monkeypatch.setattr(get_settings(), "week_rank_mode", mode)
     monkeypatch.setattr(weekboard, "leagues_on", lambda: leagues)
-    p = await new_player(client, f"weekend-board-{mode}-{leagues}")
+    p = await new_player(client, f"weekend-board-{mode}-{leagues}", aged=True)
     await solve_case(client, p, board_cases.nightly)
     before = await board(client, p)  # cache contains this player with only the nightly case's 3 stars
     assert before["me"]["stars"] == 3
@@ -94,7 +94,7 @@ async def test_weekend_solve_refreshes_warmed_board_without_double_counting(clie
 
 async def test_weekend_counts_for_weekly_prize_minimum_and_message(client, monkeypatch, board_cases):
     monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
-    p = await new_player(client, "weekend-prize-combined")
+    p = await new_player(client, "weekend-prize-combined", aged=True)
     await solve_case(client, p, board_cases.nightly)
     await solve_case(client, p, board_cases.weekend)
     async with db.SessionLocal() as session:
@@ -112,7 +112,7 @@ async def test_weekend_counts_for_weekly_prize_minimum_and_message(client, monke
 async def test_old_weekend_unranked_and_close_boundary_do_not_add_weekly_stars(client, monkeypatch, board_cases):
     monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
     close = gameclock.to_utc_naive(gameclock.week_end(board_cases.ws))
-    players = [await new_player(client, f"weekend-boundary-{i}") for i in range(4)]
+    players = [await new_player(client, f"weekend-boundary-{i}", aged=True) for i in range(4)]
     async with db.SessionLocal() as session:
         for player, case, ranked, finished in (
             (players[0], board_cases.weekend, True, close - timedelta(microseconds=1)),

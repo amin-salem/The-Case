@@ -54,7 +54,7 @@ async def test_archive_quote_debit_insufficient_funds_ownership_and_legacy(clien
     tomorrow = content.by_id("c021")
     monkeypatch.setattr(content, "all_cases", lambda: (c, tomorrow))
     monkeypatch.setattr(content, "now_local", lambda: content.opens_at(tomorrow) + timedelta(hours=1))
-    p = await new_player(client, f"quote-{difficulty}")
+    p = await new_player(client, f"quote-{difficulty}", aged=True)
     h = p["headers"]
     row = next(r for r in (await client.get('/v1/cases', headers=h)).json()['archive'] if r['id'] == c.id)
     cost = [100, 120, 150, 180, 220][difficulty - 1]
@@ -81,7 +81,7 @@ async def test_archive_quote_debit_insufficient_funds_ownership_and_legacy(clien
         logs = (await s.scalars(select(CoinLog).where(CoinLog.player_id == p['player_id'], CoinLog.reason == f'unlock:{c.id}'))).all()
         assert len(logs) == 1 and logs[0].amount == -cost
     # Old clients send no body: their existing flow still works at the server's current price.
-    old = await new_player(client, f'legacy-quote-{difficulty}')
+    old = await new_player(client, f'legacy-quote-{difficulty}', aged=True)
     await fund(old['player_id'])
     assert (await client.post(f'/v1/cases/{c.id}/unlock', headers=old['headers'])).status_code == 200
     assert await balance(old['player_id']) == 1780
@@ -92,7 +92,7 @@ async def test_vip_and_tonights_free_access_never_charge(client, monkeypatch):
     tomorrow = content.by_id('c021')
     monkeypatch.setattr(content, 'all_cases', lambda: (c, tomorrow))
     monkeypatch.setattr(content, 'now_local', lambda: content.opens_at(c) + timedelta(hours=1))
-    p = await new_player(client, 'economy-free')
+    p = await new_player(client, 'economy-free', aged=True)
     assert (await client.post(f'/v1/cases/{c.id}/unlock', headers=p['headers'], json={'expected_cost': 1})).status_code == 200
     assert await balance(p['player_id']) == eco.START_COINS
     monkeypatch.setattr(content, 'now_local', lambda: content.opens_at(tomorrow) + timedelta(hours=1))
@@ -109,7 +109,7 @@ async def test_nightly_reward_bonus_and_repeat_solve(client, monkeypatch, diffic
     c = changed(content.by_id('c020'), difficulty)
     monkeypatch.setattr(content, 'all_cases', lambda: (c,))
     monkeypatch.setattr(content, 'now_local', lambda: content.opens_at(c) + timedelta(hours=1))
-    p = await new_player(client, f'reward-{difficulty}-{stars}')
+    p = await new_player(client, f'reward-{difficulty}-{stars}', aged=True)
     await client.get(f'/v1/cases/{c.id}', headers=p['headers'])
     async with db.SessionLocal() as s:
         await s.execute(update(CaseProgress).where(CaseProgress.player_id == p['player_id']).values(attempts=3-stars))
@@ -134,7 +134,7 @@ async def test_live_and_expired_weekend_keep_distinct_baselines(client, monkeypa
     monkeypatch.setattr(content, 'weekly_cases', lambda: (c,))
     now = content.weekly_closes_at(c) + timedelta(seconds=1) if expired else content.weekly_all_open_at(c)
     monkeypatch.setattr(content, 'now_local', lambda: now)
-    p = await new_player(client, f'weekend-{difficulty}-{stars}-{expired}')
+    p = await new_player(client, f'weekend-{difficulty}-{stars}-{expired}', aged=True)
     await fund(p['player_id'])
     if expired:
         row = next(r for r in (await client.get('/v1/cases', headers=p['headers'])).json()['archive'] if r['id'] == c.id)
@@ -158,7 +158,7 @@ async def test_streak_and_early_weekend_bonuses_are_added_not_scaled(client, mon
     previous = content.by_id('c019')
     monkeypatch.setattr(content, 'all_cases', lambda: tuple(c if x.id == c.id else x for x in cases))
     monkeypatch.setattr(content, 'now_local', lambda: content.opens_at(c) + timedelta(hours=1))
-    p = await new_player(client, 'bonus-unscaled')
+    p = await new_player(client, 'bonus-unscaled', aged=True)
     async with db.SessionLocal() as s:
         await s.execute(update(Player).where(Player.id == p['player_id']).values(streak=6, best_streak=6, last_daily_solved=previous.publish.isoformat()))
         await s.commit()
@@ -168,7 +168,7 @@ async def test_streak_and_early_weekend_bonuses_are_added_not_scaled(client, mon
     w = changed(content.weekly_cases()[0], 5)
     monkeypatch.setattr(content, 'weekly_cases', lambda: (w,))
     monkeypatch.setattr(content, 'now_local', lambda: content.opens_at(w) + timedelta(hours=1))
-    b = await new_player(client, 'early-unscaled')
+    b = await new_player(client, 'early-unscaled', aged=True)
     await client.get(f'/v1/cases/{w.id}', headers=b['headers'])
     result = (await client.post(f'/v1/cases/{w.id}/accuse', headers=b['headers'], json={
         'suspect': w.culprit, 'evidence': sorted(w.proof)[0], 'motive': w.data['solution']['motive']})).json()

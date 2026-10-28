@@ -74,7 +74,7 @@ async def test_lost_nightly_case_hides_the_answer_until_the_next_case(client, cl
     c = content.by_id("c045")
     clock(night("c045"))
     opens_next = int(content.next_case_at().timestamp())
-    p = await new_player(client, "delay-1")
+    p = await new_player(client, "delay-1", aged=True)
     h = p["headers"]
     await client.get(f"/v1/cases/{c.id}", headers=h)
     r = await fail_case(client, h, c)
@@ -94,7 +94,7 @@ async def test_lost_nightly_case_hides_the_answer_until_the_next_case(client, cl
 async def test_solvers_see_the_explanation_at_once(client, clock):
     c = content.by_id("c046")
     clock(night("c046"))
-    p = await new_player(client, "delay-solver")
+    p = await new_player(client, "delay-solver", aged=True)
     await client.get(f"/v1/cases/{c.id}", headers=p["headers"])
     r = await accuse(client, p["headers"], c, c.culprit)
     assert r["result"] == "solved" and r["explanation"] and r["culprit"] == c.culprit and r["answer_at"] is None
@@ -103,7 +103,7 @@ async def test_solvers_see_the_explanation_at_once(client, clock):
 async def test_archive_case_shows_the_answer_at_once(client, clock):
     old, newer = content.by_id("c046"), content.by_id("c047")
     clock(night("c047"))
-    p = await new_player(client, "delay-archive")
+    p = await new_player(client, "delay-archive", aged=True)
     h = p["headers"]
     async with db.SessionLocal() as s:
         await s.execute(update(Player).where(Player.id == p["player_id"]).values(coins=500))
@@ -117,7 +117,7 @@ async def test_archive_case_shows_the_answer_at_once(client, clock):
 async def test_lost_weekend_case_waits_for_its_closing(client, clock):
     w = content.weekly_cases()[0]
     clock(content.weekly_all_open_at(w) + timedelta(hours=1))
-    p = await new_player(client, "delay-weekend")
+    p = await new_player(client, "delay-weekend", aged=True)
     h = p["headers"]
     await client.get(f"/v1/cases/{w.id}", headers=h)
     wrong_motive = w.data["solution"].get("motive")
@@ -152,8 +152,8 @@ def test_story_answer_comes_24_hours_after_the_failure():
 async def test_solve_without_investigation_is_one_star_and_unranked(client, clock, strict_rules):
     c = content.by_id("c047")
     clock(night("c047"))
-    lazy = await new_player(client, "proof-lazy")
-    diligent = await new_player(client, "proof-diligent")
+    lazy = await new_player(client, "proof-lazy", aged=True)
+    diligent = await new_player(client, "proof-diligent", aged=True)
     for pl in (lazy, diligent):
         await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
     r = await accuse(client, lazy["headers"], c, c.culprit)
@@ -179,7 +179,7 @@ async def test_time_alone_or_suspects_alone_is_not_enough(client, clock, strict_
     cases = [({"active_seconds": 500, "seen": ids[:1]}, "proof-one-suspect"),
              ({"active_seconds": 30, "seen": ids[:3]}, "proof-short-time")]
     for vals, device in cases:
-        p = await new_player(client, device)
+        p = await new_player(client, device, aged=True)
         await client.get(f"/v1/cases/{c.id}", headers=p["headers"])
         await set_progress(p["player_id"], c.id, **vals)
         r = await accuse(client, p["headers"], c, c.culprit)
@@ -242,7 +242,7 @@ async def test_weekly_prizes_skip_new_unsecured_accounts(client, monkeypatch):
     monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
     monkeypatch.setattr(content, "now_local", lambda: datetime(2027, 6, 25, 22, 0, tzinfo=TEHRAN))
     young = await new_player(client, "prize-young", aged=False)
-    old = await new_player(client, "prize-old")
+    old = await new_player(client, "prize-old", aged=True)
     async with db.SessionLocal() as s:
         for pl in (young, old):
             for i in range(2):
@@ -270,9 +270,9 @@ async def referral_items(pid):
 
 
 async def test_inviter_is_paid_only_after_three_solve_days(client):
-    inviter = await new_player(client, "inv-main")
+    inviter = await new_player(client, "inv-main", aged=True)
     me = (await client.get("/v1/me", headers=inviter["headers"])).json()
-    invitee = await new_player(client, "inv-friend")
+    invitee = await new_player(client, "inv-friend", aged=True)
     r = await client.post("/v1/referrals/redeem", headers=invitee["headers"], json={"code": me["invite_code"]})
     assert r.status_code == 200, r.text
     assert await referral_items(inviter["player_id"]) == 0  # nothing at redeem time
@@ -293,10 +293,10 @@ async def fake_solve_days_extra(pid):
 
 
 async def test_one_paid_invite_per_device_and_five_per_week(client):
-    inviter = await new_player(client, "cap-main")
+    inviter = await new_player(client, "cap-main", aged=True)
     code = (await client.get("/v1/me", headers=inviter["headers"])).json()["invite_code"]
-    a = await new_player(client, "cap-shared-device")
-    b = await new_player(client, "cap-shared-device")  # a second account on the same phone
+    a = await new_player(client, "cap-shared-device", aged=True)
+    b = await new_player(client, "cap-shared-device", aged=True)  # a second account on the same phone
     for pl in (a, b):
         assert (await client.post("/v1/referrals/redeem", headers=pl["headers"], json={"code": code})).status_code == 200
         await fake_solve_days(pl["player_id"], 3)
@@ -309,7 +309,7 @@ async def test_one_paid_invite_per_device_and_five_per_week(client):
         for i in range(2, eco.INVITE_PAID_PER_WEEK + 1):
             s.add(ReferralPayout(inviter_id=inviter["player_id"], invitee_id=f"x{i}", device_id=f"dev-x{i}", week=week, slot=i))
         await s.commit()
-    late = await new_player(client, "cap-late")
+    late = await new_player(client, "cap-late", aged=True)
     assert (await client.post("/v1/referrals/redeem", headers=late["headers"], json={"code": code})).status_code == 200
     await fake_solve_days(late["player_id"], 3)
     assert await ac.maybe_pay_referral(late["player_id"]) is False
@@ -372,7 +372,7 @@ async def test_suspects_and_evidence_are_shuffled_per_player(client, clock):
     clock(night("c045"))
     orders, ev_orders = set(), set()
     for i in range(6):
-        p = await new_player(client, f"shuffle-{i}")
+        p = await new_player(client, f"shuffle-{i}", aged=True)
         case = (await client.get(f"/v1/cases/{c.id}", headers=p["headers"])).json()["case"]
         again = (await client.get(f"/v1/cases/{c.id}", headers=p["headers"])).json()["case"]
         assert [s["id"] for s in case["suspects"]] == [s["id"] for s in again["suspects"]]  # stable per player
@@ -397,7 +397,7 @@ async def test_cheat_report_lists_devices_fast_solves_and_bursts(client, clock):
     c = content.by_id("c050")
     clock(night("c050"))
     for i in range(3):
-        await new_player(client, "report-farm-device")
+        await new_player(client, "report-farm-device", aged=True)
     suspect = innocent_of(c)
     ids = []
     for i in range(4):
@@ -405,7 +405,7 @@ async def test_cheat_report_lists_devices_fast_solves_and_bursts(client, clock):
         ids.append(p["player_id"])
         await client.get(f"/v1/cases/{c.id}", headers=p["headers"])
         await accuse(client, p["headers"], c, suspect)
-    lazy = await new_player(client, "report-fast")
+    lazy = await new_player(client, "report-fast", aged=True)
     await client.get(f"/v1/cases/{c.id}", headers=lazy["headers"])
     await accuse(client, lazy["headers"], c, c.culprit)
     assert (await client.get("/admin/cheat-report")).status_code == 403
@@ -434,8 +434,8 @@ async def test_hasty_accusation_does_not_reveal_the_culprit(client, clock, stric
     clock(night("c049"))
     bad_ev = next(e["id"] for e in c.data["evidence"] if e["id"] not in c.proof)
     ids = [s["id"] for s in c.data["suspects"]][:2]
-    hasty = await new_player(client, "nudge-hasty")
-    careful = await new_player(client, "nudge-careful")
+    hasty = await new_player(client, "nudge-hasty", aged=True)
+    careful = await new_player(client, "nudge-careful", aged=True)
     for pl in (hasty, careful):
         await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
     await set_progress(careful["player_id"], c.id, active_seconds=eco.min_active_seconds(c.data["difficulty"]), seen=ids)
@@ -461,7 +461,7 @@ async def test_a_fast_reader_of_an_easy_case_gets_the_stars_but_a_hard_one_needs
     results = {}
     for diff, active in ((2, 80), (5, 80)):  # 80 s: enough for difficulty 2 (75 s), not for 5 (130 s)
         monkeypatch.setitem(c.data, "difficulty", diff)
-        pl = await new_player(client, f"proof-diff-{diff}")
+        pl = await new_player(client, f"proof-diff-{diff}", aged=True)
         await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
         await set_progress(pl["player_id"], c.id, active_seconds=active, seen=ids)
         results[diff] = await accuse(client, pl["headers"], c, c.culprit)
@@ -476,7 +476,7 @@ async def test_early_refusals_have_no_culprit_oracle_and_can_be_corrected(client
     bad = next(e["id"] for e in c.data["evidence"] if e["id"] not in c.proof)
     histories = []
     for i, suspect in enumerate((c.culprit, innocent_of(c))):
-        pl = await new_player(client, f"inconclusive-{i}")
+        pl = await new_player(client, f"inconclusive-{i}", aged=True)
         await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
         result = await accuse(client, pl["headers"], c, suspect, bad)
         assert result["result"] == "inconclusive"
@@ -498,7 +498,7 @@ async def test_early_refusals_have_no_culprit_oracle_and_can_be_corrected(client
 async def test_legacy_hasty_and_wrong_suspect_histories_do_not_reveal_culprit(client, clock, strict_rules):
     c = content.by_id("c049")
     clock(night(c.id))
-    pl = await new_player(client, "legacy-refusals")
+    pl = await new_player(client, "legacy-refusals", aged=True)
     await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
     await set_progress(pl["player_id"], c.id, wrong_tries=[
         {"s": c.culprit, "e": "e1", "m": None, "r": "hasty"},
@@ -512,7 +512,7 @@ async def test_legacy_hasty_and_wrong_suspect_histories_do_not_reveal_culprit(cl
 async def test_inconclusive_refusals_keep_the_same_attempt_limit(client, clock, strict_rules):
     c = content.by_id("c049")
     clock(night(c.id))
-    pl = await new_player(client, "inconclusive-limit")
+    pl = await new_player(client, "inconclusive-limit", aged=True)
     await client.get(f"/v1/cases/{c.id}", headers=pl["headers"])
     result = await fail_case(client, pl["headers"], c)
     assert result["attempts_left"] == 0 and result["progress"]["failed"]

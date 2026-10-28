@@ -19,7 +19,7 @@ async def lost_setup(client, monkeypatch, difficulty, name):
     tomorrow = content.by_id("c021")
     monkeypatch.setattr(content, "all_cases", lambda: (c, tomorrow))
     monkeypatch.setattr(content, "now_local", lambda: content.opens_at(tomorrow) + timedelta(hours=1))
-    p = await new_player(client, name)
+    p = await new_player(client, name, aged=True)
     await fund(p["player_id"])
     base = PRICES[difficulty - 1]
     assert (await client.post(f"/v1/cases/{c.id}/unlock", headers=p["headers"], json={"expected_cost": base})).status_code == 200
@@ -85,7 +85,7 @@ async def test_lost_case_stays_closed_after_a_solved_case_is_not_affected(client
     tomorrow = content.by_id("c021")
     monkeypatch.setattr(content, "all_cases", lambda: (c, tomorrow))
     monkeypatch.setattr(content, "now_local", lambda: content.opens_at(tomorrow) + timedelta(hours=1))
-    p = await new_player(client, "solver-ok")
+    p = await new_player(client, "solver-ok", aged=True)
     await fund(p["player_id"])
     assert (await client.post(f"/v1/cases/{c.id}/unlock", headers=p["headers"])).status_code == 200
     assert (await accuse(client, p["headers"], c, c.culprit))["result"] == "solved"

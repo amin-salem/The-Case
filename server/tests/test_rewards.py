@@ -22,7 +22,7 @@ async def test_weekly_prize_paid_once_and_in_inbox(client, monkeypatch):
     monkeypatch.setattr(content, "week_cases", lambda w: [SimpleNamespace(id=f"zr{w.isoformat()}-{i}") for i in range(7)])
     monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
     monkeypatch.setattr(content, "now_local", lambda: datetime(2027, 6, 11, 22, 0, tzinfo=TEHRAN))  # the week closed at 21:00
-    p = await new_player(client, "device-reward-1")
+    p = await new_player(client, "device-reward-1", aged=True)
     async with db.SessionLocal() as s:
         for i in range(2):
             s.add(CaseProgress(player_id=p["player_id"], case_id=f"zr{ws.isoformat()}-{i}", solved=True, stars=3, ranked=True,

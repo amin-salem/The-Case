@@ -41,7 +41,7 @@ def deep(c):
 
 
 async def start(client, name, c):
-    p = await new_player(client, name)
+    p = await new_player(client, name, aged=True)
     await client.get(f"/v1/cases/{c.id}", headers=p["headers"])
     return p
 
@@ -220,7 +220,7 @@ async def test_weekly_order_nights_then_on_time_then_plaques_then_speed(client, 
     monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
     ws = date(2027, 4, 2)
     clock(T(2027, 4, 5, 12))
-    one3, three1, pun, late, quick, slow = [await new_player(client, f"wc-{i}") for i in range(6)]
+    one3, three1, pun, late, quick, slow = [await new_player(client, f"wc-{i}", aged=True) for i in range(6)]
 
     async def solve(p, i, stars, day, seconds=100, daily=False):
         await week_solve(p["player_id"], wid(ws, i), stars, T(2027, 4, day, 10), seconds=seconds)
@@ -280,7 +280,7 @@ async def test_suspicious_report_flags_and_never_bans(client, clock, caplog):
     c = content.by_id("c043")
     clock(night("c043"))
     now = utcnow()
-    ps = [await new_player(client, f"sr-{i}") for i in range(10)]
+    ps = [await new_player(client, f"sr-{i}", aged=True) for i in range(10)]
     async with db.SessionLocal() as s:
         for i, p in enumerate(ps):
             s.add(CaseProgress(player_id=p["player_id"], case_id=c.id, solved=True, stars=3, ranked=True, was_daily=True,

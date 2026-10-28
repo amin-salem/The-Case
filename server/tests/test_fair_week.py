@@ -84,7 +84,7 @@ async def set_player(pid, **vals):
 async def test_archive_solves_do_not_count(client, clock, single_board, week_of_fake_cases):
     ws, old = date(2027, 1, 8), date(2027, 1, 1)
     clock(T(2027, 1, 12, 12))
-    vet, newbie = await new_player(client, "fw-vet"), await new_player(client, "fw-new")
+    vet, newbie = await new_player(client, "fw-vet", aged=True), await new_player(client, "fw-new", aged=True)
     await solve(vet["player_id"], wid(ws, 0), 3, T(2027, 1, 8, 22))            # the veteran: the week's own case
     for i in range(7):                                                          # the newcomer buys the old week's archive
         await solve(newbie["player_id"], wid(old, i), 3, T(2027, 1, 11, 10 + i))
@@ -98,7 +98,7 @@ async def test_archive_solves_do_not_count(client, clock, single_board, week_of_
 
 async def test_friday_case_solved_on_saturday_counts_for_its_new_week(client, clock, single_board, week_of_fake_cases):
     new_ws = date(2027, 1, 22)
-    p = await new_player(client, "fw-sat")
+    p = await new_player(client, "fw-sat", aged=True)
     await solve(p["player_id"], wid(new_ws, 0), 3, T(2027, 1, 23, 10))         # Friday 21:00 case, solved Saturday morning
     clock(T(2027, 1, 24, 12))
     assert (await board(client, p["headers"]))["me"]["stars"] == 3
@@ -106,8 +106,8 @@ async def test_friday_case_solved_on_saturday_counts_for_its_new_week(client, cl
 
 async def test_thursday_case_solved_before_friday_21_counts_for_the_old_week(client, clock, single_board, week_of_fake_cases):
     ws = date(2027, 1, 29)
-    p = await new_player(client, "fw-thu")
-    late = await new_player(client, "fw-thu-late")
+    p = await new_player(client, "fw-thu", aged=True)
+    late = await new_player(client, "fw-thu-late", aged=True)
     await solve(p["player_id"], wid(ws, 6), 2, T(2027, 2, 5, 20, 59))           # Friday 20:59: still the old week
     await solve(late["player_id"], wid(ws, 6), 3, T(2027, 2, 5, 21, 1))         # Friday 21:01: archive now
     clock(T(2027, 2, 5, 20, 59))
@@ -122,8 +122,8 @@ async def test_thursday_case_solved_before_friday_21_counts_for_the_old_week(cli
 async def test_unranked_and_unfinished_rows_never_count_and_prizes_skip_new_accounts(client, clock, single_board, week_of_fake_cases):
     ws = date(2027, 2, 5)
     clock(T(2027, 2, 8, 12))
-    lazy, young, ok = (await new_player(client, "fw-lazy"), await new_player(client, "fw-young", aged=False),
-                       await new_player(client, "fw-ok"))
+    lazy, young, ok = (await new_player(client, "fw-lazy", aged=True), await new_player(client, "fw-young", aged=False),
+                       await new_player(client, "fw-ok", aged=True))
     await solve(lazy["player_id"], wid(ws, 0), 1, T(2027, 2, 6, 10), ranked=False)
     await solve(young["player_id"], wid(ws, 0), 3, T(2027, 2, 6, 10))
     await solve(ok["player_id"], wid(ws, 0), 2, T(2027, 2, 6, 10))
@@ -141,7 +141,7 @@ async def test_unranked_and_unfinished_rows_never_count_and_prizes_skip_new_acco
 async def test_tie_break_more_cases_then_faster(client, clock, single_board, week_of_fake_cases):
     ws = date(2027, 2, 12)
     clock(T(2027, 2, 15, 12))
-    a, b, c = [await new_player(client, f"fw-tie{i}") for i in range(3)]
+    a, b, c = [await new_player(client, f"fw-tie{i}", aged=True) for i in range(3)]
     await solve(a["player_id"], wid(ws, 0), 3, T(2027, 2, 13, 10), seconds=50)                    # 3 points, 1 case
     await solve(b["player_id"], wid(ws, 0), 2, T(2027, 2, 13, 10), seconds=300)                   # 3 points, 2 cases
     await solve(b["player_id"], wid(ws, 1), 1, T(2027, 2, 14, 10), seconds=300)
@@ -155,7 +155,7 @@ async def test_tie_break_more_cases_then_faster(client, clock, single_board, wee
 async def test_my_rank_beyond_the_limit(client, clock, single_board, week_of_fake_cases):
     ws = date(2027, 2, 19)
     clock(T(2027, 2, 21, 12))
-    ps = [await new_player(client, f"fw-far{i}") for i in range(3)]
+    ps = [await new_player(client, f"fw-far{i}", aged=True) for i in range(3)]
     for i, p in enumerate(ps):
         await solve(p["player_id"], wid(ws, 0), 3 - i, T(2027, 2, 20, 10))
     b = await board(client, ps[2]["headers"], limit=1)
@@ -165,8 +165,8 @@ async def test_my_rank_beyond_the_limit(client, clock, single_board, week_of_fak
 # ------------------------------------------------------------------ settlement
 async def test_settlement_waits_for_the_margin_and_matches_the_board(client, clock, single_board, week_of_fake_cases):
     ws = date(2027, 3, 5)
-    p = await new_player(client, "fw-pay1")
-    q = await new_player(client, "fw-pay2")
+    p = await new_player(client, "fw-pay1", aged=True)
+    q = await new_player(client, "fw-pay2", aged=True)
     await solve(p["player_id"], wid(ws, 0), 3, T(2027, 3, 6, 10))
     await solve(p["player_id"], wid(ws, 1), 3, T(2027, 3, 7, 10))
     await solve(q["player_id"], wid(ws, 0), 2, T(2027, 3, 6, 10))
@@ -194,7 +194,7 @@ async def test_settlement_waits_for_the_margin_and_matches_the_board(client, clo
 async def test_two_simultaneous_settlements_pay_once(client, clock, single_board, week_of_fake_cases):
     import asyncio
     ws = date(2027, 3, 19)
-    p = await new_player(client, "fw-race")
+    p = await new_player(client, "fw-race", aged=True)
     await solve(p["player_id"], wid(ws, 0), 3, T(2027, 3, 20, 10))
     await solve(p["player_id"], wid(ws, 1), 3, T(2027, 3, 21, 10))
 
@@ -217,7 +217,7 @@ async def test_weeks_before_the_fair_rule_are_never_paid(client, clock, single_b
 
 async def test_a_prize_needs_two_cases(client, clock, single_board, week_of_fake_cases):
     ws = date(2027, 4, 2)
-    p = await new_player(client, "fw-one-case")
+    p = await new_player(client, "fw-one-case", aged=True)
     await solve(p["player_id"], wid(ws, 0), 3, T(2027, 4, 3, 10))
     async with db.SessionLocal() as s:
         assert await rewards.settle_week(s, ws) == 0
@@ -234,7 +234,7 @@ def test_league_thresholds_follow_the_rank_titles():
 async def test_league_snapshot_is_stable_and_a_player_is_in_one_league(client, clock, leagues, week_of_fake_cases):
     ws = date(2027, 4, 9)
     clock(T(2027, 4, 10, 12))
-    p = await new_player(client, "fw-snap")
+    p = await new_player(client, "fw-snap", aged=True)
     await set_player(p["player_id"], xp=700, cases_solved=5)
     async with db.SessionLocal() as s:
         assert await weekboard.league_of(s, ws, p["player_id"]) == 1
@@ -252,7 +252,7 @@ async def test_league_snapshot_is_stable_and_a_player_is_in_one_league(client, c
     async with db.SessionLocal() as s:                         # next week's snapshot is the promotion
         assert await weekboard.league_of(s, next_ws, p["player_id"]) == 3
     # a player who never solved anything is in league 0
-    fresh = await new_player(client, "fw-snap-new")
+    fresh = await new_player(client, "fw-snap-new", aged=True)
     async with db.SessionLocal() as s:
         assert await weekboard.league_of(s, ws, fresh["player_id"]) == 0
 
@@ -260,7 +260,7 @@ async def test_league_snapshot_is_stable_and_a_player_is_in_one_league(client, c
 async def test_board_shows_own_league_with_a_switch(client, clock, leagues, week_of_fake_cases):
     ws = date(2027, 5, 14)
     clock(T(2027, 5, 15, 12))
-    rookie, boss = await new_player(client, "fw-lg-r"), await new_player(client, "fw-lg-b")
+    rookie, boss = await new_player(client, "fw-lg-r", aged=True), await new_player(client, "fw-lg-b", aged=True)
     await set_player(boss["player_id"], xp=7000, cases_solved=50)
     await set_player(rookie["player_id"], xp=10, cases_solved=1)
     await solve(rookie["player_id"], wid(ws, 0), 3, T(2027, 5, 15, 10))
@@ -279,7 +279,7 @@ async def test_settlement_pays_each_league_once(client, clock, leagues, week_of_
     ws = date(2027, 4, 23)
     clock(T(2027, 4, 24, 12))
     xps = [0, 0, 0, 0, 700, 3000, 7000]            # four rookies (only 3 prizes), one of each other league
-    ps = [await new_player(client, f"fw-pl{i}") for i in range(len(xps))]
+    ps = [await new_player(client, f"fw-pl{i}", aged=True) for i in range(len(xps))]
     for p, xp in zip(ps, xps):
         await set_player(p["player_id"], xp=xp, cases_solved=5)
     async with db.SessionLocal() as s:
@@ -311,7 +311,7 @@ async def test_settlement_pays_each_league_once(client, clock, leagues, week_of_
 async def test_leagues_kill_switch_falls_back_to_one_board(client, clock, single_board, week_of_fake_cases):
     ws = date(2027, 5, 7)
     clock(T(2027, 5, 8, 12))
-    p = await new_player(client, "fw-off")
+    p = await new_player(client, "fw-off", aged=True)
     await solve(p["player_id"], wid(ws, 0), 3, T(2027, 5, 8, 10))
     b = await board(client, p["headers"])
     assert b["league"] is None and b["leagues"] == [] and b["me"]["rank"] == 1
@@ -341,7 +341,7 @@ async def test_sarbazras_row_shows_profile_rank_and_league(client, clock, league
     idx = next(i for i, (_, t) in enumerate(eco.RANKS) if t == "سربازرس")
     ws = date(2027, 6, 11)
     clock(T(2027, 6, 12, 12))
-    rey = await new_player(client, "fw-rey")
+    rey = await new_player(client, "fw-rey", aged=True)
     await set_player(rey["player_id"], xp=eco.RANKS[idx][0], cases_solved=20, nickname="reyhoon")
     await solve(rey["player_id"], wid(ws, 0), 3, T(2027, 6, 12, 10))
     prof = (await client.get("/v1/me", headers=rey["headers"])).json()
@@ -362,7 +362,7 @@ async def test_promoted_during_the_week_keeps_the_weeks_league_but_shows_the_cur
     from app import economy as eco
     ws = date(2027, 6, 18)
     clock(T(2027, 6, 19, 9))
-    p = await new_player(client, "fw-promo")
+    p = await new_player(client, "fw-promo", aged=True)
     await set_player(p["player_id"], xp=next(x for x, t in eco.RANKS if t == "کارآگاه ارشد"), cases_solved=9, nickname="promo")
     async with db.SessionLocal() as s:
         await weekboard.ensure_snapshot(s, ws)               # the week's start

@@ -52,6 +52,7 @@ async def seed(s):
     player(s, 5, NOW - timedelta(days=10), NOW - timedelta(days=30), coins=5000)             # not active this week
     player(s, 6, NOW - timedelta(days=10), NOW - timedelta(hours=1), coins=9999, device="smoke-x")
     player(s, 7, NOW - timedelta(days=10), NOW - timedelta(hours=1), coins=9999, banned=True)
+    await s.flush()  # PostgreSQL enforces the foreign keys: the players must exist before their rows
     for n in (1, 2, 3, 4, 6, 7):
         coin(s, n, 100, f"solve:c0{n}", d)
     coin(s, 1, -40, "hint1:c020", d)
@@ -100,8 +101,9 @@ async def test_first_day_spenders_and_notes(session):
     for n in range(1, 25):
         spender = n <= 12
         player(session, n, created, created + (timedelta(days=2) if (n % 2 == 0 or not spender) else timedelta(hours=3)))
-        if spender:
-            coin(session, n, -40, "hint1:c020", created + timedelta(hours=2))
+    await session.flush()  # PostgreSQL enforces the foreign keys
+    for n in range(1, 13):
+        coin(session, n, -40, "hint1:c020", created + timedelta(hours=2))
     coin(session, 13, -40, "hint1:c020", created + timedelta(days=3))                           # later spend: not a first-day spender
     await session.commit()
     fd = (await er.build(session, 14, now=NOW))["first_day"]
