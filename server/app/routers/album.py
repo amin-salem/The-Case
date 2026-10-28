@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import album, avatars, content, progress
+from .. import album, avatars, content, progress, welcome
 from ..db import get_session
 from ..models import CaseProgress, Player
 from ..security import current_player
@@ -20,11 +20,12 @@ async def get_album(player: Player = Depends(current_player), session: AsyncSess
         select(CaseProgress).where(CaseProgress.player_id == player.id))).scalars().all()}
     solved = {cid for cid, p in rows.items() if p.solved}
     today = content.todays_case()
+    offers = await welcome.offers_for(session, player)
     entries, groups = [], {}
     for c in cases:
         p = rows.get(c.id)
         openable = bool(p and p.solved) or _can_open(c, p, player, today)
-        entries.append(album.entry(c, p, openable=openable, price=0 if openable else _unlock_cost(c, p)))
+        entries.append(album.entry(c, p, openable=openable, price=0 if openable else _unlock_cost(c, p, offers)))
         key, name, icon = album.group_of(c.data)
         g = groups.setdefault(key, {"key": key, "title": name, "icon": icon, "total": 0, "solved": 0})
         g["total"] += 1

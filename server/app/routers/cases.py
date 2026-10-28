@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
-from .. import content, gameclock, progress, ratings, streakrepair, weekboard
+from .. import content, gameclock, progress, ratings, streakrepair, weekboard, welcome
 from ..cache import TTLCache
 from .. import economy as eco
 from ..content import Case
@@ -57,12 +57,15 @@ def _weekly_live(c: Case) -> bool:
     return content.is_weekly(c.id) and content.now_local() < content.weekly_closes_at(c)
 
 
-def _unlock_cost(c: Case, p: CaseProgress | None = None) -> int:
-    """Archive price by difficulty; a case the player LOST costs more to open again (second chance)."""
+def _unlock_cost(c: Case, p: CaseProgress | None = None, offers: welcome.Offers = welcome.NONE) -> int:
+    """Archive price by difficulty; a case the player LOST costs more to open again (second chance).
+    `offers` are the one-time first-days prices of a new player (welcome.py); weekend cases never get them."""
     weekend = content.is_weekly(c.id)
     if p is not None and p.failed and not p.solved and not content.is_story(c.id):
-        return eco.reopen_lost_cost(c.data.get("difficulty"), weekend=weekend)
-    return eco.archive_unlock_cost(c.data.get("difficulty"), weekend=weekend)
+        base = eco.reopen_lost_cost(c.data.get("difficulty"), weekend=weekend)
+        return base if weekend else welcome.reopen_cost(base, offers)
+    base = eco.archive_unlock_cost(c.data.get("difficulty"), weekend=weekend)
+    return base if weekend else welcome.archive_cost(base, c.data.get("difficulty"), offers)
 
 
 def _shows_allowed(c: Case) -> int:
@@ -191,12 +194,13 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
     rated = await ratings.summary(session)
     my_stars = await ratings.mine(session, player.id)
     today = content.todays_case()
+    offers = await welcome.offers_for(session, player)
 
     def row(c: Case) -> CaseRow:
         p = mine.get(c.id)
         s = c.summary()
         return CaseRow(**s, today=today is not None and c.id == today.id,
-                       weekend=content.is_weekly(c.id), locked=not _can_open(c, p, player, today), unlock_cost=_unlock_cost(c, p),
+                       weekend=content.is_weekly(c.id), locked=not _can_open(c, p, player, today), unlock_cost=_unlock_cost(c, p, offers),
                        base_solve_rewards={stars: eco.solve_reward(c.data.get("difficulty"), stars, live_weekend=_weekly_live(c)) for stars in (1, 2, 3)},
                        solved=bool(p and p.solved), failed=bool(p and p.failed),
                        stars=p.stars if p else 0, solvers=int(counts.get(c.id, 0)),
@@ -225,7 +229,7 @@ async def get_case(case_id: str, player: Player = Depends(current_player),
     if not _can_open(c, p, player):
         if content.is_story(c.id):
             raise HTTPException(409, "chapter_locked")
-        raise HTTPException(402, {"error": "locked", "cost": _unlock_cost(c, p), "lost": bool(p and p.failed)})
+        raise HTTPException(402, {"error": "locked", "cost": _unlock_cost(c, p, await welcome.offers_for(session, player)), "lost": bool(p and p.failed)})
     if p is None:
         p = CaseProgress(player_id=player.id, case_id=c.id, opened_at=utcnow())
         session.add(p)
@@ -263,7 +267,7 @@ async def unlock(case_id: str, body: UnlockIn | None = None, player: Player = De
         p = await _progress(session, player.id, c.id)
         if _can_open(c, p, player):
             return await get_case(case_id, player, session)  # the other request already opened it
-        cost = _unlock_cost(c, p)
+        cost = _unlock_cost(c, p, await welcome.offers_for(session, player))
         if body is not None and body.expected_cost is not None and body.expected_cost != cost:
             raise HTTPException(409, {"error": "price_changed", "cost": cost})
         if player.coins < cost:
@@ -537,7 +541,7 @@ async def stats(case_id: str, player: Player = Depends(current_player), session:
     if p is None or not (p.solved or p.failed):
         raise HTTPException(409, "finish_first")
     if p.failed and not p.solved:  # a lost case stays closed: no culprit, no crowd numbers, until the second chance is paid
-        raise HTTPException(402, {"error": "locked", "cost": _unlock_cost(c, p), "lost": True})
+        raise HTTPException(402, {"error": "locked", "cost": _unlock_cost(c, p, await welcome.offers_for(session, player)), "lost": True})
     firsts = dict((await session.execute(
         select(CaseProgress.first_accused, func.count()).where(
             CaseProgress.case_id == c.id, CaseProgress.first_accused.is_not(None))

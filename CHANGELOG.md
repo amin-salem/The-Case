@@ -1,3 +1,7 @@
+# server 1.41.3: first-days offers for new players (28 Oct 2026, urgent)
+
+- Dead end found: a new player (100 start coins) who lost the first night's case could not reopen it (2 x archive price, 200-440) and had nothing else to play until the next 21:00. Now a player in his first 3 days gets two ONE-TIME lower prices (`app/welcome.py`): the first reopening of a lost (non-weekend) case costs 100 coins, and the first archive case of difficulty 1-2 costs 50. They are still paid in coins (no free coins). "Used" is read from the coin ledger (`reopen:` / `unlock:` rows) under the player lock, so a double tap or a second worker cannot use an offer twice; accounts older than 3 days cost no extra query. The prices appear in the case list, the album and the 402/409 answers, so the current app shows them with no new APK. Weekend cases never get the offers.
+
 # server 1.41.2: guests on the boards (28 Oct 2026, urgent)
 
 - New and guest accounts now appear on the daily, weekly and all-time boards at once (before: hidden for 48 h unless secured with email/phone). Banned players and testers stay hidden. The weekly prizes and the daily 3-star draw still skip unsecured accounts younger than 48 h. Switch back with `SHOW_NEW_ACCOUNTS_ON_BOARDS=false`. No migration, no APK.
