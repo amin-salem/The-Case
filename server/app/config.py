@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     bazaar_package_name: str = "ir.gammly.parvandeh"
     bazaar_base_url: str = "https://pardakht.cafebazaar.ir/devapi/v2"
     bazaar_api_secret: str = ""
+    bazaar_reviews_base_url: str = "https://sandoghche.cafebazaar.ir"  # Bazaar comments API (the same Pishkhan token)
     bazaar_client_id: str = ""
     bazaar_client_secret: str = ""
     bazaar_refresh_token: str = ""

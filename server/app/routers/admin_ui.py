@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .. import content
 from ..config import get_settings
 from ..cache import TTLCache
+from ..services import bazaar_reviews
 from ..services import economy_report as economy_service
 from ..services import funnel as funnel_service
 from ..services import health as health_service
@@ -433,3 +434,30 @@ async def link_phone(player_id: str, body: LinkPhoneIn, session: AsyncSession = 
     session.add(AdminLog(action="link_phone", target=p.id, detail={"last4": phone[-4:]}))
     await session.commit()
     return {"ok": True, "phone_last4": phone[-4:], "released_from": released}
+
+
+class ReviewReplyIn(BaseModel):
+    text: str = Field(min_length=1, max_length=2000)
+
+
+@router.get("/bazaar-reviews")
+async def bazaar_reviews_list(unreplied: bool = False, max_rate: int | None = Query(None, ge=1, le=5),
+                              cursor: str | None = Query(None, max_length=300)):
+    """The latest Cafe Bazaar reviews (read from Bazaar, cached a minute). A Bazaar problem is a normal answer
+    {"ok": false, "error", "detail"}, never an error page, so the rest of the panel keeps working."""
+    try:
+        data = await bazaar_reviews.list_reviews(get_settings(), only_unreplied=unreplied, max_rate=max_rate, cursor=cursor)
+    except bazaar_reviews.ReviewsError as e:
+        return {"ok": False, "error": e.code, "detail": e.message}
+    return {"ok": True, **data}
+
+
+@router.post("/bazaar-reviews/{review_id}/reply")
+async def bazaar_reviews_reply(review_id: int, body: ReviewReplyIn):
+    from ..services.ratelimit import enforce
+    await enforce("admin_reply", "all")
+    try:
+        await bazaar_reviews.reply(get_settings(), review_id, body.text)
+    except bazaar_reviews.ReviewsError as e:
+        return {"ok": False, "error": e.code, "detail": e.message}
+    return {"ok": True, "detail": "پاسخ فرستاده شد؛ بعد از تأیید بازار دیده می‌شود"}
