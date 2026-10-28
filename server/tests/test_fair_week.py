@@ -119,7 +119,7 @@ async def test_thursday_case_solved_before_friday_21_counts_for_the_old_week(cli
     assert st.get(p["player_id"]) == 2 and late["player_id"] not in st
 
 
-async def test_unranked_hidden_and_unfinished_rows_never_count(client, clock, single_board, week_of_fake_cases):
+async def test_unranked_and_unfinished_rows_never_count_and_prizes_skip_new_accounts(client, clock, single_board, week_of_fake_cases):
     ws = date(2027, 2, 5)
     clock(T(2027, 2, 8, 12))
     lazy, young, ok = (await new_player(client, "fw-lazy"), await new_player(client, "fw-young", aged=False),
@@ -132,7 +132,10 @@ async def test_unranked_hidden_and_unfinished_rows_never_count(client, clock, si
         await s.commit()
     async with db.SessionLocal() as s:
         st = {x.player.id: x.points for x in await weekboard.standings(s, ws)}
-    assert st == {ok["player_id"]: 2}
+        prize = {x.player.id: x.points for x in await weekboard.standings(s, ws, prize=True)}
+    # 28 Oct 2026: the board shows the new unsecured account, the prize list still skips it
+    assert st == {ok["player_id"]: 2, young["player_id"]: 3}
+    assert prize == {ok["player_id"]: 2}
 
 
 async def test_tie_break_more_cases_then_faster(client, clock, single_board, week_of_fake_cases):
