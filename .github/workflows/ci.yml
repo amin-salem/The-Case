@@ -86,7 +86,7 @@ jobs:
                      ("case_progress", "night1"), ("players", "streak_repair_mark"),
                      ("case_progress", "cards_opened"), ("case_progress", "questions_asked"),
                      ("case_progress", "stars_restored")]
-          TABLES = ["riddle_answers", "mission_days", "player_achievements", "story_progress", "story_state", "admin_log", "rate_hits", "case_comments", "referral_payouts", "phone_codes", "player_avatars", "week_leagues", "week_settlements", "streak_repairs", "player_tools", "case_tool_uses", "daily_draws", "case_guesses"]
+          TABLES = ["riddle_answers", "mission_days", "player_achievements", "story_progress", "story_state", "admin_log", "rate_hits", "case_comments", "referral_payouts", "phone_codes", "player_avatars", "week_leagues", "week_settlements", "streak_repairs", "player_tools", "case_tool_uses", "daily_draws", "case_guesses", "nickname_claims"]
           EOF
           python - <<'EOF'
           import sqlite3, sys

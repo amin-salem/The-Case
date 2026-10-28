@@ -278,6 +278,16 @@ class PlayerAchievement(Base):
     at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 
+class NicknameClaim(Base):
+    """A taken detective name (app/nicknames.py): `key` is the normalised name; the primary key makes a name unique."""
+
+    __tablename__ = "nickname_claims"
+
+    key: Mapped[str] = mapped_column(String(40), primary_key=True)
+    player_id: Mapped[str] = mapped_column(String(32), index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
 class PlayerAvatar(Base):
     """An avatar or a frame a player owns beyond the free ones (kind: avatar | frame; how: goal | shop | admin)."""
 

@@ -1,11 +1,12 @@
 """Profile, daily login calendar, streak insurance and rewarded ads."""
+import logging
 from datetime import date, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import avatars, content, feed, progress, purge, streakrepair
+from .. import avatars, content, feed, nicknames, progress, purge, streakrepair
 from .. import economy as eco
 from ..config import get_settings
 from ..db import get_session, lock_players
@@ -14,6 +15,8 @@ from ..schemas import ClientInfoIn, CoinsOut, GainsOut, ProfileIn, ProfileOut
 from ..security import current_player
 from ..util import add_coins, clean_nickname
 from .common import profile_out
+
+log = logging.getLogger("profile")
 
 router = APIRouter(prefix="/v1", tags=["profile"])
 
@@ -109,6 +112,10 @@ async def update_me(body: ProfileIn, player: Player = Depends(current_player),
     if body.nickname is not None:
         name = clean_nickname(body.nickname)
         if name is None:
+            raise HTTPException(422, "bad_nickname")
+        if not await nicknames.claim(session, player.id, name):
+            # 28 Oct 2026: the name belongs to another detective. The current app maps this code to «این اسم قابل قبول نیست».
+            log.info("nickname refused: taken")
             raise HTTPException(422, "bad_nickname")
         player.nickname = name
     if body.avatar is not None:  # old apps: the portrait index
