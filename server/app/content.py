@@ -117,6 +117,10 @@ def validate(d: dict, max_suspects: int = 6) -> None:
             raise CaseError(f"{d['id']}/{s['id']}: intro must be {INTRO_MIN}-{INTRO_MAX} characters")
         if len(s["questions"]) < 2:
             raise CaseError(f"{d['id']}/{s['id']}: needs at least 2 questions")
+        # 29 Oct 2026: w004 had every age as a string ("49"); the app reads a number, so every suspect showed «۰ ساله»
+        age = s.get("age")
+        if not isinstance(age, int) or isinstance(age, bool) or not 10 <= age <= 99:
+            raise CaseError(f"{d['id']}/{s['id']}: age must be a whole number 10-99 (not text), got {age!r}")
     for e in d["evidence"]:
         for key in ("type", "title", "text"):
             if key not in e:

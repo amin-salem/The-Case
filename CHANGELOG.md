@@ -1,3 +1,8 @@
+# server 1.43.1: weekend case w004 showed every suspect as «۰ ساله» (29 Oct 2026, urgent)
+
+- w004 «کاروانسرای آخر خط» (live since Thursday 09:00) had the eight ages written as text ("49"), not numbers, since its format-3 rewrite on 27 Oct; the app reads a number and showed «۰ ساله» for everyone. Fixed in the file. The case loader now refuses any suspect whose age is not a whole number 10-99 (cases and weekend cases), with a test, so CI stops such a file before release. All other case files were checked: only w004 had it.
+- Re-read of w004: the time-lapse card (e9) did not list Qasem, who crossed the courtyard twice during his own two absences (blanket to room 1, the generator room); added. Mansour said the pantry was locked «from ten», although he moved the flour bag in it at 23:45; now «شب‌ها قفله». Clue chain, culprit and answer unchanged, so no new blind test.
+
 # server 1.43.0: whole test suite on PostgreSQL, duplicate-accounts screen (28 Oct 2026)
 
 - CI: new job `server-postgres` runs the WHOLE server suite (`pytest -q`) on a PostgreSQL 16 service container, next to the unchanged SQLite run in job `server`. `wallet-postgres` keeps the concurrency races (`tests/test_wallet_concurrency.py`). Rule: every new query is tested on PostgreSQL in CI. Reason: on 28 Oct 2026 `GET /v1/cases` was a 500 for every new account on Liara (server 1.41.3-1.41.6) because SQLite accepted a GROUP BY that PostgreSQL refuses.

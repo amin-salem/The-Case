@@ -109,6 +109,21 @@ def test_a_suspect_without_intro_is_refused():
         content.validate(d)
 
 
+def test_age_must_be_a_number_in_every_case_and_weekend_case():
+    """29 Oct 2026: w004 stored ages as text and the app showed every suspect as «۰ ساله»."""
+    import copy
+
+    import pytest
+    for c in (*content.all_cases(), *content.weekly_cases()):
+        for s in c.data["suspects"]:
+            assert isinstance(s["age"], int) and not isinstance(s["age"], bool) and 10 <= s["age"] <= 99, (c.id, s["id"])
+    d = copy.deepcopy(content.all_cases()[0].data)
+    for bad in ("49", None, 0, 150, True, 49.5):
+        d["suspects"][0]["age"] = bad
+        with pytest.raises(content.CaseError):
+            content.validate(d)
+
+
 def test_every_case_has_a_known_category_and_all_are_used():
     from app.content import CATEGORIES
     cats = Counter(c.data.get("category") for c in [*content.all_cases(), *content.weekly_cases()])
