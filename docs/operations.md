@@ -753,3 +753,7 @@ Problem: the daily answer is shared in groups, so the daily ranking prize lost i
 - So a device id shared by 2+ rows is one person counted twice. The screen lists those groups (the secured row, the probable orphans, anything else) and the numbers: all rows, distinct devices, devices with several accounts, probable orphans (a guest with no solved case, no purchase, not banned, not a tester, sharing a device with a secured row) and «real people estimate» = rows minus probable orphans.
 - READ ONLY. Nothing is deleted or merged. A purge/merge tool can be built if wanted (it must move coins/purchases first and be logged in the admin log).
 - `GET /admin/api/duplicate-accounts?limit=&offset=` (at most 200 groups, 2000 rows) and `/duplicate-accounts/summary`. Uses the index on `players.device_id`; it shows nicknames, short ids, phone last 4 only. The real numbers can be read only in the live admin panel.
+
+## Reset a case for a player (server 1.43.2; 30 Oct 2026)
+Admin panel → Players → the player → «↺ ریست پرونده». Enter the case number (c020, w004…), press «دیدن آنچه پاک می‌شود», then «ریست کن» and confirm. Only that case for that player is cleared; coins are not refunded and solving it again pays nothing (no coins, XP, warrants). The action is in «اقدام‌ها» as `case_reset`. Limit: 10 a minute (`RL_ADMIN_CASE_RESET`). Story chapters cannot be reset here.
+

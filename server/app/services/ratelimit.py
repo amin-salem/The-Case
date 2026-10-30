@@ -76,6 +76,7 @@ DEFAULTS: dict[str, Policy] = {p.name: p for p in [
     _p("sms_device", [(6, 86400)], "key", "strict", "closed", "SMS codes asked from one device_id"),
     _p("sms_daily", [(3000, 86400)], "key", "strict", "closed", "all SMS codes a day (money ceiling; raise with RL_SMS_DAILY)"),
     _p("admin_reply", [(5, 60), (60, 3600)], "key", "strict", "closed", "admin replies to Bazaar reviews"),
+    _p("admin_case_reset", [(10, 60), (100, 3600)], "key", "strict", "closed", "admin: reset a case for a player"),
     _p("sms_verify", [(10, 600)], "key", "strict", "closed", "wrong-code guessing, per phone number"),
     _p("sms_verify_ip", [(20, 600)], "ip", "strict", "closed", "code checks, per IP"),
     # game actions that cost or pay coins: strict per player

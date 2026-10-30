@@ -1,3 +1,10 @@
+# server 1.43.2: admin «ریست پرونده» (30 Oct 2026, urgent)
+
+- Admin panel, player page, button «↺ ریست پرونده»: type a case number, see what will be cleared (result, stars, wrong accusations, hints, tools, first guesses, comments, weekly-board place), then confirm in two steps. It puts that ONE case back to «not played» for that ONE player, so the player can solve it again: progress row (solved/failed, stars, attempts, hints, time, notes, first guess), tools used, first guess, the player's comment/rating (and replies under it). The weekly board is computed from solved rows, so the place disappears with them. `cases_solved` and `stars_total` go down by that solve.
+- Kept on purpose: coins already paid (no refund), an archive unlock (no second payment), streak, XP, achievements. The case id is remembered in `player.stats["reset_cases"]` (newest 100): solving it again pays no coins, XP, warrants or mission/achievement counters, and the weekend «کی دروغ می‌گه؟» reward is not paid twice (anti double-farming).
+- API: `GET /admin/api/players/{id}/case-reset?case_id=` (preview, read only) and `POST` (body `case_id`, `confirm: true`; one transaction under the player lock; limit `admin_case_reset` 10/min). One `AdminLog` line `case_reset`. Story chapters are refused (`story_case`). Tests in `tests/test_case_reset.py`.
+- Deploy: redeploy from the Liara panel. No migration, no APK.
+
 # server 1.43.1: weekend case w004 showed every suspect as «۰ ساله» (29 Oct 2026, urgent)
 
 - w004 «کاروانسرای آخر خط» (live since Thursday 09:00) had the eight ages written as text ("49"), not numbers, since its format-3 rewrite on 27 Oct; the app reads a number and showed «۰ ساله» for everyone. Fixed in the file. The case loader now refuses any suspect whose age is not a whole number 10-99 (cases and weekend cases), with a test, so CI stops such a file before release. All other case files were checked: only w004 had it.

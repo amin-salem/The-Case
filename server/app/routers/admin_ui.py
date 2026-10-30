@@ -14,6 +14,7 @@ from .. import content
 from ..config import get_settings
 from ..cache import TTLCache
 from ..services import bazaar_reviews
+from ..services import case_reset
 from ..services import duplicates as duplicates_service
 from ..services import economy_report as economy_service
 from ..services import funnel as funnel_service
@@ -447,6 +448,39 @@ async def link_phone(player_id: str, body: LinkPhoneIn, session: AsyncSession = 
     session.add(AdminLog(action="link_phone", target=p.id, detail={"last4": phone[-4:]}))
     await session.commit()
     return {"ok": True, "phone_last4": phone[-4:], "released_from": released}
+
+
+class CaseResetIn(BaseModel):
+    case_id: str = Field(min_length=1, max_length=16)
+    confirm: bool = False
+
+
+def _reset_error(e: "case_reset.ResetError") -> HTTPException:
+    return HTTPException(e.status, e.code)
+
+
+@router.get("/players/{player_id}/case-reset")
+async def case_reset_preview(player_id: str, case_id: str = Query(..., min_length=1, max_length=16),
+                             session: AsyncSession = Depends(get_session)):
+    """READ ONLY. What «ریست پرونده» would clear for this player and case."""
+    try:
+        out = await case_reset.preview(session, player_id, case_id)
+    except case_reset.ResetError as e:
+        raise _reset_error(e)
+    return {**out, "title": _title(case_id)}
+
+
+@router.post("/players/{player_id}/case-reset")
+async def case_reset_apply(player_id: str, body: CaseResetIn, session: AsyncSession = Depends(get_session)):
+    """Support: put one case back to «not played» for one player (see services/case_reset.py). Needs confirm=true."""
+    if not body.confirm:
+        raise HTTPException(422, "confirm_needed")
+    from ..services.ratelimit import enforce
+    await enforce("admin_case_reset", "all")
+    try:
+        return await case_reset.apply(session, player_id, body.case_id)
+    except case_reset.ResetError as e:
+        raise _reset_error(e)
 
 
 class ReviewReplyIn(BaseModel):

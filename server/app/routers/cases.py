@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .. import anticheat as ac
 from .. import content, gameclock, progress, ratings, streakrepair, weekboard, welcome
 from ..cache import TTLCache
+from ..services import case_reset
 from .. import economy as eco
 from ..content import Case
 from ..db import get_session, lock_players
@@ -412,17 +413,24 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         warrants = eco.warrants_for_solve(first_ever=(player.cases_solved or 0) == 0, streak_up=streak_up,
                                           streak=player.streak, live=live,
                                           live_solved_before=int((player.stats or {}).get("weekly_solved", 0)))
+        # a case the admin reset (services/case_reset.py) can be solved again, but pays and counts nothing twice
+        replay = case_reset.was_reset(player, c.id)
+        if replay:
+            reward = early_bonus = warrants = 0
         player.cases_solved += 1
         player.stars_total += p.stars
-        await add_coins(session, player, reward, f"solve:{c.id}")
+        if reward:
+            await add_coins(session, player, reward, f"solve:{c.id}")
         xp = eco.WEEKLY_XP[p.stars] if live else eco.XP_CASE[p.stars] + (eco.XP_DAILY_BONUS if today_case else 0)
+        if replay:
+            xp = 0
         early = today_case and (content.now_local() - content.opens_at(c)).total_seconds() <= 30 * 60
-        gains = await progress.record(
-            session, player, xp=xp, case_solved=1, daily_solved=int(today_case),
-            case_3stars=int(p.stars == 3), case_no_hint=int(p.hints == 0),
-            first_try=int(p.attempts == 0 and not p.proof_misses), fast5=int(p.seconds <= 300),
-            fast2=int(p.seconds <= 120 and not weekly), early_daily=int(early), weekly_solved=int(live),
-            weekend_night1=int(early_bonus > 0), warrants=warrants)
+        counters = dict(case_solved=1, daily_solved=int(today_case),
+                        case_3stars=int(p.stars == 3), case_no_hint=int(p.hints == 0),
+                        first_try=int(p.attempts == 0 and not p.proof_misses), fast5=int(p.seconds <= 300),
+                        fast2=int(p.seconds <= 120 and not weekly), early_daily=int(early), weekly_solved=int(live),
+                        weekend_night1=int(early_bonus > 0))
+        gains = await progress.record(session, player, xp=xp, warrants=warrants, **({} if replay else counters))
         await story_finish(session, player.id, c.id, p)
         await session.commit()
         _solvers.clear()  # this worker shows the new solver count at once; the others within 30 s
@@ -524,7 +532,7 @@ async def night1_liar(case_id: str, body: LiarIn, player: Player = Depends(curre
     if body.suspect not in content.visible_suspect_ids(c):
         raise HTTPException(404, "no_suspect")
     ok = body.suspect == c.data["night1"]["liar"]
-    reward = eco.WEEKEND_LIAR_REWARD if ok else 0
+    reward = eco.WEEKEND_LIAR_REWARD if ok and not case_reset.was_reset(player, c.id) else 0
     p.night1 = {"pick": body.suspect, "ok": ok, "reward": reward}
     if reward:
         await add_coins(session, player, reward, f"liar:{c.id}")
