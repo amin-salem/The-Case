@@ -1,3 +1,8 @@
+# server 1.45.0: two new cases c053, c054 (31 Oct 2026)
+
+- c053 «رضایت‌نامه‌ای برای سال بعد» (publish 20 Nov 2026, cold case, difficulty 5) and c054 «حجمی که کم نشد» (publish 21 Nov 2026, locked-room, difficulty 5). Ideas 1 and 2 of the idea bank. Fresh blind tests: c053 s3 80-85%, c054 s1 90%, no single card decides.
+- No migration. Redeploy from Liara; content only.
+
 # server 1.44.2: c039, c040 re-reviewed (Astra cases, 31 Oct 2026)
 
 - c039 «کیفِ کنار پنجره» was rebuilt. The old version had dense, lawyer-style cards (±50 g tolerances, bag volume in litres, an 80-second room interval explained three times). One CCTV card plus the card list named the carrier without the weight trick, and the explanation ran to about 500 words. It now has one plain timeline. The scale slip shows the handbag weighed 1.7 kg at 20:14, while the five money bundles weigh about 5 kg, so the money was gone before the scale and the shelf or empty-counter trail is false. A corridor camera shows the bag handed to a man with the night's only orange guest card (no. 7, activated at 19:50). That breaks Zarei's claim that he arrived at 20:40.
