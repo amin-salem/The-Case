@@ -278,7 +278,8 @@ async def test_decisions_are_logged_without_personal_data(client, clock, caplog)
         await client.post("/v1/wallet/streak-repair", headers=p["headers"])
         await client.post("/v1/wallet/streak-repair", headers=p["headers"])
     lines = [r.getMessage() for r in caplog.records if r.name == "streak"]
-    assert lines == [f"streak_repair decision=repaired streak=12 price={economy.streak_repair_cost(12)}",
+    assert lines == ["streak_insurance decision=broken missed=1 held=0 streak=12",   # settled first (1.44.0), then the repair
+                     f"streak_repair decision=repaired streak=12 price={economy.streak_repair_cost(12)}",
                      "streak_repair decision=not_eligible streak=12 price=0"]
     assert all(p["player_id"] not in line for line in lines)
 

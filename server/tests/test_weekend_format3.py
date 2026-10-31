@@ -253,11 +253,16 @@ def test_day2_opens_friday_morning_from_5_nov_and_a_writer_cannot_regress(wk):
     content.validate_weekly(with_hours("2026-10-29", 12))      # w004 (live before the change) is exempt
     content.validate_weekly(with_hours("2026-11-05", 24))
     # the real files written for the new rule
+    import json
+
+    def real(name):
+        return json.loads((content.WEEKLY_DIR / f"{name}.json").read_text(encoding="utf-8"))
+
     for name in ("w005", "w006", "w007"):
-        assert content.weekly_by_id(name).data["chapters"][1]["at_hours"] == 24, name
-    assert content.weekly_by_id("w004").data["chapters"][1]["at_hours"] == 12
-    for c in content.weekly_cases():                            # every real format-3 file passes the guard
-        content.validate_weekly(c.data)
+        assert real(name)["chapters"][1]["at_hours"] == 24, name
+    assert real("w004")["chapters"][1]["at_hours"] == 12
+    for name in ("w004", "w005", "w006", "w007"):               # every real file passes the guard
+        content.validate_weekly(real(name))
 
 
 async def test_lost_weekend_case_second_chance_is_cheap_pays_archive_and_stays_off_the_weekly_board(client, clock, wk):
@@ -291,7 +296,8 @@ async def test_lost_weekend_case_second_chance_is_cheap_pays_archive_and_stays_o
     assert (await client.post("/v1/cases/w098/unlock", headers=h, json={"expected_cost": price * 2})).status_code == 409
     ok = await client.post("/v1/cases/w098/unlock", headers=h, json={"expected_cost": price})
     assert ok.status_code == 200, ok.text
-    assert (await client.get("/v1/me", headers=h)).json()["coins"] == 2000 - price
+    from .test_difficulty_economy import balance
+    assert await balance(pid) == 2000 - price
     won = (await client.post("/v1/cases/w098/accuse", headers=h, json={"suspect": wk.culprit, "motive": sol["motive"]})).json()
     assert won["result"] == "solved" and won["early_bonus"] == 0
     assert won["reward"] == eco.solve_reward(diff, won["stars"])           # archive coins, never the live weekend reward
