@@ -33,23 +33,23 @@ def test_rewrite_retains_opening_and_supported_contract(number, publish, scene, 
 
 def test_c042_disk_to_chassis_to_borrower_mapping_uses_post_repair_state():
     repair = clue("c042", "e3")
-    pairs = re.findall(r"دیسک د(\d+) داخل بدنهٔ (\d+)", repair)
+    pairs = re.findall(r"د(\d+) در بدنهٔ (\d+)", repair)
     disk_to_body = {int(disk): int(body) for disk, body in pairs}
     assert len(disk_to_body) == 2
     receipt = clue("c042", "e4")
-    recipients = {int(body): name for body, name in re.findall(r"بدنهٔ (\d+) به (محسن|ساناز)", receipt)}
-    disk = int(re.search(r"روی دیسک «د(\d+)»", clue("c042", "e2")).group(1))
+    recipients = {int(body): name for body, name in re.findall(r"(\d+) به (محسن|ساناز)", receipt)}
+    disk = int(re.search(r"گ۷ روی دیسک «د(\d+)»", clue("c042", "e2")).group(1))
     culprit = next(s for s in content.by_id("c042").data["suspects"] if s["id"] == content.by_id("c042").culprit)
     assert recipients[disk_to_body[disk]] in culprit["name"]
     # The pre-repair label points to someone else: omitting the swap is wrong.
-    before = int(re.search(r"بدنهٔ (\d+)، برچسبِ روی در «محسن»، پیش از تعمیر دیسک د۴۱", repair).group(1))
+    before = int(re.search(r"بدنهٔ (\d+)، روی درش «محسن»، پیش از تعمیر دیسک د۴۱", repair).group(1))
     assert recipients[before] not in culprit["name"]
 
 
 def test_c042_final_attachment_exists_before_mutation_but_after_initial_draft():
     events = re.findall(r"(\d{2}):(\d{2})", clue("c042", "e2"))
     created, delivered, modified = [60 * int(h) + int(m) for h, m in events]
-    release = re.search(r"نغمه در (\d{2}):(\d{2})", clue("c042", "e6"))
+    release = re.search(r"نغمه ساعت (\d{2}):(\d{2})", clue("c042", "e6"))
     released = 60 * int(release[1]) + int(release[2])
     assert created < released < modified < delivered
     assert "R4-71" in clue("c042", "e1") and "R4-71" in clue("c042", "e6")
