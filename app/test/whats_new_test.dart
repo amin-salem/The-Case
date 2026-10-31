@@ -22,7 +22,7 @@ void main() {
 
   test('list: newest first, titles for this release, no «نفر»', () {
     expect(kWhatsNew.first.id, 80);
-    expect(kWhatsNew.first.items.length, 3);
+    expect(kWhatsNew.first.items.length, 2);
     expect(kWhatsNew.first.items.first.title, 'اسمت رو از خونه عوض کن؛ با دکمه‌ی تاس اسم پیشنهادی می‌گیری');
     for (final r in kWhatsNew) {
       for (final it in r.items) {

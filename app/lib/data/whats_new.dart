@@ -45,7 +45,6 @@ class WhatsNewRelease {
 const List<WhatsNewRelease> kWhatsNew = [
   WhatsNewRelease(80, '۱.۴۰', '2026-10-28', [
     WhatsNewItem('name_pick', 'اسمت رو از خونه عوض کن؛ با دکمه‌ی تاس اسم پیشنهادی می‌گیری', WhatsNewTarget.caseToday),
-    WhatsNewItem('net_fix', 'اتصال به سرور توی گوشی‌هایی که برنامه آفلاین نشون می‌داد درست شد', WhatsNewTarget.caseToday),
     WhatsNewItem('store_update', 'آپدیت از داخل کافه بازار راحت‌تر شد', WhatsNewTarget.caseToday),
   ]),
   WhatsNewRelease(79, '۱.۴۰', '2026-10-28', [

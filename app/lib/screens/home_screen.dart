@@ -412,6 +412,12 @@ class _HomeScreenState extends State<HomeScreen> {
           textAlign: TextAlign.center,
           style: tBody(14, color: K.inkSoft),
         ),
+        if (Api.i.lastFailure.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text('کد خطا: ${Api.i.lastFailure}',
+                key: const ValueKey('failure_code'), textDirection: TextDirection.ltr, style: tBody(11, color: K.inkSoft)),
+          ),
         const SizedBox(height: 12),
         StampButton(label: 'دوباره امتحان کن', icon: Icons.refresh_rounded, onTap: _refresh),
       ]),
