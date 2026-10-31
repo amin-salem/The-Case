@@ -1,3 +1,8 @@
+# server 1.45.1: two new cases c055, c056 (31 Oct 2026)
+
+- c055 «هدیه از کدام طرف آمد؟» (publish 22 Nov 2026, conflicting accounts, difficulty 5) and c056 «محموله‌ای که نباید نجات پیدا می‌کرد» (publish 23 Nov 2026, crisis, difficulty 5). Ideas 3 and 4 of the idea bank. Fresh blind tests: c055 s5 95%, c056 s2 93%, no single card decides.
+- No migration. Redeploy from Liara; content only.
+
 # server 1.45.0: two new cases c053, c054 (31 Oct 2026)
 
 - c053 «رضایت‌نامه‌ای برای سال بعد» (publish 20 Nov 2026, cold case, difficulty 5) and c054 «حجمی که کم نشد» (publish 21 Nov 2026, locked-room, difficulty 5). Ideas 1 and 2 of the idea bank. Fresh blind tests: c053 s3 80-85%, c054 s1 90%, no single card decides.
