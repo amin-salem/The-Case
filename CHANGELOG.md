@@ -1,3 +1,10 @@
+# server 1.44.1: c041, c042 re-reviewed, c025 re-checked (Astra series c025-c042 closed, 31 Oct 2026)
+
+- c041 «نمونه‌ای که از فرش نبود»: one timed truth for the two samples and two envelopes; plain cards; fixed questions that presumed things the suspects never said, the buyer's colour-sample lie made testable, Rana/Shida gap closed, «شهر سروان» removed, new §10b tool lines. Culprit and publish date unchanged.
+- c042 «پیوستِ نسخهٔ چهار»: rebuilt as one clear chain (certificate on disk -> disk swap at repair -> handover by body number -> the only expense approval), removed the swapped-own-laptop hole, two «sister company» threads, Hamed's self-contradicting statement, witness «رعنا» (same name as c041), «شهر سروان»; new §10b tool lines. Culprit and publish date unchanged.
+- c025 (already published 23 Oct): only real errors fixed: the doctor handed medicine to Mahnaz while she was out, the gift box went to Siavash's own car (now his father's), Siavash denying what his own statement said, a question presuming Zari's words, who posted the will in the family group, proof cards now e5+e8+e9 (was e9 only; players who chose e9 stay correct).
+- No migration. Redeploy from Liara is optional (content only; c041/c042 open 8-9 Nov).
+
 # server 1.44.0 + app 1.41.0+82: streak insurance by the night, board order, lost weekend case, weekend days (31 Oct 2026, one slot)
 
 - **A. App: confirm before leaving.** Android back on the home tab asks «می‌خوای از برنامه خارج بشی؟» («بله» leaves through the injectable `MainShell.exitApp`, «خیر» closes). Back while the dialog is open means «خیر»; two quick presses never stack two dialogs. Other tabs still go home first.
