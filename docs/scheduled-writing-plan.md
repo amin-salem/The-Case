@@ -10,8 +10,11 @@ Since 27 Oct every session writes from `docs/case-ideas-batch1.md` (read it from
 `git show origin/docs/writing-plan:docs/case-ideas-batch1.md`; the brief that produced it is `docs/case-ideas-brief.md`).
 - Nightly: idea k → c(52+k) (ideas 1-30 → c053-c082). A session writes the two lowest-numbered ideas whose case file does not
   exist yet. Publish dates stay contiguous after the highest existing case.
-- Weekend: idea 31 → w007, 32 → w008 … 36 → w012, the lowest idea whose file does not exist; **always format 3** (night-1 liar,
-  one newcomer, two nights at_hours 0 and 12, open_hour 9, closes_hours 36), publish = highest weekend publish + 7 days.
+- Weekend: idea 31 → w007, 32 → w008 … 36 → w012, the lowest idea whose file does not exist; **always format 3** (day-1 liar,
+  one newcomer, two days: chapter 1 at_hours 0, **chapter 2 at_hours 24 = Friday 09:00** (Amin, 30 Oct 2026; the validator refuses
+  anything else for publish >= 2026-11-05), open_hour 9, closes_hours 36), publish = highest weekend publish + 7 days.
+  Wording: «روز اول / روز دوم» (never «شب اول / شب دوم»). A night passes between the two parts: the chapter-2 `text` starts from
+  «صبح جمعه», and no story text or card may say «امشب», «همین شب», «ساعت ۲۱» or «همان شب» about chapter 2.
 - Hand the Opus writer the idea text verbatim plus the style definition from the brief (S1-S7). Keep premise, style, puzzle type,
   scene, category and culprit; fix every weakness against docs/case-writing-rules.md (the ideas are outlines, not checked cases).
   Vary how false trails are cleared: at most two receipts/forms clear people in one case; use people, objects and answers for the rest.
