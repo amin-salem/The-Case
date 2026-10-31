@@ -9,9 +9,10 @@ rewards.py, so they can never disagree):
 - A solve counts only while the week is open: finished before the next week's first case is released. After that the
   case is archive for the board.
 - Only solved, ranked (investigated) solves of visible players count. Points = stars.
-- Order (WEEK_RANK_MODE=consistency, the default): nights solved, then nights solved ON their own night, then points
-  (stars), then less total time (speed only breaks ties), then older account. The old order (points first, then
-  cases, then time) is WEEK_RANK_MODE=points.
+- Order (WEEK_RANK_MODE=points, the default since 31 Oct 2026, Amin): points (plaques/stars) first, then nights solved,
+  then nights solved ON their own night, then less total time, then older account. So 10 plaques over 4 nights beat
+  8 plaques over 5 nights. The order of 22-31 Oct (nights solved first, then on time, then plaques, then time) is
+  WEEK_RANK_MODE=consistency, kept for a rollback. standings() and my_standing() use the same keys in the same order.
 """
 from __future__ import annotations
 
@@ -141,7 +142,8 @@ async def league_of(session: AsyncSession, ws: date, player_id: str) -> int:
 
 # ------------------------------------------------------------------ standings
 def consistency_mode() -> bool:
-    return get_settings().week_rank_mode != "points"
+    """The rollback order (nights first). Anything but «consistency» in WEEK_RANK_MODE means the default `points` order."""
+    return (get_settings().week_rank_mode or "").strip().lower() == "consistency"
 
 
 def _agg():
@@ -168,7 +170,7 @@ def _order():
     if consistency_mode():
         keys = [n.desc(), ontime.desc(), pts.desc(), secs.asc()]
     else:
-        keys = [pts.desc(), n.desc(), secs.asc()]
+        keys = [pts.desc(), n.desc(), ontime.desc(), secs.asc()]
     return keys + [Player.created_at.asc(), Player.id.asc()]
 
 
@@ -188,14 +190,21 @@ async def my_standing(session: AsyncSession, ws: date, player: Player, league: i
     if not n:
         return None
     pts, n, secs, ontime = int(pts), int(n), int(secs or 0), int(ontime or 0)
-    sub = _base(ws, league).with_only_columns(Player.id, pts_e.label("pts"), n_e.label("n"), secs_e.label("secs"),
-                                              ontime_e.label("ontime")).subquery()
+    sub = _base(ws, league).with_only_columns(Player.id, Player.created_at.label("created"), pts_e.label("pts"),
+                                              n_e.label("n"), secs_e.label("secs"), ontime_e.label("ontime")).subquery()
     c = sub.c
     if consistency_mode():
-        better = ((c.n > n) | ((c.n == n) & (c.ontime > ontime)) | ((c.n == n) & (c.ontime == ontime) & (c.pts > pts))
-                  | ((c.n == n) & (c.ontime == ontime) & (c.pts == pts) & (c.secs < secs)))
+        keys = [(c.n, n, True), (c.ontime, ontime, True), (c.pts, pts, True), (c.secs, secs, False)]
     else:
-        better = (c.pts > pts) | ((c.pts == pts) & (c.n > n)) | ((c.pts == pts) & (c.n == n) & (c.secs < secs))
+        keys = [(c.pts, pts, True), (c.n, n, True), (c.ontime, ontime, True), (c.secs, secs, False)]
+    keys += [(c.created, player.created_at, False), (c.id, player.id, False)]   # same tie-breaks as standings()
+    better, equal_so_far = None, None
+    for col, mine, higher_is_better in keys:
+        step = (col > mine) if higher_is_better else (col < mine)
+        cond = step if equal_so_far is None else (equal_so_far & step)
+        better = cond if better is None else (better | cond)
+        eq = col == mine
+        equal_so_far = eq if equal_so_far is None else (equal_so_far & eq)
     ahead = await session.scalar(select(func.count()).select_from(sub).where(better))
     return int(ahead or 0) + 1, pts
 

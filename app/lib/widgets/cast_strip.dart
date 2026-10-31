@@ -130,7 +130,7 @@ class _CastStripState extends State<CastStrip> {
                     key: ValueKey('newcomer-${s.id}'),
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(color: K.stamp, borderRadius: BorderRadius.circular(999)),
-                    child: Text('تازه · شب دوم', style: tBody(11, color: Colors.white, w: FontWeight.w900)),
+                    child: Text('تازه · روز دوم', style: tBody(11, color: Colors.white, w: FontWeight.w900)),
                   ),
                 ),
             ]),

@@ -214,7 +214,7 @@ async def test_draw_kill_switch_and_nobody_eligible(client, clock, monkeypatch):
         assert row is not None and row.winner_id is None and row.eligible == 0
 
 
-# ---------------------------------------------------------------- 3b. weekly order: consistency first
+# ---------------------------------------------------------------- 3b. weekly order: the rollback order (consistency first)
 async def test_weekly_order_nights_then_on_time_then_plaques_then_speed(client, clock, monkeypatch, week_of_fake_cases):
     monkeypatch.setattr(get_settings(), "week_rank_mode", "consistency")
     monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
@@ -251,7 +251,7 @@ async def test_weekly_order_nights_then_on_time_then_plaques_then_speed(client, 
         pl = await s.get(Player, ids["slow"])
         rank, pts = await weekboard.my_standing(s, ws, pl, None)
     assert rank == order.index(ids["slow"]) + 1 and pts == 4
-    # the old order is one setting away
+    # the default order (plaques first) is one setting away
     monkeypatch.setattr(get_settings(), "week_rank_mode", "points")
     async with db.SessionLocal() as s:
         old = [x.player.id for x in await weekboard.standings(s, ws)]

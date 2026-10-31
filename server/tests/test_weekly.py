@@ -92,7 +92,8 @@ async def test_accusing_is_allowed_from_the_first_chapter(client, clock):
 
 def test_weekend_schedule_text_comes_from_the_clock_constants():
     sch = content.weekend_schedule()
-    assert sch["text"] == "هر هفته پنجشنبه صبح ساعت ۹ باز می‌شه و تا جمعه ساعت ۲۱ وقت داری."
+    assert sch["text"] == ("هر هفته پنجشنبه صبح ساعت ۹ باز می‌شه، جمعه صبح ساعت ۹ روز دوم می‌رسه "
+                           "و تا جمعه ساعت ۲۱ وقت داری.")
     assert (sch["open_weekday"], sch["open_hour"], sch["hours"]) == (3, content.WEEKEND_OPEN_HOUR, content.WEEKLY_HOURS)
     assert (content.WEEKEND_OPEN_HOUR, content.WEEKLY_HOURS) == (9, 36)  # Thursday 09:00 -> Friday 21:00
     assert "معمولاً" not in sch["text"]

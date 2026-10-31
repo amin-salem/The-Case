@@ -30,7 +30,10 @@ async def lost_setup(client, monkeypatch, difficulty, name):
 def test_reopen_price_is_double_the_archive_price_for_every_difficulty():
     for d, base in enumerate(PRICES, 1):
         assert eco.reopen_lost_cost(d) == base * 2
-    assert eco.reopen_lost_cost(3, weekend=True) == eco.archive_unlock_cost(3, weekend=True) * 2
+    # the weekend second chance is the plain weekend archive price (Amin, 31 Oct 2026), not double
+    assert eco.reopen_lost_cost(3, weekend=True) == eco.archive_unlock_cost(3, weekend=True) * eco.WEEKEND_LOST_REOPEN_FACTOR == 250
+    assert [eco.reopen_lost_cost(d, weekend=True) for d in range(1, 6)] == [170, 200, 250, 300, 370]
+    assert eco.difficulty_policy()["weekend_lost_reopen_factor"] == 1
     assert eco.reopen_lost_cost(None) == eco.archive_unlock_cost(None) * 2
     assert eco.difficulty_policy()["lost_reopen_factor"] == 2
 

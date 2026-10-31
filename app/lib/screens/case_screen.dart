@@ -28,6 +28,7 @@ import '../widgets/tool_tray.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'accuse_screen.dart';
+import 'archive_screen.dart' show unlockQuotedCase;
 import 'dialogs.dart';
 import 'result_screen.dart';
 import 'suspect_sheet.dart';
@@ -69,6 +70,7 @@ class _CaseScreenState extends State<CaseScreen> {
   CaseData? _case;
   Progress? _progress;
   String? _error;
+  CaseRow? _lostRow; // set when the server says «locked + lost»: the second-chance price instead of a bare error
   bool _intro = true;
   final Map<String, SuspectMark> _marks = {};
   final Set<String> _pins = {}; // evidence the player has pinned to the board
@@ -221,6 +223,33 @@ class _CaseScreenState extends State<CaseScreen> {
     _saveNotes();
   }
 
+  /// 402 `locked` with `lost: true` (3 wrong accusations): the case as a row with the server's second-chance price.
+  CaseRow? _lostCase(Object e) {
+    if (e is! ApiException || e.status != 402 || e.code != 'locked') return null;
+    final d = e.detail;
+    if (d is! Map || d['lost'] != true) return null;
+    return CaseRow({
+      'id': widget.caseId,
+      'unlock_cost': d['cost'],
+      'failed': true,
+      'locked': true,
+      'weekend': widget.caseId.startsWith('w'),
+    });
+  }
+
+  /// The same confirm flow as the archive: price (and price_changed), not enough coins -> the shop.
+  Future<void> _secondChance() async {
+    final row = _lostRow;
+    if (row == null) return;
+    final ok = await unlockQuotedCase(context, row);
+    if (!mounted || !ok) return;
+    setState(() {
+      _lostRow = null;
+      _error = null;
+    });
+    await _load();
+  }
+
   Future<void> _retry() async {
     setState(() => _error = null);
     if (!Api.i.online) await Api.i.reconnect();
@@ -252,6 +281,18 @@ class _CaseScreenState extends State<CaseScreen> {
       }
     } catch (e) {
       if (!mounted) return;
+      final lost = _case == null ? _lostCase(e) : null;
+      if (lost != null) {
+        // a lost case is closed until the second chance is paid: show that offer (not «این پرونده قفله»)
+        setState(() {
+          _lostRow = lost;
+          _error = 'این پرونده رو باختی و بسته شده.';
+        });
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && _lostRow != null) _secondChance();
+        });
+        return;
+      }
       if (_case != null) {
         // already showing the case: keep it, just say what happened
         toast(context, Api.friendly(e));
@@ -526,7 +567,14 @@ class _CaseScreenState extends State<CaseScreen> {
                       const SizedBox(height: 10),
                       Text(_error!, textAlign: TextAlign.center, style: tBody(15)),
                       const SizedBox(height: 14),
-                      StampButton(label: 'دوباره امتحان کن', icon: Icons.refresh_rounded, onTap: _retry),
+                      if (_lostRow != null)
+                        StampButton(
+                            key: const ValueKey('case-second-chance'),
+                            label: 'فرصت دوباره · ${fa(_lostRow!.unlockCost)} سکه',
+                            icon: Icons.replay_rounded,
+                            onTap: _secondChance)
+                      else
+                        StampButton(label: 'دوباره امتحان کن', icon: Icons.refresh_rounded, onTap: _retry),
                     ]),
                   ),
           ),
@@ -788,7 +836,7 @@ class _CaseScreenState extends State<CaseScreen> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(c.twoNights
-                  ? 'شب دوم: یه مظنون تازه و مدارک جدید باز می‌شه'
+                  ? 'روز دوم: یه مظنون تازه و مدارک جدید باز می‌شه'
                   : 'فصل ${fa(c.chapters.length + 1)} از ${fa(c.chaptersTotal)} با مدارک تازه باز می‌شه',
                   style: tBody(13.5, w: FontWeight.w700)),
             ),
@@ -859,7 +907,7 @@ class _CaseScreenState extends State<CaseScreen> {
         Row(children: [
           const Icon(Icons.nightlight_round, color: K.stamp, size: 20),
           const SizedBox(width: 6),
-          Expanded(child: Text('شب اول · ${n.question}', style: tDisplay(17, color: K.ink))),
+          Expanded(child: Text('روز اول · ${n.question}', style: tDisplay(17, color: K.ink))),
           if (a != null && a.ok)
             Text('+${fa(a.reward)} سکه', style: tBody(13, color: K.stamp, w: FontWeight.w900)),
         ]),
@@ -868,7 +916,7 @@ class _CaseScreenState extends State<CaseScreen> {
           Text('یکی از مظنون‌ها توی حرفش با یکی از مدارک امشب نمی‌خونه. فقط یک بار می‌تونی جواب بدی؛ جواب درست ${fa(n.reward)} سکه‌ست. '
               'ربطی به متهم‌کردن اصلی نداره و فرصت اتهامت رو کم نمی‌کنه.', style: tBody(13.5, color: K.ink))
         else if (a == null)
-          Text('وقتش گذشت؛ شب دوم شروع شده.', style: tBody(13.5, color: K.inkSoft))
+          Text('وقتش گذشت؛ روز دوم شروع شده.', style: tBody(13.5, color: K.inkSoft))
         else ...[
           Text(a.ok ? 'درست گفتی!' : 'این بار نشد.', style: tBody(14.5, color: a.ok ? K.ok : K.stamp, w: FontWeight.w900)),
           const SizedBox(height: 4),

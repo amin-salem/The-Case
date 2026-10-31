@@ -67,7 +67,7 @@ void main() {
     expect(CasesList({'next_case_at': 1, 'archive': <dynamic>[]}).weeklyNextChapterAt, isNull);
   });
 
-  testWidgets('the newcomer carries a «تازه · شب دوم» tag on the cast strip', (tester) async {
+  testWidgets('the newcomer carries a «تازه · روز دوم» tag on the cast strip', (tester) async {
     final a = Suspect(_suspect('s1'));
     final b = Suspect(_suspect('s2', appears: 1));
     await tester.pumpWidget(MaterialApp(

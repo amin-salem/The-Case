@@ -28,6 +28,7 @@ def profile_out(p: Player, login_reward: int = 0) -> ProfileOut:
         offer = streakrepair.repair_offer(p)
     except Exception:
         offer = None
+    shown_streak, shown_freezes, _, _ = streakrepair.effective_streak(p)  # settled against the calendar, no write
     return ProfileOut(
         streak_repair=StreakRepairOffer(key=offer["key"], streak=offer["streak"], price=offer["price"]) if offer else None,
         xp=xp, rank=r, rank_title=eco.RANKS[r][1], rank_xp=eco.RANKS[r][0],
@@ -37,9 +38,9 @@ def profile_out(p: Player, login_reward: int = 0) -> ProfileOut:
         referred=p.referred_by is not None, email=mask_email(p.email), secured=bool(p.email or p.phone_hash), phone=mask_phone(p),
         needs_phone=bool(p.email and not p.phone_hash and get_settings().require_phone_for_email),
         coins=p.coins, no_ads=p.no_ads or vip_active(p), vip_until=ts(p.vip_until),
-        streak=p.streak, best_streak=p.best_streak, cases_solved=p.cases_solved,
+        streak=shown_streak, best_streak=max(p.best_streak or 0, shown_streak), cases_solved=p.cases_solved,
         stars_total=p.stars_total, login_reward=login_reward,
-        login_day=p.login_day or 0, warrants=p.warrants or 0, streak_freezes=p.streak_freezes or 0,
+        login_day=p.login_day or 0, warrants=p.warrants or 0, streak_freezes=shown_freezes,
     )
 
 

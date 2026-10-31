@@ -81,10 +81,12 @@ async def test_streak_insurance_and_badge(client, clock):
     r = await client.post("/v1/wallet/streak-freeze", headers=h)
     assert r.status_code == 409
 
-    # miss one case: insurance keeps the streak
+    # miss one case: the insurance is spent that night and the night counts (2 + 1 covered), then +1 for this solve
     clock(evening_of(ids[i + 3]))
+    me = (await client.get("/v1/me", headers=h)).json()
+    assert me["streak"] == 3 and me["streak_freezes"] == 1
     r = await solve_today(client, h, ids[i + 3])
-    assert r["streak"] == 3 and r["freezes_used"] == 1
+    assert r["streak"] == 4 and r["freezes_used"] == 1
     assert (await client.get("/v1/me", headers=h)).json()["streak_freezes"] == 1
 
     # miss two cases with only one insurance left: the streak starts again, insurance is kept

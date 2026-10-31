@@ -42,7 +42,9 @@ Future<bool> unlockQuotedCase(BuildContext context, CaseRow row) async {
     final ok = await confirm(context,
         changed ? 'قیمت پرونده تغییر کرده' : lost ? 'فرصت دوباره' : row.weekend ? 'باز کردن پرونده‌ی آخر هفته' : 'باز کردن پرونده‌ی قدیمی',
         lost
-            ? 'این پرونده رو باختی و بسته شده. با ${fa(quote)} سکه (دو برابر قیمت عادی) دوباره باز می‌شه و ${fa(3)} فرصت تازه داری؛ این دور تو رتبه‌بندی شبانه حساب نمی‌شه.$rewardText'
+            ? (row.weekend
+                ? 'این پرونده رو باختی و بسته شده. با ${fa(quote)} سکه دوباره باز می‌شه و ${fa(3)} فرصت تازه داری؛ این دور تو جدول هفته حساب نمی‌شه.$rewardText'
+                : 'این پرونده رو باختی و بسته شده. با ${fa(quote)} سکه (دو برابر قیمت عادی) دوباره باز می‌شه و ${fa(3)} فرصت تازه داری؛ این دور تو رتبه‌بندی شبانه حساب نمی‌شه.$rewardText')
             : '${row.weekend ? 'همهٔ فصل‌های این پروندهٔ بسته‌شده با هم باز می‌شن.' : 'این پرونده مال روزهای قبله.'} با ${fa(quote)} سکه بازش کن.$rewardText',
         lost ? 'دوباره باز کن · ${fa(quote)} سکه' : 'باز کن · ${fa(quote)} سکه');
     if (!ok || !context.mounted || Api.i.account != account) return false;

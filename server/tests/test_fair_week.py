@@ -32,7 +32,8 @@ def week_of_fake_cases(monkeypatch):
 
 @pytest.fixture(autouse=True)
 def _points_order(monkeypatch):
-    """These tests describe the old order (plaques first); tests/test_leak_defence.py covers the consistency order."""
+    """These tests use the default order (plaques first, then nights, on-time nights, speed); tests/test_leak_defence.py
+    covers the rollback order WEEK_RANK_MODE=consistency."""
     from app.config import get_settings
     monkeypatch.setattr(get_settings(), "week_rank_mode", "points")
 
@@ -375,3 +376,62 @@ async def test_promoted_during_the_week_keeps_the_weeks_league_but_shows_the_cur
     # he is NOT on the board of the league «بازرس» this week
     other = await board(client, p["headers"], league=2)
     assert not any(r["me"] for r in other["top"])
+
+
+# ------------------------------------------------------------------ the order: plaques, nights, on-time nights, speed, age
+async def test_points_order_plaques_first_then_nights_ontime_speed_age(client, single_board, week_of_fake_cases, monkeypatch):
+    """Amin, 31 Oct 2026: 10 plaques over 4 nights beat 8 plaques over 5 nights. my_standing() agrees with standings()."""
+    from app.config import get_settings
+    ws = date(2027, 3, 5)
+    names = ["eight5", "ten4", "two1", "three1", "ontime", "late", "fast", "slow", "old", "young"]
+    pl = {n: await new_player(client, f"po-{n}", aged=True) for n in names}
+
+    async def put(name, i, stars, day, seconds=100, daily=False):
+        await solve(pl[name]["player_id"], wid(ws, i), stars, T(2027, 3, day, 10), seconds=seconds)
+        async with db.SessionLocal() as s:
+            await s.execute(update(CaseProgress).where(CaseProgress.player_id == pl[name]["player_id"],
+                                                       CaseProgress.case_id == wid(ws, i)).values(was_daily=daily))
+            await s.commit()
+
+    for i, st in enumerate([2, 2, 2, 1, 1]):
+        await put("eight5", i, st, 6 + i)                      # 8 plaques over 5 nights
+    for i, st in enumerate([3, 3, 2, 2]):
+        await put("ten4", i, st, 6 + i)                        # 10 plaques over 4 nights
+    await put("two1", 0, 3, 6)                                 # same plaques (3) as three1, but one night
+    for i in range(2):
+        await put("three1", i, 1 + i, 6 + i)
+    await put("ontime", 0, 1, 6, daily=True)                   # same plaques and nights: on its own night wins
+    await put("late", 0, 1, 7, daily=False)
+    await put("fast", 0, 1, 8, seconds=50)                     # all equal but the time
+    await put("slow", 0, 1, 8, seconds=400)
+    await put("old", 0, 1, 9)                                  # all equal: the older account is first
+    await put("young", 0, 1, 9)
+    await set_player(pl["old"]["player_id"], created_at=datetime(2026, 1, 1))
+    await set_player(pl["young"]["player_id"], created_at=datetime(2026, 6, 1))
+
+    async def order():
+        async with db.SessionLocal() as s:
+            rows = await weekboard.standings(s, ws)
+        return [x.player.id for x in rows]
+
+    ids = {n: pl[n]["player_id"] for n in names}
+    got = await order()
+    pos = lambda n: got.index(ids[n])           # noqa: E731
+    assert pos("ten4") < pos("eight5")                          # plaques first
+    assert pos("three1") < pos("two1")                          # equal plaques: more nights
+    assert pos("ontime") < pos("late")                          # then nights on their own night
+    assert pos("fast") < pos("slow")                            # then less time
+    assert pos("old") < pos("young")                            # then the older account
+    # my_standing counts exactly like standings
+    for n in names:
+        async with db.SessionLocal() as s:
+            rank, pts = await weekboard.my_standing(s, ws, await s.get(Player, ids[n]), None)
+        assert rank == pos(n) + 1, n
+    # the rollback order is one setting away: nights first, so the 5-night player now beats the 4-night one
+    monkeypatch.setattr(get_settings(), "week_rank_mode", "consistency")
+    old = await order()
+    assert old.index(ids["eight5"]) < old.index(ids["ten4"])
+    for n in names:
+        async with db.SessionLocal() as s:
+            rank, _ = await weekboard.my_standing(s, ws, await s.get(Player, ids[n]), None)
+        assert rank == old.index(ids[n]) + 1, n

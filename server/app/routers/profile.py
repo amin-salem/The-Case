@@ -63,6 +63,10 @@ async def delete_me(player: Player = Depends(current_player), session: AsyncSess
 @router.post("/wallet/streak-freeze", response_model=ProfileOut)
 async def buy_streak_freeze(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """Streak insurance: if a daily case is missed, one is spent and the streak survives."""
+    # settle the calendar first (under the player lock): a night already missed is covered or broken by what the player
+    # held BEFORE this purchase; insurance bought after the miss never covers it
+    player = (await lock_players(session, [player.id]))[player.id]
+    streakrepair.settle(player)
     if (player.streak_freezes or 0) >= eco.MAX_FREEZES:
         raise HTTPException(409, "max_freezes")
     if player.coins < eco.FREEZE_COST:
@@ -83,6 +87,7 @@ async def repair_streak(player: Player = Depends(current_player), session: Async
         streakrepair.log_decision("disabled")
         raise HTTPException(403, "repair_disabled")
     player = (await lock_players(session, [player.id]))[player.id]
+    streakrepair.settle(player)
     offer = streakrepair.repair_offer(player)
     if offer is None:
         streakrepair.log_decision("not_eligible", player.streak or 0)

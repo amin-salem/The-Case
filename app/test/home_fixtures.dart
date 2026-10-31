@@ -13,14 +13,14 @@ http.Response jsonResponse(Object body, [int status = 200]) => http.Response.byt
     headers: {'content-type': 'application/json; charset=utf-8'});
 
 Map<String, dynamic> caseRow(String id, int number, String title,
-        {bool today = false, bool solved = false, bool failed = false, bool locked = false, int cost = 150, int stars = 0}) =>
+        {bool today = false, bool solved = false, bool failed = false, bool locked = false, int cost = 150, int stars = 0, bool weekend = false}) =>
     {
       'id': id, 'number': number, 'title': title, 'location': 'بندر انزلی', 'scene': 'harbor', 'category': 'murder',
-      'difficulty': 3, 'today': today, 'weekend': false, 'locked': locked, 'unlock_cost': cost, 'solved': solved,
+      'difficulty': 3, 'today': today, 'weekend': weekend, 'locked': locked, 'unlock_cost': cost, 'solved': solved,
       'failed': failed, 'stars': stars, 'solvers': 12, 'my_rating': 0,
     };
 
-/// Tonight's case state: 'open', 'solved' or 'lost'. [weekend]: null, 'open', 'solved'.
+/// Tonight's case state: 'open', 'solved' or 'lost'. [weekend]: null, 'open', 'solved', 'lost' (3 wrong accusations: closed, second chance 250).
 Map<String, dynamic> casesBody({String tonight = 'open', String? weekend, int archiveCount = 4}) {
   final archive = [
     for (int i = 0; i < archiveCount; i++)
@@ -32,7 +32,9 @@ Map<String, dynamic> casesBody({String tonight = 'open', String? weekend, int ar
         locked: tonight == 'lost', cost: 300),
     'next_case_at': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 3 * 3600,
     'archive': archive,
-    if (weekend != null) 'weekly': caseRow('w1', 9, 'شب بندر', solved: weekend == 'solved'),
+    if (weekend != null)
+      'weekly': caseRow('w1', 9, 'شب بندر',
+          solved: weekend == 'solved', failed: weekend == 'lost', locked: weekend == 'lost', cost: 250, weekend: weekend == 'lost'),
     if (weekend != null) 'weekly_closes_at': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 2 * 86400,
   };
 }

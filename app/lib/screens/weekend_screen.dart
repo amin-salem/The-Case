@@ -7,6 +7,7 @@ import '../widgets/category.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/coming_soon.dart';
 import '../widgets/scene.dart';
+import 'archive_screen.dart' show unlockQuotedCase;
 import 'case_screen.dart';
 
 DateTime? _time(Object? v) => v is num ? DateTime.fromMillisecondsSinceEpoch(v.toInt() * 1000) : null;
@@ -51,7 +52,19 @@ class _WeekendScreenState extends State<WeekendScreen> {
     await _load();
   }
 
+  /// The case was lost (3 wrong accusations): it is closed until the player pays the second-chance price.
+  bool _lost(CaseRow c) => c.failed && !c.solved;
+
   void _play(CaseRow c) async {
+    if (_lost(c)) {
+      // the same flow as the archive: confirm the quoted price (price_changed, not enough coins -> the shop)
+      final ok = await unlockQuotedCase(context, c);
+      if (!mounted) return;
+      if (!ok) {
+        _load();
+        return;
+      }
+    }
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => CaseScreen(caseId: c.id)));
     _load();
   }
@@ -62,11 +75,11 @@ class _WeekendScreenState extends State<WeekendScreen> {
     return s is Map ? Map<String, dynamic>.from(s) : <String, dynamic>{};
   }
 
-  /// «هر هفته پنجشنبه صبح ساعت ۹ باز می‌شه و تا جمعه ساعت ۲۱ وقت داری.» comes from the server (content.weekend_schedule),
+  /// «هر هفته پنجشنبه صبح ساعت ۹ باز می‌شه، جمعه صبح ساعت ۹ روز دوم می‌رسه و تا جمعه ساعت ۲۱ وقت داری.» comes from the server (content.weekend_schedule),
   /// so the app can never disagree with the clock; this literal is only for an old cached config.
   String _scheduleText(Map<String, dynamic> up) {
     final t = _schedule(up)['text'];
-    return t is String && t.isNotEmpty ? t : 'هر هفته پنجشنبه صبح ساعت ۹ باز می‌شه و تا جمعه ساعت ۲۱ وقت داری.';
+    return t is String && t.isNotEmpty ? t : 'هر هفته پنجشنبه صبح ساعت ۹ باز می‌شه، جمعه صبح ساعت ۹ روز دوم می‌رسه و تا جمعه ساعت ۲۱ وقت داری.';
   }
 
   DateTime _fallbackOpening(Map<String, dynamic> up) {
@@ -76,7 +89,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
     return nextWeekendOpening(null, wd is num ? wd.toInt() + 1 : DateTime.thursday, h is num ? h.toInt() : 9);
   }
 
-  /// Format 3: «شب اول / شب دوم» side by side, the early-solve reward and the countdown to chapter 2.
+  /// Format 3: «روز اول / روز دوم» side by side, the early-solve reward and the countdown to chapter 2.
   Widget _nightsCard() {
     final api = Api.i;
     final at = _cases?.weeklyNextChapterAt;
@@ -116,21 +129,21 @@ class _WeekendScreenState extends State<WeekendScreen> {
           Expanded(
             child: Text(
                 night2Open
-                    ? 'شب دوم باز شده؛ جایزه‌ی زودتر حل‌کردن تموم شد، ولی جایزه‌ی اصلی سر جاشه.'
-                    : 'کامل حل کنی قبل از شب دوم: ${fa(api.weeklyEarlyBonus)} سکه‌ی اضافه + پلاک «شب اول».',
+                    ? 'روز دوم باز شده؛ جایزه‌ی زودتر حل‌کردن تموم شد، ولی جایزه‌ی اصلی سر جاشه.'
+                    : 'کامل حل کنی قبل از روز دوم: ${fa(api.weeklyEarlyBonus)} سکه‌ی اضافه + پلاک «روز اول».',
                 style: tBody(13.5, w: FontWeight.w900)),
           ),
         ]),
       ),
       const SizedBox(height: 10),
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        col('شب اول', Icons.nightlight_round, [
-          'مظنون‌ها و مدارک شب اول',
+        col('روز اول', Icons.wb_sunny_rounded, [
+          'مظنون‌ها و مدارک روز اول',
           '«کی دروغ می‌گه؟»: یک بار جواب بده، ${fa(api.weekendLiarReward)} سکه',
-          'از همین شب می‌تونی متهم کنی',
+          'از همین روز می‌تونی متهم کنی',
         ], active: !night2Open),
         const SizedBox(width: 10),
-        col('شب دوم', Icons.wb_twilight_rounded, [
+        col('روز دوم', Icons.wb_twilight_rounded, [
           'یه مظنون تازه',
           'مدارک و حرف‌های جدید',
           night2Open ? 'باز شده' : 'تا باز شدنش:',
@@ -164,17 +177,23 @@ class _WeekendScreenState extends State<WeekendScreen> {
             if (weekly != null)
               SectionBanner(
                 background: AnimatedScene(scene: weekly.scene, height: double.infinity, dim: 0.2),
-                chip: weekly.solved ? 'حلش کردی!' : 'پرونده‌ی این هفته · بازه',
+                chip: weekly.solved ? 'حلش کردی!' : weekly.failed ? 'این بار نشد' : 'پرونده‌ی این هفته · بازه',
                 title: weekly.title,
                 subtitle: '${weekly.category.isEmpty ? '' : '${categoryName(weekly.category)} · '}دو فصل، هشت مظنون · پاداش پایه تا ${fa(weekly.maxSolveReward ?? Api.i.weeklyReward)} سکه',
                 countdownLabel: 'تا پایان پرونده',
                 at: _cases?.weeklyClosesAt,
                 onCountdownDone: _opened,
                 onTap: () => _play(weekly),
-                button: StampButton(
-                    label: weekly.solved ? 'دیدن پرونده' : 'ورود به پرونده',
-                    icon: Icons.search_rounded,
-                    onTap: () => _play(weekly)),
+                button: _lost(weekly)
+                    ? StampButton(
+                        key: const ValueKey('weekend-second-chance'),
+                        label: 'فرصت دوباره · ${fa(weekly.unlockCost)} سکه',
+                        icon: Icons.replay_rounded,
+                        onTap: () => _play(weekly))
+                    : StampButton(
+                        label: weekly.solved ? 'دیدن پرونده' : 'ورود به پرونده',
+                        icon: Icons.search_rounded,
+                        onTap: () => _play(weekly)),
               )
             else
               SectionBanner(
@@ -188,12 +207,18 @@ class _WeekendScreenState extends State<WeekendScreen> {
                 at: _time(up['opens_at']) ?? _fallbackOpening(up),
                 onCountdownDone: _opened,
               ),
+            if (weekly != null && _lost(weekly))
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text('فرصت دوباره حساب جدول هفته نمی‌شه.',
+                    key: const ValueKey('weekend-second-chance-note'), style: tBody(13, color: K.textSoft)),
+              ),
             if (weekly != null && _cases?.weeklyFormat == 3) ...[const SizedBox(height: 14), _nightsCard()],
             const SizedBox(height: 14),
             InfoCard(title: 'چطوری کار می‌کنه؟', lines: [
               (Icons.event_rounded, '${_scheduleText(up)} پرونده‌ی شبانه سر جاشه.'),
               (Icons.auto_stories_rounded, _cases?.weeklyFormat == 3
-                  ? 'دو شب داره؛ شب دوم یه مظنون تازه و مدارک جدید می‌آره.'
+                  ? 'دو روز داره؛ روز دوم (جمعه صبح) یه مظنون تازه و مدارک جدید می‌آره.'
                   : 'دو فصل داره؛ فصل دوم مدارک و حرف‌های تازه می‌آره.'),
               (Icons.fact_check_rounded, 'هر مدرک رو می‌تونی به یه مظنون نشون بدی و ببینی چی می‌گه. تعدادش محدوده.'),
               (Icons.gavel_rounded, 'از همون فصل اول می‌تونی متهم کنی: هم مقصر، هم «چرا و چطور». زودتر درست بگی، ${fa(Api.i.weeklyEarlyBonus)} سکه‌ی اضافه می‌گیری.'),

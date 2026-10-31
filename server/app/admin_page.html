@@ -458,7 +458,7 @@ const VIEWS = {
     const bar = (v, cls) => `<span class="fbar ${cls || ''}"><i style="width:${Math.max(0, Math.min(100, v || 0))}%"></i></span>`;
     const sec = (d, k, f) => d[k] && d[k].error ? '<p class="err">این بخش الان خطا داد؛ بقیه‌ی صفحه سالم است. چند لحظه بعد دوباره بزن.</p>' : f(d[k]);
     const tbl = (head, rows) => `<div class="scroll"><table><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr>${rows.join('')}</table></div>`;
-    const NAMES = {solve: 'حل پرونده', daily_login: 'ورود روزانه', chest: 'صندوقچه', achievement: 'نشان', welcome: 'سکه‌ی شروع', buy: 'خرید بسته', hint: 'سرنخ', tool: 'ابزار کارآگاهی', unlock: 'بایگانی', reopen: 'فرصت دوباره', avatar: 'آواتار و قاب', streak_freeze: 'محافظ زنجیره', streak_repair: 'ترمیم زنجیره', story_skip: 'رد کردن انتظار داستان', riddle_unlock: 'قفل معما', riddle: 'معما', ad: 'تبلیغ', liar: 'شب اول آخر هفته', secure_account: 'امن کردن حساب'};
+    const NAMES = {solve: 'حل پرونده', daily_login: 'ورود روزانه', chest: 'صندوقچه', achievement: 'نشان', welcome: 'سکه‌ی شروع', buy: 'خرید بسته', hint: 'سرنخ', tool: 'ابزار کارآگاهی', unlock: 'بایگانی', reopen: 'فرصت دوباره', avatar: 'آواتار و قاب', streak_freeze: 'محافظ زنجیره', streak_repair: 'ترمیم زنجیره', story_skip: 'رد کردن انتظار داستان', riddle_unlock: 'قفل معما', riddle: 'معما', ad: 'تبلیغ', liar: 'روز اول آخر هفته', secure_account: 'امن کردن حساب'};
     const GROUP = {desire: 'میل بازیکن', escape: 'فرار از گیر', other: 'سایر'};
     const nm = k => esc(NAMES[k] || k);
     m.innerHTML = '<div class="row"><span class="muted">بازه:</span><span id="edays"></span><button id="ere">تازه‌سازی</button><span class="muted" id="eat"></span></div><div id="ebody"></div>';

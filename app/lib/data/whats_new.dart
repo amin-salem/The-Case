@@ -43,6 +43,13 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(82, '۱.۴۱', '2026-10-31', [
+    WhatsNewItem('exit_ask', 'با دکمه‌ی برگشت از خونه بیرون نمی‌ری؛ اول می‌پرسیم می‌خوای از برنامه خارج بشی', WhatsNewTarget.caseToday),
+    WhatsNewItem('insurance_night', 'بیمه‌ی زنجیره همون شبی که پرونده رو از دست می‌دی خرج می‌شه و اون شب جزو زنجیره‌ت می‌مونه؛ بدون بیمه، زنجیره همون لحظه صفر نشون داده می‌شه', WhatsNewTarget.caseToday),
+    WhatsNewItem('week_order', 'جدول هفته: اول پلاک، بعد تعداد شب‌ها، بعد شب‌های سر وقت، آخرش سرعت', WhatsNewTarget.leaderboard),
+    WhatsNewItem('weekend_retry', 'اگه پرونده‌ی آخر هفته رو باختی، قیمت «فرصت دوباره» رو می‌بینی و با یه ضربه دوباره بازش می‌کنی', WhatsNewTarget.weekend),
+    WhatsNewItem('weekend_days', 'پرونده‌ی آخر هفته «روز اول» و «روز دوم» داره؛ روز دوم جمعه صبح ساعت ۹ باز می‌شه', WhatsNewTarget.weekend),
+  ]),
   WhatsNewRelease(80, '۱.۴۰', '2026-10-28', [
     WhatsNewItem('name_pick', 'اسمت رو از خونه عوض کن؛ با دکمه‌ی تاس اسم پیشنهادی می‌گیری', WhatsNewTarget.caseToday),
     WhatsNewItem('store_update', 'آپدیت از داخل کافه بازار راحت‌تر شد', WhatsNewTarget.caseToday),

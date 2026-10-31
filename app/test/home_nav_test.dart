@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:the_case/screens/archive_screen.dart';
 import 'package:the_case/screens/main_shell.dart';
@@ -55,7 +56,7 @@ void main() {
       expect(field.controller!.text, '۲۸');
     });
 
-    testWidgets('Android back from another tab goes home first; on home it leaves the app', (t) async {
+    testWidgets('Android back from another tab goes home first, without a dialog', (t) async {
       await seedHome();
       await pumpApp(t);
       await t.tap(find.text('برترها').last);
@@ -66,8 +67,69 @@ void main() {
       onTab.onPopInvokedWithResult!(false, null);
       await t.pump(const Duration(milliseconds: 300));
       expect(selectedTab(t), MainShell.home);
-      final popScope = t.widget<PopScope>(find.byWidgetPredicate((w) => w is PopScope).first);
-      expect(popScope.canPop, isTrue, reason: 'on home, back may leave the app');
+      expect(find.byKey(const ValueKey('exit-dialog')), findsNothing);
+    });
+
+    group('exit confirmation on the home tab', () {
+      var exits = 0;
+      setUp(() {
+        exits = 0;
+        MainShell.exitApp = () => exits++;
+      });
+      tearDown(() {
+        MainShell.exitApp = () {
+          SystemNavigator.pop();
+        };
+      });
+
+      Future<void> backOnHome(WidgetTester t) async {
+        final scope = t.widget<PopScope>(find.byWidgetPredicate((w) => w is PopScope).first);
+        expect(scope.canPop, isFalse, reason: 'back on home never leaves the app by itself');
+        scope.onPopInvokedWithResult!(false, null);
+        await t.pump(const Duration(milliseconds: 300));
+      }
+
+      testWidgets('back on home shows the question; «خیر» keeps the app open', (t) async {
+        await seedHome();
+        await pumpApp(t);
+        await backOnHome(t);
+        expect(find.byKey(const ValueKey('exit-dialog')), findsOneWidget);
+        expect(find.text('می‌خوای از برنامه خارج بشی؟'), findsOneWidget);
+        expect(Directionality.of(t.element(find.byKey(const ValueKey('exit-dialog')))), TextDirection.rtl);
+        await t.tap(find.byKey(const ValueKey('exit-no')));
+        await t.pump(const Duration(milliseconds: 400));
+        expect(find.byKey(const ValueKey('exit-dialog')), findsNothing);
+        expect(exits, 0);
+        expect(selectedTab(t), MainShell.home);
+      });
+
+      testWidgets('«بله» leaves the app through MainShell.exitApp', (t) async {
+        await seedHome();
+        await pumpApp(t);
+        await backOnHome(t);
+        await t.tap(find.byKey(const ValueKey('exit-yes')));
+        await t.pump(const Duration(milliseconds: 400));
+        expect(exits, 1);
+        expect(find.byKey(const ValueKey('exit-dialog')), findsNothing);
+      });
+
+      testWidgets('two quick back presses open one dialog; back while it is open means «خیر»', (t) async {
+        await seedHome();
+        await pumpApp(t);
+        final scope = t.widget<PopScope>(find.byWidgetPredicate((w) => w is PopScope).first);
+        scope.onPopInvokedWithResult!(false, null);
+        scope.onPopInvokedWithResult!(false, null); // the second press in the same frame
+        await t.pump(const Duration(milliseconds: 300));
+        expect(find.byKey(const ValueKey('exit-dialog')), findsOneWidget);
+        // the system back button while the dialog is open pops the dialog route (= «خیر»)
+        await t.binding.handlePopRoute();
+        await t.pump(const Duration(milliseconds: 400));
+        expect(find.byKey(const ValueKey('exit-dialog')), findsNothing);
+        expect(exits, 0);
+        // and a new back press asks again
+        await backOnHome(t);
+        expect(find.byKey(const ValueKey('exit-dialog')), findsOneWidget);
+      });
     });
 
     testWidgets('the bar is hidden inside a case (any screen pushed above the shell)', (t) async {

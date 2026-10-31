@@ -15,3 +15,21 @@
 
 ## developer_note
 Build 81
+
+<!-- build: 82 -->
+## changelog_fa
+- پیش از خروج از برنامه با دکمه‌ی برگشت، تأیید گرفته می‌شود
+- بیمه‌ی زنجیره از همان شبی که پرونده از دست می‌رود به حساب می‌آید و نتیجه‌اش بلافاصله دیده می‌شود
+- ترتیب جدول هفته: ابتدا پلاک، سپس تعداد شب‌ها، شب‌های سر وقت و در آخر سرعت
+- پرونده‌ی آخر هفته در دو روز: روز اول و روز دوم؛ پس از شکست هم قیمت فرصت دوباره روشن است
+- بهبودهای کوچک
+
+## changelog_en
+- The back button on the home screen now asks before leaving the app
+- Streak insurance applies the night a case is missed and shows at once
+- Weekly board order: plaques first, then nights, on-time nights and finally speed
+- The weekend case now has two days: day one and day two; after a loss the second-chance price is shown clearly
+- Small improvements
+
+## developer_note
+Build 82

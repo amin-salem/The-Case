@@ -25,8 +25,8 @@ def make_case3() -> content.Case:
     newcomer, liar = others[0], others[1]
     later = [e["id"] for e in d["evidence"] if e["id"] not in NIGHT1_CARDS]
     d.update({"id": "w098", "number": 98, "publish": THU.isoformat(), "format": 3, "open_hour": 9, "closes_hours": 36})
-    d["chapters"] = [{"title": "شب اول", "at_hours": 0},
-                     {"title": "شب دوم", "at_hours": 12, "text": "مظنون تازه و مدارک جدید", "evidence": later}]
+    d["chapters"] = [{"title": "روز اول", "at_hours": 0},
+                     {"title": "روز دوم", "at_hours": 24, "text": "مظنون تازه و مدارک جدید", "evidence": later}]
     for s in d["suspects"]:
         s["reactions"] = {"e1": "این رو نمی‌دونم از کجاست."}
         s["appears_chapter"] = 1 if s["id"] == newcomer else 0
@@ -61,7 +61,8 @@ async def _coins(client, h) -> int:
 
 def test_new_schedule_thursday_morning_to_friday_night():
     assert (content.WEEKEND_OPEN_WEEKDAY, content.WEEKEND_OPEN_HOUR, content.WEEKLY_HOURS) == (3, 9, 36)
-    assert content.weekend_schedule()["text"] == "هر هفته پنجشنبه صبح ساعت ۹ باز می‌شه و تا جمعه ساعت ۲۱ وقت داری."
+    assert content.weekend_schedule()["text"] == ("هر هفته پنجشنبه صبح ساعت ۹ باز می‌شه، جمعه صبح ساعت ۹ روز دوم می‌رسه "
+                                                  "و تا جمعه ساعت ۲۱ وقت داری.")
     # w001 keeps its own 48 h window (it says so in its file)
     w1 = content.weekly_by_id("w001")
     assert content.weekly_closes_at(w1) - content.opens_at(w1) == timedelta(hours=48)
@@ -69,7 +70,7 @@ def test_new_schedule_thursday_morning_to_friday_night():
 
 def test_format3_timing_and_validation(wk):
     assert content.opens_at(wk) == datetime(2026, 11, 5, 9, tzinfo=TEHRAN)
-    assert content.weekly_all_open_at(wk) == datetime(2026, 11, 5, 21, tzinfo=TEHRAN)  # chapter 2 at 21:00
+    assert content.weekly_all_open_at(wk) == datetime(2026, 11, 6, 9, tzinfo=TEHRAN)   # day 2 opens Friday 09:00 (from 5 Nov 2026)
     assert content.weekly_closes_at(wk) == datetime(2026, 11, 6, 21, tzinfo=TEHRAN)    # Friday 21:00
     content.validate_weekly(wk.data)
 
@@ -120,7 +121,7 @@ async def test_night1_hides_the_newcomer_and_the_night2_cards(client, clock, wk)
     assert data["progress"]["night1"] is None
 
     # chapter 2: the newcomer and the new cards (marked as night 2) appear, the question is closed
-    clock(content.opens_at(wk) + timedelta(hours=13))
+    clock(content.opens_at(wk) + timedelta(hours=25))
     case = (await client.get("/v1/cases/w098", headers=h)).json()["case"]
     assert _newcomer(wk) in {s["id"] for s in case["suspects"]} and len(case["suspects"]) == len(wk.data["suspects"])
     assert {e["chapter"] for e in case["evidence"]} == {1, 2}
@@ -136,7 +137,7 @@ async def test_the_newcomer_cannot_be_accused_questioned_or_shown_cards_on_night
     assert (await client.post("/v1/cases/w098/show", headers=h, json={"suspect": new, "evidence": "e1"})).status_code == 404
     assert (await client.post("/v1/cases/w098/seen", headers=h, json={"suspect": new})).status_code == 404
     assert (await client.post("/v1/cases/w098/liar", headers=h, json={"suspect": new})).status_code == 404
-    clock(content.opens_at(wk) + timedelta(hours=13))
+    clock(content.opens_at(wk) + timedelta(hours=25))
     assert (await client.post("/v1/cases/w098/show", headers=h, json={"suspect": new, "evidence": "e1"})).status_code == 200
     assert (await client.post("/v1/cases/w098/seen", headers=h, json={"suspect": new})).status_code == 200
 
@@ -176,7 +177,7 @@ async def test_liar_question_pays_once_and_has_one_try(client, clock, wk):
     c = (await new_player(client, "f3-liar-c"))["headers"]
     assert (await client.post("/v1/cases/w098/liar", headers=c, json={"suspect": liar})).status_code == 409
     await client.get("/v1/cases/w098", headers=c)
-    clock(content.opens_at(wk) + timedelta(hours=13))
+    clock(content.opens_at(wk) + timedelta(hours=25))
     r = await client.post("/v1/cases/w098/liar", headers=c, json={"suspect": liar})
     assert r.status_code == 409 and r.json()["detail"] == "night1_closed"
 
@@ -212,7 +213,7 @@ async def test_night1_solve_pays_the_bigger_bonus_and_earns_the_plaque(client, c
     assert "weekend_night1" in {x["id"] for x in r["gains"]["achievements"]}
 
     # solved on night 2: the normal reward, no bonus, no plaque
-    clock(content.opens_at(wk) + timedelta(hours=13))
+    clock(content.opens_at(wk) + timedelta(hours=25))
     b = (await new_player(client, "f3-solve-b"))["headers"]
     await client.get("/v1/cases/w098", headers=b)
     r = (await client.post("/v1/cases/w098/accuse", headers=b, json={"suspect": wk.culprit, "motive": sol["motive"]})).json()
@@ -226,7 +227,74 @@ async def test_case_list_tells_the_app_when_chapter_2_opens(client, clock, wk):
     lst = (await client.get("/v1/cases", headers=h)).json()
     assert lst["weekly"]["id"] == "w098" and lst["weekly"]["category"] in content.CATEGORIES
     assert lst["weekly_format"] == 3 and lst["weekly_next_chapter_at"] == int(content.weekly_all_open_at(wk).timestamp())
-    clock(content.opens_at(wk) + timedelta(hours=13))
+    clock(content.opens_at(wk) + timedelta(hours=25))
     lst = (await client.get("/v1/cases", headers=h)).json()
     assert lst["weekly_next_chapter_at"] is None
 
+
+
+def test_day2_opens_friday_morning_from_5_nov_and_a_writer_cannot_regress(wk):
+    """Amin, 30 Oct 2026: a format-3 weekend case published on or after 2026-11-05 opens day 2 at at_hours 24 (Friday 09:00).
+    Older cases (w004 and before) are exempt."""
+    assert content.WEEKEND_DAY2_AT_HOURS == 24 and content.WEEKEND_DAY2_FROM == "2026-11-05"
+    content.validate_weekly(wk.data)
+
+    def with_hours(publish, hours):
+        d = copy.deepcopy(wk.data)
+        d["publish"] = publish
+        d["chapters"][1]["at_hours"] = hours
+        return d
+
+    for bad in (12, 18, 30):
+        with pytest.raises(content.CaseError, match="24"):
+            content.validate_weekly(with_hours("2026-11-05", bad))
+        with pytest.raises(content.CaseError, match="24"):
+            content.validate_weekly(with_hours("2026-12-03", bad))
+    content.validate_weekly(with_hours("2026-10-29", 12))      # w004 (live before the change) is exempt
+    content.validate_weekly(with_hours("2026-11-05", 24))
+    # the real files written for the new rule
+    for name in ("w005", "w006", "w007"):
+        assert content.weekly_by_id(name).data["chapters"][1]["at_hours"] == 24, name
+    assert content.weekly_by_id("w004").data["chapters"][1]["at_hours"] == 12
+    for c in content.weekly_cases():                            # every real format-3 file passes the guard
+        content.validate_weekly(c.data)
+
+
+async def test_lost_weekend_case_second_chance_is_cheap_pays_archive_and_stays_off_the_weekly_board(client, clock, wk):
+    """Amin, 31 Oct 2026: after 3 wrong accusations the live weekend case is closed with a clear price (the plain weekend
+    archive price, not double); the paid second chance pays archive coins, and never counts for the weekly board."""
+    from sqlalchemy import select, update
+
+    from app import db
+    from app.models import CaseProgress, Player
+
+    clock(content.opens_at(wk) + timedelta(hours=1))
+    p = await new_player(client, "f3-lost")
+    h, pid = p["headers"], p["player_id"]
+    sol = wk.data["solution"]
+    diff = wk.data.get("difficulty")
+    price = eco.WEEKEND_ARCHIVE_PRICES[eco.difficulty_level(diff) - 1]
+    await client.get("/v1/cases/w098", headers=h)
+    wrong = next(s["id"] for s in wk.data["suspects"] if s["id"] not in (wk.culprit, _newcomer(wk)))
+    for _ in range(eco.MAX_ATTEMPTS):
+        r = (await client.post("/v1/cases/w098/accuse", headers=h, json={"suspect": wrong, "motive": sol["motive"]})).json()
+    assert r["result"] == "failed"
+    closed = await client.get("/v1/cases/w098", headers=h)
+    assert closed.status_code == 402 and closed.json()["detail"] == {"error": "locked", "cost": price, "lost": True}
+    row = (await client.get("/v1/cases", headers=h)).json()["weekly"]
+    assert row["failed"] and row["locked"] and row["unlock_cost"] == price
+    assert row["base_solve_rewards"] == {str(s): eco.solve_reward(diff, s) for s in (1, 2, 3)} \
+        or row["base_solve_rewards"] == {s: eco.solve_reward(diff, s) for s in (1, 2, 3)}   # archive coins, as the retry pays
+    async with db.SessionLocal() as s:
+        await s.execute(update(Player).where(Player.id == pid).values(coins=2000))
+        await s.commit()
+    assert (await client.post("/v1/cases/w098/unlock", headers=h, json={"expected_cost": price * 2})).status_code == 409
+    ok = await client.post("/v1/cases/w098/unlock", headers=h, json={"expected_cost": price})
+    assert ok.status_code == 200, ok.text
+    assert (await client.get("/v1/me", headers=h)).json()["coins"] == 2000 - price
+    won = (await client.post("/v1/cases/w098/accuse", headers=h, json={"suspect": wk.culprit, "motive": sol["motive"]})).json()
+    assert won["result"] == "solved" and won["early_bonus"] == 0
+    assert won["reward"] == eco.solve_reward(diff, won["stars"])           # archive coins, never the live weekend reward
+    async with db.SessionLocal() as s:
+        prog = await s.scalar(select(CaseProgress).where(CaseProgress.player_id == pid, CaseProgress.case_id == "w098"))
+        assert prog.solved and prog.ranked is False                         # not on the weekly board

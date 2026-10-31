@@ -705,7 +705,17 @@ class _HomeScreenState extends State<HomeScreen> {
       line: line,
       lineColor: color,
       badge: const NewTag('weekend_tab'),
-      onTap: () => MainShell.tab.value = MainShell.weekend,
+      onTap: () {
+        final w = cs.weekly;
+        // a lost weekend case opens the same second-chance flow as the weekend tab (price, confirm, shop), not an error
+        if (w != null && w.failed && !w.solved) {
+          openCaseRow(context, w).then((_) {
+            if (mounted) _load();
+          });
+        } else {
+          MainShell.tab.value = MainShell.weekend;
+        }
+      },
     );
   }
 

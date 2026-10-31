@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../services/sound.dart';
 import '../theme.dart';
@@ -30,6 +31,11 @@ class MainShell extends StatefulWidget {
   /// True while a weekend case is open and not yet solved or lost (the home screen sets it): a small dot on the tab.
   static final ValueNotifier<bool> weekendOpen = ValueNotifier(false);
 
+  /// How the app is left after «بله» in the exit dialog. Tests replace it (a real [SystemNavigator.pop] ends the test).
+  static void Function() exitApp = () {
+    SystemNavigator.pop();
+  };
+
   /// Story mode is not a tab any more: it opens as a normal screen (from «تازه‌ها» on the home screen).
   static Future<void> openStory(BuildContext context) async {
     Sfx.i.ambient('music_story', volume: Sfx.musicVolume);
@@ -47,6 +53,7 @@ class _MainShellState extends State<MainShell> {
   // a tab other than home is rebuilt each time it is opened, so it shows fresh data
   final List<int> _visits = List.filled(MainShell.count, 0);
   final Set<int> _seen = {MainShell.home}; // tabs are built the first time they are opened
+  bool _exitDialogOpen = false; // two quick back presses must never stack two dialogs
 
   @override
   void initState() {
@@ -104,6 +111,35 @@ class _MainShellState extends State<MainShell> {
     }
   }
 
+  /// Android back on the home tab: ask before leaving. «خیر» (or back again while it is open) just closes the dialog.
+  Future<void> _confirmExit() async {
+    if (_exitDialogOpen || !mounted) return;
+    _exitDialogOpen = true;
+    final leave = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        key: const ValueKey('exit-dialog'),
+        backgroundColor: K.paper,
+        scrollable: true, // long texts on a small phone / large font
+        content: Text('می‌خوای از برنامه خارج بشی؟', style: tDisplay(18, color: K.ink)),
+        actions: [
+          TextButton(
+              key: const ValueKey('exit-no'),
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text('خیر', style: tBody(15, color: K.inkSoft))),
+          FilledButton(
+            key: const ValueKey('exit-yes'),
+            style: FilledButton.styleFrom(backgroundColor: K.stamp),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text('بله', style: tBody(15, color: Colors.white, w: FontWeight.w700)),
+          ),
+        ],
+      ),
+    );
+    _exitDialogOpen = false;
+    if (leave == true) MainShell.exitApp();
+  }
+
   Widget _page(int i) => switch (i) {
         MainShell.home => const HomeScreen(),
         MainShell.weekend => WeekendScreen(key: ValueKey('wk${_visits[i]}')),
@@ -123,10 +159,15 @@ class _MainShellState extends State<MainShell> {
     return ValueListenableBuilder<int>(
       valueListenable: MainShell.tab,
       builder: (context, current, _) => PopScope(
-        // back on another tab goes home first; back on home leaves the app
-        canPop: current == MainShell.home,
+        // back on another tab goes home first; back on home asks «می‌خوای از برنامه خارج بشی؟» (never leaves at once)
+        canPop: false,
         onPopInvokedWithResult: (didPop, _) {
-          if (!didPop) MainShell.tab.value = MainShell.home;
+          if (didPop) return;
+          if (current != MainShell.home) {
+            MainShell.tab.value = MainShell.home;
+          } else {
+            _confirmExit();
+          }
         },
         child: Scaffold(
           body: IndexedStack(index: current, children: [for (int i = 0; i < MainShell.count; i++) _seen.contains(i) ? _page(i) : const SizedBox.shrink()]),

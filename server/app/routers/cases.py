@@ -202,7 +202,7 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
         s = c.summary()
         return CaseRow(**s, today=today is not None and c.id == today.id,
                        weekend=content.is_weekly(c.id), locked=not _can_open(c, p, player, today), unlock_cost=_unlock_cost(c, p, offers),
-                       base_solve_rewards={stars: eco.solve_reward(c.data.get("difficulty"), stars, live_weekend=_weekly_live(c)) for stars in (1, 2, 3)},
+                       base_solve_rewards={stars: eco.solve_reward(c.data.get("difficulty"), stars, live_weekend=_weekly_live(c) and not (p and (p.unlocked or (p.failed and not p.solved)))) for stars in (1, 2, 3)},
                        solved=bool(p and p.solved), failed=bool(p and p.failed),
                        stars=p.stars if p else 0, solvers=int(counts.get(c.id, 0)),
                        rating_avg=rated.get(c.id, (0.0, 0, 0))[0], rating_count=rated.get(c.id, (0.0, 0, 0))[1],
@@ -327,6 +327,9 @@ async def _daily_rank(session: AsyncSession, case_id: str, stars: int, seconds: 
 @router.post("/{case_id}/accuse", response_model=AccuseOut)
 async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_player),
                  session: AsyncSession = Depends(get_session)):
+    # One accusation at a time per player: the streak, the insurance, the coins and "was it solved already" are read and
+    # written under the player lock, so two simultaneous solves can never settle or pay twice (31 Oct 2026).
+    player = (await lock_players(session, [player.id]))[player.id]
     c = _opened_case(case_id, player)
     p = await _progress(session, player.id, c.id)
     if p is None or not _can_open(c, p, player):
@@ -350,7 +353,10 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         p.first_accused = body.suspect  # the player's first instinct, for the "what others thought" stats
 
     weekly = content.is_weekly(c.id)
-    live = _weekly_live(c)  # an expired weekend case in the archive pays like a normal archive case
+    weekly_open = _weekly_live(c)
+    # an expired weekend case in the archive pays like a normal archive case; so does a PAID second chance on the live one
+    # (Amin, 31 Oct 2026): it costs the weekend archive price, pays archive coins, and never counts for the weekly board
+    live = weekly_open and not p.unlocked
     right_motive = not weekly or body.motive == c.data["solution"].get("motive")
     # two-part accusation (format 2): who + why/how. Culprit right = solved (3 stars if the second part is right too,
     # at most 2 if not); culprit wrong = a try is lost and the case stays open. Older cases: culprit + proof + motive.
@@ -364,7 +370,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
             natural = min(natural, 2)
         # proof of investigation: without enough time and interrogations it is still solved, but 1 star, no place
         proven = ac.proof_ok(p, c)
-        paid_retry = today_case and bool(p.unlocked)  # today's case played again after a loss: pays and counts, but no board place
+        paid_retry = (today_case or weekly_open) and bool(p.unlocked)  # today's case played again after a loss: pays and counts, but no board place
         depth_pass, depth_why = ac.depth_ok(p, c)
         p.stars, p.ranked = (natural if proven else 1), proven and not paid_retry and depth_pass
         unranked_reason = "retry" if paid_retry else "time" if not proven else "depth" if not depth_pass else ""
@@ -381,37 +387,37 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         if live and right_motive and content.now_local() < content.weekly_all_open_at(c):
             early_bonus = eco.WEEKLY_EARLY_BONUS  # solved before the last chapter opened
             reward += early_bonus
-        freezes_used, badge, milestone, streak_up = 0, None, None, False
+        freezes_used, badge, milestone, streak_up, warrant_step = 0, None, None, False, None
         if today_case:
             reward += eco.DAILY_BONUS
             # the streak counts daily cases in a row (by case, not by calendar day,
             # because a daily case stays "today's case" from 21:00 to 21:00)
             mine = c.publish.isoformat()
             if player.last_daily_solved != mine:
-                missed = _missed_between(player.last_daily_solved, c)
-                held = player.streak_freezes or 0
-                if missed == 0:
-                    player.streak += 1
-                elif missed is not None and 0 < missed <= held and player.streak > 0:
-                    # streak insurance covers the missed cases
-                    player.streak_freezes = held - missed
-                    freezes_used = missed
-                    player.streak += 1
-                else:
-                    player.streak = 1
-                player.best_streak = max(player.best_streak, player.streak)
-                player.last_daily_solved = mine
-                streak_up = True
-                if player.streak % eco.STREAK_BONUS_EVERY == 0:
-                    reward += eco.STREAK_BONUS
-                if player.streak in eco.STREAK_BADGES:
-                    badge = player.streak
-                if player.streak in eco.STREAK_MILESTONES:
-                    milestone = player.streak  # the new apps celebrate every step of the ladder (badge is only 7/30/100)
+                # settle the calendar first (app/streakrepair.py): insurance spent for the missed nights, a broken
+                # streak marked. Under the player lock, so two simultaneous solves can never spend it twice.
+                st = streakrepair.settle(player)
+                freezes_used = st["covered"]
+                if player.last_daily_solved != mine:
+                    if _missed_between(player.last_daily_solved, c) == 0:
+                        player.streak += 1
+                        base = st["base"]
+                    else:
+                        player.streak, base = 1, 0
+                    player.best_streak = max(player.best_streak, player.streak)
+                    player.last_daily_solved = mine
+                    streak_up = True
+                    # rewards fire by CROSSING a threshold above `base` (the last value already rewarded), so a jump
+                    # over 7 (covered nights + this one) pays once and never twice
+                    reward += eco.STREAK_BONUS * (player.streak // eco.STREAK_BONUS_EVERY - base // eco.STREAK_BONUS_EVERY)
+                    badge = streakrepair.crossed(base, player.streak, eco.STREAK_BADGES)
+                    milestone = streakrepair.crossed(base, player.streak, eco.STREAK_MILESTONES)  # the apps celebrate every step (badge is only 7/30/100)
+                    warrant_step = streakrepair.crossed(base, player.streak, eco.STREAK_WARRANTS)
+                    player.stats = {**(player.stats or {}), "streak_paid": player.streak}
         # story warrants are scarce (economy.warrants_for_solve): the first solve ever, a streak milestone, every
         # second live weekend case. Tonight's case and the daily missions no longer give one.
         warrants = eco.warrants_for_solve(first_ever=(player.cases_solved or 0) == 0, streak_up=streak_up,
-                                          streak=player.streak, live=live,
+                                          streak=warrant_step or player.streak, live=live,
                                           live_solved_before=int((player.stats or {}).get("weekly_solved", 0)))
         # a case the admin reset (services/case_reset.py) can be solved again, but pays and counts nothing twice
         replay = case_reset.was_reset(player, c.id)
@@ -441,7 +447,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         return AccuseOut(result="solved", unranked=not p.ranked, stars_capped=natural > p.stars,
                          ranked=p.ranked, unranked_reason=unranked_reason, depth=ac.depth_summary(p, c),
                          attempts_left=eco.MAX_ATTEMPTS - p.attempts, stars=p.stars,
-                         reward=reward, coins=player.coins, streak=player.streak, explanation=explanation,
+                         reward=reward, coins=player.coins, streak=streakrepair.shown_streak(player), explanation=explanation,
                          culprit=c.culprit, proof=sorted(c.proof), rank=rank, progress=_progress_out(c, p),
                          seconds=p.seconds, hints_used=p.hints, freezes_used=freezes_used, badge=badge, streak_milestone=milestone,
                          gains=GainsOut(**gains.out()), story=story_extra(c, p) if content.is_story(c.id) else None,
@@ -456,7 +462,7 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         _note_wrong(p, body, near)
         await session.commit()
         return AccuseOut(result=near, attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
-                         streak=player.streak, progress=_progress_out(c, p))
+                         streak=streakrepair.shown_streak(player), progress=_progress_out(c, p))
     p.attempts += 1
     # Before investigation, ALL rejected accusations have the same public result
     # and history shape. Neither the verdict nor metadata identifies the culprit.
@@ -469,14 +475,14 @@ async def accuse(case_id: str, body: AccuseIn, player: Player = Depends(current_
         await story_finish(session, player.id, c.id, p)
         await session.commit()
         shown = ac.answer_visible(p)
-        return AccuseOut(result="failed", attempts_left=0, coins=player.coins, streak=player.streak,
+        return AccuseOut(result="failed", attempts_left=0, coins=player.coins, streak=streakrepair.shown_streak(player),
                          explanation=explanation if shown else None, culprit=c.culprit if shown else None,
                          proof=sorted(c.proof) if shown else [], answer_at=ac.answer_at_ts(p),
                          progress=_progress_out(c, p), hints_used=p.hints, gains=GainsOut(**gains.out()),
                          story=story_extra(c, p) if content.is_story(c.id) else None)
     await session.commit()
     return AccuseOut(result=result, attempts_left=eco.MAX_ATTEMPTS - p.attempts, coins=player.coins,
-                     streak=player.streak, progress=_progress_out(c, p))
+                     streak=streakrepair.shown_streak(player), progress=_progress_out(c, p))
 
 
 @router.post("/{case_id}/show", response_model=ShowOut)

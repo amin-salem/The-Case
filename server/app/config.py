@@ -70,9 +70,9 @@ class Settings(BaseSettings):
     depth_require_report: bool = False  # true: an app that never reports depth (an old app) is gated too
 
     # Fair daily reward (docs/operations.md «Leaked answers»): a small draw among ranked 3-plaque solvers, and a weekly
-    # board that rewards consistency (nights solved, then nights solved on time, then plaques, speed only breaks ties).
+    # board: plaques first, then nights solved, then nights solved on time, then speed (since 31 Oct 2026).
     daily_draw_enabled: bool = False  # OFF since 24 Oct 2026 (Amin): no draws, no winner messages. DAILY_DRAW_ENABLED=true turns it back on
-    week_rank_mode: str = "consistency"  # WEEK_RANK_MODE=points restores the old order (plaques first)
+    week_rank_mode: str = "points"  # plaques, nights, on-time nights, speed. WEEK_RANK_MODE=consistency restores the 22-31 Oct order (nights first)
 
     # Rewarded ads pay coins only when a real ad network is in the app.
     ads_enabled: bool = False

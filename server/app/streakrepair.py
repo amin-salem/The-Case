@@ -1,7 +1,14 @@
 """Streak repair and the live streak shown to other players (Amin, 16 Oct 2026).
 
-The streak is stored lazily: `Player.streak` only drops to 1 when the player next solves a daily case, so a broken
-streak keeps its old number until then. Two things need to know whether it is really alive:
+Streak insurance like Duolingo (Amin, 30 Oct 2026): the streak and the insurance are SETTLED against the calendar,
+not at the next solve. `effective_streak(player, now)` is the one pure function that says what a player's streak and
+insurance are RIGHT NOW: the night a daily case is missed, one insurance is spent (and the night counts as one of the
+streak's nights); without enough insurance the streak shows 0 at once. Everything that shows a streak uses it. Nothing
+is written on a plain GET (two workers would race): the stored fields are settled by `settle()` inside the write paths
+that already hold the player lock (solve, buy insurance, repair). The repair offer still reads the stored (old) streak.
+
+Older note: the stored `Player.streak` used to drop to 1 only when the player next solved. Things that need to know
+whether it is really alive:
 
 - the repair offer: the player missed EXACTLY ONE daily case, the case after it opened less than 24 hours ago, no
   streak insurance covers the gap, and nobody has repaired this break yet. The server decides, never the app;
@@ -34,6 +41,83 @@ def missed_between(last_solved: str, c) -> int | None:
     return cases.index(c) - last - 1
 
 
+def _calendar(now: datetime | None):
+    """(daily cases, index of the publish date, index of today's case or None)."""
+    cases = content.all_cases()
+    today = content.todays_case(now or content.now_local())
+    return cases, ({c.publish.isoformat(): i for i, c in enumerate(cases)}), (cases.index(today) if today else None)
+
+
+def _effective(p: Player, cal) -> tuple[int, int, int, bool, int | None]:
+    """(streak, freezes, covered, broken, missed). `missed` = daily cases strictly between the last one solved and
+    today's case (today's own unsolved case is NOT missed); None when it cannot be told."""
+    cases, index, today_i = cal
+    streak, freezes = int(p.streak or 0), int(p.streak_freezes or 0)
+    last = p.last_daily_solved or ""
+    if streak <= 0 or not last or today_i is None or last not in index:
+        return streak, freezes, 0, False, None
+    missed = today_i - index[last] - 1
+    if missed <= 0:
+        return streak, freezes, 0, False, missed
+    # a break already recorded by a write path stays a break (insurance bought AFTER the miss never covers it)
+    if (p.stats or {}).get("streak_broken") == last:
+        return 0, freezes, 0, True, missed
+    if missed <= freezes:
+        return streak + missed, freezes - missed, missed, False, missed
+    return 0, freezes, 0, True, missed
+
+
+def effective_streak(p: Player, now: datetime | None = None) -> tuple[int, int, int, bool]:
+    """What the streak and the insurance of this player are right now: (streak, freezes, covered, broken).
+    Pure: no query, no write. All-or-nothing: the missed nights are covered only when the player holds at least as
+    many insurances as missed cases (and has a streak); otherwise the streak is broken (shows 0) and the insurances
+    stay untouched. `covered` = nights covered by insurance (they count as nights of the streak)."""
+    s, f, covered, broken, _ = _effective(p, _calendar(now))
+    return s, f, covered, broken
+
+
+def shown_streak(p: Player, now: datetime | None = None) -> int:
+    return effective_streak(p, now)[0]
+
+
+def shown_freezes(p: Player, now: datetime | None = None) -> int:
+    return effective_streak(p, now)[1]
+
+
+def settle(p: Player, now: datetime | None = None) -> dict:
+    """PERSIST effective_streak() into the stored fields. Call only under the player lock, inside a write path, before
+    the action. Idempotent: after it the player has no missed case left (covered) or carries the broken marker.
+    Returns {covered, broken, base}: `base` is the streak value up to which streak rewards were already evaluated (a
+    reward fires when the streak CROSSES a threshold above it, so a jump over 7 pays once and never twice)."""
+    cal = _calendar(now)
+    cases, index, today_i = cal
+    pre = int(p.streak or 0)
+    s, f, covered, broken, missed = _effective(p, cal)
+    stats = p.stats or {}
+    paid = stats.get("streak_paid")
+    base = paid if isinstance(paid, int) and 0 <= paid <= pre else pre
+    if covered:
+        p.streak, p.streak_freezes = s, f
+        p.best_streak = max(p.best_streak or 0, s)
+        p.last_daily_solved = cases[today_i - 1].publish.isoformat()  # the case before today's: nothing missed any more
+        if paid != base:
+            p.stats = {**(p.stats or {}), "streak_paid": base}  # a later solve still pays what these nights crossed
+        log.info("streak_insurance decision=spent nights=%d left=%d streak=%d", covered, f, s)
+    elif broken:
+        last = p.last_daily_solved or ""
+        if stats.get("streak_broken") != last:
+            p.stats = {**stats, "streak_broken": last}  # the stored streak stays: the repair offer still knows it
+            log.info("streak_insurance decision=broken missed=%s held=%d streak=%d", missed, f, pre)
+        base = 0
+    return {"covered": covered, "broken": broken, "base": base}
+
+
+def crossed(base: int, streak: int, ladder) -> int | None:
+    """The highest step of `ladder` crossed when a streak goes from `base` to `streak` (None if none)."""
+    hit = [m for m in ladder if base < m <= streak]
+    return max(hit) if hit else None
+
+
 def repair_offer(p: Player, now: datetime | None = None) -> dict | None:
     """The repair this player may buy right now, or None. {key, streak, price, bridge}: `key` names the break (the
     publish date of the last daily case solved), `bridge` is the publish date of the missed case."""
@@ -43,9 +127,9 @@ def repair_offer(p: Player, now: datetime | None = None) -> dict | None:
     last = p.last_daily_solved or ""
     if streak < eco.REPAIR_MIN_STREAK or not last or last == (p.streak_repair_mark or ""):
         return None
-    if (p.streak_freezes or 0) >= 1:
-        return None  # the insurance already covers a single missed case
     now = now or content.now_local()
+    if _effective(p, _calendar(now))[2]:
+        return None  # the insurance covers the missed case
     today = content.todays_case(now)
     if today is None or content.is_weekly(today.id) or content.is_story(today.id):
         return None
@@ -59,25 +143,17 @@ def repair_offer(p: Player, now: datetime | None = None) -> dict | None:
 
 
 class LiveStreak:
-    """Is a stored streak still alive? Built once per request; `of(player)` is then a dictionary lookup."""
+    """The streak to show others, settled against the calendar. Built once per request; `of(player)` is then cheap."""
 
     def __init__(self, now: datetime | None = None):
-        now = now or content.now_local()
-        today = content.todays_case(now)
-        self.keys: set[str] = set()
-        if today is not None:
-            cases = content.all_cases()
-            i = cases.index(today)
-            self.keys.add(today.publish.isoformat())
-            if i > 0:
-                self.keys.add(cases[i - 1].publish.isoformat())
+        self.cal = _calendar(now)
 
     def of(self, p: Player) -> int:
-        """The streak to show others: 0 once the last daily case solved is older than yesterday's. (A player holding
-        insurance may still be alive; the board is conservative and shows no flame for him until he plays.)"""
-        if (p.last_daily_solved or "") not in self.keys:
+        """0 once a missed case is not covered by insurance (a covered night counts as a night of the streak)."""
+        if self.cal[2] is None or (p.last_daily_solved or "") not in self.cal[1]:
             return 0
-        return max(0, min(int(p.streak or 0), MAX_SHOWN_STREAK))
+        s = _effective(p, self.cal)[0]
+        return max(0, min(s, MAX_SHOWN_STREAK))
 
 
 def log_decision(decision: str, streak: int = 0, price: int = 0) -> None:
