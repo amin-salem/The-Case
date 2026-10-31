@@ -82,25 +82,20 @@ def test_c038_stack_order_reverses_writing_order():
     assert content.by_id("c038").culprit == "s1"
 
 
-def test_c039_cash_impossible_at_entry_even_at_worst_scale_tolerances():
-    gross, trolley, suitcase_a, suitcase_b, error, shell, contents, sample_count, sample_weight, sample_error = numbers(clue("c039", "e1"))
-    # The raw measurement sheet and human manifest are distinct sources.
-    assert '«الف» چمدان بزرگ، «ب» چمدان کوچک و «پ» کیف دستی' in clue("c039", "e2")
-    assert 'با بارِ «پ»' in clue("c039", "e3")
+def test_c039_bag_was_already_light_at_the_scale():
+    grams = lambda t: [int(n) for n in re.findall(r"(\d+) گرم", t)]
+    gross, trolley, suitcase_a, suitcase_b = grams(clue("c039", "e1"))
+    assert '«الف» چمدانِ بزرگ، «ب» چمدانِ کوچک، «پ» کیفِ دستی' in clue("c039", "e1")
     handbag = gross - trolley - suitcase_a - suitcase_b
-    max_handbag = handbag + 4 * error
-    claim = content.by_id("c039").data["suspects"][1]["statement"]
-    assert "پنج‌هزار اسکناس صد‌هزارتومنی" in claim
-    min_cash = 5000 // sample_count * (sample_weight - sample_error)
-    assert min_cash > max_handbag
-    assert contents + shell == handbag
-    assert min_cash + shell - error > max_handbag
-    # Equal mass does not establish equal contents. The case uses separate
-    # custody before the scale to attribute the provable large cash deficit.
-    assert "دوربینِ سالن زیپ کیف را پیوسته نشان نمی‌دهد" in clue("c039", "e5")
-    assert "راه ورود به آن فقط همین زیپ" in clue("c039", "e3")
-    # Five measured, wrapped bundles fit the helper's observed tote without
-    # assuming an unseen exit or accomplice.
-    dimensions = numbers(clue("c039", "e4"))[-3:]
-    assert 5 * prod(dimensions) / 1000 == 10  # cm³ -> litres
-    assert "دوازده لیتر" in clue("c039", "e5")
+    shell, contents = grams(clue("c039", "e2"))
+    assert shell + contents == handbag == 1700      # nothing changed after the scale
+    assert "پنج بسته‌ی هزارتایی" in clue("c039", "e3") and "یه کیلو" in clue("c039", "e3")
+    assert 5 * 1000 > handbag                        # the cash could not be in the bag at 20:14
+    scale = _times(clue("c039", "e1"))[0]               # 20:14
+    handover = _times(clue("c039", "e4"))
+    assert all(t < scale for t in handover[:4])      # the only unseen custody is before the scale
+    assert "نارنجی" in clue("c039", "e4")
+    cards = clue("c039", "e5")
+    assert "فقط یک نارنجی، شماره‌ی ۷" in cards and _times(cards)[0] < handover[0]
+    culprit = content.by_id("c039").data["suspects"][4]
+    assert culprit["id"] == "s5" and "نه کم بیست رسیدم" in culprit["statement"]
