@@ -1,8 +1,15 @@
-# server 1.44.1: c039, c040 re-reviewed (Astra cases, 31 Oct 2026)
+# server 1.44.2: c039, c040 re-reviewed (Astra cases, 31 Oct 2026)
 
 - c039 «کیفِ کنار پنجره» was rebuilt. The old version had dense, lawyer-style cards (±50 g tolerances, bag volume in litres, an 80-second room interval explained three times). One CCTV card plus the card list named the carrier without the weight trick, and the explanation ran to about 500 words. It now has one plain timeline. The scale slip shows the handbag weighed 1.7 kg at 20:14, while the five money bundles weigh about 5 kg, so the money was gone before the scale and the shelf or empty-counter trail is false. A corridor camera shows the bag handed to a man with the night's only orange guest card (no. 7, activated at 19:50). That breaks Zarei's claim that he arrived at 20:40.
 - c040 «لیوانِ رزروشده» was tightened. The cards now give clock times, and the pantry film no longer shows which label shape was closed first. The case now turns on the wrong victim: Aram drank Georg's cup, so the naive reading (Aram's own cup, open until 19:14, Rafael's hidden hand) points the wrong way. Dangling questions were removed (a "drawer report", "copying tools"), «گورگ» was changed to «گئورگ», and the intro wording was fixed.
 - All tool lines in both cases were rewritten under rules §10b. Culprits and publish dates are unchanged. Fresh blind tests rated c039 2.5-3/5 and c040 4/5. Details are in `docs/case-log.md`.
+
+# server 1.44.1: c041, c042 re-reviewed, c025 re-checked (Astra series c025-c042 closed, 31 Oct 2026)
+
+- c041 «نمونه‌ای که از فرش نبود»: one timed truth for the two samples and two envelopes; plain cards; fixed questions that presumed things the suspects never said, the buyer's colour-sample lie made testable, Rana/Shida gap closed, «شهر سروان» removed, new §10b tool lines. Culprit and publish date unchanged.
+- c042 «پیوستِ نسخهٔ چهار»: rebuilt as one clear chain (certificate on disk -> disk swap at repair -> handover by body number -> the only expense approval), removed the swapped-own-laptop hole, two «sister company» threads, Hamed's self-contradicting statement, witness «رعنا» (same name as c041), «شهر سروان»; new §10b tool lines. Culprit and publish date unchanged.
+- c025 (already published 23 Oct): only real errors fixed: the doctor handed medicine to Mahnaz while she was out, the gift box went to Siavash's own car (now his father's), Siavash denying what his own statement said, a question presuming Zari's words, who posted the will in the family group, proof cards now e5+e8+e9 (was e9 only; players who chose e9 stay correct).
+- No migration. Redeploy from Liara is optional (content only; c041/c042 open 8-9 Nov).
 
 # server 1.44.0 + app 1.41.0+82: streak insurance by the night, board order, lost weekend case, weekend days (31 Oct 2026, one slot)
 
