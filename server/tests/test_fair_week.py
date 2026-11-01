@@ -229,7 +229,7 @@ async def test_a_prize_needs_two_cases(client, clock, single_board, week_of_fake
 def test_league_thresholds_follow_the_rank_titles():
     from app import economy as eco
     assert weekboard.league_min_xp() == (0, eco.RANKS[4][0], eco.RANKS[8][0], eco.RANKS[12][0])
-    assert [weekboard.league_for_xp(x) for x in (0, 599, 600, 2499, 2500, 6499, 6500, 99999)] == [0, 0, 1, 1, 2, 2, 3, 3]
+    assert [weekboard.league_for_xp(x) for x in (0, 1599, 1600, 5599, 5600, 13499, 13500, 99999)] == [0, 0, 1, 1, 2, 2, 3, 3]
 
 
 async def test_league_snapshot_is_stable_and_a_player_is_in_one_league(client, clock, leagues, week_of_fake_cases):

@@ -27,8 +27,9 @@ def clock(monkeypatch):
 def test_rank_table():
     assert eco.rank_of(0) == 0 and eco.RANKS[0][1] == "کارآگاه تازه‌کار"
     assert eco.RANKS[-1][1] == "اسطوره‌ی کارآگاهی" and len(eco.RANKS) == 19
-    # the first nine thresholds are the old ones: nobody lost a title when ranks were added
-    assert [x for x, t in eco.RANKS if t in ("کارآگاه", "کارآگاه ارشد", "بازرس", "سربازرس", "افسانه")] == [600, 1300, 2500, 4200, 15000]
+    # thresholds raised on 1 Nov 2026 (migration 0035 lifts existing players so nobody loses a title)
+    assert [x for x, t in eco.RANKS if t in ("کارآگاه", "کارآگاه ارشد", "بازرس", "سربازرس", "افسانه")] == [1600, 3200, 5600, 9000, 29000]
+    assert [x for x, _ in eco.RANKS][:4] == [0, 250, 550, 1000] and eco.RANKS[-1][0] == 50000
     assert [x for x, _ in eco.RANKS] == sorted({x for x, _ in eco.RANKS})
     for i, (need, _) in enumerate(eco.RANKS):
         assert eco.rank_of(need) == i
@@ -90,3 +91,37 @@ async def test_failed_case_gives_a_little_xp(client, clock):
 async def test_config_lists_ranks(client):
     e = (await client.get("/v1/config")).json()["economy"]
     assert e["ranks"][0] == {"xp": 0, "title": eco.RANKS[0][1]} and len(e["ranks"]) == len(eco.RANKS)
+
+
+async def test_migration_0035_keeps_every_rank_and_is_idempotent(client):
+    """Raising the thresholds must not demote anyone: a player is lifted to the new threshold of the rank held under the
+    old table (and nobody is lowered). Runs the migration's own SQL on the suite's database (SQLite and PostgreSQL)."""
+    import importlib.util
+    from pathlib import Path
+    from sqlalchemy import select, text
+    from app import db
+    from app.models import Player
+    spec = importlib.util.spec_from_file_location("m0035", Path(__file__).resolve().parent.parent / "alembic/versions/0035_rank_thresholds.py")
+    mig = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mig)
+    old = [0, 100, 200, 400, 600, 900, 1300, 1900, 2500, 3300, 4200, 5300, 6500, 8000, 10000, 12500, 15000, 20000, 30000]
+    new = [x for x, _ in eco.RANKS]
+    xps = [0, 99, 100, 150, 599, 600, 899, 1900, 2305, 4299, 5000, 12499, 29999, 30000, 60000]
+    cases = [(xp, max(xp, new[max(i for i, x in enumerate(old) if xp >= x)])) for xp in xps]
+    ids = []
+    for i, (xp, _) in enumerate(cases):
+        p = await new_player(client, f"mig-rank-{i}")
+        ids.append(p["player_id"])
+        async with db.SessionLocal() as s:
+            (await s.get(Player, p["player_id"])).xp = xp
+            await s.commit()
+    for _ in range(2):  # the second run changes nothing
+        async with db.SessionLocal() as s:
+            await s.execute(text(mig.SQL))
+            await s.commit()
+        async with db.SessionLocal() as s:
+            for pid, (xp, want) in zip(ids, cases):
+                got = (await s.scalar(select(Player.xp).where(Player.id == pid)))
+                assert got == want, (xp, got, want)
+                held = max(i for i, x in enumerate(old) if xp >= x)
+                assert eco.rank_of(got) >= held  # never demoted

@@ -1,3 +1,11 @@
+# server 1.46.0: wider gaps between detective ranks (1 Nov 2026, urgent)
+
+- Amin: the gaps between ranks were too small. The 19 XP thresholds are raised (first steps about 2.5x, top about 1.6x): 0, 250, 550, 1000, 1600, 2300, 3200, 4300, 5600, 7200, 9000, 11000, 13500, 16500, 20000, 24000, 29000, 36000, 50000 (was 0, 100, 200, 400, 600, 900, 1300, 1900, 2500, 3300, 4200, 5300, 6500, 8000, 10000, 12500, 15000, 20000, 30000). Titles and the number of ranks are unchanged. A 3-star nightly case is about 75 XP, so the first rank-up takes about 4 nights instead of 2.
+- Nobody is demoted: migration `0035` (data only, same SQL on SQLite and PostgreSQL, idempotent) lifts every player to the NEW threshold of the rank they held under the OLD table; their progress inside the rank starts again at its bottom. XP is never lowered.
+- Leagues follow the rank index, so they keep the same ranks: «کارآگاه» league from 1600 XP, «بازرس» from 5600, «سرپرست» from 13500. Achievements and avatar frames look ranks up by index/title, so they are unchanged. The app reads the table from `/v1/meta`, no app change.
+- Tests: `test_rank_table`, league thresholds, and a migration test (every rank kept, never lowered, second run changes nothing).
+- Deploy: redeploy from the Liara panel (the migration runs at start). No APK.
+
 # server 1.45.1: two new cases c055, c056 (31 Oct 2026)
 
 - c055 «هدیه از کدام طرف آمد؟» (publish 22 Nov 2026, conflicting accounts, difficulty 5) and c056 «محموله‌ای که نباید نجات پیدا می‌کرد» (publish 23 Nov 2026, crisis, difficulty 5). Ideas 3 and 4 of the idea bank. Fresh blind tests: c055 s5 95%, c056 s2 93%, no single card decides.

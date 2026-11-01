@@ -38,9 +38,9 @@ log = logging.getLogger("weekboard")
 # snapshot was taken (the start of the week). The row of a player always shows his CURRENT profile rank title; the league
 # only says which board he plays on this week. Leagues are named by their range, not by one rank title:
 #   0 تازه‌کار  = تازه‌کار .. کارآگاه کارآموز     (from 0 XP)
-#   1 کارآگاه   = کارآگاه .. بازپرس               (from RANKS[4], 600 XP)
-#   2 بازرس     = بازرس .. سرپرست پرونده‌ها        (from RANKS[8], 2500 XP)
-#   3 سرپرست    = کارآگاه نخبه .. اسطوره‌ی کارآگاهی (from RANKS[12], 6500 XP)
+#   1 کارآگاه   = کارآگاه .. بازپرس               (from RANKS[4], 1600 XP)
+#   2 بازرس     = بازرس .. سرپرست پرونده‌ها        (from RANKS[8], 5600 XP)
+#   3 سرپرست    = کارآگاه نخبه .. اسطوره‌ی کارآگاهی (from RANKS[12], 13500 XP)
 LEAGUE_DEFS = (("تازه‌کار", 0), ("کارآگاه", 4), ("بازرس", 8), ("سرپرست", 12))   # (name, first rank index of economy.RANKS)
 LEAGUES = tuple(n for n, _ in LEAGUE_DEFS)
 LEAGUE_FROM_RANK = tuple(r for _, r in LEAGUE_DEFS)
