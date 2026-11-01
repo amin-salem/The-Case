@@ -1,3 +1,11 @@
+# server 1.47.0: real users vs. throw-away rows in the admin panel (1 Nov 2026, urgent)
+
+- Amin: the player count overstates real people (two «مینا» rows for one phone). Cause found: the app's `device_id` is a random id kept in the app's own storage, NOT a hardware id; clearing data or reinstalling makes a new id and a new guest row, so the old row never shares a device id with the new one. The earlier «حساب‌های تکراری» check (same device id) only catches the newest orphan.
+- New grouping (`services/real_users.py`, read only, nothing is deleted or merged): **real** (solved a case or has a granted purchase), **tried** (opened a case, never solved, never paid), **empty** (never opened a case), **duplicate** (probably the same person as a newer row), **excluded** (tester, banned, load-test «smoke-load-» rows). Duplicate rules: (a) a guest with no solved case sharing the device id of a row that has an e-mail or phone; (b) two rows whose e-mail names (letters only, at least 5) start the same, e.g. maryam / maryamfarzaneh, where the older row went quiet by the time the newer one was created. Excluded rows are never marked.
+- Admin panel: the home screen cards now show real / active-7-days / tried / empty / probable duplicates / excluded; «بازیکن‌ها» opens on «واقعی» with a group filter and a «گروه» column (with the reason for a duplicate). `GET /admin/api/real-users`; `GET /admin/api/players?segment=`.
+- Limits: a row from an old app with no e-mail and a different device id cannot be linked (nothing connects it); it drops out of «active» after a few days. Examines the newest 20 000 rows. Tests in `tests/test_real_users.py` (also on PostgreSQL).
+- Deploy: redeploy from the Liara panel. No migration, no APK.
+
 # server 1.46.0: wider gaps between detective ranks (1 Nov 2026, urgent)
 
 - Amin: the gaps between ranks were too small. The 19 XP thresholds are raised (first steps about 2.5x, top about 1.6x): 0, 250, 550, 1000, 1600, 2300, 3200, 4300, 5600, 7200, 9000, 11000, 13500, 16500, 20000, 24000, 29000, 36000, 50000 (was 0, 100, 200, 400, 600, 900, 1300, 1900, 2500, 3300, 4200, 5300, 6500, 8000, 10000, 12500, 15000, 20000, 30000). Titles and the number of ranks are unchanged. A 3-star nightly case is about 75 XP, so the first rank-up takes about 4 nights instead of 2.

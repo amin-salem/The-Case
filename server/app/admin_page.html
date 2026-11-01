@@ -287,9 +287,9 @@ const VIEWS = {
     const d = await api('/admin/api/overview?days=14'), t = d.totals;
     const pend = await api('/admin/api/comments/cases').then(x => x.pending).catch(() => 0);
     const acw = await api('/admin/anticheat-watch?days=7').then(acHtml).catch(() => '<div class="ac"><h3>آنتی‌چیت: الان خوانده نشد</h3><p class="muted">چند لحظه بعد دوباره بزن.</p></div>');
-    const dup = await api('/admin/api/duplicate-accounts/summary').catch(() => null);
+    const dup = await api('/admin/api/real-users').catch(() => null);
     m.innerHTML = acw + `<div class="quick"><button class="${pend ? 'hot' : ''}" id="qc">💬 نظرهای در انتظار (${num(pend)})</button><button id="qm">✉ پیام / هدیه به همه</button><button id="qp">👥 بازیکن‌ها (بن، سکه)</button></div><div class="cards">${card(t.players,'کل بازیکن‌ها','👥','#e0a526')}${card(t.active_24h,'فعال ۲۴ ساعت','⚡','#5dae7e')}${card(t.active_7d,'فعال ۷ روز','📅','#8ab4f8')}${card(t.secured,'حساب امن‌شده (ایمیل)','🔒','#b48ead')}${card(t.cases_solved,'پرونده‌ی حل‌شده','✅','#5dae7e')}${card(t.coins_in_circulation,'سکه‌ی در گردش','🪙','#e0a526')}${card(t.banned,'بن‌شده','⛔','#d0543f')}</div>` +
-      (dup ? `<div class="cards">${card(dup.real_people_estimate,'کارآگاه‌های واقعی (تخمین)','🕵️','#8ab4f8')}${card(dup.probable_orphans,'حساب مهمان‌ِ یتیم (احتمالاً تکراری)','🔁','#d0543f')}${card(dup.devices,'دستگاه متفاوت','📱','#b48ead')}</div><p class="muted">از ${num(dup.players)} ردیف، حدود ${num(dup.probable_orphans)} تا مهمانِ بی‌پرونده‌اند که روی دستگاه یک حساب امن‌شده ساخته شده‌اند. <a href="#" id="qdup">فهرست حساب‌های تکراری</a></p>` : '') +
+      (dup ? `<div class="cards">${card(dup.real,'کارآگاه واقعی','🕵️','#5dae7e')}${card(dup.real_active_7d,'واقعیِ فعال ۷ روز','⚡','#8ab4f8')}${card(dup.tried,'امتحان‌کننده (حل نکرده)','🔎','#e0a526')}${card(dup.empty,'نصب بدون پرونده','📭','#b48ead')}${card(dup.duplicate,'تکراریِ محتمل','🔁','#d0543f')}${card(dup.excluded,'تستر / بن / آزمایشی','🧪','#9aa0a6')}</div><p class="muted">از ${num(dup.players)} ردیف، ${num(dup.real)} نفر واقعی‌اند (پرونده حل کرده‌اند یا خرید دارند). <a href="#" id="qdup">فهرست بازیکن‌ها بر اساس گروه</a></p>` : '') +
       chart('بازیکن‌های فعال در روز', d.days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', d.days, 'new', '#e0a526') +
       chart('پرونده‌ی باز شده', d.days, 'opened', '#8ab4f8') + chart('حل‌شده', d.days, 'solved', '#5dae7e') + chart('شکست', d.days, 'failed', '#d0543f') +
       chart('خرید موفق', d.days, 'purchases', '#e0a526') + chart('سکه‌ی دریافتی', d.days, 'coins_in', '#5dae7e') + chart('سکه‌ی خرج‌شده', d.days, 'coins_out', '#d0543f') +
@@ -298,7 +298,7 @@ const VIEWS = {
 
     acWire();
     $('#qc').onclick = () => go('comments'); $('#qm').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها'); $('#qp').onclick = () => go('players');
-    const qd = $('#qdup'); if (qd) qd.onclick = e => { e.preventDefault(); go('players', {dups: true}); };
+    const qd = $('#qdup'); if (qd) qd.onclick = e => { e.preventDefault(); VIEWS._pq = Object.assign(VIEWS._pq || {q: '', sort: 'last_seen', banned: false}, {segment: 'real'}); go('players'); };
   },
   async feed(m) {
     const draw = async () => {
@@ -312,15 +312,16 @@ const VIEWS = {
   async players(m, arg) {
     if (arg && arg.id) return VIEWS.player(m, arg.id);
     if (arg && arg.dups) return VIEWS.dups(m);
-    const st = VIEWS._pq || (VIEWS._pq = {q: '', sort: 'last_seen', banned: false});
+    const st = VIEWS._pq || (VIEWS._pq = {q: '', sort: 'last_seen', banned: false, segment: 'real'});
+    const SEG = {real: 'واقعی', tried: 'امتحان‌کننده', empty: 'بدون پرونده', duplicate: 'تکراری محتمل', excluded: 'تستر/بن/آزمایشی'};
     const load = async () => {
-      const d = await api(`/admin/api/players?q=${encodeURIComponent(st.q)}&sort=${st.sort}&only_banned=${st.banned}&limit=100`);
-      $('#plist').innerHTML = `<p class="muted">${num(d.total)} بازیکن</p><div class="scroll"><table><tr><th>نام</th><th>سکه</th><th>حل</th><th>ستاره</th><th>استریک</th><th>حساب</th><th>نسخه</th><th>ثبت‌نام</th><th>آخرین فعالیت</th></tr>` +
-        d.items.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.id.slice(0,6))} ${p.banned ? '<span class="tag banned">بن</span>' : ''}</td><td>${num(p.coins)}</td><td>${num(p.solved)}</td><td>${num(p.stars)}</td><td>${num(p.streak)}</td><td>${p.secured ? 'امن' : 'مهمان'}</td><td>${num(p.app_version)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('') + '</table></div>';
+      const d = await api(`/admin/api/players?q=${encodeURIComponent(st.q)}&sort=${st.sort}&only_banned=${st.banned}&segment=${st.segment || 'real'}&limit=100`);
+      $('#plist').innerHTML = `<p class="muted">${num(d.total)} بازیکن</p><div class="scroll"><table><tr><th>نام</th><th>سکه</th><th>حل</th><th>ستاره</th><th>استریک</th><th>حساب</th><th>گروه</th><th>نسخه</th><th>ثبت‌نام</th><th>آخرین فعالیت</th></tr>` +
+        d.items.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.id.slice(0,6))} ${p.banned ? '<span class="tag banned">بن</span>' : ''}</td><td>${num(p.coins)}</td><td>${num(p.solved)}</td><td>${num(p.stars)}</td><td>${num(p.streak)}</td><td>${p.secured ? 'امن' : 'مهمان'}</td><td>${SEG[p.segment] || ''}${p.dup_reason ? ' <span class="muted">(' + (p.dup_reason === 'email' ? 'ایمیل مشابه' : 'هم‌دستگاه') + ')</span>' : ''}</td><td>${num(p.app_version)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('') + '</table></div>';
       $('#plist').querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
     };
-    m.innerHTML = `<div class="row"><input id="pq" placeholder="نام، ایمیل، کد دعوت، شناسه یا دستگاه" value="${esc(st.q)}" style="flex:1;min-width:200px"><select id="ps">${[['last_seen','آخرین فعالیت'],['created','جدیدترین'],['coins','سکه'],['solved','حل‌شده'],['stars','ستاره'],['streak','استریک']].map(([k,n]) => `<option value="${k}" ${st.sort===k?'selected':''}>${n}</option>`).join('')}</select><label><input type="checkbox" id="pb" ${st.banned?'checked':''}> فقط بن‌شده‌ها</label><button id="pdup">🔁 حساب‌های تکراری</button></div><div id="plist"></div>`;
-    $('#pq').onchange = e => { st.q = e.target.value.trim(); load(); }; $('#ps').onchange = e => { st.sort = e.target.value; load(); }; $('#pb').onchange = e => { st.banned = e.target.checked; load(); };
+    m.innerHTML = `<div class="row"><input id="pq" placeholder="نام، ایمیل، کد دعوت، شناسه یا دستگاه" value="${esc(st.q)}" style="flex:1;min-width:200px"><select id="pseg">${[['real','واقعی'],['tried','امتحان‌کننده'],['empty','بدون پرونده'],['duplicate','تکراری محتمل'],['excluded','تستر/بن/آزمایشی'],['all','همه']].map(([k,n]) => `<option value="${k}" ${(st.segment||'real')===k?'selected':''}>${n}</option>`).join('')}</select><select id="ps">${[['last_seen','آخرین فعالیت'],['created','جدیدترین'],['coins','سکه'],['solved','حل‌شده'],['stars','ستاره'],['streak','استریک']].map(([k,n]) => `<option value="${k}" ${st.sort===k?'selected':''}>${n}</option>`).join('')}</select><label><input type="checkbox" id="pb" ${st.banned?'checked':''}> فقط بن‌شده‌ها</label><button id="pdup">🔁 حساب‌های تکراری</button></div><div id="plist"></div>`;
+    $('#pq').onchange = e => { st.q = e.target.value.trim(); load(); }; $('#ps').onchange = e => { st.sort = e.target.value; load(); }; $('#pseg').onchange = e => { st.segment = e.target.value; load(); }; $('#pb').onchange = e => { st.banned = e.target.checked; load(); };
     $('#pdup').onclick = () => go('players', {dups: true});
     await load();
   },

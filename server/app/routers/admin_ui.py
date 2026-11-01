@@ -16,6 +16,7 @@ from ..cache import TTLCache
 from ..services import bazaar_reviews
 from ..services import case_reset
 from ..services import duplicates as duplicates_service
+from ..services import real_users
 from ..services import economy_report as economy_service
 from ..services import funnel as funnel_service
 from ..services import health as health_service
@@ -177,20 +178,34 @@ _SORTS = {"last_seen": Player.last_seen, "created": Player.created_at, "coins": 
 
 @router.get("/players")
 async def players(q: str = Query("", max_length=60), sort: str = "last_seen", limit: int = Query(40, ge=1, le=200),
-                  offset: int = Query(0, ge=0), only_banned: bool = False, session: AsyncSession = Depends(get_session)):
+                  offset: int = Query(0, ge=0), only_banned: bool = False,
+                  segment: str = Query("all", pattern="^(all|real|tried|empty|duplicate|excluded)$"),
+                  session: AsyncSession = Depends(get_session)):
+    """The player list. `segment` filters by real_users.SEGMENTS; every row says which segment it is in."""
     col = _SORTS.get(sort, Player.last_seen)
+    dup = await real_users.duplicate_ids(session)
     stmt = select(Player)
     if q:
         stmt = stmt.where(or_(Player.nickname.contains(q), Player.invite_code == q.upper(), Player.id.startswith(q),
                               Player.device_id == q, Player.email == q.lower()))
     if only_banned:
         stmt = stmt.where(Player.banned.is_(True))
+    if segment != "all":
+        stmt = stmt.where(real_users.where_segment(segment, list(dup)))
     total = int(await session.scalar(select(func.count()).select_from(stmt.subquery())) or 0)
     rows = (await session.execute(stmt.order_by(col.desc(), Player.id).limit(limit).offset(offset))).scalars().all()
+    lab = await real_users.label_rows(session, list(rows), dup)
     return {"total": total, "items": [{
         "id": p.id, "nickname": p.nickname, "coins": p.coins, "solved": p.cases_solved, "stars": p.stars_total,
         "streak": p.streak, "secured": bool(p.email or p.phone_hash), "banned": p.banned, "app_version": p.app_version,
+        "segment": lab[p.id]["segment"], "dup_reason": lab[p.id]["reason"],
         "created": ts(p.created_at), "last_seen": ts(p.last_seen)} for p in rows]}
+
+
+@router.get("/real-users")
+async def real_users_summary(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. How many rows are real people and how many are throw-away (see services/real_users.py)."""
+    return await real_users.summary(session)
 
 
 @router.get("/duplicate-accounts")
