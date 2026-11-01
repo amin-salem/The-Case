@@ -1,3 +1,9 @@
+# server 1.49.0: nightly cases c057 and c058 (1 Nov 2026, ideas session 4 of 15)
+
+- c057 «نامی در حاشیه‌ی مقاله» (publish 24 Nov 2026, idea #5, style S5, hidden relationship) and c058 «سه جای خالی روی میز» (publish 25 Nov 2026, idea #6, classic, concealments after the crime). Difficulty 5 both.
+- Blind tests (Sonnet helper, public copy with tool lines): c057 s4 at 90%, c058 s3 at 90% after one fix round; no single card decides. Notification teasers added; case counts in tests updated to 58.
+- Deploy: redeploy from the Liara panel. No APK, no migration.
+
 # server 1.48.1: weekend case w005 rewritten in format 3 (1 Nov 2026, urgent)
 
 - w005 «نسخه‌ی خطی که دو بار گم شد» (live Thursday 5 Nov 09:00) was still in the old format 2 with flat prose, a culprit named almost by one card and «چرا و چطور» options that carried names. Rewritten by Claude Opus into format 3 like w004/w007: «روز اول» Thursday 09:00 and «روز دوم» Friday 09:00 (`at_hours` 24), closes Friday 21:00; seven suspects on day 1 and one newcomer on day 2 (Kamran, the catalogue photographer, who saw a man leave the reading hall); day-1 question «کی می‌گه از شک به اصالت دیوان خبر نداشت، ولی داشت؟» (the director, card e4); four nameless why/how options; 15 cards (8 + 7); house voice; every suspect has a secret that is not the crime; camera/print lines rewritten to be useful facts. Same id, publish date, scene, category, title and culprit (s3, code-drawn portrait).
