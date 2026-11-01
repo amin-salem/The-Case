@@ -1,4 +1,4 @@
-"""The case files themselves: 56 cases, one new case a night, mostly difficulty 4."""
+"""The case files themselves: 58 cases, one new case a night, mostly difficulty 4."""
 from collections import Counter
 from datetime import timedelta
 
@@ -7,9 +7,9 @@ from app import content
 
 def test_fifty_cases_with_unique_ids_and_a_nightly_schedule():
     cases = content.all_cases()
-    assert len(cases) == 56
-    assert [c.number for c in cases] == list(range(1, 57))
-    assert len({c.id for c in cases}) == 56
+    assert len(cases) == 58
+    assert [c.number for c in cases] == list(range(1, 59))
+    assert len({c.id for c in cases}) == 58
     for a, b in zip(cases, cases[1:]):
         assert b.publish - a.publish == timedelta(days=1), f"{a.id} -> {b.id}: one case per night, no gaps"
 

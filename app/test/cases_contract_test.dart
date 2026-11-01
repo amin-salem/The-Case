@@ -12,7 +12,7 @@ void main() {
   final dir = Directory('../server/app/content/cases');
   final files = dir.listSync().whereType<File>().where((f) => f.path.endsWith('.json')).toList()..sort((a, b) => a.path.compareTo(b.path));
 
-  test('there are 56 cases', () => expect(files.length, 56));
+  test('there are 58 cases', () => expect(files.length, 58));
 
   const hair = {'bald', 'short', 'slick', 'curly', 'long', 'cap', 'hijab'};
   const beard = {'none', 'full', 'mustache', 'stubble'};
