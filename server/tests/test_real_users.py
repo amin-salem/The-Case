@@ -51,8 +51,9 @@ async def test_empty_database(session):
 async def test_segments_and_counts(session):
     real = add(session, solved=3, seen=2)
     buyer = add(session)
-    session.add(Purchase(player_id=buyer, product_id="coins_100", purchase_token="tok-ru-1", status="granted"))
     tried = add(session)
+    await session.flush()  # the players exist before rows that point at them (no ORM relationships here)
+    session.add(Purchase(player_id=buyer, product_id="coins_100", purchase_token="tok-ru-1", status="granted"))
     session.add(CaseProgress(player_id=tried, case_id="c001"))
     empty = add(session)
     tester = add(session, solved=5, tester=True)
