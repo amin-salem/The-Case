@@ -236,7 +236,7 @@ async def test_league_snapshot_is_stable_and_a_player_is_in_one_league(client, c
     ws = date(2027, 4, 9)
     clock(T(2027, 4, 10, 12))
     p = await new_player(client, "fw-snap", aged=True)
-    await set_player(p["player_id"], xp=700, cases_solved=5)
+    await set_player(p["player_id"], xp=1700, cases_solved=5)
     async with db.SessionLocal() as s:
         assert await weekboard.league_of(s, ws, p["player_id"]) == 1
     await set_player(p["player_id"], xp=99999)                  # grows during the week: the league does not change
@@ -262,7 +262,7 @@ async def test_board_shows_own_league_with_a_switch(client, clock, leagues, week
     ws = date(2027, 5, 14)
     clock(T(2027, 5, 15, 12))
     rookie, boss = await new_player(client, "fw-lg-r", aged=True), await new_player(client, "fw-lg-b", aged=True)
-    await set_player(boss["player_id"], xp=7000, cases_solved=50)
+    await set_player(boss["player_id"], xp=14000, cases_solved=50)
     await set_player(rookie["player_id"], xp=10, cases_solved=1)
     await solve(rookie["player_id"], wid(ws, 0), 3, T(2027, 5, 15, 10))
     await solve(boss["player_id"], wid(ws, 0), 1, T(2027, 5, 15, 10))
@@ -279,7 +279,7 @@ async def test_board_shows_own_league_with_a_switch(client, clock, leagues, week
 async def test_settlement_pays_each_league_once(client, clock, leagues, week_of_fake_cases):
     ws = date(2027, 4, 23)
     clock(T(2027, 4, 24, 12))
-    xps = [0, 0, 0, 0, 700, 3000, 7000]            # four rookies (only 3 prizes), one of each other league
+    xps = [0, 0, 0, 0, 1700, 6000, 14000]            # four rookies (only 3 prizes), one of each other league
     ps = [await new_player(client, f"fw-pl{i}", aged=True) for i in range(len(xps))]
     for p, xp in zip(ps, xps):
         await set_player(p["player_id"], xp=xp, cases_solved=5)

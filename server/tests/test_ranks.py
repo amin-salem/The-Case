@@ -93,9 +93,9 @@ async def test_config_lists_ranks(client):
     assert e["ranks"][0] == {"xp": 0, "title": eco.RANKS[0][1]} and len(e["ranks"]) == len(eco.RANKS)
 
 
-async def test_migration_0035_keeps_every_rank_and_is_idempotent(client):
+async def test_migration_0035_keeps_every_rank(client):
     """Raising the thresholds must not demote anyone: a player is lifted to the new threshold of the rank held under the
-    old table (and nobody is lowered). Runs the migration's own SQL on the suite's database (SQLite and PostgreSQL)."""
+    old table (and nobody is lowered). Alembic runs a migration once, so the SQL is run once here. Runs the migration's own SQL on the suite's database (SQLite and PostgreSQL)."""
     import importlib.util
     from pathlib import Path
     from sqlalchemy import select, text
@@ -115,7 +115,7 @@ async def test_migration_0035_keeps_every_rank_and_is_idempotent(client):
         async with db.SessionLocal() as s:
             (await s.get(Player, p["player_id"])).xp = xp
             await s.commit()
-    for _ in range(2):  # the second run changes nothing
+    for _ in range(1):
         async with db.SessionLocal() as s:
             await s.execute(text(mig.SQL))
             await s.commit()

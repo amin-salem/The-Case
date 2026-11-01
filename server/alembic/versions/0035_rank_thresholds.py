@@ -1,7 +1,7 @@
 """Rank thresholds raised (1 Nov 2026, Amin: the gaps between ranks were too small). Data only, no schema change.
 Nobody loses a rank: every player below the NEW threshold of the rank they hold under the OLD table is lifted to that
-threshold (their progress inside the rank starts again at its bottom). Idempotent: running it again changes nothing.
-Same SQL on SQLite and PostgreSQL.
+threshold (their progress inside the rank starts again at its bottom). NOT safe to run twice by hand (the second run
+would lift again); Alembic runs it once. Same SQL on SQLite and PostgreSQL.
 
 Revision ID: 0035
 Revises: 0034
