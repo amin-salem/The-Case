@@ -119,3 +119,11 @@ an urgent earlier request).
 ## Store texts (Amin, 26 Oct 2026)
 Cafe Bazaar release notes and store descriptions are written in a professional, general voice, like any studio's. Never mention
 AI, Claude, prompts or "generated"; no technical details (builds, servers, anti-cheat, file sizes); no promises that are not in the app.
+
+## Persian mixed with English in my chat replies (Amin, 1 Nov 2026)
+This is only about how I write to Amin in the chat. It does NOT change app texts, case texts, store texts or docs.
+Persian that mixes in English words, ids or numbers shows in the wrong order when read right to left, so keep chat replies tidy:
+- Use a Persian word whenever one exists («بازنویسی» not "rewrite", «شاخه» not "branch").
+- Unavoidable English (ids like `c047`, file names, commands, versions) goes in backticks, not glued to Persian punctuation.
+- Do not start a line or bullet with an English word or number; start with Persian.
+- Short sentences, one idea per bullet.
