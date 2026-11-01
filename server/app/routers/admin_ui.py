@@ -16,6 +16,7 @@ from ..cache import TTLCache
 from ..services import bazaar_reviews
 from ..services import case_reset
 from ..services import duplicates as duplicates_service
+from ..services import purge as purge_service
 from ..services import real_users
 from ..services import economy_report as economy_service
 from ..services import funnel as funnel_service
@@ -206,6 +207,29 @@ async def players(q: str = Query("", max_length=60), sort: str = "last_seen", li
 async def real_users_summary(session: AsyncSession = Depends(get_session)):
     """READ ONLY. How many rows are real people and how many are throw-away (see services/real_users.py)."""
     return await real_users.summary(session)
+
+
+class PurgeIn(BaseModel):
+    ids: list[str] | None = Field(None, max_length=200)  # None = the first 200 candidates
+    confirm: bool = False
+
+
+@router.get("/purge-preview")
+async def purge_preview(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. Accounts that are certainly worth nothing (services/purge.py) and why."""
+    return await purge_service.preview(session)
+
+
+@router.post("/purge")
+async def purge_apply(body: PurgeIn, session: AsyncSession = Depends(get_session)):
+    """Deletes accounts from the preview (each re-checked under its lock). Needs confirm=true; 200 rows at most."""
+    if not body.confirm:
+        raise HTTPException(422, "confirm_needed")
+    if body.ids is not None and any(not isinstance(i, str) or not 0 < len(i) <= 32 for i in body.ids):
+        raise HTTPException(422, "bad_ids")
+    from ..services.ratelimit import enforce
+    await enforce("admin_purge", "all")
+    return await purge_service.apply(session, body.ids)
 
 
 @router.get("/duplicate-accounts")

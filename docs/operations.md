@@ -770,3 +770,6 @@ The XP table is `economy.RANKS` (19 ranks, up to 50 000 XP). Changing it needs a
 ## Real users (server 1.47.0; 1 Nov 2026)
 Admin home cards and «بازیکن‌ها» (filter «گروه»): real, tried, empty, probable duplicate, excluded (see `services/real_users.py`). «Real» means solved a case or has a granted purchase. A duplicate is only a probable match (same device id, or e-mail names that start the same and an older row that went quiet); check a pair by opening both rows. Nothing is removed automatically.
 
+## Purge of worthless accounts (server 1.48.0; 1 Nov 2026)
+Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are certainly worth nothing (rules in `services/purge.py`: abandoned over 14 days, orphan of a secured account, load-test rows) and deletes them after confirmation, 200 at most per press. It is irreversible; the admin log keeps the count and short ids. Run it again until the list is empty. A player whose device was purged simply gets a new guest account.
+

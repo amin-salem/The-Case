@@ -312,6 +312,7 @@ const VIEWS = {
   async players(m, arg) {
     if (arg && arg.id) return VIEWS.player(m, arg.id);
     if (arg && arg.dups) return VIEWS.dups(m);
+    if (arg && arg.purge) return VIEWS.purge(m);
     const st = VIEWS._pq || (VIEWS._pq = {q: '', sort: 'last_seen', banned: false, segment: 'real'});
     const SEG = {real: 'واقعی', tried: 'امتحان‌کننده', empty: 'بدون پرونده', duplicate: 'تکراری محتمل', excluded: 'تستر/بن/آزمایشی'};
     const load = async () => {
@@ -320,10 +321,27 @@ const VIEWS = {
         d.items.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.id.slice(0,6))} ${p.banned ? '<span class="tag banned">بن</span>' : ''}</td><td>${num(p.coins)}</td><td>${num(p.solved)}</td><td>${num(p.stars)}</td><td>${num(p.streak)}</td><td>${p.secured ? 'امن' : 'مهمان'}</td><td>${SEG[p.segment] || ''}${p.dup_reason ? ' <span class="muted">(' + (p.dup_reason === 'email' ? 'ایمیل مشابه' : 'هم‌دستگاه') + ')</span>' : ''}</td><td>${num(p.app_version)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('') + '</table></div>';
       $('#plist').querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
     };
-    m.innerHTML = `<div class="row"><input id="pq" placeholder="نام، ایمیل، کد دعوت، شناسه یا دستگاه" value="${esc(st.q)}" style="flex:1;min-width:200px"><select id="pseg">${[['real','واقعی'],['tried','امتحان‌کننده'],['empty','بدون پرونده'],['duplicate','تکراری محتمل'],['excluded','تستر/بن/آزمایشی'],['all','همه']].map(([k,n]) => `<option value="${k}" ${(st.segment||'real')===k?'selected':''}>${n}</option>`).join('')}</select><select id="ps">${[['last_seen','آخرین فعالیت'],['created','جدیدترین'],['coins','سکه'],['solved','حل‌شده'],['stars','ستاره'],['streak','استریک']].map(([k,n]) => `<option value="${k}" ${st.sort===k?'selected':''}>${n}</option>`).join('')}</select><label><input type="checkbox" id="pb" ${st.banned?'checked':''}> فقط بن‌شده‌ها</label><button id="pdup">🔁 حساب‌های تکراری</button></div><div id="plist"></div>`;
+    m.innerHTML = `<div class="row"><input id="pq" placeholder="نام، ایمیل، کد دعوت، شناسه یا دستگاه" value="${esc(st.q)}" style="flex:1;min-width:200px"><select id="pseg">${[['real','واقعی'],['tried','امتحان‌کننده'],['empty','بدون پرونده'],['duplicate','تکراری محتمل'],['excluded','تستر/بن/آزمایشی'],['all','همه']].map(([k,n]) => `<option value="${k}" ${(st.segment||'real')===k?'selected':''}>${n}</option>`).join('')}</select><select id="ps">${[['last_seen','آخرین فعالیت'],['created','جدیدترین'],['coins','سکه'],['solved','حل‌شده'],['stars','ستاره'],['streak','استریک']].map(([k,n]) => `<option value="${k}" ${st.sort===k?'selected':''}>${n}</option>`).join('')}</select><label><input type="checkbox" id="pb" ${st.banned?'checked':''}> فقط بن‌شده‌ها</label><button id="pdup">🔁 حساب‌های تکراری</button><button id="ppurge">🧹 پاک‌سازی</button></div><div id="plist"></div>`;
     $('#pq').onchange = e => { st.q = e.target.value.trim(); load(); }; $('#ps').onchange = e => { st.sort = e.target.value; load(); }; $('#pseg').onchange = e => { st.segment = e.target.value; load(); }; $('#pb').onchange = e => { st.banned = e.target.checked; load(); };
     $('#pdup').onclick = () => go('players', {dups: true});
+    $('#ppurge').onclick = () => go('players', {purge: true});
     await load();
+  },
+  async purge(m) {
+    const d = await api('/admin/api/purge-preview'), c = d.counts;
+    const WHY = {abandoned: 'رهاشده', orphan: 'مهمان یتیم', smoke: 'آزمایشی'};
+    m.innerHTML = `<div class="row"><button id="back">← فهرست</button><h2 style="margin:0">پاک‌سازی حساب‌های بی‌ارزش</h2></div>
+    <div class="cards">${card(c.abandoned,'رهاشده (' + d.abandoned_days + '+ روز، هیچ کاری نکرده)','👻','#9aa0a6')}${card(c.orphan,'مهمان یتیم (هم‌دستگاهِ حساب امن)','🔁','#d0543f')}${card(c.smoke,'حساب آزمایشی بار','🧪','#b48ead')}${card(d.total,'کل قابل پاک‌سازی','🧹','#e0a526')}</div>
+    <p class="muted">فقط مهمان‌هایی که هیچ ارزشی ندارند: پرونده‌ای باز یا حل نکرده‌اند، خرید و نظر و XP و استریک و حکم و VIP ندارند، سکه‌شان بیشتر از هدیه‌ی شروع نیست، کسی را دعوت نکرده‌اند و دعوت‌شده هم نیستند، و تستر یا بن‌شده نیستند. اگر دستگاهی که حسابش پاک شده برگردد، برنامه خودش یک مهمان تازه می‌سازد و مشکلی پیش نمی‌آید. هر بار حداکثر ${num(d.max_batch)} حساب پاک می‌شود و هر حساب هنگام پاک شدن دوباره بررسی می‌شود.</p>
+    <div class="row"><button id="pgo" class="danger" ${d.total ? '' : 'disabled'}>پاک کن (${num(Math.min(d.total, d.max_batch))} حساب)</button></div>
+    <div class="scroll"><table><tr><th>نام</th><th>دلیل</th><th>سکه</th><th>ثبت‌نام</th><th>آخرین فعالیت</th></tr>${d.items.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.short_id)} <span class="muted ltr">${esc(p.short_id)}</span></td><td>${WHY[p.reason] || ''}</td><td>${num(p.coins)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('')}</table></div>`;
+    $('#back').onclick = () => go('players'); m.querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
+    $('#pgo').onclick = async () => {
+      const n = Math.min(d.total, d.max_batch);
+      if (!(await ask('مطمئنی؟ ' + num(n) + ' حساب بی‌ارزش برای همیشه پاک شود؟ این کار برگشت ندارد.'))) return;
+      try { const r = await api('/admin/api/purge', {method: 'POST', body: JSON.stringify({ids: d.items.map(p => p.id), confirm: true})}); note(num(r.deleted) + ' حساب پاک شد' + (r.skipped ? ' (' + num(r.skipped) + ' تا دیگر شرایط را نداشت)' : '')); go('players', {purge: true}); }
+      catch (e) { note(e.message); }
+    };
   },
   async dups(m) {
     const d = await api('/admin/api/duplicate-accounts?limit=200'), u = d.summary;

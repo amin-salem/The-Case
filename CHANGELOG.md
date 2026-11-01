@@ -1,3 +1,11 @@
+# server 1.48.0: purge of worthless accounts in the admin panel (1 Nov 2026, urgent)
+
+- Admin panel, «بازیکن‌ها» → «🧹 پاک‌سازی»: shows the accounts that are CERTAINLY worth nothing, with the reason, and deletes them after a preview and a confirmation. Nothing is automatic. A row qualifies only when it is a guest (no e-mail/phone), not a tester or banned, and holds nothing: no solved or even opened case, no purchase, no comment, no XP/stars/streak/warrants/VIP/no-ads, coins not above the starting gift, it invited nobody and was not invited. Plus one of: **abandoned** (created and last seen over 14 days ago), **orphan** (same device id as an account with e-mail/phone, at least a day old), **smoke** (load-test rows «smoke-load-…», at least a day old).
+- Safety: every id is re-checked inside the transaction under the player lock (a stale panel cannot delete someone who has acted since), at most 200 rows per call, `confirm: true` required, strict fail-closed limit `admin_purge` (5/min), one `purge_players` line in the admin log (count and short ids), one structured log line. All tables with a `player_id` are cleaned (also the ones without a foreign key: coin log, events, nickname claims, week leagues…).
+- If a deleted device comes back, its saved login is refused (`wrong_login`) and the app registers a new guest by itself (api.dart `_login`), so no player is blocked.
+- API: `GET /admin/api/purge-preview` (read only), `POST /admin/api/purge` (`ids` optional, `confirm`). Tests: `tests/test_purge.py` (every protection, orphan/abandoned/smoke, dependents, bounded batch, deleted login refused), also on PostgreSQL.
+- Deploy: redeploy from the Liara panel. No migration, no APK.
+
 # server 1.47.0: real users vs. throw-away rows in the admin panel (1 Nov 2026, urgent)
 
 - Amin: the player count overstates real people (two «مینا» rows for one phone). Cause found: the app's `device_id` is a random id kept in the app's own storage, NOT a hardware id; clearing data or reinstalling makes a new id and a new guest row, so the old row never shares a device id with the new one. The earlier «حساب‌های تکراری» check (same device id) only catches the newest orphan.
