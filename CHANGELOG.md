@@ -1,3 +1,10 @@
+# server 1.50.1: nightly cases c043-c046 rewritten in the house voice (2 Nov 2026, urgent)
+
+- c043 «قطعه‌ای که جا ماند» (10 Nov, guilty knowledge, culprit s4), c044 «پنجره‌ای که راه خروج نبود» (11 Nov, staged scene, culprit s1), c045 «پشتِ تصویرِ باران» (12 Nov, motive inversion, culprit s5), c046 «امضای زیرِ نامِ دیگری» (13 Nov, hidden relationship, culprit s2). Same ids, dates, scenes, titles, suspect ids and avatars; story, cards, questions and tool lines rewritten with the c026-c042 method (one true timeline, no single-card giveaway, no presumed questions, unique names).
+- Blind tests with fresh Sonnet readers on a public copy (tool lines included), then every soft spot found was fixed in the files (times, dangling names, missing links such as the culprit's mother in c046, the planted chain's reason in c043, the window sketch in c044) and a second blind round was run.
+- c043 notification teaser updated. No code change.
+- Deploy: redeploy from the Liara panel BEFORE 10 Nov. No APK, no migration.
+
 # server 1.50.0: promo case (free for 48 hours for a new detective) and a page for every case (2 Nov 2026)
 
 - Amin's campaign: an ad video plays the opening of a good old case; the viewer installs, wants the answer and must not meet a coin wall on his first night.
