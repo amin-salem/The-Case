@@ -84,10 +84,11 @@ async def test_admin_starts_and_ends_a_window_and_checks_the_case(client, monkey
 
 
 async def test_too_many_open_windows_are_refused(client, monkeypatch):
+    older = content.by_id("c019")   # before the clock is patched
     setup_clock(monkeypatch)
     monkeypatch.setattr(promo, "MAX_ACTIVE", 1)
     assert (await start(client)).status_code == 200
-    older, tonight, c20 = content.by_id("c019"), content.by_id("c021"), content.by_id("c020")
+    tonight, c20 = content.by_id("c021"), content.by_id("c020")
     monkeypatch.setattr(content, "all_cases", lambda: (older, c20, tonight))
     assert (await start(client, "c019")).status_code == 409
 
