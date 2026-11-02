@@ -317,3 +317,17 @@ All difficulty 4. No single card names a culprit in any case. Notification tease
 - Round 2 fixed (2026-11-02, round 2 blind tests c059 ~90%, c060 ~88%, no single card decisive; clue chains unchanged): c059 cleaner's watch extended to 17:30 (covers the 4-hour full cure), solution says the ghost was general scare/cover and the 4th-night scream was her opportunity (no reliable trap), e12 has the group's printed Mehr build photos on the workshop wall (tracing source), e8 has the old neck screw inside the cloak with the original head; c060 Mitra saw the box shut quickly at 12:28 and a bulge in his waistcoat pocket, s1 print now flour and raw dough inside the knot loops, Sahar 12:42-12:47 at the whiteboard calling Sattari, Mitra's search starts 12:47 (matches e8), Pedram's 12:52 walk from the scullery past the counter, Goli and Nazi named as the rival entries, Pedram's waived debt tied to tasting Iraj's dishes in secret.
 
 - Blind tests 2026-11-02 (Sonnet helper, public copy with tool lines): c059 round 1 90%, round 2 (after the fix round) 90%; c060 round 1 85%, round 2 88%. No single card or line decides in either; both read 5 and 4. Round-2 soft spots (paint cure window, ghost as cover, tracing source, neck screw; spoon-leaving sighting, knot print wording, Sahar 12:42-12:47, Pedram's walk, dangling cousins/debt) fixed in the files without changing the chains.
+
+
+## 3 November 2026 — c047–c050 full house rewrite (urgent, Amin)
+
+Opus writers, Sonnet fresh-reader blind tests on public copies with tool lines. Same ids, dates, scenes, categories, suspect ids, avatars.
+
+| case | publish | type | culprit | blind test |
+|---|---|---|---|---|
+| c047 «شمع روی قفسه» | 2026-11-14 | 5 time trick (candle delay) | s1 | 96%; fixed: dark room under the door, why he stayed after the card swipe, "two" vs "three" volumes |
+| c048 «کلید شماره‌ی دو» | 2026-11-15 | 9 object biography | s3 | 93%; elimination alone solved it, so difficulty 5 -> 4; fixed: service-lift time stated, reason the card was planted |
+| c049 «پنج مظنون، یک راست‌گو» | 2026-11-16 | 8 helpful witness is the liar | s5 | 90%; no hard contradictions; title «نفر» -> «مظنون» |
+| c050 «ترتیب ورود» | 2026-11-17 | 5 time trick (arrival order) | s5 | 82%; fixed: her real departure (agency receipt 19:10) fits the 20:40 arrival |
+
+Known and accepted: c049 poison/ignition chain is long (reader rated 4 of 5, kept 5); c050 poison source (oleander from the garden) is inferred, not shown.

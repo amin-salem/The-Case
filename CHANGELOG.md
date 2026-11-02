@@ -1,3 +1,10 @@
+# server 1.51.1: nightly cases c047-c050 rewritten in the house voice (3 Nov 2026, urgent)
+
+- c047 «شمع روی قفسه» (14 Nov, time trick, culprit s1), c048 «کلید شماره‌ی دو» (15 Nov, object biography, culprit s3), c049 «پنج مظنون، یک راست‌گو» (16 Nov, helpful witness is the liar, culprit s5; title no longer says «نفر»), c050 «ترتیب ورود» (17 Nov, time trick, culprit s5). Same ids, dates, scenes, categories, suspect ids and avatars; story, names, cards, questions and tool lines rewritten with the c026-c046 method (one true timeline, no single card names the culprit, no presumed questions, unique names; the old drafts' clashing names are gone).
+- Blind tests with fresh Sonnet readers (public copy, tool lines included): c047 96%, c048 93%, c049 90%, c050 82%; every soft spot they found was fixed in the files (c048 difficulty 5 -> 4 because elimination alone solved it; c050 the culprit's real departure time is now shown by the agency receipt).
+- Notification teasers of c049 and c050 updated. No code change.
+- Deploy: redeploy from the Liara panel BEFORE 14 Nov. No APK, no migration.
+
 # server 1.51.0: nightly cases c059, c060 (2 Nov 2026, ideas session 5 of 15)
 
 - c059 «تماشاگر ردیف خالی» (26 Nov, difficulty 5, S3 seemingly supernatural, shadow staged scene, theater / art) and c060 «داور بی‌قاشق» (27 Nov, difficulty 4, S4 light humour, victim stages the scene, kitchen / travel). Ideas #7 and #8 of batch 1.
