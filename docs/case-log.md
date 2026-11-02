@@ -298,7 +298,7 @@ Rewritten with the c026–c042 method (Opus writers, Sonnet fresh-reader blind t
 | case | publish | type | culprit | blind test |
 |---|---|---|---|---|
 | c043 «قطعه‌ای که جا ماند» | 2026-11-10 | 1 guilty knowledge | s4 | round 1: 72%; fixed: attendant's whereabouts 20:09–20:14, reason the chain was planted in the coat, compartment label, handle print wording. Round 2: 85%, no single card; Azar's time aligned to 8:09 |
-| c044 «پنجره‌ای که راه خروج نبود» | 2026-11-11 | 6 staged scene | s1 | round 1: 90%; fixed: post position outside the mesh, photo count/chair at 20:49–20:50, ambiguous «نه» in the pantry card |
+| c044 «پنجره‌ای که راه خروج نبود» | 2026-11-11 | 6 staged scene | s1 | round 1: 90%; fixed: post position outside the mesh, photo count/chair at 20:49–20:50, ambiguous «نه» in the pantry card. Round 2: 80%; post position made explicit (inside, on the floor) |
 | c045 «پشتِ تصویرِ باران» | 2026-11-12 | 10 motive inversion | s5 | round 1: 85%; fixed: «ده کم بیست» ambiguity, dangling Nazanin, gloves, invoice wording, owner renamed, why not burn the picture. Round 2: 90% |
 | c046 «امضای زیرِ نامِ دیگری» | 2026-11-13 | 2 hidden relationship | s2 | round 1: 90%; fixed: mother named, caller link, slip custody, radio-call source. Round 2: 85%; caller described as a young woman |
 
