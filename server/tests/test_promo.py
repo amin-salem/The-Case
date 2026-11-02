@@ -1,0 +1,150 @@
+"""Promo cases (app/services/promo.py, Amin 2 Nov 2026): an archive case that is free to open for a NEW detective while an
+admin's window is open; older accounts, lost cases and every other case keep the normal price. Runs on SQLite and PostgreSQL."""
+import asyncio
+from datetime import datetime, timedelta
+
+from sqlalchemy import select
+
+from app import content, db
+from app.models import CoinLog
+from app.services import promo
+from .conftest import ADMIN, new_player
+from .test_anticheat import fail_case
+from .test_difficulty_economy import balance, changed, fund
+
+
+def setup_clock(monkeypatch, difficulty=4):
+    """c020 is an archive case, c021 is tonight's case."""
+    c = changed(content.by_id("c020"), difficulty)
+    tonight = content.by_id("c021")
+    monkeypatch.setattr(content, "all_cases", lambda: (c, tonight))
+    monkeypatch.setattr(content, "now_local", lambda: content.opens_at(tonight) + timedelta(hours=1))
+    return c
+
+
+def row(rows, cid):
+    return next(r for r in rows["archive"] if r["id"] == cid)
+
+
+async def start(client, case_id="c020", hours=48):
+    return await client.post("/admin/api/promo", headers=ADMIN, json={"case_id": case_id, "hours": hours})
+
+
+# ---- the stored list: a bad row never makes anything free ----
+
+def test_parse_ignores_bad_rows_and_closed_windows():
+    now = datetime(2026, 11, 2, 12, 0)
+    good = {"case_id": "c020", "starts_at": "2026-11-02T10:00:00", "ends_at": "2026-11-04T10:00:00"}
+    rows = [good,
+            {"case_id": "c021", "starts_at": "2026-11-01T10:00:00", "ends_at": "2026-11-02T10:00:00"},   # ended
+            {"case_id": "c022", "starts_at": "2026-11-03T10:00:00", "ends_at": "2026-11-04T10:00:00"},   # not yet
+            {"case_id": "c023", "starts_at": "garbage", "ends_at": "2026-11-04T10:00:00"},
+            {"case_id": "c024", "starts_at": "2026-11-02T10:00:00+00:00", "ends_at": "2026-11-04T10:00:00+00:00"},   # timezone: refused
+            {"case_id": "c025", "starts_at": "2026-11-04T10:00:00", "ends_at": "2026-11-02T10:00:00"},   # ends before it starts
+            {"case_id": 5, "starts_at": "2026-11-02T10:00:00", "ends_at": "2026-11-04T10:00:00"},
+            {"starts_at": "2026-11-02T10:00:00"}, "text", None]
+    assert promo.parse(rows, now) == {"c020": datetime(2026, 11, 4, 10, 0)}
+    assert promo.parse("not a list", now) == {} and promo.parse(None, now) == {}
+
+
+# ---- the admin: who may start a window and for what ----
+
+async def test_admin_starts_and_ends_a_window_and_checks_the_case(client, monkeypatch):
+    setup_clock(monkeypatch)
+    assert (await client.post("/admin/api/promo", json={"case_id": "c020"})).status_code in (401, 403)   # no admin key
+    assert (await start(client, "c021")).status_code == 422                       # tonight's case is free for everybody
+    assert (await start(client, "c999")).status_code == 404                       # unknown
+    assert (await start(client, "s01ch01")).status_code == 422                    # a story chapter
+    assert (await start(client, "c020", hours=0)).status_code == 422
+    assert (await start(client, "c020", hours=promo.MAX_HOURS + 1)).status_code == 422
+    r = await start(client)
+    assert r.status_code == 200 and r.json()["items"][0]["case_id"] == "c020" and r.json()["items"][0]["state"] == "open"
+    again = await start(client, hours=24)   # starting again restarts the window, it does not add a second row
+    assert again.status_code == 200 and len(again.json()["items"]) == 1
+    ended = await client.post("/admin/api/promo/end", headers=ADMIN, json={"case_id": "c020"})
+    assert ended.json()["ended"] is True and ended.json()["items"][0]["state"] == "ended"
+    assert (await client.post("/admin/api/promo/end", headers=ADMIN, json={"case_id": "c020"})).json()["ended"] is False
+    log = (await client.get("/admin/api/promo", headers=ADMIN)).json()
+    assert log["default_hours"] == 48 and log["items"][0]["state"] == "ended"
+
+
+async def test_too_many_open_windows_are_refused(client, monkeypatch):
+    setup_clock(monkeypatch)
+    monkeypatch.setattr(promo, "MAX_ACTIVE", 1)
+    assert (await start(client)).status_code == 200
+    monkeypatch.setattr(content, "all_cases", lambda: (changed(content.by_id("c020"), 4), content.by_id("c021"), content.by_id("c019")))
+    assert (await start(client, "c019")).status_code == 409
+
+
+# ---- the player: free once for a new detective, never for anybody else ----
+
+async def test_new_player_opens_the_promo_case_free_once_and_it_does_not_use_the_first_days_offer(client, monkeypatch):
+    c = setup_clock(monkeypatch, 1)   # difficulty 1: the first-days archive offer (50 coins) could apply, the promo must win
+    p = await new_player(client, "promo-new", aged=False)
+    h, pid = p["headers"], p["player_id"]
+    await fund(pid, 500)
+    assert row((await client.get("/v1/cases", headers=h)).json(), c.id)["unlock_cost"] == 50   # before the window
+    assert (await start(client, c.id)).status_code == 200
+    assert row((await client.get("/v1/cases", headers=h)).json(), c.id)["unlock_cost"] == 0
+    stale = await client.post(f"/v1/cases/{c.id}/unlock", headers=h, json={"expected_cost": 50})
+    assert stale.status_code == 409 and stale.json()["detail"]["cost"] == 0
+    r1, r2 = await asyncio.gather(*[client.post(f"/v1/cases/{c.id}/unlock", headers=h, json={"expected_cost": 0}) for _ in range(2)])
+    assert r1.status_code == 200 and r2.status_code == 200
+    assert await balance(pid) == 500   # nothing was paid
+    async with db.SessionLocal() as s:
+        reasons = [x.reason for x in (await s.scalars(select(CoinLog).where(CoinLog.player_id == pid))).all()
+                   if x.reason.endswith(c.id)]
+    assert reasons.count(f"promo:{c.id}") == 1 and f"unlock:{c.id}" not in reasons   # the 50-coin offer is still unused
+    assert (await client.get(f"/v1/cases/{c.id}", headers=h)).status_code == 200
+
+
+async def test_an_old_account_pays_the_normal_price(client, monkeypatch):
+    c = setup_clock(monkeypatch)
+    assert (await start(client, c.id)).status_code == 200
+    p = await new_player(client, "promo-old", aged=True)
+    assert row((await client.get("/v1/cases", headers=p["headers"])).json(), c.id)["unlock_cost"] == 180
+    await fund(p["player_id"], 500)
+    poor = await client.post(f"/v1/cases/{c.id}/unlock", headers=p["headers"], json={"expected_cost": 0})
+    assert poor.status_code == 409 and poor.json()["detail"]["cost"] == 180
+
+
+async def test_the_window_closes_and_only_the_named_case_is_free(client, monkeypatch):
+    c = setup_clock(monkeypatch)
+    p = await new_player(client, "promo-end", aged=False)
+    h = p["headers"]
+    assert (await start(client, c.id)).status_code == 200
+    assert row((await client.get("/v1/cases", headers=h)).json(), c.id)["unlock_cost"] == 0
+    await client.post("/admin/api/promo/end", headers=ADMIN, json={"case_id": c.id})
+    assert row((await client.get("/v1/cases", headers=h)).json(), c.id)["unlock_cost"] == 180
+
+
+async def test_a_lost_promo_case_still_costs_the_reopen_price(client, monkeypatch):
+    c = setup_clock(monkeypatch, 3)
+    p = await new_player(client, "promo-lost", aged=False)
+    h, pid = p["headers"], p["player_id"]
+    assert (await start(client, c.id)).status_code == 200
+    assert (await client.post(f"/v1/cases/{c.id}/unlock", headers=h, json={"expected_cost": 0})).status_code == 200
+    await fail_case(client, h, c)
+    closed = await client.get(f"/v1/cases/{c.id}", headers=h)
+    assert closed.status_code == 402 and closed.json()["detail"]["cost"] > 0 and closed.json()["detail"]["lost"]
+    assert await balance(pid) >= 0
+
+
+# ---- the public page of a case ----
+
+async def test_case_page_for_ad_links(client, monkeypatch):
+    c = setup_clock(monkeypatch)
+    r = await client.get(f"/c/{c.id}")
+    assert r.status_code == 200 and c.data["title"] in r.text and "پرونده‌ی بایگانی" in r.text
+    assert "رایگان برای کارآگاه" not in r.text   # no window yet
+    assert (await start(client, c.id)).status_code == 200
+    r = await client.get(f"/c/{c.id}")
+    assert "رایگان برای کارآگاه‌های تازه" in r.text and "cafebazaar.ir" in r.text
+    assert c.data["evidence"][0]["text"][:30] not in r.text and c.data["solution"]["explanation"][:30] not in r.text
+    for bad in ("c999", "s01ch01", "x1", "c020%3Cscript%3E"):
+        g = await client.get(f"/c/{bad}", follow_redirects=False)
+        assert g.status_code == 302 and g.headers["location"] == "/"
+    tonight = await client.get("/c/c021")
+    assert tonight.status_code == 200 and "پرونده‌ی امشب" in tonight.text
+    future = await client.get("/c/c050", follow_redirects=False)
+    assert future.status_code == 302   # not published yet: nothing is shown

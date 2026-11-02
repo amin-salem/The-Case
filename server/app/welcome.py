@@ -9,7 +9,7 @@ so a double tap cannot use an offer twice and a restart forgets nothing.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
 from sqlalchemy import case, func, select
@@ -28,6 +28,7 @@ NEWBIE_ARCHIVE_MAX_DIFFICULTY = 2
 class Offers:
     reopen: bool = False
     archive: bool = False
+    promo: frozenset = field(default_factory=frozenset)   # case ids that are free to open for him right now (services/promo.py)
 
 
 NONE = Offers()
@@ -45,7 +46,8 @@ async def offers_for(session: AsyncSession, player: Player, now: datetime | None
         select(func.coalesce(func.sum(case((CoinLog.reason.like("reopen:%"), 1), else_=0)), 0),
                func.coalesce(func.sum(case((CoinLog.reason.like("unlock:%"), 1), else_=0)), 0))
         .where(CoinLog.player_id == player.id, CoinLog.reason.like("reopen:%") | CoinLog.reason.like("unlock:%")))).one()
-    return Offers(reopen=not reopened, archive=not unlocked)
+    from .services import promo
+    return Offers(reopen=not reopened, archive=not unlocked, promo=frozenset(await promo.active(session, now)))
 
 
 def reopen_cost(base: int, offers: Offers) -> int:

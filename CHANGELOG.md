@@ -1,3 +1,15 @@
+# server 1.50.0: promo case (free for 48 hours for a new detective) and a page for every case (2 Nov 2026)
+
+- Amin's campaign: an ad video plays the opening of a good old case; the viewer installs, wants the answer and must not meet a coin wall on his first night.
+- **Promo window** (`services/promo.py`, kept in the config row `promo_cases`: no table, no migration). Admin panel, tab «پرونده‌ها», block «پرونده‌ی تبلیغی»: type a case id (c020), hours (default 48, 1-168), «شروع». While the window is open that archive case costs **0 coins** for an account younger than 3 days (`welcome.NEWBIE_DAYS`). Older accounts, a case the player already LOST (reopen price) and every other case keep the normal price. Once opened it stays open for him.
+- Opening writes the ledger line `promo:<case>` (not `unlock:`), so the first-days archive offer (50 coins) is not used up, and no mission/achievement credit is given. Double tap pays and counts once (same lock as a normal unlock). At most 10 windows open at once; the list keeps 40 rows; a malformed row is ignored (nothing becomes free by accident).
+- Not allowed as a promo: tonight's case (free for everybody), a story chapter, an unpublished case, a weekend case that is still live.
+- **Public page `/c/<case id>`** (c001-c999, w001-w999): title, difficulty, suspect count, the opening text the app also shows, a Cafe Bazaar button and, while a window is open, «رایگان برای کارآگاه‌های تازه · N ساعت دیگر». Unknown, story, unpublished or still-live weekend ids go to `/`. This is the link to put under an ad video.
+- App (next APK, not required for the server): a free case shows «رایگان» instead of «۰ سکه». Without it the old app shows «۰ سکه · باز کن», which still works.
+- Not built (needs an APK build change): opening the app straight on the case from the link. The player installs, then finds the case in «بایگانی».
+- Admin rate policy `admin_promo`. Tests: `tests/test_promo.py`.
+- Deploy: redeploy from the Liara panel. No migration.
+
 # server 1.49.0: nightly cases c057 and c058 (1 Nov 2026, ideas session 4 of 15)
 
 - c057 «نامی در حاشیه‌ی مقاله» (publish 24 Nov 2026, idea #5, style S5, hidden relationship) and c058 «سه جای خالی روی میز» (publish 25 Nov 2026, idea #6, classic, concealments after the crime). Difficulty 5 both.

@@ -16,6 +16,7 @@ from ..cache import TTLCache
 from ..services import bazaar_reviews
 from ..services import case_reset
 from ..services import duplicates as duplicates_service
+from ..services import promo as promo_service
 from ..services import purge as purge_service
 from ..services import real_users
 from ..services import economy_report as economy_service
@@ -230,6 +231,39 @@ async def purge_apply(body: PurgeIn, session: AsyncSession = Depends(get_session
     from ..services.ratelimit import enforce
     await enforce("admin_purge", "all")
     return await purge_service.apply(session, body.ids)
+
+
+class PromoIn(BaseModel):
+    case_id: str = Field(..., min_length=1, max_length=16)
+    hours: int = Field(promo_service.DEFAULT_HOURS, ge=promo_service.MIN_HOURS, le=promo_service.MAX_HOURS)
+
+
+class PromoEndIn(BaseModel):
+    case_id: str = Field(..., min_length=1, max_length=16)
+
+
+@router.get("/promo")
+async def promo_list(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. Promo case windows (free to open for a new detective), newest first."""
+    return {"items": await promo_service.listing(session), "default_hours": promo_service.DEFAULT_HOURS,
+            "max_active": promo_service.MAX_ACTIVE}
+
+
+@router.post("/promo")
+async def promo_start(body: PromoIn, session: AsyncSession = Depends(get_session)):
+    """Start (or restart) a free window for one archive case. A new detective = an account younger than 3 days."""
+    from ..services.ratelimit import enforce
+    await enforce("admin_promo", "all")
+    new = await promo_service.start(session, body.case_id, body.hours)
+    return {"ok": True, "window": new, "items": await promo_service.listing(session)}
+
+
+@router.post("/promo/end")
+async def promo_end(body: PromoEndIn, session: AsyncSession = Depends(get_session)):
+    from ..services.ratelimit import enforce
+    await enforce("admin_promo", "all")
+    ended = await promo_service.end(session, body.case_id)
+    return {"ok": True, "ended": ended, "items": await promo_service.listing(session)}
 
 
 @router.get("/duplicate-accounts")

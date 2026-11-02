@@ -62,6 +62,8 @@ def _unlock_cost(c: Case, p: CaseProgress | None = None, offers: welcome.Offers 
     """Archive price by difficulty; a case the player LOST costs more to open again (second chance).
     `offers` are the one-time first-days prices of a new player (welcome.py); weekend cases never get them."""
     weekend = content.is_weekly(c.id)
+    if c.id in offers.promo and not (p and (p.failed or p.solved)):
+        return 0   # a promo window (services/promo.py): free to open for a new detective
     if p is not None and p.failed and not p.solved and not content.is_story(c.id):
         base = eco.reopen_lost_cost(c.data.get("difficulty"), weekend=weekend)
         return base if weekend else welcome.reopen_cost(base, offers)
@@ -274,7 +276,8 @@ async def unlock(case_id: str, body: UnlockIn | None = None, player: Player = De
         if player.coins < cost:
             raise HTTPException(402, {"error": "not_enough_coins", "need": cost})
         lost = bool(p and p.failed and not p.solved)
-        await add_coins(session, player, -cost, f"{'reopen' if lost else 'unlock'}:{c.id}")
+        promo_free = cost == 0 and not lost   # only a promo window makes an archive case free
+        await add_coins(session, player, -cost, f"{'reopen' if lost else 'promo' if promo_free else 'unlock'}:{c.id}")
         if p is None:
             p = CaseProgress(player_id=player.id, case_id=c.id)
             session.add(p)
@@ -283,6 +286,8 @@ async def unlock(case_id: str, body: UnlockIn | None = None, player: Player = De
             log.info("lost_case_reopened case=%s cost=%d", c.id, cost)
             p.failed, p.attempts, p.proof_misses, p.finished_at, p.reveal_at = False, 0, 0, None, None
             p.ranked = False
+        elif promo_free:
+            log.info("promo_case_opened case=%s", c.id)   # no mission/achievement credit: nothing was bought
         else:
             await progress.record(session, player, case_unlock=1)
         p.unlocked = True

@@ -374,6 +374,23 @@ const VIEWS = {
     const d = await api('/admin/api/cases');
     m.innerHTML = '<p class="muted">برای دیدن سختی: «حل‌شده» کم و «اتهام اشتباه» زیاد یعنی سخت؛ اگر بیشتر بازیکن‌ها اول به مجرم شک کنند یعنی قابل حدس است.</p><div class="scroll"><table><tr><th>پرونده</th><th>باز شد</th><th>حل</th><th>شکست</th><th>میانگین ستاره</th><th>زمان</th><th>سرنخ</th><th>اتهام اشتباه</th><th>اولین حدس‌ها</th></tr>' +
       d.map(c => `<tr><td>${esc(c.title)}</td><td>${num(c.opened)}</td><td>${num(c.solved)}</td><td>${num(c.failed)}</td><td>${c.avg_stars ?? '—'}</td><td>${c.avg_seconds ?? '—'}ث</td><td>${c.avg_hints ?? '—'}</td><td>${c.avg_wrong ?? '—'}</td><td>${c.first_guess.map(g => esc(g.suspect) + ' ×' + g.n + (g.culprit ? ' ✔' : '')).join('، ')}</td></tr>`).join('') + '</table></div>';
+    const pr = await api('/admin/api/promo').catch(() => null);
+    if (pr) {
+      const ST = {open: 'باز', upcoming: 'به‌زودی', ended: 'تمام‌شده'};
+      m.insertAdjacentHTML('beforeend', `<h3>🎁 پرونده‌ی تبلیغی (رایگان برای کارآگاه تازه)</h3>
+      <p class="muted">برای ویدیوی تبلیغاتی: شناسه‌ی یک پرونده‌ی بایگانی (مثلاً c020) را بده؛ ${num(pr.default_hours)} ساعت برای حساب‌های کمتر از ۳ روز رایگان باز می‌شود. بازیکن قدیمی قیمت عادی می‌دهد. حداکثر ${num(pr.max_active)} پنجره‌ی هم‌زمان.</p>
+      <div class="row"><input id="prc" placeholder="شناسه‌ی پرونده، مثل c020" style="width:180px"><input id="prh" type="number" min="1" max="168" value="${pr.default_hours}" style="width:90px"> ساعت <button id="prgo">شروع</button></div>
+      <div class="scroll"><table><tr><th>پرونده</th><th>وضعیت</th><th>شروع</th><th>پایان</th><th></th></tr>${pr.items.map(x => `<tr><td>${esc(x.title || x.case_id)} <span class="muted">${esc(x.case_id)}</span></td><td>${ST[x.state] || x.state}</td><td>${esc(x.starts_at)}</td><td>${esc(x.ends_at)}</td><td>${x.state === 'open' ? `<button data-pe="${esc(x.case_id)}" class="danger">پایان</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">هنوز پنجره‌ای ساخته نشده.</td></tr>'}</table></div>`);
+      $('#prgo').onclick = async () => {
+        const id = $('#prc').value.trim(), h = parseInt($('#prh').value, 10) || pr.default_hours;
+        if (!id) return;
+        try { await api('/admin/api/promo', {method: 'POST', body: JSON.stringify({case_id: id, hours: h})}); note('پنجره‌ی رایگان شروع شد'); go('cases'); }
+        catch (e) { note(e.message); }
+      };
+      m.querySelectorAll('button[data-pe]').forEach(b => b.onclick = async () => {
+        try { await api('/admin/api/promo/end', {method: 'POST', body: JSON.stringify({case_id: b.dataset.pe})}); note('پنجره بسته شد'); go('cases'); } catch (e) { note(e.message); }
+      });
+    }
   },
   async comments(m) {
     const st = VIEWS._cm || (VIEWS._cm = {status: 'pending', case_id: ''});

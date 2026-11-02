@@ -36,6 +36,8 @@ DEFAULTS: dict[str, Any] = {
         "vip_monthly": "۱۴۹٬۰۰۰ تومان / ۳۰ روز",
     },
     "news": [],
+    # Promo cases: free to open for a new detective for a while (services/promo.py). Edited in the panel, not by hand.
+    "promo_cases": [],
 }
 
 

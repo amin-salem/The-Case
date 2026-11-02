@@ -773,3 +773,14 @@ Admin home cards and «بازیکن‌ها» (filter «گروه»): real, tried,
 ## Purge of worthless accounts (server 1.48.0; 1 Nov 2026)
 Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are certainly worth nothing (rules in `services/purge.py`: abandoned over 14 days, orphan of a secured account, load-test rows) and deletes them after confirmation, 200 at most per press. It is irreversible; the admin log keeps the count and short ids. Run it again until the list is empty. A player whose device was purged simply gets a new guest account.
 
+
+## Promo case for ads (server 1.50.0; 2 Nov 2026)
+- Start: admin panel → «پرونده‌ها» → «پرونده‌ی تبلیغی»: case id (for example `c020`), hours (48), «شروع». End early with «پایان».
+  Do it at the moment the video is posted: the clock runs from the click. Several windows can be open (at most 10).
+- Who gets it free: only accounts younger than 3 days. Players who already know the game pay the normal archive price.
+  A case the player lost still costs the reopen price. Nothing else changes (rewards are the normal archive rewards).
+- Link under the video: `https://gaamly.ir/c/c020` (the case id in the end). It shows the title, opening text, hours left and the
+  Cafe Bazaar button. It needs the Bazaar address in `site.py` (`BAZAAR_URL`) to be the real one.
+- The list is the config row `promo_cases`; do not edit it by hand (a bad row is ignored, so nothing is free by mistake).
+- What to watch: ledger lines `promo:<case>` (one per new player who opened it) against `solve` lines of that case.
+- Not built yet: opening the app straight on the case from the link (needs a change in the APK build).
