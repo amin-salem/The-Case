@@ -3,14 +3,29 @@ admin's window is open; older accounts, lost cases and every other case keep the
 import asyncio
 from datetime import datetime, timedelta
 
-from sqlalchemy import select
+import pytest
+from sqlalchemy import delete, select
 
 from app import content, db
 from app.models import CoinLog
-from app.services import promo
+from app.models import ConfigValue
+from app.services import promo, remote_config
 from .conftest import ADMIN, new_player
 from .test_anticheat import fail_case
 from .test_difficulty_economy import balance, changed, fund
+
+
+@pytest.fixture(autouse=True)
+async def clean_windows(client):
+    """The database is shared by the tests of a run: a window left open here would make c020 free in other files."""
+    async def wipe():
+        async with db.SessionLocal() as s:
+            await s.execute(delete(ConfigValue).where(ConfigValue.key == promo.KEY))
+            await s.commit()
+        remote_config.invalidate()
+    await wipe()
+    yield
+    await wipe()
 
 
 def setup_clock(monkeypatch, difficulty=4):
@@ -32,7 +47,7 @@ async def start(client, case_id="c020", hours=48):
 
 # ---- the stored list: a bad row never makes anything free ----
 
-def test_parse_ignores_bad_rows_and_closed_windows():
+async def test_parse_ignores_bad_rows_and_closed_windows():
     now = datetime(2026, 11, 2, 12, 0)
     good = {"case_id": "c020", "starts_at": "2026-11-02T10:00:00", "ends_at": "2026-11-04T10:00:00"}
     rows = [good,
@@ -72,7 +87,8 @@ async def test_too_many_open_windows_are_refused(client, monkeypatch):
     setup_clock(monkeypatch)
     monkeypatch.setattr(promo, "MAX_ACTIVE", 1)
     assert (await start(client)).status_code == 200
-    monkeypatch.setattr(content, "all_cases", lambda: (changed(content.by_id("c020"), 4), content.by_id("c021"), content.by_id("c019")))
+    older, tonight, c20 = content.by_id("c019"), content.by_id("c021"), content.by_id("c020")
+    monkeypatch.setattr(content, "all_cases", lambda: (older, c20, tonight))
     assert (await start(client, "c019")).status_code == 409
 
 

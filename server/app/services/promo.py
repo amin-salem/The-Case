@@ -39,7 +39,7 @@ def _row(raw: Any) -> tuple[str, datetime, datetime] | None:
     """One stored row as (case_id, starts, ends), or None when it is malformed."""
     try:
         cid, s, e = raw["case_id"], datetime.fromisoformat(raw["starts_at"]), datetime.fromisoformat(raw["ends_at"])
-        if not isinstance(cid, str) or not 0 < len(cid) <= 16 or s.tzinfo is not None or e.tzinfo is not None or e <= s:
+        if not isinstance(cid, str) or not 0 < len(cid) <= 16 or s.tzinfo is not None or e.tzinfo is not None or e < s:
             return None
         return cid, s, e
     except (KeyError, TypeError, ValueError):
