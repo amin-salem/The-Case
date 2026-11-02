@@ -1,3 +1,9 @@
+# server 1.51.0: nightly cases c059, c060 (2 Nov 2026, ideas session 5 of 15)
+
+- c059 «تماشاگر ردیف خالی» (26 Nov, difficulty 5, S3 seemingly supernatural, shadow staged scene, theater / art) and c060 «داور بی‌قاشق» (27 Nov, difficulty 4, S4 light humour, victim stages the scene, kitchen / travel). Ideas #7 and #8 of batch 1.
+- Blind tests with fresh Sonnet readers on public copies (tool lines included): c059 90% then 90%, c060 85% then 88%; no single card or line decides. Every soft spot found was fixed in the files. Notification teasers added; case count tests 58 -> 60.
+- Deploy: redeploy from the Liara panel. No APK, no migration.
+
 # server 1.50.1: nightly cases c043-c046 rewritten in the house voice (2 Nov 2026, urgent)
 
 - c043 «قطعه‌ای که جا ماند» (10 Nov, guilty knowledge, culprit s4), c044 «پنجره‌ای که راه خروج نبود» (11 Nov, staged scene, culprit s1), c045 «پشتِ تصویرِ باران» (12 Nov, motive inversion, culprit s5), c046 «امضای زیرِ نامِ دیگری» (13 Nov, hidden relationship, culprit s2). Same ids, dates, scenes, titles, suspect ids and avatars; story, cards, questions and tool lines rewritten with the c026-c042 method (one true timeline, no single-card giveaway, no presumed questions, unique names).
