@@ -1,3 +1,9 @@
+# server 1.52.0: nightly cases c061, c062 (3 Nov 2026, ideas session 6 of 15)
+
+- c061 «خطی که هنوز خشک نشده بود» (28 Nov, difficulty 5, S1 cold case, guilty knowledge, library / family) and c062 «تخت آماده، وسیله‌ی ناآماده» (29 Nov, difficulty 5, S2 locked room, silent theft, hospital / medical). Ideas #9 and #10 of batch 1.
+- Blind tests with fresh Sonnet readers on public copies (tool lines included): c061 93% → 93% → 90% → 90%, c062 95% → 92% → 90% → 92%; no single card or line decides; every soft spot found was fixed in the files. Notification teasers added; case count tests 60 -> 62.
+- Deploy: redeploy from the Liara panel. No APK, no migration.
+
 # server 1.51.1: nightly cases c047-c050 rewritten in the house voice (3 Nov 2026, urgent)
 
 - c047 «شمع روی قفسه» (14 Nov, time trick, culprit s1), c048 «کلید شماره‌ی دو» (15 Nov, object biography, culprit s3), c049 «پنج مظنون، یک راست‌گو» (16 Nov, helpful witness is the liar, culprit s5; title no longer says «نفر»), c050 «ترتیب ورود» (17 Nov, time trick, culprit s5). Same ids, dates, scenes, categories, suspect ids and avatars; story, names, cards, questions and tool lines rewritten with the c026-c046 method (one true timeline, no single card names the culprit, no presumed questions, unique names; the old drafts' clashing names are gone).

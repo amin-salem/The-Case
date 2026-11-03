@@ -1,4 +1,4 @@
-"""Plays every one of the 60 cases through the real API, as a player would."""
+"""Plays every one of the 62 cases through the real API, as a player would."""
 import pytest
 
 from app import content, economy
@@ -8,7 +8,7 @@ from .conftest import new_player
 
 @pytest.fixture
 def all_open(monkeypatch):
-    """Pretend it's the evening after the last case, so all 60 are open, and let the archive be free."""
+    """Pretend it's the evening after the last case, so all 62 are open, and let the archive be free."""
     from datetime import datetime
     from zoneinfo import ZoneInfo
 
@@ -23,7 +23,7 @@ async def test_every_case_can_be_solved_and_only_by_the_right_proof(client, all_
     p = await new_player(client, "marathon-runner")
     h = p["headers"]
     lst = (await client.get("/v1/cases", headers=h)).json()
-    assert 1 + len([r for r in lst["archive"] if not r["weekend"]]) == 60  # weekend cases in the archive are extra
+    assert 1 + len([r for r in lst["archive"] if not r["weekend"]]) == 62  # weekend cases in the archive are extra
     for c in content.all_cases():
         opened = (await client.post(f"/v1/cases/{c.id}/unlock", headers=h)) if c.id != lst["today"]["id"] else None
         if opened is not None:
