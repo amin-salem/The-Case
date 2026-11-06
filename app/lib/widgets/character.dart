@@ -148,6 +148,7 @@ const Set<String> kPortraits = {
   'f_mid_teacher',
   'f_mid_widow',
   'f_mid_witness',
+  'f_mid_waitress',
   'f_old_aristocrat',
   'f_old_baker',
   'f_old_cook',
@@ -196,11 +197,13 @@ const Set<String> kPortraits = {
   'm_mid_photographer',
   'm_mid_policeman',
   'm_mid_resident',
+  'm_mid_researcher',
   'm_mid_roadworker',
   'm_mid_sailor',
   'm_mid_teacher',
   'm_mid_technician',
   'm_mid_tycoon',
+  'm_mid_worker',
   'm_old_bakerman',
   'm_old_boss',
   'm_old_butler',
@@ -617,3 +620,4 @@ class SuspectPortrait extends StatelessWidget {
         : ClipRRect(borderRadius: BorderRadius.circular(size * 0.1), child: art);
   }
 }
+
