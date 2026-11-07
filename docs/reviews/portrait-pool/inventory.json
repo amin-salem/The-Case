@@ -1,0 +1,704 @@
+{
+  "base": "1db49849ade2a9de7510d39069dc0ffe94be585b",
+  "cases": 31,
+  "appearances": 176,
+  "pool": 124,
+  "scenes": 20,
+  "missing": [
+    {
+      "case": "w005",
+      "suspect": "s3",
+      "name": "سیاوش نامور",
+      "role": "پژوهشگر مهمان و نسخه‌شناس",
+      "age": 46,
+      "gender": "m",
+      "portrait": "m_mid_researcher",
+      "file_exists": false,
+      "registered": false,
+      "metadata_age": null,
+      "age_difference": null,
+      "gender_key_matches": true,
+      "age_review": false,
+      "all_case_uses": "w005/s3"
+    },
+    {
+      "case": "w006",
+      "suspect": "s3",
+      "name": "قاسم بیات",
+      "role": "مسئول نظافت و خدمات طبقه چهارم",
+      "age": 36,
+      "gender": "m",
+      "portrait": "m_mid_worker",
+      "file_exists": false,
+      "registered": false,
+      "metadata_age": null,
+      "age_difference": null,
+      "gender_key_matches": true,
+      "age_review": false,
+      "all_case_uses": "w006/s3"
+    },
+    {
+      "case": "w006",
+      "suspect": "s4",
+      "name": "ژیلا پاکزاد",
+      "role": "مسئول سرویس اتاق و رستوران هتل",
+      "age": 32,
+      "gender": "f",
+      "portrait": "f_mid_waitress",
+      "file_exists": false,
+      "registered": false,
+      "metadata_age": null,
+      "age_difference": null,
+      "gender_key_matches": true,
+      "age_review": false,
+      "all_case_uses": "w006/s4"
+    }
+  ],
+  "age_differences_over_10": 20,
+  "registry_difference": [],
+  "age_registry_difference": [],
+  "gender_key_mismatches": [],
+  "within_case_duplicates": [],
+  "repeated_culprit_ids": {},
+  "all_repeated_portraits": {
+    "m_young_boxer": [
+      "c001/s1",
+      "c006/s2",
+      "c037/s3",
+      "w003/s4"
+    ],
+    "f_young_painter": [
+      "c001/s2",
+      "c023/s1"
+    ],
+    "m_old_painter": [
+      "c001/s3",
+      "c006/s3",
+      "c039/s2"
+    ],
+    "m_mid_guard": [
+      "c001/s4",
+      "c004/s4",
+      "c024/s2",
+      "c031/s2",
+      "c040/s5"
+    ],
+    "f_young_photographer": [
+      "c002/s1",
+      "w004/s2"
+    ],
+    "m_old_warden": [
+      "c002/s2",
+      "c021/s5",
+      "c044/s2",
+      "c056/s5",
+      "c059/s5"
+    ],
+    "m_mid_tycoon": [
+      "c002/s3",
+      "c013/s3",
+      "c039/s1",
+      "w001/s6",
+      "w003/s1"
+    ],
+    "m_old_boss": [
+      "c002/s4",
+      "c019/s3",
+      "c043/s2",
+      "c054/s5",
+      "c058/s3",
+      "w007/s2"
+    ],
+    "m_young_casual": [
+      "c002/s5",
+      "c017/s2",
+      "c038/s3",
+      "c055/s3",
+      "c058/s2",
+      "w002/s7",
+      "w004/s8"
+    ],
+    "m_mid_nurse": [
+      "c003/s1",
+      "c011/s2",
+      "c027/s4",
+      "c028/s1",
+      "c051/s4"
+    ],
+    "m_mid_chef": [
+      "c003/s2",
+      "c032/s5",
+      "c035/s1",
+      "c041/s5",
+      "c052/s6"
+    ],
+    "f_young_chemist": [
+      "c003/s3",
+      "c016/s2"
+    ],
+    "f_mid_witness": [
+      "c003/s4",
+      "c042/s2"
+    ],
+    "m_young_designer": [
+      "c004/s1",
+      "c017/s3",
+      "c032/s1",
+      "w004/s7"
+    ],
+    "m_old_fisher": [
+      "c004/s2",
+      "c024/s4",
+      "c046/s1"
+    ],
+    "m_old_professor": [
+      "c004/s3",
+      "c009/s1",
+      "w003/s2",
+      "w005/s1",
+      "w007/s7"
+    ],
+    "f_young_waitress": [
+      "c004/s5",
+      "c022/s2"
+    ],
+    "m_young_dj": [
+      "c005/s1",
+      "c011/s4",
+      "c051/s3"
+    ],
+    "m_mid_resident": [
+      "c005/s2",
+      "c020/s1",
+      "c030/s5",
+      "c042/s1",
+      "c049/s2",
+      "c053/s1"
+    ],
+    "f_mid_gallery": [
+      "c005/s3",
+      "c020/s4",
+      "c054/s1"
+    ],
+    "m_old_gardener": [
+      "c005/s4",
+      "c013/s5",
+      "c045/s5"
+    ],
+    "m_old_jurist": [
+      "c005/s5",
+      "c009/s4",
+      "c035/s4"
+    ],
+    "m_old_grandpa": [
+      "c006/s1",
+      "c014/s1",
+      "c035/s2"
+    ],
+    "m_mid_merchant": [
+      "c006/s4",
+      "c012/s3",
+      "c017/s4",
+      "c021/s1",
+      "c023/s4"
+    ],
+    "m_mid_policeman": [
+      "c007/s1",
+      "c037/s5",
+      "c047/s5"
+    ],
+    "m_mid_technician": [
+      "c007/s2",
+      "c015/s2",
+      "c016/s4",
+      "c026/s2",
+      "c046/s4",
+      "c057/s2",
+      "c059/s4",
+      "w004/s5"
+    ],
+    "f_mid_journalist": [
+      "c007/s3",
+      "c037/s4",
+      "c057/s3",
+      "w007/s4"
+    ],
+    "f_mid_archaeologist": [
+      "c007/s4",
+      "c046/s2"
+    ],
+    "m_mid_sailor": [
+      "c007/s5",
+      "c027/s1",
+      "c042/s3",
+      "c049/s1"
+    ],
+    "m_mid_officer": [
+      "c008/s1",
+      "c019/s1",
+      "c035/s5",
+      "c041/s4",
+      "c043/s4"
+    ],
+    "f_mid_surgeon": [
+      "c008/s2",
+      "c033/s4"
+    ],
+    "f_mid_pharmacist": [
+      "c008/s4",
+      "c028/s2",
+      "c051/s5"
+    ],
+    "f_young_nurse": [
+      "c008/s5",
+      "c051/s2"
+    ],
+    "m_mid_barista": [
+      "c009/s2",
+      "c036/s4",
+      "c048/s5",
+      "c056/s3",
+      "c057/s1",
+      "c060/s3",
+      "c062/s4"
+    ],
+    "f_young_researcher": [
+      "c009/s3",
+      "c036/s3"
+    ],
+    "f_mid_scholar": [
+      "c009/s5",
+      "c029/s3",
+      "c057/s4",
+      "w005/s4"
+    ],
+    "m_mid_artist": [
+      "c010/s1",
+      "c017/s1",
+      "c024/s3",
+      "c030/s3",
+      "c043/s3",
+      "c054/s2"
+    ],
+    "f_mid_laborer": [
+      "c010/s2",
+      "c039/s4"
+    ],
+    "m_mid_photographer": [
+      "c010/s3",
+      "c015/s1",
+      "c026/s4",
+      "c040/s3",
+      "c061/s2",
+      "w001/s1"
+    ],
+    "f_young_artist": [
+      "c010/s4",
+      "c054/s3",
+      "c059/s3",
+      "w002/s8"
+    ],
+    "m_young_athlete": [
+      "c010/s5",
+      "c021/s3",
+      "c050/s6"
+    ],
+    "m_old_woolcap": [
+      "c011/s1",
+      "c030/s4",
+      "c033/s5"
+    ],
+    "f_mid_guest": [
+      "c011/s3",
+      "c041/s2"
+    ],
+    "f_mid_housewife": [
+      "c011/s5",
+      "c013/s4",
+      "c053/s5",
+      "c055/s1",
+      "c058/s1",
+      "c061/s3"
+    ],
+    "m_young_it": [
+      "c012/s1",
+      "c022/s4",
+      "c052/s4",
+      "c056/s2",
+      "w007/s3"
+    ],
+    "m_mid_cook": [
+      "c012/s2",
+      "c031/s5",
+      "c032/s2",
+      "c055/s5",
+      "w004/s6"
+    ],
+    "f_mid_chef": [
+      "c012/s4",
+      "c033/s2",
+      "c060/s4",
+      "w003/s7"
+    ],
+    "f_young_athlete": [
+      "c012/s5",
+      "c052/s3"
+    ],
+    "m_young_undergrad": [
+      "c013/s1",
+      "c014/s3",
+      "c052/s5",
+      "w006/s7"
+    ],
+    "m_mid_business": [
+      "c013/s2",
+      "c023/s2",
+      "c036/s1",
+      "w003/s8",
+      "w004/s1",
+      "w006/s1"
+    ],
+    "f_mid_manager": [
+      "c014/s2",
+      "c030/s1",
+      "c034/s3",
+      "c056/s1",
+      "c060/s2"
+    ],
+    "f_young_bookworm": [
+      "c014/s4",
+      "c055/s2",
+      "w002/s4"
+    ],
+    "f_mid_teacher": [
+      "c014/s5",
+      "c018/s3",
+      "c042/s4",
+      "c053/s2",
+      "c062/s1"
+    ],
+    "f_mid_singer": [
+      "c015/s3",
+      "c043/s1"
+    ],
+    "f_mid_cleaner": [
+      "c015/s4",
+      "c022/s5"
+    ],
+    "m_young_worker": [
+      "c015/s5",
+      "c020/s2",
+      "w002/s3"
+    ],
+    "m_old_scientist": [
+      "c016/s1",
+      "c036/s5",
+      "c052/s1"
+    ],
+    "f_young_student": [
+      "c016/s3",
+      "c034/s2"
+    ],
+    "m_mid_conductor": [
+      "c016/s5",
+      "c026/s3",
+      "c033/s3",
+      "c040/s4",
+      "c042/s5"
+    ],
+    "m_mid_teacher": [
+      "c018/s1",
+      "c022/s3",
+      "c038/s4",
+      "c047/s1",
+      "c049/s3"
+    ],
+    "m_mid_driver": [
+      "c018/s2",
+      "c025/s2",
+      "c045/s4",
+      "c046/s3"
+    ],
+    "m_young_student": [
+      "c018/s4",
+      "c021/s4",
+      "c045/s2",
+      "w005/s8"
+    ],
+    "m_young_waiter": [
+      "c018/s5",
+      "c023/s3",
+      "c048/s1",
+      "c060/s5"
+    ],
+    "m_old_butler": [
+      "c019/s2",
+      "c029/s5",
+      "c046/s5"
+    ],
+    "f_young_receptionist": [
+      "c019/s4",
+      "c031/s1",
+      "w004/s4",
+      "w006/s2"
+    ],
+    "f_mid_officer": [
+      "c019/s5",
+      "c025/s5"
+    ],
+    "m_old_farmer": [
+      "c020/s3",
+      "c031/s4",
+      "w001/s5"
+    ],
+    "m_mid_lecturer": [
+      "c020/s5",
+      "c029/s1",
+      "c034/s5",
+      "c044/s5",
+      "c057/s5",
+      "c059/s1",
+      "w002/s1",
+      "w007/s8"
+    ],
+    "f_mid_curator": [
+      "c021/s2",
+      "c052/s2"
+    ],
+    "m_mid_lawyer": [
+      "c022/s1",
+      "c027/s3",
+      "c050/s2",
+      "w001/s8",
+      "w002/s5"
+    ],
+    "m_old_schoolmaster": [
+      "c023/s5",
+      "c038/s2",
+      "c061/s5",
+      "w003/s5"
+    ],
+    "f_mid_business": [
+      "c024/s1",
+      "c032/s3",
+      "c043/s5",
+      "c062/s3"
+    ],
+    "f_mid_restorer": [
+      "c024/s5",
+      "c059/s2",
+      "w005/s2"
+    ],
+    "m_young_courier": [
+      "c025/s1",
+      "c054/s4",
+      "w007/s5"
+    ],
+    "f_mid_clerk": [
+      "c025/s3",
+      "c045/s3",
+      "c058/s4"
+    ],
+    "m_old_physician": [
+      "c025/s4",
+      "c050/s1"
+    ],
+    "f_mid_lawyer": [
+      "c026/s1",
+      "c031/s3",
+      "c040/s1"
+    ],
+    "m_old_flatcap": [
+      "c026/s5",
+      "c047/s3",
+      "c053/s4",
+      "c058/s5",
+      "c061/s4"
+    ],
+    "m_old_captain": [
+      "c027/s2",
+      "c049/s4"
+    ],
+    "m_old_cleric": [
+      "c027/s5",
+      "c041/s1"
+    ],
+    "f_mid_inspector": [
+      "c028/s3",
+      "c050/s4"
+    ],
+    "m_mid_doctor": [
+      "c028/s4",
+      "c034/s1",
+      "c039/s5",
+      "c051/s1",
+      "w006/s5"
+    ],
+    "m_young_conscript": [
+      "c028/s5",
+      "w001/s4"
+    ],
+    "m_old_rich": [
+      "c029/s2",
+      "c050/s3",
+      "w002/s6"
+    ],
+    "f_mid_scientist": [
+      "c029/s4",
+      "c047/s2"
+    ],
+    "f_mid_soldier": [
+      "c030/s2",
+      "w001/s2"
+    ],
+    "m_mid_fixer": [
+      "c033/s1",
+      "c037/s1",
+      "c048/s4",
+      "c062/s2"
+    ],
+    "m_mid_roadworker": [
+      "c034/s4",
+      "c038/s1"
+    ],
+    "f_mid_baker": [
+      "c035/s3",
+      "c044/s4"
+    ],
+    "f_mid_widow": [
+      "c036/s2",
+      "c048/s2"
+    ],
+    "f_mid_director": [
+      "c037/s2",
+      "c047/s4"
+    ],
+    "f_mid_agent": [
+      "c038/s5",
+      "c044/s1"
+    ],
+    "f_mid_attorney": [
+      "c039/s3",
+      "c048/s3"
+    ],
+    "f_mid_librarian": [
+      "c040/s2",
+      "c061/s1"
+    ],
+    "m_old_bakerman": [
+      "c040/s6",
+      "c060/s1",
+      "w005/s5"
+    ],
+    "f_mid_mechanic": [
+      "c044/s3",
+      "w001/s3"
+    ],
+    "f_mid_banker": [
+      "c045/s1",
+      "c050/s5"
+    ],
+    "f_mid_designer": [
+      "c062/s5",
+      "w001/s7",
+      "w006/s8",
+      "w007/s1"
+    ],
+    "f_mid_judge": [
+      "w003/s6",
+      "w007/s6"
+    ],
+    "f_mid_doctor": [
+      "w004/s3",
+      "w006/s6"
+    ]
+  },
+  "scenes_in_scope": {
+    "school": [
+      "c038",
+      "c053"
+    ],
+    "airport": [
+      "c039",
+      "c056"
+    ],
+    "tower": [
+      "c040",
+      "c058"
+    ],
+    "bazaar_night": [
+      "c041"
+    ],
+    "office": [
+      "c042",
+      "c057"
+    ],
+    "train": [
+      "c043"
+    ],
+    "museum": [
+      "c044",
+      "w003"
+    ],
+    "villa_rain": [
+      "c045",
+      "c050"
+    ],
+    "warehouse": [
+      "c046"
+    ],
+    "library": [
+      "c047",
+      "c061",
+      "w005"
+    ],
+    "hotel": [
+      "c048",
+      "w006"
+    ],
+    "harbor": [
+      "c049"
+    ],
+    "hospital": [
+      "c051",
+      "c062"
+    ],
+    "lab": [
+      "c052",
+      "c054"
+    ],
+    "wedding": [
+      "c055",
+      "w002"
+    ],
+    "theater": [
+      "c059"
+    ],
+    "kitchen": [
+      "c060"
+    ],
+    "snow_lodge": [
+      "w001"
+    ],
+    "desert": [
+      "w004"
+    ]
+  },
+  "byte_identical_groups": [],
+  "decoded_dimensions": {
+    "(448, 448)": 124,
+    "(1024, 1024)": 20
+  },
+  "future_slots": 198,
+  "unwritten_slots": 140,
+  "unwritten_gender_age_counts": {
+    "('f', '18-35')": 22,
+    "('m', '36-54')": 34,
+    "('f', '36-54')": 29,
+    "('f', '55+')": 16,
+    "('m', '55+')": 18,
+    "('m', '18-35')": 19,
+    "('u', '18-35')": 1,
+    "('u', '36-54')": 1
+  }
+}

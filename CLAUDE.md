@@ -119,3 +119,8 @@ an urgent earlier request).
 ## Store texts (Amin, 26 Oct 2026)
 Cafe Bazaar release notes and store descriptions are written in a professional, general voice, like any studio's. Never mention
 AI, Claude, prompts or "generated"; no technical details (builds, servers, anti-cheat, file sizes); no promises that are not in the app.
+
+## Branch names (2 Nov 2026)
+A remote branch called `art` already exists, so Git refuses any branch named `art/...` (GitHub error 422 «Reference update failed»;
+a ref cannot be both a file and a folder). Name art branches without that prefix, for example `portrait-pool-audit`, and check
+`git ls-remote --heads origin '<prefix>*'` before choosing a prefix for a new branch.
