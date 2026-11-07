@@ -1,0 +1,367 @@
+case,suspect,name,gender,age,role,portrait,proposed_portrait,reason,status
+c001,s4,رحیم صفری,m,55,نگهبان شب راسته,m_mid_guard,m_old_warden,age gap >7,draft; needs cast visual review
+c001,s1,کاوه ملکی,m,28,پسر حاج‌مرتضی,m_young_boxer,m_young_boxer,retained,draft; needs cast visual review
+c001,s2,نسرین فرهادی,f,34,حسابدار مغازه,f_young_painter,f_young_painter,retained,draft; needs cast visual review
+c001,s3,حاج‌مرتضی ملکی,m,62,صاحب مغازه,m_old_painter,m_old_painter,retained,draft; needs cast visual review
+c002,s1,پریا شمس,f,29,منشی مدیرعامل,f_young_photographer,f_young_photographer,retained,draft; needs cast visual review
+c002,s2,جواد رستمی,m,60,نگهبان ساختمان,m_old_warden,m_old_warden,retained,draft; needs cast visual review
+c002,s3,شهرام نیک‌پور,m,42,مدیر مالی,m_mid_tycoon,m_mid_lawyer,age gap >7,draft; needs cast visual review
+c002,s4,مهندس آرمان,m,55,مدیرعامل,m_old_boss,m_old_boss,retained,draft; needs cast visual review
+c002,s5,سامان کریمی,m,31,برنامه‌نویس,m_young_casual,m_young_casual,retained,draft; needs cast visual review
+c003,s2,فرشید نوری,m,45,دستیار سابق مقتول,m_mid_chef,m_mid_officer,unrelated uniform,draft; needs cast visual review
+c003,s1,عباس قاسمی,m,50,مهماندار واگن ۴,m_mid_nurse,m_mid_business,age gap >7; unrelated uniform,draft; needs cast visual review
+c003,s3,مهتاب کریمی,f,27,دانشجوی دکترای شیمی,f_young_chemist,f_young_chemist,retained,draft; needs cast visual review
+c003,s4,لیلا سعیدی,f,38,دختر مقتول,f_mid_witness,f_mid_witness,retained,draft; needs cast visual review
+c004,s5,سیما رادمنش,f,36,مرمتگر آثار,f_young_waitress,f_mid_journalist,age gap >7,draft; needs cast visual review
+c004,s1,علی مرادی,m,24,نظافتچی موزه,m_young_designer,m_young_designer,retained,draft; needs cast visual review
+c004,s2,آقای آقازاده,m,61,مجموعه‌دار هنری,m_old_fisher,m_old_fisher,retained,draft; needs cast visual review
+c004,s3,دکتر حمیدی,m,58,مدیر موزه,m_old_professor,m_old_boss,age gap >7,draft; needs cast visual review
+c004,s4,نادر شریفی,m,47,نگهبان شب,m_mid_guard,m_mid_fixer,global culprit allocation / within-cast separation,draft; needs cast visual review
+c005,s2,کامران فرهی,m,45,برادرِ رویا,m_mid_resident,m_mid_resident,retained,draft; needs cast visual review
+c005,s1,پیمان رستگار,m,22,برادرزاده‌ی مقتول,m_young_dj,m_young_student,unrelated uniform,draft; needs cast visual review
+c005,s3,رویا رستگار,f,49,همسر مقتول,f_mid_gallery,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c005,s4,مش‌قربان,m,67,باغبان ویلا,m_old_gardener,m_old_gardener,retained,draft; needs cast visual review
+c005,s5,دکتر نیک‌نام,m,56,وکیل خانوادگی,m_old_jurist,m_mid_lecturer,age gap >7,draft; needs cast visual review
+c006,s3,حسین توکلی,m,58,صاحب انبار,m_old_painter,m_old_captain,age gap >7,draft; needs cast visual review
+c006,s1,یدالله,m,65,نگهبان شب انبار,m_old_grandpa,m_old_grandpa,retained,draft; needs cast visual review
+c006,s2,سهیل احمدی,m,36,مدیر سابق انبار,m_young_boxer,m_mid_driver,age gap >7,draft; needs cast visual review
+c006,s4,رضا ناصری,m,50,صاحب شرکت فرش رقیب,m_mid_merchant,m_mid_merchant,retained,draft; needs cast visual review
+c007,s1,مهدی کریمی,m,45,بازرس گمرک,m_mid_policeman,m_mid_photographer,unrelated uniform,draft; needs cast visual review
+c007,s2,حمید زارعی,m,32,اپراتور جرثقیل,m_mid_technician,m_young_courier,age gap >7,draft; needs cast visual review
+c007,s3,نسرین فروتن,f,50,نگهبان دروازه,f_mid_journalist,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c007,s4,سارا داوودی,f,38,نماینده‌ی صادرکننده,f_mid_archaeologist,f_mid_archaeologist,retained,draft; needs cast visual review
+c007,s5,جلال رحمانی,m,54,ناخدای کشتی,m_mid_sailor,m_mid_sailor,retained,draft; needs cast visual review
+c008,s3,شهلا پورحسن,f,63,نظافتچی بخش,f_old_rich,f_old_rich,retained,draft; needs cast visual review
+c008,s1,امیر افتخاری,m,36,پسر بیمار,m_mid_officer,m_mid_driver,age gap >7,draft; needs cast visual review
+c008,s2,دکتر ماندانا شریفی,f,44,پزشک کشیک,f_mid_surgeon,f_mid_archaeologist,age gap >7,draft; needs cast visual review
+c008,s4,زهره رحیمی,f,39,داروساز,f_mid_pharmacist,f_mid_pharmacist,retained,draft; needs cast visual review
+c008,s5,فرشته عزیزی,f,33,پرستار شب,f_young_nurse,f_young_nurse,retained,draft; needs cast visual review
+c009,s3,مهسا رضوانی,f,29,دانشجوی دکتری تاریخ، دستیار دکتر ملکی,f_young_researcher,f_young_athlete,unrelated uniform,draft; needs cast visual review
+c009,s1,دکتر فریدون ملکی,m,68,استاد بازنشسته‌ی تاریخ,m_old_professor,m_old_professor,retained,draft; needs cast visual review
+c009,s2,کامران تهرانی,m,47,کتاب‌فروش عتیقه، بازار قدیم رشت,m_mid_barista,m_mid_fixer,age gap >7; unrelated uniform,draft; needs cast visual review
+c009,s4,یدالله باقری,m,59,نگهبان ساختمان,m_old_jurist,m_old_boss,age gap >7,draft; needs cast visual review
+c009,s5,شیوا نیک‌پی,f,36,کتابدار تالار نسخه‌های قدیمی,f_mid_scholar,f_mid_designer,age gap >7,draft; needs cast visual review
+c010,s5,آرش رحیمی,m,27,بازیگر نقش نوکر، جایگزین نقش اول مرد,m_young_athlete,m_young_athlete,retained,draft; needs cast visual review
+c010,s1,سهراب نیک‌نام,m,46,بازیگر نقش اول مرد,m_mid_artist,m_mid_researcher,age gap >7,draft; needs cast visual review
+c010,s2,پروانه سلطانی,f,52,کارگردان,f_mid_laborer,f_mid_cleaner,age gap >7; unrelated uniform,draft; needs cast visual review
+c010,s3,نادر جهانگیری,m,38,مسئول صحنه,m_mid_photographer,m_mid_photographer,retained,draft; needs cast visual review
+c010,s4,ملیکا سلطانی‌فر,f,25,بازیگر جایگزین نقش اول زن,f_young_artist,f_young_artist,retained,draft; needs cast visual review
+c011,s1,بهمن طاهرخانی,m,56,مدیر هتل,m_old_woolcap,,age gap >7,new portrait needed
+c011,s2,فرهاد عبادی,m,41,برادرزاده‌ی خانم عبادی، مهمان اتاق ۲۱۶,m_mid_nurse,m_mid_lawyer,unrelated uniform,draft; needs cast visual review
+c011,s3,زری مرادی,f,47,سرخدمه‌ی هتل,f_mid_guest,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c011,s4,پویا رستگار,m,24,کارمند پذیرش,m_young_dj,m_young_athlete,unrelated uniform,draft; needs cast visual review
+c011,s5,ساغر نوروزی,f,39,دلال عتیقه، مهمان اتاق ۳۰۵,f_mid_housewife,f_mid_attorney,age gap >7,draft; needs cast visual review
+c012,s4,آزاده نصیری,f,33,کمک‌آشپز,f_mid_chef,f_mid_waitress,age gap >7,draft; needs cast visual review
+c012,s1,علی نادری,m,22,ظرف‌شور,m_young_it,m_young_it,retained,draft; needs cast visual review
+c012,s2,حسین هاشمی,m,50,سرآشپز,m_mid_cook,m_mid_cook,retained,draft; needs cast visual review
+c012,s3,مهدی توکلی,m,44,صاحب سفره‌خانه,m_mid_merchant,m_mid_merchant,retained,draft; needs cast visual review
+c012,s5,پریا نوری,f,27,صندوق‌دار,f_young_athlete,f_young_athlete,retained,draft; needs cast visual review
+c013,s2,مسعود فرجی,m,51,رئیس کمیته‌ی برگزاری مسابقه,m_mid_business,m_mid_business,retained,draft; needs cast visual review
+c013,s1,کاوه رزاقی,m,29,اسکی‌باز کوهستان، قهرمان پارسال,m_young_undergrad,m_young_undergrad,retained,draft; needs cast visual review
+c013,s3,فرهاد کرمی,m,46,مدیر پناهگاه,m_mid_tycoon,m_mid_tycoon,retained,draft; needs cast visual review
+c013,s4,شهلا امیری,f,44,آشپز پناهگاه,f_mid_housewife,f_mid_housewife,retained,draft; needs cast visual review
+c013,s5,بهرام نیک‌نام,m,58,راهنمای کوهستان و امدادگر پناهگاه,m_old_gardener,m_old_gardener,retained,draft; needs cast visual review
+c014,s5,فرشته کاویانی,f,38,معلم، مهمان تور,f_mid_teacher,f_mid_teacher,retained,draft; needs cast visual review
+c014,s1,غلامرضا صالحی,m,67,سرایدار رباط,m_old_grandpa,m_old_grandpa,retained,draft; needs cast visual review
+c014,s2,لیلا ارجمند,f,45,ستاره‌شناس، سرپرست تور رصد,f_mid_manager,f_mid_manager,retained,draft; needs cast visual review
+c014,s3,آرش مولایی,m,26,دانشجوی عکاسی، مهمان تور,m_young_undergrad,m_young_undergrad,retained,draft; needs cast visual review
+c014,s4,نگار شریفی,f,31,دستیار کلکسیونر,f_young_bookworm,f_young_bookworm,retained,draft; needs cast visual review
+c015,s1,کامران افشار,m,44,سرپرست شیفت شب ایستگاه,m_mid_photographer,m_mid_conductor,global culprit allocation / within-cast separation,draft; needs cast visual review
+c015,s2,یوسف قنبری,m,34,تکنسین فنی شیفت شب,m_mid_technician,m_mid_technician,retained,draft; needs cast visual review
+c015,s3,نسرین تهرانی,f,38,اپراتور اتاق کنترل,f_mid_singer,f_mid_singer,retained,draft; needs cast visual review
+c015,s4,زهرا مرادی,f,52,نظافتچی شیفت شب,f_mid_cleaner,f_mid_cleaner,retained,draft; needs cast visual review
+c015,s5,بهزاد نیک‌خو,m,27,کارگر پیمانکار تعمیرات خروجی ۲,m_young_worker,m_young_worker,retained,draft; needs cast visual review
+c016,s3,مهسا کرمانی,f,27,دانشجوی دکترا، صاحب نمونه‌های دزدیده‌شده,f_young_student,f_young_student,retained,draft; needs cast visual review
+c016,s1,دکتر هوشنگ وفایی,m,63,استاد راهنما و رئیس آزمایشگاه ۲۰۴,m_old_scientist,m_old_gardener,global culprit allocation / within-cast separation,draft; needs cast visual review
+c016,s2,نیلوفر صدری,f,29,دانشجوی دکترا، هم‌آزمایشگاهی و هم‌اتاقی خوابگاه مهسا,f_young_chemist,f_young_chemist,retained,draft; needs cast visual review
+c016,s4,مجید طاهری,m,41,تکنسین آزمایشگاه,m_mid_technician,m_mid_technician,retained,draft; needs cast visual review
+c016,s5,اکبر فتحی,m,56,نگهبان شب ساختمان پژوهشکده,m_mid_conductor,m_mid_lecturer,age gap >7; unrelated uniform,draft; needs cast visual review
+c017,s4,فرهاد نیک‌نام,m,33,پسرعمه‌ی عروس، حسابدار حجره‌ی فرش پدر عروس,m_mid_merchant,m_young_boxer,age gap >7,draft; needs cast visual review
+c017,s1,سینا رحمانی,m,31,عکاس تالار,m_mid_artist,m_mid_artist,retained,draft; needs cast visual review
+c017,s2,کاوه صدری,m,26,پسرعموی داماد,m_young_casual,m_young_casual,retained,draft; needs cast visual review
+c017,s3,میلاد بهروزی,m,29,دی‌جی تالار,m_young_designer,m_young_designer,retained,draft; needs cast visual review
+c017,s5,زهرا شاکری,f,61,عمه‌ی عروس، خواهر منصور شاکری,f_old_widow,f_old_widow,retained,draft; needs cast visual review
+c018,s5,بهزاد صفایی,m,29,مسئول آزمایشگاه مدرسه,m_young_waiter,m_young_casual,unrelated uniform,draft; needs cast visual review
+c018,s1,حسین ابراهیمی,m,54,معاون مدرسه,m_mid_teacher,m_mid_lecturer,age gap >7,draft; needs cast visual review
+c018,s2,جلال کریمی,m,49,دبیر فیزیک,m_mid_driver,m_mid_business,age gap >7,draft; needs cast visual review
+c018,s3,شیرین مرادی,f,38,منشی مدرسه,f_mid_teacher,f_mid_teacher,retained,draft; needs cast visual review
+c018,s4,آرمان تقوی,m,17,دانش‌آموز دوازدهم، ادمین کانال مدرسه,m_young_student,m_young_student,retained,draft; needs cast visual review
+c019,s5,سحر یوسفی,f,34,بازرس اتاق دستی,f_mid_officer,f_mid_witness,unrelated uniform,draft; needs cast visual review
+c019,s1,بهنام ملکی,m,37,باربر و بارگیر,m_mid_officer,m_mid_artist,age gap >7,draft; needs cast visual review
+c019,s2,رضا اکبری,m,48,مسئول امنیت شیفت,m_old_butler,m_mid_fixer,unrelated uniform,draft; needs cast visual review
+c019,s3,هاشمی,m,56,مسافر، تاجر فرش,m_old_boss,m_old_boss,retained,draft; needs cast visual review
+c019,s4,مینا ایزدی,f,29,مسئول پذیرش,f_young_receptionist,f_young_receptionist,retained,draft; needs cast visual review
+c020,s2,کاوه پاکزاد,m,29,شاگرد ساعت‌ساز، دستیار مرمت,m_young_worker,m_young_worker,retained,draft; needs cast visual review
+c020,s1,هومن رزاقی,m,54,ساعت‌ساز، پیمانکار مرمت ساعت برج,m_mid_resident,m_mid_resident,retained,draft; needs cast visual review
+c020,s3,حاج عباس قنبری,m,71,متصدی برج ساعت، ساکن اتاقک پای برج,m_old_farmer,m_old_farmer,retained,draft; needs cast visual review
+c020,s4,گلنار شیرازی,f,46,صاحب کافه‌ی قدیمی روبه‌روی برج,f_mid_gallery,f_mid_gallery,retained,draft; needs cast visual review
+c020,s5,مهندس بهزاد فرخی,m,49,معاون عمرانی شهرداری سرخ‌آباد,m_mid_lecturer,m_mid_lecturer,retained,draft; needs cast visual review
+c021,s4,بهروز رحمانی,m,26,شاگرد حجره‌ی حاج ناصر,m_young_student,m_young_student,retained,draft; needs cast visual review
+c021,s1,مرتضی کاشی,m,55,پارچه‌فروش، حجره‌ی روبه‌روی حاج ناصر,m_mid_merchant,m_mid_merchant,retained,draft; needs cast visual review
+c021,s2,فرشته نوری,f,41,عطار، حجره‌ی کناری حاج ناصر,f_mid_curator,f_mid_curator,retained,draft; needs cast visual review
+c021,s3,سعید ناصری,m,31,پسر حاج ناصر,m_young_athlete,m_young_athlete,retained,draft; needs cast visual review
+c021,s5,مش رجب صفایی,m,63,نگهبان شب بازار,m_old_warden,m_old_warden,retained,draft; needs cast visual review
+c022,s1,فرهاد صبوری,m,48,معاون مالی، قدیمی‌ترین همکار مدیرعامل,m_mid_lawyer,m_mid_lawyer,retained,draft; needs cast visual review
+c022,s2,مریم احمدوند,f,33,منشی مدیرعامل,f_young_waitress,f_young_photographer,age gap >7,draft; needs cast visual review
+c022,s3,بهنام کریمی,m,36,حسابدار,m_mid_teacher,m_mid_driver,age gap >7,draft; needs cast visual review
+c022,s4,آرش محبی,m,29,مسئول فناوری اطلاعات,m_young_it,m_young_it,retained,draft; needs cast visual review
+c022,s5,صغری اکبری,f,58,نظافتچی شب طبقه‌های پنج تا هفت,f_mid_cleaner,f_mid_publisher,age gap >7,draft; needs cast visual review
+c023,s5,جلال رضوانی,m,63,کارمند بازنشسته‌ی راه‌آهن، هم‌کوپه‌ای,m_old_schoolmaster,m_old_schoolmaster,retained,draft; needs cast visual review
+c023,s1,نازنین سلطانی,f,27,نقاش، خواهرزاده‌ی منیژه، هم‌کوپه‌ای,f_young_painter,f_young_painter,retained,draft; needs cast visual review
+c023,s2,حمید جهانی,m,45,مهماندار واگن سه,m_mid_business,m_mid_business,retained,draft; needs cast visual review
+c023,s3,کیان معتمدی,m,30,نوازنده‌ی سه‌تار، مسافر کوپه‌ی هشت,m_young_waiter,m_young_designer,age gap >7; unrelated uniform,draft; needs cast visual review
+c023,s4,فرشید بهرامی,m,52,بازرگان، هم‌کوپه‌ای,m_mid_merchant,m_mid_merchant,retained,draft; needs cast visual review
+c024,s3,بردیا شمس,m,38,عکاس مراسم افتتاح,m_mid_artist,m_mid_artist,retained,draft; needs cast visual review
+c024,s1,دکتر فریبا نوروزی,f,57,مدیر موزه,f_mid_business,f_mid_librarian,age gap >7,draft; needs cast visual review
+c024,s2,اصغر مرادی,m,52,سرپرست نگهبان‌های موزه,m_mid_guard,m_mid_lecturer,age gap >7,draft; needs cast visual review
+c024,s4,حاج کیومرث بهادری,m,70,مجموعه‌دار عتیقه، مهمان ویژه,m_old_fisher,m_old_fisher,retained,draft; needs cast visual review
+c024,s5,مهتاب کیانی,f,36,مرمت‌گر موزه، سخنران شب افتتاح,f_mid_restorer,f_mid_restorer,retained,draft; needs cast visual review
+c025,s2,حسین فروزان,m,44,رانندهٔ خانواده و برادر زری,m_mid_driver,,age gap >7,new portrait needed
+c025,s1,سیاوش بهروزی,m,46,پسر رضا بهروزی,m_young_courier,m_mid_researcher,age gap >7,draft; needs cast visual review
+c025,s3,زری فروزان,f,30,خدمتکار خانه و ذی‌نفع وصیت,f_mid_clerk,f_young_painter,age gap >7,draft; needs cast visual review
+c025,s4,دکتر جهانگیر سامی,m,62,پزشک خانواده,m_old_physician,m_old_physician,retained,draft; needs cast visual review
+c025,s5,مهناز صبوری,f,35,منشی مخصوص بهروزی,f_mid_officer,f_mid_designer,unrelated uniform,draft; needs cast visual review
+c026,s3,کیوان رادمهر,m,53,نگهبان شب انبار,m_mid_conductor,,age gap >7; unrelated uniform,new portrait needed
+c026,s1,تکتم ملکی,f,39,حسابدار انبار,f_mid_lawyer,f_mid_lawyer,retained,draft; needs cast visual review
+c026,s2,پیمان گودرزی,m,37,اپراتور لیفتراک,m_mid_technician,m_mid_technician,retained,draft; needs cast visual review
+c026,s4,سهراب کیانی,m,43,مسئول توزیع انبار,m_mid_photographer,m_mid_photographer,retained,draft; needs cast visual review
+c026,s5,منوچهر افشار,m,63,صاحب انبار,m_old_flatcap,m_old_flatcap,retained,draft; needs cast visual review
+c027,s1,کوروش بحری,m,41,ناخدای قایق طوفان,m_mid_sailor,,age gap >7,new portrait needed
+c027,s2,جمشید رضایی,m,59,ناخدای قایق موج,m_old_captain,m_old_captain,retained,draft; needs cast visual review
+c027,s3,نادر هرمزی,m,36,ناخدای قایق صدف,m_mid_lawyer,m_mid_lawyer,retained,draft; needs cast visual review
+c027,s4,یوسف صیادی,m,48,ناخدای قایق ساحل,m_mid_nurse,m_mid_fixer,age gap >7; unrelated uniform,draft; needs cast visual review
+c027,s5,عباس دهقانی,m,55,ناخدای قایق مروارید,m_old_cleric,m_mid_captain,age gap >7; unrelated uniform,draft; needs cast visual review
+c028,s3,فریده ناصری,f,33,پرستار شب بخش مراقبت ویژه,f_mid_inspector,f_mid_inspector,retained,draft; needs cast visual review
+c028,s1,سهراب جهانبخش,m,41,پرستار شب بخش مراقبت ویژه,m_mid_nurse,m_mid_nurse,retained,draft; needs cast visual review
+c028,s2,پریسا فرهمند,f,37,داروساز شیفت عصر بیمارستان,f_mid_pharmacist,f_mid_pharmacist,retained,draft; needs cast visual review
+c028,s4,دکتر مازیار راد,m,32,دستیار ارشد جراحی,m_mid_doctor,m_young_courier,age gap >7,draft; needs cast visual review
+c028,s5,غلامرضا صمدی,m,30,بهیار بخش مراقبت ویژه,m_young_conscript,m_young_designer,unrelated uniform,draft; needs cast visual review
+c029,s5,بابک کمالی,m,36,مسئول ثبت امانت,m_old_butler,m_young_designer,age gap >7; unrelated uniform,draft; needs cast visual review
+c029,s1,دکتر ناصر فاضلی,m,52,پژوهشگر مهمان,m_mid_lecturer,m_mid_lecturer,retained,draft; needs cast visual review
+c029,s2,حسن عطایی,m,57,نگهبان کتابخانه,m_old_rich,m_old_boss,age gap >7,draft; needs cast visual review
+c029,s3,زهره راد,f,44,کتابدار بخش نسخه‌ها,f_mid_scholar,f_mid_scholar,retained,draft; needs cast visual review
+c029,s4,مریم صمیمی,f,33,پژوهشگر متن‌های کهن,f_mid_scientist,f_young_photographer,unrelated uniform,draft; needs cast visual review
+c030,s2,مهتاب صالحی,f,35,لباس‌دار,f_mid_soldier,f_mid_singer,unrelated uniform,draft; needs cast visual review
+c030,s1,نیلوفر خسروی,f,40,مدیر صحنه,f_mid_manager,f_mid_manager,retained,draft; needs cast visual review
+c030,s3,کامیار نظری,m,45,بازیگر نقش پادشاه,m_mid_artist,m_mid_artist,retained,draft; needs cast visual review
+c030,s4,رسول طاهری,m,58,تهیه‌کننده,m_old_woolcap,m_old_boss,age gap >7,draft; needs cast visual review
+c030,s5,امید فرجی,m,31,اپراتور نور,m_mid_resident,m_young_courier,age gap >7,draft; needs cast visual review
+c031,s4,منوچهر زمانی,m,56,صاحب هتل,m_old_farmer,,age gap >7,new portrait needed
+c031,s1,بهاره کاشانی,f,29,مسئول پذیرش,f_young_receptionist,f_young_receptionist,retained,draft; needs cast visual review
+c031,s2,پرویز ملکی,m,50,نگهبان شب,m_mid_guard,m_mid_business,age gap >7,draft; needs cast visual review
+c031,s3,نسرین حیدری,f,42,حسابدار,f_mid_lawyer,f_mid_lawyer,retained,draft; needs cast visual review
+c031,s5,هاشم رنجبر,m,47,سرآشپز,m_mid_cook,m_mid_cook,retained,draft; needs cast visual review
+c032,s3,مینو شیرازی,f,47,مدیر رستوران,f_mid_business,f_mid_business,retained,draft; needs cast visual review
+c032,s1,سعید جعفرزاده,m,26,گارسون,m_young_designer,m_young_designer,retained,draft; needs cast visual review
+c032,s2,حمید ثقفی,m,54,سرآشپز,m_mid_cook,m_mid_cook,retained,draft; needs cast visual review
+c032,s4,آزیتا مهرجو,f,28,کمک‌آشپز,f_young_cook,f_young_cook,retained,draft; needs cast visual review
+c032,s5,ابراهیم غفاری,m,33,ظرف‌شور,m_mid_chef,m_young_courier,age gap >7,draft; needs cast visual review
+c033,s1,بهنام نوروزی,m,38,راهنمای کوه,m_mid_fixer,m_mid_worker,age gap >7,draft; needs cast visual review
+c033,s2,روشنک آذری,f,41,آشپز پناهگاه,f_mid_chef,f_mid_chef,retained,draft; needs cast visual review
+c033,s3,کاوه شفیعی,m,46,سرپرست پناهگاه,m_mid_conductor,m_mid_researcher,unrelated uniform,draft; needs cast visual review
+c033,s4,دکتر عاطفه سرمدی,f,45,مهمان، پزشک,f_mid_surgeon,f_mid_archaeologist,global culprit allocation / within-cast separation,draft; needs cast visual review
+c033,s5,ناصر رحمتی,m,60,برادر مقتول,m_old_woolcap,m_old_boss,age gap >7,draft; needs cast visual review
+c034,s5,فرهاد توکلی,m,37,فیلم‌بردار مستند,m_mid_lecturer,m_mid_driver,age gap >7,draft; needs cast visual review
+c034,s1,علیرضا بلوچی,m,44,راهنمای کویر,m_mid_doctor,m_mid_officer,unrelated uniform,draft; needs cast visual review
+c034,s2,سارا تقوی,f,23,دانشجوی کارآموز,f_young_student,f_young_student,retained,draft; needs cast visual review
+c034,s3,دکتر مینا ایمانی,f,50,سرپرست کاوش,f_mid_manager,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c034,s4,پژمان شهابی,m,31,کارگر کاوش,m_mid_roadworker,m_young_courier,age gap >7,draft; needs cast visual review
+c035,s3,پروانه عباسی,f,41,مأمور میز اشیای گمشده,f_mid_baker,f_mid_baker,retained,draft; needs cast visual review
+c035,s1,بهروز سلطانی,m,34,مسافر یابنده‌ی کیف,m_mid_chef,m_mid_driver,age gap >7; unrelated uniform,draft; needs cast visual review
+c035,s2,مرتضی اکبری,m,57,صاحب کیف,m_old_grandpa,m_old_boss,age gap >7,draft; needs cast visual review
+c035,s4,هاشم نوری,m,56,نظافتچی ایستگاه,m_old_jurist,m_mid_lecturer,age gap >7,draft; needs cast visual review
+c035,s5,حسین رحیمی,m,49,نگهبان ایستگاه,m_mid_officer,m_mid_officer,retained,draft; needs cast visual review
+c036,s2,دکتر شیما غفاری,f,36,پسادکتری,f_mid_widow,f_mid_widow,retained,draft; needs cast visual review
+c036,s1,مجتبی نیکزاد,m,48,مسئول ایمنی زیستی,m_mid_business,m_mid_business,retained,draft; needs cast visual review
+c036,s3,نگار حیدری,f,27,دانشجوی دکتری,f_young_researcher,f_young_researcher,retained,draft; needs cast visual review
+c036,s4,علیرضا قاسمی,m,40,تکنسین,m_mid_barista,m_mid_technician,unrelated uniform,draft; needs cast visual review
+c036,s5,دکتر پیمان آریا,m,55,رئیس آزمایشگاه,m_old_scientist,m_old_scientist,retained,draft; needs cast visual review
+c037,s2,مریم داوودی,f,57,خاله‌ی عروس,f_mid_director,f_mid_librarian,age gap >7,draft; needs cast visual review
+c037,s1,سهراب ابراهیمی,m,35,مهمانِ همراه خانواده‌ی داماد,m_mid_fixer,m_mid_driver,age gap >7,draft; needs cast visual review
+c037,s3,آیدین رحیمی,m,28,برادر داماد,m_young_boxer,m_young_boxer,retained,draft; needs cast visual review
+c037,s4,نسرین توکلی,f,38,هماهنگ‌کننده‌ی تالار,f_mid_journalist,f_mid_journalist,retained,draft; needs cast visual review
+c037,s5,کیومرث نظری,m,32,دی‌جی عروسی,m_mid_policeman,m_young_courier,age gap >7; unrelated uniform,draft; needs cast visual review
+c038,s1,داریوش مرادی,m,52,معاون آموزشی,m_mid_roadworker,m_mid_lecturer,unrelated uniform,draft; needs cast visual review
+c038,s2,غلام‌رضا شفیعی,m,61,سرایدار مدرسه,m_old_schoolmaster,m_old_schoolmaster,retained,draft; needs cast visual review
+c038,s3,آرمین کاظمی,m,17,دانش‌آموز پایه‌ی یازدهم,m_young_casual,m_young_student,age gap >7,draft; needs cast visual review
+c038,s4,کامبیز رحیمی,m,46,دبیر ریاضی,m_mid_teacher,m_mid_teacher,retained,draft; needs cast visual review
+c038,s5,فاطمه راستی,f,38,دبیر ادبیات و مسئول دبیرخانه,f_mid_agent,f_mid_agent,retained,draft; needs cast visual review
+c039,s5,بهمن زارعی,m,50,مسافر و شاهدِ داوطلب,m_mid_doctor,m_mid_sailor,unrelated uniform,draft; needs cast visual review
+c039,s1,کریم عابدی,m,36,متصدی پذیرش سالن,m_mid_tycoon,m_mid_driver,age gap >7,draft; needs cast visual review
+c039,s2,ایرج منصوری,m,58,تاجر و صاحب کیف,m_old_painter,m_old_boss,age gap >7,draft; needs cast visual review
+c039,s3,لیلا نظری,f,31,میزبان سالن,f_mid_attorney,f_mid_attorney,retained,draft; needs cast visual review
+c039,s4,طاهره صادقی,f,47,نظافتچی سالن,f_mid_laborer,f_mid_cleaner,unrelated uniform,draft; needs cast visual review
+c040,s1,دکتر لیدا زند,f,51,مسئول مالی بایگانی فرهنگی سپیدار,f_mid_lawyer,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c040,s2,ناره پطروسیان,f,60,همسایه‌ی برج و میزبان داوطلب نشست,f_mid_librarian,f_mid_librarian,retained,draft; needs cast visual review
+c040,s3,هرانت قریبیان,m,33,برادرزاده‌ی آرام؛ کارمند داروخانه,m_mid_photographer,m_young_courier,age gap >7,draft; needs cast visual review
+c040,s4,رافائل خسروی,m,47,مرمت‌گر برج و اسناد معماری بایگانی,m_mid_conductor,m_mid_fixer,unrelated uniform,draft; needs cast visual review
+c040,s5,داوود فرجی,m,54,نگهبان محوطه و مسئول رساندن وسایل به برج,m_mid_guard,m_mid_lecturer,age gap >7,draft; needs cast visual review
+c040,s6,گئورگ آواکیان,m,62,مدیر بایگانی فرهنگی سپیدار,m_old_bakerman,m_old_gardener,age gap >7,draft; needs cast visual review
+c041,s3,اکبر فاضلی,m,58,خریدار فرش,m_old_tailor,m_old_physician,age gap >7,draft; needs cast visual review
+c041,s1,جمشید حکیمی,m,63,ارزیاب فرش,m_old_cleric,m_old_gardener,unrelated uniform,draft; needs cast visual review
+c041,s2,مینا قاسمی,f,43,بافنده و تأمین‌کننده,f_mid_guest,f_mid_guest,retained,draft; needs cast visual review
+c041,s4,بهمن عبدی,m,49,فروشندهٔ فرش,m_mid_officer,m_mid_officer,retained,draft; needs cast visual review
+c041,s5,نادر وکیلی,m,45,فروشندهٔ همسایه,m_mid_chef,m_mid_photographer,unrelated uniform,draft; needs cast visual review
+c042,s2,دکتر ساناز میرزایی,f,46,مدیر پروژه,f_mid_witness,f_mid_archaeologist,age gap >7,draft; needs cast visual review
+c042,s1,محسن شفیعی,m,41,مهندس ارشد,m_mid_resident,m_mid_lawyer,age gap >7,draft; needs cast visual review
+c042,s3,بهزاد اعتمادی,m,38,مهندس محاسب,m_mid_sailor,m_mid_artist,age gap >7,draft; needs cast visual review
+c042,s4,نغمه ایزدی,f,30,دبیر پروژه,f_mid_teacher,f_young_painter,age gap >7,draft; needs cast visual review
+c042,s5,حامد خلیلی,m,33,کارشناس فناوری,m_mid_conductor,m_young_courier,age gap >7; unrelated uniform,draft; needs cast visual review
+c043,s4,یونس مهرجو,m,50,مأمور واگن خواب,m_mid_officer,m_old_butler,global culprit allocation / within-cast separation,draft; needs cast visual review
+c043,s1,افسانه سرافراز,f,52,صاحب گردنبند، مسافر کوپه‌ی پنج,f_mid_singer,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c043,s2,جهانگیر بهنام,m,56,رئیس قطار,m_old_boss,m_old_boss,retained,draft; needs cast visual review
+c043,s3,سیروس پرنیان,m,44,نقاش، مسافر کوپه‌ی شش,m_mid_artist,m_mid_artist,retained,draft; needs cast visual review
+c043,s5,تهمینه شکیبا,f,36,همسفر افسانه، معرف خریدار,f_mid_business,f_mid_business,retained,draft; needs cast visual review
+c044,s1,گلنار صدری,f,34,مسئول پذیرش,f_mid_agent,f_mid_guest,age gap >7,draft; needs cast visual review
+c044,s2,عزیز مدنی,m,55,نگهبان,m_old_warden,m_old_warden,retained,draft; needs cast visual review
+c044,s3,نگین ساعی,f,31,عکاس,f_mid_mechanic,f_mid_waitress,age gap >7,draft; needs cast visual review
+c044,s4,دکتر رویا کوشا,f,49,سرپرست مجموعه,f_mid_baker,f_mid_baker,retained,draft; needs cast visual review
+c044,s5,سیروس نیک‌پی,m,52,مرمت‌گر,m_mid_lecturer,m_mid_lecturer,retained,draft; needs cast visual review
+c045,s5,اسفندیار وفامنش,m,62,باغبان و مباشر باغ,m_old_gardener,m_old_fisher,global culprit allocation / within-cast separation,draft; needs cast visual review
+c045,s1,بهاره شفق,f,35,دستیار نقاش,f_mid_banker,f_mid_designer,age gap >7,draft; needs cast visual review
+c045,s2,سامان روشن,m,29,پسر نقاش,m_young_student,m_young_boxer,age gap >7,draft; needs cast visual review
+c045,s3,زهره بلوری,f,48,آشپز ویلا,f_mid_clerk,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c045,s4,وحید پناه,m,44,راننده,m_mid_driver,m_mid_officer,age gap >7,draft; needs cast visual review
+c046,s2,کتایون زرگری,f,36,مسئول باسکول,f_mid_archaeologist,f_mid_clerk,age gap >7,draft; needs cast visual review
+c046,s1,منوچهر کاشانی,m,61,مالک انبار,m_old_fisher,m_old_fisher,retained,draft; needs cast visual review
+c046,s3,تورج باقری,m,52,رانندهٔ کامیون,m_mid_driver,m_mid_lecturer,age gap >7,draft; needs cast visual review
+c046,s4,رامین مقدم,m,39,اپراتور لیفتراک,m_mid_technician,m_mid_technician,retained,draft; needs cast visual review
+c046,s5,شاهرخ وثوق,m,45,مسئول توزیع,m_old_butler,m_mid_officer,age gap >7; unrelated uniform,draft; needs cast visual review
+c047,s1,طهمورث پاک‌نیت,m,44,مسئول بخش نسخه‌های خطی,m_mid_teacher,m_mid_teacher,retained,draft; needs cast visual review
+c047,s2,دکتر فرنگیس رهنورد,f,41,پژوهشگر نسخه‌شناس,f_mid_scientist,f_mid_agent,unrelated uniform,draft; needs cast visual review
+c047,s3,مسیب آراسته,m,59,نظافتچی,m_old_flatcap,m_old_flatcap,retained,draft; needs cast visual review
+c047,s4,ارغوان نقره‌کار,f,38,کتابدار,f_mid_director,f_mid_attorney,age gap >7,draft; needs cast visual review
+c047,s5,عزت‌الله بهاری,m,50,نگهبان شب,m_mid_policeman,m_mid_business,unrelated uniform,draft; needs cast visual review
+c048,s3,فرزانه قدیری,f,33,متصدی پذیرش,f_mid_attorney,f_mid_attorney,retained,draft; needs cast visual review
+c048,s1,پوریا اسکویی,m,24,باربر,m_young_waiter,m_young_athlete,unrelated uniform,draft; needs cast visual review
+c048,s2,شمسی کاووسی,f,49,خدمتکار طبقه‌ی ششم,f_mid_widow,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c048,s4,تیمور گلریز,m,38,تعمیرکار,m_mid_fixer,m_mid_artist,age gap >7,draft; needs cast visual review
+c048,s5,حسام مشهدی,m,46,مهمان اتاق ۶۰۵,m_mid_barista,m_mid_researcher,age gap >7; unrelated uniform,draft; needs cast visual review
+c049,s5,حمدان گله‌داری,m,46,ناخدای صیاد-۱,m_mid_captain,m_mid_fixer,age gap >7,draft; needs cast visual review
+c049,s1,یحیی دشتی‌پور,m,43,ناخدای صیاد-۳,m_mid_sailor,m_mid_sailor,retained,draft; needs cast visual review
+c049,s2,عبدالله سلگی,m,51,ناخدای صیاد-۲,m_mid_resident,m_mid_resident,retained,draft; needs cast visual review
+c049,s3,مهیار تنگسیری,m,38,ناخدای صیاد-۴,m_mid_teacher,m_mid_teacher,retained,draft; needs cast visual review
+c049,s4,غلامعلی کنگی,m,55,ناخدای صیاد-۵,m_old_captain,m_mid_captain,age gap >7,draft; needs cast visual review
+c050,s5,آیدا افخمی,f,34,منشی مقتول,f_mid_banker,f_young_painter,age gap >7,draft; needs cast visual review
+c050,s1,دکتر نصرالله دانشور,m,58,پزشک خانواده,m_old_physician,m_old_physician,retained,draft; needs cast visual review
+c050,s2,هادی صدرایی,m,47,وکیل مقتول,m_mid_lawyer,m_mid_lawyer,retained,draft; needs cast visual review
+c050,s3,اسکندر زرنگار,m,55,مجموعه‌دار مینیاتور,m_old_rich,m_mid_lecturer,age gap >7,draft; needs cast visual review
+c050,s4,پریوش امیرخیزی,f,52,همسر مقتول,f_mid_inspector,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c050,s6,سورنا ملک‌آرا,m,29,پسر مقتول,m_young_athlete,m_young_athlete,retained,draft; needs cast visual review
+c051,s4,اسماعیل رستگار,m,55,سرپرستار شیفت شب، طبقه‌های چهار و پنج,m_mid_nurse,m_mid_doctor,age gap >7,draft; needs cast visual review
+c051,s1,دکتر کیارش امینی,m,33,دستیار کشیک داخلی، پزشک شب بخش ۴,m_mid_doctor,m_young_courier,age gap >7,draft; needs cast visual review
+c051,s2,الهام توسلی,f,31,پرستار شیفت شب بخش ۴,f_young_nurse,f_young_nurse,retained,draft; needs cast visual review
+c051,s3,یاسین قربانی,m,26,کمک‌بهیار شیفت شب، طبقه‌های سه و چهار,m_young_dj,m_young_casual,unrelated uniform,draft; needs cast visual review
+c051,s5,دکتر سپیده امینی,f,38,داروساز کشیک شب بیمارستان,f_mid_pharmacist,f_mid_pharmacist,retained,draft; needs cast visual review
+c052,s2,دکتر ژاله فرزین‌فر,f,47,دانشیار دانشکده، استاد مشاور پایان‌نامه‌ی نیوشا,f_mid_curator,f_mid_curator,retained,draft; needs cast visual review
+c052,s1,دکتر فریدون نیک‌سرشت,m,64,مدیر گروه و سرپرست آزمایشگاه فیزیولوژی گیاهی,m_old_scientist,m_old_captain,age gap >7,draft; needs cast visual review
+c052,s3,نیوشا طاهرخانی,f,29,دانشجوی دکتری، صاحب سینی خشک‌شده,f_young_athlete,f_young_athlete,retained,draft; needs cast visual review
+c052,s4,دکتر پویان شهرکی,m,35,پژوهشگر پسادکتری، مجری آزمون تکرار کوهسر-۷,m_young_it,m_young_it,retained,draft; needs cast visual review
+c052,s5,بهراد سلیمی,m,31,دانشجوی دکتری آزمایشگاه فیزیولوژی گیاهی,m_young_undergrad,m_young_undergrad,retained,draft; needs cast visual review
+c052,s6,جواد کریمیان,m,52,تکنسین آزمایشگاه و گلخانه‌ی دانشکده,m_mid_chef,m_mid_lecturer,age gap >7; unrelated uniform,draft; needs cast visual review
+c053,s3,مهین سبحانی,f,58,مسئول طرح شنوایی‌سنجی دبستان سپیده در سال‌های ۸۴ و ۸۵؛ حالا مدیر مرکز شنوایی‌سنجی نوا,f_old_retired,f_old_retired,retained,draft; needs cast visual review
+c053,s1,بهروز امیرخانی,m,51,حسابدار دبستان سپیده در سال ۸۵؛ حالا حسابدار یک شرکت پخش,m_mid_resident,m_mid_resident,retained,draft; needs cast visual review
+c053,s2,لادن امیرخانی,f,45,معلم کلاس سوم دبستان سپیده و دستیار طرح شنوایی‌سنجی در سال ۸۵؛ حالا معاون یک دبیرستان,f_mid_teacher,f_mid_teacher,retained,draft; needs cast visual review
+c053,s4,اردشیر دادفر,m,60,تعمیرکار سمعک؛ در سال ۸۵ تعمیر دستگاه‌های طرح با او بود,m_old_flatcap,m_old_flatcap,retained,draft; needs cast visual review
+c053,s5,نسرین شکیبا,f,49,نماینده‌ی اولیا در دبستان سپیده در سال ۸۵؛ خاله‌ی یکی از بچه‌های طرح,f_mid_housewife,f_mid_housewife,retained,draft; needs cast visual review
+c054,s1,مژگان فرهمند,f,46,مسئول نمایش و طراح ویترین‌های نمایشگاه؛ خواهر داریوش فرهمند,f_mid_gallery,f_mid_gallery,retained,draft; needs cast visual review
+c054,s2,شروین فراهانی,m,42,طراح و سازنده‌ی حجم‌نما؛ استاد نسترن,m_mid_artist,m_mid_artist,retained,draft; needs cast visual review
+c054,s3,نسترن بهنام,f,28,دستیار شروین در ساخت حجم‌نما,f_young_artist,f_young_artist,retained,draft; needs cast visual review
+c054,s4,کامیار صبوری,m,33,بسته‌بند کارگاه و سازنده‌ی ویترین‌های نمایشگاه,m_young_courier,m_young_courier,retained,draft; needs cast visual review
+c054,s5,داریوش فرهمند,m,55,سرمایه‌گذار حجم‌نما؛ برادر بزرگ مژگان,m_old_boss,m_old_boss,retained,draft; needs cast visual review
+c055,s5,فرهاد پارسا,m,49,برادر کوچک گیتی؛ مجلس‌دار، که پذیرایی و برنامه‌ی امشب کار او بود,m_mid_cook,m_mid_merchant,unrelated uniform,draft; needs cast visual review
+c055,s1,گیتی پارسا,f,54,میزبان مهمانی؛ دختر بزرگ خانم‌جان، خواهر فرهاد و مادر پریسا,f_mid_housewife,f_mid_housewife,retained,draft; needs cast visual review
+c055,s2,پریسا آذرنوش,f,30,دختر گیتی و نوه‌ی خانم‌جان,f_young_bookworm,f_young_bookworm,retained,draft; needs cast visual review
+c055,s3,نوید سپهری,m,32,دوست پریسا؛ برادرزاده‌ی هما کیانی,m_young_casual,m_young_casual,retained,draft; needs cast visual review
+c055,s4,هما کیانی,f,61,همسایه و دوست سی‌ساله‌ی خانم‌جان؛ عمه‌ی نوید,f_old_grandma,f_old_grandma,retained,draft; needs cast visual review
+c056,s2,آبتین کاویانی,m,34,هماهنگ‌کننده‌ی محموله‌های خیریه در فرودگاه؛ داماد فریبرز نامدار,m_young_it,m_young_it,retained,draft; needs cast visual review
+c056,s1,سوسن بهشتی,f,47,مدیر خیریه‌ی درمانی رهاورد؛ خواهر بزرگ مانی,f_mid_manager,f_mid_manager,retained,draft; needs cast visual review
+c056,s3,مانی بهشتی,m,35,تعمیرکار تجهیزات خیریه؛ برادر سوسن و شاگرد سابق فریبرز نامدار,m_mid_barista,m_mid_driver,unrelated uniform,draft; needs cast visual review
+c056,s4,ترانه یزدانی,f,31,انباردار شیفت شب سوله‌ی درمانی؛ مستأجر سابق سوسن,f_young_firefighter,f_mid_waitress,unrelated uniform,draft; needs cast visual review
+c056,s5,فریبرز نامدار,m,58,نماینده‌ی شرکت اهداکننده و بازرس بازنشسته‌ی تجهیزات پزشکی؛ پدرزن آبتین,m_old_warden,m_old_boss,unrelated uniform,draft; needs cast visual review
+c057,s4,دکتر منیژه دادبین,f,45,دبیر داوری مسابقه از اول آبان؛ استاد دانشگاه و استاد راهنمای روزبه افشار,f_mid_scholar,f_mid_scholar,retained,draft; needs cast visual review
+c057,s1,روزبه افشار,m,30,متقاضی مسابقه و صاحب طرح شماره‌ی ۹؛ شاگرد دکتری دکتر دادبین و همکار سابق نسیم شایگان در فصلنامه,m_mid_barista,m_young_designer,unrelated uniform,draft; needs cast visual review
+c057,s2,بردیا شایگان,m,38,مسئول میز دریافت طرح‌ها؛ برادر نسیم شایگان و رفیق دکتر سرابی,m_mid_technician,m_mid_technician,retained,draft; needs cast visual review
+c057,s3,نسیم شایگان,f,34,ویراستار فصلنامه‌ی نارون؛ خواهر بردیا شایگان و همکار سابق روزبه افشار,f_mid_journalist,f_mid_journalist,retained,draft; needs cast visual review
+c057,s5,دکتر کیوان سرابی,m,52,داور ارشد مسابقه و دبیر موقت داوری تا آخر مهر؛ دبیر سابق فصلنامه‌ی نارون و همکار قدیمی دکتر دادبین,m_mid_lecturer,m_mid_lecturer,retained,draft; needs cast visual review
+c058,s3,فرامرز وزیری,m,57,مدیر املاک خانواده و وارث دیگر؛ برادر ناهید وزیری,m_old_boss,m_old_boss,retained,draft; needs cast visual review
+c058,s1,ناهید وزیری,f,53,صاحب‌خانه و یکی از دو وارث؛ خواهر فرامرز وزیری و مادر شاهین نیک‌خواه,f_mid_housewife,f_mid_housewife,retained,draft; needs cast visual review
+c058,s2,شاهین نیک‌خواه,m,29,ارزیاب املاک؛ پسر ناهید وزیری و دوست دانشگاهی مهسا ارجمند,m_young_casual,m_young_casual,retained,draft; needs cast visual review
+c058,s4,مهسا ارجمند,f,32,منشی دفترخانه‌ی ۱۸۲ و منشی جلسه‌ی تقسیم؛ دوست دانشگاهی شاهین نیک‌خواه,f_mid_clerk,f_mid_waitress,age gap >7,draft; needs cast visual review
+c058,s5,عباس رهنما,m,66,دایی ناهید و فرامرز و شاهد امضای توافق‌نامه؛ ضامن وام شاهین,m_old_flatcap,m_old_flatcap,retained,draft; needs cast visual review
+c059,s2,شیرین مستوفی,f,46,طراح عروسک و صحنه‌ی گروه مهتاب؛ استاد شبنم دلنواز و همسر سابق هوشنگ آذرپور,f_mid_restorer,f_mid_banker,age gap >7; unrelated uniform,draft; needs cast visual review
+c059,s1,هوشنگ آذرپور,m,50,کارگردان و سرپرست گروه عروسکی مهتاب؛ همسر سابق شیرین مستوفی,m_mid_lecturer,m_mid_lecturer,retained,draft; needs cast visual review
+c059,s3,شبنم دلنواز,f,27,عروسک‌گردان اصلی گروه مهتاب؛ شاگرد شیرین مستوفی و خواهر اشکان دلنواز,f_young_artist,f_young_artist,retained,draft; needs cast visual review
+c059,s4,اشکان دلنواز,m,31,نورپرداز گروه مهتاب؛ برادر شبنم دلنواز و دوست قدیمی مجید توانا,m_mid_technician,m_young_courier,age gap >7,draft; needs cast visual review
+c059,s5,مجید توانا,m,60,مسئول سالن تمرین خانه‌ی فرهنگ اقاقیا؛ طلبکار هوشنگ آذرپور,m_old_warden,m_old_boss,unrelated uniform,draft; needs cast visual review
+c060,s1,ایرج فروتن,m,63,داور همیشگی مسابقه و بزرگ خانواده‌ی فروتن؛ پدر سحر فروتن,m_old_bakerman,m_old_bakerman,retained,draft; needs cast visual review
+c060,s2,سحر فروتن,f,35,برگزارکننده‌ی مسابقه؛ دختر ایرج فروتن و همسر آرش نامور,f_mid_manager,f_mid_manager,retained,draft; needs cast visual review
+c060,s3,آرش نامور,m,38,شرکت‌کننده‌ی مسابقه؛ داماد ایرج فروتن و همسر سحر فروتن,m_mid_barista,m_mid_artist,unrelated uniform,draft; needs cast visual review
+c060,s4,میترا خوشدل,f,51,مدیر آشپزخانه‌ی مهمان‌سرای سروناز؛ خاله‌ی پدرام یوسفی,f_mid_chef,f_mid_cleaner,age gap >7,draft; needs cast visual review
+c060,s5,پدرام یوسفی,m,26,دستیار ایرج فروتن در مسابقه؛ خواهرزاده‌ی میترا خوشدل و بدهکار ایرج,m_young_waiter,m_young_casual,unrelated uniform,draft; needs cast visual review
+c061,s4,منصور اردلان,m,61,مدیر صندوق خانواده‌ی نیک‌نهاد از ۱۳۷۴؛ برادر پروین اردلان و پسرخاله‌ی افروز تابان,m_old_flatcap,m_old_flatcap,retained,draft; needs cast visual review
+c061,s1,پروین اردلان,f,55,کتابدار کتابخانه‌ی خانوادگی نیک‌نهاد؛ خواهر منصور اردلان و استاد قدیم کامران زرین‌دست,f_mid_librarian,f_mid_librarian,retained,draft; needs cast visual review
+c061,s2,کامران زرین‌دست,m,49,صحاف و مرمت‌گر، صاحب کارگاه صحافی؛ شاگرد قدیم پروین اردلان,m_mid_photographer,m_mid_photographer,retained,draft; needs cast visual review
+c061,s3,افروز تابان,f,45,دختر و وارث شوکت تابان؛ دخترخاله‌ی منصور و پروین اردلان، صاحب خیاطی مادرش,f_mid_housewife,f_mid_housewife,retained,draft; needs cast visual review
+c061,s5,خسروان پاکدل,m,67,حسابدار پیشین صندوق خانواده‌ی نیک‌نهاد تا اسفند ۱۳۸۰؛ ضامن قرارداد شاگردی کامران زرین‌دست,m_old_schoolmaster,m_old_schoolmaster,retained,draft; needs cast visual review
+c062,s4,حمید دادرس,m,39,کارشناس تدارکات بیمارستان؛ برادر آزاده دادرس و بدهکار نصرت سپنتا,m_mid_barista,,unrelated uniform,new portrait needed
+c062,s1,منیر آگاه,f,40,مسئول آموزش بخش آموزش و نمایش تجهیزات؛ همکار حمید دادرس در کمیته‌ی تجهیزات,f_mid_teacher,f_mid_teacher,retained,draft; needs cast visual review
+c062,s2,نصرت سپنتا,m,52,تعمیرکار تجهیزات بیمارستان؛ طلبکار حمید دادرس و استاد سابق پیمانه رفیعی,m_mid_fixer,m_mid_fixer,retained,draft; needs cast visual review
+c062,s3,آزاده دادرس,f,44,نماینده‌ی خیریه‌ی همدم؛ خواهر بزرگ حمید دادرس و همسایه‌ی ده‌ساله‌ی پیمانه رفیعی,f_mid_business,f_mid_business,retained,draft; needs cast visual review
+c062,s5,پیمانه رفیعی,f,36,طراح نمایشگاه و سازنده‌ی دیوار نمایش اتاق ۳۰۴؛ شاگرد سابق نصرت سپنتا و همسایه‌ی آزاده دادرس,f_mid_designer,f_mid_designer,retained,draft; needs cast visual review
+w001,s7,شیرین مقدم,f,38,پرستار منصور,f_mid_designer,f_mid_designer,retained,draft; needs cast visual review
+w001,s1,کاوه صدری,m,52,پسر بزرگ منصور,m_mid_photographer,m_mid_photographer,retained,draft; needs cast visual review
+w001,s2,دکتر لیلا صدری,f,47,دختر منصور، متخصص قلب,f_mid_soldier,f_mid_cleaner,unrelated uniform,draft; needs cast visual review
+w001,s3,پریسا صدری,f,45,همسر کاوه,f_mid_mechanic,f_mid_mechanic,retained,draft; needs cast visual review
+w001,s4,نیما صدری,m,24,نوه‌ی منصور، پسر کاوه,m_young_conscript,m_young_athlete,unrelated uniform,draft; needs cast visual review
+w001,s5,اکبر نوروزی,m,66,سرایدار ویلا,m_old_farmer,m_old_farmer,retained,draft; needs cast visual review
+w001,s6,هوشنگ راد,m,58,مدیر مالی شرکت، دوست قدیمی منصور,m_mid_tycoon,m_old_boss,age gap >7,draft; needs cast visual review
+w001,s8,مهرداد کیانی,m,50,وکیل خانواده,m_mid_lawyer,m_mid_business,age gap >7,draft; needs cast visual review
+w002,s6,سیامک رهبر,m,57,حسابدار و مباشر باغ، رفیق قدیمی جمشید,m_old_rich,m_old_gardener,age gap >7,draft; needs cast visual review
+w002,s1,بهروز امیری,m,55,برادر کوچک جمشید، شریک باغ,m_mid_lecturer,m_mid_lecturer,retained,draft; needs cast visual review
+w002,s2,مهتاب امیری,f,50,همسر جمشید، مادر عروس,f_mid_pilot,f_mid_cleaner,age gap >7; unrelated uniform,draft; needs cast visual review
+w002,s3,حمید رستمی,m,33,گارسون شرکت پذیرایی؛ سرکارگر سابق باغ,m_young_worker,m_young_worker,retained,draft; needs cast visual review
+w002,s4,لادن امیری,f,34,دختر بهروز، طراح لباس عروس,f_young_bookworm,f_young_bookworm,retained,draft; needs cast visual review
+w002,s5,آرش فراهانی,m,36,برادر بزرگ داماد، حسابدار تعاونی صادرات مرکبات,m_mid_lawyer,m_mid_lawyer,retained,draft; needs cast visual review
+w002,s7,امید کاظمی,m,31,مسئول آتش‌بازی,m_young_casual,m_young_casual,retained,draft; needs cast visual review
+w002,s8,پریسا نوری,f,29,عکاس عروسی,f_young_artist,f_young_artist,retained,draft; needs cast visual review
+w003,s1,کامران پرند,m,48,مدیر حراج,m_mid_tycoon,m_mid_tycoon,retained,draft; needs cast visual review
+w003,s2,ایرج مستوفی,m,52,کارشناس ساعت‌ساز,m_old_professor,m_mid_lecturer,age gap >7,draft; needs cast visual review
+w003,s3,پرناز سالاری,f,44,وارث بزرگ‌تر,f_mid_commander,f_mid_archaeologist,age gap >7; unrelated uniform,draft; needs cast visual review
+w003,s4,پویا سالاری,m,34,وارث کوچک‌تر,m_young_boxer,m_young_boxer,retained,draft; needs cast visual review
+w003,s5,بهروز پارسا,m,58,دلال فرش و دوست قدیمی,m_old_schoolmaster,m_old_boss,age gap >7,draft; needs cast visual review
+w003,s6,ملیحه روشن,f,41,نگهبان موزه‌ی خانگی,f_mid_judge,f_mid_agent,unrelated uniform,draft; needs cast visual review
+w003,s7,گلرخ منوچهری,f,46,خدمتکار و آشپز خانه,f_mid_chef,f_mid_chef,retained,draft; needs cast visual review
+w003,s8,محسن عمادی,m,50,خریدار تلفنی,m_mid_business,m_mid_business,retained,draft; needs cast visual review
+w004,s5,کیان جهانبخش,m,44,راهنمای تورهای کویر,m_mid_technician,m_mid_technician,retained,draft; needs cast visual review
+w004,s1,فرشاد بخشعلی,m,49,فروشنده‌ی تجهیزات معدنی,m_mid_business,m_mid_business,retained,draft; needs cast visual review
+w004,s2,ترانه شریفی,f,31,عکاس طبیعت و مستندساز,f_young_photographer,f_young_photographer,retained,draft; needs cast visual review
+w004,s3,دکتر نوشین پارسا,f,45,پزشک عمومی درمانگاه‌های بین‌راهی,f_mid_doctor,f_mid_doctor,retained,draft; needs cast visual review
+w004,s4,رویا ملک‌پور,f,28,دختر صاحب کاروانسرا,f_young_receptionist,f_young_receptionist,retained,draft; needs cast visual review
+w004,s6,منصور صفری,m,46,آشپز کاروانسرای صفا,m_mid_cook,m_mid_cook,retained,draft; needs cast visual review
+w004,s7,سامان ناصری,m,33,استادیار باستان‌شناسی,m_young_designer,m_young_designer,retained,draft; needs cast visual review
+w004,s8,آرش کاظمی,m,30,نامزد رویا ملک‌پور,m_young_casual,m_young_casual,retained,draft; needs cast visual review
+w005,s3,سیاوش نامور,m,46,پژوهشگر مهمان و نسخه‌شناس,m_mid_researcher,m_mid_researcher,retained,draft; needs cast visual review
+w005,s1,بیژن کیوان‌فر,m,54,مدیر کتابخانه‌ی اسناد کهن,m_old_professor,m_mid_lecturer,age gap >7,draft; needs cast visual review
+w005,s2,تارا بهبهانی,f,39,مرمتگر اسناد و نسخه‌های خطی,f_mid_restorer,f_mid_restorer,retained,draft; needs cast visual review
+w005,s4,پریسا رادمنش,f,36,کتابدار بخش نسخه‌های خطی,f_mid_scholar,f_mid_designer,age gap >7,draft; needs cast visual review
+w005,s5,فریدون همتی,m,61,مجموعه‌دار نسخه‌های خطی,m_old_bakerman,m_old_boss,age gap >7,draft; needs cast visual review
+w005,s6,مرجان صادقی,f,43,نگهبان شب کتابخانه,f_mid_pastry,f_mid_agent,unrelated uniform,draft; needs cast visual review
+w005,s7,لاله عارف‌نیا,f,58,اهداکننده‌ی دیوان,f_mid_publisher,f_mid_publisher,retained,draft; needs cast visual review
+w005,s8,کامران شاهرخی,m,29,فهرست‌نویس انبار مجله‌ها,m_young_student,m_young_boxer,age gap >7,draft; needs cast visual review
+w006,s7,نیما رادپور,m,31,منشی و برنامه‌ریز همایش تجاری,m_young_undergrad,m_young_undergrad,retained,draft; needs cast visual review
+w006,s1,مهران ناصری,m,49,مدیر هتل بوتیک مروارید,m_mid_business,m_mid_business,retained,draft; needs cast visual review
+w006,s2,پروانه فروغی,f,30,متصدی پذیرش شیفت شب هتل,f_young_receptionist,f_young_receptionist,retained,draft; needs cast visual review
+w006,s3,قاسم بیات,m,36,مسئول نظافت و خدمات طبقه چهارم,m_mid_worker,m_mid_worker,retained,draft; needs cast visual review
+w006,s4,ژیلا پاکزاد,f,32,مسئول سرویس اتاق و رستوران هتل,f_mid_waitress,f_mid_waitress,retained,draft; needs cast visual review
+w006,s5,بهرام ذوالفقاری,m,45,میهمان و رقیب تجاری در همایش,m_mid_doctor,m_mid_officer,unrelated uniform,draft; needs cast visual review
+w006,s6,دکتر نگین تدین,f,40,پزشک مقیم و مشاور همایش,f_mid_doctor,f_mid_doctor,retained,draft; needs cast visual review
+w006,s8,ماندانا افشارچی,f,37,راننده‌ی ترانسفر و تاکسی هتل,f_mid_designer,f_mid_designer,retained,draft; needs cast visual review
+w007,s5,آرمین رهی‌زاد,m,32,مسئول صحنه,m_young_courier,m_young_courier,retained,outside remap scope
+w007,s1,نیلوفر کیافر,f,36,طراح، یکی از چهار تیم نهایی,f_mid_designer,f_mid_designer,retained,outside remap scope
+w007,s2,بهمنیار رادکیش,m,58,برگزارکننده، شرکت رویدادهای رادکیش,m_old_boss,m_old_boss,retained,outside remap scope
+w007,s3,آریا سروش‌فر,m,29,دستیار فنی، صدا و نور,m_young_it,m_young_it,retained,outside remap scope
+w007,s4,دلارام آذری‌نیا,f,41,مجری مراسم,f_mid_journalist,f_mid_journalist,retained,outside remap scope
+w007,s6,مهرنوش دادپوی,f,47,داور مسابقه، استاد دانشگاه,f_mid_judge,f_mid_judge,unrelated uniform,outside remap scope
+w007,s7,کیومرث به‌آیین,m,63,معمار پیشکسوت، سخنران ویژه,m_old_professor,m_old_professor,retained,outside remap scope
+w007,s8,شهنام فرهی‌نیا,m,52,بازرس سابق ساختمان,m_mid_lecturer,m_mid_lecturer,retained,outside remap scope

@@ -1,0 +1,3662 @@
+[
+  {
+    "case": "c001",
+    "suspect": "s1",
+    "name": "کاوه ملکی",
+    "age": 28,
+    "role": "پسر حاج‌مرتضی",
+    "portrait": "m_young_boxer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c001",
+    "suspect": "s2",
+    "name": "نسرین فرهادی",
+    "age": 34,
+    "role": "حسابدار مغازه",
+    "portrait": "f_young_painter",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c001",
+    "suspect": "s3",
+    "name": "حاج‌مرتضی ملکی",
+    "age": 62,
+    "role": "صاحب مغازه",
+    "portrait": "m_old_painter",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c001",
+    "suspect": "s4",
+    "name": "رحیم صفری",
+    "age": 55,
+    "role": "نگهبان شب راسته",
+    "portrait": "m_mid_guard",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c002",
+    "suspect": "s1",
+    "name": "پریا شمس",
+    "age": 29,
+    "role": "منشی مدیرعامل",
+    "portrait": "f_young_photographer",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c002",
+    "suspect": "s2",
+    "name": "جواد رستمی",
+    "age": 60,
+    "role": "نگهبان ساختمان",
+    "portrait": "m_old_warden",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c002",
+    "suspect": "s3",
+    "name": "شهرام نیک‌پور",
+    "age": 42,
+    "role": "مدیر مالی",
+    "portrait": "m_mid_tycoon",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c002",
+    "suspect": "s4",
+    "name": "مهندس آرمان",
+    "age": 55,
+    "role": "مدیرعامل",
+    "portrait": "m_old_boss",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c002",
+    "suspect": "s5",
+    "name": "سامان کریمی",
+    "age": 31,
+    "role": "برنامه‌نویس",
+    "portrait": "m_young_casual",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c003",
+    "suspect": "s1",
+    "name": "عباس قاسمی",
+    "age": 50,
+    "role": "مهماندار واگن ۴",
+    "portrait": "m_mid_nurse",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c003",
+    "suspect": "s2",
+    "name": "فرشید نوری",
+    "age": 45,
+    "role": "دستیار سابق مقتول",
+    "portrait": "m_mid_chef",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c003",
+    "suspect": "s3",
+    "name": "مهتاب کریمی",
+    "age": 27,
+    "role": "دانشجوی دکترای شیمی",
+    "portrait": "f_young_chemist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c003",
+    "suspect": "s4",
+    "name": "لیلا سعیدی",
+    "age": 38,
+    "role": "دختر مقتول",
+    "portrait": "f_mid_witness",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c004",
+    "suspect": "s1",
+    "name": "علی مرادی",
+    "age": 24,
+    "role": "نظافتچی موزه",
+    "portrait": "m_young_designer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c004",
+    "suspect": "s2",
+    "name": "آقای آقازاده",
+    "age": 61,
+    "role": "مجموعه‌دار هنری",
+    "portrait": "m_old_fisher",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c004",
+    "suspect": "s3",
+    "name": "دکتر حمیدی",
+    "age": 58,
+    "role": "مدیر موزه",
+    "portrait": "m_old_professor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c004",
+    "suspect": "s4",
+    "name": "نادر شریفی",
+    "age": 47,
+    "role": "نگهبان شب",
+    "portrait": "m_mid_guard",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c004",
+    "suspect": "s5",
+    "name": "سیما رادمنش",
+    "age": 36,
+    "role": "مرمتگر آثار",
+    "portrait": "f_young_waitress",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c005",
+    "suspect": "s1",
+    "name": "پیمان رستگار",
+    "age": 22,
+    "role": "برادرزاده‌ی مقتول",
+    "portrait": "m_young_dj",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c005",
+    "suspect": "s2",
+    "name": "کامران فرهی",
+    "age": 45,
+    "role": "برادرِ رویا",
+    "portrait": "m_mid_resident",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c005",
+    "suspect": "s3",
+    "name": "رویا رستگار",
+    "age": 49,
+    "role": "همسر مقتول",
+    "portrait": "f_mid_gallery",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c005",
+    "suspect": "s4",
+    "name": "مش‌قربان",
+    "age": 67,
+    "role": "باغبان ویلا",
+    "portrait": "m_old_gardener",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c005",
+    "suspect": "s5",
+    "name": "دکتر نیک‌نام",
+    "age": 56,
+    "role": "وکیل خانوادگی",
+    "portrait": "m_old_jurist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c006",
+    "suspect": "s1",
+    "name": "یدالله",
+    "age": 65,
+    "role": "نگهبان شب انبار",
+    "portrait": "m_old_grandpa",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c006",
+    "suspect": "s2",
+    "name": "سهیل احمدی",
+    "age": 36,
+    "role": "مدیر سابق انبار",
+    "portrait": "m_young_boxer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c006",
+    "suspect": "s3",
+    "name": "حسین توکلی",
+    "age": 58,
+    "role": "صاحب انبار",
+    "portrait": "m_old_painter",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c006",
+    "suspect": "s4",
+    "name": "رضا ناصری",
+    "age": 50,
+    "role": "صاحب شرکت فرش رقیب",
+    "portrait": "m_mid_merchant",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c007",
+    "suspect": "s1",
+    "name": "مهدی کریمی",
+    "age": 45,
+    "role": "بازرس گمرک",
+    "portrait": "m_mid_policeman",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c007",
+    "suspect": "s2",
+    "name": "حمید زارعی",
+    "age": 32,
+    "role": "اپراتور جرثقیل",
+    "portrait": "m_mid_technician",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c007",
+    "suspect": "s3",
+    "name": "نسرین فروتن",
+    "age": 50,
+    "role": "نگهبان دروازه",
+    "portrait": "f_mid_journalist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c007",
+    "suspect": "s4",
+    "name": "سارا داوودی",
+    "age": 38,
+    "role": "نماینده‌ی صادرکننده",
+    "portrait": "f_mid_archaeologist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c007",
+    "suspect": "s5",
+    "name": "جلال رحمانی",
+    "age": 54,
+    "role": "ناخدای کشتی",
+    "portrait": "m_mid_sailor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c008",
+    "suspect": "s1",
+    "name": "امیر افتخاری",
+    "age": 36,
+    "role": "پسر بیمار",
+    "portrait": "m_mid_officer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c008",
+    "suspect": "s2",
+    "name": "دکتر ماندانا شریفی",
+    "age": 44,
+    "role": "پزشک کشیک",
+    "portrait": "f_mid_surgeon",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c008",
+    "suspect": "s3",
+    "name": "شهلا پورحسن",
+    "age": 63,
+    "role": "نظافتچی بخش",
+    "portrait": "f_old_rich",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c008",
+    "suspect": "s4",
+    "name": "زهره رحیمی",
+    "age": 39,
+    "role": "داروساز",
+    "portrait": "f_mid_pharmacist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c008",
+    "suspect": "s5",
+    "name": "فرشته عزیزی",
+    "age": 33,
+    "role": "پرستار شب",
+    "portrait": "f_young_nurse",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c009",
+    "suspect": "s1",
+    "name": "دکتر فریدون ملکی",
+    "age": 68,
+    "role": "استاد بازنشسته‌ی تاریخ",
+    "portrait": "m_old_professor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c009",
+    "suspect": "s2",
+    "name": "کامران تهرانی",
+    "age": 47,
+    "role": "کتاب‌فروش عتیقه، بازار قدیم رشت",
+    "portrait": "m_mid_barista",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c009",
+    "suspect": "s3",
+    "name": "مهسا رضوانی",
+    "age": 29,
+    "role": "دانشجوی دکتری تاریخ، دستیار دکتر ملکی",
+    "portrait": "f_young_researcher",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c009",
+    "suspect": "s4",
+    "name": "یدالله باقری",
+    "age": 59,
+    "role": "نگهبان ساختمان",
+    "portrait": "m_old_jurist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c009",
+    "suspect": "s5",
+    "name": "شیوا نیک‌پی",
+    "age": 36,
+    "role": "کتابدار تالار نسخه‌های قدیمی",
+    "portrait": "f_mid_scholar",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c010",
+    "suspect": "s1",
+    "name": "سهراب نیک‌نام",
+    "age": 46,
+    "role": "بازیگر نقش اول مرد",
+    "portrait": "m_mid_artist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c010",
+    "suspect": "s2",
+    "name": "پروانه سلطانی",
+    "age": 52,
+    "role": "کارگردان",
+    "portrait": "f_mid_laborer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c010",
+    "suspect": "s3",
+    "name": "نادر جهانگیری",
+    "age": 38,
+    "role": "مسئول صحنه",
+    "portrait": "m_mid_photographer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c010",
+    "suspect": "s4",
+    "name": "ملیکا سلطانی‌فر",
+    "age": 25,
+    "role": "بازیگر جایگزین نقش اول زن",
+    "portrait": "f_young_artist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c010",
+    "suspect": "s5",
+    "name": "آرش رحیمی",
+    "age": 27,
+    "role": "بازیگر نقش نوکر، جایگزین نقش اول مرد",
+    "portrait": "m_young_athlete",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c011",
+    "suspect": "s1",
+    "name": "بهمن طاهرخانی",
+    "age": 56,
+    "role": "مدیر هتل",
+    "portrait": "m_old_woolcap",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c011",
+    "suspect": "s2",
+    "name": "فرهاد عبادی",
+    "age": 41,
+    "role": "برادرزاده‌ی خانم عبادی، مهمان اتاق ۲۱۶",
+    "portrait": "m_mid_nurse",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c011",
+    "suspect": "s3",
+    "name": "زری مرادی",
+    "age": 47,
+    "role": "سرخدمه‌ی هتل",
+    "portrait": "f_mid_guest",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c011",
+    "suspect": "s4",
+    "name": "پویا رستگار",
+    "age": 24,
+    "role": "کارمند پذیرش",
+    "portrait": "m_young_dj",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c011",
+    "suspect": "s5",
+    "name": "ساغر نوروزی",
+    "age": 39,
+    "role": "دلال عتیقه، مهمان اتاق ۳۰۵",
+    "portrait": "f_mid_housewife",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c012",
+    "suspect": "s1",
+    "name": "علی نادری",
+    "age": 22,
+    "role": "ظرف‌شور",
+    "portrait": "m_young_it",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c012",
+    "suspect": "s2",
+    "name": "حسین هاشمی",
+    "age": 50,
+    "role": "سرآشپز",
+    "portrait": "m_mid_cook",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c012",
+    "suspect": "s3",
+    "name": "مهدی توکلی",
+    "age": 44,
+    "role": "صاحب سفره‌خانه",
+    "portrait": "m_mid_merchant",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c012",
+    "suspect": "s4",
+    "name": "آزاده نصیری",
+    "age": 33,
+    "role": "کمک‌آشپز",
+    "portrait": "f_mid_chef",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c012",
+    "suspect": "s5",
+    "name": "پریا نوری",
+    "age": 27,
+    "role": "صندوق‌دار",
+    "portrait": "f_young_athlete",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c013",
+    "suspect": "s1",
+    "name": "کاوه رزاقی",
+    "age": 29,
+    "role": "اسکی‌باز کوهستان، قهرمان پارسال",
+    "portrait": "m_young_undergrad",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c013",
+    "suspect": "s2",
+    "name": "مسعود فرجی",
+    "age": 51,
+    "role": "رئیس کمیته‌ی برگزاری مسابقه",
+    "portrait": "m_mid_business",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c013",
+    "suspect": "s3",
+    "name": "فرهاد کرمی",
+    "age": 46,
+    "role": "مدیر پناهگاه",
+    "portrait": "m_mid_tycoon",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c013",
+    "suspect": "s4",
+    "name": "شهلا امیری",
+    "age": 44,
+    "role": "آشپز پناهگاه",
+    "portrait": "f_mid_housewife",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c013",
+    "suspect": "s5",
+    "name": "بهرام نیک‌نام",
+    "age": 58,
+    "role": "راهنمای کوهستان و امدادگر پناهگاه",
+    "portrait": "m_old_gardener",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c014",
+    "suspect": "s1",
+    "name": "غلامرضا صالحی",
+    "age": 67,
+    "role": "سرایدار رباط",
+    "portrait": "m_old_grandpa",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c014",
+    "suspect": "s2",
+    "name": "لیلا ارجمند",
+    "age": 45,
+    "role": "ستاره‌شناس، سرپرست تور رصد",
+    "portrait": "f_mid_manager",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c014",
+    "suspect": "s3",
+    "name": "آرش مولایی",
+    "age": 26,
+    "role": "دانشجوی عکاسی، مهمان تور",
+    "portrait": "m_young_undergrad",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c014",
+    "suspect": "s4",
+    "name": "نگار شریفی",
+    "age": 31,
+    "role": "دستیار کلکسیونر",
+    "portrait": "f_young_bookworm",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c014",
+    "suspect": "s5",
+    "name": "فرشته کاویانی",
+    "age": 38,
+    "role": "معلم، مهمان تور",
+    "portrait": "f_mid_teacher",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c015",
+    "suspect": "s1",
+    "name": "کامران افشار",
+    "age": 44,
+    "role": "سرپرست شیفت شب ایستگاه",
+    "portrait": "m_mid_photographer",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c015",
+    "suspect": "s2",
+    "name": "یوسف قنبری",
+    "age": 34,
+    "role": "تکنسین فنی شیفت شب",
+    "portrait": "m_mid_technician",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c015",
+    "suspect": "s3",
+    "name": "نسرین تهرانی",
+    "age": 38,
+    "role": "اپراتور اتاق کنترل",
+    "portrait": "f_mid_singer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c015",
+    "suspect": "s4",
+    "name": "زهرا مرادی",
+    "age": 52,
+    "role": "نظافتچی شیفت شب",
+    "portrait": "f_mid_cleaner",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c015",
+    "suspect": "s5",
+    "name": "بهزاد نیک‌خو",
+    "age": 27,
+    "role": "کارگر پیمانکار تعمیرات خروجی ۲",
+    "portrait": "m_young_worker",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c016",
+    "suspect": "s1",
+    "name": "دکتر هوشنگ وفایی",
+    "age": 63,
+    "role": "استاد راهنما و رئیس آزمایشگاه ۲۰۴",
+    "portrait": "m_old_scientist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c016",
+    "suspect": "s2",
+    "name": "نیلوفر صدری",
+    "age": 29,
+    "role": "دانشجوی دکترا، هم‌آزمایشگاهی و هم‌اتاقی خوابگاه مهسا",
+    "portrait": "f_young_chemist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c016",
+    "suspect": "s3",
+    "name": "مهسا کرمانی",
+    "age": 27,
+    "role": "دانشجوی دکترا، صاحب نمونه‌های دزدیده‌شده",
+    "portrait": "f_young_student",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c016",
+    "suspect": "s4",
+    "name": "مجید طاهری",
+    "age": 41,
+    "role": "تکنسین آزمایشگاه",
+    "portrait": "m_mid_technician",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c016",
+    "suspect": "s5",
+    "name": "اکبر فتحی",
+    "age": 56,
+    "role": "نگهبان شب ساختمان پژوهشکده",
+    "portrait": "m_mid_conductor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c017",
+    "suspect": "s1",
+    "name": "سینا رحمانی",
+    "age": 31,
+    "role": "عکاس تالار",
+    "portrait": "m_mid_artist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c017",
+    "suspect": "s2",
+    "name": "کاوه صدری",
+    "age": 26,
+    "role": "پسرعموی داماد",
+    "portrait": "m_young_casual",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c017",
+    "suspect": "s3",
+    "name": "میلاد بهروزی",
+    "age": 29,
+    "role": "دی‌جی تالار",
+    "portrait": "m_young_designer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c017",
+    "suspect": "s4",
+    "name": "فرهاد نیک‌نام",
+    "age": 33,
+    "role": "پسرعمه‌ی عروس، حسابدار حجره‌ی فرش پدر عروس",
+    "portrait": "m_mid_merchant",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c017",
+    "suspect": "s5",
+    "name": "زهرا شاکری",
+    "age": 61,
+    "role": "عمه‌ی عروس، خواهر منصور شاکری",
+    "portrait": "f_old_widow",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c018",
+    "suspect": "s1",
+    "name": "حسین ابراهیمی",
+    "age": 54,
+    "role": "معاون مدرسه",
+    "portrait": "m_mid_teacher",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c018",
+    "suspect": "s2",
+    "name": "جلال کریمی",
+    "age": 49,
+    "role": "دبیر فیزیک",
+    "portrait": "m_mid_driver",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c018",
+    "suspect": "s3",
+    "name": "شیرین مرادی",
+    "age": 38,
+    "role": "منشی مدرسه",
+    "portrait": "f_mid_teacher",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c018",
+    "suspect": "s4",
+    "name": "آرمان تقوی",
+    "age": 17,
+    "role": "دانش‌آموز دوازدهم، ادمین کانال مدرسه",
+    "portrait": "m_young_student",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c018",
+    "suspect": "s5",
+    "name": "بهزاد صفایی",
+    "age": 29,
+    "role": "مسئول آزمایشگاه مدرسه",
+    "portrait": "m_young_waiter",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c019",
+    "suspect": "s1",
+    "name": "بهنام ملکی",
+    "age": 37,
+    "role": "باربر و بارگیر",
+    "portrait": "m_mid_officer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c019",
+    "suspect": "s2",
+    "name": "رضا اکبری",
+    "age": 48,
+    "role": "مسئول امنیت شیفت",
+    "portrait": "m_old_butler",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c019",
+    "suspect": "s3",
+    "name": "هاشمی",
+    "age": 56,
+    "role": "مسافر، تاجر فرش",
+    "portrait": "m_old_boss",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c019",
+    "suspect": "s4",
+    "name": "مینا ایزدی",
+    "age": 29,
+    "role": "مسئول پذیرش",
+    "portrait": "f_young_receptionist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c019",
+    "suspect": "s5",
+    "name": "سحر یوسفی",
+    "age": 34,
+    "role": "بازرس اتاق دستی",
+    "portrait": "f_mid_officer",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c020",
+    "suspect": "s1",
+    "name": "هومن رزاقی",
+    "age": 54,
+    "role": "ساعت‌ساز، پیمانکار مرمت ساعت برج",
+    "portrait": "m_mid_resident",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c020",
+    "suspect": "s2",
+    "name": "کاوه پاکزاد",
+    "age": 29,
+    "role": "شاگرد ساعت‌ساز، دستیار مرمت",
+    "portrait": "m_young_worker",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c020",
+    "suspect": "s3",
+    "name": "حاج عباس قنبری",
+    "age": 71,
+    "role": "متصدی برج ساعت، ساکن اتاقک پای برج",
+    "portrait": "m_old_farmer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c020",
+    "suspect": "s4",
+    "name": "گلنار شیرازی",
+    "age": 46,
+    "role": "صاحب کافه‌ی قدیمی روبه‌روی برج",
+    "portrait": "f_mid_gallery",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c020",
+    "suspect": "s5",
+    "name": "مهندس بهزاد فرخی",
+    "age": 49,
+    "role": "معاون عمرانی شهرداری سرخ‌آباد",
+    "portrait": "m_mid_lecturer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c021",
+    "suspect": "s1",
+    "name": "مرتضی کاشی",
+    "age": 55,
+    "role": "پارچه‌فروش، حجره‌ی روبه‌روی حاج ناصر",
+    "portrait": "m_mid_merchant",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c021",
+    "suspect": "s2",
+    "name": "فرشته نوری",
+    "age": 41,
+    "role": "عطار، حجره‌ی کناری حاج ناصر",
+    "portrait": "f_mid_curator",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c021",
+    "suspect": "s3",
+    "name": "سعید ناصری",
+    "age": 31,
+    "role": "پسر حاج ناصر",
+    "portrait": "m_young_athlete",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c021",
+    "suspect": "s4",
+    "name": "بهروز رحمانی",
+    "age": 26,
+    "role": "شاگرد حجره‌ی حاج ناصر",
+    "portrait": "m_young_student",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c021",
+    "suspect": "s5",
+    "name": "مش رجب صفایی",
+    "age": 63,
+    "role": "نگهبان شب بازار",
+    "portrait": "m_old_warden",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c022",
+    "suspect": "s1",
+    "name": "فرهاد صبوری",
+    "age": 48,
+    "role": "معاون مالی، قدیمی‌ترین همکار مدیرعامل",
+    "portrait": "m_mid_lawyer",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c022",
+    "suspect": "s2",
+    "name": "مریم احمدوند",
+    "age": 33,
+    "role": "منشی مدیرعامل",
+    "portrait": "f_young_waitress",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c022",
+    "suspect": "s3",
+    "name": "بهنام کریمی",
+    "age": 36,
+    "role": "حسابدار",
+    "portrait": "m_mid_teacher",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c022",
+    "suspect": "s4",
+    "name": "آرش محبی",
+    "age": 29,
+    "role": "مسئول فناوری اطلاعات",
+    "portrait": "m_young_it",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c022",
+    "suspect": "s5",
+    "name": "صغری اکبری",
+    "age": 58,
+    "role": "نظافتچی شب طبقه‌های پنج تا هفت",
+    "portrait": "f_mid_cleaner",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c023",
+    "suspect": "s1",
+    "name": "نازنین سلطانی",
+    "age": 27,
+    "role": "نقاش، خواهرزاده‌ی منیژه، هم‌کوپه‌ای",
+    "portrait": "f_young_painter",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c023",
+    "suspect": "s2",
+    "name": "حمید جهانی",
+    "age": 45,
+    "role": "مهماندار واگن سه",
+    "portrait": "m_mid_business",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c023",
+    "suspect": "s3",
+    "name": "کیان معتمدی",
+    "age": 30,
+    "role": "نوازنده‌ی سه‌تار، مسافر کوپه‌ی هشت",
+    "portrait": "m_young_waiter",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c023",
+    "suspect": "s4",
+    "name": "فرشید بهرامی",
+    "age": 52,
+    "role": "بازرگان، هم‌کوپه‌ای",
+    "portrait": "m_mid_merchant",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c023",
+    "suspect": "s5",
+    "name": "جلال رضوانی",
+    "age": 63,
+    "role": "کارمند بازنشسته‌ی راه‌آهن، هم‌کوپه‌ای",
+    "portrait": "m_old_schoolmaster",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c024",
+    "suspect": "s1",
+    "name": "دکتر فریبا نوروزی",
+    "age": 57,
+    "role": "مدیر موزه",
+    "portrait": "f_mid_business",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c024",
+    "suspect": "s2",
+    "name": "اصغر مرادی",
+    "age": 52,
+    "role": "سرپرست نگهبان‌های موزه",
+    "portrait": "m_mid_guard",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c024",
+    "suspect": "s3",
+    "name": "بردیا شمس",
+    "age": 38,
+    "role": "عکاس مراسم افتتاح",
+    "portrait": "m_mid_artist",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c024",
+    "suspect": "s4",
+    "name": "حاج کیومرث بهادری",
+    "age": 70,
+    "role": "مجموعه‌دار عتیقه، مهمان ویژه",
+    "portrait": "m_old_fisher",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c024",
+    "suspect": "s5",
+    "name": "مهتاب کیانی",
+    "age": 36,
+    "role": "مرمت‌گر موزه، سخنران شب افتتاح",
+    "portrait": "f_mid_restorer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c025",
+    "suspect": "s1",
+    "name": "سیاوش بهروزی",
+    "age": 46,
+    "role": "پسر رضا بهروزی",
+    "portrait": "m_young_courier",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c025",
+    "suspect": "s2",
+    "name": "حسین فروزان",
+    "age": 44,
+    "role": "رانندهٔ خانواده و برادر زری",
+    "portrait": "m_mid_driver",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c025",
+    "suspect": "s3",
+    "name": "زری فروزان",
+    "age": 30,
+    "role": "خدمتکار خانه و ذی‌نفع وصیت",
+    "portrait": "f_mid_clerk",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c025",
+    "suspect": "s4",
+    "name": "دکتر جهانگیر سامی",
+    "age": 62,
+    "role": "پزشک خانواده",
+    "portrait": "m_old_physician",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c025",
+    "suspect": "s5",
+    "name": "مهناز صبوری",
+    "age": 35,
+    "role": "منشی مخصوص بهروزی",
+    "portrait": "f_mid_officer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c026",
+    "suspect": "s1",
+    "name": "تکتم ملکی",
+    "age": 39,
+    "role": "حسابدار انبار",
+    "portrait": "f_mid_lawyer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c026",
+    "suspect": "s2",
+    "name": "پیمان گودرزی",
+    "age": 37,
+    "role": "اپراتور لیفتراک",
+    "portrait": "m_mid_technician",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c026",
+    "suspect": "s3",
+    "name": "کیوان رادمهر",
+    "age": 53,
+    "role": "نگهبان شب انبار",
+    "portrait": "m_mid_conductor",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c026",
+    "suspect": "s4",
+    "name": "سهراب کیانی",
+    "age": 43,
+    "role": "مسئول توزیع انبار",
+    "portrait": "m_mid_photographer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c026",
+    "suspect": "s5",
+    "name": "منوچهر افشار",
+    "age": 63,
+    "role": "صاحب انبار",
+    "portrait": "m_old_flatcap",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c027",
+    "suspect": "s1",
+    "name": "کوروش بحری",
+    "age": 41,
+    "role": "ناخدای قایق طوفان",
+    "portrait": "m_mid_sailor",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c027",
+    "suspect": "s2",
+    "name": "جمشید رضایی",
+    "age": 59,
+    "role": "ناخدای قایق موج",
+    "portrait": "m_old_captain",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c027",
+    "suspect": "s3",
+    "name": "نادر هرمزی",
+    "age": 36,
+    "role": "ناخدای قایق صدف",
+    "portrait": "m_mid_lawyer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c027",
+    "suspect": "s4",
+    "name": "یوسف صیادی",
+    "age": 48,
+    "role": "ناخدای قایق ساحل",
+    "portrait": "m_mid_nurse",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c027",
+    "suspect": "s5",
+    "name": "عباس دهقانی",
+    "age": 55,
+    "role": "ناخدای قایق مروارید",
+    "portrait": "m_old_cleric",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c028",
+    "suspect": "s1",
+    "name": "سهراب جهانبخش",
+    "age": 41,
+    "role": "پرستار شب بخش مراقبت ویژه",
+    "portrait": "m_mid_nurse",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c028",
+    "suspect": "s2",
+    "name": "پریسا فرهمند",
+    "age": 37,
+    "role": "داروساز شیفت عصر بیمارستان",
+    "portrait": "f_mid_pharmacist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c028",
+    "suspect": "s3",
+    "name": "فریده ناصری",
+    "age": 33,
+    "role": "پرستار شب بخش مراقبت ویژه",
+    "portrait": "f_mid_inspector",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c028",
+    "suspect": "s4",
+    "name": "دکتر مازیار راد",
+    "age": 32,
+    "role": "دستیار ارشد جراحی",
+    "portrait": "m_mid_doctor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c028",
+    "suspect": "s5",
+    "name": "غلامرضا صمدی",
+    "age": 30,
+    "role": "بهیار بخش مراقبت ویژه",
+    "portrait": "m_young_conscript",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c029",
+    "suspect": "s1",
+    "name": "دکتر ناصر فاضلی",
+    "age": 52,
+    "role": "پژوهشگر مهمان",
+    "portrait": "m_mid_lecturer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c029",
+    "suspect": "s2",
+    "name": "حسن عطایی",
+    "age": 57,
+    "role": "نگهبان کتابخانه",
+    "portrait": "m_old_rich",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c029",
+    "suspect": "s3",
+    "name": "زهره راد",
+    "age": 44,
+    "role": "کتابدار بخش نسخه‌ها",
+    "portrait": "f_mid_scholar",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c029",
+    "suspect": "s4",
+    "name": "مریم صمیمی",
+    "age": 33,
+    "role": "پژوهشگر متن‌های کهن",
+    "portrait": "f_mid_scientist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c029",
+    "suspect": "s5",
+    "name": "بابک کمالی",
+    "age": 36,
+    "role": "مسئول ثبت امانت",
+    "portrait": "m_old_butler",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c030",
+    "suspect": "s1",
+    "name": "نیلوفر خسروی",
+    "age": 40,
+    "role": "مدیر صحنه",
+    "portrait": "f_mid_manager",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c030",
+    "suspect": "s2",
+    "name": "مهتاب صالحی",
+    "age": 35,
+    "role": "لباس‌دار",
+    "portrait": "f_mid_soldier",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c030",
+    "suspect": "s3",
+    "name": "کامیار نظری",
+    "age": 45,
+    "role": "بازیگر نقش پادشاه",
+    "portrait": "m_mid_artist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c030",
+    "suspect": "s4",
+    "name": "رسول طاهری",
+    "age": 58,
+    "role": "تهیه‌کننده",
+    "portrait": "m_old_woolcap",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c030",
+    "suspect": "s5",
+    "name": "امید فرجی",
+    "age": 31,
+    "role": "اپراتور نور",
+    "portrait": "m_mid_resident",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c031",
+    "suspect": "s1",
+    "name": "بهاره کاشانی",
+    "age": 29,
+    "role": "مسئول پذیرش",
+    "portrait": "f_young_receptionist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c031",
+    "suspect": "s2",
+    "name": "پرویز ملکی",
+    "age": 50,
+    "role": "نگهبان شب",
+    "portrait": "m_mid_guard",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c031",
+    "suspect": "s3",
+    "name": "نسرین حیدری",
+    "age": 42,
+    "role": "حسابدار",
+    "portrait": "f_mid_lawyer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c031",
+    "suspect": "s4",
+    "name": "منوچهر زمانی",
+    "age": 56,
+    "role": "صاحب هتل",
+    "portrait": "m_old_farmer",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c031",
+    "suspect": "s5",
+    "name": "هاشم رنجبر",
+    "age": 47,
+    "role": "سرآشپز",
+    "portrait": "m_mid_cook",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c032",
+    "suspect": "s1",
+    "name": "سعید جعفرزاده",
+    "age": 26,
+    "role": "گارسون",
+    "portrait": "m_young_designer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c032",
+    "suspect": "s2",
+    "name": "حمید ثقفی",
+    "age": 54,
+    "role": "سرآشپز",
+    "portrait": "m_mid_cook",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c032",
+    "suspect": "s3",
+    "name": "مینو شیرازی",
+    "age": 47,
+    "role": "مدیر رستوران",
+    "portrait": "f_mid_business",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c032",
+    "suspect": "s4",
+    "name": "آزیتا مهرجو",
+    "age": 28,
+    "role": "کمک‌آشپز",
+    "portrait": "f_young_cook",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c032",
+    "suspect": "s5",
+    "name": "ابراهیم غفاری",
+    "age": 33,
+    "role": "ظرف‌شور",
+    "portrait": "m_mid_chef",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c033",
+    "suspect": "s1",
+    "name": "بهنام نوروزی",
+    "age": 38,
+    "role": "راهنمای کوه",
+    "portrait": "m_mid_fixer",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c033",
+    "suspect": "s2",
+    "name": "روشنک آذری",
+    "age": 41,
+    "role": "آشپز پناهگاه",
+    "portrait": "f_mid_chef",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c033",
+    "suspect": "s3",
+    "name": "کاوه شفیعی",
+    "age": 46,
+    "role": "سرپرست پناهگاه",
+    "portrait": "m_mid_conductor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c033",
+    "suspect": "s4",
+    "name": "دکتر عاطفه سرمدی",
+    "age": 45,
+    "role": "مهمان، پزشک",
+    "portrait": "f_mid_surgeon",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c033",
+    "suspect": "s5",
+    "name": "ناصر رحمتی",
+    "age": 60,
+    "role": "برادر مقتول",
+    "portrait": "m_old_woolcap",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c034",
+    "suspect": "s1",
+    "name": "علیرضا بلوچی",
+    "age": 44,
+    "role": "راهنمای کویر",
+    "portrait": "m_mid_doctor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c034",
+    "suspect": "s2",
+    "name": "سارا تقوی",
+    "age": 23,
+    "role": "دانشجوی کارآموز",
+    "portrait": "f_young_student",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c034",
+    "suspect": "s3",
+    "name": "دکتر مینا ایمانی",
+    "age": 50,
+    "role": "سرپرست کاوش",
+    "portrait": "f_mid_manager",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c034",
+    "suspect": "s4",
+    "name": "پژمان شهابی",
+    "age": 31,
+    "role": "کارگر کاوش",
+    "portrait": "m_mid_roadworker",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c034",
+    "suspect": "s5",
+    "name": "فرهاد توکلی",
+    "age": 37,
+    "role": "فیلم‌بردار مستند",
+    "portrait": "m_mid_lecturer",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c035",
+    "suspect": "s1",
+    "name": "بهروز سلطانی",
+    "age": 34,
+    "role": "مسافر یابنده‌ی کیف",
+    "portrait": "m_mid_chef",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c035",
+    "suspect": "s2",
+    "name": "مرتضی اکبری",
+    "age": 57,
+    "role": "صاحب کیف",
+    "portrait": "m_old_grandpa",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c035",
+    "suspect": "s3",
+    "name": "پروانه عباسی",
+    "age": 41,
+    "role": "مأمور میز اشیای گمشده",
+    "portrait": "f_mid_baker",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c035",
+    "suspect": "s4",
+    "name": "هاشم نوری",
+    "age": 56,
+    "role": "نظافتچی ایستگاه",
+    "portrait": "m_old_jurist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c035",
+    "suspect": "s5",
+    "name": "حسین رحیمی",
+    "age": 49,
+    "role": "نگهبان ایستگاه",
+    "portrait": "m_mid_officer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c036",
+    "suspect": "s1",
+    "name": "مجتبی نیکزاد",
+    "age": 48,
+    "role": "مسئول ایمنی زیستی",
+    "portrait": "m_mid_business",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c036",
+    "suspect": "s2",
+    "name": "دکتر شیما غفاری",
+    "age": 36,
+    "role": "پسادکتری",
+    "portrait": "f_mid_widow",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c036",
+    "suspect": "s3",
+    "name": "نگار حیدری",
+    "age": 27,
+    "role": "دانشجوی دکتری",
+    "portrait": "f_young_researcher",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c036",
+    "suspect": "s4",
+    "name": "علیرضا قاسمی",
+    "age": 40,
+    "role": "تکنسین",
+    "portrait": "m_mid_barista",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c036",
+    "suspect": "s5",
+    "name": "دکتر پیمان آریا",
+    "age": 55,
+    "role": "رئیس آزمایشگاه",
+    "portrait": "m_old_scientist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c037",
+    "suspect": "s1",
+    "name": "سهراب ابراهیمی",
+    "age": 35,
+    "role": "مهمانِ همراه خانواده‌ی داماد",
+    "portrait": "m_mid_fixer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c037",
+    "suspect": "s2",
+    "name": "مریم داوودی",
+    "age": 57,
+    "role": "خاله‌ی عروس",
+    "portrait": "f_mid_director",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c037",
+    "suspect": "s3",
+    "name": "آیدین رحیمی",
+    "age": 28,
+    "role": "برادر داماد",
+    "portrait": "m_young_boxer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c037",
+    "suspect": "s4",
+    "name": "نسرین توکلی",
+    "age": 38,
+    "role": "هماهنگ‌کننده‌ی تالار",
+    "portrait": "f_mid_journalist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c037",
+    "suspect": "s5",
+    "name": "کیومرث نظری",
+    "age": 32,
+    "role": "دی‌جی عروسی",
+    "portrait": "m_mid_policeman",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c038",
+    "suspect": "s1",
+    "name": "داریوش مرادی",
+    "age": 52,
+    "role": "معاون آموزشی",
+    "portrait": "m_mid_roadworker",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c038",
+    "suspect": "s2",
+    "name": "غلام‌رضا شفیعی",
+    "age": 61,
+    "role": "سرایدار مدرسه",
+    "portrait": "m_old_schoolmaster",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c038",
+    "suspect": "s3",
+    "name": "آرمین کاظمی",
+    "age": 17,
+    "role": "دانش‌آموز پایه‌ی یازدهم",
+    "portrait": "m_young_casual",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c038",
+    "suspect": "s4",
+    "name": "کامبیز رحیمی",
+    "age": 46,
+    "role": "دبیر ریاضی",
+    "portrait": "m_mid_teacher",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c038",
+    "suspect": "s5",
+    "name": "فاطمه راستی",
+    "age": 38,
+    "role": "دبیر ادبیات و مسئول دبیرخانه",
+    "portrait": "f_mid_agent",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c039",
+    "suspect": "s1",
+    "name": "کریم عابدی",
+    "age": 36,
+    "role": "متصدی پذیرش سالن",
+    "portrait": "m_mid_tycoon",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c039",
+    "suspect": "s2",
+    "name": "ایرج منصوری",
+    "age": 58,
+    "role": "تاجر و صاحب کیف",
+    "portrait": "m_old_painter",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c039",
+    "suspect": "s3",
+    "name": "لیلا نظری",
+    "age": 31,
+    "role": "میزبان سالن",
+    "portrait": "f_mid_attorney",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c039",
+    "suspect": "s4",
+    "name": "طاهره صادقی",
+    "age": 47,
+    "role": "نظافتچی سالن",
+    "portrait": "f_mid_laborer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c039",
+    "suspect": "s5",
+    "name": "بهمن زارعی",
+    "age": 50,
+    "role": "مسافر و شاهدِ داوطلب",
+    "portrait": "m_mid_doctor",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c040",
+    "suspect": "s1",
+    "name": "دکتر لیدا زند",
+    "age": 51,
+    "role": "مسئول مالی بایگانی فرهنگی سپیدار",
+    "portrait": "f_mid_lawyer",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c040",
+    "suspect": "s2",
+    "name": "ناره پطروسیان",
+    "age": 60,
+    "role": "همسایه‌ی برج و میزبان داوطلب نشست",
+    "portrait": "f_mid_librarian",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c040",
+    "suspect": "s3",
+    "name": "هرانت قریبیان",
+    "age": 33,
+    "role": "برادرزاده‌ی آرام؛ کارمند داروخانه",
+    "portrait": "m_mid_photographer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c040",
+    "suspect": "s4",
+    "name": "رافائل خسروی",
+    "age": 47,
+    "role": "مرمت‌گر برج و اسناد معماری بایگانی",
+    "portrait": "m_mid_conductor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c040",
+    "suspect": "s5",
+    "name": "داوود فرجی",
+    "age": 54,
+    "role": "نگهبان محوطه و مسئول رساندن وسایل به برج",
+    "portrait": "m_mid_guard",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c040",
+    "suspect": "s6",
+    "name": "گئورگ آواکیان",
+    "age": 62,
+    "role": "مدیر بایگانی فرهنگی سپیدار",
+    "portrait": "m_old_bakerman",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c041",
+    "suspect": "s1",
+    "name": "جمشید حکیمی",
+    "age": 63,
+    "role": "ارزیاب فرش",
+    "portrait": "m_old_cleric",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c041",
+    "suspect": "s2",
+    "name": "مینا قاسمی",
+    "age": 43,
+    "role": "بافنده و تأمین‌کننده",
+    "portrait": "f_mid_guest",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c041",
+    "suspect": "s3",
+    "name": "اکبر فاضلی",
+    "age": 58,
+    "role": "خریدار فرش",
+    "portrait": "m_old_tailor",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c041",
+    "suspect": "s4",
+    "name": "بهمن عبدی",
+    "age": 49,
+    "role": "فروشندهٔ فرش",
+    "portrait": "m_mid_officer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c041",
+    "suspect": "s5",
+    "name": "نادر وکیلی",
+    "age": 45,
+    "role": "فروشندهٔ همسایه",
+    "portrait": "m_mid_chef",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c042",
+    "suspect": "s1",
+    "name": "محسن شفیعی",
+    "age": 41,
+    "role": "مهندس ارشد",
+    "portrait": "m_mid_resident",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c042",
+    "suspect": "s2",
+    "name": "دکتر ساناز میرزایی",
+    "age": 46,
+    "role": "مدیر پروژه",
+    "portrait": "f_mid_witness",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c042",
+    "suspect": "s3",
+    "name": "بهزاد اعتمادی",
+    "age": 38,
+    "role": "مهندس محاسب",
+    "portrait": "m_mid_sailor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c042",
+    "suspect": "s4",
+    "name": "نغمه ایزدی",
+    "age": 30,
+    "role": "دبیر پروژه",
+    "portrait": "f_mid_teacher",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c042",
+    "suspect": "s5",
+    "name": "حامد خلیلی",
+    "age": 33,
+    "role": "کارشناس فناوری",
+    "portrait": "m_mid_conductor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c043",
+    "suspect": "s1",
+    "name": "افسانه سرافراز",
+    "age": 52,
+    "role": "صاحب گردنبند، مسافر کوپه‌ی پنج",
+    "portrait": "f_mid_singer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c043",
+    "suspect": "s2",
+    "name": "جهانگیر بهنام",
+    "age": 56,
+    "role": "رئیس قطار",
+    "portrait": "m_old_boss",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c043",
+    "suspect": "s3",
+    "name": "سیروس پرنیان",
+    "age": 44,
+    "role": "نقاش، مسافر کوپه‌ی شش",
+    "portrait": "m_mid_artist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c043",
+    "suspect": "s4",
+    "name": "یونس مهرجو",
+    "age": 50,
+    "role": "مأمور واگن خواب",
+    "portrait": "m_mid_officer",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c043",
+    "suspect": "s5",
+    "name": "تهمینه شکیبا",
+    "age": 36,
+    "role": "همسفر افسانه، معرف خریدار",
+    "portrait": "f_mid_business",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c044",
+    "suspect": "s1",
+    "name": "گلنار صدری",
+    "age": 34,
+    "role": "مسئول پذیرش",
+    "portrait": "f_mid_agent",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c044",
+    "suspect": "s2",
+    "name": "عزیز مدنی",
+    "age": 55,
+    "role": "نگهبان",
+    "portrait": "m_old_warden",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c044",
+    "suspect": "s3",
+    "name": "نگین ساعی",
+    "age": 31,
+    "role": "عکاس",
+    "portrait": "f_mid_mechanic",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c044",
+    "suspect": "s4",
+    "name": "دکتر رویا کوشا",
+    "age": 49,
+    "role": "سرپرست مجموعه",
+    "portrait": "f_mid_baker",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c044",
+    "suspect": "s5",
+    "name": "سیروس نیک‌پی",
+    "age": 52,
+    "role": "مرمت‌گر",
+    "portrait": "m_mid_lecturer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c045",
+    "suspect": "s1",
+    "name": "بهاره شفق",
+    "age": 35,
+    "role": "دستیار نقاش",
+    "portrait": "f_mid_banker",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c045",
+    "suspect": "s2",
+    "name": "سامان روشن",
+    "age": 29,
+    "role": "پسر نقاش",
+    "portrait": "m_young_student",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c045",
+    "suspect": "s3",
+    "name": "زهره بلوری",
+    "age": 48,
+    "role": "آشپز ویلا",
+    "portrait": "f_mid_clerk",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c045",
+    "suspect": "s4",
+    "name": "وحید پناه",
+    "age": 44,
+    "role": "راننده",
+    "portrait": "m_mid_driver",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c045",
+    "suspect": "s5",
+    "name": "اسفندیار وفامنش",
+    "age": 62,
+    "role": "باغبان و مباشر باغ",
+    "portrait": "m_old_gardener",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c046",
+    "suspect": "s1",
+    "name": "منوچهر کاشانی",
+    "age": 61,
+    "role": "مالک انبار",
+    "portrait": "m_old_fisher",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c046",
+    "suspect": "s2",
+    "name": "کتایون زرگری",
+    "age": 36,
+    "role": "مسئول باسکول",
+    "portrait": "f_mid_archaeologist",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c046",
+    "suspect": "s3",
+    "name": "تورج باقری",
+    "age": 52,
+    "role": "رانندهٔ کامیون",
+    "portrait": "m_mid_driver",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c046",
+    "suspect": "s4",
+    "name": "رامین مقدم",
+    "age": 39,
+    "role": "اپراتور لیفتراک",
+    "portrait": "m_mid_technician",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c046",
+    "suspect": "s5",
+    "name": "شاهرخ وثوق",
+    "age": 45,
+    "role": "مسئول توزیع",
+    "portrait": "m_old_butler",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c047",
+    "suspect": "s1",
+    "name": "طهمورث پاک‌نیت",
+    "age": 44,
+    "role": "مسئول بخش نسخه‌های خطی",
+    "portrait": "m_mid_teacher",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c047",
+    "suspect": "s2",
+    "name": "دکتر فرنگیس رهنورد",
+    "age": 41,
+    "role": "پژوهشگر نسخه‌شناس",
+    "portrait": "f_mid_scientist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c047",
+    "suspect": "s3",
+    "name": "مسیب آراسته",
+    "age": 59,
+    "role": "نظافتچی",
+    "portrait": "m_old_flatcap",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c047",
+    "suspect": "s4",
+    "name": "ارغوان نقره‌کار",
+    "age": 38,
+    "role": "کتابدار",
+    "portrait": "f_mid_director",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c047",
+    "suspect": "s5",
+    "name": "عزت‌الله بهاری",
+    "age": 50,
+    "role": "نگهبان شب",
+    "portrait": "m_mid_policeman",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c048",
+    "suspect": "s1",
+    "name": "پوریا اسکویی",
+    "age": 24,
+    "role": "باربر",
+    "portrait": "m_young_waiter",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c048",
+    "suspect": "s2",
+    "name": "شمسی کاووسی",
+    "age": 49,
+    "role": "خدمتکار طبقه‌ی ششم",
+    "portrait": "f_mid_widow",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c048",
+    "suspect": "s3",
+    "name": "فرزانه قدیری",
+    "age": 33,
+    "role": "متصدی پذیرش",
+    "portrait": "f_mid_attorney",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c048",
+    "suspect": "s4",
+    "name": "تیمور گلریز",
+    "age": 38,
+    "role": "تعمیرکار",
+    "portrait": "m_mid_fixer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c048",
+    "suspect": "s5",
+    "name": "حسام مشهدی",
+    "age": 46,
+    "role": "مهمان اتاق ۶۰۵",
+    "portrait": "m_mid_barista",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c049",
+    "suspect": "s1",
+    "name": "یحیی دشتی‌پور",
+    "age": 43,
+    "role": "ناخدای صیاد-۳",
+    "portrait": "m_mid_sailor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c049",
+    "suspect": "s2",
+    "name": "عبدالله سلگی",
+    "age": 51,
+    "role": "ناخدای صیاد-۲",
+    "portrait": "m_mid_resident",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c049",
+    "suspect": "s3",
+    "name": "مهیار تنگسیری",
+    "age": 38,
+    "role": "ناخدای صیاد-۴",
+    "portrait": "m_mid_teacher",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c049",
+    "suspect": "s4",
+    "name": "غلامعلی کنگی",
+    "age": 55,
+    "role": "ناخدای صیاد-۵",
+    "portrait": "m_old_captain",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c049",
+    "suspect": "s5",
+    "name": "حمدان گله‌داری",
+    "age": 46,
+    "role": "ناخدای صیاد-۱",
+    "portrait": "m_mid_captain",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c050",
+    "suspect": "s1",
+    "name": "دکتر نصرالله دانشور",
+    "age": 58,
+    "role": "پزشک خانواده",
+    "portrait": "m_old_physician",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c050",
+    "suspect": "s2",
+    "name": "هادی صدرایی",
+    "age": 47,
+    "role": "وکیل مقتول",
+    "portrait": "m_mid_lawyer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c050",
+    "suspect": "s3",
+    "name": "اسکندر زرنگار",
+    "age": 55,
+    "role": "مجموعه‌دار مینیاتور",
+    "portrait": "m_old_rich",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c050",
+    "suspect": "s4",
+    "name": "پریوش امیرخیزی",
+    "age": 52,
+    "role": "همسر مقتول",
+    "portrait": "f_mid_inspector",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c050",
+    "suspect": "s5",
+    "name": "آیدا افخمی",
+    "age": 34,
+    "role": "منشی مقتول",
+    "portrait": "f_mid_banker",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c050",
+    "suspect": "s6",
+    "name": "سورنا ملک‌آرا",
+    "age": 29,
+    "role": "پسر مقتول",
+    "portrait": "m_young_athlete",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c051",
+    "suspect": "s1",
+    "name": "دکتر کیارش امینی",
+    "age": 33,
+    "role": "دستیار کشیک داخلی، پزشک شب بخش ۴",
+    "portrait": "m_mid_doctor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c051",
+    "suspect": "s2",
+    "name": "الهام توسلی",
+    "age": 31,
+    "role": "پرستار شیفت شب بخش ۴",
+    "portrait": "f_young_nurse",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c051",
+    "suspect": "s3",
+    "name": "یاسین قربانی",
+    "age": 26,
+    "role": "کمک‌بهیار شیفت شب، طبقه‌های سه و چهار",
+    "portrait": "m_young_dj",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c051",
+    "suspect": "s4",
+    "name": "اسماعیل رستگار",
+    "age": 55,
+    "role": "سرپرستار شیفت شب، طبقه‌های چهار و پنج",
+    "portrait": "m_mid_nurse",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c051",
+    "suspect": "s5",
+    "name": "دکتر سپیده امینی",
+    "age": 38,
+    "role": "داروساز کشیک شب بیمارستان",
+    "portrait": "f_mid_pharmacist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c052",
+    "suspect": "s1",
+    "name": "دکتر فریدون نیک‌سرشت",
+    "age": 64,
+    "role": "مدیر گروه و سرپرست آزمایشگاه فیزیولوژی گیاهی",
+    "portrait": "m_old_scientist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c052",
+    "suspect": "s2",
+    "name": "دکتر ژاله فرزین‌فر",
+    "age": 47,
+    "role": "دانشیار دانشکده، استاد مشاور پایان‌نامه‌ی نیوشا",
+    "portrait": "f_mid_curator",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c052",
+    "suspect": "s3",
+    "name": "نیوشا طاهرخانی",
+    "age": 29,
+    "role": "دانشجوی دکتری، صاحب سینی خشک‌شده",
+    "portrait": "f_young_athlete",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c052",
+    "suspect": "s4",
+    "name": "دکتر پویان شهرکی",
+    "age": 35,
+    "role": "پژوهشگر پسادکتری، مجری آزمون تکرار کوهسر-۷",
+    "portrait": "m_young_it",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c052",
+    "suspect": "s5",
+    "name": "بهراد سلیمی",
+    "age": 31,
+    "role": "دانشجوی دکتری آزمایشگاه فیزیولوژی گیاهی",
+    "portrait": "m_young_undergrad",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c052",
+    "suspect": "s6",
+    "name": "جواد کریمیان",
+    "age": 52,
+    "role": "تکنسین آزمایشگاه و گلخانه‌ی دانشکده",
+    "portrait": "m_mid_chef",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c053",
+    "suspect": "s1",
+    "name": "بهروز امیرخانی",
+    "age": 51,
+    "role": "حسابدار دبستان سپیده در سال ۸۵؛ حالا حسابدار یک شرکت پخش",
+    "portrait": "m_mid_resident",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c053",
+    "suspect": "s2",
+    "name": "لادن امیرخانی",
+    "age": 45,
+    "role": "معلم کلاس سوم دبستان سپیده و دستیار طرح شنوایی‌سنجی در سال ۸۵؛ حالا معاون یک دبیرستان",
+    "portrait": "f_mid_teacher",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c053",
+    "suspect": "s3",
+    "name": "مهین سبحانی",
+    "age": 58,
+    "role": "مسئول طرح شنوایی‌سنجی دبستان سپیده در سال‌های ۸۴ و ۸۵؛ حالا مدیر مرکز شنوایی‌سنجی نوا",
+    "portrait": "f_old_retired",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c053",
+    "suspect": "s4",
+    "name": "اردشیر دادفر",
+    "age": 60,
+    "role": "تعمیرکار سمعک؛ در سال ۸۵ تعمیر دستگاه‌های طرح با او بود",
+    "portrait": "m_old_flatcap",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c053",
+    "suspect": "s5",
+    "name": "نسرین شکیبا",
+    "age": 49,
+    "role": "نماینده‌ی اولیا در دبستان سپیده در سال ۸۵؛ خاله‌ی یکی از بچه‌های طرح",
+    "portrait": "f_mid_housewife",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c054",
+    "suspect": "s1",
+    "name": "مژگان فرهمند",
+    "age": 46,
+    "role": "مسئول نمایش و طراح ویترین‌های نمایشگاه؛ خواهر داریوش فرهمند",
+    "portrait": "f_mid_gallery",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c054",
+    "suspect": "s2",
+    "name": "شروین فراهانی",
+    "age": 42,
+    "role": "طراح و سازنده‌ی حجم‌نما؛ استاد نسترن",
+    "portrait": "m_mid_artist",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c054",
+    "suspect": "s3",
+    "name": "نسترن بهنام",
+    "age": 28,
+    "role": "دستیار شروین در ساخت حجم‌نما",
+    "portrait": "f_young_artist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c054",
+    "suspect": "s4",
+    "name": "کامیار صبوری",
+    "age": 33,
+    "role": "بسته‌بند کارگاه و سازنده‌ی ویترین‌های نمایشگاه",
+    "portrait": "m_young_courier",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c054",
+    "suspect": "s5",
+    "name": "داریوش فرهمند",
+    "age": 55,
+    "role": "سرمایه‌گذار حجم‌نما؛ برادر بزرگ مژگان",
+    "portrait": "m_old_boss",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c055",
+    "suspect": "s1",
+    "name": "گیتی پارسا",
+    "age": 54,
+    "role": "میزبان مهمانی؛ دختر بزرگ خانم‌جان، خواهر فرهاد و مادر پریسا",
+    "portrait": "f_mid_housewife",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c055",
+    "suspect": "s2",
+    "name": "پریسا آذرنوش",
+    "age": 30,
+    "role": "دختر گیتی و نوه‌ی خانم‌جان",
+    "portrait": "f_young_bookworm",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c055",
+    "suspect": "s3",
+    "name": "نوید سپهری",
+    "age": 32,
+    "role": "دوست پریسا؛ برادرزاده‌ی هما کیانی",
+    "portrait": "m_young_casual",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c055",
+    "suspect": "s4",
+    "name": "هما کیانی",
+    "age": 61,
+    "role": "همسایه و دوست سی‌ساله‌ی خانم‌جان؛ عمه‌ی نوید",
+    "portrait": "f_old_grandma",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c055",
+    "suspect": "s5",
+    "name": "فرهاد پارسا",
+    "age": 49,
+    "role": "برادر کوچک گیتی؛ مجلس‌دار، که پذیرایی و برنامه‌ی امشب کار او بود",
+    "portrait": "m_mid_cook",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c056",
+    "suspect": "s1",
+    "name": "سوسن بهشتی",
+    "age": 47,
+    "role": "مدیر خیریه‌ی درمانی رهاورد؛ خواهر بزرگ مانی",
+    "portrait": "f_mid_manager",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c056",
+    "suspect": "s2",
+    "name": "آبتین کاویانی",
+    "age": 34,
+    "role": "هماهنگ‌کننده‌ی محموله‌های خیریه در فرودگاه؛ داماد فریبرز نامدار",
+    "portrait": "m_young_it",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c056",
+    "suspect": "s3",
+    "name": "مانی بهشتی",
+    "age": 35,
+    "role": "تعمیرکار تجهیزات خیریه؛ برادر سوسن و شاگرد سابق فریبرز نامدار",
+    "portrait": "m_mid_barista",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c056",
+    "suspect": "s4",
+    "name": "ترانه یزدانی",
+    "age": 31,
+    "role": "انباردار شیفت شب سوله‌ی درمانی؛ مستأجر سابق سوسن",
+    "portrait": "f_young_firefighter",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c056",
+    "suspect": "s5",
+    "name": "فریبرز نامدار",
+    "age": 58,
+    "role": "نماینده‌ی شرکت اهداکننده و بازرس بازنشسته‌ی تجهیزات پزشکی؛ پدرزن آبتین",
+    "portrait": "m_old_warden",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c057",
+    "suspect": "s1",
+    "name": "روزبه افشار",
+    "age": 30,
+    "role": "متقاضی مسابقه و صاحب طرح شماره‌ی ۹؛ شاگرد دکتری دکتر دادبین و همکار سابق نسیم شایگان در فصلنامه",
+    "portrait": "m_mid_barista",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c057",
+    "suspect": "s2",
+    "name": "بردیا شایگان",
+    "age": 38,
+    "role": "مسئول میز دریافت طرح‌ها؛ برادر نسیم شایگان و رفیق دکتر سرابی",
+    "portrait": "m_mid_technician",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c057",
+    "suspect": "s3",
+    "name": "نسیم شایگان",
+    "age": 34,
+    "role": "ویراستار فصلنامه‌ی نارون؛ خواهر بردیا شایگان و همکار سابق روزبه افشار",
+    "portrait": "f_mid_journalist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c057",
+    "suspect": "s4",
+    "name": "دکتر منیژه دادبین",
+    "age": 45,
+    "role": "دبیر داوری مسابقه از اول آبان؛ استاد دانشگاه و استاد راهنمای روزبه افشار",
+    "portrait": "f_mid_scholar",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c057",
+    "suspect": "s5",
+    "name": "دکتر کیوان سرابی",
+    "age": 52,
+    "role": "داور ارشد مسابقه و دبیر موقت داوری تا آخر مهر؛ دبیر سابق فصلنامه‌ی نارون و همکار قدیمی دکتر دادبین",
+    "portrait": "m_mid_lecturer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c058",
+    "suspect": "s1",
+    "name": "ناهید وزیری",
+    "age": 53,
+    "role": "صاحب‌خانه و یکی از دو وارث؛ خواهر فرامرز وزیری و مادر شاهین نیک‌خواه",
+    "portrait": "f_mid_housewife",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c058",
+    "suspect": "s2",
+    "name": "شاهین نیک‌خواه",
+    "age": 29,
+    "role": "ارزیاب املاک؛ پسر ناهید وزیری و دوست دانشگاهی مهسا ارجمند",
+    "portrait": "m_young_casual",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c058",
+    "suspect": "s3",
+    "name": "فرامرز وزیری",
+    "age": 57,
+    "role": "مدیر املاک خانواده و وارث دیگر؛ برادر ناهید وزیری",
+    "portrait": "m_old_boss",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c058",
+    "suspect": "s4",
+    "name": "مهسا ارجمند",
+    "age": 32,
+    "role": "منشی دفترخانه‌ی ۱۸۲ و منشی جلسه‌ی تقسیم؛ دوست دانشگاهی شاهین نیک‌خواه",
+    "portrait": "f_mid_clerk",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c058",
+    "suspect": "s5",
+    "name": "عباس رهنما",
+    "age": 66,
+    "role": "دایی ناهید و فرامرز و شاهد امضای توافق‌نامه؛ ضامن وام شاهین",
+    "portrait": "m_old_flatcap",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c059",
+    "suspect": "s1",
+    "name": "هوشنگ آذرپور",
+    "age": 50,
+    "role": "کارگردان و سرپرست گروه عروسکی مهتاب؛ همسر سابق شیرین مستوفی",
+    "portrait": "m_mid_lecturer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c059",
+    "suspect": "s2",
+    "name": "شیرین مستوفی",
+    "age": 46,
+    "role": "طراح عروسک و صحنه‌ی گروه مهتاب؛ استاد شبنم دلنواز و همسر سابق هوشنگ آذرپور",
+    "portrait": "f_mid_restorer",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "c059",
+    "suspect": "s3",
+    "name": "شبنم دلنواز",
+    "age": 27,
+    "role": "عروسک‌گردان اصلی گروه مهتاب؛ شاگرد شیرین مستوفی و خواهر اشکان دلنواز",
+    "portrait": "f_young_artist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c059",
+    "suspect": "s4",
+    "name": "اشکان دلنواز",
+    "age": 31,
+    "role": "نورپرداز گروه مهتاب؛ برادر شبنم دلنواز و دوست قدیمی مجید توانا",
+    "portrait": "m_mid_technician",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c059",
+    "suspect": "s5",
+    "name": "مجید توانا",
+    "age": 60,
+    "role": "مسئول سالن تمرین خانه‌ی فرهنگ اقاقیا؛ طلبکار هوشنگ آذرپور",
+    "portrait": "m_old_warden",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c060",
+    "suspect": "s1",
+    "name": "ایرج فروتن",
+    "age": 63,
+    "role": "داور همیشگی مسابقه و بزرگ خانواده‌ی فروتن؛ پدر سحر فروتن",
+    "portrait": "m_old_bakerman",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c060",
+    "suspect": "s2",
+    "name": "سحر فروتن",
+    "age": 35,
+    "role": "برگزارکننده‌ی مسابقه؛ دختر ایرج فروتن و همسر آرش نامور",
+    "portrait": "f_mid_manager",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c060",
+    "suspect": "s3",
+    "name": "آرش نامور",
+    "age": 38,
+    "role": "شرکت‌کننده‌ی مسابقه؛ داماد ایرج فروتن و همسر سحر فروتن",
+    "portrait": "m_mid_barista",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c060",
+    "suspect": "s4",
+    "name": "میترا خوشدل",
+    "age": 51,
+    "role": "مدیر آشپزخانه‌ی مهمان‌سرای سروناز؛ خاله‌ی پدرام یوسفی",
+    "portrait": "f_mid_chef",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c060",
+    "suspect": "s5",
+    "name": "پدرام یوسفی",
+    "age": 26,
+    "role": "دستیار ایرج فروتن در مسابقه؛ خواهرزاده‌ی میترا خوشدل و بدهکار ایرج",
+    "portrait": "m_young_waiter",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c061",
+    "suspect": "s1",
+    "name": "پروین اردلان",
+    "age": 55,
+    "role": "کتابدار کتابخانه‌ی خانوادگی نیک‌نهاد؛ خواهر منصور اردلان و استاد قدیم کامران زرین‌دست",
+    "portrait": "f_mid_librarian",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c061",
+    "suspect": "s2",
+    "name": "کامران زرین‌دست",
+    "age": 49,
+    "role": "صحاف و مرمت‌گر، صاحب کارگاه صحافی؛ شاگرد قدیم پروین اردلان",
+    "portrait": "m_mid_photographer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c061",
+    "suspect": "s3",
+    "name": "افروز تابان",
+    "age": 45,
+    "role": "دختر و وارث شوکت تابان؛ دخترخاله‌ی منصور و پروین اردلان، صاحب خیاطی مادرش",
+    "portrait": "f_mid_housewife",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c061",
+    "suspect": "s4",
+    "name": "منصور اردلان",
+    "age": 61,
+    "role": "مدیر صندوق خانواده‌ی نیک‌نهاد از ۱۳۷۴؛ برادر پروین اردلان و پسرخاله‌ی افروز تابان",
+    "portrait": "m_old_flatcap",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c061",
+    "suspect": "s5",
+    "name": "خسروان پاکدل",
+    "age": 67,
+    "role": "حسابدار پیشین صندوق خانواده‌ی نیک‌نهاد تا اسفند ۱۳۸۰؛ ضامن قرارداد شاگردی کامران زرین‌دست",
+    "portrait": "m_old_schoolmaster",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c062",
+    "suspect": "s1",
+    "name": "منیر آگاه",
+    "age": 40,
+    "role": "مسئول آموزش بخش آموزش و نمایش تجهیزات؛ همکار حمید دادرس در کمیته‌ی تجهیزات",
+    "portrait": "f_mid_teacher",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c062",
+    "suspect": "s2",
+    "name": "نصرت سپنتا",
+    "age": 52,
+    "role": "تعمیرکار تجهیزات بیمارستان؛ طلبکار حمید دادرس و استاد سابق پیمانه رفیعی",
+    "portrait": "m_mid_fixer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "c062",
+    "suspect": "s3",
+    "name": "آزاده دادرس",
+    "age": 44,
+    "role": "نماینده‌ی خیریه‌ی همدم؛ خواهر بزرگ حمید دادرس و همسایه‌ی ده‌ساله‌ی پیمانه رفیعی",
+    "portrait": "f_mid_business",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "c062",
+    "suspect": "s4",
+    "name": "حمید دادرس",
+    "age": 39,
+    "role": "کارشناس تدارکات بیمارستان؛ برادر آزاده دادرس و بدهکار نصرت سپنتا",
+    "portrait": "m_mid_barista",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "c062",
+    "suspect": "s5",
+    "name": "پیمانه رفیعی",
+    "age": 36,
+    "role": "طراح نمایشگاه و سازنده‌ی دیوار نمایش اتاق ۳۰۴؛ شاگرد سابق نصرت سپنتا و همسایه‌ی آزاده دادرس",
+    "portrait": "f_mid_designer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w001",
+    "suspect": "s1",
+    "name": "کاوه صدری",
+    "age": 52,
+    "role": "پسر بزرگ منصور",
+    "portrait": "m_mid_photographer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w001",
+    "suspect": "s2",
+    "name": "دکتر لیلا صدری",
+    "age": 47,
+    "role": "دختر منصور، متخصص قلب",
+    "portrait": "f_mid_soldier",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w001",
+    "suspect": "s3",
+    "name": "پریسا صدری",
+    "age": 45,
+    "role": "همسر کاوه",
+    "portrait": "f_mid_mechanic",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w001",
+    "suspect": "s4",
+    "name": "نیما صدری",
+    "age": 24,
+    "role": "نوه‌ی منصور، پسر کاوه",
+    "portrait": "m_young_conscript",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w001",
+    "suspect": "s5",
+    "name": "اکبر نوروزی",
+    "age": 66,
+    "role": "سرایدار ویلا",
+    "portrait": "m_old_farmer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w001",
+    "suspect": "s6",
+    "name": "هوشنگ راد",
+    "age": 58,
+    "role": "مدیر مالی شرکت، دوست قدیمی منصور",
+    "portrait": "m_mid_tycoon",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w001",
+    "suspect": "s7",
+    "name": "شیرین مقدم",
+    "age": 38,
+    "role": "پرستار منصور",
+    "portrait": "f_mid_designer",
+    "gender": "f",
+    "culprit": true
+  },
+  {
+    "case": "w001",
+    "suspect": "s8",
+    "name": "مهرداد کیانی",
+    "age": 50,
+    "role": "وکیل خانواده",
+    "portrait": "m_mid_lawyer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w002",
+    "suspect": "s1",
+    "name": "بهروز امیری",
+    "age": 55,
+    "role": "برادر کوچک جمشید، شریک باغ",
+    "portrait": "m_mid_lecturer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w002",
+    "suspect": "s2",
+    "name": "مهتاب امیری",
+    "age": 50,
+    "role": "همسر جمشید، مادر عروس",
+    "portrait": "f_mid_pilot",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w002",
+    "suspect": "s3",
+    "name": "حمید رستمی",
+    "age": 33,
+    "role": "گارسون شرکت پذیرایی؛ سرکارگر سابق باغ",
+    "portrait": "m_young_worker",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w002",
+    "suspect": "s4",
+    "name": "لادن امیری",
+    "age": 34,
+    "role": "دختر بهروز، طراح لباس عروس",
+    "portrait": "f_young_bookworm",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w002",
+    "suspect": "s5",
+    "name": "آرش فراهانی",
+    "age": 36,
+    "role": "برادر بزرگ داماد، حسابدار تعاونی صادرات مرکبات",
+    "portrait": "m_mid_lawyer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w002",
+    "suspect": "s6",
+    "name": "سیامک رهبر",
+    "age": 57,
+    "role": "حسابدار و مباشر باغ، رفیق قدیمی جمشید",
+    "portrait": "m_old_rich",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "w002",
+    "suspect": "s7",
+    "name": "امید کاظمی",
+    "age": 31,
+    "role": "مسئول آتش‌بازی",
+    "portrait": "m_young_casual",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w002",
+    "suspect": "s8",
+    "name": "پریسا نوری",
+    "age": 29,
+    "role": "عکاس عروسی",
+    "portrait": "f_young_artist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w003",
+    "suspect": "s1",
+    "name": "کامران پرند",
+    "age": 48,
+    "role": "مدیر حراج",
+    "portrait": "m_mid_tycoon",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "w003",
+    "suspect": "s2",
+    "name": "ایرج مستوفی",
+    "age": 52,
+    "role": "کارشناس ساعت‌ساز",
+    "portrait": "m_old_professor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w003",
+    "suspect": "s3",
+    "name": "پرناز سالاری",
+    "age": 44,
+    "role": "وارث بزرگ‌تر",
+    "portrait": "f_mid_commander",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w003",
+    "suspect": "s4",
+    "name": "پویا سالاری",
+    "age": 34,
+    "role": "وارث کوچک‌تر",
+    "portrait": "m_young_boxer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w003",
+    "suspect": "s5",
+    "name": "بهروز پارسا",
+    "age": 58,
+    "role": "دلال فرش و دوست قدیمی",
+    "portrait": "m_old_schoolmaster",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w003",
+    "suspect": "s6",
+    "name": "ملیحه روشن",
+    "age": 41,
+    "role": "نگهبان موزه‌ی خانگی",
+    "portrait": "f_mid_judge",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w003",
+    "suspect": "s7",
+    "name": "گلرخ منوچهری",
+    "age": 46,
+    "role": "خدمتکار و آشپز خانه",
+    "portrait": "f_mid_chef",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w003",
+    "suspect": "s8",
+    "name": "محسن عمادی",
+    "age": 50,
+    "role": "خریدار تلفنی",
+    "portrait": "m_mid_business",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w004",
+    "suspect": "s1",
+    "name": "فرشاد بخشعلی",
+    "age": 49,
+    "role": "فروشنده‌ی تجهیزات معدنی",
+    "portrait": "m_mid_business",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w004",
+    "suspect": "s2",
+    "name": "ترانه شریفی",
+    "age": 31,
+    "role": "عکاس طبیعت و مستندساز",
+    "portrait": "f_young_photographer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w004",
+    "suspect": "s3",
+    "name": "دکتر نوشین پارسا",
+    "age": 45,
+    "role": "پزشک عمومی درمانگاه‌های بین‌راهی",
+    "portrait": "f_mid_doctor",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w004",
+    "suspect": "s4",
+    "name": "رویا ملک‌پور",
+    "age": 28,
+    "role": "دختر صاحب کاروانسرا",
+    "portrait": "f_young_receptionist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w004",
+    "suspect": "s5",
+    "name": "کیان جهانبخش",
+    "age": 44,
+    "role": "راهنمای تورهای کویر",
+    "portrait": "m_mid_technician",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "w004",
+    "suspect": "s6",
+    "name": "منصور صفری",
+    "age": 46,
+    "role": "آشپز کاروانسرای صفا",
+    "portrait": "m_mid_cook",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w004",
+    "suspect": "s7",
+    "name": "سامان ناصری",
+    "age": 33,
+    "role": "استادیار باستان‌شناسی",
+    "portrait": "m_young_designer",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w004",
+    "suspect": "s8",
+    "name": "آرش کاظمی",
+    "age": 30,
+    "role": "نامزد رویا ملک‌پور",
+    "portrait": "m_young_casual",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w005",
+    "suspect": "s1",
+    "name": "بیژن کیوان‌فر",
+    "age": 54,
+    "role": "مدیر کتابخانه‌ی اسناد کهن",
+    "portrait": "m_old_professor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w005",
+    "suspect": "s2",
+    "name": "تارا بهبهانی",
+    "age": 39,
+    "role": "مرمتگر اسناد و نسخه‌های خطی",
+    "portrait": "f_mid_restorer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w005",
+    "suspect": "s3",
+    "name": "سیاوش نامور",
+    "age": 46,
+    "role": "پژوهشگر مهمان و نسخه‌شناس",
+    "portrait": "m_mid_researcher",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "w005",
+    "suspect": "s4",
+    "name": "پریسا رادمنش",
+    "age": 36,
+    "role": "کتابدار بخش نسخه‌های خطی",
+    "portrait": "f_mid_scholar",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w005",
+    "suspect": "s5",
+    "name": "فریدون همتی",
+    "age": 61,
+    "role": "مجموعه‌دار نسخه‌های خطی",
+    "portrait": "m_old_bakerman",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w005",
+    "suspect": "s6",
+    "name": "مرجان صادقی",
+    "age": 43,
+    "role": "نگهبان شب کتابخانه",
+    "portrait": "f_mid_pastry",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w005",
+    "suspect": "s7",
+    "name": "لاله عارف‌نیا",
+    "age": 58,
+    "role": "اهداکننده‌ی دیوان",
+    "portrait": "f_mid_publisher",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w005",
+    "suspect": "s8",
+    "name": "کامران شاهرخی",
+    "age": 29,
+    "role": "فهرست‌نویس انبار مجله‌ها",
+    "portrait": "m_young_student",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w006",
+    "suspect": "s1",
+    "name": "مهران ناصری",
+    "age": 49,
+    "role": "مدیر هتل بوتیک مروارید",
+    "portrait": "m_mid_business",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w006",
+    "suspect": "s2",
+    "name": "پروانه فروغی",
+    "age": 30,
+    "role": "متصدی پذیرش شیفت شب هتل",
+    "portrait": "f_young_receptionist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w006",
+    "suspect": "s3",
+    "name": "قاسم بیات",
+    "age": 36,
+    "role": "مسئول نظافت و خدمات طبقه چهارم",
+    "portrait": "m_mid_worker",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w006",
+    "suspect": "s4",
+    "name": "ژیلا پاکزاد",
+    "age": 32,
+    "role": "مسئول سرویس اتاق و رستوران هتل",
+    "portrait": "f_mid_waitress",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w006",
+    "suspect": "s5",
+    "name": "بهرام ذوالفقاری",
+    "age": 45,
+    "role": "میهمان و رقیب تجاری در همایش",
+    "portrait": "m_mid_doctor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w006",
+    "suspect": "s6",
+    "name": "دکتر نگین تدین",
+    "age": 40,
+    "role": "پزشک مقیم و مشاور همایش",
+    "portrait": "f_mid_doctor",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w006",
+    "suspect": "s7",
+    "name": "نیما رادپور",
+    "age": 31,
+    "role": "منشی و برنامه‌ریز همایش تجاری",
+    "portrait": "m_young_undergrad",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "w006",
+    "suspect": "s8",
+    "name": "ماندانا افشارچی",
+    "age": 37,
+    "role": "راننده‌ی ترانسفر و تاکسی هتل",
+    "portrait": "f_mid_designer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w007",
+    "suspect": "s1",
+    "name": "نیلوفر کیافر",
+    "age": 36,
+    "role": "طراح، یکی از چهار تیم نهایی",
+    "portrait": "f_mid_designer",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w007",
+    "suspect": "s2",
+    "name": "بهمنیار رادکیش",
+    "age": 58,
+    "role": "برگزارکننده، شرکت رویدادهای رادکیش",
+    "portrait": "m_old_boss",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w007",
+    "suspect": "s3",
+    "name": "آریا سروش‌فر",
+    "age": 29,
+    "role": "دستیار فنی، صدا و نور",
+    "portrait": "m_young_it",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w007",
+    "suspect": "s4",
+    "name": "دلارام آذری‌نیا",
+    "age": 41,
+    "role": "مجری مراسم",
+    "portrait": "f_mid_journalist",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w007",
+    "suspect": "s5",
+    "name": "آرمین رهی‌زاد",
+    "age": 32,
+    "role": "مسئول صحنه",
+    "portrait": "m_young_courier",
+    "gender": "m",
+    "culprit": true
+  },
+  {
+    "case": "w007",
+    "suspect": "s6",
+    "name": "مهرنوش دادپوی",
+    "age": 47,
+    "role": "داور مسابقه، استاد دانشگاه",
+    "portrait": "f_mid_judge",
+    "gender": "f",
+    "culprit": false
+  },
+  {
+    "case": "w007",
+    "suspect": "s7",
+    "name": "کیومرث به‌آیین",
+    "age": 63,
+    "role": "معمار پیشکسوت، سخنران ویژه",
+    "portrait": "m_old_professor",
+    "gender": "m",
+    "culprit": false
+  },
+  {
+    "case": "w007",
+    "suspect": "s8",
+    "name": "شهنام فرهی‌نیا",
+    "age": 52,
+    "role": "بازرس سابق ساختمان",
+    "portrait": "m_mid_lecturer",
+    "gender": "m",
+    "culprit": false
+  }
+]
