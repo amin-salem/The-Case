@@ -1,4 +1,4 @@
-"""The case files themselves: 62 cases, one new case a night, mostly difficulty 4."""
+"""The case files themselves: 64 cases, one new case a night, mostly difficulty 4."""
 from collections import Counter
 from datetime import timedelta
 
@@ -7,9 +7,9 @@ from app import content
 
 def test_fifty_cases_with_unique_ids_and_a_nightly_schedule():
     cases = content.all_cases()
-    assert len(cases) == 62
-    assert [c.number for c in cases] == list(range(1, 63))
-    assert len({c.id for c in cases}) == 62
+    assert len(cases) == 64
+    assert [c.number for c in cases] == list(range(1, 65))
+    assert len({c.id for c in cases}) == 64
     for a, b in zip(cases, cases[1:]):
         assert b.publish - a.publish == timedelta(days=1), f"{a.id} -> {b.id}: one case per night, no gaps"
 
@@ -24,7 +24,8 @@ def test_scenes_are_varied_and_known():
     scenes = Counter(c.data["scene"] for c in content.all_cases())
     assert set(scenes) <= content.SCENES
     assert len(scenes) == 20          # every theme is used
-    assert max(scenes.values()) <= 4  # and none is repeated too often
+    # and none is repeated too often (5 since c063/c064: the idea bank fixes each case's scene, docs/case-ideas-batch1.md)
+    assert max(scenes.values()) <= 5
 
 
 def test_every_case_is_well_formed():

@@ -1,3 +1,9 @@
+# server 1.53.0: nightly cases c063, c064 (7 Nov 2026, ideas session 9 of 15)
+
+- c063 «شکست برای کس دیگر» (30 Nov, difficulty 5, S6 conflicting accounts, wrong victim, lab / science) and c064 «چتری که خشک برگشت» (1 Dec, difficulty 5, S7 crime inside a crisis, object biography, villa_rain / family). Ideas #11 and #12 of batch 1.
+- Blind tests with fresh Sonnet readers on public copies (tool lines included): c063 93% -> 92%, c064 90% -> 88%; no single card or line decides; every soft spot found was fixed in the files (two fix rounds). Notification teasers added; case count tests 62 -> 64. The scene cap in test_content.py is now 5 (the idea bank fixes each case's scene; lab and villa_rain were already at 4).
+- Deploy: redeploy from the Liara panel. No APK, no migration.
+
 # server 1.52.0: nightly cases c061, c062 (3 Nov 2026, ideas session 6 of 15)
 
 - c061 «خطی که هنوز خشک نشده بود» (28 Nov, difficulty 5, S1 cold case, guilty knowledge, library / family) and c062 «تخت آماده، وسیله‌ی ناآماده» (29 Nov, difficulty 5, S2 locked room, silent theft, hospital / medical). Ideas #9 and #10 of batch 1.
