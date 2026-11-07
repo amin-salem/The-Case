@@ -1,0 +1,12 @@
+{
+ "status": "pre-generation distinction specifications; six gaps from constrained draft assignment",
+ "common_prompt": "Use case: stylized-concept. Square cinematic painterly realistic head-and-shoulders portrait for a Persian detective game. Dark navy plain background, amber key light from upper left, restrained cool fill. A fictional Iranian adult man, calm neutral expression, no guilt cues. Modest plain civilian clothing, no uniform, no props, no text, logos or badge. Real skin texture and anatomically natural proportions. Head centered, fully visible with shoulders. Distinct individual character, not a generic handsome actor. No resemblance to another portrait requested in this series.",
+ "portraits": [
+ {"id":"m_neutral_56_round","age":56,"slot":"c011/s1","distinction":"Broad round face, full cheeks, small straight nose with wide tip, slightly hooded wide-set dark eyes, short straight silver hair with low hairline, clean shaven, no glasses, medium warm olive skin. Plain navy collarless shirt."},
+ {"id":"m_neutral_44_long","age":44,"slot":"c025/s2","distinction":"Long narrow face, lean cheeks, long softly convex nose, close-set almond brown eyes, shaved bald head, fine horizontal moustache with no beard, no glasses, medium brown skin. Plain charcoal collared shirt."},
+ {"id":"m_neutral_53_square","age":53,"slot":"c026/s3","distinction":"Broad square face with wide jaw, short broad nose, deep-set light brown eyes, short tightly curled salt-and-pepper hair, clean shaven, thick rectangular black glasses, medium olive skin. Plain dark brown jacket over cream shirt."},
+ {"id":"m_neutral_41_oval","age":41,"slot":"c027/s1","distinction":"Small oval face with narrow chin, straight narrow nose, large round dark eyes, short side-parted straight black hair with high forehead, small neat goatee without moustache, no glasses, light olive skin. Plain muted teal crewneck."},
+ {"id":"m_neutral_56_angular","age":56,"slot":"c031/s4","distinction":"Angular diamond face, high cheekbones and pointed chin, softly downturned broad nose, narrow brown eyes, mostly bald with thin silver hair at sides, full short white beard, small round wire glasses, warm tan skin. Plain dark plum shirt and charcoal blazer."},
+ {"id":"m_neutral_39_broad","age":39,"slot":"c062/s4","distinction":"Broad oblong face with substantial chin, slightly upturned small nose, wide-set dark almond eyes, short dense wavy black hair, clean shaven, no glasses, deep warm olive skin. Plain muted grey-blue collared shirt, no insignia."}
+ ]
+}

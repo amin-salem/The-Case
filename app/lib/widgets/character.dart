@@ -109,6 +109,9 @@ class _AnimatedSuspectState extends State<AnimatedSuspect> with SingleTickerProv
 /// Painted portraits shipped with the app (assets/portraits). A suspect whose avatar names one of
 /// these is shown with it; everyone else is drawn by CharacterPainter.
 const Set<String> kPortraits = {
+  'm_mid_researcher',
+  'm_mid_worker',
+  'f_mid_waitress',
   'f_mid_agent',
   'f_mid_archaeologist',
   'f_mid_attorney',
@@ -617,3 +620,4 @@ class SuspectPortrait extends StatelessWidget {
         : ClipRRect(borderRadius: BorderRadius.circular(size * 0.1), child: art);
   }
 }
+
