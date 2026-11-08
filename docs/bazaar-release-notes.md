@@ -33,3 +33,19 @@ Build 81
 
 ## developer_note
 Build 82
+
+<!-- build: 83 -->
+## changelog_fa
+- در پرونده‌ی آخر هفته، روز اول و روز دوم زیر هم نمایش داده می‌شوند و شمارنده‌ی زمان خواناتر است
+- چهره‌ی چند مظنون در پرونده‌های آخر هفته بهتر شد
+- جهت فلش‌ها در آلبوم و صفحه‌ی اصلی یکدست شد
+- بهبودهای کوچک
+
+## changelog_en
+- On the weekend case, day one and day two now sit one under the other with a clearer countdown
+- Improved portraits for several suspects in weekend cases
+- Arrow direction made consistent in the album and on the home screen
+- Small improvements
+
+## developer_note
+Build 83
