@@ -130,7 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   SettingsRow(
                     icon: Icons.notifications_active_rounded,
                     title: 'یادآوری پرونده‌ی هر شب',
-                    sub: 'ساعت ۹ شب؛ و ساعت ۱۰:۳۰ اگه زنجیره‌ات در خطر باشه',
+                    sub: 'ساعت ۹ شب؛ و ساعت ۸ شب اگه زنجیره‌ات در خطر باشه',
                     end: _switch(Reminders.i.enabled, (v) => Reminders.i.setEnabled(v)),
                     onTap: () => Reminders.i.setEnabled(!Reminders.i.enabled),
                   ),

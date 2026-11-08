@@ -49,3 +49,17 @@ Build 82
 
 ## developer_note
 Build 83
+
+<!-- build: 84 -->
+## changelog_fa
+- فروشگاه تازه با نمایش ارزش هر بسته و راهنمای مصرف سکه
+- یادآوری زنجیره حالا یک ساعت قبل از پرونده‌ی تازه می‌آید و تعداد اعلان‌ها کمتر شده
+- بهبودهای کوچک
+
+## changelog_en
+- A new shop that shows what each pack is worth and what coins can be used for
+- The streak reminder now arrives one hour before the next case, with fewer notifications overall
+- Small improvements
+
+## developer_note
+Build 84
