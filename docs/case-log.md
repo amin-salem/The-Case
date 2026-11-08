@@ -355,3 +355,6 @@ Known and accepted: c049 poison/ignition chain is long (reader rated 4 of 5, kep
 
 ## 8 November 2026 — c040 clarity fix (urgent, Amin)
 Amin: «یکم گنگه». Cause: the left/right ownership of the cups lived only in Nare's answer, plus unused label shapes and a dense film card. Fixed in e2, e3, e6, intro, Nare's answer and Nare's print; explanation 245 words. Two fresh-reader blind tests: s1 90% and 92%, difficulty 4, clarity 3/5 (the wrong-victim step still needs left/right tracking; that is the puzzle itself).
+
+## 8 November 2026 — c041, c042 clarity fixes (urgent, Amin)
+Clarity audit of c041-c050 (Sonnet auditors with the c040 checklist): c041 3, c042 2, c043 3, c044 3, c045 3, c046 2, c047 3, c048 4, c049 3, c050 3. Amin chose c041 and c042 first. After the fixes, fresh-reader blind tests: c041 s3 88% (clarity 3), c042 s2 90% (clarity 3). The other eight wait for Amin's priority.

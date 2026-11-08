@@ -1,3 +1,9 @@
+# server 1.53.2: c041 and c042 made clearer (8 Nov 2026, urgent)
+
+- c041 «نمونه‌ای که از فرش نبود» (tonight): e4 now says plainly which piece went into the first envelope; e6 names what each envelope was («الف» Vakili's colour envelope, «ب» the lab envelope); e9 says the carpet itself matches the certificate; a noise detail (printed numbers) removed. Blind test: s3 at 88%, clarity 3/5.
+- c042 «پیوستِ نسخهٔ چهار» (9 Nov): the file codes R3-22/R4-71 became «نسخهٔ سه/چهار»; the certificate-on-disk fact moved from e2 to e3 with a one-line mapping (body, lid name, disk, certificate); e5 says the 22:50 approval came two minutes after the 22:48 change; the vague last line of the intro was replaced. Blind test: s2 at 90%, clarity 3/5 (was 2/5).
+- Same culprits, proofs and difficulty. No APK, no migration.
+
 # server 1.53.1: c040 «لیوانِ رزروشده» made clearer (8 Nov 2026, urgent)
 
 - Amin found the case hard to follow. The key fact (Aram's flag by the left cup, Georg's by the right) was only in one of Nare's answers; it is now in card e6, which also says the leaking cup was the left one.
