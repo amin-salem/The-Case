@@ -351,3 +351,7 @@ Known and accepted: c049 poison/ignition chain is long (reader rated 4 of 5, kep
 - Logic plans, name changes, clue chains and both fix rounds: docs/reviews/c063-c064-plan.md. Name changes from the ideas: سپیده -> ویدا, هومن -> هرمز, یلدا سروش‌نیا -> یلدا کهربایی; توران -> عشرت, فریدون -> خسرو, مینا/سروش دادخواه -> گلاره/فرشید آذرکیش; c063 title «نفر» -> «کس». Receipts/forms that clear people: one per case.
 - Round 1 and 2 soft spots (glare/white sleeve, cutter and coat custody, clamp mechanics, list lie, call log, umbrella search gap, Golareh's motive for the 22:48 trip, Farshid's window, car geometry) fixed in the files without changing the chains.
 - Scene cap in test_content.py raised 4 -> 5 (lab and villa_rain at 4 already; idea 13 is office, also at 4).
+
+
+## 8 November 2026 — c040 clarity fix (urgent, Amin)
+Amin: «یکم گنگه». Cause: the left/right ownership of the cups lived only in Nare's answer, plus unused label shapes and a dense film card. Fixed in e2, e3, e6, intro, Nare's answer and Nare's print; explanation 245 words. Two fresh-reader blind tests: s1 90% and 92%, difficulty 4, clarity 3/5 (the wrong-victim step still needs left/right tracking; that is the puzzle itself).

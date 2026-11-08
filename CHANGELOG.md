@@ -1,3 +1,9 @@
+# server 1.53.1: c040 «لیوانِ رزروشده» made clearer (8 Nov 2026, urgent)
+
+- Amin found the case hard to follow. The key fact (Aram's flag by the left cup, Georg's by the right) was only in one of Nare's answers; it is now in card e6, which also says the leaking cup was the left one.
+- Removed the triangle/circle label shapes (they played no part in the proof), made the intro say Aram took the intact cup, added a one-line summary of the two unattended moments to e3, Nare now remembers the closing order (matching the film), Lida's folder is shown on the table, and the explanation mentions her print on Georg's flag.
+- Same culprit, proof and difficulty. Blind tests after the change: s1 at 90% and 92%, no single card names her. No APK, no migration.
+
 # server 1.53.0: nightly cases c063, c064 (7 Nov 2026, ideas session 9 of 15)
 
 - c063 «شکست برای کس دیگر» (30 Nov, difficulty 5, S6 conflicting accounts, wrong victim, lab / science) and c064 «چتری که خشک برگشت» (1 Dec, difficulty 5, S7 crime inside a crisis, object biography, villa_rain / family). Ideas #11 and #12 of batch 1.
