@@ -1,3 +1,11 @@
+# server 1.53.4 / app 1.41.1+83: weekend portraits and small screen fixes (8 Nov 2026, urgent)
+
+- Weekend portraits: the three missing painted faces (Siavash Namvar in w005, Ghasem Bayat and Zhila Pakzad in w006) now ship with the app, so they are no longer drawn by the fallback painter. In w005 four faces that did not fit (a baker's apron on a manuscript collector, a pastry apron on a night guard, ages 12-14 years apart) and in w006 the doctor's coat on a business rival were swapped for fitting portraits. Only `avatar.portrait` changed; no story text, culprit or proof.
+- Weekend tab: «روز اول» and «روز دوم» are now two full-width blocks, one under the other, so the countdown to day two has room.
+- Leaderboard, «پرونده‌ی امروز» tab: the header no longer repeats «پرونده‌ی امروز:» (the tab already says it); it shows the case title and «بیشترین پلاک و کمترین زمان».
+- Arrows: the album strip and the «حسابت هنوز امن نیست» card on Home pointed the wrong way in the right-to-left layout; now like every other row.
+- No migration.
+
 # server 1.53.3: c043-c050 made clearer (8 Nov 2026, urgent)
 
 - After the clarity audit, every fact a solution needs is now in an evidence card or the intro (not only in a suspect's answer): c043 the clasp facts and the 20:36 moment; c044 who fitted the window mesh and Aziz's whereabouts; c045 who made which seed envelopes; c046 the 15:52 radio call and Katayoun's mother; c047 Pak-niyat's carton claim and the lamp print; c048 the code moment at check-in and the ring's history; c049 the unlit boat at the ladder and the nine sets of nets; c050 the 20:40 intercom and the 85-minute road.

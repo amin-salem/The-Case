@@ -71,7 +71,7 @@ class AlbumStrip extends StatelessWidget {
                     style: tBody(12, color: near ? K.brass : K.textSoft, w: FontWeight.w700).copyWith(height: 1.5)),
               ]),
             ),
-            const Icon(Icons.chevron_left_rounded, color: K.textSoft),
+            const Icon(Icons.chevron_right_rounded, color: K.textSoft),
           ]),
         ),
       ),
