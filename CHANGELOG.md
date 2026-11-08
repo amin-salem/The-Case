@@ -1,3 +1,9 @@
+# server 1.54.0: nightly cases c065, c066 (8 Nov 2026, ideas session 10 of 15)
+
+- c065 «انصراف با جوهر آبی» (2 Dec, difficulty 5, S5 documents, the witness is the liar, office / medical) and c066 «گلدان‌های ردیف آفتاب» (3 Dec, difficulty 5, classic, motive reversal, school / science). Ideas #13 and #14 of batch 1.
+- Blind tests with fresh Sonnet readers on public copies (tool lines included): c065 93%, 93%, 92%, 93%; c066 92%, 90%, 90%; no single card or line decides; every soft spot found was fixed in the files (three fix rounds). Notification teasers added; case count tests 64 -> 66.
+- Deploy: redeploy from the Liara panel. No APK, no migration.
+
 # server 1.53.4 / app 1.41.1+83: weekend portraits and small screen fixes (8 Nov 2026, urgent)
 
 - Weekend portraits: the three missing painted faces (Siavash Namvar in w005, Ghasem Bayat and Zhila Pakzad in w006) now ship with the app, so they are no longer drawn by the fallback painter. In w005 four faces that did not fit (a baker's apron on a manuscript collector, a pastry apron on a night guard, ages 12-14 years apart) and in w006 the doctor's coat on a business rival were swapped for fitting portraits. Only `avatar.portrait` changed; no story text, culprit or proof.
