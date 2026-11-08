@@ -358,3 +358,6 @@ Amin: «یکم گنگه». Cause: the left/right ownership of the cups lived onl
 
 ## 8 November 2026 — c041, c042 clarity fixes (urgent, Amin)
 Clarity audit of c041-c050 (Sonnet auditors with the c040 checklist): c041 3, c042 2, c043 3, c044 3, c045 3, c046 2, c047 3, c048 4, c049 3, c050 3. Amin chose c041 and c042 first. After the fixes, fresh-reader blind tests: c041 s3 88% (clarity 3), c042 s2 90% (clarity 3). The other eight wait for Amin's priority.
+
+## 8 November 2026 — c043–c050 clarity fixes (urgent, Amin: «نمیخوام از ۴۰ تا ۵۰ دیگه ایراد بدی ببینم»)
+Opus fixers applied the audit findings (key facts into cards, one meaning per word, decisive sentence first, noise cut). Blind tests after the fix (culprit %, clarity /5): c043 85% 3.5; c044 88% 3; c045 92% 3; c046 90% 3 (was 2); c047 90% 3; c048 90% 3; c049 90% 3; c050 88% 3. Follow-ups applied after the blind tests: c044 Nikpey's leaving time, c045 Vahid's 21:40 errand in his statement, c048 the daughter's name removed from e3 (it pointed straight at the culprit), c049 boat round-trip time in e3, c050 the flask stayed on the hall table. Remaining clarity 3 = the puzzles need note-taking by design (timelines, two-step identity), not missing or hidden facts.

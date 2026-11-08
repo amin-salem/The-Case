@@ -1,3 +1,9 @@
+# server 1.53.3: c043-c050 made clearer (8 Nov 2026, urgent)
+
+- After the clarity audit, every fact a solution needs is now in an evidence card or the intro (not only in a suspect's answer): c043 the clasp facts and the 20:36 moment; c044 who fitted the window mesh and Aziz's whereabouts; c045 who made which seed envelopes; c046 the 15:52 radio call and Katayoun's mother; c047 Pak-niyat's carton claim and the lamp print; c048 the code moment at check-in and the ring's history; c049 the unlit boat at the ladder and the nine sets of nets; c050 the 20:40 intercom and the 85-minute road.
+- Words that meant two things now mean one (lock/clasp, envelope/letter, office rooms, doors, card names); overloaded cards start with the decisive sentence; noise details removed; times aligned; confusable witness names changed (c046 guard, c048 three witnesses, c049 guard). c047's innocent exits moved a few minutes earlier so the candle window is not a one-minute call.
+- Same culprits, proofs and difficulty. Fresh-reader blind tests: c043 85%, c044 88%, c045 92%, c046 90%, c047 90%, c048 90%, c049 90%, c050 88%; no single card names a culprit. No APK, no migration.
+
 # server 1.53.2: c041 and c042 made clearer (8 Nov 2026, urgent)
 
 - c041 «نمونه‌ای که از فرش نبود» (tonight): e4 now says plainly which piece went into the first envelope; e6 names what each envelope was («الف» Vakili's colour envelope, «ب» the lab envelope); e9 says the carpet itself matches the certificate; a noise detail (printed numbers) removed. Blind test: s3 at 88%, clarity 3/5.
