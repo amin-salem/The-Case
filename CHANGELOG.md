@@ -2,6 +2,7 @@
 
 - **Shop** (Amin approved the design on the canvas, 8 Nov): the starter pack leads (until it is bought; hidden when `no_ads`), then the VIP card (days left shown), the three coin bags with "حدود N پرونده‌ی بایگانی" and a "+N٪ بیشتر" label, then "با سکه چی می‌شه خرید؟" (hints from 40, archive from 100, streak insurance, wardrobe from 300) and a trust note. Every percentage is computed from the prices the app really shows (Bazaar's own price when it knows it, else the config); nothing is typed in. No timers, no struck-out prices.
 - **Streak reminder**: now at **20:00** (one hour before the next case) instead of 22:30 (90 minutes after the case opened), only when a streak runs and the open case is unsolved. The three later-night reminders were removed: at most one extra notification a day besides the 21:00 one. Settings text updated. (The public privacy page still says 22:30; it changes with the next server push.)
+- Release workflow: the "upload-artifact" step no longer stops the build when GitHub's artifact storage quota is full (it blocked the GitHub release and the Bazaar upload on 8 Nov, build 83).
 - Check of the streak after a missed night: the server already settles it against the calendar (`streakrepair.effective_streak`, tests in `test_night_streak.py`). The streak shows 0 the moment the NEXT case opens (21:00), not at midnight: the open case stays solvable for 24 hours by design.
 
 # server 1.53.4 / app 1.41.1+83: weekend portraits and small screen fixes (8 Nov 2026, urgent)
