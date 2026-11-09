@@ -65,3 +65,15 @@ Build 83
 
 ## developer_note
 Build 85
+
+<!-- build: 86 -->
+## changelog_fa
+- زیر هر مدرک، کارت مظنون‌هایی که در متن آمده‌اند حالا با فامیلی هم نشان داده می‌شود
+- بهبودهای کوچک
+
+## changelog_en
+- Under each piece of evidence, the suspects it mentions now show up when only their surname is used
+- Small improvements
+
+## developer_note
+Build 86

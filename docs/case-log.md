@@ -361,3 +361,13 @@ Clarity audit of c041-c050 (Sonnet auditors with the c040 checklist): c041 3, c0
 
 ## 8 November 2026 — c043–c050 clarity fixes (urgent, Amin: «نمیخوام از ۴۰ تا ۵۰ دیگه ایراد بدی ببینم»)
 Opus fixers applied the audit findings (key facts into cards, one meaning per word, decisive sentence first, noise cut). Blind tests after the fix (culprit %, clarity /5): c043 85% 3.5; c044 88% 3; c045 92% 3; c046 90% 3 (was 2); c047 90% 3; c048 90% 3; c049 90% 3; c050 88% 3. Follow-ups applied after the blind tests: c044 Nikpey's leaving time, c045 Vahid's 21:40 errand in his statement, c048 the daughter's name removed from e3 (it pointed straight at the culprit), c049 boat round-trip time in e3, c050 the flask stayed on the hall table. Remaining clarity 3 = the puzzles need note-taking by design (timelines, two-step identity), not missing or hidden facts.
+
+
+### 2026-11-08 nightly (Sonnet coordinator, Opus writer): c065, c066 from the idea bank
+| id | publish | idea / style / type | culprit | result |
+|---|---|---|---|---|
+| c065 «انصراف با جوهر آبی» | 2026-12-02 | idea #13, style S5, puzzle type 8 (office / medical), difficulty 5 | s5 سهیلا شهنواز | blind tests 93%, 93%, 92%, 93%; no single card decides |
+| c066 «گلدان‌های ردیف آفتاب» | 2026-12-03 | idea #14, style classic, puzzle type 10 (school / science), difficulty 5 | s1 بابک نامجو | blind tests 92%, 90%, 90%; no single card decides |
+
+- Logic plans and three fix rounds: docs/reviews/c065-c066-plan.md. Name changes: آذر -> سهیلا, رامین -> پرهام, مرجان -> بیتا, فرنگیس -> قدسی; بردیا -> مازیار, الهام -> شادی, بابک فرزان -> بابک نامجو, جلال آذری -> حشمت مهرپرور.
+- Soft spots fixed: c065 (key-board alibis e12, archive line pen, free-slot sale stated, backdated entries checked, Parham's alibi anchor), c066 (saucer layer counts, return day Friday, sublet on a card, why nobody noticed, Naghmeh/Heshmat limits, e4 rewritten plainly). Receipts/forms that clear people: c065 e9, e11; c066 e8, e9.
