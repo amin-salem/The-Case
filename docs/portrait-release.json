@@ -1,0 +1,9 @@
+{
+  "_note": "Portraits are app assets: a player on an older APK sees the drawn fallback face instead (Amin, 9 Nov 2026: «تصاویر تولید نشده» in w005). A case may use a portrait only when it is published on or after `usable_from` of that portrait = the day the APK that ships it reached most players (about 14 days after it was published on Cafe Bazaar). Portraits not listed here shipped in build 78 (27 Oct 2026) or earlier. Cases published before `check_from` are exempt. Tested by server/tests/test_content.py::test_case_uses_only_portraits_players_have.",
+  "check_from": "2026-11-09",
+  "portraits": {
+    "f_mid_waitress": {"first_build": 83, "usable_from": "2026-11-26"},
+    "m_mid_worker": {"first_build": 83, "usable_from": "2026-11-26"},
+    "m_mid_researcher": {"first_build": 83, "usable_from": "2026-11-26"}
+  }
+}

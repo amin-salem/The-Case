@@ -198,3 +198,24 @@ def test_portrait_age_matches_the_character():
                 if not lo <= ages[p] <= hi:
                     misses.append((c.id, s["id"], s["avatar"]["age"], p))
     assert len(misses) <= 8, misses
+
+
+def test_case_uses_only_portraits_players_have():
+    """A new portrait lives in the APK; a player who has not updated sees a drawn fallback face (w005, Nov 2026). So a case
+    may use a portrait only from the day the build that ships it reached most players (docs/portrait-release.json)."""
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2]
+    rel = json.loads((root / "docs" / "portrait-release.json").read_text(encoding="utf-8"))
+    shipped = {p.stem for p in (root / "app" / "assets" / "portraits").glob("*.webp")}
+    assert set(rel["portraits"]) <= shipped, "portrait-release.json lists a portrait that is not shipped"
+    early = []
+    for c in (*content.all_cases(), *content.weekly_cases()):
+        day = c.publish.isoformat()
+        if day < rel["check_from"]:
+            continue
+        for s in c.data["suspects"]:
+            p = s["avatar"].get("portrait")
+            if p in rel["portraits"] and day < rel["portraits"][p]["usable_from"]:
+                early.append((c.id, day, s["id"], p, rel["portraits"][p]["usable_from"]))
+    assert not early, f"these cases use a portrait most players do not have yet: {early}"
