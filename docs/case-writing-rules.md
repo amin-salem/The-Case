@@ -91,6 +91,7 @@ why. Then judge:
   Never reserve "special" faces for culprits and never give innocent suspects only the faces that already were culprits.
   A culprit whose `portrait` is not a shipped file is drawn by code and counts as unique.
 - `server/tests/test_content.py::test_culprit_portraits_are_unique` enforces the culprit rule while unused faces exist.
+- **Only faces the players have** (Amin, 9 Nov 2026): a portrait added to the app reaches a player only with the APK that ships it; on an older APK the suspect gets a drawn fallback face. A new portrait may be used only in cases published on or after its `usable_from` in `docs/portrait-release.json` (test `test_case_uses_only_portraits_players_have`).
 - Every suspect needs an `intro` (required; 20–90 characters, spoken-friendly Persian, one line). It is shown on the
   case's «آدم‌های پرونده» strip and on the portrait chips, **before** the player has read any statement, so it says only
   WHO the person is relative to the case: role, relationship to the victim/place, what they were doing there at a
