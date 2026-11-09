@@ -177,6 +177,7 @@ async def test_impact_counts_signups_free_opens_solves_and_buyers(client, monkey
     async with db.SessionLocal() as s:   # the first account becomes one hour older than the window start
         await s.execute(Player.__table__.update().where(Player.id == before["player_id"]).values(created_at=utcnow() - timedelta(minutes=1)))
         await s.commit()
+    base = next(x for x in (await client.get("/admin/api/promo/impact", headers=ADMIN)).json()["items"] if x["case_id"] == c.id)
     p = await new_player(client, "impact-new", aged=False)
     await fund(p["player_id"], 100)
     assert (await client.post(f"/v1/cases/{c.id}/unlock", headers=p["headers"], json={"expected_cost": 0})).status_code == 200
@@ -187,8 +188,8 @@ async def test_impact_counts_signups_free_opens_solves_and_buyers(client, monkey
         await s.commit()
     items = (await client.get("/admin/api/promo/impact", headers=ADMIN)).json()["items"]
     w = next(x for x in items if x["case_id"] == c.id)
-    assert w["state"] == "open" and w["signups"] >= 1 and w["opened"] == 1 and w["opened_new"] == 1
-    assert w["solved"] == 1 and w["buyers"] == 1 and w["signups_before"] >= 0
+    assert w["state"] == "open" and w["signups"] == base["signups"] + 1 and w["opened"] == base["opened"] + 1 and w["opened_new"] == base["opened_new"] + 1
+    assert w["solved"] == base["solved"] + 1 and w["buyers"] == base["buyers"] + 1 and w["signups_before"] >= 0
     assert (await client.get("/admin/api/promo/impact")).status_code in (401, 403)   # admin key required
 
 
