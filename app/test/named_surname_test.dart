@@ -21,6 +21,6 @@ void main() {
   test('a shared surname or a surname equal to another first name is ignored', () {
     final fam = [_s('s1', 'علی رضایی'), _s('s2', 'مریم رضایی'), _s('s3', 'رضا کریمی'), _s('s4', 'سارا رضا')];
     expect([for (final s in suspectsNamedIn('رضایی آمد', fam)) s.id], isEmpty);
-    expect([for (final s in suspectsNamedIn('رضا آمد', fam)) s.id], ['s3', 's4']);
+    expect([for (final s in suspectsNamedIn('رضا آمد', fam)) s.id], ['s3']);
   });
 }
