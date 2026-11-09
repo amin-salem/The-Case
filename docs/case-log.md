@@ -372,3 +372,12 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 
 - Logic plans and three fix rounds: docs/reviews/c065-c066-plan.md. Name changes: آذر -> سهیلا, رامین -> پرهام, مرجان -> بیتا, فرنگیس -> قدسی; بردیا -> مازیار, الهام -> شادی, بابک فرزان -> بابک نامجو, جلال آذری -> حشمت مهرپرور.
 - Soft spots fixed: c065 (key-board alibis e12, archive line pen, free-slot sale stated, backdated entries checked, Parham's alibi anchor), c066 (saucer layer counts, return day Friday, sublet on a card, why nobody noticed, Naghmeh/Heshmat limits, e4 rewritten plainly). Receipts/forms that clear people: c065 e9, e11; c066 e8, e9.
+
+### 2026-11-09 nightly (Sonnet coordinator, Opus writer): c067, c068 from the idea bank
+| id | publish | idea / style / type | culprit | result |
+|---|---|---|---|---|
+| c067 «زنگ طبقه‌ی بی‌سکنه» | 2026-12-04 | idea #15, style S3, puzzle type 5 (tower / family), difficulty 5 | s4 مهران پرتوی | blind tests 88%, 93%; no single card decides |
+| c068 «بار برگشتی زمستان» | 2026-12-05 | idea #16, style S1, puzzle type 6 (warehouse / business), difficulty 5 | s2 شهرام نکوفر | blind tests 93%, 93%; no single card decides |
+
+- Logic plans and fix rounds: docs/reviews/c067-c068-plan.md. Name changes: ژاله -> پروانه, کیانی -> صفاریان, راد -> آرین‌فر, نوبهار -> پرتوی (Mehran aged 43 -> 60 for an unused culprit face); سامان -> یوسف, ایرج -> رحیم.
+- Soft spots fixed: c067 stolen receipt now found behind the fire-cabinet extinguisher; c068 1383 weekday names removed (they were wrong), who carried crate T-17 up and when, Farideh's train on 12 Bahman, the 620k bike total, waybill whereabouts. Receipts/forms that clear people: c067 e2, e3; c068 e3, e9.

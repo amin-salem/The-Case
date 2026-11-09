@@ -1,3 +1,7 @@
+# server 1.57.0: nightly cases c067, c068 (9 Nov 2026)
+
+- Two new nightly cases from the idea bank (ideas 15 and 16), difficulty 5: c067 «زنگ طبقه‌ی بی‌سکنه» (publish 4 Dec 2026) and c068 «بار برگشتی زمستان» (publish 5 Dec 2026), with notify texts and camera/print lines for every suspect. Case count tests now expect 68.
+
 # server 1.56.0: admin panel in Tehran time, effect of a free case, a lighter overview (9 Nov 2026, urgent)
 
 - **Tehran time everywhere in the panel** (web and admin app): every date and time (`fmtT`, day names, promo windows, next weekend case) is shown with `timeZone: Asia/Tehran`, whatever zone the phone has. Server day buckets were already Tehran days.
