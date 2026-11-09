@@ -785,4 +785,5 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
   Cafe Bazaar button. It needs the Bazaar address in `site.py` (`BAZAAR_URL`) to be the real one.
 - The list is the config row `promo_cases`; do not edit it by hand (a bad row is ignored, so nothing is free by mistake).
 - What to watch: ledger lines `promo:<case>` (one per new player who opened it) against `solve` lines of that case.
+- The effect is in the panel: «🗂 پرونده‌ها» → «📈 اثر رایگان‌کردن» (signups in the window against the same length before it, free opens, solves, coin buyers). All panel times are Tehran time.
 - Not built yet: opening the app straight on the case from the link (needs a change in the APK build).

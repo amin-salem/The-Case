@@ -18,12 +18,14 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from fastapi import HTTPException
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import content
-from ..models import AdminLog, ConfigValue, utcnow
+from .. import welcome
+from ..models import AdminLog, CaseProgress, CoinLog, ConfigValue, Player, Purchase, utcnow
 from . import remote_config
+from .funnel import _valid_player
 
 log = logging.getLogger("promo")
 
@@ -141,3 +143,55 @@ async def end(session: AsyncSession, case_id: str, now: datetime | None = None) 
         await _save(session, rows)
         log.info("promo_ended case=%s", case_id)
     return changed
+
+
+IMPACT_ROWS = 10      # windows measured per call (the newest)
+IMPACT_CAP = 5000     # players looked at per window
+_CHUNK = 500
+
+
+async def impact(session: AsyncSession, now: datetime | None = None) -> list[dict]:
+    """What each promo window did (read only), newest window first.
+
+    - `signups`: accounts created while the window was open (until now, or its end).
+    - `signups_before`: accounts created in an equally long stretch just before it (the baseline to compare with; a
+      comparison, not proof: the ad, the day of the week and the store ranking all move signups).
+    - `opened`: detectives who opened the case for free (ledger line `promo:<case>`), `opened_new` of them signed up inside
+      the window; `solved` of those solved it; `buyers`: accounts created in the window that bought coins (any time since).
+    Indexed queries only: players by `created_at`, then the ledger / progress / purchases by `player_id`. Bounded by IMPACT_CAP.
+    """
+    now = now or utcnow()
+    out: list[dict] = []
+    for w in (await listing(session, now))[:IMPACT_ROWS]:
+        if w["state"] == "upcoming":
+            continue
+        s, e = datetime.fromisoformat(w["starts_at"]), min(now, datetime.fromisoformat(w["ends_at"]))
+        span = max(e - s, timedelta(minutes=1))
+        valid = _valid_player()
+        new_ids = [r[0] for r in (await session.execute(select(Player.id).where(
+            Player.created_at >= s, Player.created_at <= e, valid).limit(IMPACT_CAP))).all()]
+        before = int(await session.scalar(select(func.count()).select_from(Player).where(
+            Player.created_at >= s - span, Player.created_at < s, valid)) or 0)
+        cand = {r[0]: r[1] for r in (await session.execute(select(Player.id, Player.created_at).where(
+            Player.created_at >= s - timedelta(days=welcome.NEWBIE_DAYS), Player.created_at <= e, valid)
+            .limit(IMPACT_CAP))).all()}
+        opened: set[str] = set()
+        ids = list(cand)
+        for i in range(0, len(ids), _CHUNK):
+            opened.update(r[0] for r in (await session.execute(select(CoinLog.player_id).where(
+                CoinLog.player_id.in_(ids[i:i + _CHUNK]), CoinLog.reason == f"promo:{w['case_id']}", CoinLog.at >= s))).all())
+        solved = 0
+        buyers = 0
+        olist, nlist = list(opened), new_ids
+        for i in range(0, len(olist), _CHUNK):
+            solved += int(await session.scalar(select(func.count()).select_from(CaseProgress).where(
+                CaseProgress.player_id.in_(olist[i:i + _CHUNK]), CaseProgress.case_id == w["case_id"],
+                CaseProgress.solved.is_(True))) or 0)
+        for i in range(0, len(nlist), _CHUNK):
+            buyers += int(await session.scalar(select(func.count(func.distinct(Purchase.player_id))).where(
+                Purchase.player_id.in_(nlist[i:i + _CHUNK]), Purchase.status == "granted")) or 0)
+        out.append({"case_id": w["case_id"], "title": w["title"], "state": w["state"], "starts_at": w["starts_at"],
+                    "ends_at": w["ends_at"], "hours": round(span.total_seconds() / 3600, 1), "signups": len(new_ids),
+                    "signups_before": before, "opened": len(opened),
+                    "opened_new": sum(1 for p in opened if cand.get(p) and cand[p] >= s), "solved": solved, "buyers": buyers})
+    return out

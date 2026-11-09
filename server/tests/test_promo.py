@@ -165,3 +165,32 @@ async def test_case_page_for_ad_links(client, monkeypatch):
     assert tonight.status_code == 200 and "پرونده‌ی امشب" in tonight.text
     future = await client.get("/c/c050", follow_redirects=False)
     assert future.status_code == 302   # not published yet: nothing is shown
+
+
+# ---- the admin's effect report (read only) ----
+
+async def test_impact_counts_signups_free_opens_solves_and_buyers(client, monkeypatch):
+    from app.models import CaseProgress, Player, Purchase, utcnow
+    c = setup_clock(monkeypatch, 1)
+    before = await new_player(client, "impact-before", aged=False)   # signed up before the window: baseline
+    assert (await start(client, c.id)).status_code == 200
+    async with db.SessionLocal() as s:   # the first account becomes one hour older than the window start
+        await s.execute(Player.__table__.update().where(Player.id == before["player_id"]).values(created_at=utcnow() - timedelta(minutes=1)))
+        await s.commit()
+    p = await new_player(client, "impact-new", aged=False)
+    await fund(p["player_id"], 100)
+    assert (await client.post(f"/v1/cases/{c.id}/unlock", headers=p["headers"], json={"expected_cost": 0})).status_code == 200
+    async with db.SessionLocal() as s:   # solved + bought coins
+        cp = (await s.execute(select(CaseProgress).where(CaseProgress.player_id == p["player_id"], CaseProgress.case_id == c.id))).scalar_one()
+        cp.solved = True
+        s.add(Purchase(player_id=p["player_id"], product_id="coins_400", purchase_token="impact-token-1", status="granted"))
+        await s.commit()
+    items = (await client.get("/admin/api/promo/impact", headers=ADMIN)).json()["items"]
+    w = next(x for x in items if x["case_id"] == c.id)
+    assert w["state"] == "open" and w["signups"] >= 1 and w["opened"] == 1 and w["opened_new"] == 1
+    assert w["solved"] == 1 and w["buyers"] == 1 and w["signups_before"] >= 0
+    assert (await client.get("/admin/api/promo/impact")).status_code in (401, 403)   # admin key required
+
+
+async def test_impact_with_no_windows_is_empty(client):
+    assert (await client.get("/admin/api/promo/impact", headers=ADMIN)).json() == {"items": []}

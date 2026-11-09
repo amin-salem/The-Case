@@ -271,6 +271,12 @@ async def promo_list(session: AsyncSession = Depends(get_session)):
             "max_active": promo_service.MAX_ACTIVE}
 
 
+@router.get("/promo/impact")
+async def promo_impact(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. For every promo window: signups, free opens, solves and buyers (see services/promo.impact)."""
+    return {"items": await promo_service.impact(session)}
+
+
 @router.post("/promo")
 async def promo_start(body: PromoIn, session: AsyncSession = Depends(get_session)):
     """Start (or restart) a free window for one archive case. A new detective = an account younger than 3 days."""
