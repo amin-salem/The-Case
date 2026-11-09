@@ -101,8 +101,11 @@ jobs:
             cat app/release/server_check.md 2>/dev/null || true
           } > notes.md
       - uses: actions/upload-artifact@v4
+        # GitHub's artifact storage quota can be full (8 Nov 2026); the APK is also published as a release and sent to Bazaar below
+        continue-on-error: true
         with:
           name: the_case-apk
+          retention-days: 7
           path: app/release/*
       - name: Publish the GitHub release
         uses: softprops/action-gh-release@v2

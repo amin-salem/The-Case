@@ -5,6 +5,19 @@
 - Old apps that never report a build (0) cannot show the banner; they are counted separately.
 - Tests: `test_app_update_admin.py` (SQLite and PostgreSQL jobs). No migration, no APK. Deploy: redeploy from Liara.
 
+# app 1.42.2+86: suspect cards under evidence also work for surnames (9 Nov 2026, urgent; app only, nothing under `server/`)
+
+- Under every evidence card the app shows the suspects the card names; it only knew first names and full names. Newer cases (c041, c048 and several others) write only the surname («عبدی»، «حکیمی»), so their cards showed nobody. `suspectsNamedIn` now also matches a surname (3+ letters, only when it is unique among the suspects and not another suspect's first name, never inside a longer word). c041 goes from 0 to 9 cards with suspects, c048 from 0 to 7. Test: `named_surname_test.dart`.
+
+# app 1.42.1+85 (build 84 was cancelled before upload; this contains it): new shop and a calmer streak reminder (8 Nov 2026, urgent; app only, nothing under `server/`)
+
+- **Shop** (Amin approved the design on the canvas, 8 Nov): the starter pack leads (until it is bought; hidden when `no_ads`), then the VIP card (days left shown), the three coin bags with "حدود N پرونده‌ی بایگانی" and a "+N٪ بیشتر" label, then "با سکه چی می‌شه خرید؟" (hints from 40, archive from 100, streak insurance, wardrobe from 300) and a trust note. Every percentage is computed from the prices the app really shows (Bazaar's own price when it knows it, else the config); nothing is typed in. No timers, no struck-out prices.
+- **Streak reminder**: now at **20:00** (one hour before the next case) instead of 22:30 (90 minutes after the case opened), only when a streak runs and the open case is unsolved. The three later-night reminders were removed: at most one extra notification a day besides the 21:00 one. Settings text updated. (The public privacy page still says 22:30; it changes with the next server push.)
+- Accusation messages (Amin approved, 8 Nov): right person + wrong card «آدم درست رو گرفتی! ولی این مدرک دروغش رو ثابت نمی‌کنه. مدرک دیگه‌ای رو امتحان کن.»; wrong person «این آدم قاتل نیست. N فرصت دیگه داری.»; not enough investigation «این اتهام اثبات نشد؛ هنوز کافی تحقیق نکرده‌ای…» (still never says the person is innocent). The server logic is unchanged.
+- CI: the UI-preview uploads no longer fail the job when GitHub's artifact quota is full (the failed upload used to SKIP the home-screen preview tests that follow) and keep files 1 day; the APK artifact keeps 7 days.
+- Release workflow: the "upload-artifact" step no longer stops the build when GitHub's artifact storage quota is full (it blocked the GitHub release and the Bazaar upload on 8 Nov, build 83).
+- Check of the streak after a missed night: the server already settles it against the calendar (`streakrepair.effective_streak`, tests in `test_night_streak.py`). The streak shows 0 the moment the NEXT case opens (21:00), not at midnight: the open case stays solvable for 24 hours by design.
+
 # server 1.54.0: nightly cases c065, c066 (8 Nov 2026, ideas session 10 of 15)
 
 - c065 «انصراف با جوهر آبی» (2 Dec, difficulty 5, S5 documents, the witness is the liar, office / medical) and c066 «گلدان‌های ردیف آفتاب» (3 Dec, difficulty 5, classic, motive reversal, school / science). Ideas #13 and #14 of batch 1.
