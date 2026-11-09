@@ -722,6 +722,8 @@ Problem: the daily answer is shared in groups, so the daily ranking prize lost i
 - The check fails open: if the config cannot be read, nobody sees a banner or a block. Only players who install build 79 or newer can show it; older installs do not have the code.
 - Nothing is set in the database by the release: the defaults show nothing until you raise the numbers.
 
+**Panel block (server 1.55.0, 9 Nov 2026).** The two numbers are no longer set with API calls: admin panel (or the admin app) → tab «⚙ اقدام‌ها» → «📲 بروزرسانی اپ». After you press «انتشار» for a build in Bazaar, put its number in «آخرین نسخه» and save. «حداقل نسخه» locks older builds (the panel asks a second time when active players would be locked out). `GET/POST /admin/api/app-update`; every save is in the admin log as `app_update`.
+
 **Install source.** The app (build 79+) sends the installer package once per start with `POST /v1/me/client` (`installer`, stored in `players.install_source`). The admin overview shows the counts: `com.farsitel.bazaar` = «کافه بازار», `ir.mservices.market` = «مایکت», empty or any other value = «مستقیم/نامشخص». Only players who opened build 79 or newer report it; everyone else counts as «مستقیم/نامشخص» until they update, so the Bazaar number grows as players update.
 
 ## First-days offers query on PostgreSQL (server 1.41.7; 28 Oct 2026)

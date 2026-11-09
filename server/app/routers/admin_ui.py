@@ -16,6 +16,7 @@ from ..cache import TTLCache
 from ..services import bazaar_reviews
 from ..services import case_reset
 from ..services import duplicates as duplicates_service
+from ..services import app_update as app_update_service
 from ..services import promo as promo_service
 from ..services import purge as purge_service
 from ..services import real_users
@@ -238,8 +239,29 @@ class PromoIn(BaseModel):
     hours: int = Field(promo_service.DEFAULT_HOURS, ge=promo_service.MIN_HOURS, le=promo_service.MAX_HOURS)
 
 
+class AppUpdateIn(BaseModel):
+    latest_version: int = Field(..., ge=1, le=99999)
+    min_version: int = Field(1, ge=1, le=99999)
+    confirm_block: bool = False
+    update_url: str | None = Field(None, max_length=300)
+
+
 class PromoEndIn(BaseModel):
     case_id: str = Field(..., min_length=1, max_length=16)
+
+
+@router.get("/app-update")
+async def app_update_view(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. The update notice values and how many active players would see the banner or be blocked."""
+    return await app_update_service.view(session)
+
+
+@router.post("/app-update")
+async def app_update_save(body: AppUpdateIn, session: AsyncSession = Depends(get_session)):
+    """Save latest_version / min_version (and optionally update_url). Blocking players needs confirm_block."""
+    from ..services.ratelimit import enforce
+    await enforce("admin_app_update", "all")
+    return await app_update_service.save(session, body.latest_version, body.min_version, body.confirm_block, body.update_url)
 
 
 @router.get("/promo")

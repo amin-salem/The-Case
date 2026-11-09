@@ -1,3 +1,10 @@
+# server 1.55.0: admin panel block «📲 بروزرسانی اپ» (9 Nov 2026, urgent)
+
+- Tab «⚙ اقدام‌ها» in the admin panel (and the admin app, which shows the same page) now edits the update notice: «آخرین نسخه» (`latest_version`) and «حداقل نسخه» (`min_version`), with a live count of how many active players (last 30 days, by the build the app reports) would see the banner or be blocked, and the most common builds. No more API calls by hand.
+- Safe: values 1..99999, `min_version` cannot exceed `latest_version`, a link must be http(s); raising `min_version` while active players would be locked out needs a second tap («بله، قفل کن», API `confirm_block`). Saving writes an `admin_log` row (`app_update`) and one log line; rate limit `admin_app_update`. API: `GET/POST /admin/api/app-update`.
+- Old apps that never report a build (0) cannot show the banner; they are counted separately.
+- Tests: `test_app_update_admin.py` (SQLite and PostgreSQL jobs). No migration, no APK. Deploy: redeploy from Liara.
+
 # server 1.54.0: nightly cases c065, c066 (8 Nov 2026, ideas session 10 of 15)
 
 - c065 «انصراف با جوهر آبی» (2 Dec, difficulty 5, S5 documents, the witness is the liar, office / medical) and c066 «گلدان‌های ردیف آفتاب» (3 Dec, difficulty 5, classic, motive reversal, school / science). Ideas #13 and #14 of batch 1.
