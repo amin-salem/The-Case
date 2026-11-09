@@ -1,3 +1,7 @@
+# server 1.55.1: the admin player list shows the version the player really runs (9 Nov 2026)
+
+- The «بازیکن‌ها» list and the version table showed `players.app_version`, which was set at sign-up and only refreshed at login (tokens last long, so it stayed e.g. 1 for players who run the newest build). The app already reports its real build at every start (`/v1/me/client` -> `client_build`). Now: that report also updates `app_version`; the list shows `client_build` when known; the version table (health) groups by the running build. No migration. Test in `test_ratelimit.py`.
+
 # server 1.55.0: admin panel block «📲 بروزرسانی اپ» (9 Nov 2026, urgent)
 
 - Tab «⚙ اقدام‌ها» in the admin panel (and the admin app, which shows the same page) now edits the update notice: «آخرین نسخه» (`latest_version`) and «حداقل نسخه» (`min_version`), with a live count of how many active players (last 30 days, by the build the app reports) would see the banner or be blocked, and the most common builds. No more API calls by hand.

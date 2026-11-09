@@ -162,6 +162,8 @@ async def report_client(body: ClientInfoIn, player: Player = Depends(current_pla
     """The app reports its version and device once per start (rate limited by the «client_info» policy)."""
     player.client_version = body.app_version.strip()
     player.client_build = body.build
+    if body.build > 0:
+        player.app_version = body.build  # the admin list showed the build of the sign-up (often 1); the running one is what matters
     player.platform = body.platform
     player.os_version = body.os_version.strip()
     player.device_model = body.device_model.strip()

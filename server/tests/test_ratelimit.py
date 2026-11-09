@@ -370,3 +370,16 @@ async def test_install_source_stored_counted_and_bad_value_dropped(client):
     assert (now["bazaar"] - before["bazaar"], now["myket"] - before["myket"]) == (1, 1)
     assert sum(now.values()) - sum(before.values()) == 4  # the four new players: bazaar, myket and two unknown
     assert any(v["build"] == 79 and v["players"] >= 4 for v in ov["versions"])
+
+
+async def test_client_report_updates_the_version_shown_in_the_admin_list(client):
+    """The admin list used to show the build of the sign-up (often 1). The running build must win."""
+    from .conftest import ADMIN, new_player
+    p = await new_player(client, "dev-realver-1")
+    good = {"app_version": "1.42.2", "build": 86, "platform": "android"}
+    assert (await client.post("/v1/me/client", json=good, headers=p["headers"])).status_code == 200
+    items = (await client.get("/admin/api/players?limit=200", headers=ADMIN)).json()["items"]
+    mine = [x for x in items if x["id"] == p["player_id"]]
+    assert mine and mine[0]["app_version"] == 86
+    vers = (await client.get("/admin/api/overview", headers=ADMIN)).json()
+    assert isinstance(vers, dict)

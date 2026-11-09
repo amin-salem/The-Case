@@ -200,7 +200,7 @@ async def players(q: str = Query("", max_length=60), sort: str = "last_seen", li
     lab = await real_users.label_rows(session, list(rows), dup)
     return {"total": total, "items": [{
         "id": p.id, "nickname": p.nickname, "coins": p.coins, "solved": p.cases_solved, "stars": p.stars_total,
-        "streak": p.streak, "secured": bool(p.email or p.phone_hash), "banned": p.banned, "app_version": p.app_version,
+        "streak": p.streak, "secured": bool(p.email or p.phone_hash), "banned": p.banned, "app_version": p.client_build or p.app_version,
         "segment": lab[p.id]["segment"], "dup_reason": lab[p.id]["reason"],
         "created": ts(p.created_at), "last_seen": ts(p.last_seen)} for p in rows]}
 
