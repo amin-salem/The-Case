@@ -554,7 +554,7 @@ const VIEWS = {
     m.innerHTML = `<div class="row"><button id="bc">ارسال پیام/هدیه به همه</button></div><h2>سابقه‌ی اقدام‌های ادمین</h2><div class="scroll"><table><tr><th>زمان</th><th>اقدام</th><th>هدف</th><th>جزئیات</th></tr>${log.map(r => `<tr><td>${fmtT(r.t)}</td><td>${esc(r.action)}</td><td class="ltr">${esc(r.target)}</td><td>${esc(JSON.stringify(r.detail))}</td></tr>`).join('')}</table></div>`;
     $('#bc').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها');
     const au = await api('/admin/api/app-update').catch(() => null);
-    if (au) {
+    if (au && Array.isArray(au.builds)) {
       m.insertAdjacentHTML('afterbegin', `<h2>📲 بروزرسانی اپ</h2>
       <p class="muted">بعد از «انتشار» هر بیلد در کافه بازار، «آخرین نسخه» را برابر شماره‌ی همان بیلد بگذار؛ بازیکن‌هایی که بیلدشان کمتر است یک بنر قابل‌بستن می‌بینند. «حداقل نسخه» فقط برای اضطرار است: بیلدهای کمتر از آن قفل می‌شوند. فقط بازیکن‌های ۳۰ روز اخیر شمرده می‌شوند و بیلدهای خیلی قدیمی (بدون گزارش) اصلاً بنر ندارند: ${num(au.unknown_build)} نفر.</p>
       <div class="row"><label>آخرین نسخه <input id="aul" type="number" min="1" max="99999" value="${au.latest_version}" style="width:90px"></label>
