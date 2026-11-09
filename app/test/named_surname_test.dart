@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:parvandeh/models/models.dart';
-import 'package:parvandeh/widgets/cast_strip.dart';
+import 'package:the_case/models/models.dart';
+import 'package:the_case/widgets/cast_strip.dart';
 
 Suspect _s(String id, String name) => Suspect({'id': id, 'name': name, 'role': 'x', 'age': 30});
 
