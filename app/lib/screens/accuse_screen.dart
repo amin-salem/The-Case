@@ -450,7 +450,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(e.title, style: tBody(14.5, color: K.ink, w: FontWeight.w900)),
               Text(e.text, style: tBody(13, color: K.ink), maxLines: on ? 8 : 2, overflow: TextOverflow.ellipsis),
-              if (bad) ...[const SizedBox(height: 6), Align(alignment: AlignmentDirectional.centerStart, child: _wrongTag('این مدرک دروغش را ثابت نمی‌کند'))],
+              if (bad) ...[const SizedBox(height: 6), Align(alignment: AlignmentDirectional.centerStart, child: _wrongTag('این مدرک دروغش رو ثابت نمی‌کنه'))],
             ]),
           ),
           if (on) const Icon(Icons.check_circle_rounded, color: K.brass),

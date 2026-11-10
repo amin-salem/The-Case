@@ -167,8 +167,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
-              pending ? 'نظرت ثبت شد؛ بعد از تأیید مدیر برای همه دیده می‌شود. فقط خودت الان آن را می‌بینی.'
-                      : 'نظرت تأیید نشد. می‌توانی آن را بازنویسی کنی.',
+              pending ? 'نظرت ثبت شد؛ بعد از تأیید مدیر برای همه دیده می‌شه. فعلاً فقط خودت می‌بینیش.'
+                      : 'نظرت تأیید نشد. می‌تونی بازنویسیش کنی.',
               style: tBody(12.5, color: pending ? K.brass : K.stamp, w: FontWeight.w700),
             ),
           ),
@@ -317,7 +317,7 @@ class _WriteSheetState extends State<_WriteSheet> {
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
               ),
             ),
-            Text(_reply || _c.text.trim().isNotEmpty ? 'بعد از بررسی مدیر منتشر می‌شود.' : 'امتیاز همان لحظه ثبت می‌شود.',
+            Text(_reply || _c.text.trim().isNotEmpty ? 'بعد از بررسی مدیر منتشر می‌شه.' : 'امتیازت همون لحظه ثبت می‌شه.',
                 style: tBody(12, color: K.kraft)),
             if (_err != null) Padding(padding: const EdgeInsets.only(top: 6), child: Text(_err!, style: tBody(12.5, color: K.stamp, w: FontWeight.w700))),
             const SizedBox(height: 12),

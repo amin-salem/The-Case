@@ -127,7 +127,7 @@ class _ClaimNoteEditorState extends State<ClaimNoteEditor> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Text(widget.existing == null ? 'پیوند شخصی به مدرک' : 'ویرایش پیوند شخصی', style: tDisplay(20)),
           const SizedBox(height: 6),
-          Text('این فقط فرضیهٔ خودته؛ بازی درستی یا نادرستی‌اش رو تأیید نمی‌کنه.', style: tBody(12.5, color: K.textSoft)),
+          Text('این فقط فرضیه‌ی خودته؛ بازی درستی یا نادرستی‌اش رو تأیید نمی‌کنه.', style: tBody(12.5, color: K.textSoft)),
           if (widget.existing != null && (_claim == null || widget.existing!.evidenceChanged(widget.caseData)))
             Padding(padding: const EdgeInsets.only(top: 8), child: Text('بخشی از پرونده تغییر کرده؛ مرجع‌ها رو دوباره انتخاب و بررسی کن.', style: tBody(13, color: K.brass))),
           const SizedBox(height: 14),

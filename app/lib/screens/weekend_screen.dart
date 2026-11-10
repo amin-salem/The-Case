@@ -223,7 +223,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
                   : 'دو فصل داره؛ فصل دوم مدارک و حرف‌های تازه می‌آره.'),
               (Icons.fact_check_rounded, 'هر مدرک رو می‌تونی به یه مظنون نشون بدی و ببینی چی می‌گه. تعدادش محدوده.'),
               (Icons.gavel_rounded, 'از همون فصل اول می‌تونی متهم کنی: هم مقصر، هم «چرا و چطور». زودتر درست بگی، ${fa(Api.i.weeklyEarlyBonus)} سکه‌ی اضافه می‌گیری.'),
-              (Icons.emoji_events_rounded, 'پاداش پایه: تا ${fa(weekly?.maxSolveReward ?? Api.i.weeklyReward)} سکه و کلی امتیاز رتبه. جایزهٔ حل زودهنگام جداست؛ زنجیره‌ی شبانه‌ت هم دست نمی‌خوره.'),
+              (Icons.emoji_events_rounded, 'پاداش پایه: تا ${fa(weekly?.maxSolveReward ?? Api.i.weeklyReward)} سکه و کلی امتیاز رتبه. جایزه‌ی حل زودهنگام جداست؛ زنجیره‌ی شبانه‌ت هم دست نمی‌خوره.'),
             ]),
           ]),
         ),

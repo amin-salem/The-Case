@@ -37,7 +37,7 @@ Future<bool> unlockQuotedCase(BuildContext context, CaseRow row) async {
   for (var tries = 0; tries < 5; tries++) {
     if (!context.mounted || Api.i.account != account) return false;
     final rewards = row.baseSolveRewards;
-    final rewardText = rewards.isEmpty ? '' : '\nپاداش پایهٔ حل: ${fa(rewards[1] ?? 0)} تا ${fa(rewards[3] ?? 0)} سکه؛ بسته به پلاک‌ها.';
+    final rewardText = rewards.isEmpty ? '' : '\nپاداش پایه‌ی حل: ${fa(rewards[1] ?? 0)} تا ${fa(rewards[3] ?? 0)} سکه؛ بسته به پلاک‌ها.';
     final lost = row.failed;
     final ok = await confirm(context,
         changed ? 'قیمت پرونده تغییر کرده' : lost ? 'فرصت دوباره' : row.weekend ? 'باز کردن پرونده‌ی آخر هفته' : 'باز کردن پرونده‌ی قدیمی',
@@ -47,7 +47,7 @@ Future<bool> unlockQuotedCase(BuildContext context, CaseRow row) async {
                 : 'این پرونده رو باختی و بسته شده. با ${fa(quote)} سکه (دو برابر قیمت عادی) دوباره باز می‌شه و ${fa(3)} فرصت تازه داری؛ این دور تو رتبه‌بندی شبانه حساب نمی‌شه.$rewardText')
             : quote == 0
                 ? 'این پرونده برای کارآگاه‌های تازه، برای چند ساعت رایگانه. بازش کن و دنبال مجرم بگرد.$rewardText'
-                : '${row.weekend ? 'همهٔ فصل‌های این پروندهٔ بسته‌شده با هم باز می‌شن.' : 'این پرونده مال روزهای قبله.'} با ${fa(quote)} سکه بازش کن.$rewardText',
+                : '${row.weekend ? 'همه‌ی فصل‌های این پرونده‌ی بسته‌شده با هم باز می‌شن.' : 'این پرونده مال روزهای قبله.'} با ${fa(quote)} سکه بازش کن.$rewardText',
         lost ? 'دوباره باز کن · ${fa(quote)} سکه' : quote == 0 ? 'باز کن · رایگان' : 'باز کن · ${fa(quote)} سکه');
     if (!ok || !context.mounted || Api.i.account != account) return false;
     try {
@@ -594,7 +594,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
           ),
           if (!c.solved && !c.failed && c.baseSolveRewards.isNotEmpty)
             Padding(padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-              child: Text('پاداش پایهٔ حل: ${fa(c.baseSolveRewards[1] ?? 0)} تا ${fa(c.maxSolveReward ?? 0)} سکه',
+              child: Text('پاداش پایه‌ی حل: ${fa(c.baseSolveRewards[1] ?? 0)} تا ${fa(c.maxSolveReward ?? 0)} سکه',
                 style: tBody(12, color: K.textSoft))),
         ]),
       ),

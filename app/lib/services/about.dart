@@ -39,7 +39,7 @@ class AboutInfo {
       'بسته: ${v(packageName)}',
       'نسخه‌ی سرور: ${v(serverVersion)}',
       'اتصال به سرور: ${serverOk ? 'برقرار' : 'قطع'}',
-      'شناسه‌ی بازیکن: ${v(playerShortId)}',
+      'شناسه‌ی کارآگاه: ${v(playerShortId)}',
       'کد دعوت: ${v(inviteCode)}',
       'زبان دستگاه: ${v(language)}',
     ].join('\n');

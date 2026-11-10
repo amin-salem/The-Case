@@ -461,7 +461,7 @@ class _AboutCardState extends State<AboutCard> {
                   row('بسته', i.packageName, ltr: true),
                   row('سرور', i.serverOk ? 'متصل  •  ${i.serverVersion}' : 'در دسترس نیست',
                       color: i.serverOk ? K.ok : K.stamp),
-                  row('شناسه‌ی بازیکن', i.playerShortId, ltr: true),
+                  row('شناسه‌ی کارآگاه', i.playerShortId, ltr: true),
                   row('کد دعوت', i.inviteCode, ltr: true),
                   row('زبان دستگاه', i.language, ltr: true),
                   const SizedBox(height: 6),

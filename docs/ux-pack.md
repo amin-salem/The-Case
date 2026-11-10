@@ -50,3 +50,18 @@ Boards `After.dc.html` and `Starter.dc.html`.
 - Tests: `app/test/starter_offer_test.dart` (choice of the case, show-twice rule, counter per account, tiles),
   `app/test/next_case_widget_test.dart` (card, sheet, result screen; text scale 1.0, 1.3, 2.0), `server/tests/test_starter_offer.py`
   (funnel on SQLite and PostgreSQL, events endpoint, `suspect_count`, admin page).
+## Session 3: shop value and voice sweep (10 Nov 2026)
+- Shop (`shop_screen.dart`, new pure helper `services/shop_value.dart`): the «کارآگاه ویژه» card is first; the three bags
+  follow, each with one line «≈ N پرونده» (real coins ÷ the 150-coin typical archive case; hidden when it is under one case).
+  The «+٪ بیشتر» line and its explanation sentence are gone. The badge «بیشترین ارزش» goes only to the bag with the most
+  coins per toman from the real store prices (none when a price is unknown or two bags tie). The VIP card states only
+  «کل بایگانی باز، بدون سکه» and «سرنخ اول هر پرونده رایگان»; the line «اگه ماهی N پرونده‌ی قدیمی یا بیشتر باز کنی، از سکه
+  خریدن ارزون‌تره» uses N computed from the VIP price and the best real coin rate (hidden when it cannot be computed).
+  The starter pack stays its own row under the bags with its real price. Buy flows, errors and dialogs are untouched.
+  Revenue note: the VIP and the best-value bag now carry the clear value story; no free coins were added.
+- Voice sweep: `docs/app-voice.md` (4 rules, glossary). Applied in `app/lib`: «ـهٔ» forms, formal verbs in the comments
+  screen, «بازیکن» → «کارآگاه», «را» in the accuse tag, and the generic / offline / server-down errors now say that coins and
+  progress are safe. Case and story content untouched.
+- Tests: `app/test/shop_value_test.dart` (badge, tie, unknown price, VIP break-even, hidden lines), `app/test/app_voice_test.dart`
+  (curated lint over `app/lib`, `allowed` list empty).
+- Not done on purpose: «باز است» on the home story chip stays (an existing test pins it).

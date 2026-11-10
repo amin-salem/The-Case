@@ -153,9 +153,9 @@ class Api extends ChangeNotifier {
 
   // ---------------------------------------------------------------- friendly texts
 
-  static const offlineText = 'به اینترنت وصل نیستی';
-  static const serverDownText = 'الان به سرور دسترسی نداریم، چند دقیقه دیگه دوباره امتحان کن';
-  static const genericText = 'یه مشکلی پیش اومد، دوباره امتحان کن';
+  static const offlineText = 'به اینترنت وصل نیستی؛ سکه و پیشرفتت سر جاشه، وصل که شدی ادامه بده';
+  static const serverDownText = 'الان به سرور دسترسی نداریم؛ سکه و پیشرفتت سر جاشه، چند دقیقه دیگه دوباره امتحان کن';
+  static const genericText = 'یه مشکلی پیش اومد؛ سکه و پیشرفتت سر جاشه، دوباره امتحان کن';
   /// Under 90 s: seconds; from 90 s: minutes («حدود ۵ دقیقه»); from 90 min: hours. 0 / unknown: a general sentence.
   static String rateLimitedText(int seconds) {
     if (seconds <= 0) return 'خیلی سریع پیش رفتی، کمی صبر کن و دوباره امتحان کن';
@@ -1308,7 +1308,7 @@ class Api extends ChangeNotifier {
         'wrong_login' => 'ایمیل یا رمز اشتباهه',
         'bad_code' => 'کد اشتباهه یا تاریخش گذشته',
         'already_redeemed' => 'قبلاً کد دعوت وارد کردی',
-        'only_for_new_players' => 'کد دعوت فقط برای بازیکن‌های تازه است',
+        'only_for_new_players' => 'کد دعوت فقط برای کارآگاه‌های تازه‌ست',
         'same_device' => 'کد دعوت باید از گوشی یه کارآگاه دیگه باشه',
         'ad_limit' => 'امروز سهم تبلیغت تموم شد، فردا دوباره بیا',
         'bad_nickname' => 'این اسم قبلاً انتخاب شده یا قابل قبول نیست؛ یکی دیگه امتحان کن',

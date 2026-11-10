@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../services/api.dart';
 import '../services/billing.dart';
+import '../services/shop_value.dart';
 import '../theme.dart';
 import '../widgets/engagement.dart';
 import '../widgets/offline.dart';
@@ -123,24 +124,30 @@ class _ShopScreenState extends State<ShopScreen> {
                       )
                     : const SizedBox.shrink(),
               ),
-              // first purchase first: the starter pack is the cheapest coin deal, so it leads until it is bought
-              ListenableBuilder(listenable: api, builder: (_, __) => _starterHero()),
+              // the «کارآگاه ویژه» card leads; the one-time starter pack is its own row below the bags
               ListenableBuilder(listenable: api, builder: (_, __) => _vipHero()),
               const SizedBox(height: 22),
               _heading('سکه', 'برای سرنخ، پرونده‌های قدیمی و کمد'),
               const SizedBox(height: 16),
-              IntrinsicHeight(
-                child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  Expanded(child: _pack('coins_small', 'کیسه‌ی کوچیک', 1)),
-                  const SizedBox(width: 10),
-                  Expanded(child: _pack('coins_medium', 'کیف کارآگاه', 2, tag: 'محبوب')),
-                  const SizedBox(width: 10),
-                  Expanded(child: _pack('coins_large', 'گاوصندوق', 3, tag: 'بهترین ارزش')),
-                ]),
+              ListenableBuilder(
+                listenable: api,
+                builder: (_, __) {
+                  final best = _bestPackId;
+                  return IntrinsicHeight(
+                    child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                      Expanded(child: _pack('coins_small', 'کیسه‌ی کوچیک', 1, tag: best == 'coins_small' ? 'بیشترین ارزش' : null)),
+                      const SizedBox(width: 10),
+                      Expanded(child: _pack('coins_medium', 'کیف کارآگاه', 2, tag: best == 'coins_medium' ? 'بیشترین ارزش' : null)),
+                      const SizedBox(width: 10),
+                      Expanded(child: _pack('coins_large', 'گاوصندوق', 3, tag: best == 'coins_large' ? 'بیشترین ارزش' : null)),
+                    ]),
+                  );
+                },
               ),
               const SizedBox(height: 8),
-              Text('«بیشتر» یعنی سکه‌ی بیشتر به‌ازای هر تومان، نسبت به کیسه‌ی کوچیک. پرونده‌ی بایگانی را حدود ${fa(_typicalArchive)} سکه حساب کرده‌ایم.',
+              Text('هر پرونده یعنی یه پرونده‌ی بایگانی با سختی متوسط (${fa(ShopValue.typicalArchive)} سکه).',
                   style: tBody(11.5, color: K.textSoft)),
+              ListenableBuilder(listenable: api, builder: (_, __) => _starterHero()),
               const SizedBox(height: 22),
               _heading('با سکه چی می‌شه خرید؟', null),
               const SizedBox(height: 10),
@@ -192,17 +199,23 @@ class _ShopScreenState extends State<ShopScreen> {
     return coins > 0 && t != null ? coins / t : null;
   }
 
-  /// «+۲۳٪ بیشتر» against the small bag; empty when it is not clearly better.
-  String _bonus(String id) {
-    final base = _perToman('coins_small'), mine = _perToman(id);
-    if (base == null || mine == null || id == 'coins_small') return '';
-    final pct = ((mine / base - 1) * 100).round();
-    return pct >= 5 ? '+${fa(pct)}٪ بیشتر' : '';
+  /// The bag with the most coins per toman (real prices); null when unknown or tied.
+  String? get _bestPackId => ShopValue.bestValueId({
+        for (final id in ['coins_small', 'coins_medium', 'coins_large']) id: (coins: Api.i.productCoins(id), toman: _toman(_priceOf(id))),
+      });
+
+  /// Best coins per toman over the three bags (for the VIP comparison).
+  double? get _bestPerToman {
+    double? best;
+    for (final id in ['coins_small', 'coins_medium', 'coins_large']) {
+      final v = _perToman(id);
+      if (v != null && (best == null || v > best)) best = v;
+    }
+    return best;
   }
 
   /// Archive cases a coin amount opens at the middle difficulty price (150).
-  static const int _typicalArchive = 150;
-  int _cases(int coins) => coins ~/ _typicalArchive;
+  int _cases(int coins) => ShopValue.cases(coins);
 
   /// True when the starter pack gives more coins per toman than every bag.
   bool get _starterIsCheapest {
@@ -222,7 +235,7 @@ class _ShopScreenState extends State<ShopScreen> {
     final coins = api.productCoins(id);
     if (coins <= 0) return const SizedBox.shrink();
     return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.only(top: 14),
       child: GestureDetector(
         onTap: () => _buy(id, 'بسته‌ی شروع'),
         child: Container(
@@ -255,8 +268,10 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
             ]),
             const SizedBox(height: 8),
-            Text('با ${fa(coins)} سکه حدود ${fa(_cases(coins))} پرونده‌ی قدیمی را باز می‌کنی.', style: tBody(12, color: K.text.withValues(alpha: 0.8)).copyWith(height: 1.7)),
-            const SizedBox(height: 10),
+            if (_cases(coins) > 0) ...[
+              Text('${fa(coins)} سکه ≈ ${fa(_cases(coins))} پرونده‌ی بایگانی', style: tBody(12, color: K.text.withValues(alpha: 0.8)).copyWith(height: 1.7)),
+              const SizedBox(height: 10),
+            ],
             StampButton(label: 'بخرش · ${_priceOf(id)}', icon: Icons.shopping_bag_rounded, height: 48, onTap: () => _buy(id, 'بسته‌ی شروع')),
           ]),
         ),
@@ -331,6 +346,7 @@ class _ShopScreenState extends State<ShopScreen> {
   Widget _vipHero() {
     const id = 'vip_monthly';
     final vip = Api.i.profile?.vip ?? false;
+    final breakEven = ShopValue.vipBreakEven(_toman(_priceOf(id)), _bestPerToman);
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
       decoration: BoxDecoration(
@@ -356,8 +372,14 @@ class _ShopScreenState extends State<ShopScreen> {
         const SizedBox(height: 8),
         Text('کارآگاه ویژه · ۳۰ روز', style: tDisplay(22)),
         const SizedBox(height: 4),
-        Text('همه‌ی پرونده‌های بایگانی رایگان · اولین سرنخ هر پرونده رایگان',
-            style: tBody(13.5, color: K.text.withValues(alpha: 0.85))),
+        Text('✓ کل بایگانی باز، بدون سکه', style: tBody(13.5, color: K.text.withValues(alpha: 0.85))),
+        Text('✓ سرنخ اول هر پرونده رایگان', style: tBody(13.5, color: K.text.withValues(alpha: 0.85))),
+        if (breakEven != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text('اگه ماهی ${fa(breakEven)} پرونده‌ی قدیمی یا بیشتر باز کنی، از سکه خریدن ارزون‌تره.',
+                style: tBody(12, color: K.textSoft).copyWith(height: 1.6)),
+          ),
         if (vip)
           Padding(
             padding: const EdgeInsets.only(top: 4),
@@ -407,12 +429,9 @@ class _ShopScreenState extends State<ShopScreen> {
             FittedBox(fit: BoxFit.scaleDown, child: Text(fa(api.productCoins(id)), maxLines: 1, style: tDisplay(20))),
             Text(title, textAlign: TextAlign.center, maxLines: 2, style: tBody(11.5, color: K.textSoft, w: FontWeight.w800)),
             const SizedBox(height: 2),
-            Text('حدود ${fa(_cases(api.productCoins(id)))} پرونده‌ی بایگانی', textAlign: TextAlign.center, maxLines: 2, style: tBody(10.5, color: K.textSoft)),
             const SizedBox(height: 4),
-            SizedBox(
-              height: 16,
-              child: Text(_bonus(id), maxLines: 1, style: tBody(11, color: const Color(0xFF5DAE7E), w: FontWeight.w900)),
-            ),
+            if (_cases(api.productCoins(id)) > 0)
+              Text('≈ ${fa(_cases(api.productCoins(id)))} پرونده', textAlign: TextAlign.center, maxLines: 1, style: tBody(12, w: FontWeight.w800)),
             const Spacer(),
             const SizedBox(height: 6),
             SizedBox(

@@ -153,7 +153,7 @@ class _GuessStatsCardState extends State<GuessStatsCard> {
               Text(
                 top.$2 == 0
                     ? 'هنوز کسی متهمی انتخاب نکرده.'
-                    : '${fa(top.$2)}٪ از بازیکن‌ها اول به ${top.$1.name} شک کردن${topRight ? ' و درست زدن!' : '، ولی اشتباه بود!'}',
+                    : '${fa(top.$2)}٪ از کارآگاه‌ها اول به ${top.$1.name} شک کردن${topRight ? ' و درست زدن!' : '، ولی اشتباه بود!'}',
                 style: tBody(14, color: K.inkSoft, w: FontWeight.w700),
               ),
               const SizedBox(height: 10),
