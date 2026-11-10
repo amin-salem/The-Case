@@ -290,8 +290,13 @@ class CaseRow {
         ratingAvg = j['rating_avg'] is num ? (j['rating_avg'] as num).toDouble() : 0,
         ratingCount = _i(j['rating_count']),
         commentCount = _i(j['comment_count']),
-        myRating = _i(j['my_rating']);
+        myRating = _i(j['my_rating']),
+        suspectCount = _i(j['suspect_count']),
+        solveRate = j['solve_rate'] is num ? (j['solve_rate'] as num).round().clamp(0, 100) : null;
 
+  /// Percent of detectives who solved it, only when the server really sends one (`solve_rate`); null = hide the line.
+  final int? solveRate;
+  final int suspectCount; // 0 = an old server did not say: the line is hidden
   final String id, title, location, scene, publish;
   final String category; // topic key, '' when unknown
   final int number, difficulty, unlockCost, stars, solvers;

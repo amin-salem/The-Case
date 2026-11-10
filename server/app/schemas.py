@@ -177,6 +177,7 @@ class CaseRow(BaseModel):
     rating_count: int = 0     # how many detectives gave stars
     comment_count: int = 0    # approved written comments
     my_rating: int = 0        # the stars this player gave (0 = not rated)
+    suspect_count: int = 0    # suspects in the case (0 = unknown); the result screen's suggested case shows it
 
 
 class CasesOut(BaseModel):

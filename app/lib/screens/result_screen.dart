@@ -18,7 +18,13 @@ import '../widgets/rate_card.dart';
 import '../widgets/scene.dart';
 import '../widgets/typewriter.dart';
 import 'album_screen.dart';
+import '../services/starter_offer.dart';
+import '../widgets/next_case_card.dart';
+import '../widgets/starter_sheet.dart';
+import 'archive_screen.dart';
 import 'comments_screen.dart';
+import 'dialogs.dart';
+import 'main_shell.dart';
 import 'leaderboard_screen.dart';
 
 /// The big moment: stamp, stars, one row of rewards, the culprit, what others thought, share.
@@ -38,6 +44,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
   Album? _album; // the album after this solve (null: offline / old server / not solved)
   FirstGuess? _guess; // the first guess given before the evidence (null: none / offline / old server)
+  CasesList? _cases; // for the suggested next case and tomorrow's opening time (null: offline)
 
   @override
   void initState() {
@@ -46,6 +53,9 @@ class _ResultScreenState extends State<ResultScreen> {
       if (mounted) setState(() => _guess = g);
     });
     if (solved) {
+      Api.i.cases().then((c) {
+        if (mounted) setState(() => _cases = c);
+      }).catchError((Object e) => debugPrint('cases: $e'));
       Api.i.album().then((a) {
         if (mounted) setState(() => _album = a);
       }).catchError((Object e) => debugPrint('album: $e'));
@@ -75,6 +85,10 @@ class _ResultScreenState extends State<ResultScreen> {
       if (!mounted || !active() || _manualRating) return;
       await maybeShowRateSheet(context, caseData.id, caseData.title,
           canOffer: () => active() && !_manualRating);
+      // the very first solve of this account: the calm moment for the starter pack (twice at most, one tap closes)
+      if (mounted && active() && (Api.i.profile?.casesSolved ?? 0) == 1 && result.story == null) {
+        await maybeShowStarterSheet(context, StarterMoment.firstSolve);
+      }
     } finally {
       if (mounted) setState(() => _promptBusy = false);
     }
@@ -97,9 +111,10 @@ class _ResultScreenState extends State<ResultScreen> {
             ),
             const SizedBox(height: 18),
             if (solved) ...[
-              Center(child: StampIn(delay: const Duration(milliseconds: 700), child: Plaques(count: result.stars, size: 44))),
-              const SizedBox(height: 12),
+              Center(child: StampIn(delay: const Duration(milliseconds: 700), child: Plaques(count: result.stars, size: 36))),
+              const SizedBox(height: 10),
               FadeSlideIn(delay: const Duration(milliseconds: 1000), child: _rewards()),
+              ..._nextStep(),
               if (_album != null) ...[
                 const SizedBox(height: 10),
                 FadeSlideIn(
@@ -260,6 +275,46 @@ class _ResultScreenState extends State<ResultScreen> {
         ),
       ]),
     );
+  }
+
+  /// The one primary next step after a solve (not after a story chapter: the story has its own next step).
+  List<Widget> _nextStep() {
+    final c = _cases;
+    if (c == null || result.story != null) return const [];
+    final row = pickSuggestedCase(c.archive, rank: Api.i.profile?.rank ?? 0, excludeId: caseData.id);
+    final now = DateTime.now();
+    final open = c.nextCaseAt.isAfter(now);
+    return [
+      const SizedBox(height: 14),
+      FadeSlideIn(
+        delay: const Duration(milliseconds: 1100),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          if (row != null)
+            ListenableBuilder(
+              listenable: Api.i,
+              builder: (_, __) => NextCaseCard(
+                row: row,
+                coins: Api.i.coins,
+                onOpen: () => openCaseRow(context, row),
+                onShort: () async {
+                  final need = suggestedPrice(row) - Api.i.coins;
+                  await showNeedCoins(context, need, what: 'باز کردن این پرونده', starter: true);
+                },
+                onMore: () {
+                  MainShell.tab.value = MainShell.archive;
+                  Navigator.of(context).popUntil((r) => r.isFirst);
+                },
+              ),
+            ),
+          if (open)
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Text(nextOpeningText(c.nextCaseAt, now),
+                  key: const ValueKey('next-opening'), textAlign: TextAlign.center, style: tBody(12, color: K.textSoft)),
+            ),
+        ]),
+      ),
+    ];
   }
 
   /// Solved, but without enough investigation: 1 star and no leaderboard place (anti-cheat).

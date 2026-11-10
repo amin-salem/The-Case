@@ -955,6 +955,21 @@ class Api extends ChangeNotifier {
         body: {'body': body, 'rating': rating, if (parentId != null) 'parent_id': parentId});
   }
 
+  /// One product event for the admin funnel (best effort: a failure or no network never bothers the player).
+  /// Names up to 48 characters, a few short props; the server keeps them in the existing `events` table.
+  Future<void> track(String name, [Map<String, Object> props = const {}]) async {
+    if (!online) return;
+    try {
+      await _call('POST', '/v1/events', body: {
+        'events': [
+          {'name': name, 'props': props, 'ts': DateTime.now().millisecondsSinceEpoch ~/ 1000}
+        ]
+      });
+    } catch (e) {
+      debugPrint('track $name: $e');
+    }
+  }
+
   Future<CaseStats> caseStats(String id) async =>
       CaseStats((await _call('GET', '/v1/cases/$id/stats') as Map).cast<String, dynamic>());
 

@@ -5,10 +5,15 @@ import 'package:flutter/material.dart';
 import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/offline.dart';
+import '../services/starter_offer.dart';
+import '../widgets/starter_sheet.dart';
 import 'shop_screen.dart';
 
 /// "Not enough coins": go to the shop or watch an ad.
-Future<void> showNeedCoins(BuildContext context, int need) async {
+Future<void> showNeedCoins(BuildContext context, int need, {String? what, bool starter = false}) async {
+  // for a hint, tool or archive case the starter pack (at most twice per account, closes in one tap) takes this moment when it may; it carries the ad route too
+  if (starter && await maybeShowStarterSheet(context, StarterMoment.lackCoins, need: need, what: what)) return;
+  if (!context.mounted) return;
   await showModalBottomSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,

@@ -397,7 +397,7 @@ class _CaseScreenState extends State<CaseScreen> {
     } on ApiException catch (e) {
       if (!mounted) return;
       if (e.code == 'not_enough_coins') {
-        await showNeedCoins(context, e.need);
+        await showNeedCoins(context, e.need, what: 'این ابزار', starter: true);
       } else {
         toast(context, e.code == 'already_used' || e.code == 'no_tool' ? 'وضعیت ابزارها به‌روز شد.' : Api.friendly(e));
         unawaited(_loadTools());
@@ -528,7 +528,7 @@ class _CaseScreenState extends State<CaseScreen> {
     } on ApiException catch (e) {
       if (!mounted) return;
       if (e.code == 'not_enough_coins') {
-        await showNeedCoins(context, e.need);
+        await showNeedCoins(context, e.need, what: 'این سرنخ', starter: true);
       } else {
         toast(context, Api.friendly(e));
       }

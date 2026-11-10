@@ -61,7 +61,7 @@ Future<bool> unlockQuotedCase(BuildContext context, CaseRow row) async {
         continue;
       }
       if (e.code == 'not_enough_coins') {
-        await showNeedCoins(context, e.need > 0 ? e.need : quote);
+        await showNeedCoins(context, e.need > 0 ? e.need : quote, what: 'باز کردن این پرونده', starter: true);
       } else {
         toast(context, Api.friendly(e));
       }

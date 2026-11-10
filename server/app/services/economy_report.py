@@ -22,7 +22,7 @@ from sqlalchemy.orm import aliased
 
 from .. import economy as eco
 from ..models import CaseProgress as CP
-from ..models import CaseToolUse, CoinLog, Player
+from ..models import CaseToolUse, CoinLog, Event, Player
 from ..util import ts
 from .funnel import _valid_player
 
@@ -169,6 +169,33 @@ async def _first_day(s: AsyncSession, since: datetime, now: datetime) -> dict:
             "spenders_came_back_pct": _pct(back(sp), len(sp)), "others_came_back_pct": _pct(back(rest), len(rest))}
 
 
+STARTER_EVENTS = ("starter_offer_shown", "starter_offer_tapped", "starter_offer_closed", "starter_offer_bought")
+STARTER_ROW_CAP = 20000            # events looked at (the newest); one account sees the offer at most twice
+
+
+async def _starter_offer(s: AsyncSession, since: datetime) -> dict:
+    """The starter-pack sheet funnel from the app's own events (`starter_offer_shown/tapped/closed/bought`): how many
+    showings, how many players tapped «خرید», how many bought, and the same split by moment. Counted in Python from a
+    bounded read, so no JSON operator is needed (SQLite and Postgres alike). Player ids are not returned."""
+    rows = (await s.execute(select(Event.name, Event.player_id, Event.props).join(Player, Player.id == Event.player_id)
+                            .where(Event.ts >= since, Event.name.in_(STARTER_EVENTS), _valid_player())
+                            .order_by(Event.id.desc()).limit(STARTER_ROW_CAP))).all()
+    short = {n: n.removeprefix("starter_offer_") for n in STARTER_EVENTS}
+    total = {k: 0 for k in short.values()}
+    players = {k: set() for k in short.values()}
+    by_moment: dict[str, dict[str, int]] = {}
+    for name, pid, props in rows:
+        k = short[name]
+        total[k] += 1
+        players[k].add(pid)
+        m = props.get("moment") if isinstance(props, dict) else None
+        m = m if isinstance(m, str) and m in ("lack_coins", "first_solve") else "other"
+        by_moment.setdefault(m, {x: 0 for x in short.values()})[k] += 1
+    shown_p, tapped_p, bought_p = (len(players[k]) for k in ("shown", "tapped", "bought"))
+    return {**total, "shown_players": shown_p, "tapped_players": tapped_p, "bought_players": bought_p,
+            "tapped_pct": _pct(tapped_p, shown_p), "bought_pct": _pct(bought_p, shown_p), "by_moment": by_moment}
+
+
 def notes(d: dict) -> list[str]:
     """Plain-language readings of the numbers above (a guide, not a verdict; they need a few days of data)."""
     out: list[str] = []
@@ -204,7 +231,7 @@ def notes(d: dict) -> list[str]:
 
 SECTIONS: list[tuple[str, Callable[..., Awaitable[Any]], str]] = [
     ("flows", _flows, "since"), ("balances", _balances, "now"), ("cases", _cases, "since"),
-    ("after_loss", _after_loss, "since"), ("first_day", _first_day, "both"),
+    ("after_loss", _after_loss, "since"), ("first_day", _first_day, "both"), ("starter_offer", _starter_offer, "since"),
 ]
 
 

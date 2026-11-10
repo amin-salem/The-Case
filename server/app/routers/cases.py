@@ -208,7 +208,8 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
                        solved=bool(p and p.solved), failed=bool(p and p.failed),
                        stars=p.stars if p else 0, solvers=int(counts.get(c.id, 0)),
                        rating_avg=rated.get(c.id, (0.0, 0, 0))[0], rating_count=rated.get(c.id, (0.0, 0, 0))[1],
-                       comment_count=rated.get(c.id, (0.0, 0, 0))[2], my_rating=my_stars.get(c.id, 0))
+                       comment_count=rated.get(c.id, (0.0, 0, 0))[2], my_rating=my_stars.get(c.id, 0),
+                       suspect_count=len(c.data.get("suspects") or []))
 
     archive = [row(c) for c in reversed(opened) if today is None or c.id != today.id]
     now = content.now_local()
