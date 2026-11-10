@@ -201,7 +201,7 @@ class _StarterSheetState extends State<StarterSheet> {
                 style: TextButton.styleFrom(minimumSize: const Size.fromHeight(44)),
                 child: Text('یا با دیدن تبلیغ سکه‌ی رایگان بگیر', style: tBody(12.5, color: K.stamp, w: FontWeight.w800)),
               ),
-            Text('این پیشنهاد در کل فقط دو بار نشان داده می‌شود', textAlign: TextAlign.center, style: tBody(11, color: K.inkSoft)),
+            Text('این پیشنهاد در کل فقط دو بار نشونت داده می‌شه', textAlign: TextAlign.center, style: tBody(11, color: K.inkSoft)),
           ]),
         ),
       ),

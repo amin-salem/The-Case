@@ -103,7 +103,7 @@ void main() {
       expect(find.text('فقط یک بار برای هر حساب'), findsOneWidget);
       expect(find.textContaining('۷۹٬۰۰۰ تومان'), findsOneWidget);
       expect(find.text('اولین پرونده‌ات رو حل کردی'), findsOneWidget);
-      expect(find.text('این پیشنهاد در کل فقط دو بار نشان داده می‌شود'), findsOneWidget);
+      expect(find.text('این پیشنهاد در کل فقط دو بار نشونت داده می‌شه'), findsOneWidget);
       expect(t.takeException(), isNull);
       await t.ensureVisible(find.byKey(const ValueKey('starter-later')));
       await t.tap(find.byKey(const ValueKey('starter-later')));
