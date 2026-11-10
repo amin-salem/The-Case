@@ -6,6 +6,7 @@ Revision ID: 0036
 Revises: 0035
 Create Date: 2026-11-10
 """
+import sqlalchemy as sa
 from alembic import op
 
 revision = "0036"
@@ -15,6 +16,9 @@ depends_on = None
 
 
 def upgrade() -> None:
+    # a database created from the models (tests, the CI "old database" step) already has it
+    if "ix_coin_log_reason" in {i["name"] for i in sa.inspect(op.get_bind()).get_indexes("coin_log")}:
+        return
     op.create_index("ix_coin_log_reason", "coin_log", ["reason"])
 
 
