@@ -105,8 +105,8 @@ class _MainShellState extends State<MainShell> {
     if (i == MainShell.weekend) {
       WhatsNew.i.tagOpened('weekend_tab');
       // one event per app launch (the admin panel compares weekdays with Thursday-Saturday); no personal data
-      if (!_weekendTabLogged) {
-        _weekendTabLogged = true;
+      if (!MainShell._weekendTabLogged) {
+        MainShell._weekendTabLogged = true;
         Api.i.track('weekend_tab_open');
       }
     }
