@@ -805,3 +805,9 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
   invisible characters (`nickname_chars`). Blocked substrings (after removing spaces, case-insensitive): `کس`, `کیر`, `کون`, `جنده`, `fuck`, `sex`,
   `admin`, `مدیر`; also links (`http`, `www.`, `.ir`, `.com`, `@`, `t.me`) and more than 6 digits (`bad_nickname`). A name another detective owns is
   `nickname_taken` (compared by key: case, spaces, punctuation and Arabic/Persian letter variants are ignored).
+
+## Archive picks and the weekend tab (UX pack, 10 Nov 2026)
+- `GET /v1/cases/picks` suggests up to 3 archive cases per player from real numbers only (see `docs/ux-pack.md` session 4); it needs
+  at least 20 real detectives per reason, so a young game simply shows fewer or no suggestions. Nothing to set.
+- Economy tab, block «۷. تب «آخر هفته»»: how often the weekend tab is opened, Thursday-Saturday vs the other days (event `weekend_tab_open`,
+  once per app launch, only from the new app). Read it after a week of the new version before deciding about the tab.

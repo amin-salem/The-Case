@@ -71,3 +71,26 @@ Boards `After.dc.html` and `Starter.dc.html`.
 - Tests: `app/test/shop_value_test.dart` (badge, tie, unknown price, VIP break-even, hidden lines), `app/test/app_voice_test.dart`
   (curated lint over `app/lib`, `allowed` list empty).
 - Not done on purpose: «باز است» on the home story chip stays (an existing test pins it).
+
+## Session 4: archive picks and the weekend tab (10 Nov 2026)
+Boards `ArchivePick.dc.html` and `Nav.dc.html` (the nav board stays a proposal; the weekend tab is NOT removed).
+- Server `GET /v1/cases/picks` (`server/app/picks.py`, route declared before `/{case_id}`): up to 3 archive cases the player has
+  not solved or lost (never tonight's), each with ONE real reason, chosen in this order and never the same case twice:
+  `easy` «آسان» (difficulty 1-2, solve rate >= 60 % among >= 20 detectives who played it), `popular` «پرطرفدار» (best average
+  rating >= 4.0 over >= 20 ratings, else the most solves in the last 30 days with >= 20), `taste` «سلیقه‌ی تو» (a topic where this
+  player solved >= 2 cases, and a case of that topic that >= 20 detectives played). A reason whose real sample is too small is
+  dropped; fewer than 3 picks is fine; none = `{"picks": []}` and the app shows no row. The answer carries only the real numbers
+  behind the reason plus this player's current `unlock_cost` (first-days prices and promo included).
+- Cost: one shared GROUP BY over `case_progress` (cached 120 s per worker, 2 entries) + the existing shared ratings summary + one
+  indexed read of the caller's own progress. Nothing per player is cached (a new solve shows at once). Rate policy: the existing
+  `read` policy (GET under /v1). Fail-open: any error answers `{"picks": []}` with 200. No migration, nothing in `ci.yml`.
+- App: `ArchivePicksRow` on top of the archive list («پیشنهاد برای تو · از روی N پرونده‌ای که حل کردی», three equal cards,
+  tap selects, detail card with the real reason and «باز کن · N سکه» / «باز کن · رایگان» / «باز کن» for an opened case). The button
+  is the normal `openCaseRow` (confirm dialog, price re-check, first-days prices, need-coins sheet). Hidden for no picks, offline, an
+  old server or any error; the search, filters and list below are unchanged. Picks of cases that are solved/lost/not in the list are dropped.
+- Weekend tab: kept. `MainShell` sends the existing event `weekend_tab_open` (no props) the first time the tab is opened in an
+  app launch (once per session). Admin economy tab, new block «۷. تب «آخر هفته»»: opens per Tehran day, cards for the daily average on
+  Thursday-Saturday vs the other days, and a table of the last 30 days; empty/unknown payloads show a calm «هنوز کسی باز نکرده» line.
+  Decide from it next release whether to fold the tab into home/archive.
+- Tests: `server/tests/test_archive_picks.py` (pure choice, minimum samples, database stats, route price, fail-open, weekend split;
+  runs on SQLite and PostgreSQL), `app/test/archive_picks_test.dart` (parsing, row, text scale 1.3/2.0, hidden on error/none, once-per-launch event).

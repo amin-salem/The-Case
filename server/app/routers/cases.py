@@ -7,14 +7,14 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
-from .. import content, gameclock, progress, ratings, streakrepair, weekboard, welcome
+from .. import content, gameclock, picks as picks_mod, progress, ratings, streakrepair, weekboard, welcome
 from ..cache import TTLCache
 from ..services import case_reset
 from .. import economy as eco
 from ..content import Case
 from ..db import get_session, lock_players
 from ..models import CaseProgress, Player, utcnow
-from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut, HintOut, LiarIn, LiarOut, ProgressOut, SeenIn, SeenOut,
+from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut, HintOut, LiarIn, LiarOut, PicksOut, PickOut, ProgressOut, SeenIn, SeenOut,
                        ShowIn, ShowOut, StatsOut, SuspectStat, TickIn, TickOut, UnlockIn)
 from ..security import current_player
 from ..util import add_coins
@@ -223,6 +223,31 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
                               weekly_closes_at=int(content.weekly_closes_at(weekly).timestamp()) if weekly else None,
                               weekly_next_chapter_at=_next_chapter_at(weekly),
                               weekly_format=int(weekly.data.get("format", 0)) if weekly else 0))
+
+
+@router.get("/picks", response_model=PicksOut)  # declared before "/{case_id}"
+async def archive_picks(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """«پیشنهاد برای تو»: up to 3 unsolved archive cases, each with one real reason (picks.py). An empty list = no section.
+    Fails open: any error answers an empty list, never a broken archive screen."""
+    try:
+        today = content.todays_case()
+        pool = [c for c in content.opened() if today is None or c.id != today.id]
+        category_of = {c.id: c.data.get("category", "") for c in pool}
+        candidates = [{"id": c.id, "number": c.number, "category": c.data.get("category", ""),
+                       "difficulty": c.data["difficulty"]} for c in pool]
+        chosen = await picks_mod.picks_for(session, player.id, candidates, category_of, await ratings.summary(session))
+        if not chosen:
+            return PicksOut()
+        by_id = {c.id: c for c in pool}
+        offers = await welcome.offers_for(session, player)
+        mine = {p.case_id: p for p in (await session.execute(
+            select(CaseProgress).where(CaseProgress.player_id == player.id,
+                                       CaseProgress.case_id.in_([x["case_id"] for x in chosen])))).scalars().all()}
+        return PicksOut(picks=[PickOut(**x, unlock_cost=_unlock_cost(by_id[x["case_id"]], mine.get(x["case_id"]), offers))
+                               for x in chosen])
+    except Exception:
+        log.exception("archive picks failed")
+        return PicksOut()
 
 
 @router.get("/{case_id}", response_model=CaseOut)

@@ -13,7 +13,7 @@ A healthy game earns from both, but a game whose spending is mostly escape feels
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Awaitable, Callable
 
 from sqlalchemy import and_, case, func, select
@@ -195,6 +195,35 @@ async def _starter_offer(s: AsyncSession, since: datetime) -> dict:
     return {**total, "shown_players": shown_p, "tapped_players": tapped_p, "bought_players": bought_p,
             "tapped_pct": _pct(tapped_p, shown_p), "bought_pct": _pct(bought_p, shown_p), "by_moment": by_moment}
 
+WEEKEND_TAB_EVENT = "weekend_tab_open"
+WEEKEND_ROW_CAP = 20000            # events looked at (the newest); the app sends one per launch at most
+THU_SAT = (3, 4, 5)                # Python weekday(): Thursday, Friday, Saturday
+
+
+async def _weekend_tab(s: AsyncSession, since: datetime) -> dict:
+    """How often the «آخر هفته» tab of the archive screen is opened (event `weekend_tab_open`, one per app launch),
+    per Tehran day, split into Thursday-Saturday (when a weekend case is live) and the other days, so the owner can decide
+    whether the tab is worth keeping. Counts only; no player ids. Counted in Python from a bounded read."""
+    from .. import content
+    tz = content.now_local().tzinfo
+    rows = (await s.execute(select(Event.ts, Event.player_id).join(Player, Player.id == Event.player_id)
+                            .where(Event.ts >= since, Event.name == WEEKEND_TAB_EVENT, _valid_player())
+                            .order_by(Event.id.desc()).limit(WEEKEND_ROW_CAP))).all()
+    per_day: dict[str, list] = {}
+    for ts_, pid in rows:
+        d = ts_.replace(tzinfo=timezone.utc).astimezone(tz).date()
+        e = per_day.setdefault(d.isoformat(), [d.weekday(), 0, set()])
+        e[1] += 1
+        e[2].add(pid)
+    days = [{"day": k, "thu_sat": v[0] in THU_SAT, "opens": v[1], "players": len(v[2])} for k, v in sorted(per_day.items())]
+
+    def group(flag: bool) -> dict:
+        part = [d for d in days if d["thu_sat"] is flag]
+        return {"days": len(part), "opens": sum(d["opens"] for d in part),
+                "per_day": round(sum(d["opens"] for d in part) / len(part), 1) if part else None}
+    return {"days": days, "thu_sat": group(True), "other": group(False),
+            "players": len({pid for _, pid in rows}), "opens": len(rows)}
+
 
 def notes(d: dict) -> list[str]:
     """Plain-language readings of the numbers above (a guide, not a verdict; they need a few days of data)."""
@@ -232,6 +261,7 @@ def notes(d: dict) -> list[str]:
 SECTIONS: list[tuple[str, Callable[..., Awaitable[Any]], str]] = [
     ("flows", _flows, "since"), ("balances", _balances, "now"), ("cases", _cases, "since"),
     ("after_loss", _after_loss, "since"), ("first_day", _first_day, "both"), ("starter_offer", _starter_offer, "since"),
+    ("weekend_tab", _weekend_tab, "since"),
 ]
 
 

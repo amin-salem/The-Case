@@ -31,6 +31,12 @@ class MainShell extends StatefulWidget {
   /// True while a weekend case is open and not yet solved or lost (the home screen sets it): a small dot on the tab.
   static final ValueNotifier<bool> weekendOpen = ValueNotifier(false);
 
+  /// The «آخر هفته» tab was opened and counted in this app launch (at most one `weekend_tab_open` event per launch).
+  static bool _weekendTabLogged = false;
+
+  @visibleForTesting
+  static void resetWeekendTabLog() => _weekendTabLogged = false;
+
   /// How the app is left after «بله» in the exit dialog. Tests replace it (a real [SystemNavigator.pop] ends the test).
   static void Function() exitApp = () {
     SystemNavigator.pop();
@@ -96,7 +102,14 @@ class _MainShellState extends State<MainShell> {
   void _onTab() {
     if (!mounted) return;
     final i = MainShell.tab.value;
-    if (i == MainShell.weekend) WhatsNew.i.tagOpened('weekend_tab');
+    if (i == MainShell.weekend) {
+      WhatsNew.i.tagOpened('weekend_tab');
+      // one event per app launch (the admin panel compares weekdays with Thursday-Saturday); no personal data
+      if (!_weekendTabLogged) {
+        _weekendTabLogged = true;
+        Api.i.track('weekend_tab_open');
+      }
+    }
     setState(() {
       _visits[i]++;
       _seen.add(i);

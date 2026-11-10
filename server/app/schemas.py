@@ -191,6 +191,23 @@ class CasesOut(BaseModel):
     weekly_format: int = 0                    # 3 = two-night format (night-1 question, newcomer in chapter 2)
 
 
+class PickOut(BaseModel):
+    case_id: str
+    reason: str            # easy | popular | taste (the app maps it to «آسان» / «پرطرفدار» / «سلیقه‌ی تو»)
+    unlock_cost: int = 0   # what this player pays now (first-days prices and promo included); 0 = free to open
+    solve_rate: int | None = None       # easy: % of the detectives who played it and solved it
+    players: int | None = None          # easy: how many played it
+    rating_avg: float | None = None     # popular (rating): average stars
+    rating_count: int | None = None
+    solved_30d: int | None = None       # popular (recent): solves in the last 30 days
+    category: str | None = None         # taste: the topic key
+    category_solved: int | None = None  # taste: how many of that topic this player solved
+
+
+class PicksOut(BaseModel):
+    picks: list[PickOut] = Field(default_factory=list)
+
+
 class ProgressOut(BaseModel):
     hints: list[str]    # hints bought so far (text)
     attempts: int

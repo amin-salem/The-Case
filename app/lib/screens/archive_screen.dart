@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/api.dart';
 import '../services/archive_logic.dart';
+import '../services/archive_picks.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/category.dart';
 import '../widgets/offline.dart';
+import '../widgets/archive_picks.dart';
 import '../widgets/archive_stats.dart';
 import '../widgets/scene.dart';
 import 'album_screen.dart';
@@ -89,6 +91,7 @@ class ArchiveScreen extends StatefulWidget {
 
 class _ArchiveScreenState extends State<ArchiveScreen> {
   List<CaseRow>? _rows;
+  List<ArchivePick> _picks = const []; // «پیشنهاد برای تو»; empty = no row (none, offline, error, old server)
   String? _error;
   ArchiveFilter _filter = ArchiveFilter.all;
   ArchiveSort _sort = ArchiveSort.newest;
@@ -127,7 +130,11 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
       }
     } catch (e) {
       if (mounted) setState(() => _error = Api.friendly(e));
+      return;
     }
+    // the suggestions come after the list and never block it; any failure just leaves the row out
+    final picks = await Api.i.archivePicks();
+    if (mounted) setState(() => _picks = picks);
   }
 
   Future<void> _refresh() async {
@@ -194,6 +201,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
               const SliverToBoxAdapter(child: OfflineBanner(margin: EdgeInsets.fromLTRB(16, 10, 16, 0))),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _summary(rows)),
               if (rows != null && _nudgeVisible(rows)) SliverToBoxAdapter(child: _rateNudge(rows)),
+              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _picksRow(rows)),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _searchBox()),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _filters(rows)),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _categoryChips(rows)),
@@ -281,6 +289,12 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
           ),
         ]),
       );
+
+  Widget _picksRow(List<CaseRow> rows) {
+    final items = showablePicks(_picks, rows);
+    if (items.isEmpty) return const SizedBox.shrink();
+    return ArchivePicksRow(items: items, solvedCount: rows.where((r) => r.solved).length, onOpen: _open);
+  }
 
   /// Progress and the coin hint: how much of the archive is done, and what an old case costs.
   Widget _summary(List<CaseRow> rows) {

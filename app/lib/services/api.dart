@@ -15,6 +15,7 @@ import '../models/progress.dart';
 import '../models/story.dart';
 import '../models/tools.dart';
 import 'app_update.dart';
+import 'archive_picks.dart';
 import 'case_clock.dart';
 import 'store_rating.dart';
 import 'claim_note_store.dart';
@@ -763,6 +764,18 @@ class Api extends ChangeNotifier {
 
   /// The case list; offline, the last saved list.
   Future<CasesList> cases() async => CasesList(await _cachedGet('/v1/cases', _kCases));
+
+  /// «پیشنهاد برای تو»: up to three unsolved archive cases with a real reason. Best effort: offline, an old server (404),
+  /// an error or a strange answer all give an empty list, and the archive then simply shows no row.
+  Future<List<ArchivePick>> archivePicks() async {
+    if (!online) return const [];
+    try {
+      return ArchivePick.parseAll(await _call('GET', '/v1/cases/picks'));
+    } catch (e) {
+      debugPrint('archive picks: $e');
+      return const [];
+    }
+  }
 
   /// Returns (case, progress, isToday). Offline, a case opened before comes from the phone.
   Future<(CaseData, Progress, bool)> openCase(String id) async {
