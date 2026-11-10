@@ -107,7 +107,7 @@ class _StoryBoardScreenState extends State<StoryBoardScreen> {
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text('سرنخ‌های جمع‌شده', style: tBody(13, w: FontWeight.w900)),
-                Text('در پایان فصل، اتهام نهایی با همین‌ها ساخته می‌شود', style: tBody(12, color: K.textSoft)),
+                Text('در پایان فصل، اتهام نهایی با همین‌ها ساخته می‌شه', style: tBody(12, color: K.textSoft)),
               ]),
             ),
             const SizedBox(width: 10),

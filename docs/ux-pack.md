@@ -18,3 +18,19 @@ is not available. Sessions 1-7 push only this branch; session 8 bumps pubspec, w
 - Compatible both ways: an old app ignores `bonus_coins`; an old server sends no `update_bonus_coins` and no `bonus_coins`.
 - Tests: `server/tests/test_update_bonus.py` (repeat, race, downgrade, new install, bounds, admin save; runs on SQLite and
   PostgreSQL in CI), `app/test/app_update_test.dart`, `app/test/update_modal_home_test.dart` (text scale 1.3 and 2.0).
+
+## Session 3: shop value and voice sweep (10 Nov 2026)
+- Shop (`shop_screen.dart`, new pure helper `services/shop_value.dart`): the «کارآگاه ویژه» card is first; the three bags
+  follow, each with one line «≈ N پرونده» (real coins ÷ the 150-coin typical archive case; hidden when it is under one case).
+  The «+٪ بیشتر» line and its explanation sentence are gone. The badge «بیشترین ارزش» goes only to the bag with the most
+  coins per toman from the real store prices (none when a price is unknown or two bags tie). The VIP card states only
+  «کل بایگانی باز، بدون سکه» and «سرنخ اول هر پرونده رایگان»; the line «اگه ماهی N پرونده‌ی قدیمی یا بیشتر باز کنی، از سکه
+  خریدن ارزون‌تره» uses N computed from the VIP price and the best real coin rate (hidden when it cannot be computed).
+  The starter pack stays its own row under the bags with its real price. Buy flows, errors and dialogs are untouched.
+  Revenue note: the VIP and the best-value bag now carry the clear value story; no free coins were added.
+- Voice sweep: `docs/app-voice.md` (4 rules, glossary). Applied in `app/lib`: «ـهٔ» forms, formal verbs in the comments
+  screen, «بازیکن» → «کارآگاه», «را» in the accuse tag, and the generic / offline / server-down errors now say that coins and
+  progress are safe. Case and story content untouched.
+- Tests: `app/test/shop_value_test.dart` (badge, tie, unknown price, VIP break-even, hidden lines), `app/test/app_voice_test.dart`
+  (curated lint over `app/lib`, `allowed` list empty).
+- Not done on purpose: «باز است» on the home story chip stays (an existing test pins it).
