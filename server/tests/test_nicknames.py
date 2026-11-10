@@ -62,3 +62,44 @@ async def test_deleting_the_account_frees_the_name(client):
     assert (await rename(client, a, "ناپدید")).status_code == 200
     assert (await client.post("/v1/me/delete", headers=a["headers"])).status_code == 200
     assert (await rename(client, b, "ناپدید")).status_code == 200
+
+
+# ---- 10 Nov 2026: «taken» and «not acceptable» are different errors; no emoji or stickers in a name ----
+
+async def rename_v2(client, p, name):
+    return await client.patch("/v1/me", headers=p["headers"], json={"nickname": name, "name_errors": True})
+
+
+def test_problem_codes_and_the_character_whitelist():
+    from app.util import clean_nickname, nickname_problem as prob
+    assert prob("شرلوک") is None and prob("می‌لاد") is None and prob("Ali 99") is None and prob("علی_رضا") is None
+    assert prob("کارآگاه۱۲۳۴") is None and prob("Ali.K") is None
+    for emoji in ("علی😀", "😀😀", "🕵️ شرلوک", "ali❤", "علی★", "تست\u200d", "ab\u202e", "علی\n\tرضا\x00", "a\ufe0fb"):
+        assert prob(emoji) == "nickname_chars", repr(emoji)
+    assert prob("x") == "nickname_length" and prob("") == "nickname_length" and prob("a" * 17) == "nickname_length"
+    assert prob("123456") == "nickname_chars" and prob("...") == "nickname_chars"     # needs a letter
+    assert prob("site.ir") == "bad_nickname" and prob("admin") == "bad_nickname" and prob("a1234567z") == "bad_nickname"
+    assert clean_nickname("  علی   رضا ") == "علی رضا" and clean_nickname("علی😀") is None
+
+
+async def test_new_app_gets_separate_codes_and_old_app_keeps_the_old_one(client):
+    a, b = await new_player(client, "nv-a"), await new_player(client, "nv-b")
+    assert (await rename(client, a, "کنجکاوان")).status_code == 200
+    taken = await rename_v2(client, b, "کنجکاوان")
+    assert taken.status_code == 422 and taken.json()["detail"] == "nickname_taken"
+    assert (await rename_v2(client, b, "علی😀")).json()["detail"] == "nickname_chars"
+    assert (await rename_v2(client, b, "x")).json()["detail"] == "nickname_length"
+    assert (await rename_v2(client, b, "admin")).json()["detail"] == "bad_nickname"
+    # the old app (no name_errors) still gets the one code its text maps
+    for name in ("کنجکاوان", "علی😀", "x", "admin"):
+        r = await rename(client, b, name)
+        assert r.status_code == 422 and r.json()["detail"] == "bad_nickname", name
+    assert (await rename_v2(client, b, "شبگرد")).status_code == 200
+
+
+async def test_a_refused_name_changes_nothing(client):
+    a = await new_player(client, "nz-a")
+    before = (await client.get("/v1/me", headers=a["headers"])).json()["nickname"]
+    for name in ("علی😀", "x", "a" * 40):
+        assert (await rename_v2(client, a, name)).status_code == 422
+    assert (await client.get("/v1/me", headers=a["headers"])).json()["nickname"] == before

@@ -799,3 +799,9 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
   and with at least one solved case. A new or empty account earns nothing; one real player lying about his build gets his single gift at most.
 - If you set «آخرین نسخه» before the build is on Bazaar, nobody can claim it yet but the banner already shows: do not.
 - A newer «آخرین نسخه» opens a new round of gifts, so raise it only for a build worth announcing.
+
+## Detective names (10 Nov 2026)
+- Allowed: letters of any language, digits, single spaces, ZWNJ, `_ . -`, 2-16 characters, at least one letter. No emoji, stickers, symbols or
+  invisible characters (`nickname_chars`). Blocked substrings (after removing spaces, case-insensitive): `کس`, `کیر`, `کون`, `جنده`, `fuck`, `sex`,
+  `admin`, `مدیر`; also links (`http`, `www.`, `.ir`, `.com`, `@`, `t.me`) and more than 6 digits (`bad_nickname`). A name another detective owns is
+  `nickname_taken` (compared by key: case, spaces, punctuation and Arabic/Persian letter variants are ignored).

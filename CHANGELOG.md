@@ -1,3 +1,14 @@
+# server 1.58.1: detective names: «taken» and «not acceptable» are different errors, no emoji or stickers (10 Nov 2026)
+
+- `PATCH /v1/me` with `"name_errors": true` (the new app) answers 422 with one of `nickname_taken` (another detective has the name),
+  `nickname_length` (2-16 letters), `nickname_chars` (emoji, stickers, symbols, invisible or control characters) or `bad_nickname`
+  (a link, a blocked word, more than 6 digits). Without the flag (every older app) the answer stays `bad_nickname` for all of them, so old
+  apps keep their text. Before, «taken» and «not acceptable» shared one code and one message.
+- Allowed in a name: letters of any language, digits (Persian, Arabic or Latin), single spaces, ZWNJ and `_ . -`; at least one letter. Names
+  that already contain an emoji are not touched until the player changes the name.
+- `nickname` is bounded at 64 characters by the schema and checked at 2-16 in the handler (a stable code instead of a validation list).
+- Tests: `server/tests/test_nicknames.py` (whitelist, codes for new and old apps, a refused name changes nothing). No schema change.
+
 # server 1.58.0: nightly cases c069, c070 (10 Nov 2026)
 
 - Two new nightly cases from the idea bank, written in the daytime at Amin's request (instead of the 23:00 session): c069 «جای خالی پشت شیشه» (idea 17, style S2 impossible crime, puzzle type 1 guilty knowledge, museum / art, difficulty 5, publish 6 Dec 2026) and c070 «دامادِ پشتِ نقاب» (idea 18, style S4 light humour, puzzle type 9 object biography, wedding / family, difficulty 4, publish 7 Dec 2026). notify.json entries added.
