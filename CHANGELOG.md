@@ -1,3 +1,10 @@
+# server 1.57.1: weekend case w007 «جای سخنران» fully rewritten (10 Nov 2026, urgent)
+
+- Amin asked for a full rewrite of w007 with the same idea (idea 31, wrong victim). Same id, number, publish (Thu 19 Nov 2026), scene, category, title, suspects' names and portraits; every text is new: 18 cards (14 on day 1, 4 on day 2), statements, questions, reactions, tool lines, motives, hints, explanation.
+- What changed for players: the whole chain is solvable on day 1 (who thought who was first, the 18:31 photos against the order of the work, who was really there, the hidden motive), day 2 proves it (the opened platform, a note written at 18:39, the inspection report, the contract signed the morning after). Fewer minute tables, more people: the culprit tries to stop the wrong person at the last moment; the day-2 newcomer is already seen on day 1 as an unknown man with a blue folder, so he is not "obviously innocent".
+- Four blind tests (two day-1 runs, two full runs); final results day 1: 88%, difficulty 4; full: 95%, difficulty 4, fair. Every finding fixed (see `docs/case-log.md`).
+- `notify.json` entry unchanged (same title and teaser still fit).
+
 # server 1.57.0: nightly cases c067, c068 (9 Nov 2026)
 
 - Two new nightly cases from the idea bank (ideas 15 and 16), difficulty 5: c067 «زنگ طبقه‌ی بی‌سکنه» (publish 4 Dec 2026) and c068 «بار برگشتی زمستان» (publish 5 Dec 2026), with notify texts and camera/print lines for every suspect. Case count tests now expect 68.
