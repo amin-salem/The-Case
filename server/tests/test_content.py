@@ -8,7 +8,7 @@ from app import content
 def test_fifty_cases_with_unique_ids_and_a_nightly_schedule():
     cases = content.all_cases()
     assert len(cases) == 70
-    assert [c.number for c in cases] == list(range(1, 69))
+    assert [c.number for c in cases] == list(range(1, 71))
     assert len({c.id for c in cases}) == 70
     for a, b in zip(cases, cases[1:]):
         assert b.publish - a.publish == timedelta(days=1), f"{a.id} -> {b.id}: one case per night, no gaps"
