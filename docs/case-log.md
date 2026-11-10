@@ -382,3 +382,13 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 
 - Logic plans and fix rounds: docs/reviews/c067-c068-plan.md. Name changes: ژاله -> پروانه, کیانی -> صفاریان, راد -> آرین‌فر, نوبهار -> پرتوی (Mehran aged 43 -> 60 for an unused culprit face); سامان -> یوسف, ایرج -> رحیم.
 - Soft spots fixed: c067 stolen receipt now found behind the fire-cabinet extinguisher; c068 1383 weekday names removed (they were wrong), who carried crate T-17 up and when, Farideh's train on 12 Bahman, the 620k bike total, waybill whereabouts. Receipts/forms that clear people: c067 e2, e3; c068 e3, e9.
+
+### 2026-11-10 nightly (written by hand in the daytime, Amin «پرونده‌هایی که مال امشبه رو بنویس»): c069, c070 from the idea bank
+| id | publish | idea / style / type | culprit | result |
+|---|---|---|---|---|
+| c069 «جای خالی پشت شیشه» | 2026-12-06 | idea #17, style S2, puzzle type 1 (museum / art), difficulty 5 | s3 بهناز معتمدی | blind tests 80% (diff 4), 82% (diff 4, fair); no single card decides |
+| c070 «دامادِ پشتِ نقاب» | 2026-12-07 | idea #18, style S4, puzzle type 9 (wedding / family), difficulty 4 | s5 نرگس نیکزاد | blind tests 93% (diff 3), 85% (3.5), 92% (3.5-4, fair); no single card decides |
+
+- c069 trick: the block never left the locked case; hidden under the reversed velvet lid of the stand. Guilty knowledge: on Thursday night, with the stand still sealed, the owner says the block «is lying on its back, pattern up». Fixes after test 1: selfie card e13 at 15:51 closes the assistant's window, guard now saw «something shiny» (the empty holder), «پایه» split into جعبه/سرپوش/نگهدارنده, block and cavity sizes, dating logic of the blunt tip stated (old prints sharp, broken years tipless, only post-1398 blunt), why the stand was sealed unopened (owner's request). After test 2: Vahid no longer alone with the key after locking, glass door vs lid wording, small sentences.
+- c070 chain: ribbon with the iron burn -> the bolt tied with the mask's own ribbons -> bolt rolled after the tent curtain was cut (matching zigzag edge) -> curtain hung 19:27 with the sewing table already empty -> only Narges in the room from the 19:15 doorbell (Tarane, tablet video) -> motive: the «window» joke is her mother Simin's real story and the old suitor was secretly invited. Rework after test 1: grandmother's two answers that named Narges removed, Farshad's hidden 2-minute visit added as a second strong false trail, show time unified, ribbon ends consistent. After test 2: Narges no longer admits rolling the bolt; Kian's sighting and the 19:27 window bracket it. After test 3: Simin named as Narges's mother, pins/pencil in her apron, small wording.
+

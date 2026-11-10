@@ -1,3 +1,8 @@
+# server 1.58.0: nightly cases c069, c070 (10 Nov 2026)
+
+- Two new nightly cases from the idea bank, written in the daytime at Amin's request (instead of the 23:00 session): c069 «جای خالی پشت شیشه» (idea 17, style S2 impossible crime, puzzle type 1 guilty knowledge, museum / art, difficulty 5, publish 6 Dec 2026) and c070 «دامادِ پشتِ نقاب» (idea 18, style S4 light humour, puzzle type 9 object biography, wedding / family, difficulty 4, publish 7 Dec 2026). notify.json entries added.
+- Blind tests: c069 80% then 82% (difficulty 4, fair, no single card decides); c070 93% (difficulty 3) -> reworked, 85% (3.5) -> hardened again, 92% (3.5-4, fair). Every finding fixed (see `docs/case-log.md`).
+
 # server 1.57.1: weekend case w007 «جای سخنران» fully rewritten (10 Nov 2026, urgent)
 
 - Amin asked for a full rewrite of w007 with the same idea (idea 31, wrong victim). Same id, number, publish (Thu 19 Nov 2026), scene, category, title, suspects' names and portraits; every text is new: 18 cards (14 on day 1, 4 on day 2), statements, questions, reactions, tool lines, motives, hints, explanation.
