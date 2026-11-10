@@ -745,7 +745,7 @@ class Api extends ChangeNotifier {
 
   Future<void> updateProfile({String? nickname, int? avatar, String? avatarId, String? avatarFrame}) async {
     final j = await _call('PATCH', '/v1/me', body: {
-      if (nickname != null) 'nickname': nickname,
+      if (nickname != null) ...{'nickname': nickname, 'name_errors': true}, // the server then says WHY (taken, characters, length)
       if (avatar != null) 'avatar': avatar,
       if (avatarId != null) 'avatar_id': avatarId,
       if (avatarFrame != null) 'avatar_frame': avatarFrame,
@@ -1311,7 +1311,10 @@ class Api extends ChangeNotifier {
         'only_for_new_players' => 'کد دعوت فقط برای کارآگاه‌های تازه‌ست',
         'same_device' => 'کد دعوت باید از گوشی یه کارآگاه دیگه باشه',
         'ad_limit' => 'امروز سهم تبلیغت تموم شد، فردا دوباره بیا',
-        'bad_nickname' => 'این اسم قبلاً انتخاب شده یا قابل قبول نیست؛ یکی دیگه امتحان کن',
+        'nickname_taken' => 'این اسم رو قبلاً یه کارآگاه دیگه برداشته؛ یه اسم دیگه انتخاب کن',
+        'nickname_chars' => 'توی اسم فقط حرف و عدد بذار؛ ایموجی، استیکر و نشونه قبول نیست',
+        'nickname_length' => 'اسم باید بین ۲ تا ۱۶ حرف باشه',
+        'bad_nickname' => 'این اسم قابل قبول نیست؛ یه اسم دیگه امتحان کن',
         'banned' => 'این حساب مسدود شده',
         'rate_limited' => 'خیلی سریع پیش رفتی، کمی صبر کن و دوباره امتحان کن',
         'too_many_requests' => 'خیلی سریع امتحان کردی، کمی صبر کن',
