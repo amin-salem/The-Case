@@ -13,6 +13,7 @@ from ..db import get_session, lock_players
 from ..models import Player, StreakRepair, utcnow
 from ..schemas import ClientInfoIn, CoinsOut, GainsOut, ProfileIn, ProfileOut
 from ..security import current_player
+from ..services import app_update
 from ..util import add_coins, clean_nickname
 from .common import profile_out
 
@@ -159,7 +160,12 @@ async def delete_smoke_player(player: Player = Depends(current_player), session:
 @router.post("/me/client")
 async def report_client(body: ClientInfoIn, player: Player = Depends(current_player),
                         session: AsyncSession = Depends(get_session)):
-    """The app reports its version and device once per start (rate limited by the «client_info» policy)."""
+    """The app reports its version and device once per start (rate limited by the «client_info» policy).
+
+    When the player moved from a build below `latest_version` to one at or above it, the one-time update thank-you is
+    paid here (services/app_update.grant_bonus); the answer says how many coins (`bonus_coins`, 0 = none)."""
+    player = (await lock_players(session, [player.id]))[player.id]
+    prev = player.client_build or player.app_version or 0   # read under the lock, before this report overwrites it
     player.client_version = body.app_version.strip()
     player.client_build = body.build
     if body.build > 0:
@@ -170,8 +176,16 @@ async def report_client(body: ClientInfoIn, player: Player = Depends(current_pla
     if body.installer:  # an old app (or an unknown source) sends none: keep what we knew
         player.install_source = body.installer
     player.client_at = utcnow()
+    paid = 0
+    if body.build > 0:
+        try:
+            async with session.begin_nested():
+                paid = await app_update.grant_bonus(session, player, int(prev), body.build)
+        except Exception:  # the thank-you must never lose the version report itself
+            log.exception("update_bonus failed")
+            paid = 0
     await session.commit()
-    return {"ok": True}
+    return {"ok": True, "bonus_coins": paid}
 
 
 @router.post("/wallet/ad-reward", response_model=CoinsOut)

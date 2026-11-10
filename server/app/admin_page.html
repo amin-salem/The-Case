@@ -584,7 +584,9 @@ const VIEWS = {
       <p class="muted">بعد از «انتشار» هر بیلد در کافه بازار، «آخرین نسخه» را برابر شماره‌ی همان بیلد بگذار؛ بازیکن‌هایی که بیلدشان کمتر است یک بنر قابل‌بستن می‌بینند. «حداقل نسخه» فقط برای اضطرار است: بیلدهای کمتر از آن قفل می‌شوند. فقط بازیکن‌های ۳۰ روز اخیر شمرده می‌شوند و بیلدهای خیلی قدیمی (بدون گزارش) اصلاً بنر ندارند: ${num(au.unknown_build)} نفر.</p>
       <div class="row"><label>آخرین نسخه <input id="aul" type="number" min="1" max="99999" value="${au.latest_version}" style="width:90px"></label>
       <label>حداقل نسخه <input id="aum" type="number" min="1" max="99999" value="${au.min_version}" style="width:90px"></label>
+      <label>سکه‌ی هدیه‌ی آپدیت (۰ = خاموش) <input id="aub" type="number" min="0" max="300" value="${Number.isFinite(au.update_bonus_coins) ? au.update_bonus_coins : 50}" style="width:80px"></label>
       <button id="aus">ذخیره</button></div>
+      <p class="muted">هدیه فقط بعد از ثبت «آخرین نسخه» شروع می‌شود و برای هر بازیکن برای هر نسخه فقط یک‌بار پرداخت می‌شود (نصب تازه چیزی نمی‌گیرد). برای نسخه‌ی فعلی تا الان ${num(au.bonus_paid || 0)} بازیکن هدیه گرفته‌اند.</p>
       <p id="aup" class="muted">الان: ${num(au.banner_now)} بازیکن بنر می‌بینند، ${num(au.blocked_now)} بازیکن قفل‌اند. بیلدهای رایج: ${au.builds.map(x => esc(x.build) + ' (' + num(x.players) + ')').join('، ')}</p>`);
       const upd = () => {
         const l = parseInt($('#aul').value, 10) || 1, mn = parseInt($('#aum').value, 10) || 1;
@@ -593,7 +595,7 @@ const VIEWS = {
       };
       $('#aul').oninput = upd; $('#aum').oninput = upd;
       const send = async (confirm) => {
-        const body = {latest_version: parseInt($('#aul').value, 10) || 1, min_version: parseInt($('#aum').value, 10) || 1, confirm_block: !!confirm};
+        const body = {latest_version: parseInt($('#aul').value, 10) || 1, min_version: parseInt($('#aum').value, 10) || 1, confirm_block: !!confirm, update_bonus_coins: Math.max(0, Math.min(300, parseInt($('#aub').value, 10) || 0))};
         try { await api('/admin/api/app-update', {method: 'POST', body: JSON.stringify(body)}); note('ذخیره شد'); go('actions'); }
         catch (e) {
           if (/confirm_block/.test(e.message)) {

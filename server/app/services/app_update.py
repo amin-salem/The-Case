@@ -21,12 +21,15 @@ from fastapi import HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..models import AdminLog, ConfigValue, Player, utcnow
+from ..models import AdminLog, CoinLog, ConfigValue, Player, utcnow
+from ..util import add_coins
 from . import remote_config
 
 log = logging.getLogger("app_update")
 
 MAX_BUILD = 99999
+MAX_BONUS = 300
+DEFAULT_BONUS = 50
 ACTIVE_DAYS = 30
 
 
@@ -43,12 +46,51 @@ def _below(counts: dict[int, int], n: int) -> int:
     return sum(c for b, c in counts.items() if 0 < b < n)
 
 
+def bonus_coins(cfg: dict[str, Any]) -> int:
+    """The configured thank-you amount, always inside 0..300 (a bad stored value means the default, never a big grant)."""
+    v = cfg.get("update_bonus_coins", DEFAULT_BONUS)
+    if isinstance(v, bool) or not isinstance(v, (int, float)) or v != v:
+        return DEFAULT_BONUS
+    return max(0, min(MAX_BONUS, int(v)))
+
+
+def _reason(latest: int) -> str:
+    return f"update_bonus:{latest}"
+
+
+async def grant_bonus(session: AsyncSession, player: Player, prev_build: int, new_build: int) -> int:
+    """Pays the update thank-you ONCE per player per `latest_version`; returns the coins paid (0 = nothing).
+
+    Only a player whose previous build (> 0) was below `latest_version` and who now runs a build >= it gets it: a new
+    install (previous 0 or already current) and a downgrade get nothing. The caller holds the player lock
+    (db.lock_players) and commits; the ledger row `update_bonus:<latest>` is checked inside that lock, so two simultaneous
+    reports pay once.
+    """
+    cfg = await remote_config.load_config(session)
+    try:
+        latest = int(cfg.get("latest_version") or 0)
+    except (TypeError, ValueError):
+        latest = 0
+    amount = bonus_coins(cfg)
+    if amount <= 0 or latest <= 1 or prev_build <= 0 or prev_build >= latest or new_build < latest:
+        return 0
+    done = await session.scalar(select(func.count()).select_from(CoinLog).where(
+        CoinLog.player_id == player.id, CoinLog.reason == _reason(latest)))
+    if done:
+        return 0
+    await add_coins(session, player, amount, _reason(latest))
+    log.info("update_bonus paid latest=%d amount=%d from=%d to=%d", latest, amount, prev_build, new_build)
+    return amount
+
+
 async def view(session: AsyncSession) -> dict[str, Any]:
     cfg = await remote_config.load_config(session)
     counts = await _counts(session)
     latest, mn = int(cfg.get("latest_version") or 1), int(cfg.get("min_version") or 1)
     builds = sorted(counts.items(), reverse=True)[:12]
+    paid = await session.scalar(select(func.count()).select_from(CoinLog).where(CoinLog.reason == _reason(latest))) if latest > 1 else 0
     return {
+        "update_bonus_coins": bonus_coins(cfg), "bonus_paid": int(paid or 0),
         "latest_version": latest, "min_version": mn, "update_url": cfg.get("update_url") or "",
         "active_days": ACTIVE_DAYS,
         "banner_now": _below(counts, latest) if latest > 1 else 0,
@@ -63,12 +105,16 @@ def preview(counts: dict[int, int], latest: int, mn: int) -> dict[str, int]:
 
 
 async def save(session: AsyncSession, latest: int, mn: int, confirm_block: bool = False,
-               update_url: str | None = None) -> dict[str, Any]:
+               update_url: str | None = None, bonus: int | None = None) -> dict[str, Any]:
     if not (1 <= latest <= MAX_BUILD) or not (1 <= mn <= MAX_BUILD):
         raise HTTPException(422, "bad_version")
     if mn > latest:
         raise HTTPException(422, "min_above_latest")
+    if bonus is not None and not (0 <= bonus <= MAX_BONUS):
+        raise HTTPException(422, "bad_bonus")
     values: dict[str, Any] = {"latest_version": latest, "min_version": mn}
+    if bonus is not None:
+        values["update_bonus_coins"] = bonus
     if update_url is not None and update_url.strip():
         u = urlparse(update_url.strip())
         if u.scheme not in ("https", "http") or not u.netloc or len(update_url) > 300:
@@ -86,7 +132,7 @@ async def save(session: AsyncSession, latest: int, mn: int, confirm_block: bool 
             session.add(ConfigValue(key=key, value=value))
         else:
             row.value, row.updated_at = value, utcnow()
-    session.add(AdminLog(action="app_update", target="config", detail={"latest": latest, "min": mn, "blocked": blocked}))
+    session.add(AdminLog(action="app_update", target="config", detail={"latest": latest, "min": mn, "blocked": blocked, "bonus": bonus}))
     await session.commit()
     remote_config.invalidate()
     log.info("app_update latest=%d min=%d blocked=%d", latest, mn, blocked)

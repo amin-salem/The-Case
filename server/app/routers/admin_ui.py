@@ -244,6 +244,7 @@ class AppUpdateIn(BaseModel):
     min_version: int = Field(1, ge=1, le=99999)
     confirm_block: bool = False
     update_url: str | None = Field(None, max_length=300)
+    update_bonus_coins: int | None = Field(None, ge=0, le=300)
 
 
 class PromoEndIn(BaseModel):
@@ -261,7 +262,8 @@ async def app_update_save(body: AppUpdateIn, session: AsyncSession = Depends(get
     """Save latest_version / min_version (and optionally update_url). Blocking players needs confirm_block."""
     from ..services.ratelimit import enforce
     await enforce("admin_app_update", "all")
-    return await app_update_service.save(session, body.latest_version, body.min_version, body.confirm_block, body.update_url)
+    return await app_update_service.save(session, body.latest_version, body.min_version, body.confirm_block, body.update_url,
+                                        body.update_bonus_coins)
 
 
 @router.get("/promo")

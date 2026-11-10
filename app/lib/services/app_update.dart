@@ -45,6 +45,39 @@ class AppUpdate extends ChangeNotifier {
   /// This build is older than the server's `min_version`: the full-screen page.
   bool get mustUpdate => minVersion > 0 && build < minVersion;
 
+  /// Thank-you coins the server pays once for updating (`update_bonus_coins`, 0..300). An older server sends none:
+  /// 0 means "say nothing about coins" (never an invented number).
+  int get bonusCoins => readInt(Api.i.config['update_bonus_coins']).clamp(0, 300);
+
+  /// A newer build is out and this one is not blocked (the modal or, after ✕, the home chip is about this).
+  bool get updateAvailable {
+    final latest = latestVersion;
+    return latest > 0 && build < latest && !mustUpdate;
+  }
+
+  bool _modalShown = false;
+
+  /// The modal opens at most once per app launch, and only while the banner is not closed (3 days per `latest_version`).
+  bool get modalDue => _prefs != null && bannerVisible && !_modalShown;
+  void markModalShown() => _modalShown = true;
+
+  /// The slim home chip: an update exists but the modal is closed (after ✕ / «بعداً») or already shown this launch.
+  bool get chipVisible => updateAvailable && !bannerVisible;
+
+  /// Coins the server just paid for this update (from `POST /v1/me/client`); the home page shows the thank-you once.
+  int _thanks = 0;
+  int takeThanks() {
+    final n = _thanks;
+    _thanks = 0;
+    return n;
+  }
+
+  void thank(int coins) {
+    if (coins <= 0) return;
+    _thanks = coins;
+    notifyListeners();
+  }
+
   /// This build is older than `latest_version` (and not blocked): the dismissible card.
   bool get bannerVisible {
     final latest = latestVersion;
@@ -58,7 +91,11 @@ class AppUpdate extends ChangeNotifier {
   }
 
   @visibleForTesting
-  void resetForTest() => _prefs = null;
+  void resetForTest() {
+    _prefs = null;
+    _modalShown = false;
+    _thanks = 0;
+  }
 
   Future<void> load() async {
     if (_prefs != null) return;

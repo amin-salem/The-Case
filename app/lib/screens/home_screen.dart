@@ -7,6 +7,7 @@ import '../models/album.dart';
 import '../models/models.dart';
 import '../models/progress.dart';
 import '../services/api.dart';
+import '../services/app_update.dart';
 import '../services/billing.dart';
 import '../widgets/album_strip.dart';
 import '../widgets/category.dart';
@@ -52,11 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _wasOnline = Api.i.online;
   int _account = Api.i.account;
   bool _calendarShown = false;
+  bool _calendarDone = false;
 
   @override
   void initState() {
     super.initState();
     Api.i.addListener(_onApi);
+    AppUpdate.i.addListener(_onUpdate);
+    AppUpdate.i.load();
     MainShell.tab.addListener(_onTab);
     WhatsNew.i.homeAction.addListener(_onWhatsNewJump);
     Reminders.i.onResume = _onResume;
@@ -78,7 +82,27 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Today's login calendar, then (once) the permission for the nightly reminders.
   Future<void> _welcome() async {
     await _showCalendar();
+    _calendarDone = true;
     if (mounted) await Reminders.i.askOnce();
+    _maybeShowUpdate();
+  }
+
+  /// The «نسخه‌ی تازه آماده‌ست» modal: once per launch, only when the home page is the visible route (never over a case
+  /// screen or another dialog), never with the forced-update page (bannerVisible is false then).
+  void _maybeShowUpdate() {
+    if (!mounted || !AppUpdate.i.modalDue || !_calendarDone) return;
+    if (MainShell.tab.value != MainShell.home || ModalRoute.of(context)?.isCurrent != true) return;
+    showUpdateModal(context);
+  }
+
+  /// «ممنون که آپدیت کردی»: shown once when the server has just paid the update coins.
+  void _onUpdate() {
+    if (!mounted) return;
+    final n = AppUpdate.i.takeThanks();
+    if (n > 0) {
+      toast(context, 'ممنون که آپدیت کردی · ${fa(n)} سکه به حسابت اضافه شد');
+    }
+    _maybeShowUpdate();
   }
 
   /// Today's login reward (once per visit; it may only arrive after coming back online).
@@ -105,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _load();
       _showCalendar();
     }
+    _maybeShowUpdate();
   }
 
   /// Back in the foreground (also after the phone's settings screen): fresh cases and a fresh reminder plan.
@@ -122,6 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     if (Reminders.i.onResume == _onResume) Reminders.i.onResume = null;
     Api.i.removeListener(_onApi);
+    AppUpdate.i.removeListener(_onUpdate);
     MainShell.tab.removeListener(_onTab);
     WhatsNew.i.homeAction.removeListener(_onWhatsNewJump);
     _tick?.cancel();
@@ -315,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _topBar(),
                   const SizedBox(height: 10),
                   const WhatsNewBanner(),
-                  const UpdateCard(),
+                  const UpdateChip(),
                   const NamePromptCard(),
                   const StoreRatingCard(),
                   const NotificationsOffCard(),

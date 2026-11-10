@@ -787,3 +787,13 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
 - What to watch: ledger lines `promo:<case>` (one per new player who opened it) against `solve` lines of that case.
 - The effect is in the panel: «🗂 پرونده‌ها» → «📈 اثر رایگان‌کردن» (signups in the window against the same length before it, free opens, solves, coin buyers). All panel times are Tehran time.
 - Not built yet: opening the app straight on the case from the link (needs a change in the APK build).
+
+## Update thank-you coins («هدیه‌ی آپدیت») (UX pack, 10 Nov 2026)
+- Order matters: first publish the new build on Cafe Bazaar, and only THEN set «آخرین نسخه» in the admin panel (block «📲 بروزرسانی اپ»).
+  From that moment every player who updates gets `update_bonus_coins` once (default 50, range 0..300, 0 = off).
+  Set the number in the same block. The block also shows how many players were paid for the current «آخرین نسخه».
+- Rules (server, `POST /v1/me/client`): the previous build (> 0) must be below «آخرین نسخه» and the build now reported must be at
+  least it. New installs (previous build 0 or already current) and downgrades get nothing. One payment per player per
+  «آخرین نسخه» (ledger reason `update_bonus:<build>`, checked under the player lock, so a race pays once).
+- If you set «آخرین نسخه» before the build is on Bazaar, nobody can claim it yet but the banner already shows: do not.
+- A newer «آخرین نسخه» opens a new round of gifts, so raise it only for a build worth announcing.

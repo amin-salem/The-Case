@@ -14,6 +14,7 @@ import '../models/avatars.dart';
 import '../models/progress.dart';
 import '../models/story.dart';
 import '../models/tools.dart';
+import 'app_update.dart';
 import 'case_clock.dart';
 import 'store_rating.dart';
 import 'claim_note_store.dart';
@@ -325,12 +326,18 @@ class Api extends ChangeNotifier {
     try {
       final info = await PackageInfo.fromPlatform();
       final installer = await _installer();
-      await _call('POST', '/v1/me/client', body: {
+      final j = await _call('POST', '/v1/me/client', body: {
         if (installer.isNotEmpty) 'installer': installer,
         'app_version': info.version,
         'build': int.tryParse(info.buildNumber) ?? kAppBuild,
         'platform': defaultTargetPlatform == TargetPlatform.iOS ? 'ios' : 'android',
       });
+      // «ممنون که آپدیت کردی»: the server paid the one-time update coins (an old server answers without the field)
+      final paid = j is Map ? AppUpdate.readInt(j['bonus_coins']) : 0;
+      if (paid > 0) {
+        unawaited(refreshProfile());
+        AppUpdate.i.thank(paid);
+      }
     } catch (e) {
       debugPrint('report client: $e');
     }

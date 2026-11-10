@@ -18,6 +18,8 @@ DEFAULTS: dict[str, Any] = {
     "min_version": 1,
     "latest_version": 1,
     "update_url": "https://cafebazaar.ir/app/ir.gammly.parvandeh",
+    # Thank-you coins paid once per player per latest_version when the player updates (services/app_update.py); 0 = off.
+    "update_bonus_coins": 50,
     "share_url": "https://cafebazaar.ir/app/ir.gammly.parvandeh",
     "privacy_url": "https://gaamly.ir/privacy",
     "terms_url": "https://gaamly.ir/terms",
