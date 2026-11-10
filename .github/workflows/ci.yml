@@ -67,6 +67,8 @@ jobs:
           pnames = {r[1] for r in d.execute("PRAGMA index_list(players)")}
           assert {"ix_players_referred_by", "ix_players_created_at", "ix_players_last_seen"} <= pnames, pnames
           assert {"ix_progress_opened_at", "ix_progress_finished_at"} <= names, names
+          cnames = {r[1] for r in d.execute("PRAGMA index_list(coin_log)")}
+          assert "ix_coin_log_reason" in cnames, cnames
           print("capacity indexes ok")
           EOF2
           rm -f mig.db

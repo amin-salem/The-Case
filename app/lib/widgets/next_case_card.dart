@@ -32,7 +32,8 @@ class NextCaseCard extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Text('هنوز ذهنت گرمه؛ یکی دیگه؟', style: tBody(12, color: K.inkSoft, w: FontWeight.w900)),
         const SizedBox(height: 10),
-        Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        // IntrinsicHeight: a stretching Row inside a scroll view gets an infinite height otherwise (CI, 10 Nov 2026).
+        IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Container(
             width: 72,
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -51,7 +52,7 @@ class NextCaseCard extends StatelessWidget {
                 Text('${fa(row.solveRate!)}٪ کارآگاه‌ها حلش کردن', key: const ValueKey('next-case-rate'), style: tBody(11.5, color: const Color(0xFF3E6B4E), w: FontWeight.w800)),
             ]),
           ),
-        ]),
+        ])),
         const SizedBox(height: 12),
         StampButton(
           key: const ValueKey('next-case-open'),

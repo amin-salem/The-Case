@@ -166,6 +166,7 @@ class CoinLog(Base):
     """Every change of a player's coins (for support and fraud checks)."""
 
     __tablename__ = "coin_log"
+    __table_args__ = (Index("ix_coin_log_reason", "reason"),)  # admin counts of update_bonus:<n> and promo:<case> rows (migration 0036)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     player_id: Mapped[str] = mapped_column(String(32), index=True)
