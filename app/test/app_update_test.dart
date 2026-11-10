@@ -5,11 +5,6 @@ import 'package:the_case/services/api.dart';
 import 'package:the_case/services/app_update.dart';
 import 'package:the_case/widgets/update_card.dart';
 
-Widget _host(Widget child) => MaterialApp(
-      builder: (context, c) => Directionality(textDirection: TextDirection.rtl, child: c!),
-      home: Scaffold(body: ListView(children: [child])),
-    );
-
 void main() {
   var clock = DateTime(2026, 10, 30, 12);
   setUp(() async {

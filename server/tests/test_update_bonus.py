@@ -19,6 +19,7 @@ async def clean(client):
     async def wipe():
         async with db.SessionLocal() as s:
             await s.execute(delete(ConfigValue).where(ConfigValue.key.in_(KEYS)))
+            await s.execute(delete(CoinLog).where(CoinLog.reason.like("update_bonus:%")))
             await s.commit()
         remote_config.invalidate()
     await wipe()
