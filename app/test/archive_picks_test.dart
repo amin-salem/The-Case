@@ -77,8 +77,8 @@ void main() {
     testWidgets('three equal cards; tapping one changes the detail card; the button uses the chosen case', (t) async {
       final opened = <CaseRow>[];
       await pumpRow(t, opened);
-      expect(find.text('پیشنهاد برای تو'), findsOneWidget);
-      expect(find.textContaining('از روی ۱۲ پرونده'), findsOneWidget);
+      expect(find.textContaining('پیشنهاد برای تو', findRichText: true), findsOneWidget);
+      expect(find.textContaining('از روی ۱۲ پرونده', findRichText: true), findsOneWidget);
       final w = [for (var i = 0; i < 3; i++) t.getSize(find.byKey(ValueKey('archive-pick-$i'))).width];
       expect(w[0], closeTo(w[1], 0.5));
       expect(w[1], closeTo(w[2], 0.5));
@@ -105,7 +105,7 @@ void main() {
     testWidgets('nothing to show means no widget at all', (t) async {
       await pumpRow(t, [], rows: [_row('zz', 9)]);
       expect(find.byKey(const ValueKey('archive-picks')), findsNothing);
-      expect(find.text('پیشنهاد برای تو'), findsNothing);
+      expect(find.textContaining('پیشنهاد برای تو', findRichText: true), findsNothing);
     });
 
     for (final scale in [1.3, 2.0]) {
@@ -128,7 +128,7 @@ void main() {
       Api.i.httpClient = MockClient((r) async {
         if (r.url.path == '/v1/cases') return jsonResponse(casesBody());
         if (r.url.path == '/v1/cases/picks') {
-          if (picksFail) return jsonResponse({'detail': 'boom'}, 500);
+          if (picksFail) return jsonResponse({'detail': 'none'}, 404);
           return jsonResponse(picks ?? _body());
         }
         if (r.url.path == '/v1/events') {
@@ -155,14 +155,14 @@ void main() {
       await setup(t);
       await goTo(t, 'بایگانی');
       expect(find.byKey(const ValueKey('archive-picks')), findsOneWidget);
-      expect(find.byKey(const ValueKey('archive-search')), findsOneWidget);
+      expect(find.byKey(const ValueKey('archive-search'), skipOffstage: false), findsOneWidget);
     });
 
-    testWidgets('a server error on the suggestions hides the row and nothing else', (t) async {
+    testWidgets('an old server (404) or an error on the suggestions hides the row and nothing else', (t) async {
       await setup(t, fail: true);
       await goTo(t, 'بایگانی');
       expect(find.byKey(const ValueKey('archive-picks')), findsNothing);
-      expect(find.byKey(const ValueKey('archive-search')), findsOneWidget);
+      expect(find.byKey(const ValueKey('archive-search'), skipOffstage: false), findsOneWidget);
     });
 
     testWidgets('no picks, no row', (t) async {
