@@ -4,10 +4,12 @@ Runs on SQLite and PostgreSQL."""
 import asyncio
 
 import pytest
+from datetime import timedelta
+
 from sqlalchemy import delete, func, select, update
 
 from app import db
-from app.models import CoinLog, ConfigValue, Player
+from app.models import CoinLog, ConfigValue, Player, utcnow
 from app.services import remote_config
 from .conftest import ADMIN, new_player
 
@@ -30,14 +32,17 @@ async def clean(client):
 async def set_cfg(**values):
     async with db.SessionLocal() as s:
         for k, v in values.items():
-            s.add(ConfigValue(key=k, value=v))
+            # published a day ago: the players below were created before that (see grant_bonus)
+            s.add(ConfigValue(key=k, value=v, updated_at=utcnow() - timedelta(days=1)))
         await s.commit()
     remote_config.invalidate()
 
 
-async def set_build(pid, build):
+async def set_build(pid, build, *, solved=1, age_days=3):
+    """An account that existed before the release (created `age_days` ago) and has played (`solved` cases)."""
     async with db.SessionLocal() as s:
-        await s.execute(update(Player).where(Player.id == pid).values(client_build=build, app_version=build))
+        await s.execute(update(Player).where(Player.id == pid).values(
+            client_build=build, app_version=build, cases_solved=solved, created_at=utcnow() - timedelta(days=age_days)))
         await s.commit()
 
 
@@ -80,6 +85,19 @@ async def test_new_install_and_unknown_build_get_nothing(client):
     await set_build(old["player_id"], 0)         # an app that never reported: no known previous build
     assert (await report(client, old, 90)).json()["bonus_coins"] == 0
     assert await paid_rows(fresh["player_id"]) == 0 and await paid_rows(old["player_id"]) == 0
+
+
+async def test_faked_build_numbers_from_new_or_empty_accounts_get_nothing(client):
+    """The build number is client-reported. A farm of accounts made after the release, or accounts that never solved a case,
+    earn nothing by claiming an old build and then the new one."""
+    await set_cfg(latest_version=90)
+    newer = await new_player(client, "dev-ub-9")
+    await set_build(newer["player_id"], 80, age_days=-1)          # created AFTER latest_version was published
+    empty = await new_player(client, "dev-ub-10")
+    await set_build(empty["player_id"], 80, solved=0)              # old enough but never solved a case
+    assert (await report(client, newer, 90)).json()["bonus_coins"] == 0
+    assert (await report(client, empty, 90)).json()["bonus_coins"] == 0
+    assert await paid_rows(newer["player_id"]) == 0 and await paid_rows(empty["player_id"]) == 0
 
 
 async def test_downgrade_or_partial_update_gets_nothing(client):

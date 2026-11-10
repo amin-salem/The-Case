@@ -62,7 +62,8 @@ async def grant_bonus(session: AsyncSession, player: Player, prev_build: int, ne
     """Pays the update thank-you ONCE per player per `latest_version`; returns the coins paid (0 = nothing).
 
     Only a player whose previous build (> 0) was below `latest_version` and who now runs a build >= it gets it: a new
-    install (previous 0 or already current) and a downgrade get nothing. The caller holds the player lock
+    install (previous 0 or already current) and a downgrade get nothing. The account must also predate the moment
+    `latest_version` was set and have solved a case (the build number is client-reported; see the comment below). The caller holds the player lock
     (db.lock_players) and commits; the ledger row `update_bonus:<latest>` is checked inside that lock, so two simultaneous
     reports pay once.
     """
@@ -73,6 +74,13 @@ async def grant_bonus(session: AsyncSession, player: Player, prev_build: int, ne
         latest = 0
     amount = bonus_coins(cfg)
     if amount <= 0 or latest <= 1 or prev_build <= 0 or prev_build >= latest or new_build < latest:
+        return 0
+    # The build number comes from the app, so it can be faked. What we can check on the server: only an account that
+    # existed BEFORE `latest_version` was published (a newer account installed the new build anyway) and that has really
+    # played (a solved case) can be thanked. A farm of fresh or empty accounts earns nothing; one real account can still
+    # claim its single 50 coins by lying, which is the whole loss.
+    published = await session.scalar(select(ConfigValue.updated_at).where(ConfigValue.key == "latest_version"))
+    if published is None or player.created_at is None or player.created_at >= published or (player.cases_solved or 0) < 1:
         return 0
     done = await session.scalar(select(func.count()).select_from(CoinLog).where(
         CoinLog.player_id == player.id, CoinLog.reason == _reason(latest)))

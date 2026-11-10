@@ -19,6 +19,12 @@ is not available. Sessions 1-7 push only this branch; session 8 bumps pubspec, w
 - Tests: `server/tests/test_update_bonus.py` (repeat, race, downgrade, new install, bounds, admin save; runs on SQLite and
   PostgreSQL in CI), `app/test/app_update_test.dart`, `app/test/update_modal_home_test.dart` (text scale 1.3 and 2.0).
 
+### Update bonus: who can be thanked (10 Nov 2026, after Amin asked to close the faked-build hole)
+- The build number is reported by the app, so it can be faked. `grant_bonus` now also requires that the account was created BEFORE
+  `latest_version` was set (a newer account installed the new build anyway) and has solved at least one case. A farm of new or empty
+  accounts earns nothing. What stays possible: an existing player who has played lies once and gets his single `update_bonus_coins`
+  (no way to prove the installed build from the server). Tests: `test_faked_build_numbers_from_new_or_empty_accounts_get_nothing`.
+
 ## Session 2: next case after a solve and the starter-pack sheet (10 Nov 2026)
 Boards `After.dc.html` and `Starter.dc.html`.
 - Result screen (`result_screen.dart`, `widgets/next_case_card.dart`): after a normal solve (not a story chapter) the compact

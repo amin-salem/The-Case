@@ -795,5 +795,7 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
 - Rules (server, `POST /v1/me/client`): the previous build (> 0) must be below «آخرین نسخه» and the build now reported must be at
   least it. New installs (previous build 0 or already current) and downgrades get nothing. One payment per player per
   «آخرین نسخه» (ledger reason `update_bonus:<build>`, checked under the player lock, so a race pays once).
+- The build number is reported by the app and can be faked, so the server also requires an account created BEFORE «آخرین نسخه» was saved
+  and with at least one solved case. A new or empty account earns nothing; one real player lying about his build gets his single gift at most.
 - If you set «آخرین نسخه» before the build is on Bazaar, nobody can claim it yet but the banner already shows: do not.
 - A newer «آخرین نسخه» opens a new round of gifts, so raise it only for a build worth announcing.
