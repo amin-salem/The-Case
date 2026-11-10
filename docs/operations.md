@@ -787,3 +787,9 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
 - What to watch: ledger lines `promo:<case>` (one per new player who opened it) against `solve` lines of that case.
 - The effect is in the panel: «🗂 پرونده‌ها» → «📈 اثر رایگان‌کردن» (signups in the window against the same length before it, free opens, solves, coin buyers). All panel times are Tehran time.
 - Not built yet: opening the app straight on the case from the link (needs a change in the APK build).
+
+## Detective names (10 Nov 2026)
+- Allowed: letters of any language, digits, single spaces, ZWNJ, `_ . -`, 2-16 characters, at least one letter. No emoji, stickers, symbols or
+  invisible characters (`nickname_chars`). Blocked substrings (after removing spaces, case-insensitive): `کس`, `کیر`, `کون`, `جنده`, `fuck`, `sex`,
+  `admin`, `مدیر`; also links (`http`, `www.`, `.ir`, `.com`, `@`, `t.me`) and more than 6 digits (`bad_nickname`). A name another detective owns is
+  `nickname_taken` (compared by key: case, spaces, punctuation and Arabic/Persian letter variants are ignored).

@@ -1,6 +1,7 @@
 """Small helpers shared by the routers."""
 import re
 import secrets
+import unicodedata
 from datetime import datetime, timezone
 
 from fastapi import HTTPException
@@ -40,14 +41,33 @@ _URL = re.compile(r"(https?://|www\.|\.ir\b|\.com\b|@|t\.me)", re.I)
 _BLOCKED = ["کس", "کیر", "کون", "جنده", "fuck", "sex", "admin", "مدیر"]
 
 
-def clean_nickname(name: str) -> str | None:
+_NAME_PUNCT = {"_", ".", "-"}
+
+
+def nickname_problem(name: str) -> str | None:
+    """Why a detective name is not acceptable, as a stable code (None = fine). Codes: `nickname_length` (2-16 letters),
+    `nickname_chars` (only letters of any language, digits, one space between words, ZWNJ and _ . - are allowed; emoji,
+    stickers, symbols, control and invisible characters are not), `bad_nickname` (a link, a blocked word, too many digits)."""
     name = " ".join(name.split())
-    if not (2 <= len(name) <= 16) or _URL.search(name):
-        return None
+    if not (2 <= len(name) <= 16):
+        return "nickname_length"
+    for ch in name:
+        cat = unicodedata.category(ch)
+        ok = cat[0] == "L" or cat == "Nd" or ch == " " or ch == "\u200c" or ch in _NAME_PUNCT
+        if not ok:           # emoji (So, Sk, Cs), ZWJ and variation selectors (Cf, Mn), arrows, hearts, control characters ...
+            return "nickname_chars"
+    if not any(unicodedata.category(ch)[0] == "L" for ch in name):
+        return "nickname_chars"   # digits and dots only
+    if _URL.search(name):
+        return "bad_nickname"
     low = name.lower().replace(" ", "")
     if any(b in low for b in _BLOCKED) or sum(ch.isdigit() for ch in name) > 6:
-        return None
-    return name
+        return "bad_nickname"
+    return None
+
+
+def clean_nickname(name: str) -> str | None:
+    return None if nickname_problem(name) else " ".join(name.split())
 
 
 async def add_coins(session: AsyncSession, player: Player, amount: int, reason: str) -> None:
