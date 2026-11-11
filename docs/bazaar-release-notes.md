@@ -77,3 +77,25 @@ Build 85
 
 ## developer_note
 Build 86
+
+<!-- build: 87 -->
+## changelog_fa
+- یادآوری نسخه‌ی تازه همراه با هدیه‌ی تشکر برای آپدیت
+- صفحه‌ی بعد از حل پرونده روشن‌تر شد و پرونده‌ی بعدی را پیشنهاد می‌دهد
+- بایگانی حالا پرونده‌هایی مناسب شما پیشنهاد می‌دهد
+- صفحه‌ی اصلی مرتب‌تر و جدول رتبه‌ها تازه شد
+- قفسه‌ی افتخار در پروفایل و لحظه‌ی مهر پرونده
+- پیام‌های بدون اینترنت و خطا روشن‌تر شد
+- بهبودهای کوچک
+
+## changelog_en
+- A reminder for the new version with a thank-you gift for updating
+- A clearer screen after solving a case that suggests the next one
+- The archive now suggests cases that suit you
+- A tidier home screen and a refreshed leaderboard
+- A trophy shelf in the profile and a stamp moment when a case is sealed
+- Clearer offline and error messages
+- Small improvements
+
+## developer_note
+Build 87

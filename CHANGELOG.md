@@ -1,3 +1,15 @@
+# server 1.59.0 / app 1.43.0+87: UX pack release (11 Nov 2026)
+
+- One release of the eight UX sessions (docs/ux-pack.md): an update reminder with a one-time thank-you gift, a next-case card and the starter-pack sheet after a solve,
+  a clearer shop (value lines, a calmer voice), archive picks and the weekend tab, a leaner home with shared empty/offline/error states, a redesigned leaderboard, and the
+  honor shelf in the profile with a stamp moment. Includes builds 85 and 86 (surname-only suspect chips); build 86 was never published.
+- Detective-name errors for the new app (taken / length / characters / not acceptable), see server 1.58.1.
+- Art: ten neutral male and eight neutral female portraits (head covering rule for women, `head_covering` in `docs/art-registry.json`), the watchmaker avatar with a headscarf,
+  the portrait age and role contract (`tools/art_rules.py`, `server/tests/test_case_art_contract.py`). The new portraits are not used in any case before their `usable_from`;
+  15 remaps are reported as pending until 25 Nov 2026 (the test then fails for real if they are still unresolved).
+- Writer kit for a second Claude account (`docs/writer-brief.md`, `docs/handoff.md`, `docs/second-account-setup.md`, `server/tools/case_index.py`, `server/tools/check_case.py`).
+- Deploy the server from Liara BEFORE publishing the APK; then set «آخرین نسخه» = 87.
+
 # server 1.58.1: detective names: «taken» and «not acceptable» are different errors, no emoji or stickers (10 Nov 2026)
 
 - `PATCH /v1/me` with `"name_errors": true` (the new app) answers 422 with one of `nickname_taken` (another detective has the name),
