@@ -16,6 +16,7 @@ from ..cache import TTLCache
 from ..services import bazaar_reviews
 from ..services import case_reset
 from ..services import duplicates as duplicates_service
+from ..services import app_update as app_update_service
 from ..services import promo as promo_service
 from ..services import purge as purge_service
 from ..services import real_users
@@ -199,7 +200,7 @@ async def players(q: str = Query("", max_length=60), sort: str = "last_seen", li
     lab = await real_users.label_rows(session, list(rows), dup)
     return {"total": total, "items": [{
         "id": p.id, "nickname": p.nickname, "coins": p.coins, "solved": p.cases_solved, "stars": p.stars_total,
-        "streak": p.streak, "secured": bool(p.email or p.phone_hash), "banned": p.banned, "app_version": p.app_version,
+        "streak": p.streak, "secured": bool(p.email or p.phone_hash), "banned": p.banned, "app_version": p.client_build or p.app_version,
         "segment": lab[p.id]["segment"], "dup_reason": lab[p.id]["reason"],
         "created": ts(p.created_at), "last_seen": ts(p.last_seen)} for p in rows]}
 
@@ -238,8 +239,29 @@ class PromoIn(BaseModel):
     hours: int = Field(promo_service.DEFAULT_HOURS, ge=promo_service.MIN_HOURS, le=promo_service.MAX_HOURS)
 
 
+class AppUpdateIn(BaseModel):
+    latest_version: int = Field(..., ge=1, le=99999)
+    min_version: int = Field(1, ge=1, le=99999)
+    confirm_block: bool = False
+    update_url: str | None = Field(None, max_length=300)
+
+
 class PromoEndIn(BaseModel):
     case_id: str = Field(..., min_length=1, max_length=16)
+
+
+@router.get("/app-update")
+async def app_update_view(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. The update notice values and how many active players would see the banner or be blocked."""
+    return await app_update_service.view(session)
+
+
+@router.post("/app-update")
+async def app_update_save(body: AppUpdateIn, session: AsyncSession = Depends(get_session)):
+    """Save latest_version / min_version (and optionally update_url). Blocking players needs confirm_block."""
+    from ..services.ratelimit import enforce
+    await enforce("admin_app_update", "all")
+    return await app_update_service.save(session, body.latest_version, body.min_version, body.confirm_block, body.update_url)
 
 
 @router.get("/promo")
@@ -247,6 +269,12 @@ async def promo_list(session: AsyncSession = Depends(get_session)):
     """READ ONLY. Promo case windows (free to open for a new detective), newest first."""
     return {"items": await promo_service.listing(session), "default_hours": promo_service.DEFAULT_HOURS,
             "max_active": promo_service.MAX_ACTIVE}
+
+
+@router.get("/promo/impact")
+async def promo_impact(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. For every promo window: signups, free opens, solves and buyers (see services/promo.impact)."""
+    return {"items": await promo_service.impact(session)}
 
 
 @router.post("/promo")

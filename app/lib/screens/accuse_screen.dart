@@ -101,11 +101,11 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
         _busy = false;
         _left = r.attemptsLeft;
         _feedback = inconclusive
-            ? 'این اتهام اثبات نشد. حرف مظنون رو دوباره با مدارک بسنج؛ می‌تونی همین مظنون رو با مدرک دیگه‌ای انتخاب کنی. ${fa(r.attemptsLeft)} فرصت دیگه داری.'
+            ? 'این اتهام اثبات نشد؛ هنوز کافی تحقیق نکرده‌ای. چند مدرک و بازجویی دیگه رو ببین و دوباره امتحان کن. ${fa(r.attemptsLeft)} فرصت دیگه داری.'
             : switch (r.result) {
-          'wrong_proof' => 'آدم درست رو گرفتی، ولی این مدرک دروغش رو ثابت نمی‌کنه. یه پلاک کم شد؛ مدرک دیگه‌ای رو امتحان کن.',
+          'wrong_proof' => 'آدم درست رو گرفتی! ولی این مدرک دروغش رو ثابت نمی‌کنه. مدرک دیگه‌ای رو امتحان کن.',
           'wrong_motive' => 'آدم و مدرک درسته، ولی انگیزه‌اش این نبود. یه پلاک کم شد؛ دوباره فکر کن چرا این کار رو کرد.',
-          _ => 'اشتباه بود! این آدم بی‌گناهه. ${fa(r.attemptsLeft)} فرصت دیگه داری.',
+          _ => 'این آدم قاتل نیست. ${fa(r.attemptsLeft)} فرصت دیگه داری.',
         };
         // back to the step that was wrong
         switch (r.result) {

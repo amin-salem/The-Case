@@ -1,3 +1,103 @@
+# server 1.58.1: detective names: «taken» and «not acceptable» are different errors, no emoji or stickers (10 Nov 2026)
+
+- `PATCH /v1/me` with `"name_errors": true` (the new app) answers 422 with one of `nickname_taken` (another detective has the name),
+  `nickname_length` (2-16 letters), `nickname_chars` (emoji, stickers, symbols, invisible or control characters) or `bad_nickname`
+  (a link, a blocked word, more than 6 digits). Without the flag (every older app) the answer stays `bad_nickname` for all of them, so old
+  apps keep their text. Before, «taken» and «not acceptable» shared one code and one message.
+- Allowed in a name: letters of any language, digits (Persian, Arabic or Latin), single spaces, ZWNJ and `_ . -`; at least one letter. Names
+  that already contain an emoji are not touched until the player changes the name.
+- `nickname` is bounded at 64 characters by the schema and checked at 2-16 in the handler (a stable code instead of a validation list).
+- Tests: `server/tests/test_nicknames.py` (whitelist, codes for new and old apps, a refused name changes nothing). No schema change.
+
+# server 1.58.0: nightly cases c069, c070 (10 Nov 2026)
+
+- Two new nightly cases from the idea bank, written in the daytime at Amin's request (instead of the 23:00 session): c069 «جای خالی پشت شیشه» (idea 17, style S2 impossible crime, puzzle type 1 guilty knowledge, museum / art, difficulty 5, publish 6 Dec 2026) and c070 «دامادِ پشتِ نقاب» (idea 18, style S4 light humour, puzzle type 9 object biography, wedding / family, difficulty 4, publish 7 Dec 2026). notify.json entries added.
+- Blind tests: c069 80% then 82% (difficulty 4, fair, no single card decides); c070 93% (difficulty 3) -> reworked, 85% (3.5) -> hardened again, 92% (3.5-4, fair). Every finding fixed (see `docs/case-log.md`).
+
+# server 1.57.1: weekend case w007 «جای سخنران» fully rewritten (10 Nov 2026, urgent)
+
+- Amin asked for a full rewrite of w007 with the same idea (idea 31, wrong victim). Same id, number, publish (Thu 19 Nov 2026), scene, category, title, suspects' names and portraits; every text is new: 18 cards (14 on day 1, 4 on day 2), statements, questions, reactions, tool lines, motives, hints, explanation.
+- What changed for players: the whole chain is solvable on day 1 (who thought who was first, the 18:31 photos against the order of the work, who was really there, the hidden motive), day 2 proves it (the opened platform, a note written at 18:39, the inspection report, the contract signed the morning after). Fewer minute tables, more people: the culprit tries to stop the wrong person at the last moment; the day-2 newcomer is already seen on day 1 as an unknown man with a blue folder, so he is not "obviously innocent".
+- Four blind tests (two day-1 runs, two full runs); final results day 1: 88%, difficulty 4; full: 95%, difficulty 4, fair. Every finding fixed (see `docs/case-log.md`).
+- `notify.json` entry unchanged (same title and teaser still fit).
+
+# server 1.57.0: nightly cases c067, c068 (9 Nov 2026)
+
+- Two new nightly cases from the idea bank (ideas 15 and 16), difficulty 5: c067 «زنگ طبقه‌ی بی‌سکنه» (publish 4 Dec 2026) and c068 «بار برگشتی زمستان» (publish 5 Dec 2026), with notify texts and camera/print lines for every suspect. Case count tests now expect 68.
+
+# server 1.56.0: admin panel in Tehran time, effect of a free case, a lighter overview (9 Nov 2026, urgent)
+
+- **Tehran time everywhere in the panel** (web and admin app): every date and time (`fmtT`, day names, promo windows, next weekend case) is shown with `timeZone: Asia/Tehran`, whatever zone the phone has. Server day buckets were already Tehran days.
+- **Effect of a free case:** `GET /admin/api/promo/impact` (read only, admin key) and a table «📈 اثر رایگان‌کردن» under the promo block in «🗂 پرونده‌ها», plus one line on the overview. Per window: signups while it was open, signups in an equally long stretch just before it (a comparison, not proof), detectives who opened the case free (ledger `promo:<case>`), how many of them were new in the window, solved, and buyers of coins among the window's signups. Indexed queries only (players by `created_at`, then ledger, progress and purchases by `player_id`), at most 5000 players per window, newest 10 windows. Tests in `tests/test_promo.py`.
+- **Lighter overview:** «امروز تا الان» (new, active, opened, solved, purchases) against yesterday and the average of the 7 days before; 3 player cards; 4 charts instead of 8; the anti-cheat block is collapsed while it is green; the version table (it lives in «سلامت»), the loss/coin charts (they live in «اقتصاد سکه») and the useless «GitHub watch» card are gone.
+
+# server 1.55.2: weekend case w006 «میهمان اتاق ۴۰۸» rewritten; portraits players have (9 Nov 2026, urgent)
+
+- w006 (opens Thursday 12 Nov 09:00) fully rewritten by Claude Opus in format 3 and the house voice: a henna night in hotel Narvan, Shiraz; the grandmother of the bride changes her room from 408 to 411 and by morning her safe is empty. Day 1: 7 suspects, 8 cards, night-1 question «کی می‌گه تمام مدت پشت پیشخوان بوده، ولی نبوده؟»; day 2: the unbooked guest of 408 (newcomer) and 4 new cards. The old Gemini file had third-person reactions, a motive option that named the culprit and loose ends (the stolen bag never found). Blind tests: day 1 only 82% (culprit and motive right, difficulty 4), full case 92% (difficulty 4); fixes from both tests applied (night-1 question made unambiguous, money motive planted on day 1, the necklace is now found, wording). notify.json teaser updated.
+- Portraits players have: w005 used faces shipped only from build 83, so players on older APKs saw drawn fallback faces. w006 uses only faces shipped since build 78. New file `docs/portrait-release.json` (+ test `test_case_uses_only_portraits_players_have`): a case may use a new portrait only from the day its build reached most players (`usable_from`, now 26 Nov 2026 for f_mid_waitress, m_mid_worker, m_mid_researcher). Bump it when Amin publishes a build with new faces.
+
+# server 1.55.1: the admin player list shows the version the player really runs (9 Nov 2026)
+
+- The «بازیکن‌ها» list and the version table showed `players.app_version`, which was set at sign-up and only refreshed at login (tokens last long, so it stayed e.g. 1 for players who run the newest build). The app already reports its real build at every start (`/v1/me/client` -> `client_build`). Now: that report also updates `app_version`; the list shows `client_build` when known; the version table (health) groups by the running build. No migration. Test in `test_ratelimit.py`.
+
+# server 1.55.0: admin panel block «📲 بروزرسانی اپ» (9 Nov 2026, urgent)
+
+- Tab «⚙ اقدام‌ها» in the admin panel (and the admin app, which shows the same page) now edits the update notice: «آخرین نسخه» (`latest_version`) and «حداقل نسخه» (`min_version`), with a live count of how many active players (last 30 days, by the build the app reports) would see the banner or be blocked, and the most common builds. No more API calls by hand.
+- Safe: values 1..99999, `min_version` cannot exceed `latest_version`, a link must be http(s); raising `min_version` while active players would be locked out needs a second tap («بله، قفل کن», API `confirm_block`). Saving writes an `admin_log` row (`app_update`) and one log line; rate limit `admin_app_update`. API: `GET/POST /admin/api/app-update`.
+- Old apps that never report a build (0) cannot show the banner; they are counted separately.
+- Tests: `test_app_update_admin.py` (SQLite and PostgreSQL jobs). No migration, no APK. Deploy: redeploy from Liara.
+
+# app 1.42.2+86: suspect cards under evidence also work for surnames (9 Nov 2026, urgent; app only, nothing under `server/`)
+
+- Under every evidence card the app shows the suspects the card names; it only knew first names and full names. Newer cases (c041, c048 and several others) write only the surname («عبدی»، «حکیمی»), so their cards showed nobody. `suspectsNamedIn` now also matches a surname (3+ letters, only when it is unique among the suspects and not another suspect's first name, never inside a longer word). c041 goes from 0 to 9 cards with suspects, c048 from 0 to 7. Test: `named_surname_test.dart`.
+
+# app 1.42.1+85 (build 84 was cancelled before upload; this contains it): new shop and a calmer streak reminder (8 Nov 2026, urgent; app only, nothing under `server/`)
+
+- **Shop** (Amin approved the design on the canvas, 8 Nov): the starter pack leads (until it is bought; hidden when `no_ads`), then the VIP card (days left shown), the three coin bags with "حدود N پرونده‌ی بایگانی" and a "+N٪ بیشتر" label, then "با سکه چی می‌شه خرید؟" (hints from 40, archive from 100, streak insurance, wardrobe from 300) and a trust note. Every percentage is computed from the prices the app really shows (Bazaar's own price when it knows it, else the config); nothing is typed in. No timers, no struck-out prices.
+- **Streak reminder**: now at **20:00** (one hour before the next case) instead of 22:30 (90 minutes after the case opened), only when a streak runs and the open case is unsolved. The three later-night reminders were removed: at most one extra notification a day besides the 21:00 one. Settings text updated. (The public privacy page still says 22:30; it changes with the next server push.)
+- Accusation messages (Amin approved, 8 Nov): right person + wrong card «آدم درست رو گرفتی! ولی این مدرک دروغش رو ثابت نمی‌کنه. مدرک دیگه‌ای رو امتحان کن.»; wrong person «این آدم قاتل نیست. N فرصت دیگه داری.»; not enough investigation «این اتهام اثبات نشد؛ هنوز کافی تحقیق نکرده‌ای…» (still never says the person is innocent). The server logic is unchanged.
+- CI: the UI-preview uploads no longer fail the job when GitHub's artifact quota is full (the failed upload used to SKIP the home-screen preview tests that follow) and keep files 1 day; the APK artifact keeps 7 days.
+- Release workflow: the "upload-artifact" step no longer stops the build when GitHub's artifact storage quota is full (it blocked the GitHub release and the Bazaar upload on 8 Nov, build 83).
+- Check of the streak after a missed night: the server already settles it against the calendar (`streakrepair.effective_streak`, tests in `test_night_streak.py`). The streak shows 0 the moment the NEXT case opens (21:00), not at midnight: the open case stays solvable for 24 hours by design.
+
+# server 1.54.0: nightly cases c065, c066 (8 Nov 2026, ideas session 10 of 15)
+
+- c065 «انصراف با جوهر آبی» (2 Dec, difficulty 5, S5 documents, the witness is the liar, office / medical) and c066 «گلدان‌های ردیف آفتاب» (3 Dec, difficulty 5, classic, motive reversal, school / science). Ideas #13 and #14 of batch 1.
+- Blind tests with fresh Sonnet readers on public copies (tool lines included): c065 93%, 93%, 92%, 93%; c066 92%, 90%, 90%; no single card or line decides; every soft spot found was fixed in the files (three fix rounds). Notification teasers added; case count tests 64 -> 66.
+- Deploy: redeploy from the Liara panel. No APK, no migration.
+
+# server 1.53.4 / app 1.41.1+83: weekend portraits and small screen fixes (8 Nov 2026, urgent)
+
+- Weekend portraits: the three missing painted faces (Siavash Namvar in w005, Ghasem Bayat and Zhila Pakzad in w006) now ship with the app, so they are no longer drawn by the fallback painter. In w005 four faces that did not fit (a baker's apron on a manuscript collector, a pastry apron on a night guard, ages 12-14 years apart) and in w006 the doctor's coat on a business rival were swapped for fitting portraits. Only `avatar.portrait` changed; no story text, culprit or proof.
+- Weekend tab: «روز اول» and «روز دوم» are now two full-width blocks, one under the other, so the countdown to day two has room.
+- Leaderboard, «پرونده‌ی امروز» tab: the header no longer repeats «پرونده‌ی امروز:» (the tab already says it); it shows the case title and «بیشترین پلاک و کمترین زمان».
+- Arrows: the album strip and the «حسابت هنوز امن نیست» card on Home pointed the wrong way in the right-to-left layout; now like every other row.
+- No migration.
+
+# server 1.53.3: c043-c050 made clearer (8 Nov 2026, urgent)
+
+- After the clarity audit, every fact a solution needs is now in an evidence card or the intro (not only in a suspect's answer): c043 the clasp facts and the 20:36 moment; c044 who fitted the window mesh and Aziz's whereabouts; c045 who made which seed envelopes; c046 the 15:52 radio call and Katayoun's mother; c047 Pak-niyat's carton claim and the lamp print; c048 the code moment at check-in and the ring's history; c049 the unlit boat at the ladder and the nine sets of nets; c050 the 20:40 intercom and the 85-minute road.
+- Words that meant two things now mean one (lock/clasp, envelope/letter, office rooms, doors, card names); overloaded cards start with the decisive sentence; noise details removed; times aligned; confusable witness names changed (c046 guard, c048 three witnesses, c049 guard). c047's innocent exits moved a few minutes earlier so the candle window is not a one-minute call.
+- Same culprits, proofs and difficulty. Fresh-reader blind tests: c043 85%, c044 88%, c045 92%, c046 90%, c047 90%, c048 90%, c049 90%, c050 88%; no single card names a culprit. No APK, no migration.
+
+# server 1.53.2: c041 and c042 made clearer (8 Nov 2026, urgent)
+
+- c041 «نمونه‌ای که از فرش نبود» (tonight): e4 now says plainly which piece went into the first envelope; e6 names what each envelope was («الف» Vakili's colour envelope, «ب» the lab envelope); e9 says the carpet itself matches the certificate; a noise detail (printed numbers) removed. Blind test: s3 at 88%, clarity 3/5.
+- c042 «پیوستِ نسخهٔ چهار» (9 Nov): the file codes R3-22/R4-71 became «نسخهٔ سه/چهار»; the certificate-on-disk fact moved from e2 to e3 with a one-line mapping (body, lid name, disk, certificate); e5 says the 22:50 approval came two minutes after the 22:48 change; the vague last line of the intro was replaced. Blind test: s2 at 90%, clarity 3/5 (was 2/5).
+- Same culprits, proofs and difficulty. No APK, no migration.
+
+# server 1.53.1: c040 «لیوانِ رزروشده» made clearer (8 Nov 2026, urgent)
+
+- Amin found the case hard to follow. The key fact (Aram's flag by the left cup, Georg's by the right) was only in one of Nare's answers; it is now in card e6, which also says the leaking cup was the left one.
+- Removed the triangle/circle label shapes (they played no part in the proof), made the intro say Aram took the intact cup, added a one-line summary of the two unattended moments to e3, Nare now remembers the closing order (matching the film), Lida's folder is shown on the table, and the explanation mentions her print on Georg's flag.
+- Same culprit, proof and difficulty. Blind tests after the change: s1 at 90% and 92%, no single card names her. No APK, no migration.
+
+# server 1.53.0: nightly cases c063, c064 (7 Nov 2026, ideas session 9 of 15)
+
+- c063 «شکست برای کس دیگر» (30 Nov, difficulty 5, S6 conflicting accounts, wrong victim, lab / science) and c064 «چتری که خشک برگشت» (1 Dec, difficulty 5, S7 crime inside a crisis, object biography, villa_rain / family). Ideas #11 and #12 of batch 1.
+- Blind tests with fresh Sonnet readers on public copies (tool lines included): c063 93% -> 92%, c064 90% -> 88%; no single card or line decides; every soft spot found was fixed in the files (two fix rounds). Notification teasers added; case count tests 62 -> 64. The scene cap in test_content.py is now 5 (the idea bank fixes each case's scene; lab and villa_rain were already at 4).
+- Deploy: redeploy from the Liara panel. No APK, no migration.
+
 # server 1.52.0: nightly cases c061, c062 (3 Nov 2026, ideas session 6 of 15)
 
 - c061 «خطی که هنوز خشک نشده بود» (28 Nov, difficulty 5, S1 cold case, guilty knowledge, library / family) and c062 «تخت آماده، وسیله‌ی ناآماده» (29 Nov, difficulty 5, S2 locked room, silent theft, hospital / medical). Ideas #9 and #10 of batch 1.

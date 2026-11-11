@@ -111,7 +111,8 @@ class ProfileOut(BaseModel):
 
 
 class ProfileIn(BaseModel):
-    nickname: str | None = Field(default=None, min_length=2, max_length=16)
+    nickname: str | None = Field(default=None, max_length=64)   # length 2-16 is checked in the handler (a stable error code)
+    name_errors: bool = False   # a new app asks for the separate codes nickname_taken / nickname_length / nickname_chars
     avatar: int | None = Field(default=None, ge=0, le=11)   # old apps
     avatar_id: str | None = Field(default=None, max_length=24)
     avatar_frame: str | None = Field(default=None, max_length=24)

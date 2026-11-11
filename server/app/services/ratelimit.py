@@ -77,6 +77,7 @@ DEFAULTS: dict[str, Policy] = {p.name: p for p in [
     _p("sms_daily", [(3000, 86400)], "key", "strict", "closed", "all SMS codes a day (money ceiling; raise with RL_SMS_DAILY)"),
     _p("admin_reply", [(5, 60), (60, 3600)], "key", "strict", "closed", "admin replies to Bazaar reviews"),
     _p("admin_promo", [(30, 60), (120, 3600)], "key", "strict", "closed", "admin: start or end a promo case window"),
+    _p("admin_app_update", [(20, 60), (100, 3600)], "key", "strict", "closed", "admin: save the app update notice"),
     _p("admin_purge", [(5, 60), (30, 3600)], "key", "strict", "closed", "admin: delete worthless accounts"),
     _p("admin_case_reset", [(10, 60), (100, 3600)], "key", "strict", "closed", "admin: reset a case for a player"),
     _p("sms_verify", [(10, 600)], "key", "strict", "closed", "wrong-code guessing, per phone number"),

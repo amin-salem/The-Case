@@ -18,12 +18,29 @@ String suspectFirstName(String name) {
   return name.trim();
 }
 
-/// The suspects that a piece of text names (by first name or full name), in the order of the suspect list.
+/// The surname of a suspect («حکیمی» for «جمشید حکیمی»), or null when the name is a single word. Cards in newer cases often
+/// say only the surname («عبدی ساعت ۹ آمد»). Used only when it is unique among the suspects, at least 3 letters long and
+/// not the first name of another suspect, so a family or a shared word never shows the wrong portrait.
+String? suspectSurname(Suspect s, List<Suspect> all) {
+  final parts = s.name.trim().split(RegExp(r'\s+'));
+  if (parts.length < 2) return null;
+  final last = parts.last;
+  if (last.length < 3 || _titles.contains(last)) return null;
+  for (final o in all) {
+    if (identical(o, s) || o.id == s.id) continue;
+    final op = o.name.trim().split(RegExp(r'\s+'));
+    if (op.last == last || suspectFirstName(o.name) == last) return null;
+  }
+  return last;
+}
+
+/// The suspects that a piece of text names (by first name, surname or full name), in the order of the suspect list.
 List<Suspect> suspectsNamedIn(String text, List<Suspect> all) {
   const letter = r'[\p{L}‌]';
   final found = <Suspect>[];
   for (final s in all) {
-    for (final n in {suspectFirstName(s.name), s.name.trim()}) {
+    for (final n in {suspectFirstName(s.name), s.name.trim(), suspectSurname(s, all)}) {
+      if (n == null) continue;
       if (n.length < 2) continue;
       // not inside a longer word; «کاوه‌ی» (name + ZWNJ + ی) still counts, «علی‌اصغر» does not count as «علی»
       final re = RegExp('(?<!$letter)${RegExp.escape(n)}(?!\\p{L}|\u200c[^\\sی.,،؛:!؟?«»()-])', unicode: true);

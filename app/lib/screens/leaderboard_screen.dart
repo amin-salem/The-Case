@@ -214,7 +214,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
       if (widget.period == 'daily')
         Padding(
           padding: const EdgeInsets.only(bottom: 6),
-          child: Text('${lb.title} · بیشترین پلاک و کمترین زمان', textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
+          child: Text('${lb.title.replaceFirst(RegExp(r'^پرونده‌ی امروز:\s*'), '')} · بیشترین پلاک و کمترین زمان', textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
         ),
       if (weekly) ..._weeklyHeader(lb, selected),
       if (_loading)

@@ -89,12 +89,13 @@ class _WeekendScreenState extends State<WeekendScreen> {
     return nextWeekendOpening(null, wd is num ? wd.toInt() + 1 : DateTime.thursday, h is num ? h.toInt() : 9);
   }
 
-  /// Format 3: «روز اول / روز دوم» side by side, the early-solve reward and the countdown to chapter 2.
+  /// Format 3: «روز اول / روز دوم» one under the other (full width, so the countdown has room), the early-solve reward and the countdown to chapter 2.
   Widget _nightsCard() {
     final api = Api.i;
     final at = _cases?.weeklyNextChapterAt;
     final night2Open = at == null;
-    Widget col(String title, IconData icon, List<String> lines, {bool active = false, Widget? extra}) => Expanded(
+    Widget col(String title, IconData icon, List<String> lines, {bool active = false, Widget? extra}) => SizedBox(
+          width: double.infinity,
           child: Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -136,13 +137,13 @@ class _WeekendScreenState extends State<WeekendScreen> {
         ]),
       ),
       const SizedBox(height: 10),
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         col('روز اول', Icons.wb_sunny_rounded, [
           'مظنون‌ها و مدارک روز اول',
           '«کی دروغ می‌گه؟»: یک بار جواب بده، ${fa(api.weekendLiarReward)} سکه',
           'از همین روز می‌تونی متهم کنی',
         ], active: !night2Open),
-        const SizedBox(width: 10),
+        const SizedBox(height: 10),
         col('روز دوم', Icons.wb_twilight_rounded, [
           'یه مظنون تازه',
           'مدارک و حرف‌های جدید',

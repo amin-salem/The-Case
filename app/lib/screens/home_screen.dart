@@ -1028,7 +1028,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ]),
               ),
               const SizedBox(width: 8),
-              const Icon(Icons.chevron_left_rounded, color: K.brass),
+              const Icon(Icons.chevron_right_rounded, color: K.brass),
             ]),
           ),
         ),

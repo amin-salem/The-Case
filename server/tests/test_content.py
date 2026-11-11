@@ -1,4 +1,4 @@
-"""The case files themselves: 62 cases, one new case a night, mostly difficulty 4."""
+"""The case files themselves: 70 cases, one new case a night, mostly difficulty 4."""
 from collections import Counter
 from datetime import timedelta
 
@@ -7,9 +7,9 @@ from app import content
 
 def test_fifty_cases_with_unique_ids_and_a_nightly_schedule():
     cases = content.all_cases()
-    assert len(cases) == 62
-    assert [c.number for c in cases] == list(range(1, 63))
-    assert len({c.id for c in cases}) == 62
+    assert len(cases) == 70
+    assert [c.number for c in cases] == list(range(1, 71))
+    assert len({c.id for c in cases}) == 70
     for a, b in zip(cases, cases[1:]):
         assert b.publish - a.publish == timedelta(days=1), f"{a.id} -> {b.id}: one case per night, no gaps"
 
@@ -24,7 +24,8 @@ def test_scenes_are_varied_and_known():
     scenes = Counter(c.data["scene"] for c in content.all_cases())
     assert set(scenes) <= content.SCENES
     assert len(scenes) == 20          # every theme is used
-    assert max(scenes.values()) <= 4  # and none is repeated too often
+    # and none is repeated too often (5 since c063/c064: the idea bank fixes each case's scene, docs/case-ideas-batch1.md)
+    assert max(scenes.values()) <= 5
 
 
 def test_every_case_is_well_formed():
@@ -197,3 +198,24 @@ def test_portrait_age_matches_the_character():
                 if not lo <= ages[p] <= hi:
                     misses.append((c.id, s["id"], s["avatar"]["age"], p))
     assert len(misses) <= 8, misses
+
+
+def test_case_uses_only_portraits_players_have():
+    """A new portrait lives in the APK; a player who has not updated sees a drawn fallback face (w005, Nov 2026). So a case
+    may use a portrait only from the day the build that ships it reached most players (docs/portrait-release.json)."""
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2]
+    rel = json.loads((root / "docs" / "portrait-release.json").read_text(encoding="utf-8"))
+    shipped = {p.stem for p in (root / "app" / "assets" / "portraits").glob("*.webp")}
+    assert set(rel["portraits"]) <= shipped, "portrait-release.json lists a portrait that is not shipped"
+    early = []
+    for c in (*content.all_cases(), *content.weekly_cases()):
+        day = c.publish.isoformat()
+        if day < rel["check_from"]:
+            continue
+        for s in c.data["suspects"]:
+            p = s["avatar"].get("portrait")
+            if p in rel["portraits"] and day < rel["portraits"][p]["usable_from"]:
+                early.append((c.id, day, s["id"], p, rel["portraits"][p]["usable_from"]))
+    assert not early, f"these cases use a portrait most players do not have yet: {early}"

@@ -620,4 +620,3 @@ class SuspectPortrait extends StatelessWidget {
         : ClipRRect(borderRadius: BorderRadius.circular(size * 0.1), child: art);
   }
 }
-

@@ -38,7 +38,7 @@ def test_c042_disk_to_chassis_to_borrower_mapping_uses_post_repair_state():
     assert len(disk_to_body) == 2
     receipt = clue("c042", "e4")
     recipients = {int(body): name for body, name in re.findall(r"(\d+) به (محسن|ساناز)", receipt)}
-    disk = int(re.search(r"گ۷ روی دیسک «د(\d+)»", clue("c042", "e2")).group(1))
+    disk = int(re.search(r"گ۷ روی د(\d+)", repair).group(1))
     culprit = next(s for s in content.by_id("c042").data["suspects"] if s["id"] == content.by_id("c042").culprit)
     assert recipients[disk_to_body[disk]] in culprit["name"]
     # The pre-repair label points to someone else: omitting the swap is wrong.
@@ -52,4 +52,4 @@ def test_c042_final_attachment_exists_before_mutation_but_after_initial_draft():
     release = re.search(r"نغمه ساعت (\d{2}):(\d{2})", clue("c042", "e6"))
     released = 60 * int(release[1]) + int(release[2])
     assert created < released < modified < delivered
-    assert "R4-71" in clue("c042", "e1") and "R4-71" in clue("c042", "e6")
+    assert "نسخهٔ چهار" in clue("c042", "e1") and "نسخهٔ چهار" in clue("c042", "e6")

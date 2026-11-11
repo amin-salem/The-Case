@@ -12,7 +12,9 @@ import '../theme.dart' show fa;
 
 /// Local reminders, scheduled on the phone itself (no Firebase, which is unreliable in Iran):
 /// - 21:00 every night: "tonight's case is open"
-/// - 22:30 on nights the player hasn't solved yet: "your streak is in danger"
+/// - 20:00, one hour before the next case, only if the open case is still unsolved and a streak is running: "your streak
+///   is in danger" (Amin, 8 Nov 2026: 22:30 was 90 minutes after the case opened, far too early to mean anything).
+///   At most one reminder a day besides the 21:00 one, so players do not switch notifications off.
 /// Times come from the server's next_case_at, so the phone's time zone doesn't matter.
 class Reminders extends ChangeNotifier with WidgetsBindingObserver {
   Reminders._();
@@ -239,21 +241,14 @@ class Reminders extends ChangeNotifier with WidgetsBindingObserver {
         final ms = int.tryParse(sr[0]);
         if (ms != null) await _at(600, DateTime.fromMillisecondsSinceEpoch(ms), 'فصل بعدی داستان آماده‌ست 🔥', 'ناصری منتظره: «${sr.sublist(1).join('|')}» رو باز کن.');
       }
-      // tonight's case opened one day before the next one; remind 90 minutes after it opens
-      final tonight = nextCaseAt.subtract(const Duration(days: 1));
+      // The open case ("tonight's") stays solvable until the next one opens at nextCaseAt, and the streak only breaks
+      // then. So the warning goes one hour before that moment, not right after the case opened. Only when it is still
+      // unsolved and a streak runs. Later nights get no streak warning: a missed night already broke (or insured) it.
       if (streak > 0 && !tonightSolved) {
-        await _at(200, tonight.add(const Duration(minutes: 90)), 'زنجیره‌ات در خطره! 🔥',
+        await _at(200, nextCaseAt.subtract(const Duration(hours: 1)), 'زنجیره‌ات در خطره! 🔥',
             tonightTitle == null || tonightTitle.isEmpty
-                ? 'زنجیره‌ی ${fa(streak)} شبه‌ات منتظر پرونده‌ی امشبه. نذار بشکنه!'
-                : 'زنجیره‌ی ${fa(streak)} شبه‌ات منتظر «$tonightTitle» ـه. نذار بشکنه!');
-      }
-      // later nights: if the app isn't opened (= the case isn't solved), these still go off
-      for (int d = 1; d < 4 && streak > 0; d++) {
-        final t = tonight.add(Duration(days: d));
-        final e = nightlyAt(t);
-        final late = e?['late'] as String?;
-        await _at(200 + d, t.add(const Duration(minutes: 90)), 'پرونده‌ی امشب رو حل نکردی 🔥',
-            late ?? 'زنجیره‌ات رو از دست نده؛ هنوز وقت داری.');
+                ? 'زنجیره‌ی ${fa(streak)} شبه‌ات تا ساعت ۹ شب وقت داره. نذار بشکنه!'
+                : 'زنجیره‌ی ${fa(streak)} شبه‌ات تا ساعت ۹ شب وقت داره؛ «$tonightTitle» رو حل کن و نذار بشکنه!');
       }
     } catch (e) {
       debugPrint('reminders plan: $e');

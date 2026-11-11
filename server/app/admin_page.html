@@ -59,6 +59,8 @@ main{animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translate
 .card{position:relative;overflow:hidden;padding:12px 14px}
 .card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--ac,var(--brass))}
 .card b{font-size:26px;color:var(--ac,var(--brass))}
+.card small{display:block;margin-top:4px;font-size:11px}
+details.acwrap{margin-bottom:12px}details.acwrap>summary{cursor:pointer;padding:10px 12px;border-radius:12px;background:var(--bg2);border:1px solid var(--line)}
 .card i{position:absolute;left:10px;top:8px;font-style:normal;font-size:20px;opacity:.55}
 button:active{transform:scale(.97)}
 table{border-radius:14px}tr:nth-child(even) td{background:#ffffff05}
@@ -149,7 +151,11 @@ const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 let KEY = ''; try { KEY = sessionStorage.getItem('adminKey') || ''; } catch (e) {}
 // The admin app opens /admin/ui#k=<key>: read it once and remove it from the address bar (a fragment is never sent to the server).
 try { const m = /^#k=(.+)$/.exec(location.hash); if (m) { KEY = decodeURIComponent(m[1]).trim(); try { sessionStorage.setItem('adminKey', KEY); } catch (e) {} history.replaceState(null, '', location.pathname + location.search); } } catch (e) {}
-const fmtT = t => t ? new Date(t * 1000).toLocaleString('fa-IR', {hour12: false}) : '—';
+const TZ = 'Asia/Tehran';   // every time in the panel is shown in Tehran time, whatever the phone's own zone is
+const fmtT = t => t ? new Date(t * 1000).toLocaleString('fa-IR', {hour12: false, timeZone: TZ}) : '—';
+// server strings: stored times are naive UTC ('...Z' added); game-clock times already carry +03:30 or are Tehran-local
+const utcIso = iso => iso ? Date.parse(/[zZ]|[+-]\d\d:\d\d$/.test(iso) ? iso : iso + 'Z') / 1000 : null;
+const tehIso = iso => iso ? Date.parse(/[zZ]|[+-]\d\d:\d\d$/.test(iso) ? iso : iso + '+03:30') / 1000 : null;
 const ago = t => { if (!t) return '—'; const s = Date.now()/1000 - t; if (s < 90) return 'همین الان'; if (s < 5400) return Math.round(s/60) + ' دقیقه پیش'; if (s < 129600) return Math.round(s/3600) + ' ساعت پیش'; return Math.round(s/86400) + ' روز پیش'; };
 const num = n => (n ?? 0).toLocaleString('fa-IR');
 // The admin app's web view shows no browser pop-ups (the built-in question box answers "no" there), so questions are asked in the page itself.
@@ -189,8 +195,8 @@ async function render(arg) {
   try { await VIEWS[tab](m, arg); } catch (e) { m.innerHTML = '<p class="err">' + esc(e.message) + '</p>'; }
 }
 const compact = n => n >= 10000 ? (n/1000).toLocaleString('fa-IR', {maximumFractionDigits: 0}) + 'k' : n >= 1000 ? (n/1000).toLocaleString('fa-IR', {maximumFractionDigits: 1}) + 'k' : num(n);
-const dayName = d => { try { return new Date(d + 'T12:00:00').toLocaleDateString('fa-IR', {weekday: 'long', month: 'long', day: 'numeric'}); } catch (e) { return d; } };
-const dayNum = d => { try { return new Date(d + 'T12:00:00').toLocaleDateString('fa-IR', {day: 'numeric'}); } catch (e) { return d.slice(8); } };
+const dayName = d => { try { return new Date(d + 'T12:00:00Z').toLocaleDateString('fa-IR', {weekday: 'long', month: 'long', day: 'numeric', timeZone: TZ}); } catch (e) { return d; } };
+const dayNum = d => { try { return new Date(d + 'T12:00:00Z').toLocaleDateString('fa-IR', {day: 'numeric', timeZone: TZ}); } catch (e) { return d.slice(8); } };
 let chartSeq = 0;
 function chart(title, rows, key, color) {
   const id = 'c' + (++chartSeq), vals = rows.map(r => r[key]), max = Math.max(1, ...vals);
@@ -228,15 +234,15 @@ function healthHtml(h, lb) {
   const rows = s.rows ? Object.entries(s.rows).map(([k, v]) => `${esc(k)}: ${v == null ? '—' : num(v)}`).join(' · ') : '';
   const dom = (d.items || []).map(i => `<tr><td class="ltr">${esc(i.host)}</td><td>${dot(i.status)} ${i.days == null ? 'بررسی نشد (' + esc(i.error || '') + ')' : num(i.days) + ' روز تا پایان گواهی TLS'}</td></tr>`).join('');
   const vers = (p.app_versions || []).map(v => `<tr><td>${num(v.version)}</td><td>${num(v.players)}</td></tr>`).join('');
-  const wn = c.weekend_next ? `${esc(c.weekend_next.id)} — ${fmtT(Date.parse(c.weekend_next.opens_at) / 1000)}` : 'هنوز نوشته نشده';
+  const wn = c.weekend_next ? `${esc(c.weekend_next.id)} — ${fmtT(tehIso(c.weekend_next.opens_at))}` : 'هنوز نوشته نشده';
   return `<h2>${dot(h.overall)} وضعیت کلی: ${esc(LV[h.overall] || '')}</h2><div class="hgrid">
   <div class="hcard"><h3>${dot(s.status)} سرور</h3><table>${hk('نسخه', `<span class="ltr">${esc(s.version)}</span>`)}${hk('روشن‌بودن این پردازه', dur(s.uptime_s))}${hk('پردازه‌ها', s.workers == null ? 'نامشخص' : num(s.workers))}${hk('دیتابیس', s.db_ok ? 'در دسترس · ' + esc(s.db_ms) + ' میلی‌ثانیه' : 'در دسترس نیست')}${hk('حجم دیتابیس', s.db_size_mb == null ? '—' : esc(s.db_size_mb) + ' مگابایت')}${hk('ردیف‌ها', `<span class="ltr">${rows}</span>`)}</table></div>
   <div class="hcard"><h3>${dot(d.status)} آدرس‌ها</h3><table>${dom}</table></div>
-  <div class="hcard"><h3>${dot(c.status)} محتوا</h3><table>${hk('پرونده‌ی شبانه‌ی آماده', `${dot(c.days_ahead_status)} ${num(c.days_ahead)} روز جلوتر (${num(c.nightly_total)} پرونده)`)}${hk('آخرین پرونده‌ی شبانه', c.last_nightly_opened ? fmtT(Date.parse(c.last_nightly_opened) / 1000) : '—')}${hk('پرونده‌ی آخر هفته‌ی بعدی', wn)}${hk('داستان', c.story ? `فصل ${num(c.story.season)} «${esc(c.story.title)}» · ${num(c.story.chapters)} قسمت نوشته‌شده · قسمت بعدی: ${num(c.story.next_missing)}` : '—')}${hk('اعتبارسنجی محتوا', c.validation === 'ok' ? 'سالم' : '<span class="err">ناموفق: ' + esc((c.problems || []).join('، ')) + '</span>')}</table></div>
+  <div class="hcard"><h3>${dot(c.status)} محتوا</h3><table>${hk('پرونده‌ی شبانه‌ی آماده', `${dot(c.days_ahead_status)} ${num(c.days_ahead)} روز جلوتر (${num(c.nightly_total)} پرونده)`)}${hk('آخرین پرونده‌ی شبانه', c.last_nightly_opened ? fmtT(tehIso(c.last_nightly_opened)) : '—')}${hk('پرونده‌ی آخر هفته‌ی بعدی', wn)}${hk('داستان', c.story ? `فصل ${num(c.story.season)} «${esc(c.story.title)}» · ${num(c.story.chapters)} قسمت نوشته‌شده · قسمت بعدی: ${num(c.story.next_missing)}` : '—')}${hk('اعتبارسنجی محتوا', c.validation === 'ok' ? 'سالم' : '<span class="err">ناموفق: ' + esc((c.problems || []).join('، ')) + '</span>')}</table></div>
   <div class="hcard"><h3>${dot(p.status)} بازیکن‌ها</h3><table>${hk('کل بازیکن‌ها', num(p.total))}${hk('فعال امروز', num(p.active_today))}${hk('حل‌شده امروز', num(p.solves_today))}${hk('خطای ۵xx در ساعت اخیر', p.errors_1h == null ? 'شمرده نمی‌شود' : num(p.errors_1h))}</table>${vers ? '<table><tr><th>نسخه‌ی برنامه</th><th>بازیکن</th></tr>' + vers + '</table>' : ''}</div>
   <div class="hcard"><h3>${dot(x.status)} امنیت و محدودیت‌ها</h3><table>${hk('ADMIN_API_KEY واقعی', yn(x.admin_key_real))}${hk('JWT_SECRET واقعی', yn(x.jwt_secret_real))}${hk('محدودکننده‌ی نرخ', x.rate_limit ? 'روشن' : 'خاموش')}${hk('مسدودشده در ساعت اخیر', x.rate_limit_blocked_1h == null ? 'شمرده نمی‌شود' : num(x.rate_limit_blocked_1h))}${hk('تبلیغات پاداشی', x.ads_enabled ? 'روشن' : 'خاموش')}${hk('BAZAAR_MODE', `<span class="ltr">${esc(x.bazaar_mode)}</span>`)}${hk('ENV', `<span class="ltr">${esc(x.env)}</span>`)}</table></div>
   ${liaraHtml(lb)}
-  <div class="hcard"><h3>GitHub watch</h3><p class="muted">نتیجه‌ی این‌ها برای سرور در دسترس نیست؛ در GitHub → Actions ببین:</p><table>${(h.watch || []).map(w => `<tr><td class="ltr">${esc(w.name)}</td><td>${esc(w.schedule)}</td></tr>`).join('')}</table></div></div>`;
+</div>`;
 }
 function acHtml(w) {
   const t = w.total_solves, st = w.strict, r = st.by_reason, lr = w.live_rules;
@@ -284,20 +290,31 @@ function acWire() {
 }
 const VIEWS = {
   async overview(m) {
-    const d = await api('/admin/api/overview?days=14'), t = d.totals;
+    const d = await api('/admin/api/overview?days=14'), t = d.totals || {};
     const pend = await api('/admin/api/comments/cases').then(x => x.pending).catch(() => 0);
-    const acw = await api('/admin/anticheat-watch?days=7').then(acHtml).catch(() => '<div class="ac"><h3>آنتی‌چیت: الان خوانده نشد</h3><p class="muted">چند لحظه بعد دوباره بزن.</p></div>');
+    const acw = await api('/admin/anticheat-watch?days=7').then(w => `<details class="acwrap" ${w.level === 'green' ? '' : 'open'}><summary>🛡 آنتی‌چیت · ${w.total_solves ? num(w.strict.pct) + '٪ حل‌ها با قانون سخت آسیب می‌دیدند' : 'در این بازه حلی نیست'} (${w.level === 'green' ? 'سالم' : 'نیاز به نگاه'})</summary>${acHtml(w)}</details>`).catch(() => '<div class="ac"><h3>آنتی‌چیت: الان خوانده نشد</h3><p class="muted">چند لحظه بعد دوباره بزن.</p></div>');
     const dup = await api('/admin/api/real-users').catch(() => null);
-    m.innerHTML = acw + `<div class="quick"><button class="${pend ? 'hot' : ''}" id="qc">💬 نظرهای در انتظار (${num(pend)})</button><button id="qm">✉ پیام / هدیه به همه</button><button id="qp">👥 بازیکن‌ها (بن، سکه)</button></div><div class="cards">${card(t.players,'کل بازیکن‌ها','👥','#e0a526')}${card(t.active_24h,'فعال ۲۴ ساعت','⚡','#5dae7e')}${card(t.active_7d,'فعال ۷ روز','📅','#8ab4f8')}${card(t.secured,'حساب امن‌شده (ایمیل)','🔒','#b48ead')}${card(t.cases_solved,'پرونده‌ی حل‌شده','✅','#5dae7e')}${card(t.coins_in_circulation,'سکه‌ی در گردش','🪙','#e0a526')}${card(t.banned,'بن‌شده','⛔','#d0543f')}</div>` +
-      (dup ? `<div class="cards">${card(dup.real,'کارآگاه واقعی','🕵️','#5dae7e')}${card(dup.real_active_7d,'واقعیِ فعال ۷ روز','⚡','#8ab4f8')}${card(dup.tried,'امتحان‌کننده (حل نکرده)','🔎','#e0a526')}${card(dup.empty,'نصب بدون پرونده','📭','#b48ead')}${card(dup.duplicate,'تکراریِ محتمل','🔁','#d0543f')}${card(dup.excluded,'تستر / بن / آزمایشی','🧪','#9aa0a6')}</div><p class="muted">از ${num(dup.players)} ردیف، ${num(dup.real)} نفر واقعی‌اند (پرونده حل کرده‌اند یا خرید دارند). <a href="#" id="qdup">فهرست بازیکن‌ها بر اساس گروه</a></p>` : '') +
-      chart('بازیکن‌های فعال در روز', d.days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', d.days, 'new', '#e0a526') +
-      chart('پرونده‌ی باز شده', d.days, 'opened', '#8ab4f8') + chart('حل‌شده', d.days, 'solved', '#5dae7e') + chart('شکست', d.days, 'failed', '#d0543f') +
-      chart('خرید موفق', d.days, 'purchases', '#e0a526') + chart('سکه‌ی دریافتی', d.days, 'coins_in', '#5dae7e') + chart('سکه‌ی خرج‌شده', d.days, 'coins_out', '#d0543f') +
-      '<h2>نسخه‌ی برنامه‌ی بازیکن‌ها</h2><div class="scroll"><table><tr><th>نسخه</th><th>بیلد</th><th>تعداد بازیکن</th></tr>' + (d.versions || []).map(v => `<tr><td class="ltr">${esc(v.version)}</td><td>${num(v.build)}</td><td>${num(v.players)}</td></tr>`).join('') + '</table></div><p class="muted">«؟» یعنی هنوز نسخه‌اش را گزارش نکرده (نسخه‌ی قدیمی برنامه).</p>'
-        + (d.install_sources ? '<h2>نصب از کجا</h2><div class="scroll"><table><tr><th>منبع</th><th>تعداد بازیکن</th></tr><tr><td>کافه بازار</td><td>' + num(d.install_sources.bazaar) + '</td></tr><tr><td>مایکت</td><td>' + num(d.install_sources.myket) + '</td></tr><tr><td>مستقیم/نامشخص</td><td>' + num(d.install_sources.other) + '</td></tr></table></div><p class="muted">فقط بازیکن‌هایی که نسخه‌ی ۷۹ یا جدیدتر را باز کرده‌اند منبع را گزارش می‌کنند؛ بقیه در «مستقیم/نامشخص» می‌آیند.</p>' : '');
+    const pi = await api('/admin/api/promo/impact').then(x => (x.items || [])[0]).catch(() => null);
+    const days = Array.isArray(d.days) ? d.days : [];
+    const T = days.length ? days[days.length - 1] : null, Y = days.length > 1 ? days[days.length - 2] : null, W = days.slice(-8, -1);
+    // today (so far) against yesterday and the average of the 7 days before today
+    const kpi = (label, key, ac) => {
+      if (!T) return '';
+      const avg = W.length ? W.reduce((a, r) => a + (r[key] || 0), 0) / W.length : 0, y = Y ? Y[key] || 0 : 0, up = T[key] >= avg;
+      return `<div class="card" style="--ac:${ac}"><b>${num(T[key])}</b><span>${label}</span><small class="muted">دیروز ${num(y)} · میانگین ${num(Math.round(avg))} <span style="color:var(--${up ? 'ok' : 'bad'})">${up ? '▲' : '▼'}</span></small></div>`;
+    };
+    const promoLine = pi ? `<div class="hcard"><h3>🎁 رایگان‌کردن «${esc(pi.title || pi.case_id)}» (${pi.state === 'open' ? 'باز' : 'تمام‌شده'})</h3><p>در ${num(pi.hours)} ساعت: <b>${num(pi.signups)}</b> ثبت‌نام (همان مدت قبل‌تر: ${num(pi.signups_before)}) · <b>${num(pi.opened)}</b> نفر رایگان بازش کردند · ${num(pi.solved)} حل · ${num(pi.buyers)} خریدار سکه. <a href="#" id="qpromo">جزئیات همه‌ی پنجره‌ها</a></p></div>` : '';
+    const q = dup ? `امتحان‌کننده ${num(dup.tried)} · نصب بدون پرونده ${num(dup.empty)} · تکراری ${num(dup.duplicate)} · تستر/بن ${num(dup.excluded)} · سکه‌ی در گردش ${num(t.coins_in_circulation)}` : '';
+    const src = d.install_sources ? `نصب از: بازار ${num(d.install_sources.bazaar)} · مایکت ${num(d.install_sources.myket)} · مستقیم/نامشخص ${num(d.install_sources.other)}` : '';
+    m.innerHTML = acw + `<div class="quick"><button class="${pend ? 'hot' : ''}" id="qc">💬 نظرهای در انتظار (${num(pend)})</button><button id="qm">✉ پیام / هدیه به همه</button><button id="qp">👥 بازیکن‌ها (بن، سکه)</button></div>` +
+      `<h2>امروز تا الان <span class="muted" style="font-size:12px">· همه‌ی ساعت‌ها به وقت تهران</span></h2><div class="cards">${kpi('ثبت‌نام جدید', 'new', '#e0a526')}${kpi('بازیکن فعال', 'active', '#5dae7e')}${kpi('پرونده باز شد', 'opened', '#8ab4f8')}${kpi('پرونده حل شد', 'solved', '#5dae7e')}${kpi('خرید موفق', 'purchases', '#e0a526')}</div>` +
+      (dup ? `<div class="cards">${card(dup.real, 'کارآگاه واقعی', '🕵️', '#5dae7e')}${card(dup.real_active_7d, 'واقعیِ فعال ۷ روز', '⚡', '#8ab4f8')}${card(t.active_24h, 'فعال ۲۴ ساعت', '📅', '#e0a526')}</div><p class="muted">${q} · <a href="#" id="qdup">فهرست بازیکن‌ها بر اساس گروه</a></p>` : '') + promoLine +
+      (days.length ? chart('بازیکن‌های فعال در روز', days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', days, 'new', '#e0a526') + chart('پرونده‌ی حل‌شده', days, 'solved', '#8ab4f8') + chart('خرید موفق', days, 'purchases', '#e0a526') : '') +
+      (src ? `<p class="muted">${src}. نسخه‌ی برنامه‌ی بازیکن‌ها در تب «سلامت» است.</p>` : '');
 
     acWire();
     $('#qc').onclick = () => go('comments'); $('#qm').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها'); $('#qp').onclick = () => go('players');
+    const qpr = $('#qpromo'); if (qpr) qpr.onclick = e => { e.preventDefault(); go('cases'); };
     const qd = $('#qdup'); if (qd) qd.onclick = e => { e.preventDefault(); VIEWS._pq = Object.assign(VIEWS._pq || {q: '', sort: 'last_seen', banned: false}, {segment: 'real'}); go('players'); };
   },
   async feed(m) {
@@ -380,7 +397,15 @@ const VIEWS = {
       m.insertAdjacentHTML('beforeend', `<h3>🎁 پرونده‌ی تبلیغی (رایگان برای کارآگاه تازه)</h3>
       <p class="muted">برای ویدیوی تبلیغاتی: شناسه‌ی یک پرونده‌ی بایگانی (مثلاً c020) را بده؛ ${num(pr.default_hours)} ساعت برای حساب‌های کمتر از ۳ روز رایگان باز می‌شود. بازیکن قدیمی قیمت عادی می‌دهد. حداکثر ${num(pr.max_active)} پنجره‌ی هم‌زمان.</p>
       <div class="row"><input id="prc" placeholder="شناسه‌ی پرونده، مثل c020" style="width:180px"><input id="prh" type="number" min="1" max="168" value="${pr.default_hours}" style="width:90px"> ساعت <button id="prgo">شروع</button></div>
-      <div class="scroll"><table><tr><th>پرونده</th><th>وضعیت</th><th>شروع</th><th>پایان</th><th></th></tr>${pr.items.map(x => `<tr><td>${esc(x.title || x.case_id)} <span class="muted">${esc(x.case_id)}</span></td><td>${ST[x.state] || x.state}</td><td>${esc(x.starts_at)}</td><td>${esc(x.ends_at)}</td><td>${x.state === 'open' ? `<button data-pe="${esc(x.case_id)}" class="danger">پایان</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">هنوز پنجره‌ای ساخته نشده.</td></tr>'}</table></div>`);
+      <div class="scroll"><table><tr><th>پرونده</th><th>وضعیت</th><th>شروع</th><th>پایان</th><th></th></tr>${pr.items.map(x => `<tr><td>${esc(x.title || x.case_id)} <span class="muted">${esc(x.case_id)}</span></td><td>${ST[x.state] || x.state}</td><td>${fmtT(utcIso(x.starts_at))}</td><td>${fmtT(utcIso(x.ends_at))}</td><td>${x.state === 'open' ? `<button data-pe="${esc(x.case_id)}" class="danger">پایان</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">هنوز پنجره‌ای ساخته نشده.</td></tr>'}</table></div>`);
+      m.insertAdjacentHTML('beforeend', '<h3>📈 اثر رایگان‌کردن</h3><div id="primp"><p class="muted">در حال شمردن…</p></div>');
+      api('/admin/api/promo/impact').then(r => {
+        const rows = Array.isArray(r.items) ? r.items : [];
+        $('#primp').innerHTML = rows.length ? '<div class="scroll"><table><tr><th>پرونده</th><th>از تا</th><th>ثبت‌نام در پنجره</th><th>همان مدت قبل‌تر</th><th>رایگان باز کردند</th><th>(تازه‌وارد)</th><th>حل کردند</th><th>خریدار سکه</th></tr>' +
+          rows.map(x => `<tr><td>${esc(x.title || x.case_id)}</td><td>${fmtT(utcIso(x.starts_at))}<br>${fmtT(utcIso(x.ends_at))}</td><td class="num">${num(x.signups)}</td><td class="num">${num(x.signups_before)}</td><td class="num">${num(x.opened)}</td><td class="num">${num(x.opened_new)}</td><td class="num">${num(x.solved)}</td><td class="num">${num(x.buyers)}</td></tr>`).join('') +
+          '</table></div><p class="muted">«ثبت‌نام در پنجره» را با «همان مدت قبل‌تر» مقایسه کن؛ تبلیغ، روز هفته و رتبه‌ی فروشگاه هم ثبت‌نام را بالا و پایین می‌برند، پس این مقایسه نشانه است نه اثبات. «خریدار سکه» یعنی از ثبت‌نام‌های همین پنجره چند نفر تا الان سکه خریده‌اند.</p>'
+          : '<p class="muted">هنوز پنجره‌ای نبوده که اثرش را بشماریم.</p>';
+      }).catch(() => { const b = $('#primp'); if (b) b.innerHTML = '<p class="muted">الان خوانده نشد.</p>'; });
       $('#prgo').onclick = async () => {
         const id = $('#prc').value.trim(), h = parseInt($('#prh').value, 10) || pr.default_hours;
         if (!id) return;
@@ -553,6 +578,32 @@ const VIEWS = {
     const log = await api('/admin/api/log');
     m.innerHTML = `<div class="row"><button id="bc">ارسال پیام/هدیه به همه</button></div><h2>سابقه‌ی اقدام‌های ادمین</h2><div class="scroll"><table><tr><th>زمان</th><th>اقدام</th><th>هدف</th><th>جزئیات</th></tr>${log.map(r => `<tr><td>${fmtT(r.t)}</td><td>${esc(r.action)}</td><td class="ltr">${esc(r.target)}</td><td>${esc(JSON.stringify(r.detail))}</td></tr>`).join('')}</table></div>`;
     $('#bc').onclick = () => giftDialog(null, 'همه‌ی بازیکن‌ها');
+    const au = await api('/admin/api/app-update').catch(() => null);
+    if (au && Array.isArray(au.builds)) {
+      m.insertAdjacentHTML('afterbegin', `<h2>📲 بروزرسانی اپ</h2>
+      <p class="muted">بعد از «انتشار» هر بیلد در کافه بازار، «آخرین نسخه» را برابر شماره‌ی همان بیلد بگذار؛ بازیکن‌هایی که بیلدشان کمتر است یک بنر قابل‌بستن می‌بینند. «حداقل نسخه» فقط برای اضطرار است: بیلدهای کمتر از آن قفل می‌شوند. فقط بازیکن‌های ۳۰ روز اخیر شمرده می‌شوند و بیلدهای خیلی قدیمی (بدون گزارش) اصلاً بنر ندارند: ${num(au.unknown_build)} نفر.</p>
+      <div class="row"><label>آخرین نسخه <input id="aul" type="number" min="1" max="99999" value="${au.latest_version}" style="width:90px"></label>
+      <label>حداقل نسخه <input id="aum" type="number" min="1" max="99999" value="${au.min_version}" style="width:90px"></label>
+      <button id="aus">ذخیره</button></div>
+      <p id="aup" class="muted">الان: ${num(au.banner_now)} بازیکن بنر می‌بینند، ${num(au.blocked_now)} بازیکن قفل‌اند. بیلدهای رایج: ${au.builds.map(x => esc(x.build) + ' (' + num(x.players) + ')').join('، ')}</p>`);
+      const upd = () => {
+        const l = parseInt($('#aul').value, 10) || 1, mn = parseInt($('#aum').value, 10) || 1;
+        const by = (n) => au.builds.filter(x => x.build > 0 && x.build < n).reduce((a, x) => a + x.players, 0);
+        $('#aup').textContent = `با این مقدار: حدود ${num(l > 1 ? by(l) : 0)} بازیکن بنر می‌بینند` + (mn > 1 ? ` و حدود ${num(by(mn))} بازیکن قفل می‌شوند` : '') + ' (فقط از ۱۲ بیلد رایج)';
+      };
+      $('#aul').oninput = upd; $('#aum').oninput = upd;
+      const send = async (confirm) => {
+        const body = {latest_version: parseInt($('#aul').value, 10) || 1, min_version: parseInt($('#aum').value, 10) || 1, confirm_block: !!confirm};
+        try { await api('/admin/api/app-update', {method: 'POST', body: JSON.stringify(body)}); note('ذخیره شد'); go('actions'); }
+        catch (e) {
+          if (/confirm_block/.test(e.message)) {
+            $('#aup').innerHTML = '<b class="err">با این «حداقل نسخه» بازیکن‌های فعال قفل می‌شوند و باید برنامه را آپدیت کنند.</b> <button id="auc">بله، قفل کن</button>';
+            $('#auc').onclick = () => send(true);
+          } else note(e.message);
+        }
+      };
+      $('#aus').onclick = () => send(false);
+    }
   },
 };
 function resetCaseDialog(pid, name) {

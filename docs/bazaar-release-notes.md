@@ -33,3 +33,47 @@ Build 81
 
 ## developer_note
 Build 82
+
+<!-- build: 83 -->
+## changelog_fa
+- در پرونده‌ی آخر هفته، روز اول و روز دوم زیر هم نمایش داده می‌شوند و شمارنده‌ی زمان خواناتر است
+- چهره‌ی چند مظنون در پرونده‌های آخر هفته بهتر شد
+- جهت فلش‌ها در آلبوم و صفحه‌ی اصلی یکدست شد
+- بهبودهای کوچک
+
+## changelog_en
+- On the weekend case, day one and day two now sit one under the other with a clearer countdown
+- Improved portraits for several suspects in weekend cases
+- Arrow direction made consistent in the album and on the home screen
+- Small improvements
+
+## developer_note
+Build 83
+
+<!-- build: 85 -->
+## changelog_fa
+- فروشگاه تازه با نمایش ارزش هر بسته و راهنمای مصرف سکه
+- یادآوری زنجیره حالا یک ساعت قبل از پرونده‌ی تازه می‌آید و تعداد اعلان‌ها کمتر شده
+- پیام‌های اتهام روشن‌تر شد
+- بهبودهای کوچک
+
+## changelog_en
+- A new shop that shows what each pack is worth and what coins can be used for
+- The streak reminder now arrives one hour before the next case, with fewer notifications overall
+- Clearer messages after an accusation
+- Small improvements
+
+## developer_note
+Build 85
+
+<!-- build: 86 -->
+## changelog_fa
+- زیر هر مدرک، کارت مظنون‌هایی که در متن آمده‌اند حالا با فامیلی هم نشان داده می‌شود
+- بهبودهای کوچک
+
+## changelog_en
+- Under each piece of evidence, the suspects it mentions now show up when only their surname is used
+- Small improvements
+
+## developer_note
+Build 86

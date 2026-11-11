@@ -215,7 +215,8 @@ async def _players(session: AsyncSession) -> dict:
     active = int(await session.scalar(select(func.count()).select_from(Player).where(Player.last_seen >= start)) or 0)
     solves = int(await session.scalar(select(func.count()).select_from(CaseProgress).where(
         CaseProgress.solved.is_(True), CaseProgress.finished_at >= start)) or 0)
-    rows = (await session.execute(select(Player.app_version, func.count()).group_by(Player.app_version)
+    ver = func.coalesce(func.nullif(Player.client_build, 0), Player.app_version)   # the running build, else the sign-up one
+    rows = (await session.execute(select(ver, func.count()).group_by(ver)
                                   .order_by(func.count().desc()).limit(10))).all()
     return {"status": "ok", "total": total, "active_today": active, "solves_today": solves,
             "errors_1h": None,  # the server does not count 5xx answers yet

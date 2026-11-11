@@ -13,7 +13,7 @@ from ..db import get_session, lock_players
 from ..models import Player, StreakRepair, utcnow
 from ..schemas import ClientInfoIn, CoinsOut, GainsOut, ProfileIn, ProfileOut
 from ..security import current_player
-from ..util import add_coins, clean_nickname
+from ..util import add_coins, clean_nickname, nickname_problem
 from .common import profile_out
 
 log = logging.getLogger("profile")
@@ -115,13 +115,16 @@ async def repair_streak(player: Player = Depends(current_player), session: Async
 async def update_me(body: ProfileIn, player: Player = Depends(current_player),
                     session: AsyncSession = Depends(get_session)):
     if body.nickname is not None:
+        # An old app only knows «bad_nickname» (its text says «taken or not acceptable»); a new app sets name_errors and gets
+        # the reason: nickname_length, nickname_chars (emoji and symbols), bad_nickname (a blocked word or link), nickname_taken.
+        problem = nickname_problem(body.nickname)
+        if problem:
+            raise HTTPException(422, problem if body.name_errors else "bad_nickname")
         name = clean_nickname(body.nickname)
-        if name is None:
-            raise HTTPException(422, "bad_nickname")
         if not await nicknames.claim(session, player.id, name):
-            # 28 Oct 2026: the name belongs to another detective. The current app maps this code to «این اسم قابل قبول نیست».
+            # 28 Oct 2026: the name belongs to another detective.
             log.info("nickname refused: taken")
-            raise HTTPException(422, "bad_nickname")
+            raise HTTPException(422, "nickname_taken" if body.name_errors else "bad_nickname")
         player.nickname = name
     if body.avatar is not None:  # old apps: the portrait index
         player.avatar = body.avatar
@@ -162,6 +165,8 @@ async def report_client(body: ClientInfoIn, player: Player = Depends(current_pla
     """The app reports its version and device once per start (rate limited by the «client_info» policy)."""
     player.client_version = body.app_version.strip()
     player.client_build = body.build
+    if body.build > 0:
+        player.app_version = body.build  # the admin list showed the build of the sign-up (often 1); the running one is what matters
     player.platform = body.platform
     player.os_version = body.os_version.strip()
     player.device_model = body.device_model.strip()

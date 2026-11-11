@@ -722,6 +722,8 @@ Problem: the daily answer is shared in groups, so the daily ranking prize lost i
 - The check fails open: if the config cannot be read, nobody sees a banner or a block. Only players who install build 79 or newer can show it; older installs do not have the code.
 - Nothing is set in the database by the release: the defaults show nothing until you raise the numbers.
 
+**Panel block (server 1.55.0, 9 Nov 2026).** The two numbers are no longer set with API calls: admin panel (or the admin app) → tab «⚙ اقدام‌ها» → «📲 بروزرسانی اپ». After you press «انتشار» for a build in Bazaar, put its number in «آخرین نسخه» and save. «حداقل نسخه» locks older builds (the panel asks a second time when active players would be locked out). `GET/POST /admin/api/app-update`; every save is in the admin log as `app_update`.
+
 **Install source.** The app (build 79+) sends the installer package once per start with `POST /v1/me/client` (`installer`, stored in `players.install_source`). The admin overview shows the counts: `com.farsitel.bazaar` = «کافه بازار», `ir.mservices.market` = «مایکت», empty or any other value = «مستقیم/نامشخص». Only players who opened build 79 or newer report it; everyone else counts as «مستقیم/نامشخص» until they update, so the Bazaar number grows as players update.
 
 ## First-days offers query on PostgreSQL (server 1.41.7; 28 Oct 2026)
@@ -783,4 +785,11 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
   Cafe Bazaar button. It needs the Bazaar address in `site.py` (`BAZAAR_URL`) to be the real one.
 - The list is the config row `promo_cases`; do not edit it by hand (a bad row is ignored, so nothing is free by mistake).
 - What to watch: ledger lines `promo:<case>` (one per new player who opened it) against `solve` lines of that case.
+- The effect is in the panel: «🗂 پرونده‌ها» → «📈 اثر رایگان‌کردن» (signups in the window against the same length before it, free opens, solves, coin buyers). All panel times are Tehran time.
 - Not built yet: opening the app straight on the case from the link (needs a change in the APK build).
+
+## Detective names (10 Nov 2026)
+- Allowed: letters of any language, digits, single spaces, ZWNJ, `_ . -`, 2-16 characters, at least one letter. No emoji, stickers, symbols or
+  invisible characters (`nickname_chars`). Blocked substrings (after removing spaces, case-insensitive): `کس`, `کیر`, `کون`, `جنده`, `fuck`, `sex`,
+  `admin`, `مدیر`; also links (`http`, `www.`, `.ir`, `.com`, `@`, `t.me`) and more than 6 digits (`bad_nickname`). A name another detective owns is
+  `nickname_taken` (compared by key: case, spaces, punctuation and Arabic/Persian letter variants are ignored).
