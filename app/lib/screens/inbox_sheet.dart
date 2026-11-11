@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/state_view.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
@@ -63,15 +64,18 @@ class _InboxSheetState extends State<_InboxSheet> {
               }
               if (snap.hasError) {
                 final e = snap.error!;
-                return Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(Api.isNetworkFail(e) ? Api.needOnlineText : Api.friendly(e),
-                      textAlign: TextAlign.center, style: tBody(15, color: K.textSoft)),
-                );
+                return StateView.forError(e, key: const ValueKey('inbox-state'), onRetry: () => setState(() => _f = Api.i.inbox()));
               }
               final gifts = snap.data ?? const <InboxGift>[];
               if (gifts.isEmpty) {
-                return Padding(padding: const EdgeInsets.all(24), child: Text('نامه‌ای نداری.', style: tBody(15, color: K.textSoft)));
+                return StateView.empty(
+                  key: const ValueKey('inbox-empty'),
+                  icon: Icons.mark_email_read_rounded,
+                  title: 'هنوز نامه‌ای نیومده',
+                  body: 'هدیه‌ها و نامه‌هایی که برات بفرستیم این‌جا میان.',
+                  primaryLabel: 'بستن',
+                  onPrimary: () => Navigator.of(context).maybePop(),
+                );
               }
               return ListView(shrinkWrap: true, children: [
                 for (final g in gifts)

@@ -11,6 +11,7 @@ import '../widgets/avatar_frame.dart';
 import '../widgets/crime_tape.dart';
 import '../widgets/offline.dart';
 import '../widgets/rank.dart';
+import '../widgets/state_view.dart';
 import '../widgets/streak_flame.dart';
 import 'account_sheets.dart';
 import 'achievements_screen.dart';
@@ -88,13 +89,13 @@ class _AccountScreenState extends State<AccountScreen> {
           builder: (context, _) {
             final p = Api.i.profile;
             if (p == null) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(Api.i.online ? Api.genericText : Api.needOnlineText,
-                      textAlign: TextAlign.center, style: tBody(15, color: K.textSoft)),
-                ),
-              );
+              Future<void> retry() async {
+                await Api.i.reconnect();
+              }
+
+              return Api.i.online
+                  ? StateView.error(key: const ValueKey('profile-state'), onRetry: retry)
+                  : StateView.offline(key: const ValueKey('profile-state'), onRetry: retry);
             }
             // SafeArea: the last card must not end up under the phone's navigation bar
             return SafeArea(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../widgets/state_view.dart';
+import 'main_shell.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
@@ -178,19 +180,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     return '${fa(m)}:${fa(s).padLeft(2, '۰')}';
   }
 
-  Widget _errorView(Object e) {
-    final msg = !Api.i.online && Api.isNetworkFail(e) ? Api.needOnlineText : Api.friendly(e);
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Text(msg, textAlign: TextAlign.center, style: tBody(15)),
-          const SizedBox(height: 10),
-          StampButton(label: 'دوباره', onTap: () => _load()),
-        ]),
-      ),
-    );
-  }
+  Widget _errorView(Object e) => StateView.forError(e, key: const ValueKey('lb-state'), onRetry: () => _load());
 
   @override
   Widget build(BuildContext context) {
@@ -220,17 +210,17 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
       if (_loading)
         const Padding(padding: EdgeInsets.symmetric(vertical: 28), child: Center(child: CircularProgressIndicator(color: K.brass)))
       else if (_error != null)
-        SizedBox(height: 220, child: _errorView(_error!))
+        SizedBox(height: 400, child: _errorView(_error!))
       else if (lb.top.isEmpty)
-        Padding(
+        StateView.empty(
           key: const ValueKey('lb-empty'),
-          padding: const EdgeInsets.symmetric(vertical: 36),
-          child: Text(
-              weekly && selName.isNotEmpty
-                  ? 'هنوز هیچ کارآگاهی توی لیگ $selName پرونده‌ی این هفته رو حل نکرده. اولیش تو باش!'
-                  : 'هنوز کسی حل نکرده. اولین کارآگاه باش!',
-              textAlign: TextAlign.center,
-              style: tBody(15)),
+          icon: Icons.emoji_events_outlined,
+          title: 'جدول هنوز خالیه',
+          body: weekly && selName.isNotEmpty
+              ? 'هنوز هیچ کارآگاهی توی لیگ $selName پرونده‌ی این هفته رو حل نکرده. اولیش تو باش!'
+              : 'هنوز کسی حل نکرده. اولین کارآگاه باش!',
+          primaryLabel: 'برو سراغ پرونده‌ی امشب',
+          onPrimary: () => MainShell.tab.value = MainShell.home,
         )
       else ...[
         if (podium.isNotEmpty) _podium(podium),

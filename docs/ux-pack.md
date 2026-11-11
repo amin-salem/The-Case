@@ -94,3 +94,31 @@ Boards `ArchivePick.dc.html` and `Nav.dc.html` (the nav board stays a proposal; 
   Decide from it next release whether to fold the tab into home/archive.
 - Tests: `server/tests/test_archive_picks.py` (pure choice, minimum samples, database stats, route price, fail-open, weekend split;
   runs on SQLite and PostgreSQL), `app/test/archive_picks_test.dart` (parsing, row, text scale 1.3/2.0, hidden on error/none, once-per-launch event).
+
+## Session 5: lean home and empty/offline/error states (11 Nov 2026)
+Boards `HomeLean.dc.html` and `States.dc.html`. App only (no server change, no migration, nothing in `ci.yml`).
+- Home (`home_screen.dart`, pure rules in `services/home_rules.dart`): one primary action (tonight's hero) and the two cards
+  (archive + weekend; the weekend card keeps its real state). Everything else shows only when it asks something of the player:
+  - Streak row: the streak is at risk (tonight not solved/lost yet and streak >= 3), or the next ladder step is exactly 1 night away,
+    or the server offers a streak repair (the repair button lives in this row, so it must stay reachable).
+  - «امن‌کردن حساب»: not secured AND (3 or more solved cases OR a purchase). A purchase = a verified store purchase on this phone
+    (`Api.hasBought`, local flag `bought_coins_<player>`, set in `verifyPurchase`) or `no_ads` / VIP. The ✕ (48 px) hides it for 7 days
+    (`secure_row_closed_<player>`, local); the securing flow stays in the profile/account screen.
+  - One collapsed row «بیشتر» (`more-toggle`) holds the missions card, the culprit album strip, «چی تازه شده؟», story, invite
+    (profile), leaderboard and shop: nothing was removed, only moved. A finished missions chest shows «صندوقچه‌ی مأموریت‌ها آماده‌ست»
+    on the closed row. The old «تازه‌ها» row and the always-visible missions/album rows are gone from the page itself.
+  - The update chip (session 1), the next-case card and starter sheet (session 2) are untouched.
+- `StateView` (`widgets/state_view.dart`): icon in a circle, title, one explaining line, one primary button, optional quiet second
+  button. Factories `offline`, `error`, `empty`, and `forError(e)` which chooses by WHAT went wrong (`Api.failKind`), not by `Api.online`
+  (a down server also flips `online`). Errors say coins and progress are safe; a refusal that carries its own sentence (too many
+  requests, a business rule) keeps that sentence. No raw codes: the old «کد خطا: …» line on the home error box is gone.
+  Offline and error views retry by themselves once when the connection returns (`onBackOnline`, one call per return); the button is
+  disabled while a retry runs. Inside a list it takes its own height, in a fixed-height page it scrolls (huge fonts never overflow).
+- Used in: home case list (offline with nothing saved / error), archive (error, empty, nothing matches the filters), messages hub
+  (error, empty), inbox sheet (error, empty), leaderboard (error, empty league), shop (offline with no store data), profile (no profile).
+- Tests: `test/home_rules_test.dart` (the rules), `test/state_view_test.dart` (1.0/1.3/2.0, no English text, forError, retry once,
+  offline -> online auto retry), `test/home_nav_test.dart` (visibility per state, the ✕ and 7 days, «بیشتر» keeps every entry,
+  offline -> online loads the home without a tap, error page; fonts 1.0/1.3/2.0). `seedHome` got `secured`, `casesSolved`, `bought`,
+  `secureClosedAt`.
+- Revenue note: the streak-at-risk row and the starter/after-solve cards stay in front; the securing row now meets players who have
+  something to lose (3 solves or a purchase), which protects paying accounts. Nothing sellable was given away.

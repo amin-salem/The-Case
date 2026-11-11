@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/state_view.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
@@ -92,7 +93,7 @@ class ArchiveScreen extends StatefulWidget {
 class _ArchiveScreenState extends State<ArchiveScreen> {
   List<CaseRow>? _rows;
   List<ArchivePick> _picks = const []; // «پیشنهاد برای تو»; empty = no row (none, offline, error, old server)
-  String? _error;
+  Object? _error; // why the list could not load (null = fine)
   ArchiveFilter _filter = ArchiveFilter.all;
   ArchiveSort _sort = ArchiveSort.newest;
   String _cat = ''; // topic filter ('' = all topics)
@@ -129,7 +130,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
         });
       }
     } catch (e) {
-      if (mounted) setState(() => _error = Api.friendly(e));
+      if (mounted) setState(() => _error = e);
       return;
     }
     // the suggestions come after the list and never block it; any failure just leaves the row out
@@ -212,8 +213,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
               else if (rows == null)
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Text(_error!, textAlign: TextAlign.center, style: tBody(15)),
+                    padding: const EdgeInsets.only(top: 24),
+                    child: StateView.forError(_error!, key: const ValueKey('archive-state'), onRetry: _refresh),
                   ),
                 )
               else
@@ -463,17 +464,24 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     if (rows.isEmpty) {
       return SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(children: [
-            Text(_narrowed ? 'پرونده‌ای با این فیلتر و جست‌وجو پیدا نشد.' : 'هنوز پرونده‌ی قدیمی‌ای نیست.',
-                textAlign: TextAlign.center, style: tBody(15, color: K.textSoft)),
-            if (_narrowed)
-              TextButton(
-                key: const ValueKey('archive-clear'),
-                onPressed: _clearFilters,
-                child: Text('پاک کردن فیلترها', style: tBody(14, color: K.brass, w: FontWeight.w900)),
-              ),
-          ]),
+          padding: const EdgeInsets.only(top: 16),
+          child: _narrowed
+              ? StateView.empty(
+                  key: const ValueKey('archive-empty'),
+                  icon: Icons.search_off_rounded,
+                  title: 'چیزی پیدا نشد',
+                  body: 'پرونده‌ای با این فیلتر و جست‌وجو نیست؛ فیلترها رو پاک کن تا همه‌ی پرونده‌ها برگردن.',
+                  primaryLabel: 'پاک کردن فیلترها',
+                  onPrimary: _clearFilters)
+              : StateView.empty(
+                  key: const ValueKey('archive-empty'),
+                  title: 'بایگانی هنوز خالیه',
+                  body: 'پرونده‌های شب‌های قبل این‌جا جمع می‌شن؛ فعلاً سراغ پرونده‌ی امشب برو.',
+                  primaryLabel: 'برو سراغ پرونده‌ی امشب',
+                  onPrimary: () {
+                    if (!widget.embedded) Navigator.of(context).maybePop();
+                    MainShell.tab.value = MainShell.home;
+                  }),
         ),
       );
     }

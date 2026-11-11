@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../widgets/state_view.dart';
+import 'main_shell.dart';
 
 import '../models/progress.dart';
 import '../services/api.dart';
@@ -46,7 +48,7 @@ class MessagesHubScreen extends StatefulWidget {
 class _MessagesHubScreenState extends State<MessagesHubScreen> {
   Feed? _feed;
   AchievementsList? _ach;
-  String? _error;
+  Object? _error; // why the feed could not load (null = fine)
   int _tab = 0; // 0 messages, 1 badges
   int _filter = 0; // 0 all, 1 gifts, 2 notices
   bool _readAll = false;
@@ -80,8 +82,14 @@ class _MessagesHubScreenState extends State<MessagesHubScreen> {
         _seenTimer = Timer(const Duration(milliseconds: 1500), () => unawaited(Api.i.feedSeen()));
       }
     } catch (e) {
-      if (mounted) setState(() => _error = Api.isNetworkFail(e) ? Api.needOnlineText : Api.friendly(e));
+      if (mounted) setState(() => _error = e);
     }
+  }
+
+  /// The empty page's one next step: back to tonight's case on the home tab.
+  void _goTonight() {
+    Navigator.of(context).maybePop();
+    MainShell.tab.value = MainShell.home;
   }
 
   Future<void> _markAll() async {
@@ -139,14 +147,7 @@ class _MessagesHubScreenState extends State<MessagesHubScreen> {
     );
   }
 
-  Widget _errorBox() => Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(children: [
-          Text(_error!, textAlign: TextAlign.center, style: tBody(14, color: K.textSoft)),
-          const SizedBox(height: 12),
-          GhostButton(label: 'دوباره', icon: Icons.refresh_rounded, onTap: _load),
-        ]),
-      );
+  Widget _errorBox() => StateView.forError(_error!, key: const ValueKey('hub-state'), onRetry: _load);
 
   // ---------------------------------------------------------------- profile card
 
@@ -294,13 +295,13 @@ class _MessagesHubScreenState extends State<MessagesHubScreen> {
       const SizedBox(height: 10),
     ];
     if (items.isEmpty) {
-      out.add(Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(children: [
-          const Icon(Icons.mark_email_read_rounded, color: K.textSoft, size: 40),
-          const SizedBox(height: 8),
-          Text('فعلاً پیام تازه‌ای نداری.', textAlign: TextAlign.center, style: tBody(14, color: K.textSoft)),
-        ]),
+      out.add(StateView.empty(
+        key: const ValueKey('hub-empty'),
+        icon: Icons.mark_email_read_rounded,
+        title: 'هنوز پیامی نیومده',
+        body: 'هدیه‌ها، جواب نظرهات و خبر پرونده‌های تازه این‌جا میان.',
+        primaryLabel: 'برو سراغ پرونده‌ی امشب',
+        onPrimary: _goTonight,
       ));
       return out;
     }

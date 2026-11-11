@@ -48,12 +48,23 @@ Map<String, dynamic> missionsBody({int done = 1}) => {
       ],
     };
 
-Future<void> seedHome({String tonight = 'open', String? weekend, bool online = true, int streak = 4}) async {
+Future<void> seedHome({
+  String tonight = 'open',
+  String? weekend,
+  bool online = true,
+  int streak = 4,
+  bool secured = true,
+  int casesSolved = 5,
+  bool bought = false,
+  DateTime? secureClosedAt,
+}) async {
   SharedPreferences.setMockInitialValues({'player': 'p', 'secret': 's', 'token': 't',
-    'token_exp': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 86400});
+    'token_exp': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 86400,
+    if (bought) 'bought_coins_p': true,
+    if (secureClosedAt != null) 'secure_row_closed_p': secureClosedAt.millisecondsSinceEpoch});
   await Api.i.init();
   Api.i.online = online;
-  Api.i.profile = Profile({'player_id': 'p', 'nickname': 'آرش', 'coins': 500, 'cases_solved': 5, 'streak': streak, 'secured': true});
+  Api.i.profile = Profile({'player_id': 'p', 'nickname': 'آرش', 'coins': 500, 'cases_solved': casesSolved, 'streak': streak, 'secured': secured});
   Api.i.httpClient = MockClient((r) async {
     if (!online) throw http.ClientException('offline');
     if (r.url.path == '/v1/cases') return jsonResponse(casesBody(tonight: tonight, weekend: weekend));

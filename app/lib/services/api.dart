@@ -1054,7 +1054,46 @@ class Api extends ChangeNotifier {
             body: {'product_id': productId, 'purchase_token': token, 'store': store}) as Map)
         .cast<String, dynamic>();
     await _refreshProfileQuietly();
-    return ('${j['status']}', j['added'] as int? ?? 0);
+    final status = '${j['status']}';
+    if (status == 'granted' || status == 'already_granted') await _markBought();
+    return (status, j['added'] as int? ?? 0);
+  }
+
+  // ---- what the lean home page remembers on this phone (per account)
+
+  String get _boughtKey => 'bought_coins_${_playerId ?? ''}';
+  String get _secureClosedKey => 'secure_row_closed_${_playerId ?? ''}';
+
+  /// This account has paid for something in the store (coins, the starter pack or the VIP card), as far as this phone knows.
+  bool get hasBought {
+    try {
+      return _p.getBool(_boughtKey) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> _markBought() async {
+    try {
+      await _p.setBool(_boughtKey, true);
+    } catch (_) {}
+  }
+
+  /// When the player closed the home «امن‌کردن حساب» row (null = never).
+  DateTime? get secureRowClosedAt {
+    try {
+      final ms = _p.getInt(_secureClosedKey);
+      return ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> closeSecureRow([DateTime? now]) async {
+    try {
+      await _p.setInt(_secureClosedKey, (now ?? DateTime.now()).millisecondsSinceEpoch);
+    } catch (_) {}
+    notifyListeners();
   }
 
   // ---------------------------------------------------------------- account

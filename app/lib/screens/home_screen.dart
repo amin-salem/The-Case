@@ -9,6 +9,7 @@ import '../models/progress.dart';
 import '../services/api.dart';
 import '../services/app_update.dart';
 import '../services/billing.dart';
+import '../services/home_rules.dart';
 import '../widgets/album_strip.dart';
 import '../widgets/category.dart';
 import '../services/reminders.dart';
@@ -20,6 +21,7 @@ import '../widgets/missions_card.dart';
 import '../widgets/notifications_card.dart';
 import '../widgets/name_sheet.dart';
 import '../services/name_ideas.dart';
+import '../widgets/state_view.dart';
 import '../widgets/store_rating_card.dart';
 import '../widgets/update_card.dart';
 import '../widgets/offline.dart';
@@ -47,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Album? _album;
   DateTime? _albumAt;
   String? _error;
+  Object? _failure; // the exception behind _error (the state view picks offline or error from it)
   bool _loading = false;
   Timer? _tick;
   DateTime _lastReload = DateTime.now();
@@ -163,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _cases = c;
           _error = null;
+          _failure = null;
         });
         // the dot on the weekend tab: a weekend case is open and not yet finished
         MainShell.weekendOpen.value = c.weekly != null && !c.weekly!.solved && !c.weekly!.failed;
@@ -176,7 +180,12 @@ class _HomeScreenState extends State<HomeScreen> {
       final recovered = await Billing.i.recover();
       if (recovered > 0 && mounted) toast(context, 'خریدت اضافه شد: ${fa(recovered)} سکه');
     } catch (e) {
-      if (mounted) setState(() => _error = Api.friendly(e));
+      if (mounted) {
+        setState(() {
+          _error = Api.friendly(e);
+          _failure = e;
+        });
+      }
     } finally {
       _loading = false;
     }
@@ -372,12 +381,12 @@ class _HomeScreenState extends State<HomeScreen> {
         _weekendRow(),
       ] else
         _quickCards(cs),
-      if (_album != null && _album!.total > 0) ...[const SizedBox(height: 10), AlbumStrip(album: _album!, onTap: _openAlbum)],
-      if (_missions != null) ...[const SizedBox(height: 10), _missionsCompact(_missions!)],
-      const SizedBox(height: 10),
-      _streakRow(),
+      // only what asks something of the player now (a streak at risk, an account worth securing) ...
+      _streakRow(cs),
       _secureRow(),
-      _newsSection(),
+      // ... and everything else, one tap away in a single collapsed row
+      const SizedBox(height: 2),
+      _moreSection(),
     ];
   }
 
@@ -421,33 +430,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _openShop() => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShopScreen()));
 
-  /// Nothing to show yet. With no internet and nothing saved, explain the one-time need.
+  /// Nothing to show yet. With no internet and nothing saved, explain the one-time need; it retries by itself when the
+  /// connection returns. Never a raw error code.
   Widget _errorBox() {
-    final offline = !Api.i.online;
-    return Paper(
-      child: Column(children: [
-        Icon(offline ? Icons.wifi_off_rounded : Icons.cloud_off_rounded, color: K.inkSoft, size: 36),
-        const SizedBox(height: 6),
-        Text(offline ? 'هنوز پرونده‌ای روی گوشیت نیست' : 'پرونده‌ها بارگذاری نشد',
-            textAlign: TextAlign.center, style: tDisplay(18, color: K.ink)),
-        const SizedBox(height: 4),
-        Text(
-          offline
-              ? 'برای گرفتن اولین پرونده باید یه بار به اینترنت وصل بشی. بعدش پرونده‌هایی که باز کردی بدون اینترنت هم خونده می‌شن.'
-              : (_error ?? Api.genericText),
-          textAlign: TextAlign.center,
-          style: tBody(14, color: K.inkSoft),
-        ),
-        if (Api.i.lastFailure.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 6),
-            child: Text('کد خطا: ${Api.i.lastFailure}',
-                key: const ValueKey('failure_code'), textDirection: TextDirection.ltr, style: tBody(11, color: K.inkSoft)),
-          ),
-        const SizedBox(height: 12),
-        StampButton(label: 'دوباره امتحان کن', icon: Icons.refresh_rounded, onTap: _refresh),
-      ]),
-    );
+    final f = _failure;
+    if (f == null ? !Api.i.online : Api.failKind(f) == FailKind.offline) {
+      return StateView.offline(
+        key: const ValueKey('home-state'),
+        onRetry: _refresh,
+        body: 'برای گرفتن اولین پرونده باید یه بار به اینترنت وصل بشی. بعدش پرونده‌هایی که باز کردی بدون اینترنت هم خونده می‌شن؛ سکه و پیشرفتت هم سر جاشه.',
+      );
+    }
+    return StateView.forError(f ?? StateError('cases'), key: const ValueKey('home-state'), onRetry: _refresh);
   }
 
   // ---------------------------------------------------------------- tonight's case
@@ -841,12 +835,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// The streak: nights in a row, nights to the next milestone, and the repair offer when the server makes one.
-  Widget _streakRow() {
+  /// The streak row, only when it asks something of the player: the streak is at risk (tonight is not solved yet and the
+  /// streak is 3 nights or more), the next step is one night away, or a broken streak can be repaired.
+  Widget _streakRow(CasesList cs) {
     final p = Api.i.profile;
     if (p == null) return const SizedBox.shrink();
     final offer = p.streakRepair;
     final showOffer = offer != null && !Api.i.repairOfferClosed(offer);
+    final t = cs.today;
+    final next = nextStreakMilestone(p.streak, Api.i.streakMilestones);
+    final due = HomeRules.streakDue(
+        streak: p.streak,
+        tonightOpen: t != null && !t.solved && !t.failed,
+        nightsToNext: next == null ? null : next - p.streak,
+        repairOffer: showOffer);
+    if (!due) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Container(
@@ -908,11 +911,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  bool _newsOpen = false;
+  bool _moreOpen = false;
 
-  /// «تازه‌ها»: collapsed by default. What's new, the story, the invite, the leaderboard and the shop are one tap away.
-  Widget _newsSection() {
-    Widget row(IconData icon, String title, VoidCallback onTap, {String? sub, Widget? trailing}) => InkWell(
+  /// «بیشتر»: ONE collapsed row. Missions, the album, what's new, the story, the invite, the leaderboard and the shop
+  /// are all one tap away in it (none was removed from the app; the home page just stops shouting them).
+  Widget _moreSection() {
+    Widget row(IconData icon, String title, VoidCallback onTap, {String? sub}) => InkWell(
           onTap: onTap,
           child: Container(
             constraints: const BoxConstraints(minHeight: 48),
@@ -926,13 +930,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (sub != null) Text(sub, style: tBody(11.5, color: K.textSoft).copyWith(height: 1.4)),
                 ]),
               ),
-              if (trailing != null) trailing,
               const Icon(Icons.chevron_right_rounded, color: K.textSoft, size: 20),
             ]),
           ),
         );
+    final m = _missions;
+    final chestReady = m != null && m.allDone && !m.claimed;
     return Container(
-      key: const ValueKey('home-news'),
+      key: const ValueKey('home-more'),
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: K.night2,
@@ -943,20 +948,32 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(14),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           InkWell(
-            key: const ValueKey('news-toggle'),
-            onTap: () => setState(() => _newsOpen = !_newsOpen),
+            key: const ValueKey('more-toggle'),
+            onTap: () => setState(() => _moreOpen = !_moreOpen),
             child: Container(
-              constraints: const BoxConstraints(minHeight: 48),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              constraints: const BoxConstraints(minHeight: 52),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Row(children: [
-                const Icon(Icons.auto_awesome_rounded, color: K.brass, size: 20),
+                const Icon(Icons.apps_rounded, color: K.brass, size: 20),
                 const SizedBox(width: 10),
-                Expanded(child: Text('تازه‌ها', style: tBody(14, w: FontWeight.w900))),
-                Icon(_newsOpen ? Icons.expand_less_rounded : Icons.expand_more_rounded, color: K.textSoft),
+                Expanded(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                    Text('بیشتر', style: tBody(14, w: FontWeight.w900).copyWith(height: 1.4)),
+                    // the one thing in here that is waiting for the player: a finished missions chest
+                    if (chestReady && !_moreOpen)
+                      Text('صندوقچه‌ی مأموریت‌ها آماده‌ست',
+                          key: const ValueKey('more-chest'), style: tBody(11.5, color: K.brass, w: FontWeight.w800).copyWith(height: 1.4)),
+                  ]),
+                ),
+                Icon(_moreOpen ? Icons.expand_less_rounded : Icons.expand_more_rounded, color: K.textSoft),
               ]),
             ),
           ),
-          if (_newsOpen) ...[
+          if (_moreOpen) ...[
+            if (m != null)
+              Padding(padding: const EdgeInsets.fromLTRB(8, 0, 8, 8), child: _missionsCompact(m)),
+            if (_album != null && _album!.total > 0)
+              Padding(padding: const EdgeInsets.fromLTRB(8, 0, 8, 8), child: AlbumStrip(album: _album!, onTap: _openAlbum)),
             row(Icons.auto_awesome_rounded, 'چی تازه شده؟', () => showWhatsNewSheet(context, all: true)),
             row(Icons.menu_book_rounded, 'داستان', () => MainShell.openStory(context), sub: 'پرونده‌های سرگرد ناصری'),
             row(Icons.group_add_rounded, 'دعوت دوستان', () => MainShell.tab.value = MainShell.profile,
@@ -1023,40 +1040,60 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Guests who solved something: one line asking to secure the account.
+  /// An account worth securing: after the 3rd solved case, or after a purchase. The ✕ closes it for 7 days.
   Widget _secureRow() {
     final p = Api.i.profile;
-    if (p == null || p.secured) return const SizedBox.shrink();
+    if (p == null) return const SizedBox.shrink();
+    final due = HomeRules.secureDue(
+        secured: p.secured,
+        casesSolved: p.casesSolved,
+        bought: Api.i.hasBought || p.noAds || p.vip,
+        closedAt: Api.i.secureRowClosedAt,
+        now: DateTime.now());
+    if (!due) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Material(
+        key: const ValueKey('home-secure'),
         color: K.night2,
         borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: () => openAccountSheet(context, showSecureSheet),
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), border: Border.all(color: K.brass, width: 1.5)),
-            child: Row(children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: const BoxDecoration(color: K.night3, shape: BoxShape.circle),
-                child: const Icon(Icons.shield_rounded, color: K.brass, size: 26),
+        child: Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), border: Border.all(color: K.brass, width: 1.5)),
+          child: Row(children: [
+            Expanded(
+              child: InkWell(
+                key: const ValueKey('secure-open'),
+                borderRadius: BorderRadius.circular(16),
+                onTap: () => openAccountSheet(context, showSecureSheet),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(14, 12, 4, 12),
+                  child: Row(children: [
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: const BoxDecoration(color: K.night3, shape: BoxShape.circle),
+                      child: const Icon(Icons.shield_rounded, color: K.brass, size: 24),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                        Text('حسابت هنوز امن نیست', style: tBody(15, w: FontWeight.w900)),
+                        Text('با شماره‌ات امنش کن و ${fa(Api.i.secureReward)} سکه بگیر',
+                            style: tBody(12.5, color: K.textSoft).copyWith(height: 1.6)),
+                      ]),
+                    ),
+                  ]),
+                ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                  Text('حسابت هنوز امن نیست', style: tBody(15.5, w: FontWeight.w900)),
-                  Text('با شماره‌ات امنش کن و ${fa(Api.i.secureReward)} سکه بگیر',
-                      style: tBody(12.5, color: K.textSoft).copyWith(height: 1.6)),
-                ]),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Icons.chevron_right_rounded, color: K.brass),
-            ]),
-          ),
+            ),
+            IconButton(
+              key: const ValueKey('secure-close'),
+              tooltip: 'بستن',
+              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+              onPressed: () => Api.i.closeSecureRow(),
+              icon: const Icon(Icons.close_rounded, color: K.textSoft, size: 20),
+            ),
+          ]),
         ),
       ),
     );

@@ -8,6 +8,7 @@ import '../services/shop_value.dart';
 import '../theme.dart';
 import '../widgets/engagement.dart';
 import '../widgets/offline.dart';
+import '../widgets/state_view.dart';
 import 'avatar_picker_screen.dart';
 import 'dialogs.dart';
 
@@ -109,7 +110,16 @@ class _ShopScreenState extends State<ShopScreen> {
           // SafeArea: the last row must not end up under the phone's navigation bar
           child: SafeArea(
             top: false,
-            child: ListView(padding: const EdgeInsets.all(16), children: [
+            // nothing is known about the store yet and there is no connection: one calm page instead of empty cards
+            child: !api.online && api.config.isEmpty
+                ? StateView.offline(
+                    key: const ValueKey('shop-state'),
+                    body: 'برای دیدن فروشگاه باید به اینترنت وصل باشی. سکه و پیشرفتت سر جاشه؛ وقتی خط برگشت، خودش تازه می‌شه.',
+                    onRetry: () async {
+                      await api.reconnect();
+                      if (mounted) setState(() {});
+                    })
+                : ListView(padding: const EdgeInsets.all(16), children: [
               const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
               ListenableBuilder(
                 listenable: Billing.i,
