@@ -950,7 +950,8 @@ void main() {
   shot('home', () => const HomeScreen(), wait: const Duration(milliseconds: 1600));
   shot('shell_home', () => const MainShell(), wait: const Duration(milliseconds: 1600));
   shot('shell_weekend', () => const MainShell(), size: const Size(390, 1200), wait: const Duration(milliseconds: 600), then: (t) async {
-    await _tap(t, find.text('آخر هفته'), wait: const Duration(milliseconds: 1500));
+    MainShell.tab.value = MainShell.weekend;
+    await t.pump(const Duration(milliseconds: 1500));
   });
   shot('shell_story', () => const MainShell(), size: const Size(390, 1400), wait: const Duration(milliseconds: 600), then: (t) async {
     await _tap(t, find.text('داستان'), wait: const Duration(milliseconds: 1500));
@@ -965,7 +966,7 @@ void main() {
   shot('story_chapter_result', () => ResultScreen(caseData: _full('c027'), result: _storyResult('c027')),
       size: const Size(390, 1900), wait: const Duration(milliseconds: 2600));
   shot('shell_profile', () => const MainShell(), wait: const Duration(milliseconds: 600), then: (t) async {
-    await _tap(t, find.text('پروفایل'), wait: const Duration(milliseconds: 1500));
+    await _tap(t, find.text('کارت من'), wait: const Duration(milliseconds: 1500));
   });
   shot('home_full', () => const HomeScreen(), size: const Size(390, 1100), wait: const Duration(milliseconds: 1800));
   shot('home_today_solved', () => const HomeScreen(), before: () => _todaySolved = true, wait: const Duration(milliseconds: 1600));

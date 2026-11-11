@@ -374,6 +374,13 @@ class LeagueWeek(BaseModel):
     league: str
 
 
+class CardAchievement(BaseModel):
+    title: str
+    group: str = ""
+    metal: int = 0        # 0 bronze, 1 silver, 2 gold (how far along its chain the tier is)
+    at: int = 0
+
+
 class PlayerCardOut(BaseModel):
     pid: str
     nickname: str
@@ -385,7 +392,14 @@ class PlayerCardOut(BaseModel):
     stars_total: int = 0
     streak: int = 0
     best_streak: int = 0
-    league_history: list[LeagueWeek] = []   # the last weeks he played, newest first (bounded)
+    league_history: list[LeagueWeek] = []   # the last weeks he played, newest first (bounded; new apps no longer show it)
+    # the detective ID card (app 1.44): league from the profile rank, number by signup order, newest 3 badges
+    league: int = 0                 # index into weekboard.LEAGUES
+    league_name: str = ""
+    member_no: int = 0              # 1 = the first player ever registered (signup order, ties by id)
+    since: int = 0                  # signup time (unix seconds)
+    fastest: int = 0                # seconds of his fastest solved case (0 = none yet)
+    recent: list[CardAchievement] = []
 
 
 # ---- purchases, inbox, referral, analytics

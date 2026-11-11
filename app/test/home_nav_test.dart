@@ -14,19 +14,19 @@ int selectedTab(WidgetTester t) => t.widget<NavigationBar>(find.byType(Navigatio
 
 void main() {
   group('bottom navigation', () {
-    testWidgets('five tabs in order; the active one is selected; switching works', (t) async {
+    testWidgets('four tabs in order; the active one is selected; switching works', (t) async {
       await seedHome();
       await pumpApp(t);
       final bar = t.widget<NavigationBar>(find.byType(NavigationBar));
-      expect(bar.destinations.length, 5);
+      expect(bar.destinations.length, 4);
       expect([for (final d in bar.destinations) (d as NavigationDestination).label],
-          ['خانه', 'بایگانی', 'آخر هفته', 'برترها', 'پروفایل']);
-      expect(selectedTab(t), MainShell.home);
+          ['میز کار', 'بایگانی', 'برترها', 'کارت من']);
+      expect(selectedTab(t), 0);
       await t.tap(find.text('بایگانی').last);
       await t.pump(const Duration(milliseconds: 300));
-      expect(selectedTab(t), MainShell.archive);
+      expect(selectedTab(t), 1);
       expect(find.byType(ArchiveScreen), findsOneWidget);
-      await t.tap(find.text('خانه').last);
+      await t.tap(find.text('میز کار').last);
       await t.pump(const Duration(milliseconds: 300));
       expect(selectedTab(t), MainShell.home);
     });
@@ -34,7 +34,7 @@ void main() {
     testWidgets('each tab is at least 48 dp tall and wide', (t) async {
       await seedHome();
       await pumpApp(t);
-      for (final label in ['خانه', 'بایگانی', 'آخر هفته', 'برترها', 'پروفایل']) {
+      for (final label in ['میز کار', 'بایگانی', 'برترها', 'کارت من']) {
         final r = t.getRect(find.ancestor(of: find.text(label).last, matching: find.byType(NavigationDestination)).first);
         expect(r.height, greaterThanOrEqualTo(48), reason: label);
         expect(r.width, greaterThanOrEqualTo(48), reason: label);
@@ -50,7 +50,7 @@ void main() {
       }
       await t.enterText(find.byKey(const ValueKey('archive-search')), '۲۸');
       await t.pump();
-      await t.tap(find.text('خانه').last);
+      await t.tap(find.text('میز کار').last);
       await t.pump(const Duration(milliseconds: 300));
       await t.tap(find.text('بایگانی').last);
       await t.pump(const Duration(milliseconds: 400));
@@ -198,16 +198,20 @@ void main() {
       await pumpApp(t);
       await t.tap(find.byKey(const ValueKey('quick-archive')));
       await t.pump(const Duration(milliseconds: 400));
-      expect(selectedTab(t), MainShell.archive);
+      expect(selectedTab(t), 1);
       expect(find.byType(ArchiveScreen), findsOneWidget);
     });
 
-    testWidgets('the weekend card opens the weekend tab', (t) async {
+    testWidgets('the weekend card opens the weekend page (not in the bar; «میز کار» stays lit) and back returns home', (t) async {
       await seedHome(weekend: 'open');
       await pumpApp(t);
       await t.tap(find.byKey(const ValueKey('quick-weekend')));
       await t.pump(const Duration(milliseconds: 400));
-      expect(selectedTab(t), MainShell.weekend);
+      expect(MainShell.tab.value, MainShell.weekend);
+      expect(selectedTab(t), 0);
+      await t.tap(find.byKey(const ValueKey('weekend-back')));
+      await t.pump(const Duration(milliseconds: 400));
+      expect(MainShell.tab.value, MainShell.home);
     });
 
     testWidgets('after solved: result card and archive invitation instead of the hero', (t) async {
@@ -221,7 +225,7 @@ void main() {
       expect(find.text('۳ پرونده‌ی بایگانی منتظرته'), findsOneWidget);
       await t.tap(find.text('برو به بایگانی'));
       await t.pump(const Duration(milliseconds: 400));
-      expect(selectedTab(t), MainShell.archive);
+      expect(selectedTab(t), 1);
     });
 
     testWidgets('lost today: closed, second chance with the real reopen price, no answer', (t) async {
@@ -480,7 +484,7 @@ void main() {
           await t.pump(const Duration(milliseconds: 300));
           expect(t.takeException(), isNull);
           // the other tabs are older screens; the sweep below checks the shell and home, not their own layout at 2.0
-          for (final tab in scale > 1.0 ? <String>[] : ['بایگانی', 'آخر هفته', 'برترها', 'پروفایل']) {
+          for (final tab in scale > 1.0 ? <String>[] : ['بایگانی', 'برترها', 'کارت من']) {
             await t.tap(find.text(tab).last);
             await t.pump(const Duration(milliseconds: 400));
             expect(t.takeException(), isNull, reason: tab);

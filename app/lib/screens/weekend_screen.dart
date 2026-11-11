@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../services/api.dart';
+import 'main_shell.dart';
 import '../theme.dart';
 import '../widgets/category.dart';
 import '../widgets/profile_bell.dart';
@@ -163,6 +164,12 @@ class _WeekendScreenState extends State<WeekendScreen> {
           onRefresh: _opened,
           child: ListView(padding: const EdgeInsets.fromLTRB(16, 16, 16, 24), children: [
             Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              IconButton(
+                key: const ValueKey('weekend-back'),
+                tooltip: 'برگشت',
+                onPressed: () => MainShell.tab.value = MainShell.home,
+                icon: const Icon(Icons.arrow_back_rounded, color: K.text),
+              ),
               const ProfileBell(size: 40),
               const SizedBox(width: 8),
               Expanded(

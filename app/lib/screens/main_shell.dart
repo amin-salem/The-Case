@@ -17,7 +17,7 @@ import 'leaderboard_screen.dart';
 import 'story_screen.dart';
 import 'weekend_screen.dart';
 
-/// The app's main frame: five tabs at the bottom (home, archive, weekend, leaderboard, profile).
+/// The app's main frame: four items in the bottom bar (the desk, archive, leaderboard, my card); the weekend page opens from the home card.
 /// The story opens from the «تازه‌ها» section of the home screen (a normal route, see [openStory]).
 /// Quick riddles (riddles_screen.dart) are hidden for now. The shop opens from the coin chip.
 class MainShell extends StatefulWidget {
@@ -153,6 +153,10 @@ class _MainShellState extends State<MainShell> {
     if (leave == true) MainShell.exitApp();
   }
 
+  /// The tab behind each bar item (the weekend page, tab 2, has no item).
+  static const _tabs = [MainShell.home, MainShell.archive, MainShell.leaderboard, MainShell.profile];
+  static int _navOf(int tab) => tab == MainShell.weekend ? 0 : _tabs.indexOf(tab).clamp(0, 3);
+
   Widget _page(int i) => switch (i) {
         MainShell.home => const HomeScreen(),
         MainShell.weekend => WeekendScreen(key: ValueKey('wk${_visits[i]}')),
@@ -185,7 +189,7 @@ class _MainShellState extends State<MainShell> {
         child: Scaffold(
           body: IndexedStack(index: current, children: [for (int i = 0; i < MainShell.count; i++) _seen.contains(i) ? _page(i) : const SizedBox.shrink()]),
           bottomNavigationBar: MediaQuery.withClampedTextScaling(
-            maxScaleFactor: 1.2, // five labels share 360 dp: a huge system font must not break the bar
+            maxScaleFactor: 1.2, // four labels share 360 dp: a huge system font must not break the bar
             child: NavigationBarTheme(
               data: NavigationBarThemeData(
                 backgroundColor: K.night2,
@@ -197,32 +201,26 @@ class _MainShellState extends State<MainShell> {
               ),
               child: NavigationBar(
                 height: 66,
-                selectedIndex: current,
+                // the weekend page is not in the bar (it opens from the home card): the bar keeps «میز کار» lit there
+                selectedIndex: _navOf(current),
                 onDestinationSelected: (i) {
                   Sfx.i.play('tap', volume: 0.4);
-                  MainShell.tab.value = i;
+                  MainShell.tab.value = _tabs[i];
                 },
                 destinations: [
-                  const NavigationDestination(
-                      icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'خانه'),
-                  const NavigationDestination(
-                      icon: Icon(Icons.inventory_2_outlined), selectedIcon: Icon(Icons.inventory_2_rounded), label: 'بایگانی'),
                   NavigationDestination(
                       icon: ListenableBuilder(
                           listenable: Listenable.merge([WhatsNew.i, MainShell.weekendOpen]),
-                          builder: (_, __) => MainShell.weekendOpen.value
-                              ? Badge(
-                                  key: const ValueKey('weekend-dot'),
-                                  smallSize: 9,
-                                  backgroundColor: K.stamp,
-                                  child: const Icon(Icons.nightlight_outlined))
-                              : Badge(
-                                  isLabelVisible: WhatsNew.i.tagVisible('weekend_tab'),
-                                  label: const Text('تازه'),
-                                  backgroundColor: K.stamp,
-                                  child: const Icon(Icons.nightlight_outlined))),
-                      selectedIcon: const Icon(Icons.nightlight_round),
-                      label: 'آخر هفته'),
+                          builder: (_, __) => Badge(
+                              key: MainShell.weekendOpen.value ? const ValueKey('weekend-dot') : null,
+                              smallSize: 9,
+                              isLabelVisible: MainShell.weekendOpen.value,
+                              backgroundColor: K.stamp,
+                              child: const Icon(Icons.home_outlined))),
+                      selectedIcon: const Icon(Icons.home_rounded),
+                      label: 'میز کار'),
+                  const NavigationDestination(
+                      icon: Icon(Icons.inventory_2_outlined), selectedIcon: Icon(Icons.inventory_2_rounded), label: 'بایگانی'),
                   const NavigationDestination(
                       icon: Icon(Icons.emoji_events_outlined), selectedIcon: Icon(Icons.emoji_events_rounded), label: 'برترها'),
                   NavigationDestination(
@@ -232,9 +230,9 @@ class _MainShellState extends State<MainShell> {
                               isLabelVisible: !(Api.i.profile?.secured ?? true) && (Api.i.profile?.casesSolved ?? 0) >= 1,
                               backgroundColor: K.stamp,
                               smallSize: 9,
-                              child: const Icon(Icons.person_outline_rounded))),
-                      selectedIcon: const Icon(Icons.person_rounded),
-                      label: 'پروفایل'),
+                              child: const Icon(Icons.badge_outlined))),
+                      selectedIcon: const Icon(Icons.badge_rounded),
+                      label: 'کارت من'),
                 ],
               ),
             ),

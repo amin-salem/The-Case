@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../models/avatars.dart';
 import '../models/models.dart';
 import '../models/progress.dart';
 import '../services/api.dart';
 import '../theme.dart';
 import '../widgets/name_sheet.dart';
 import '../widgets/profile_bell.dart';
-import '../widgets/avatar_frame.dart';
-import '../widgets/crime_tape.dart';
-import '../widgets/honor_shelf.dart';
+import '../widgets/id_card.dart';
 import '../widgets/offline.dart';
 import '../widgets/rank.dart';
 import '../widgets/state_view.dart';
-import '../widgets/streak_flame.dart';
 import 'account_sheets.dart';
 import 'achievements_screen.dart';
 import 'avatar_picker_screen.dart';
@@ -32,42 +28,34 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   AchievementsList? _ach;
   ReferralStatus? _ref;
-  AvatarCatalog? _catalog; // for the shelf: owned and next frames (null: offline / not loaded)
-  CasesList? _cases; // for the shelf: three-plaque cases (null: nothing saved and offline)
-  final GlobalKey _shelfKey = GlobalKey();
+  PlayerCard? _card; // own server card: number, joined date, fastest solve (null offline: the card shows dashes)
+  final GlobalKey _cardKey = GlobalKey();
+  bool _back = false;
 
   @override
   void initState() {
     super.initState();
     _loadAchievements();
     _loadReferral();
-    _loadShelf();
+    _loadCard();
   }
 
-  Future<void> _loadShelf() async {
+  Future<void> _loadCard() async {
+    final id = Api.i.profile?.playerId ?? '';
+    if (id.isEmpty) return;
     try {
-      final c = await Api.i.avatarCatalog();
-      if (mounted) setState(() => _catalog = c);
+      final c = await Api.i.playerCard(id);
+      if (mounted) setState(() => _card = c);
     } catch (_) {
-      // the frames part of the shelf stays hidden
-    }
-    try {
-      final l = await Api.i.cases();
-      if (mounted) setState(() => _cases = l);
-    } catch (_) {
-      // the cases part of the shelf stays hidden
+      // offline: number, date and fastest solve stay empty
     }
   }
 
-  Future<void> _openFrames() async {
-    if (!needOnline(context)) return;
-    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AvatarPickerScreen(startOnFrames: true)));
-    if (mounted) _loadShelf();
-  }
-
-  Future<void> _shareShelf(Profile p, ShelfData d) async {
-    final ok = await shareShelfImage(_shelfKey, shelfShareText(p, d));
-    if (!ok && mounted) toast(context, 'عکس قفسه ساخته نشد؛ دوباره امتحان کن');
+  Future<void> _shareCard(Profile p) async {
+    final theirs = Api.i.inviteNewPlayer;
+    final ok = await shareCardImage(
+        _cardKey, 'کارت کارآگاهی من در «پرونده» 🕵️ با کد دعوتم ${fa(theirs)} سکه هدیه بگیر: ${p.inviteCode}\n${Api.i.shareUrl}');
+    if (!ok && mounted) toast(context, 'عکس کارت ساخته نشد؛ دوباره امتحان کن');
   }
 
   Future<void> _loadReferral() async {
@@ -134,16 +122,11 @@ class _AccountScreenState extends State<AccountScreen> {
               top: false,
               child: ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 32), children: [
                 const OfflineBanner(margin: EdgeInsets.only(bottom: 12)),
-                _header(p),
-                if (!p.secured) ...[const SizedBox(height: 12), _guestStrip()],
-                const SizedBox(height: 12),
-                Row(children: [
-                  _stat('پرونده‌ی حل‌شده', fa(p.casesSolved)),
-                  _stat('زنجیره', fa(p.streak), icon: Icons.local_fire_department_rounded, color: K.stamp),
-                  _stat('بهترین زنجیره', fa(p.bestStreak)),
-                ]),
-                const SizedBox(height: 12),
-                ...honorShelf(p),
+                _cardBlock(p),
+                if (!p.secured) ...[const SizedBox(height: 16), _guestStrip()],
+                const SizedBox(height: 20),
+                _ladder(p),
+                const SizedBox(height: 20),
                 _achievements(p),
                 const SizedBox(height: 12),
                 _invite(p),
@@ -155,104 +138,86 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  // ---------------------------------------------------------------- header
+  // ---------------------------------------------------------------- card
 
-  Widget _header(Profile p) {
+  Widget _cardBlock(Profile p) {
+    final look = LeagueLook.of(leagueOfRank(p.rank));
+    final icon = IconButton(
+      key: const ValueKey('card-share'),
+      tooltip: 'اشتراک‌گذاری کارت',
+      onPressed: () => _shareCard(p),
+      icon: Icon(Icons.ios_share_rounded, color: look.accent, size: 22),
+    );
+    return Column(children: [
+      IdCard(key: ValueKey('mycard-${_card?.memberNo ?? 0}'), data: IdCardData.mine(p, _card), boundaryKey: _cardKey, onFlip: (b) => setState(() => _back = b)),
+      const SizedBox(height: 6),
+      Row(children: [
+        IconButton(
+          key: const ValueKey('card-name'),
+          tooltip: 'تغییر نام',
+          onPressed: _editName,
+          icon: const Icon(Icons.edit_rounded, color: K.textSoft, size: 20),
+        ),
+        IconButton(
+          key: const ValueKey('card-avatar'),
+          tooltip: 'تغییر آواتار',
+          onPressed: _pickAvatar,
+          icon: const Icon(Icons.face_retouching_natural_rounded, color: K.textSoft, size: 22),
+        ),
+        Expanded(child: Center(child: CardDots(back: _back, look: look))),
+        icon,
+        const SizedBox(width: 48),
+      ]),
+    ]);
+  }
+
+  /// Four shields: the one he stands on is large and lit, the ones behind him are in colour, the ones ahead are grey.
+  Widget _ladder(Profile p) {
+    final cur = leagueOfRank(p.rank);
     final next = p.nextRankXp;
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: K.night2,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: K.brass.withValues(alpha: 0.3)),
-      ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        const CrimeTape(height: 18, text: 'پرونده‌ی شخصی  •  محرمانه  •  '),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
-          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            GestureDetector(
-              onTap: _pickAvatar,
-              child: SizedBox(
-                width: 84,
-                height: 84,
-                child: Stack(clipBehavior: Clip.none, children: [
-                  AvatarWithFrame(avatar: p.avatarId, frame: p.avatarFrame, size: 84, animate: true),
-                  PositionedDirectional(
-                    bottom: -2,
-                    end: -2,
-                    child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(color: K.stamp, shape: BoxShape.circle, border: Border.all(color: K.night2, width: 2.5)),
-                      child: const Icon(Icons.edit_rounded, size: 14, color: Colors.white),
-                    ),
-                  ),
-                ]),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: _editName,
-                  child: Row(children: [
-                    Flexible(child: Text(p.nickname, maxLines: 1, style: tDisplay(21), overflow: TextOverflow.ellipsis)),
-                    if (p.streak >= 2) ...[const SizedBox(width: 6), StreakFlame(p.streak, size: 16)],
-                    const SizedBox(width: 6),
-                    const Icon(Icons.edit_rounded, size: 16, color: K.textSoft),
-                  ]),
-                ),
-                if (p.vip)
-                  Row(children: [
-                    const Icon(Icons.diamond_rounded, size: 15, color: K.brass),
-                    const SizedBox(width: 4),
-                    Text('کارآگاه ویژه (VIP)', style: tBody(12.5, color: K.brass, w: FontWeight.w900)),
-                  ]),
-                const SizedBox(height: 6),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () => _showRanks(p),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                    Row(children: [
-                      RankIcon(rank: p.rank, size: 22),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(p.rankTitle,
-                            maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900, color: K.brass)),
-                      ),
-                      Text('${fa(p.xp)} امتیاز', style: tBody(12, color: K.textSoft)),
-                      const Icon(Icons.chevron_right_rounded, size: 18, color: K.textSoft),
-                    ]),
-                    const SizedBox(height: 6),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: TweenAnimationBuilder<double>(
-                        tween: Tween(begin: 0, end: p.rankProgress),
-                        duration: const Duration(milliseconds: 900),
-                        curve: Curves.easeOutCubic,
-                        builder: (_, v, __) =>
-                            LinearProgressIndicator(value: v, minHeight: 7, backgroundColor: K.night3, color: K.brass),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      next == null
-                          ? 'بالاترین درجه رو داری!'
-                          : '${fa((next - p.xp).clamp(0, next))} امتیاز تا ${p.nextRankTitle ?? 'درجه‌ی بعد'}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: tBody(12, color: K.textSoft),
-                    ),
-                  ]),
-                ),
-              ]),
-            ),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _showRanks(p),
+      child: Column(children: [
+        SizedBox(
+          height: 84,
+          child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            for (var i = 0; i < 4; i++) _shield(i, cur),
           ]),
+        ),
+        const SizedBox(height: 10),
+        Row(children: [
+          Expanded(child: Text(p.rankTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900, color: K.brass))),
+          Text(next == null ? 'بالاترین درجه' : '${fa((next - p.xp).clamp(0, next))} تا ${p.nextRankTitle ?? 'درجه‌ی بعد'}',
+              maxLines: 1, style: tBody(12, color: K.textSoft)),
+        ]),
+        const SizedBox(height: 6),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: p.rankProgress),
+            duration: const Duration(milliseconds: 900),
+            curve: Curves.easeOutCubic,
+            builder: (_, v, __) => LinearProgressIndicator(value: v, minHeight: 4, backgroundColor: K.night3, color: K.brass),
+          ),
         ),
       ]),
     );
+  }
+
+  Widget _shield(int i, int cur) {
+    final look = LeagueLook.of(i);
+    final size = i == cur ? 72.0 : 48.0;
+    Widget img = Image.asset(look.shield, width: size, height: size, fit: BoxFit.contain);
+    if (i > cur) {
+      img = Opacity(opacity: 0.4, child: ColorFiltered(colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.saturation), child: img));
+    } else if (i == cur) {
+      img = DecoratedBox(
+        decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [BoxShadow(color: look.glow.withValues(alpha: 0.55), blurRadius: 24)]),
+        child: img,
+      );
+    }
+    return Semantics(label: kLeagueNames[i], child: img);
   }
 
   Widget _guestStrip() => Container(
@@ -283,50 +248,6 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ]),
       );
-
-  Widget _stat(String label, String value, {IconData? icon, Color color = K.brass}) => Expanded(
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 3),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-          decoration: BoxDecoration(
-            color: K.night2,
-            borderRadius: BorderRadius.circular(12),
-            border: icon == null ? null : Border.all(color: color.withValues(alpha: 0.45)),
-          ),
-          child: Column(children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              if (icon != null) ...[Icon(icon, color: color, size: 20), const SizedBox(width: 2)],
-              Text(value, style: tDisplay(20, color: color)),
-            ]),
-            Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
-                style: tBody(11.5, color: K.textSoft)),
-          ]),
-        ),
-      );
-
-  // ---------------------------------------------------------------- shelf
-
-  List<Widget> honorShelf(Profile p) {
-    final d = ShelfData.build(profile: p, catalog: _catalog, cases: _cases);
-    return [
-      HonorShelf(key: const ValueKey('honor-shelf'), data: d, boundaryKey: _shelfKey, onFrames: _openFrames),
-      if (p.inviteCode.isNotEmpty && (d.catalogKnown || d.casesKnown)) ...[
-        const SizedBox(height: 8),
-        OutlinedButton.icon(
-          key: const ValueKey('shelf-share'),
-          onPressed: () => _shareShelf(p, d),
-          icon: const Icon(Icons.share_rounded, size: 18, color: K.brass),
-          label: Text('عکس قفسه‌ام رو بفرست (با کد دعوت)', textAlign: TextAlign.center, style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
-          style: OutlinedButton.styleFrom(
-            minimumSize: const Size.fromHeight(46),
-            side: BorderSide(color: K.brass.withValues(alpha: 0.5)),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        ),
-      ],
-      const SizedBox(height: 12),
-    ];
-  }
 
   // ---------------------------------------------------------------- achievements
 

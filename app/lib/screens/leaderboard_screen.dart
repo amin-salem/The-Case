@@ -9,7 +9,7 @@ import '../widgets/profile_bell.dart';
 import '../widgets/avatar_frame.dart';
 import '../widgets/engagement.dart' show faDuration;
 import '../widgets/streak_flame.dart';
-import '../widgets/player_sheet.dart';
+import '../widgets/player_card_overlay.dart';
 import '../services/board_text.dart';
 
 class LeaderboardScreen extends StatelessWidget {
@@ -214,7 +214,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
 
   void _openSheet(LeaderRow r) {
     if (r.pid.isEmpty) return; // an old server sends no id: nothing to open
-    showPlayerSheet(context, r);
+    showPlayerCard(context, r);
   }
 
   Widget _errorView(Object e) => StateView.forError(e, key: const ValueKey('lb-state'), onRetry: () => _load());

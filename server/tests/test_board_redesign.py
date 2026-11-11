@@ -233,6 +233,38 @@ async def test_player_card_numbers_and_privacy(client, clock):
     assert (await get(client, a, f"/v1/players/{b['player_id']}/card")).status_code == 404
 
 
+async def test_player_card_id_card_fields(client, clock):
+    """The detective ID card: league from the rank, number by signup order, fastest solve, newest three badges."""
+    from app import economy, weekboard
+    from app.models import PlayerAchievement
+    from .test_fair_week import solve
+    a, b = await new_player(client, "bd-idc-a", aged=True), await new_player(client, "bd-idc-b", aged=True)
+    ids, i = ids_from()
+    clock(evening_of(ids[i]))
+    xp_inspector = next(n for n, t in economy.RANKS if t == "بازرس")                    # first rank of league 2
+    await set_player(b["player_id"], xp=xp_inspector, last_daily_solved=pub(ids, i))
+    await solve(b["player_id"], "idc-1", 3, evening_of(ids[i]), seconds=95)
+    await solve(b["player_id"], "idc-2", 2, evening_of(ids[i]), seconds=61)
+    await solve(b["player_id"], "idc-3", 1, evening_of(ids[i]), seconds=3)           # below the floor: never a record
+    async with db.SessionLocal() as s:
+        for n, aid in enumerate(["first_case", "cases_5", "cases_10", "cases_25"]):          # the 4th is the newest
+            s.add(PlayerAchievement(player_id=b["player_id"], achievement_id=aid, at=utcnow() - timedelta(days=9 - n)))
+        await s.commit()
+    j = (await get(client, a, f"/v1/players/{b['player_id']}/card")).json()
+    assert j["league"] == 2 and j["league_name"] == weekboard.LEAGUES[2] == "بازرس"
+    assert j["fastest"] == 61
+    assert j["since"] > 0 and j["member_no"] >= 2
+    me = (await get(client, a, f"/v1/players/{a['player_id']}/card")).json()
+    assert 1 <= me["member_no"] < j["member_no"]                                        # a registered before b
+    assert me["league"] == 0 and me["fastest"] == 0 and me["recent"] == []
+    assert [x["title"] for x in j["recent"]] == ["پرونده‌خوار", "کارآگاه پرکار", "کارآموز"]      # newest three, newest first
+    assert [x["metal"] for x in j["recent"]] == [1, 1, 0]                                         # tiers 4 and 3 of 8 are silver, tier 2 bronze
+    assert all(set(x) == {"title", "group", "metal", "at"} and x["metal"] in (0, 1, 2) for x in j["recent"])
+    ats = [x["at"] for x in j["recent"]]
+    assert ats == sorted(ats, reverse=True)                                              # newest first
+    assert "invite_code" not in j and "email" not in j
+
+
 async def test_player_card_league_history_is_bounded_and_newest_first(client, clock, leagues):
     from app import gameclock
     from app.models import WeekLeague

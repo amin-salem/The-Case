@@ -1,3 +1,14 @@
+# server 1.61.0 / app 1.44.0+89: the detective ID card, four-item bar, new top list (11 Nov 2026)
+
+- «کارت من» is now a national-ID-style card dressed by the league (leather, steel, black and gold, royal blue): front with photo, name, rank, number and
+  join month; back with the numbers, the QR of the store page, the invite code and the game's line. Tap to flip; the share icon sends the card as a picture.
+  Under it: the four league shields (the current one large and lit, passed ones in colour, the ones ahead grey) and a thin progress line. The old
+  honor shelf and the stat row are gone; achievements and the invite card stay.
+- Bottom bar has four items: «میز کار»، «بایگانی»، «برترها»، «کارت من». The weekend case opens from its card on the desk (with a back arrow).
+- «برترها»: tapping a detective brings up HIS card (with his three newest badges on medals) instead of the old sheet.
+- `GET /v1/players/{pid}/card` adds `league`, `league_name`, `member_no`, `since`, `fastest` (ignores solves under 10 s) and `recent` (3 newest badges). Old fields stay.
+- App: `qr_flutter` added. Tests: `server/tests/test_board_redesign.py`, `app/test/id_card_test.dart`, nav and board tests updated; `honor_shelf_test` removed.
+
 # workflows: fewer GitHub Actions minutes (11 Nov 2026)
 
 - The account ran out of Actions minutes («recent account payments have failed or your spending limit needs to be increased»).

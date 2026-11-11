@@ -7,17 +7,18 @@ loading the whole board. Nothing here writes."""
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import and_, func, or_, select
+from sqlalchemy import and_, case, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
-from .. import avatars, content, gameclock, streakrepair, weekboard
+from .. import achievements, avatars, content, economy, gameclock, streakrepair, weekboard
 from ..cache import TTLCache
 from ..db import get_session
-from ..models import CaseProgress, Player, WeekLeague
-from ..schemas import (DailyStats, LeagueInfo, LeagueWeek, LeaderboardOut, LeaderRow, PlayerCardOut, RankGap,
+from ..models import CaseProgress, Player, PlayerAchievement, WeekLeague
+from ..schemas import (CardAchievement, DailyStats, LeagueInfo, LeagueWeek, LeaderboardOut, LeaderRow, PlayerCardOut, RankGap,
                        StreakBoardOut)
 from ..security import current_player
+from ..util import ts
 from .common import rank_title
 
 router = APIRouter(prefix="/v1", tags=["leaderboard"])
@@ -241,6 +242,36 @@ async def streak_board(limit: int = Query(30, ge=1, le=100), offset: int = Query
 
 
 # ------------------------------------------------------------------ player sheet
+MIN_FASTEST = 10               # seconds: a faster "solve" is not shown as a record
+
+
+def league_of(xp: int) -> int:
+    """The league a player's profile rank belongs to (weekboard.LEAGUE_FROM_RANK is the one place that decides)."""
+    r = economy.rank_of(int(xp or 0))
+    return max(i for i, first in enumerate(weekboard.LEAGUE_FROM_RANK) if r >= first)
+
+
+def _metal(a: achievements.Achievement) -> int:
+    """Bronze / silver / gold by how far along its chain a tier is."""
+    n = len(achievements.CHAIN_BY_ID[a.chain].tiers) if a.chain in achievements.CHAIN_BY_ID else 0
+    if n <= 0 or a.tier <= 0:
+        return 0
+    f = a.tier / n
+    return 0 if f <= 0.34 else 1 if f <= 0.67 else 2
+
+
+async def member_no(session: AsyncSession, pl: Player) -> int:
+    """Signup order: how many players registered before him (and he himself). Uses ix_players_created_at."""
+    return int(await session.scalar(select(func.count()).select_from(Player).where(or_(
+        Player.created_at < pl.created_at, and_(Player.created_at == pl.created_at, Player.id <= pl.id)))) or 0)
+
+
+async def fastest_solve(session: AsyncSession, pid: str) -> int:
+    secs = case((CaseProgress.active_seconds > 0, CaseProgress.active_seconds), else_=CaseProgress.seconds)
+    best = await session.scalar(select(func.min(secs)).where(
+        CaseProgress.player_id == pid, CaseProgress.solved.is_(True), secs >= MIN_FASTEST))
+    return int(best or 0)
+
 @router.get("/players/{pid}/card", response_model=PlayerCardOut)
 async def player_card(pid: str, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """Public numbers of one detective for the sheet that opens from a board row. Hidden players (banned, testers, new
@@ -256,7 +287,14 @@ async def player_card(pid: str, player: Player = Depends(current_player), sessio
         select(WeekLeague.week, WeekLeague.league).where(WeekLeague.week.in_(weeks), WeekLeague.player_id == pl.id))).all()}
     hist = [LeagueWeek(week=w, league=weekboard.LEAGUES[min(int(got[w]), len(weekboard.LEAGUES) - 1)]) for w in weeks if w in got]
     live = streakrepair.LiveStreak().of(pl)
+    got_ach = (await session.execute(select(PlayerAchievement.achievement_id, PlayerAchievement.at).where(
+        PlayerAchievement.player_id == pl.id).order_by(PlayerAchievement.at.desc(), PlayerAchievement.id.desc()).limit(3))).all()
+    recent = [CardAchievement(title=a.title, group=a.group, metal=_metal(a), at=ts(at) or 0)
+              for aid, at in got_ach if (a := achievements.BY_ID.get(aid)) is not None]
+    lg = league_of(pl.xp)
     return PlayerCardOut(pid=pl.id, nickname=pl.nickname, avatar=pl.avatar, avatar_id=avatars.avatar_key(pl),
                          avatar_frame=avatars.frame_key(pl), rank_title=rank_title(pl), cases_solved=int(pl.cases_solved or 0),
                          stars_total=int(pl.stars_total or 0), streak=live, best_streak=max(int(pl.best_streak or 0), live),
-                         league_history=hist)
+                         league_history=hist, league=lg, league_name=weekboard.LEAGUES[lg],
+                         member_no=await member_no(session, pl), since=ts(pl.created_at) or 0,
+                         fastest=await fastest_solve(session, pl.id), recent=recent)

@@ -570,9 +570,19 @@ class PlayerCard {
         starsTotal = _i(j['stars_total']),
         streak = _i(j['streak']),
         bestStreak = _i(j['best_streak']),
-        leagueHistory = [for (final w in _maps(j['league_history'])) (week: _s(w['week']), league: _s(w['league']))];
-  final String pid, nickname, avatarId, avatarFrame, rankTitle;
+        leagueHistory = [for (final w in _maps(j['league_history'])) (week: _s(w['week']), league: _s(w['league']))],
+        league = _i(j['league']),
+        leagueName = _s(j['league_name']),
+        memberNo = _i(j['member_no']),
+        since = j['since'] is num && (j['since'] as num) > 0 ? DateTime.fromMillisecondsSinceEpoch((j['since'] as num).toInt() * 1000) : null,
+        fastest = _i(j['fastest']),
+        recent = [for (final a in _maps(j['recent']).take(3)) (title: _s(a['title']), group: _s(a['group']), metal: _i(a['metal']))];
+  final String pid, nickname, avatarId, avatarFrame, rankTitle, leagueName;
   final int avatar, casesSolved, starsTotal, streak, bestStreak;
+  /// ID card fields (server 1.61): league 0..3, card number, joined date, fastest solve in seconds, three newest badges.
+  final int league, memberNo, fastest;
+  final DateTime? since;
+  final List<({String title, String group, int metal})> recent;
   /// The last weeks he played, newest first.
   final List<({String week, String league})> leagueHistory;
 }

@@ -135,20 +135,26 @@ void main() {
     expect(find.text('کارآگاه1'), findsOneWidget);
   });
 
-  testWidgets('tapping a podium place opens the player sheet with real numbers and closes in one tap', (t) async {
+  testWidgets('tapping a podium place opens his ID card with real numbers and closes in one tap', (t) async {
     server({
       '/v1/leaderboard': (_) => dailyBoard(),
       '/v1/players/p1/card': (_) => {'pid': 'p1', 'nickname': 'کارآگاه1', 'avatar': 0, 'rank_title': 'بازرس', 'cases_solved': 41,
-        'stars_total': 90, 'streak': 6, 'best_streak': 19, 'league_history': [{'week': '2026-11-06', 'league': 'بازرس'}]},
+        'stars_total': 90, 'streak': 6, 'best_streak': 19, 'league': 2, 'league_name': 'بازرس', 'member_no': 12, 'since': 1760000000, 'fastest': 221,
+        'recent': [{'title': 'پرونده‌خوار', 'group': 'cases', 'metal': 1, 'at': 1}], 'league_history': [{'week': '2026-11-06', 'league': 'بازرس'}]},
     });
     await t.pumpWidget(host(const LeaderboardBoard('daily')));
     await pump(t);
     await t.tap(find.byKey(const ValueKey('podium-1')));
     await pump(t);
     expect(find.byKey(const ValueKey('player-sheet')), findsOneWidget);
-    expect(find.descendant(of: find.byKey(const ValueKey('stat-solved')), matching: find.text('۴۱')), findsOneWidget);
-    expect(find.descendant(of: find.byKey(const ValueKey('stat-best')), matching: find.text('۱۹')), findsOneWidget);
-    expect(find.byKey(const ValueKey('league-history')), findsOneWidget);
+    expect(find.byKey(const ValueKey('id-card')), findsOneWidget);
+    expect(find.text('کارآگاه1'), findsWidgets);
+    await t.tap(find.byKey(const ValueKey('id-card'))); // flip: the back has his numbers
+    await t.pump(const Duration(milliseconds: 800));
+    expect(find.text('۴۱'), findsOneWidget);
+    expect(find.text('۱۹ شب'), findsOneWidget);
+    expect(find.byKey(const ValueKey('recent-badges')), findsOneWidget);
+    expect(find.text('پرونده‌خوار'), findsOneWidget);
     expect(requests.last.path, '/v1/players/p1/card');
     await t.tap(find.byKey(const ValueKey('player-sheet-close')));
     await pump(t);
@@ -162,8 +168,8 @@ void main() {
     await t.tap(find.byKey(const ValueKey('podium-2')));
     await pump(t);
     expect(find.byKey(const ValueKey('player-sheet')), findsOneWidget);
-    expect(find.byKey(const ValueKey('stat-solved')), findsNothing);
-    expect(find.byKey(const ValueKey('player-sheet-done')), findsOneWidget); // the way out is always there
+    expect(find.byKey(const ValueKey('id-card')), findsNothing);
+    expect(find.byKey(const ValueKey('player-sheet-close')), findsOneWidget); // the way out is always there
     expect(t.takeException(), isNull);
   });
 

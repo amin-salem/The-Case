@@ -171,11 +171,13 @@ void main() {
       expect(find.byKey(const ValueKey('archive-picks')), findsNothing);
     });
 
-    testWidgets('opening the «آخر هفته» tab logs one event per launch, with no props', (t) async {
+    testWidgets('opening the weekend page logs one event per launch, with no props', (t) async {
       await setup(t);
-      await goTo(t, 'آخر هفته');
-      await goTo(t, 'خانه');
-      await goTo(t, 'آخر هفته');
+      MainShell.tab.value = MainShell.weekend;
+      await t.pump(const Duration(milliseconds: 400));
+      await goTo(t, 'میز کار');
+      MainShell.tab.value = MainShell.weekend;
+      await t.pump(const Duration(milliseconds: 400));
       expect(events.where((e) => e.startsWith('weekend_tab_open')).toList(), ['weekend_tab_open|{}']);
     });
   });
