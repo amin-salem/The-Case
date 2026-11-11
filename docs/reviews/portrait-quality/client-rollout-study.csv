@@ -1,0 +1,359 @@
+case,slot,branch_portrait,design_only_portrait,character_age,photo_age,role,available_for_server_case_now
+c001,s4,m_mid_guard,m_old_warden,55,62,نگهبان شب راسته,True
+c001,s1,m_young_boxer,m_young_it,28,28,پسر حاج‌مرتضی,True
+c001,s2,f_young_photographer,f_young_photographer,34,33,حسابدار مغازه,True
+c001,s3,m_old_painter,m_old_painter,62,68,صاحب مغازه,True
+c002,s1,f_young_athlete,f_young_athlete,29,28,منشی مدیرعامل,True
+c002,s2,m_old_warden,m_old_warden,60,62,نگهبان ساختمان,True
+c002,s3,m_mid_lawyer,m_mid_lawyer,42,42,مدیر مالی,True
+c002,s4,m_old_boss,m_old_boss,55,60,مدیرعامل,True
+c002,s5,m_young_casual,m_young_casual,31,26,برنامه‌نویس,True
+c003,s2,m_mid_chef,m_mid_lawyer,45,42,دستیار سابق مقتول,True
+c003,s1,m_mid_business,m_mid_business,50,50,مهماندار واگن ۴,True
+c003,s3,f_young_chemist,f_young_chemist,27,32,دانشجوی دکترای شیمی,True
+c003,s4,f_mid_witness,f_mid_witness,38,36,دختر مقتول,True
+c004,s5,f_young_photographer,f_young_photographer,36,33,مرمتگر آثار,True
+c004,s1,m_young_designer,m_young_designer,24,30,نظافتچی موزه,True
+c004,s2,m_old_fisher,m_old_fisher,61,65,مجموعه‌دار هنری,True
+c004,s3,m_old_boss,m_old_boss,58,60,مدیر موزه,True
+c004,s4,m_mid_guard,m_mid_guard,47,40,نگهبان شب,True
+c005,s2,m_mid_resident,m_mid_resident,45,52,برادرِ رویا,True
+c005,s1,m_young_student,m_young_student,22,21,برادرزاده‌ی مقتول,True
+c005,s3,f_mid_cleaner,f_mid_director,49,48,همسر مقتول,True
+c005,s4,m_old_gardener,m_old_gardener,67,62,باغبان ویلا,True
+c005,s5,m_mid_lecturer,m_mid_lecturer,56,52,وکیل خانوادگی,True
+c006,s3,m_old_captain,m_old_captain,58,65,صاحب انبار,True
+c006,s1,m_old_grandpa,m_old_grandpa,65,70,نگهبان شب انبار,True
+c006,s2,m_young_courier,m_mid_driver,36,36,مدیر سابق انبار,True
+c006,s4,m_mid_merchant,m_mid_merchant,50,50,صاحب شرکت فرش رقیب,True
+c007,s1,m_mid_policeman,m_neutral_45_waves,45,45,بازرس گمرک,False
+c007,s2,m_young_courier,m_young_designer,32,30,اپراتور جرثقیل,True
+c007,s3,f_mid_director,f_mid_director,50,48,نگهبان دروازه,True
+c007,s4,f_mid_archaeologist,f_mid_archaeologist,38,45,نماینده‌ی صادرکننده,True
+c007,s5,m_mid_sailor,m_mid_sailor,54,50,ناخدای کشتی,True
+c008,s3,f_old_rich,f_old_rich,63,65,نظافتچی بخش,True
+c008,s1,m_mid_driver,m_mid_driver,36,36,پسر بیمار,True
+c008,s2,f_mid_banker,f_mid_banker,44,45,پزشک کشیک,True
+c008,s4,f_mid_pharmacist,f_mid_pharmacist,39,38,داروساز,True
+c008,s5,f_young_nurse,f_young_nurse,33,28,پرستار شب,True
+c009,s3,f_young_bookworm,f_young_bookworm,29,27,دانشجوی دکتری تاریخ، دستیار دکتر ملکی,True
+c009,s1,m_old_professor,m_old_professor,68,68,استاد بازنشسته‌ی تاریخ,True
+c009,s2,m_mid_officer,m_mid_researcher,47,46,کتاب‌فروش عتیقه، بازار قدیم رشت,False
+c009,s4,m_old_boss,m_old_boss,59,60,نگهبان ساختمان,True
+c009,s5,f_mid_designer,f_mid_designer,36,36,کتابدار تالار نسخه‌های قدیمی,True
+c010,s5,m_young_athlete,m_young_athlete,27,24,بازیگر نقش نوکر، جایگزین نقش اول مرد,True
+c010,s1,m_mid_photographer,m_mid_photographer,46,45,بازیگر نقش اول مرد,True
+c010,s2,f_mid_housewife,f_mid_housewife,52,48,کارگردان,True
+c010,s3,m_mid_artist,m_mid_artist,38,38,مسئول صحنه,True
+c010,s4,f_young_artist,f_young_artist,25,27,بازیگر جایگزین نقش اول زن,True
+c011,s1,m_old_gardener,m_old_gardener,56,62,مدیر هتل,True
+c011,s2,m_mid_lawyer,m_mid_lawyer,41,42,برادرزاده‌ی خانم عبادی، مهمان اتاق ۲۱۶,True
+c011,s3,f_mid_scholar,f_mid_scholar,47,48,سرخدمه‌ی هتل,True
+c011,s4,m_young_undergrad,m_young_undergrad,24,24,کارمند پذیرش,True
+c011,s5,f_mid_attorney,f_mid_attorney,39,38,دلال عتیقه، مهمان اتاق ۳۰۵,True
+c012,s4,f_mid_witness,f_mid_witness,33,36,کمک‌آشپز,True
+c012,s1,m_young_it,m_young_it,22,28,ظرف‌شور,True
+c012,s2,m_mid_cook,m_mid_cook,50,50,سرآشپز,True
+c012,s3,m_mid_merchant,m_mid_merchant,44,50,صاحب سفره‌خانه,True
+c012,s5,f_young_athlete,f_young_athlete,27,28,صندوق‌دار,True
+c013,s2,m_mid_business,m_mid_business,51,50,رئیس کمیته‌ی برگزاری مسابقه,True
+c013,s1,m_young_undergrad,m_young_undergrad,29,24,اسکی‌باز کوهستان، قهرمان پارسال,True
+c013,s3,m_mid_tycoon,m_mid_tycoon,46,50,مدیر پناهگاه,True
+c013,s4,f_mid_housewife,f_mid_housewife,44,48,آشپز پناهگاه,True
+c013,s5,m_old_gardener,m_old_gardener,58,62,راهنمای کوهستان و امدادگر پناهگاه,True
+c014,s5,f_mid_teacher,f_mid_teacher,38,42,معلم، مهمان تور,True
+c014,s1,m_old_grandpa,m_old_grandpa,67,70,سرایدار رباط,True
+c014,s2,f_mid_manager,f_mid_manager,45,40,ستاره‌شناس، سرپرست تور رصد,True
+c014,s3,m_young_undergrad,m_young_undergrad,26,24,دانشجوی عکاسی، مهمان تور,True
+c014,s4,f_young_bookworm,f_young_bookworm,31,27,دستیار کلکسیونر,True
+c015,s1,m_mid_photographer,m_mid_photographer,44,45,سرپرست شیفت شب ایستگاه,True
+c015,s2,m_mid_technician,m_mid_technician,34,40,تکنسین فنی شیفت شب,True
+c015,s3,f_mid_singer,f_mid_singer,38,36,اپراتور اتاق کنترل,True
+c015,s4,f_mid_cleaner,f_mid_cleaner,52,48,نظافتچی شیفت شب,True
+c015,s5,m_young_worker,m_young_worker,27,27,کارگر پیمانکار تعمیرات خروجی ۲,True
+c016,s3,f_young_student,f_young_student,27,24,دانشجوی دکترا، صاحب نمونه‌های دزدیده‌شده,True
+c016,s1,m_old_physician,m_old_physician,63,65,استاد راهنما و رئیس آزمایشگاه ۲۰۴,True
+c016,s2,f_young_receptionist,f_young_athlete,29,28,دانشجوی دکترا، هم‌آزمایشگاهی و هم‌اتاقی خوابگاه مهسا,True
+c016,s4,m_mid_lawyer,m_mid_lawyer,41,42,تکنسین آزمایشگاه,True
+c016,s5,m_mid_lecturer,m_mid_lecturer,56,52,نگهبان شب ساختمان پژوهشکده,True
+c017,s4,m_young_casual,m_young_casual,33,26,پسرعمه‌ی عروس، حسابدار حجره‌ی فرش پدر عروس,True
+c017,s1,m_mid_artist,m_mid_artist,31,38,عکاس تالار,True
+c017,s2,m_young_worker,m_young_athlete,26,24,پسرعموی داماد,True
+c017,s3,m_young_designer,m_young_designer,29,30,دی‌جی تالار,True
+c017,s5,f_old_widow,f_old_widow,61,68,عمه‌ی عروس، خواهر منصور شاکری,True
+c018,s5,m_young_undergrad,m_young_undergrad,29,24,مسئول آزمایشگاه مدرسه,True
+c018,s1,m_mid_resident,m_mid_resident,54,52,معاون مدرسه,True
+c018,s2,m_mid_sailor,m_mid_sailor,49,50,دبیر فیزیک,True
+c018,s3,f_mid_teacher,f_mid_teacher,38,42,منشی مدرسه,True
+c018,s4,m_young_student,m_young_student,17,21,دانش‌آموز دوازدهم، ادمین کانال مدرسه,True
+c019,s5,f_mid_singer,f_mid_singer,34,36,بازرس اتاق دستی,True
+c019,s1,m_mid_driver,m_mid_driver,37,36,باربر و بارگیر,True
+c019,s2,m_mid_teacher,m_mid_teacher,48,45,مسئول امنیت شیفت,True
+c019,s3,m_old_boss,m_old_boss,56,60,مسافر، تاجر فرش,True
+c019,s4,f_young_receptionist,f_young_receptionist,29,27,مسئول پذیرش,True
+c020,s2,m_young_worker,m_young_worker,29,27,شاگرد ساعت‌ساز، دستیار مرمت,True
+c020,s1,m_mid_resident,m_mid_resident,54,52,ساعت‌ساز، پیمانکار مرمت ساعت برج,True
+c020,s3,m_old_farmer,m_old_farmer,71,70,متصدی برج ساعت، ساکن اتاقک پای برج,True
+c020,s4,f_mid_gallery,f_mid_gallery,46,40,صاحب کافه‌ی قدیمی روبه‌روی برج,True
+c020,s5,m_mid_lecturer,m_mid_lecturer,49,52,معاون عمرانی شهرداری سرخ‌آباد,True
+c021,s4,m_young_student,m_young_student,26,21,شاگرد حجره‌ی حاج ناصر,True
+c021,s1,m_mid_merchant,m_mid_merchant,55,50,پارچه‌فروش، حجره‌ی روبه‌روی حاج ناصر,True
+c021,s2,f_mid_curator,f_mid_curator,41,42,عطار، حجره‌ی کناری حاج ناصر,True
+c021,s3,m_young_athlete,m_young_athlete,31,24,پسر حاج ناصر,True
+c021,s5,m_old_warden,m_old_warden,63,62,نگهبان شب بازار,True
+c022,s1,m_mid_lawyer,m_neutral_46_angular,48,49,معاون مالی، قدیمی‌ترین همکار مدیرعامل,False
+c022,s2,f_young_photographer,f_young_photographer,33,33,منشی مدیرعامل,True
+c022,s3,m_mid_driver,m_mid_driver,36,36,حسابدار,True
+c022,s4,m_young_it,m_young_it,29,28,مسئول فناوری اطلاعات,True
+c022,s5,f_mid_cleaner,f_mid_publisher,58,58,نظافتچی شب طبقه‌های پنج تا هفت,True
+c023,s5,m_old_tailor,m_old_professor,63,68,کارمند بازنشسته‌ی راه‌آهن، هم‌کوپه‌ای,True
+c023,s1,f_young_painter,f_young_painter,27,30,نقاش، خواهرزاده‌ی منیژه، هم‌کوپه‌ای,True
+c023,s2,m_mid_business,m_mid_business,45,50,مهماندار واگن سه,True
+c023,s3,m_young_designer,m_young_designer,30,30,نوازنده‌ی سه‌تار، مسافر کوپه‌ی هشت,True
+c023,s4,m_mid_merchant,m_mid_merchant,52,50,بازرگان، هم‌کوپه‌ای,True
+c024,s3,m_mid_artist,m_mid_artist,38,38,عکاس مراسم افتتاح,True
+c024,s1,f_mid_director,f_mid_librarian,57,56,مدیر موزه,True
+c024,s2,m_mid_tycoon,m_mid_tycoon,52,50,سرپرست نگهبان‌های موزه,True
+c024,s4,m_old_fisher,m_old_fisher,70,65,مجموعه‌دار عتیقه، مهمان ویژه,True
+c024,s5,f_mid_restorer,f_mid_restorer,36,38,مرمت‌گر موزه، سخنران شب افتتاح,True
+c025,s2,m_mid_sailor,m_neutral_44_long,44,44,رانندهٔ خانواده و برادر زری,False
+c025,s1,m_mid_officer,m_mid_researcher,46,46,پسر رضا بهروزی,False
+c025,s3,f_young_photographer,f_young_photographer,30,33,خدمتکار خانه و ذی‌نفع وصیت,True
+c025,s4,m_old_physician,m_old_physician,62,65,پزشک خانواده,True
+c025,s5,f_mid_designer,f_mid_designer,35,36,منشی مخصوص بهروزی,True
+c026,s3,m_mid_conductor,m_neutral_53_square,53,53,نگهبان شب انبار,False
+c026,s1,f_mid_lawyer,f_mid_lawyer,39,42,حسابدار انبار,True
+c026,s2,m_mid_technician,m_mid_technician,37,40,اپراتور لیفتراک,True
+c026,s4,m_mid_photographer,m_mid_photographer,43,45,مسئول توزیع انبار,True
+c026,s5,m_old_flatcap,m_old_flatcap,63,66,صاحب انبار,True
+c027,s1,m_mid_driver,m_neutral_41_oval,41,41,ناخدای قایق طوفان,False
+c027,s2,m_old_captain,m_old_captain,59,65,ناخدای قایق موج,True
+c027,s3,m_mid_lawyer,m_mid_lawyer,36,42,ناخدای قایق صدف,True
+c027,s4,m_mid_teacher,m_mid_teacher,48,45,ناخدای قایق ساحل,True
+c027,s5,m_mid_captain,m_mid_captain,55,55,ناخدای قایق مروارید,True
+c028,s3,f_mid_inspector,f_mid_inspector,33,40,پرستار شب بخش مراقبت ویژه,True
+c028,s1,m_mid_nurse,m_mid_nurse,41,38,پرستار شب بخش مراقبت ویژه,True
+c028,s2,f_mid_pharmacist,f_mid_pharmacist,37,38,داروساز شیفت عصر بیمارستان,True
+c028,s4,m_young_courier,m_mid_worker,32,36,دستیار ارشد جراحی,False
+c028,s5,m_young_designer,m_young_designer,30,30,بهیار بخش مراقبت ویژه,True
+c029,s5,m_young_boxer,m_mid_driver,36,36,مسئول ثبت امانت,True
+c029,s1,m_mid_lecturer,m_mid_lecturer,52,52,پژوهشگر مهمان,True
+c029,s2,m_old_warden,m_old_warden,57,62,نگهبان کتابخانه,True
+c029,s3,f_mid_scholar,f_mid_scholar,44,48,کتابدار بخش نسخه‌ها,True
+c029,s4,f_mid_guest,f_mid_guest,33,38,پژوهشگر متن‌های کهن,True
+c030,s2,f_mid_agent,f_mid_designer,35,36,لباس‌دار,True
+c030,s1,f_mid_manager,f_mid_manager,40,40,مدیر صحنه,True
+c030,s3,m_mid_artist,m_mid_artist,45,38,بازیگر نقش پادشاه,True
+c030,s4,m_old_boss,m_old_boss,58,60,تهیه‌کننده,True
+c030,s5,m_young_courier,m_young_designer,31,30,اپراتور نور,True
+c031,s4,m_old_farmer,m_neutral_56_round,56,56,صاحب هتل,False
+c031,s1,f_young_receptionist,f_young_receptionist,29,27,مسئول پذیرش,True
+c031,s2,m_mid_guard,m_mid_sailor,50,50,نگهبان شب,True
+c031,s3,f_mid_lawyer,f_mid_lawyer,42,42,حسابدار,True
+c031,s5,m_mid_cook,m_mid_cook,47,50,سرآشپز,True
+c032,s3,f_mid_business,f_mid_director,47,48,مدیر رستوران,True
+c032,s1,m_young_designer,m_young_designer,26,30,گارسون,True
+c032,s2,m_mid_cook,m_mid_cook,54,50,سرآشپز,True
+c032,s4,f_young_cook,f_young_cook,28,28,کمک‌آشپز,True
+c032,s5,m_mid_barista,m_mid_barista,33,35,ظرف‌شور,True
+c033,s1,m_mid_fixer,m_neutral_38_coils,38,39,راهنمای کوه,False
+c033,s2,f_mid_chef,f_mid_chef,41,42,آشپز پناهگاه,True
+c033,s3,m_mid_officer,m_mid_researcher,46,46,سرپرست پناهگاه,False
+c033,s4,f_mid_archaeologist,f_mid_archaeologist,45,45,مهمان، پزشک,True
+c033,s5,m_old_gardener,m_old_gardener,60,62,برادر مقتول,True
+c034,s5,m_young_designer,m_young_designer,37,30,فیلم‌بردار مستند,True
+c034,s1,m_mid_teacher,m_mid_teacher,44,45,راهنمای کویر,True
+c034,s2,f_young_student,f_young_student,23,24,دانشجوی کارآموز,True
+c034,s3,f_mid_director,f_mid_director,50,48,سرپرست کاوش,True
+c034,s4,m_young_courier,m_young_it,31,28,کارگر کاوش,True
+c035,s3,f_mid_baker,f_mid_baker,41,42,مأمور میز اشیای گمشده,True
+c035,s1,m_mid_driver,m_mid_driver,34,36,مسافر یابنده‌ی کیف,True
+c035,s2,m_mid_resident,m_mid_resident,57,52,صاحب کیف,True
+c035,s4,m_mid_lecturer,m_mid_lecturer,56,52,نظافتچی ایستگاه,True
+c035,s5,m_mid_officer,m_neutral_46_angular,49,49,نگهبان ایستگاه,False
+c036,s2,f_mid_widow,f_mid_widow,36,40,پسادکتری,True
+c036,s1,m_mid_business,m_mid_business,48,50,مسئول ایمنی زیستی,True
+c036,s3,f_young_artist,f_young_artist,27,27,دانشجوی دکتری,True
+c036,s4,m_mid_artist,m_mid_artist,40,38,تکنسین,True
+c036,s5,m_old_scientist,m_old_scientist,55,56,رئیس آزمایشگاه,True
+c037,s2,f_mid_director,f_mid_librarian,57,56,خاله‌ی عروس,True
+c037,s1,m_mid_driver,m_mid_driver,35,36,مهمانِ همراه خانواده‌ی داماد,True
+c037,s3,m_young_boxer,m_young_it,28,28,برادر داماد,True
+c037,s4,f_mid_journalist,f_mid_journalist,38,40,هماهنگ‌کننده‌ی تالار,True
+c037,s5,m_mid_artist,m_mid_artist,32,38,دی‌جی عروسی,True
+c038,s1,m_mid_lecturer,m_mid_lecturer,52,52,معاون آموزشی,True
+c038,s2,m_old_schoolmaster,m_old_schoolmaster,61,66,سرایدار مدرسه,True
+c038,s3,m_young_student,m_young_student,17,21,دانش‌آموز پایه‌ی یازدهم,True
+c038,s4,m_mid_teacher,m_mid_teacher,46,45,دبیر ریاضی,True
+c038,s5,f_mid_agent,f_mid_agent,38,42,دبیر ادبیات و مسئول دبیرخانه,True
+c039,s5,m_mid_doctor,m_mid_merchant,50,50,مسافر و شاهدِ داوطلب,True
+c039,s1,m_mid_driver,m_mid_driver,36,36,متصدی پذیرش سالن,True
+c039,s2,m_old_boss,m_old_boss,58,60,تاجر و صاحب کیف,True
+c039,s3,f_mid_attorney,f_mid_attorney,31,38,میزبان سالن,True
+c039,s4,f_mid_banker,f_mid_banker,47,45,نظافتچی سالن,True
+c040,s1,f_mid_cleaner,f_mid_housewife,51,48,مسئول مالی بایگانی فرهنگی سپیدار,True
+c040,s2,f_mid_librarian,f_mid_librarian,60,56,همسایه‌ی برج و میزبان داوطلب نشست,True
+c040,s3,m_young_courier,m_mid_worker,33,36,برادرزاده‌ی آرام؛ کارمند داروخانه,False
+c040,s4,m_mid_fixer,m_mid_fixer,47,48,مرمت‌گر برج و اسناد معماری بایگانی,True
+c040,s5,m_mid_resident,m_mid_resident,54,52,نگهبان محوطه و مسئول رساندن وسایل به برج,True
+c040,s6,m_old_gardener,m_old_gardener,62,62,مدیر بایگانی فرهنگی سپیدار,True
+c041,s3,m_old_fisher,m_old_fisher,58,65,خریدار فرش,True
+c041,s1,m_old_schoolmaster,m_old_schoolmaster,63,66,ارزیاب فرش,True
+c041,s2,f_mid_guest,f_mid_guest,43,38,بافنده و تأمین‌کننده,True
+c041,s4,m_mid_officer,m_neutral_46_angular,49,49,فروشندهٔ فرش,False
+c041,s5,m_mid_photographer,m_mid_photographer,45,45,فروشندهٔ همسایه,True
+c042,s2,f_mid_archaeologist,f_mid_archaeologist,46,45,مدیر پروژه,True
+c042,s1,m_mid_lawyer,m_mid_lawyer,41,42,مهندس ارشد,True
+c042,s3,m_mid_artist,m_mid_artist,38,38,مهندس محاسب,True
+c042,s4,f_young_photographer,f_young_photographer,30,33,دبیر پروژه,True
+c042,s5,m_young_courier,m_mid_worker,33,36,کارشناس فناوری,False
+c043,s4,m_mid_officer,m_mid_officer,50,45,مأمور واگن خواب,True
+c043,s1,f_mid_housewife,f_mid_housewife,52,48,صاحب گردنبند، مسافر کوپه‌ی پنج,True
+c043,s2,m_old_boss,m_old_boss,56,60,رئیس قطار,True
+c043,s3,m_mid_artist,m_mid_artist,44,38,نقاش، مسافر کوپه‌ی شش,True
+c043,s5,f_mid_business,f_mid_singer,36,36,همسفر افسانه، معرف خریدار,True
+c044,s1,f_mid_guest,f_mid_guest,34,38,مسئول پذیرش,True
+c044,s2,m_old_warden,m_old_warden,55,62,نگهبان,True
+c044,s3,f_mid_designer,f_mid_designer,31,36,عکاس,True
+c044,s4,f_mid_baker,f_mid_baker,49,42,سرپرست مجموعه,True
+c044,s5,m_mid_lecturer,m_mid_lecturer,52,52,مرمت‌گر,True
+c045,s5,m_old_painter,m_old_painter,62,68,باغبان و مباشر باغ,True
+c045,s1,f_mid_singer,f_mid_singer,35,36,دستیار نقاش,True
+c045,s2,m_young_it,m_young_it,29,28,پسر نقاش,True
+c045,s3,f_mid_pastry,f_mid_pastry,48,48,آشپز ویلا,True
+c045,s4,m_mid_photographer,m_mid_photographer,44,45,راننده,True
+c046,s2,f_mid_chef,f_mid_chef,36,42,مسئول باسکول,True
+c046,s1,m_old_fisher,m_old_fisher,61,65,مالک انبار,True
+c046,s3,m_mid_sailor,m_mid_sailor,52,50,رانندهٔ کامیون,True
+c046,s4,m_mid_technician,m_mid_technician,39,40,اپراتور لیفتراک,True
+c046,s5,m_mid_teacher,m_mid_teacher,45,45,مسئول توزیع,True
+c047,s1,m_mid_teacher,m_mid_teacher,44,45,مسئول بخش نسخه‌های خطی,True
+c047,s2,f_mid_scientist,f_mid_clerk,41,40,پژوهشگر نسخه‌شناس,True
+c047,s3,m_old_flatcap,m_old_flatcap,59,66,نظافتچی,True
+c047,s4,f_mid_director,f_mid_attorney,38,38,کتابدار,True
+c047,s5,m_mid_policeman,m_mid_tycoon,50,50,نگهبان شب,True
+c048,s3,f_mid_attorney,f_mid_attorney,33,38,متصدی پذیرش,True
+c048,s1,m_young_waiter,m_young_athlete,24,24,باربر,True
+c048,s2,f_mid_widow,f_mid_scholar,49,48,خدمتکار طبقه‌ی ششم,True
+c048,s4,m_mid_fixer,m_neutral_39_broad,38,39,تعمیرکار,False
+c048,s5,m_mid_barista,m_mid_researcher,46,46,مهمان اتاق ۶۰۵,False
+c049,s5,m_mid_captain,m_neutral_45_freckles,46,44,ناخدای صیاد-۱,False
+c049,s1,m_mid_sailor,m_mid_sailor,43,50,ناخدای صیاد-۳,True
+c049,s2,m_mid_resident,m_mid_resident,51,52,ناخدای صیاد-۲,True
+c049,s3,m_mid_teacher,m_mid_teacher,38,45,ناخدای صیاد-۴,True
+c049,s4,m_old_captain,m_mid_captain,55,55,ناخدای صیاد-۵,True
+c050,s5,f_mid_banker,f_mid_waitress,34,32,منشی مقتول,False
+c050,s1,m_old_physician,m_old_physician,58,65,پزشک خانواده,True
+c050,s2,m_mid_lawyer,m_mid_lawyer,47,42,وکیل مقتول,True
+c050,s3,m_old_rich,m_neutral_56_round,55,56,دلالِ مینیاتور,False
+c050,s4,f_mid_inspector,f_mid_librarian,52,56,همسر مقتول,True
+c050,s6,m_young_athlete,m_young_athlete,29,24,پسر مقتول,True
+c051,s4,m_mid_nurse,m_mid_doctor,55,48,سرپرستار شیفت شب، طبقه‌های چهار و پنج,True
+c051,s1,m_mid_doctor,m_mid_worker,33,36,دستیار کشیک داخلی، پزشک شب بخش ۴,False
+c051,s2,f_young_nurse,f_young_nurse,31,28,پرستار شیفت شب بخش ۴,True
+c051,s3,m_young_dj,m_young_casual,26,26,کمک‌بهیار شیفت شب، طبقه‌های سه و چهار,True
+c051,s5,f_mid_pharmacist,f_mid_pharmacist,38,38,داروساز کشیک شب بیمارستان,True
+c052,s2,f_mid_curator,f_mid_curator,47,42,دانشیار دانشکده، استاد مشاور پایان‌نامه‌ی نیوشا,True
+c052,s1,m_old_scientist,m_old_captain,64,65,مدیر گروه و سرپرست آزمایشگاه فیزیولوژی گیاهی,True
+c052,s3,f_young_athlete,f_young_athlete,29,28,دانشجوی دکتری، صاحب سینی خشک‌شده,True
+c052,s4,m_young_it,m_young_it,35,28,پژوهشگر پسادکتری، مجری آزمون تکرار کوهسر-۷,True
+c052,s5,m_young_undergrad,m_young_undergrad,31,24,دانشجوی دکتری آزمایشگاه فیزیولوژی گیاهی,True
+c052,s6,m_mid_chef,m_neutral_53_square,52,53,تکنسین آزمایشگاه و گلخانه‌ی دانشکده,False
+c053,s3,f_old_retired,f_old_retired,58,60,مسئول طرح شنوایی‌سنجی دبستان سپیده در سال‌های ۸۴ و ۸۵؛ حالا مدیر مرکز شنوایی‌سنجی نوا,True
+c053,s1,m_mid_resident,m_mid_resident,51,52,حسابدار دبستان سپیده در سال ۸۵؛ حالا حسابدار یک شرکت پخش,True
+c053,s2,f_mid_teacher,f_mid_teacher,45,42,معلم کلاس سوم دبستان سپیده و دستیار طرح شنوایی‌سنجی در سال ۸۵؛ حالا معاون یک دبیرستان,True
+c053,s4,m_old_flatcap,m_old_flatcap,60,66,تعمیرکار سمعک؛ در سال ۸۵ تعمیر دستگاه‌های طرح با او بود,True
+c053,s5,f_mid_housewife,f_mid_housewife,49,48,نماینده‌ی اولیا در دبستان سپیده در سال ۸۵؛ خاله‌ی یکی از بچه‌های طرح,True
+c054,s1,f_mid_gallery,f_mid_gallery,46,40,مسئول نمایش و طراح ویترین‌های نمایشگاه؛ خواهر داریوش فرهمند,True
+c054,s2,m_mid_artist,m_mid_artist,42,38,طراح و سازنده‌ی حجم‌نما؛ استاد نسترن,True
+c054,s3,f_young_artist,f_young_artist,28,27,دستیار شروین در ساخت حجم‌نما,True
+c054,s4,m_young_courier,m_mid_worker,33,36,بسته‌بند کارگاه و سازنده‌ی ویترین‌های نمایشگاه,False
+c054,s5,m_old_boss,m_old_boss,55,60,سرمایه‌گذار حجم‌نما؛ برادر بزرگ مژگان,True
+c055,s5,m_mid_cook,m_mid_sailor,49,50,برادر کوچک گیتی؛ مجلس‌دار، که پذیرایی و برنامه‌ی امشب کار او بود,True
+c055,s1,f_mid_housewife,f_mid_housewife,54,48,میزبان مهمانی؛ دختر بزرگ خانم‌جان، خواهر فرهاد و مادر پریسا,True
+c055,s2,f_young_bookworm,f_young_bookworm,30,27,دختر گیتی و نوه‌ی خانم‌جان,True
+c055,s3,m_young_casual,m_young_casual,32,26,دوست پریسا؛ برادرزاده‌ی هما کیانی,True
+c055,s4,f_old_grandma,f_old_grandma,61,65,همسایه و دوست سی‌ساله‌ی خانم‌جان؛ عمه‌ی نوید,True
+c056,s2,m_young_it,m_young_it,34,28,هماهنگ‌کننده‌ی محموله‌های خیریه در فرودگاه؛ داماد فریبرز نامدار,True
+c056,s1,f_mid_manager,f_mid_manager,47,40,مدیر خیریه‌ی درمانی رهاورد؛ خواهر بزرگ مانی,True
+c056,s3,m_mid_barista,m_mid_worker,35,36,تعمیرکار تجهیزات خیریه؛ برادر سوسن و شاگرد سابق فریبرز نامدار,False
+c056,s4,f_young_firefighter,f_mid_waitress,31,32,انباردار شیفت شب سوله‌ی درمانی؛ مستأجر سابق سوسن,False
+c056,s5,m_old_warden,m_neutral_56_angular,58,60,نماینده‌ی شرکت اهداکننده و بازرس بازنشسته‌ی تجهیزات پزشکی؛ پدرزن آبتین,False
+c057,s4,f_mid_scholar,f_mid_scholar,45,48,دبیر داوری مسابقه از اول آبان؛ استاد دانشگاه و استاد راهنمای روزبه افشار,True
+c057,s1,m_mid_barista,m_young_designer,30,30,متقاضی مسابقه و صاحب طرح شماره‌ی ۹؛ شاگرد دکتری دکتر دادبین و همکار سابق نسیم شایگان در فصلنامه,True
+c057,s2,m_mid_technician,m_neutral_38_coils,38,39,مسئول میز دریافت طرح‌ها؛ برادر نسیم شایگان و رفیق دکتر سرابی,False
+c057,s3,f_mid_journalist,f_mid_journalist,34,40,ویراستار فصلنامه‌ی نارون؛ خواهر بردیا شایگان و همکار سابق روزبه افشار,True
+c057,s5,m_mid_lecturer,m_mid_lecturer,52,52,داور ارشد مسابقه و دبیر موقت داوری تا آخر مهر؛ دبیر سابق فصلنامه‌ی نارون و همکار قدیمی دکتر دادبین,True
+c058,s3,m_old_boss,m_old_boss,57,60,مدیر املاک خانواده و وارث دیگر؛ برادر ناهید وزیری,True
+c058,s1,f_mid_housewife,f_mid_housewife,53,48,صاحب‌خانه و یکی از دو وارث؛ خواهر فرامرز وزیری و مادر شاهین نیک‌خواه,True
+c058,s2,m_young_casual,m_young_casual,29,26,ارزیاب املاک؛ پسر ناهید وزیری و دوست دانشگاهی مهسا ارجمند,True
+c058,s4,f_mid_clerk,f_mid_waitress,32,32,منشی دفترخانه‌ی ۱۸۲ و منشی جلسه‌ی تقسیم؛ دوست دانشگاهی شاهین نیک‌خواه,False
+c058,s5,m_old_flatcap,m_old_flatcap,66,66,دایی ناهید و فرامرز و شاهد امضای توافق‌نامه؛ ضامن وام شاهین,True
+c059,s2,f_mid_restorer,f_mid_banker,46,45,طراح عروسک و صحنه‌ی گروه مهتاب؛ استاد شبنم دلنواز و همسر سابق هوشنگ آذرپور,True
+c059,s1,m_mid_lecturer,m_mid_lecturer,50,52,کارگردان و سرپرست گروه عروسکی مهتاب؛ همسر سابق شیرین مستوفی,True
+c059,s3,f_young_artist,f_young_artist,27,27,عروسک‌گردان اصلی گروه مهتاب؛ شاگرد شیرین مستوفی و خواهر اشکان دلنواز,True
+c059,s4,m_mid_technician,m_young_designer,31,30,نورپرداز گروه مهتاب؛ برادر شبنم دلنواز و دوست قدیمی مجید توانا,True
+c059,s5,m_old_warden,m_neutral_56_angular,60,60,مسئول سالن تمرین خانه‌ی فرهنگ اقاقیا؛ طلبکار هوشنگ آذرپور,False
+c060,s1,m_old_bakerman,m_old_schoolmaster,63,66,داور همیشگی مسابقه و بزرگ خانواده‌ی فروتن؛ پدر سحر فروتن,True
+c060,s2,f_mid_manager,f_mid_manager,35,40,برگزارکننده‌ی مسابقه؛ دختر ایرج فروتن و همسر آرش نامور,True
+c060,s3,m_mid_barista,m_neutral_39_broad,38,39,شرکت‌کننده‌ی مسابقه؛ داماد ایرج فروتن و همسر سحر فروتن,False
+c060,s4,f_mid_chef,f_mid_pastry,51,48,مدیر آشپزخانه‌ی مهمان‌سرای سروناز؛ خاله‌ی پدرام یوسفی,True
+c060,s5,m_young_waiter,m_young_casual,26,26,دستیار ایرج فروتن در مسابقه؛ خواهرزاده‌ی میترا خوشدل و بدهکار ایرج,True
+c061,s4,m_old_flatcap,m_old_flatcap,61,66,مدیر صندوق خانواده‌ی نیک‌نهاد از ۱۳۷۴؛ برادر پروین اردلان و پسرخاله‌ی افروز تابان,True
+c061,s1,f_mid_librarian,f_mid_librarian,55,56,کتابدار کتابخانه‌ی خانوادگی نیک‌نهاد؛ خواهر منصور اردلان و استاد قدیم کامران زرین‌دست,True
+c061,s2,m_mid_photographer,m_mid_photographer,49,45,صحاف و مرمت‌گر، صاحب کارگاه صحافی؛ شاگرد قدیم پروین اردلان,True
+c061,s3,f_mid_housewife,f_mid_housewife,45,48,دختر و وارث شوکت تابان؛ دخترخاله‌ی منصور و پروین اردلان، صاحب خیاطی مادرش,True
+c061,s5,m_old_schoolmaster,m_old_schoolmaster,67,66,حسابدار پیشین صندوق خانواده‌ی نیک‌نهاد تا اسفند ۱۳۸۰؛ ضامن قرارداد شاگردی کامران زرین‌دست,True
+c062,s4,m_mid_barista,m_neutral_39_broad,39,39,کارشناس تدارکات بیمارستان؛ برادر آزاده دادرس و بدهکار نصرت سپنتا,False
+c062,s1,f_mid_teacher,f_mid_teacher,40,42,مسئول آموزش بخش آموزش و نمایش تجهیزات؛ همکار حمید دادرس در کمیته‌ی تجهیزات,True
+c062,s2,m_mid_fixer,m_mid_fixer,52,48,تعمیرکار تجهیزات بیمارستان؛ طلبکار حمید دادرس و استاد سابق پیمانه رفیعی,True
+c062,s3,f_mid_business,f_mid_mechanic,44,42,نماینده‌ی خیریه‌ی همدم؛ خواهر بزرگ حمید دادرس و همسایه‌ی ده‌ساله‌ی پیمانه رفیعی,True
+c062,s5,f_mid_designer,f_mid_designer,36,36,طراح نمایشگاه و سازنده‌ی دیوار نمایش اتاق ۳۰۴؛ شاگرد سابق نصرت سپنتا و همسایه‌ی آزاده دادرس,True
+w001,s7,f_mid_designer,f_mid_pharmacist,38,38,پرستار منصور,True
+w001,s1,m_mid_photographer,m_mid_photographer,52,45,پسر بزرگ منصور,True
+w001,s2,f_mid_soldier,f_mid_director,47,48,دختر منصور، متخصص قلب,True
+w001,s3,f_mid_mechanic,f_mid_mechanic,45,42,همسر کاوه,True
+w001,s4,m_young_conscript,m_young_athlete,24,24,نوه‌ی منصور، پسر کاوه,True
+w001,s5,m_old_farmer,m_old_farmer,66,70,سرایدار ویلا,True
+w001,s6,m_mid_tycoon,m_neutral_56_angular,58,60,مدیر مالی شرکت، دوست قدیمی منصور,False
+w001,s8,m_mid_lawyer,m_mid_tycoon,50,50,وکیل خانواده,True
+w002,s6,m_old_rich,m_neutral_56_angular,57,60,حسابدار و مباشر باغ، رفیق قدیمی جمشید,False
+w002,s1,m_mid_lecturer,m_mid_lecturer,55,52,برادر کوچک جمشید، شریک باغ,True
+w002,s2,f_mid_pilot,f_mid_scholar,50,48,همسر جمشید، مادر عروس,True
+w002,s3,m_young_worker,m_mid_barista,33,35,گارسون شرکت پذیرایی؛ سرکارگر سابق باغ,True
+w002,s4,f_young_bookworm,f_young_bookworm,34,27,دختر بهروز، طراح لباس عروس,True
+w002,s5,m_mid_lawyer,m_mid_lawyer,36,42,برادر بزرگ داماد، حسابدار تعاونی صادرات مرکبات,True
+w002,s7,m_young_casual,m_young_casual,31,26,مسئول آتش‌بازی,True
+w002,s8,f_young_artist,f_young_artist,29,27,عکاس عروسی,True
+w003,s1,m_mid_tycoon,m_mid_tycoon,48,50,مدیر حراج,True
+w003,s2,m_old_professor,m_neutral_53_square,52,53,کارشناس ساعت‌ساز,False
+w003,s3,f_mid_commander,f_mid_agent,44,42,وارث بزرگ‌تر,True
+w003,s4,m_young_boxer,m_mid_worker,34,36,وارث کوچک‌تر,False
+w003,s5,m_old_schoolmaster,m_neutral_56_angular,58,60,دلال فرش و دوست قدیمی,False
+w003,s6,f_mid_judge,f_mid_clerk,41,40,نگهبان موزه‌ی خانگی,True
+w003,s7,f_mid_chef,f_mid_chef,46,42,خدمتکار و آشپز خانه,True
+w003,s8,m_mid_business,m_mid_business,50,50,خریدار تلفنی,True
+w004,s5,m_mid_technician,m_mid_fixer,44,48,راهنمای تورهای کویر,True
+w004,s1,m_mid_business,m_mid_business,49,50,فروشنده‌ی تجهیزات معدنی,True
+w004,s2,f_young_photographer,f_young_photographer,31,33,عکاس طبیعت و مستندساز,True
+w004,s3,f_mid_doctor,f_mid_doctor,45,40,پزشک عمومی درمانگاه‌های بین‌راهی,True
+w004,s4,f_young_receptionist,f_young_athlete,28,28,دختر صاحب کاروانسرا,True
+w004,s6,m_mid_cook,m_mid_cook,46,50,آشپز کاروانسرای صفا,True
+w004,s7,m_young_designer,m_young_designer,33,30,استادیار باستان‌شناسی,True
+w004,s8,m_young_casual,m_young_casual,30,26,نامزد رویا ملک‌پور,True
+w005,s3,m_mid_researcher,m_mid_researcher,46,46,پژوهشگر مهمان و نسخه‌شناس,True
+w005,s1,m_mid_lecturer,m_mid_lecturer,54,52,مدیر کتابخانه‌ی اسناد کهن,True
+w005,s2,f_mid_restorer,f_mid_restorer,39,38,مرمتگر اسناد و نسخه‌های خطی,True
+w005,s4,f_mid_attorney,f_mid_attorney,36,38,کتابدار بخش نسخه‌های خطی,True
+w005,s5,m_old_boss,m_old_boss,61,60,مجموعه‌دار نسخه‌های خطی,True
+w005,s6,f_mid_agent,f_mid_agent,43,42,نگهبان شب کتابخانه,True
+w005,s7,f_mid_publisher,f_mid_publisher,58,58,اهداکننده‌ی دیوان,True
+w005,s8,m_young_student,m_young_it,29,28,فهرست‌نویس انبار مجله‌ها,True
+w006,s5,f_mid_manager,f_mid_manager,39,40,مدیر تشریفات عروسی,True
+w006,s1,f_mid_housewife,f_mid_housewife,47,48,مادر عروس,True
+w006,s2,m_mid_merchant,m_mid_merchant,51,50,دایی عروس,True
+w006,s3,f_young_receptionist,f_young_receptionist,27,27,متصدی پذیرش شیفت شب,True
+w006,s4,m_mid_guard,m_mid_guard,41,40,نگهبان شب هتل,True
+w006,s6,m_young_waiter,m_young_undergrad,23,24,باربر هتل,True
+w006,s7,m_young_designer,m_young_designer,31,30,داماد,True
+w006,s8,m_mid_doctor,m_neutral_46_angular,48,49,میهمان بی‌رزرو اتاق ۴۰۸,False

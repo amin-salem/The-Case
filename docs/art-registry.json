@@ -3596,6 +3596,114 @@
         "date": "2026-11-07",
         "status": "editorial apparent age; angular portrait assessed at 60 rather than prompt target 56"
       }
+    },
+    {
+      "id": "m_neutral_45_waves",
+      "apparent_gender": "m",
+      "apparent_age": 45,
+      "apparent_age_range": [
+        40,
+        50
+      ],
+      "hair_color": "chestnut streaked with grey",
+      "hair_style": "ear-length swept waves",
+      "facial_hair": "clean shaven",
+      "glasses": false,
+      "skin_tone": "light warm beige under illustrated light",
+      "face_shape": "broad jaw, narrower temples",
+      "clothing": "charcoal knit polo",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "4b39fb41e93138930ef7e644aa28610bba69c6f9627ee8a691b06f31ba0dca21",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "visual inspection of generated image and final WebP contact sheet",
+        "status": "editorial estimate, not exact age measurement"
+      }
+    },
+    {
+      "id": "m_neutral_45_freckles",
+      "apparent_gender": "m",
+      "apparent_age": 44,
+      "apparent_age_range": [
+        39,
+        49
+      ],
+      "hair_color": "reddish brown",
+      "hair_style": "short sides and receding temples",
+      "facial_hair": "short reddish brown beard",
+      "glasses": false,
+      "skin_tone": "fair warm beige with freckles under illustrated light",
+      "face_shape": "elongated, narrow jaw",
+      "clothing": "olive blazer and grey shirt",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "2a8a9f185941bad7935d86c3e89c1c530aa777687555ddf0c7f2dd0dd367e7de",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "visual inspection of generated image and final WebP contact sheet",
+        "status": "editorial estimate, not exact age measurement"
+      }
+    },
+    {
+      "id": "m_neutral_38_coils",
+      "apparent_gender": "m",
+      "apparent_age": 39,
+      "apparent_age_range": [
+        34,
+        44
+      ],
+      "hair_color": "black",
+      "hair_style": "closely cropped tight curls",
+      "facial_hair": "thick moustache",
+      "glasses": false,
+      "skin_tone": "deep warm brown under illustrated light",
+      "face_shape": "long oval",
+      "clothing": "indigo collared shirt",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "e2639e290c6c163125b04126a0b3aed38527ded273d378cb632a54a5b6ea38b8",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "visual inspection of generated image and final WebP contact sheet",
+        "status": "editorial estimate, not exact age measurement"
+      }
+    },
+    {
+      "id": "m_neutral_46_angular",
+      "apparent_gender": "m",
+      "apparent_age": 49,
+      "apparent_age_range": [
+        44,
+        54
+      ],
+      "hair_color": "silver with dark roots",
+      "hair_style": "short swept",
+      "facial_hair": "clean shaven",
+      "glasses": true,
+      "skin_tone": "light warm olive under illustrated light",
+      "face_shape": "angular with high cheekbones",
+      "clothing": "brown overshirt and grey crewneck",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "fc90dc22f9b0188c9fedfae9d8c420991365cf16faecf3578312121d1544971b",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "visual inspection of generated image and final WebP contact sheet",
+        "status": "editorial estimate, not exact age measurement"
+      }
     }
   ]
 }

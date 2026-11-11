@@ -43,6 +43,26 @@
       "first_build": null,
       "usable_from": "9999-12-31",
       "status": "unreleased; sentinel prevents case assignment until verified rollout"
+    },
+    "m_neutral_45_waves": {
+      "first_build": null,
+      "usable_from": "9999-12-31",
+      "status": "unreleased; sentinel prevents case assignment until verified rollout"
+    },
+    "m_neutral_45_freckles": {
+      "first_build": null,
+      "usable_from": "9999-12-31",
+      "status": "unreleased; sentinel prevents case assignment until verified rollout"
+    },
+    "m_neutral_38_coils": {
+      "first_build": null,
+      "usable_from": "9999-12-31",
+      "status": "unreleased; sentinel prevents case assignment until verified rollout"
+    },
+    "m_neutral_46_angular": {
+      "first_build": null,
+      "usable_from": "9999-12-31",
+      "status": "unreleased; sentinel prevents case assignment until verified rollout"
     }
   }
 }
