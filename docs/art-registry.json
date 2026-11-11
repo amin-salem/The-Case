@@ -8377,5 +8377,167 @@
     "legacy_bypass": false,
     "legacy_uncovered_pending_owner": [],
     "note": "All 92 female images reviewed with actual scarf on head; no uncovered exception. Eight new women are unreleased."
-  }
+  },
+  "ui_assets": [
+    {
+      "id": "league_0",
+      "path": "app/assets/leagues/league_0.webp",
+      "kind": "leagues",
+      "sha256": "7887c07cd9dc7a05f0f25cbf18b5ff605a8835a17b4aeca21d2fb868cc275794",
+      "size_bytes": 13028,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "existing_main": false,
+      "first_build": null,
+      "usable_from": null,
+      "release_basis": "UI art prepared on ui-league-medals; not shipped, not a case portrait or scene.",
+      "restrictions": [
+        "No case portrait/scene assignment."
+      ],
+      "visual_review_date": "2026-11-11"
+    },
+    {
+      "id": "league_1",
+      "path": "app/assets/leagues/league_1.webp",
+      "kind": "leagues",
+      "sha256": "5aab5b1fe7935328253b2ae809db4e7d2a76db44d4368e4eb0dd9b45b3468a6e",
+      "size_bytes": 11424,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "existing_main": false,
+      "first_build": null,
+      "usable_from": null,
+      "release_basis": "UI art prepared on ui-league-medals; not shipped, not a case portrait or scene.",
+      "restrictions": [
+        "No case portrait/scene assignment."
+      ],
+      "visual_review_date": "2026-11-11"
+    },
+    {
+      "id": "league_2",
+      "path": "app/assets/leagues/league_2.webp",
+      "kind": "leagues",
+      "sha256": "e0b9af150ccaa28e5248d60e375642f1e4b163cc13df704f423afa947aebf85d",
+      "size_bytes": 13674,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "existing_main": false,
+      "first_build": null,
+      "usable_from": null,
+      "release_basis": "UI art prepared on ui-league-medals; not shipped, not a case portrait or scene.",
+      "restrictions": [
+        "No case portrait/scene assignment."
+      ],
+      "visual_review_date": "2026-11-11"
+    },
+    {
+      "id": "league_3",
+      "path": "app/assets/leagues/league_3.webp",
+      "kind": "leagues",
+      "sha256": "7820a32306e1285dec20c2e85e896e3e28c78be6cd77b094eb81fe785147c71b",
+      "size_bytes": 17760,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "existing_main": false,
+      "first_build": null,
+      "usable_from": null,
+      "release_basis": "UI art prepared on ui-league-medals; not shipped, not a case portrait or scene.",
+      "restrictions": [
+        "No case portrait/scene assignment."
+      ],
+      "visual_review_date": "2026-11-11"
+    },
+    {
+      "id": "medal_bronze",
+      "path": "app/assets/medals/medal_bronze.webp",
+      "kind": "medals",
+      "sha256": "92f7014c8c50c41766cc5696f440ad11b82d41f4f28099e04e27b31aced02a61",
+      "size_bytes": 13058,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "existing_main": false,
+      "first_build": null,
+      "usable_from": null,
+      "release_basis": "UI art prepared on ui-league-medals; not shipped, not a case portrait or scene.",
+      "restrictions": [
+        "No case portrait/scene assignment."
+      ],
+      "visual_review_date": "2026-11-11"
+    },
+    {
+      "id": "medal_silver",
+      "path": "app/assets/medals/medal_silver.webp",
+      "kind": "medals",
+      "sha256": "2021638b30e5924c7941f6f44a471f3d36a319b3a5f5e35e931a6f0f394b1281",
+      "size_bytes": 14170,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "existing_main": false,
+      "first_build": null,
+      "usable_from": null,
+      "release_basis": "UI art prepared on ui-league-medals; not shipped, not a case portrait or scene.",
+      "restrictions": [
+        "No case portrait/scene assignment."
+      ],
+      "visual_review_date": "2026-11-11"
+    },
+    {
+      "id": "medal_gold",
+      "path": "app/assets/medals/medal_gold.webp",
+      "kind": "medals",
+      "sha256": "6a049392864e1bc3cdc4e443abb7f2e8568d209a96c3dc1614c731b5c1ee7208",
+      "size_bytes": 14766,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "existing_main": false,
+      "first_build": null,
+      "usable_from": null,
+      "release_basis": "UI art prepared on ui-league-medals; not shipped, not a case portrait or scene.",
+      "restrictions": [
+        "No case portrait/scene assignment."
+      ],
+      "visual_review_date": "2026-11-11"
+    },
+    {
+      "id": "podium_stage",
+      "path": "app/assets/banners/podium_stage.webp",
+      "kind": "banners",
+      "sha256": "2eb2c5cd15dc9a57ce522b9838679ce5559bd4bd2d9bde4be72c7b3196d117f3",
+      "size_bytes": 42560,
+      "dimensions": [
+        1080,
+        720
+      ],
+      "apparent_gender": "none",
+      "existing_main": false,
+      "first_build": null,
+      "usable_from": null,
+      "release_basis": "UI art prepared on ui-league-medals; not shipped, not a case portrait or scene.",
+      "restrictions": [
+        "No case portrait/scene assignment."
+      ],
+      "visual_review_date": "2026-11-11"
+    }
+  ]
 }

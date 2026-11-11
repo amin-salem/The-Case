@@ -1,0 +1,142 @@
+[
+  {
+    "id": "league_0",
+    "path": "app/assets/leagues/league_0.webp",
+    "dimensions": [
+      256,
+      256
+    ],
+    "size_bytes": 13028,
+    "quality": 82,
+    "method": 6,
+    "sha256": "7887c07cd9dc7a05f0f25cbf18b5ff605a8835a17b4aeca21d2fb868cc275794",
+    "limit_bytes": 18000,
+    "ssim_vs_export_source": 0.95983,
+    "alpha": true,
+    "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+    "ssim_background": "#101724 for compositing transparent assets"
+  },
+  {
+    "id": "league_1",
+    "path": "app/assets/leagues/league_1.webp",
+    "dimensions": [
+      256,
+      256
+    ],
+    "size_bytes": 11424,
+    "quality": 82,
+    "method": 6,
+    "sha256": "5aab5b1fe7935328253b2ae809db4e7d2a76db44d4368e4eb0dd9b45b3468a6e",
+    "limit_bytes": 18000,
+    "ssim_vs_export_source": 0.98778,
+    "alpha": true,
+    "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+    "ssim_background": "#101724 for compositing transparent assets"
+  },
+  {
+    "id": "league_2",
+    "path": "app/assets/leagues/league_2.webp",
+    "dimensions": [
+      256,
+      256
+    ],
+    "size_bytes": 13674,
+    "quality": 82,
+    "method": 6,
+    "sha256": "e0b9af150ccaa28e5248d60e375642f1e4b163cc13df704f423afa947aebf85d",
+    "limit_bytes": 18000,
+    "ssim_vs_export_source": 0.94103,
+    "alpha": true,
+    "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+    "ssim_background": "#101724 for compositing transparent assets"
+  },
+  {
+    "id": "league_3",
+    "path": "app/assets/leagues/league_3.webp",
+    "dimensions": [
+      256,
+      256
+    ],
+    "size_bytes": 17760,
+    "quality": 79,
+    "method": 6,
+    "sha256": "7820a32306e1285dec20c2e85e896e3e28c78be6cd77b094eb81fe785147c71b",
+    "limit_bytes": 18000,
+    "ssim_vs_export_source": 0.92616,
+    "alpha": true,
+    "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+    "ssim_background": "#101724 for compositing transparent assets"
+  },
+  {
+    "id": "medal_bronze",
+    "path": "app/assets/medals/medal_bronze.webp",
+    "dimensions": [
+      256,
+      256
+    ],
+    "size_bytes": 13058,
+    "quality": 82,
+    "method": 6,
+    "sha256": "92f7014c8c50c41766cc5696f440ad11b82d41f4f28099e04e27b31aced02a61",
+    "limit_bytes": 15000,
+    "ssim_vs_export_source": 0.97174,
+    "alpha": true,
+    "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+    "ssim_background": "#101724 for compositing transparent assets"
+  },
+  {
+    "id": "medal_silver",
+    "path": "app/assets/medals/medal_silver.webp",
+    "dimensions": [
+      256,
+      256
+    ],
+    "size_bytes": 14170,
+    "quality": 82,
+    "method": 6,
+    "sha256": "2021638b30e5924c7941f6f44a471f3d36a319b3a5f5e35e931a6f0f394b1281",
+    "limit_bytes": 15000,
+    "ssim_vs_export_source": 0.99586,
+    "alpha": true,
+    "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+    "ssim_background": "#101724 for compositing transparent assets"
+  },
+  {
+    "id": "medal_gold",
+    "path": "app/assets/medals/medal_gold.webp",
+    "dimensions": [
+      256,
+      256
+    ],
+    "size_bytes": 14766,
+    "quality": 80,
+    "method": 6,
+    "sha256": "6a049392864e1bc3cdc4e443abb7f2e8568d209a96c3dc1614c731b5c1ee7208",
+    "limit_bytes": 15000,
+    "ssim_vs_export_source": 0.97726,
+    "alpha": true,
+    "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+    "ssim_background": "#101724 for compositing transparent assets"
+  },
+  {
+    "id": "podium_stage",
+    "path": "app/assets/banners/podium_stage.webp",
+    "dimensions": [
+      1080,
+      720
+    ],
+    "size_bytes": 42560,
+    "encoding": "VP8L RGB lossless container after q82 sampling/export preparation",
+    "export_working_grid": [
+      360,
+      240
+    ],
+    "method": 6,
+    "sha256": "2eb2c5cd15dc9a57ce522b9838679ce5559bd4bd2d9bde4be72c7b3196d117f3",
+    "limit_bytes": 45000,
+    "ssim_vs_export_source": 0.9782,
+    "alpha": false,
+    "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+    "ssim_background": "#101724 for compositing transparent assets"
+  }
+]

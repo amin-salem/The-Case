@@ -1,0 +1,109 @@
+{
+  "mode": "built-in image generation and reference editing; deterministic export finishing",
+  "references": [
+    "app/assets/avatars/det_01.webp",
+    "app/assets/avatars/ex_champion.webp"
+  ],
+  "assets": [
+    {
+      "id": "league_0",
+      "path": "app/assets/leagues/league_0.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 13028,
+      "quality": 82,
+      "method": 6,
+      "prompt": "Use case: stylized-concept. Reference images 1 and 2 are STYLE REFERENCES ONLY: match the exact hand-painted digital game-art style of these Parvandeh avatars, warm brass highlights, deep midnight navy self-shadow, polished luminous metal accents, soft dimensional shading, Iranian detective atmosphere, crisp readable silhouette, not a flat vector and not photoreal product photography. No writing, no letters, no digits, no watermark, no brand logo, no people. Create ONE isolated rookie league shield, centered on a genuinely transparent background. Straight-on symmetrical heraldic shield with softly rounded upper shoulders, gently arched broad top, tapering sides and one pointed bottom; shield occupies about 78% of canvas width and 82% height with transparent margin. Simple polished COPPER / BRONZE thick bevel around a dark warm bronze field. A single chunky small magnifying-glass emblem at the center, clearly readable at 48px; tilted handle points down-right. Warm key light comes from TOP LEFT, cool navy shading lower right. Restrained small glints, no wreath, no crown, no star, no ribbons. This is the baseline geometry for a four-tier family; keep the shield silhouette simple. No cast shadow or backdrop outside the shield. Square asset intended for 256x256 export. Genuine transparent pixels outside object."
+    },
+    {
+      "id": "league_1",
+      "path": "app/assets/leagues/league_1.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 11424,
+      "quality": 82,
+      "method": 6,
+      "prompt": "Use case: precise-object-edit. Edit target image 1: the supplied bronze league shield. Produce one higher-tier sibling of this exact same badge family. Preserve the EXACT shield silhouette, width/height ratio, scalloped rounded shoulders, gently arched top, pointed bottom, straight-on perspective, canvas placement, transparent margin and painted bevel style. Same TOP LEFT warm brass key light, navy soft shading toward lower right. Only alter tier materials and the requested central decoration. Genuinely transparent outside the badge; no backdrop or shadow outside. Must remain bold and readable at 48 pixels. No people, writing, digits, letters, brands or watermark. SILVER shield: cool polished silver bevel and dark cool steel-blue center. Keep the small central magnifying glass, now silver, same position, and add exactly TWO small silver laurel sprigs curving upward inside the lower sides, one on each side of the magnifier. Simple restrained subordinate leaves. No crown, no star, no red ribbon. Clearly silver, not gold; warm reflected highlight only on upper-left metal."
+    },
+    {
+      "id": "league_2",
+      "path": "app/assets/leagues/league_2.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 13674,
+      "quality": 82,
+      "method": 6,
+      "prompt": "Use case: precise-object-edit. Edit target image 1: the supplied bronze league shield. Produce one higher-tier sibling of this exact same badge family. Preserve the EXACT shield silhouette, width/height ratio, scalloped rounded shoulders, gently arched top, pointed bottom, straight-on perspective, canvas placement, transparent margin and painted bevel style. Same TOP LEFT warm brass key light, navy soft shading toward lower right. Only alter tier materials and the requested central decoration. Genuinely transparent outside the badge; no backdrop or shadow outside. Must remain bold and readable at 48 pixels. No people, writing, digits, letters, brands or watermark. GOLD shield: rich bright yellow-gold bevel and deep dark golden-bronze center. REPLACE magnifying glass with a bold large EIGHT-POINTED IRANIAN GIRIH STAR made from two interlocking squares, exactly eight tips, no other star shape. Add a short plain dark CRIMSON RED ribbon across the lower third, entirely blank and without lettering, tucked within the shield. No crown, no laurel. Strong star and red ribbon remain recognizable when tiny."
+    },
+    {
+      "id": "league_3",
+      "path": "app/assets/leagues/league_3.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 17760,
+      "quality": 79,
+      "method": 6,
+      "prompt": "Use case: precise-object-edit. Preserve this exact gold-and-lapis shield, its small crown, Persian arabesque metalwork, small central magnifier, digital painted style, shape and proportions. Remove ALL haze, rays, luminous aura, grey/white glow and cast shadows OUTSIDE the shield and crown. Outside the physical metal/blue shield and solid crown must be genuinely transparent and clean, including the area above and around the crown. Keep bright glints ON the metal only. Leave about 8% clear transparent margin on every edge of the square canvas, so crown does not touch top. Same warm top-left light, no background. No writing or numbers. Do not redesign the shield or add objects."
+    },
+    {
+      "id": "medal_bronze",
+      "path": "app/assets/medals/medal_bronze.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 13058,
+      "quality": 82,
+      "method": 6,
+      "prompt": "Use case: precise-object-edit. Edit target image 1: supplied circular achievement medal base. Keep exactly the same round outline, size, concentric ring geometry, Persian girih engraving positions, broad bevels, top-left warm light and soft navy lower-right self-shadows. Preserve real transparency outside the outer circle. IMPORTANT: replace the ENTIRE inner circular disc with a totally uniform, perfectly flat solid dark navy #111923. Center is empty and featureless, like an unlit flat color swatch: no gradient, no spotlight, no noise, no stipple, no texture, no ornament, no symbols. Inner disc diameter about sixty percent of outer medal. Only the metal ring receives light and painted texture. One single centered medal, no people, text, numbers, logos, loops or ribbon. Make the ring distinctly warm REDDISH COPPER-BRONZE with dark brown recesses and restrained orange brass highlights. Not yellow gold."
+    },
+    {
+      "id": "medal_silver",
+      "path": "app/assets/medals/medal_silver.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 14170,
+      "quality": 82,
+      "method": 6,
+      "prompt": "Use case: precise-object-edit. Edit target image 1: supplied circular achievement medal base. Keep exactly the same round outline, size, concentric ring geometry, Persian girih engraving positions, broad bevels, top-left warm light and soft navy lower-right self-shadows. Preserve real transparency outside the outer circle. IMPORTANT: replace the ENTIRE inner circular disc with a totally uniform, perfectly flat solid dark navy #111923. Center is empty and featureless, like an unlit flat color swatch: no gradient, no spotlight, no noise, no stipple, no texture, no ornament, no symbols. Inner disc diameter about sixty percent of outer medal. Only the metal ring receives light and painted texture. One single centered medal, no people, text, numbers, logos, loops or ribbon. Make the ring distinctly COOL POLISHED SILVER with steel-blue grey shadows and pale white highlights. Slight amber reflection only on upper-left. Absolutely no bronze or yellow-gold ring."
+    },
+    {
+      "id": "medal_gold",
+      "path": "app/assets/medals/medal_gold.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 14766,
+      "quality": 80,
+      "method": 6,
+      "prompt": "Use case: precise-object-edit. Edit target image 1: supplied circular achievement medal base. Keep exactly the same round outline, size, concentric ring geometry, Persian girih engraving positions, broad bevels, top-left warm light and soft navy lower-right self-shadows. Preserve real transparency outside the outer circle. IMPORTANT: replace the ENTIRE inner circular disc with a totally uniform, perfectly flat solid dark navy #111923. Center is empty and featureless, like an unlit flat color swatch: no gradient, no spotlight, no noise, no stipple, no texture, no ornament, no symbols. Inner disc diameter about sixty percent of outer medal. Only the metal ring receives light and painted texture. One single centered medal, no people, text, numbers, logos, loops or ribbon. Make the ring distinctly BRIGHT PALE YELLOW GOLD with champagne-white sparkling highlights and rich warm gold recesses. The most luminous of this three-metal family, clearly different from reddish copper bronze. No gemstones or added ornaments."
+    },
+    {
+      "id": "podium_stage",
+      "path": "app/assets/banners/podium_stage.webp",
+      "dimensions": [
+        1080,
+        720
+      ],
+      "size_bytes": 42560,
+      "encoding": "VP8L RGB lossless container after q82 sampling/export preparation",
+      "export_working_grid": [
+        360,
+        240
+      ],
+      "method": 6,
+      "prompt": "Use case: precise-object-edit. Edit this empty noir stage backdrop only at its bottom fade. Preserve the single warm top-center spotlight, empty central dark stone floor, deep navy sides, painted avatar-like style, composition and 3:2 landscape aspect. At the lower 25% of the image completely remove grain, mottling and all floor details, using a smooth invisible blend down into one perfectly uniform flat dark color #0E0F11, RGB 14 15 17. The entire bottom-most 12% is EXACTLY that one solid color, with no gradient within it, no texture, no illumination, no pattern and no object. Keep the floor light in the middle well above this solid lower band. No people, no podium blocks, no text or digits. Preserve everything else."
+    }
+  ]
+}
