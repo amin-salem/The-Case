@@ -429,7 +429,10 @@ void main() {
         // a failed call starts Api's 20-second retry timer: one good call stops it, so no timer is left pending
         Api.i.httpClient = MockClient((r) async => jsonResponse({}));
         await Api.i.missions().then<void>((_) {}, onError: (Object _) {});
-        await t.pump(const Duration(milliseconds: 300));
+        // the line is back: the error page retries by itself, let that finish before the test ends
+        for (int i = 0; i < 10; i++) {
+          await t.pump(const Duration(milliseconds: 300));
+        }
       });
     });
 
