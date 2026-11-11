@@ -1,0 +1,242 @@
+{
+  "server/app/content/cases/c005.json": {
+    "before_sha256": "b3dd1bdfe553d4ac05eda3b851acf0a515f2ecc5b332c0f1eae60eabf4a39185",
+    "after_sha256": "554f3114c3f86fedfae38dccaf85d0fc83a97d2ade745fc81075c836251df4c2",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c006.json": {
+    "before_sha256": "4ffa61ab2e44edb2a36a37dcb7d4d649bda877f0705680d8326c5dd53ce2c5e6",
+    "after_sha256": "7a2f532302a06c5a8f2b9f8fa3dba433f5fed90c29c6de22b3da24d133b59410",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c007.json": {
+    "before_sha256": "c11be23a6d6d7a8d0a27dea72b5c91b37fe5a5237f10fbbcd9429c4d55bfbc15",
+    "after_sha256": "b471a985eb2c57ddb164e3d919bbe0cc374ca9a1aaffd2ede2bfbd4c85a4f64c",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c009.json": {
+    "before_sha256": "435f86b3d9a6e8512e34a7975eb0000f43aa3baa1775d5f7dc960e7d180e4ec4",
+    "after_sha256": "5df366fd961158f0c1498f41a5b4593f45e1d1d4e01d7fba4fb911608c9f18be",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c010.json": {
+    "before_sha256": "33367104c0e6a60636644f67701ee680b0cce94b0e59e833f783a051a07300fa",
+    "after_sha256": "0c4fb0057d2813f424fb7e0231afa27e814d5dc04f9148ac24aab0cae52665e0",
+    "changed_slots": 3
+  },
+  "server/app/content/cases/c011.json": {
+    "before_sha256": "d1fab52a9c626969e575ff6248f207f882dc3a9a4583e153aff610fa282fdb0c",
+    "after_sha256": "98f2bc1e849809599d0b6133fb4c22dcab7845389891b35b1524f3850a86a963",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c016.json": {
+    "before_sha256": "dfc0e4c7c969c93c01557965fc1c9d5375cd2b2f4d02a5817345d03b4f1fce19",
+    "after_sha256": "6ef9f9aa2f5b68601eb2eef5d26991be07c0f13a6ea897720e36bb1a6c4e215c",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c017.json": {
+    "before_sha256": "ed52162683790f284cf866f654a9114ad0b320ea0e1a534961f69d9a7e7acb6e",
+    "after_sha256": "6c31100149ab0eafc7f73ab87ee6be19537745dda3f96c56330666dd58aba8d5",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c019.json": {
+    "before_sha256": "89d22d1c2a5dc220ed51c1c459f3f93a5a633d6e768d81167ed4c7acf2c4dabf",
+    "after_sha256": "af069f1c91040f52c16c77995baf48dc6a9723fde63d2b160e60c9c17c2973ee",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c022.json": {
+    "before_sha256": "d12906317366672a12ec7d6879d122ff7eb5b7917d1bb7265df5b6d9818604c7",
+    "after_sha256": "a17c14d1622b369c206a77f9789800f4ad09711a1fffcc3770291bb5a9cd4e0b",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c023.json": {
+    "before_sha256": "1472fdc3175050caab262e5404db5bfb8e24d939fae2cfe4658df5bf2f00fad3",
+    "after_sha256": "ad5e91c166844a16a387e8d67076d4faf3de549bebc69bd3316299386c74881b",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c024.json": {
+    "before_sha256": "5751266588e8aefef98670d0ce74674685f8ad6d8655b92a591f2c1dc8527c0a",
+    "after_sha256": "1ffa60dca51fdc72bd540fcf3255fbe9228f7a14d8923b5959985f167226d5bc",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c025.json": {
+    "before_sha256": "8d4fd372889bf4025f23889bda2c7bbf560fdf73885aaad4c13eb188665b46fc",
+    "after_sha256": "76896cda3ddd59a64d183c5035d28dbcbc9b1ddb5866facc407456ed15e2ab55",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c027.json": {
+    "before_sha256": "14c614e9e4e393fc5089fb66ed75ab9c226f1f6eff375bbc00a8c29508bf0623",
+    "after_sha256": "8b3be9dc09a0d6c3f889df1fc2b43cafe45177f6b19defc2f6000eb3b56ad724",
+    "changed_slots": 3
+  },
+  "server/app/content/cases/c028.json": {
+    "before_sha256": "9f7423aa60681cbb62ff92d6709f116c7dbaec397cea272f7dc0a0b785164787",
+    "after_sha256": "1e06f043aec6e186c3d647ae02cc7548a6ec5f066c8ad7f21a8da60f45e766c3",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c029.json": {
+    "before_sha256": "ae577820b7b07ce9b8ead74f754ccce7861e4e78762d0dae91c6bc8663e046a4",
+    "after_sha256": "f7d083da302df17c4809ad4e725079c426fafa40dad471866e018710c0f9b292",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c030.json": {
+    "before_sha256": "ddee6f6fffd7ad06cfbf84c0ea6d105650a52061cf31b7e7e991effd48e3fd11",
+    "after_sha256": "8d844b2c3d84203234affc607ad9eec5b64bb2314e3eff17240c7eecfc959570",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c031.json": {
+    "before_sha256": "6d48adc8b2db96a4097baa2c5337072ea1790b344e4d56d3db3d7f384cde1dc7",
+    "after_sha256": "b3624424555accd13a9270a661f27e5cf5a982763748c516a7469a061c155c84",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c033.json": {
+    "before_sha256": "1939e2ec505bffd2a87f041ffaf8ac34439abe545af67b68562d68861510b0a2",
+    "after_sha256": "f1004c322d3744e03ff067c35330fa2a326cffed86c337636f507908a3ed7826",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c034.json": {
+    "before_sha256": "66fc88711431256ab94626b22236849e317483194bca76b9312453e9137845a7",
+    "after_sha256": "a537ba5528a8759763be838aff94cc550e544d69188dde2cd07804f6a731f52b",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c035.json": {
+    "before_sha256": "98e543627749340c05a69a4bd3171e22d41785d734889db720ad7ec5d4324374",
+    "after_sha256": "51dce1c25ac6ce38355867a26d8f1252fab1756ff1300ec540ee9fc1458eec5f",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c036.json": {
+    "before_sha256": "c0c04d75ceb628b8cd69e6cbca3b8c8464f36596bbecb72a4240f2d8c0c1ac19",
+    "after_sha256": "a05c5a37b16b4d3269405170cdb2dc456310efc8acfec5f4dae5e1a0f295372b",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c037.json": {
+    "before_sha256": "829d9d3053f8beb03c153f232244b7b680c163dc34f6152d6a7a0998c6aa464e",
+    "after_sha256": "4710a8837e451f34be749b46e1687906d8d92fde530f6885844251286fb897bc",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c039.json": {
+    "before_sha256": "331d3481f8a8bd7ca67f4fe74c8f5840305138f89666a995a19baf6f71f02fe8",
+    "after_sha256": "4939bcc22742917f7d471adb664cac0b165243dd44ddfa8654725fd0bbd798b7",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c040.json": {
+    "before_sha256": "6383357b5f406bb8248bd910f0635cabf52012326c44f2d22c54e011ad57dca4",
+    "after_sha256": "d21e4abec6f5e8d1d04e0209951bde67af76111891362485c0a2a161ad646e34",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c041.json": {
+    "before_sha256": "03a52df2a8b53a6a45172bb632bc927509472ccc3d615edda6d999b799421e43",
+    "after_sha256": "a2e781000cf01d8c89431ec480ee74e7ee6957feda2b06b58c809e745dbd47e1",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c042.json": {
+    "before_sha256": "987b8cd0bc9c78aa38ce66058a7ba7ac0eb2501e4f0faeed138fd790d5777f51",
+    "after_sha256": "4819b90556fa84f973f7ac909e015a3bfe52892149151112b2088260551d2dd3",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c046.json": {
+    "before_sha256": "bac3bc03d0c02ab5abb15d1360055b9527d589ff07ed1674cc5872e104371c2a",
+    "after_sha256": "25bd09b095349fc05b4d8abe9e484b05bf53e08c4344893aed161487c3761a11",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c047.json": {
+    "before_sha256": "5c34ad9df8a010b154582821dc83b07ddcc59b8f3c5be3ec4e4ec2b20237cf2c",
+    "after_sha256": "b261d8cd885ca78e755e2e59a5aa99d54df18347fd8141dd59ef5e2852b00736",
+    "changed_slots": 3
+  },
+  "server/app/content/cases/c048.json": {
+    "before_sha256": "99829b994e4c32b8575ddf08ac867a481eab231abecf35d360b311a48067934b",
+    "after_sha256": "1015037299831ef0d8e9af67ea804b2c3e91cd411a999630f1c4929e686719df",
+    "changed_slots": 4
+  },
+  "server/app/content/cases/c049.json": {
+    "before_sha256": "765318417e127bf501d78acb3be73816b31d5382fc0f869020e9c28b37718d70",
+    "after_sha256": "96d243ce6ce6b403c3c3a07a8122fbfeaa6f91b0ac50c72fa0708a0ad2c1955f",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c050.json": {
+    "before_sha256": "d0a670142c375cd23f9fc5fb65794addcec641d318da6bd38fda3480dd17c2e7",
+    "after_sha256": "1ec2a2d25c4fb3d1c833d2f47f206353b801e8ff1b470c5fd85a40f3a75f4920",
+    "changed_slots": 3
+  },
+  "server/app/content/cases/c051.json": {
+    "before_sha256": "998cb6cd42838cdb7ee70c1a63e406e15c7367c8e87d6e6196d95757f9b51053",
+    "after_sha256": "5b4a76845f575a49b9cf104a4d4d931134ef21f35a35c7af0cbad7051673c834",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c052.json": {
+    "before_sha256": "0a233211cf7faba88b5cb7d8e469b71cea95d949fefd82a9d433e024bdbd7c3e",
+    "after_sha256": "fdfcf7a67a61841c9a5f8b3394a091a7bf122ed0775b81d63bad57d996c023e9",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c054.json": {
+    "before_sha256": "137fafd2f91b7a164598bb785bd6edc7df1e1f9d0683c4f286b240120f6aceaa",
+    "after_sha256": "25f9a79ae15d970e5c2118b2dbf9300aba61624b4b2160f7fcafd44c89070c05",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c056.json": {
+    "before_sha256": "2214d06f78581bdeb759c0f9cc70d1efbecbfb7384f8d555b039918b25d05f01",
+    "after_sha256": "0d42115a747ed79d20e3bcedb9f2181c39be12dca15fffcf22b07b4d17e1c888",
+    "changed_slots": 3
+  },
+  "server/app/content/cases/c057.json": {
+    "before_sha256": "790e88c3f3f1d16257f1cbb39de5edaa1dc6d5c8fd9ef33a952bc40a79d98a39",
+    "after_sha256": "f9bad16cd9a5cccd7f7bffaf1242908c31ac855b652da20685b7cc4d55652cff",
+    "changed_slots": 2
+  },
+  "server/app/content/cases/c058.json": {
+    "before_sha256": "986ee426292be02deb47cc01355a1cd4ae37c847181919ed30066b3de9fcba05",
+    "after_sha256": "718cc9a9b70d1d9273714aea0df68af8a9b4fff02021c004ef6e218d9e45d455",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c059.json": {
+    "before_sha256": "719b5f255aed727f9b2466412f0cf6b25c73d76df558000f7b057091b001419a",
+    "after_sha256": "175714a62be089620051e4b8a89540e19b3b0787e8f43c5b57c86df23845f22e",
+    "changed_slots": 4
+  },
+  "server/app/content/cases/c060.json": {
+    "before_sha256": "ff61398a45ec9b3749a241f173058e61cf9ae60916807c6681875b145956c7ad",
+    "after_sha256": "c76e4a473a89dde0b15ca3cc713a5783e8c2ce711a2901d8fbe237db1edf7fbe",
+    "changed_slots": 4
+  },
+  "server/app/content/cases/c061.json": {
+    "before_sha256": "60cdf335466a3b9a4bd174df3ba50415625a09009e485da3bc6b381670d99ce3",
+    "after_sha256": "36e1b4a969ede6875ad6107804bb11360032901cc4e8393b30848731bd3458c6",
+    "changed_slots": 1
+  },
+  "server/app/content/cases/c062.json": {
+    "before_sha256": "adbf7f6c4ce4a2c7be90bc4c0a3d211b40574794fb2e48fd1b2970533805821a",
+    "after_sha256": "3c994c5d399aee2b7ac12e3bfbb9ccc93ec552977a053f7c947b5d1b7675168f",
+    "changed_slots": 1
+  },
+  "server/app/content/weekly/w001.json": {
+    "before_sha256": "ed62f573d52d3bd0568165d6c7d7d5923107da4cc9073adba719e4487b6f8c10",
+    "after_sha256": "75730b5adaf2faf73cd2ea3ba3722d23d6e54a5138141b0c0c808e92339f7060",
+    "changed_slots": 4
+  },
+  "server/app/content/weekly/w002.json": {
+    "before_sha256": "4cbe894e86f6210bbd38cbdc49526bee0a65cec091f0020f999af201ab2b5431",
+    "after_sha256": "c09f69bd1afb12c29b3f34d7ac9dbd46b68c270c5f9a1014523197ada78be895",
+    "changed_slots": 3
+  },
+  "server/app/content/weekly/w003.json": {
+    "before_sha256": "b13c102653de64405c9ecebf2a970020da81015f125b9329ad3751f15c2454d9",
+    "after_sha256": "e64c13314c2bd8da924764bce9e8754db850c519cc0f31af7a224dc5cf410417",
+    "changed_slots": 4
+  },
+  "server/app/content/weekly/w004.json": {
+    "before_sha256": "0e5dcf56b861ecf002b3d61ac765611fef83ea3808863e42e1ea9c8b188471d9",
+    "after_sha256": "1b3007816aafe253266abb94a66009ae4b80ecf70685d6008578861b82a6f43f",
+    "changed_slots": 1
+  },
+  "server/app/content/weekly/w005.json": {
+    "before_sha256": "e4ad0622c5608ee7e0ff42d16fa0575bce8afcc701c6ce455f5ebbe8ebb3a75f",
+    "after_sha256": "b88b85a820fa1557502535a04434ea63aec20aa5587c8b5efe3b38e4242fa8b4",
+    "changed_slots": 1
+  },
+  "server/app/content/weekly/w006.json": {
+    "before_sha256": "91ea08ec4ac3f24f6b1ab3d8e19ff7edf33a86b900ae6cf0cb5ad12648cff111",
+    "after_sha256": "0fe3c05f251b8834b7fc08c71a260ba26eb8882f6b311c076e36062fc4b4ef63",
+    "changed_slots": 2
+  }
+}

@@ -56,7 +56,6 @@ class CaseArtContract(unittest.TestCase):
         for k,item in features.items():
             self.assertEqual(item['sha256'], self.reg[k]['sha256'])
         for a,b in itertools.combinations(sorted(features),2):
-            if self.reg[a]['apparent_gender'] != self.reg[b]['apparent_gender']: continue
             dist=(int(features[a]['phash'],16)^int(features[b]['phash'],16)).bit_count()
             sim=sum(x*y for x,y in zip(vectors[a],vectors[b]))
             if dist>10 and sim<0.88: continue

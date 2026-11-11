@@ -24,7 +24,6 @@ pairs=[]
 keys=sorted(features)
 for i,k in enumerate(keys):
  for l in keys[i+1:]:
-  if k[0]!=l[0]:continue
   a,b=features[k],features[l];hd=int(np.count_nonzero(a[0]!=b[0]));cos=float(a[1]@b[1])
   if hd<=10 or cos>=.88:pairs.append(dict(a=k,b=l,phash_distance=hd,hog_cosine=round(cos,5),decision='pending'))
 for pair in pairs:
@@ -32,7 +31,7 @@ for pair in pairs:
  if old and old.get('sha256_a')==digests[pair['a']] and old.get('sha256_b')==digests[pair['b']]:pair.update(old)
  pair.update(sha256_a=digests[pair['a']],sha256_b=digests[pair['b']])
 pairs.sort(key=lambda p:(-p['hog_cosine'],p['phash_distance']))
-(O/'machine-candidates.json').write_text(json.dumps({'method':'63-bit DCT pHash plus 576-dimensional gradient-orientation histogram of fixed face crop. Not a learned face embedding or identity test.','threshold':'same gender key AND (pHash Hamming <=10 OR face-crop HOG cosine >=0.88)','candidates':pairs},indent=2))
+(O/'machine-candidates.json').write_text(json.dumps({'method':'63-bit DCT pHash plus 576-dimensional gradient-orientation histogram of fixed face crop. Not a learned face embedding or identity test.','threshold':'all portraits: pHash Hamming <=10 OR face-crop HOG cosine >=0.88','candidates':pairs},indent=2))
 for start in range(0,len(pairs),12):
  batch=pairs[start:start+12];sheet=Image.new('RGB',(900,((len(batch)+2)//3)*200),'#eeeeee');d=ImageDraw.Draw(sheet)
  for j,pair in enumerate(batch):

@@ -1,6 +1,6 @@
 {
   "method": "63-bit DCT pHash plus 576-dimensional gradient-orientation histogram of fixed face crop. Not a learned face embedding or identity test.",
-  "threshold": "same gender key AND (pHash Hamming <=10 OR face-crop HOG cosine >=0.88)",
+  "threshold": "all portraits: pHash Hamming <=10 OR face-crop HOG cosine >=0.88",
   "candidates": [
     {
       "a": "f_mid_commander",
@@ -474,6 +474,17 @@
       "review_date": "2026-11-07",
       "sha256_a": "a2b405a0c6a9d4ddd39838cd7c7f1e3c7f973c794480bd9798426a7b49113c0e",
       "sha256_b": "7e53a6292d95521b4975b2d4faaed38b5f8893aa01a64af450845d93fa82e2c6"
+    },
+    {
+      "a": "f_mid_manager",
+      "b": "m_mid_sailor",
+      "phash_distance": 10,
+      "hog_cosine": 0.68907,
+      "decision": "visually_distinguishable",
+      "sha256_a": "3c2961f3ce17c0b2836a66ab89737fa88311cb49276428c1f67a10816630b32b",
+      "sha256_b": "251fd1b12dce488d39c8c92264dd3f9ccee90c6b3b7e90001d3840bc92010553",
+      "review_date": "2026-11-11",
+      "review_note": "Shared pose and light; jaw, cheeks, hairline and beard clearly distinguish the two pictures on the comparison sheet."
     },
     {
       "a": "m_mid_artist",

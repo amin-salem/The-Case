@@ -15,13 +15,20 @@
     "role": "مهماندار واگن ۴",
     "role_tags": [
       "hospitality",
-      "railway"
+      "railway",
+      "reception"
     ]
   },
   "c003/s3": {
     "role": "دانشجوی دکترای شیمی",
     "role_tags": [
       "laboratory"
+    ]
+  },
+  "c004/s1": {
+    "role": "نظافتچی موزه",
+    "role_tags": [
+      "cleaning"
     ]
   },
   "c004/s4": {
@@ -66,6 +73,12 @@
       "medical"
     ]
   },
+  "c008/s3": {
+    "role": "نظافتچی بخش",
+    "role_tags": [
+      "cleaning"
+    ]
+  },
   "c008/s4": {
     "role": "داروساز",
     "role_tags": [
@@ -95,6 +108,12 @@
     "role": "سرخدمه‌ی هتل",
     "role_tags": [
       "hospitality"
+    ]
+  },
+  "c011/s4": {
+    "role": "کارمند پذیرش",
+    "role_tags": [
+      "reception"
     ]
   },
   "c012/s1": {
@@ -131,6 +150,12 @@
     "role": "تکنسین فنی شیفت شب",
     "role_tags": [
       "maintenance"
+    ]
+  },
+  "c015/s4": {
+    "role": "نظافتچی شیفت شب",
+    "role_tags": [
+      "cleaning"
     ]
   },
   "c015/s5": {
@@ -170,16 +195,34 @@
       "security"
     ]
   },
+  "c019/s4": {
+    "role": "مسئول پذیرش",
+    "role_tags": [
+      "reception"
+    ]
+  },
   "c020/s1": {
     "role": "ساعت‌ساز، پیمانکار مرمت ساعت برج",
     "role_tags": [
       "maintenance"
     ]
   },
+  "c020/s2": {
+    "role": "شاگرد ساعت‌ساز، دستیار مرمت",
+    "role_tags": [
+      "fieldwork"
+    ]
+  },
   "c021/s5": {
     "role": "نگهبان شب بازار",
     "role_tags": [
       "security"
+    ]
+  },
+  "c022/s5": {
+    "role": "نظافتچی شب طبقه‌های پنج تا هفت",
+    "role_tags": [
+      "cleaning"
     ]
   },
   "c023/s1": {
@@ -192,7 +235,8 @@
     "role": "مهماندار واگن سه",
     "role_tags": [
       "hospitality",
-      "railway"
+      "railway",
+      "reception"
     ]
   },
   "c024/s2": {
@@ -293,6 +337,18 @@
       "security"
     ]
   },
+  "c030/s2": {
+    "role": "لباس‌دار",
+    "role_tags": [
+      "tailoring"
+    ]
+  },
+  "c031/s1": {
+    "role": "مسئول پذیرش",
+    "role_tags": [
+      "reception"
+    ]
+  },
   "c031/s2": {
     "role": "نگهبان شب",
     "role_tags": [
@@ -355,6 +411,12 @@
       "construction"
     ]
   },
+  "c035/s4": {
+    "role": "نظافتچی ایستگاه",
+    "role_tags": [
+      "cleaning"
+    ]
+  },
   "c035/s5": {
     "role": "نگهبان ایستگاه",
     "role_tags": [
@@ -371,6 +433,24 @@
     "role": "دی‌جی عروسی",
     "role_tags": [
       "music"
+    ]
+  },
+  "c039/s1": {
+    "role": "متصدی پذیرش سالن",
+    "role_tags": [
+      "reception"
+    ]
+  },
+  "c039/s3": {
+    "role": "میزبان سالن",
+    "role_tags": [
+      "reception"
+    ]
+  },
+  "c039/s4": {
+    "role": "نظافتچی سالن",
+    "role_tags": [
+      "cleaning"
     ]
   },
   "c040/s4": {
@@ -402,6 +482,12 @@
     "role": "مأمور واگن خواب",
     "role_tags": [
       "railway"
+    ]
+  },
+  "c044/s1": {
+    "role": "مسئول پذیرش",
+    "role_tags": [
+      "reception"
     ]
   },
   "c044/s2": {
@@ -436,10 +522,22 @@
       "maintenance"
     ]
   },
+  "c047/s3": {
+    "role": "نظافتچی",
+    "role_tags": [
+      "cleaning"
+    ]
+  },
   "c047/s5": {
     "role": "نگهبان شب",
     "role_tags": [
       "security"
+    ]
+  },
+  "c048/s3": {
+    "role": "متصدی پذیرش",
+    "role_tags": [
+      "reception"
     ]
   },
   "c048/s4": {
@@ -567,6 +665,12 @@
       "restoration"
     ]
   },
+  "c065/s5": {
+    "role": "مسئول پذیرش؛ مربی سابق پرهام آشتیانی و صاحب‌خانه‌ی یاشار نیک‌روش",
+    "role_tags": [
+      "reception"
+    ]
+  },
   "c067/s2": {
     "role": "تعمیرکار ساختمان؛ پسر پروانه نیک‌آیین و خواهرزاده‌ی فیروزه",
     "role_tags": [
@@ -646,6 +750,12 @@
     "role": "نگهبان شب کتابخانه",
     "role_tags": [
       "security"
+    ]
+  },
+  "w006/s3": {
+    "role": "متصدی پذیرش شیفت شب",
+    "role_tags": [
+      "reception"
     ]
   },
   "w006/s4": {
