@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 from datetime import date
 from app import content
+from app.schemas import CaseRow
 
 class SceneVariants(unittest.TestCase):
     def test_backwards_compatibility_and_public_output(self):
@@ -16,6 +17,13 @@ class SceneVariants(unittest.TestCase):
                 self.assertEqual('scene_variant' in payload,variant is not None)
                 self.assertEqual(payload['scene'],data['scene'])
                 self.assertNotIn('solution',payload)
+    def test_archive_response_model_keeps_variant_on_wire(self):
+        data=json.loads((content.CASES_DIR/'c058.json').read_text())
+        case=content.Case(data['id'], data['number'], date.fromisoformat(data['publish']), data)
+        row=CaseRow(**case.summary(), today=False, locked=False, unlock_cost=0, solved=False,
+                    failed=False, stars=0, solvers=0)
+        self.assertEqual(json.loads(row.model_dump_json())['scene_variant'], 'apartment')
+
     def test_unknown_unsafe_and_wrong_base(self):
         original=json.loads((content.CASES_DIR/'c020.json').read_text())
         for scene,v in [('tower','../clock'),('tower',None),('tower','missing'),('tower',[]),('museum','clock')]:

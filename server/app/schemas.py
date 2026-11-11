@@ -162,6 +162,7 @@ class CaseRow(BaseModel):
     title: str
     location: str
     scene: str
+    scene_variant: str | None = None
     category: str = ""  # topic key (content.CATEGORIES); empty for a case without one
     difficulty: int
     publish: str
