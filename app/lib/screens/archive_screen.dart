@@ -518,7 +518,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             child: Stack(fit: StackFit.expand, children: [
               Opacity(
                 opacity: c.locked ? 0.55 : 1,
-                child: AnimatedScene(scene: c.scene, height: banner, animated: false, dim: c.locked ? 0.3 : 0.05),
+                child: AnimatedScene(scene: c.scene, variant: c.sceneVariant, height: banner, animated: false, dim: c.locked ? 0.3 : 0.05),
               ),
               // darkening toward the bottom, so the title reads on any scene
               const DecoratedBox(

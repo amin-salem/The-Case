@@ -610,7 +610,7 @@ class _CaseScreenState extends State<CaseScreen> {
   Widget _introView(CaseData c) {
     return Scaffold(
       body: Stack(children: [
-        Positioned.fill(child: AnimatedScene(scene: c.scene, height: double.infinity, dim: 0.55)),
+        Positioned.fill(child: AnimatedScene(scene: c.scene, variant: c.sceneVariant, height: double.infinity, dim: 0.55)),
         Positioned(left: -20, right: -20, top: MediaQuery.paddingOf(context).top + 52,
             child: Transform.rotate(angle: -0.05, child: const CrimeTape(height: 22))),
         SafeArea(
@@ -762,7 +762,7 @@ class _CaseScreenState extends State<CaseScreen> {
       child: SizedBox(
       height: 120,
       child: Stack(children: [
-        Positioned.fill(child: AnimatedScene(scene: c.scene, height: 120, dim: 0.5)),
+        Positioned.fill(child: AnimatedScene(scene: c.scene, variant: c.sceneVariant, height: 120, dim: 0.5)),
         const Positioned(left: 0, right: 0, bottom: 0, child: CrimeTape(height: 13)),
         Padding(
           padding: const EdgeInsets.fromLTRB(4, 4, 12, 8),

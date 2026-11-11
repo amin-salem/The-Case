@@ -1,4 +1,4 @@
-"""Read-only diff guard: no case field except an existing avatar.portrait string may change."""
+"""Read-only diff guard: no case field except approved scene variants and existing avatar.portrait strings may change."""
 import argparse
 import json
 from pathlib import Path
@@ -20,6 +20,10 @@ def verify(old, new, name):
             raise ValueError(f'{name}: portrait must be non-empty')
         changes += old_id != new_id
         current['avatar']['portrait'] = old_id
+    expected = {"c020": "clock", "c040": "clock", "c058": "apartment"}
+    if a['id'] in expected and 'scene_variant' not in a:
+        if b.pop('scene_variant', None) != expected[a['id']]:
+            raise ValueError(f'{name}: unexpected scene variant')
     if a != b:
         raise ValueError(f'{name}: protected case data changed')
     return changes

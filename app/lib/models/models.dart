@@ -136,6 +136,7 @@ class CaseData {
         title = _s(j['title']),
         location = _s(j['location']),
         scene = _s(j['scene']),
+        sceneVariant = _s(j['scene_variant']),
         category = _s(j['category']),
         difficulty = _difficulty(j['difficulty']),
         intro = _s(j['intro']),
@@ -181,7 +182,7 @@ class CaseData {
   final String? motive;
   bool get weekly => motives.isNotEmpty;
 
-  final String id, title, location, scene, intro;
+  final String id, title, location, scene, sceneVariant, intro;
   final String category; // topic key, '' when the case has none (old server)
   final String? culprit, explanation; // only for finished cases
   final List<String> proof;
@@ -275,6 +276,7 @@ class CaseRow {
         title = _s(j['title']),
         location = _s(j['location']),
         scene = _s(j['scene']),
+        sceneVariant = _s(j['scene_variant']),
         category = _s(j['category']),
         difficulty = _difficulty(j['difficulty']),
         publish = _s(j['publish']),
@@ -292,7 +294,7 @@ class CaseRow {
         commentCount = _i(j['comment_count']),
         myRating = _i(j['my_rating']);
 
-  final String id, title, location, scene, publish;
+  final String id, title, location, scene, sceneVariant, publish;
   final String category; // topic key, '' when unknown
   final int number, difficulty, unlockCost, stars, solvers;
   final Map<int, int> baseSolveRewards;

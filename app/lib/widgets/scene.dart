@@ -8,8 +8,9 @@ import 'scene_extra.dart';
 /// (rain, flickering lamps, passing train lights, fire embers...).
 /// Twenty scenes; every case file names one of them in its "scene" field.
 class AnimatedScene extends StatefulWidget {
-  const AnimatedScene({super.key, required this.scene, this.height = 200, this.dim = 0, this.animated = true});
+  const AnimatedScene({super.key, required this.scene, this.variant = '', this.height = 200, this.dim = 0, this.animated = true});
   final String scene;
+  final String variant;
   final double height;
   final double dim; // 0..1 darken (for text on top)
   final bool animated; // false: a still frame (cheap, for thumbnails in long lists)
@@ -50,8 +51,17 @@ class _AnimatedSceneState extends State<AnimatedScene> with SingleTickerProvider
 
   /// A painted background (assets/scenes) with a slow camera drift and a light weather layer on top.
   Widget _painted() {
-    final image = Image.asset('assets/scenes/${widget.scene}.webp',
-        fit: BoxFit.cover, filterQuality: FilterQuality.medium, gaplessPlayback: true);
+    Widget base() => Image.asset('assets/scenes/${widget.scene}.webp',
+        fit: BoxFit.cover, filterQuality: FilterQuality.medium,
+        errorBuilder: (_, __, ___) => CustomPaint(painter: ScenePainter(widget.scene, 3.0, 0)));
+    final variant = widget.variant;
+    final valid = variant.isNotEmpty && variant.length <= 48 &&
+        !RegExp('[^a-z0-9_]').hasMatch(variant);
+    final image = valid
+        ? Image.asset('assets/scenes/${widget.scene}_$variant.webp',
+            fit: BoxFit.cover, filterQuality: FilterQuality.medium,
+            errorBuilder: (_, __, ___) => base())
+        : base();
     return SizedBox(
       height: widget.height,
       width: double.infinity,

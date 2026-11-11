@@ -463,7 +463,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return _heroFrame(
       key: const ValueKey('home-hero'),
       onTap: () => _open(c),
-      art: AnimatedScene(scene: c.scene, height: double.infinity),
+      art: AnimatedScene(scene: c.scene, variant: c.sceneVariant, height: double.infinity),
       badge: const _NewBadge(),
       children: [
         Wrap(spacing: 8, runSpacing: 2, crossAxisAlignment: WrapCrossAlignment.center, children: [
