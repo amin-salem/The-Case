@@ -1,3 +1,11 @@
+# workflows: fewer GitHub Actions minutes (11 Nov 2026)
+
+- The account ran out of Actions minutes («recent account payments have failed or your spending limit needs to be increased»).
+- CI no longer runs again on `release`, `release-admin` and `screens` (the commit was tested on its branch) nor twice for pull requests; a newer push cancels the older run on the same branch.
+- The admin menu browser test (about 10 minutes) moved to `admin-menu.yml` and runs only when `server/app/admin_page.html` or its test changes (or by hand).
+- Server watch every 2 hours instead of every 30 minutes (48 runs a day was most of the minutes); release APK artifacts kept 3 days instead of 7.
+- Workflow-only change: it reaches `main` with the next push that really changes `server/`.
+
 # server 1.60.0 / app 1.43.1+88: gift case for new detectives, sign out of an account (11 Nov 2026, urgent)
 
 - Promo case (ad campaign): the free 48 hours are counted from each new detective's own signup while the admin window (the campaign, up to 168 h) is open;

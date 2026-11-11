@@ -1,0 +1,33 @@
+name: Admin menu
+# The mobile admin navigation test in a real browser (about 10 minutes, mostly installing the browser).
+# Runs only when the admin page or its test changes (Actions minutes are limited, 11 Nov 2026).
+on:
+  push:
+    branches-ignore: [release, release-admin, screens]
+    paths:
+      - "server/app/admin_page.html"
+      - "server/tools/test_admin_menu.cjs"
+      - ".github/workflows/admin-menu.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: admin-menu-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  admin-menu:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install isolated browser test tools
+        run: |
+          npm install --no-save --prefix /tmp/admin-menu-ui playwright@1.56.1
+          /tmp/admin-menu-ui/node_modules/.bin/playwright install --with-deps chromium
+      - name: Mobile admin navigation (synthetic data only)
+        env:
+          NODE_PATH: /tmp/admin-menu-ui/node_modules
+        run: node server/tools/test_admin_menu.cjs

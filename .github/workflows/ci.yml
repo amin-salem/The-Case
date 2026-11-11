@@ -1,26 +1,19 @@
 name: CI
 
+# Actions minutes are limited (11 Nov 2026: the account ran out). So:
+# - the build branches (release, release-admin, screens) are not tested again: the same commit was tested on its branch;
+# - pull requests are not run twice (their branch push already runs CI);
+# - a newer push to the same branch cancels the older run;
+# - the admin menu browser test lives in admin-menu.yml and runs only when the admin page changes.
 on:
   push:
-  pull_request:
+    branches-ignore: [release, release-admin, screens]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  admin-menu:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - name: Install isolated browser test tools
-        run: |
-          npm install --no-save --prefix /tmp/admin-menu-ui playwright@1.56.1
-          /tmp/admin-menu-ui/node_modules/.bin/playwright install --with-deps chromium
-      - name: Mobile admin navigation (synthetic data only)
-        env:
-          NODE_PATH: /tmp/admin-menu-ui/node_modules
-        run: node server/tools/test_admin_menu.cjs
-
   android-capture-policy:
     runs-on: ubuntu-latest
     steps:

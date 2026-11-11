@@ -823,3 +823,11 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
   at least 20 real detectives per reason, so a young game simply shows fewer or no suggestions. Nothing to set.
 - Economy tab, block «۷. تب «آخر هفته»»: how often the weekend tab is opened, Thursday-Saturday vs the other days (event `weekend_tab_open`,
   once per app launch, only from the new app). Read it after a week of the new version before deciding about the tab.
+
+## GitHub Actions minutes (11 Nov 2026)
+- The repo is private, so Actions minutes are limited by the account plan. On 11 Nov 2026 they ran out: jobs did not start («recent account
+  payments have failed or your spending limit needs to be increased»). Fix: GitHub → Settings → Billing and plans (payment method or the
+  Actions spending limit), or wait for the next month.
+- To spend less: CI skips the build branches, newer pushes cancel older runs, the admin menu browser test runs only when the admin page
+  changes (`admin-menu.yml`, also by hand from the Actions tab), the server watch runs every 2 hours.
+
