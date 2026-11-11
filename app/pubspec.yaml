@@ -37,6 +37,10 @@ flutter:
     - assets/scenes/
     - assets/avatars/
     - assets/frames/
+    - assets/leagues/
+    - assets/medals/
+    - assets/textures/
+    - assets/evidence/
     - assets/banners/
     - assets/story/s01ch02/
   fonts:
