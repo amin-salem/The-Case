@@ -113,3 +113,19 @@ Build 87
 
 ## developer_note
 Build 88
+
+<!-- build: 89 -->
+## changelog_fa
+- کارت کارآگاهی: کارت شناسایی شخصی با رنگ و ظاهر مخصوص هر لیگ، با پشت جذاب و امکان اشتراک‌گذاری
+- منوی پایین ساده‌تر شد: میز کار، بایگانی، برترها و کارت من
+- در برترها با لمس هر کارآگاه، کارتش را ببین
+- بهبودهای کوچک
+
+## changelog_en
+- Detective card: a personal ID card styled by your league, with a shareable back
+- Simpler bottom menu: Desk, Archive, Top list and My card
+- Tap any detective in the top list to see his card
+- Small improvements
+
+## developer_note
+Build 89

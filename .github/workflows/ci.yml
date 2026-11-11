@@ -134,6 +134,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: "3.47.9" # pinned: stable moved to 3.50 on 11 Nov 2026 and flags every material.dart import
       - name: Analyze and test
         working-directory: app
         run: |
