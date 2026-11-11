@@ -63,7 +63,7 @@ void main() {
       await pumpApp(t);
       await t.tap(find.text('برترها').last);
       await t.pump(const Duration(milliseconds: 300));
-      expect(selectedTab(t), MainShell.leaderboard);
+      expect(selectedTab(t), 2);
       final onTab = t.widget<PopScope>(find.byWidgetPredicate((w) => w is PopScope).first);
       expect(onTab.canPop, isFalse, reason: 'on another tab, back must not leave the app');
       onTab.onPopInvokedWithResult!(false, null);

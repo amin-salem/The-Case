@@ -157,6 +157,16 @@ class _MainShellState extends State<MainShell> {
   static const _tabs = [MainShell.home, MainShell.archive, MainShell.leaderboard, MainShell.profile];
   static int _navOf(int tab) => tab == MainShell.weekend ? 0 : _tabs.indexOf(tab).clamp(0, 3);
 
+  /// The desk icon; a small dot while a weekend case is open and unsolved (the weekend page is not in the bar).
+  Widget _homeIcon(IconData icon) => ListenableBuilder(
+      listenable: MainShell.weekendOpen,
+      builder: (_, __) => Badge(
+          key: MainShell.weekendOpen.value ? const ValueKey('weekend-dot') : null,
+          smallSize: 9,
+          isLabelVisible: MainShell.weekendOpen.value,
+          backgroundColor: K.stamp,
+          child: Icon(icon)));
+
   Widget _page(int i) => switch (i) {
         MainShell.home => const HomeScreen(),
         MainShell.weekend => WeekendScreen(key: ValueKey('wk${_visits[i]}')),
@@ -209,15 +219,8 @@ class _MainShellState extends State<MainShell> {
                 },
                 destinations: [
                   NavigationDestination(
-                      icon: ListenableBuilder(
-                          listenable: Listenable.merge([WhatsNew.i, MainShell.weekendOpen]),
-                          builder: (_, __) => Badge(
-                              key: MainShell.weekendOpen.value ? const ValueKey('weekend-dot') : null,
-                              smallSize: 9,
-                              isLabelVisible: MainShell.weekendOpen.value,
-                              backgroundColor: K.stamp,
-                              child: const Icon(Icons.home_outlined))),
-                      selectedIcon: const Icon(Icons.home_rounded),
+                      icon: _homeIcon(Icons.home_outlined),
+                      selectedIcon: _homeIcon(Icons.home_rounded),
                       label: 'میز کار'),
                   const NavigationDestination(
                       icon: Icon(Icons.inventory_2_outlined), selectedIcon: Icon(Icons.inventory_2_rounded), label: 'بایگانی'),

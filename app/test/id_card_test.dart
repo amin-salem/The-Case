@@ -49,6 +49,7 @@ void main() {
         expect(find.text('آرش'), findsOneWidget);
         expect(find.text('بازرس'), findsOneWidget);
         await t.tap(find.byKey(const ValueKey('id-card')));
+        await t.pump();
         await t.pump(const Duration(milliseconds: 800));
         expect(find.text('۴۱'), findsOneWidget);
         expect(find.text('AB12CD'), findsOneWidget);

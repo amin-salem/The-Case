@@ -150,6 +150,7 @@ void main() {
     expect(find.byKey(const ValueKey('id-card')), findsOneWidget);
     expect(find.text('کارآگاه1'), findsWidgets);
     await t.tap(find.byKey(const ValueKey('id-card'))); // flip: the back has his numbers
+    await t.pump();
     await t.pump(const Duration(milliseconds: 800));
     expect(find.text('۴۱'), findsOneWidget);
     expect(find.text('۱۹ شب'), findsOneWidget);
