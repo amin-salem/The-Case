@@ -99,3 +99,17 @@ Build 86
 
 ## developer_note
 Build 87
+
+<!-- build: 88 -->
+## changelog_fa
+- پرونده‌ی هدیه برای کارآگاه‌های تازه حالا در صفحه‌ی اصلی و بالای بایگانی نشان داده می‌شود
+- امکان خروج از حساب و ورود به حساب دیگر
+- بهبودهای کوچک
+
+## changelog_en
+- The gift case for new detectives now shows on the home screen and at the top of the archive
+- You can sign out of your account and sign in to another one
+- Small improvements
+
+## developer_note
+Build 88

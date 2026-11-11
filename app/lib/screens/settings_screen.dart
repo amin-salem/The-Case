@@ -17,6 +17,7 @@ import '../widgets/offline.dart';
 import '../widgets/whats_new_ui.dart';
 import 'account_sheets.dart';
 import 'dialogs.dart';
+import 'signed_out_screen.dart';
 import 'guide_screen.dart';
 
 /// Settings: account, looks, sound and reminders, support. Every row is one tap; forms open in sheets.
@@ -45,6 +46,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
     final mail = Api.i.supportEmail;
     if (mail != null) _open(Uri(scheme: 'mailto', path: mail, query: 'subject=${Uri.encodeComponent('پرونده')}'));
+  }
+
+  /// «خروج از حساب»: leave this account on this phone without deleting it, then log in to another one (or start fresh).
+  /// A guest account has no way back, so a guest is sent to secure it first.
+  Future<void> _signOut() async {
+    if (!needOnline(context)) return;
+    if (Api.i.profile?.secured != true) {
+      final ok = await confirm(context, 'اول حسابت رو امن کن',
+          'حساب مهمانت هنوز امن نشده؛ اگه خارج بشی دیگه برنمی‌گرده و سکه‌ها و پیشرفتت از دست می‌ره. اول امنش کن، بعد خارج شو.',
+          'امنش می‌کنم');
+      if (ok && mounted) await openAccountSheet(context, showSecureSheet);
+      return;
+    }
+    final ok = await confirm(context, 'خروج از حساب',
+        'از این حساب روی این گوشی خارج می‌شی. حسابت پاک نمی‌شه؛ هر وقت خواستی با شماره‌ات (یا ایمیلت) دوباره واردش می‌شی.',
+        'خارج شو');
+    if (!ok || !mounted) return;
+    await Api.i.signOut();
+    if (!mounted) return;
+    await Navigator.of(context)
+        .pushAndRemoveUntil(MaterialPageRoute<void>(builder: (_) => const SignedOutScreen()), (_) => false);
   }
 
   Future<void> _deleteAccount() async {
@@ -101,6 +123,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     icon: Icons.phonelink_setup_rounded,
                     title: 'ورود یا انتقال از گوشی دیگر',
                     onTap: () => openAccountSheet(context, showLoginSheet),
+                  ),
+                  SettingsRow(
+                    key: const ValueKey('settings-sign-out'),
+                    icon: Icons.logout_rounded,
+                    title: 'خروج از حساب',
+                    sub: 'برای رفتن به حساب دیگه',
+                    onTap: _signOut,
                   ),
                 ]),
                 _group('ظاهر', [

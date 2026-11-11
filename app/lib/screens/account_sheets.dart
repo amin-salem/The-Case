@@ -296,7 +296,7 @@ Future<bool> offerSecure(BuildContext context, {required bool afterSolve, bool F
 
 const _phoneLogin = '__phone__';
 
-Future<String?> showLoginSheet(BuildContext context, {int tab = 0}) async {
+Future<String?> showLoginSheet(BuildContext context, {int tab = 0, bool replaceWarning = true}) async {
   final r = await showNoirSheet<String>(
     context,
     title: 'ورود یا انتقال از گوشی دیگر',
@@ -308,7 +308,7 @@ Future<String?> showLoginSheet(BuildContext context, {int tab = 0}) async {
         onTap: () => Navigator.of(context).pop(_phoneLogin),
       ),
       const SizedBox(height: 12),
-      LoginTransferForm(initialTab: tab),
+      LoginTransferForm(initialTab: tab, replaceWarning: replaceWarning),
     ]),
   );
   if (r == _phoneLogin && context.mounted) return showPhoneLoginSheet(context);
@@ -316,8 +316,11 @@ Future<String?> showLoginSheet(BuildContext context, {int tab = 0}) async {
 }
 
 class LoginTransferForm extends StatefulWidget {
-  const LoginTransferForm({super.key, this.initialTab = 0});
+  const LoginTransferForm({super.key, this.initialTab = 0, this.replaceWarning = true});
   final int initialTab;
+
+  /// The «پیشرفت این گوشی جاش عوض می‌شه» line; hidden after a sign-out (nothing on this phone to replace).
+  final bool replaceWarning;
 
   @override
   State<LoginTransferForm> createState() => _LoginTransferFormState();
@@ -344,20 +347,22 @@ class _LoginTransferFormState extends State<LoginTransferForm> with SingleTicker
 
   @override
   Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: K.brass.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: K.brass.withValues(alpha: 0.45)),
+        if (widget.replaceWarning) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: K.brass.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: K.brass.withValues(alpha: 0.45)),
+            ),
+            child: Row(children: [
+              const Icon(Icons.warning_amber_rounded, color: K.brass, size: 20),
+              const SizedBox(width: 8),
+              Expanded(child: Text('پیشرفت این گوشی جاش با حساب قبلیت عوض می‌شه.', style: tBody(13, color: K.text))),
+            ]),
           ),
-          child: Row(children: [
-            const Icon(Icons.warning_amber_rounded, color: K.brass, size: 20),
-            const SizedBox(width: 8),
-            Expanded(child: Text('پیشرفت این گوشی جاش با حساب قبلیت عوض می‌شه.', style: tBody(13, color: K.text))),
-          ]),
-        ),
-        const SizedBox(height: 10),
+          const SizedBox(height: 10),
+        ],
         Container(
           decoration: BoxDecoration(color: K.night, borderRadius: BorderRadius.circular(12)),
           child: TabBar(

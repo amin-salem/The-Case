@@ -4,7 +4,9 @@ Why: an ad video plays the start of a good old case; the viewer installs, wants 
 coin wall on his first night. Nothing is given away that was being sold to that player: he did not have the game yet.
 - Who: an account younger than `welcome.NEWBIE_DAYS` (the same "new detective" as the first-days offers). Older accounts pay
   the normal archive price, so players who already know the game are not handed what Amin sells.
-- What: opening the case costs 0 coins while the window is open. Once opened it stays open for him (`unlocked`). The solve
+- When (13 Nov rule, Amin 11 Nov 2026): the window is the campaign (open while the video is on); each new detective gets
+  PERSONAL_HOURS (48) of free opening counted from HIS signup, so someone who installs on day 3 of the ad still has two days.
+- What: opening the case costs 0 coins while the window is open and his own hours last. Once opened it stays open for him (`unlocked`). The solve
   rewards are the normal archive rewards (nothing extra).
 - Where the list lives: the config row `promo_cases` (a JSON list, see remote_config.DEFAULTS), so no new table and no
   migration. An admin starts or ends a window in the panel (routers/admin_ui.py `/promo`). A broken row is ignored, so a bad
@@ -31,6 +33,7 @@ log = logging.getLogger("promo")
 
 KEY = "promo_cases"
 DEFAULT_HOURS = 48
+PERSONAL_HOURS = 48   # how long the case stays free for one detective, counted from his own signup (or the window start)
 MIN_HOURS = 1
 MAX_HOURS = 168
 MAX_ACTIVE = 10
@@ -48,6 +51,23 @@ def _row(raw: Any) -> tuple[str, datetime, datetime] | None:
         return None
 
 
+def windows(rows: Any, now: datetime) -> dict[str, tuple[datetime, datetime]]:
+    """case id -> (start, end) of the window that is open at `now` (the latest end when several overlap)."""
+    out: dict[str, tuple[datetime, datetime]] = {}
+    for raw in rows if isinstance(rows, list) else []:
+        r = _row(raw)
+        if r and r[1] <= now < r[2]:
+            old = out.get(r[0])
+            out[r[0]] = (r[1], r[2]) if old is None or r[2] > old[1] else old
+    return out
+
+
+def personal_end(created_at: datetime, start: datetime) -> datetime:
+    """The end of the free hours of one detective: PERSONAL_HOURS from his signup, or from the window start when he
+    signed up earlier. The window itself still has to be open (an admin ends it at any time)."""
+    return max(created_at, start) + timedelta(hours=PERSONAL_HOURS)
+
+
 def parse(rows: Any, now: datetime) -> dict[str, datetime]:
     """case id -> end of the window, for the windows that are open at `now`."""
     out: dict[str, datetime] = {}
@@ -56,6 +76,10 @@ def parse(rows: Any, now: datetime) -> dict[str, datetime]:
         if r and r[1] <= now < r[2]:
             out[r[0]] = max(r[2], out.get(r[0], r[2]))
     return out
+
+
+async def open_windows(session: AsyncSession, now: datetime | None = None) -> dict[str, tuple[datetime, datetime]]:
+    return windows(await remote_config.load_value(session, KEY), now or utcnow())
 
 
 async def active(session: AsyncSession, now: datetime | None = None) -> dict[str, datetime]:

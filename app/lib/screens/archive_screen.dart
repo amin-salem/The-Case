@@ -8,6 +8,7 @@ import '../services/archive_picks.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/category.dart';
+import '../widgets/gift_case.dart';
 import '../widgets/offline.dart';
 import '../widgets/archive_picks.dart';
 import '../widgets/archive_stats.dart';
@@ -200,6 +201,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             color: K.stamp,
             child: CustomScrollView(physics: const AlwaysScrollableScrollPhysics(), slivers: [
               const SliverToBoxAdapter(child: OfflineBanner(margin: EdgeInsets.fromLTRB(16, 10, 16, 0))),
+              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _giftPin(rows)),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _summary(rows)),
               if (rows != null && _nudgeVisible(rows)) SliverToBoxAdapter(child: _rateNudge(rows)),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _picksRow(rows)),
@@ -290,6 +292,13 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
           ),
         ]),
       );
+
+  /// The promo case that is free for this new detective, pinned above everything else (the same card as on the home page).
+  Widget _giftPin(List<CaseRow> rows) {
+    final c = giftCase(rows, DateTime.now());
+    if (c == null) return const SizedBox.shrink();
+    return GiftCaseCard(row: c, onOpen: () => _open(c), margin: const EdgeInsets.fromLTRB(16, 10, 16, 0));
+  }
 
   Widget _picksRow(List<CaseRow> rows) {
     final items = showablePicks(_picks, rows);

@@ -169,6 +169,7 @@ class CaseRow(BaseModel):
     weekend: bool = False  # an expired weekend case in the archive (higher price)
     locked: bool        # archive case not bought yet
     unlock_cost: int
+    free_until: int = 0  # unix seconds: this case is free to open for THIS detective until then (promo window); 0 = not a promo
     base_solve_rewards: dict[int, int] = Field(default_factory=dict)  # stars -> base coins; bonuses separate
     solved: bool
     failed: bool

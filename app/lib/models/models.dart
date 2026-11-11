@@ -282,6 +282,7 @@ class CaseRow {
         weekend = _b(j['weekend']),
         locked = _b(j['locked']),
         unlockCost = _i(j['unlock_cost'], 150),
+        freeUntil = _i(j['free_until']) > 0 ? DateTime.fromMillisecondsSinceEpoch(_i(j['free_until']) * 1000) : null,
         baseSolveRewards = _coinRewards(j['base_solve_rewards']),
         solved = _b(j['solved']),
         failed = _b(j['failed']),
@@ -297,6 +298,8 @@ class CaseRow {
   /// Percent of detectives who solved it, only when the server really sends one (`solve_rate`); null = hide the line.
   final int? solveRate;
   final int suspectCount; // 0 = an old server did not say: the line is hidden
+  /// Free to open for THIS detective until then (a promo window, `free_until`); null = not a gift (an old server never sends it).
+  final DateTime? freeUntil;
   final String id, title, location, scene, publish;
   final String category; // topic key, '' when unknown
   final int number, difficulty, unlockCost, stars, solvers;

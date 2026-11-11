@@ -486,6 +486,22 @@ class Api extends ChangeNotifier {
     return null;
   }
 
+  /// Leaves this account on this phone WITHOUT deleting it: a secured account comes back with its phone number (or e-mail,
+  /// or a transfer code) from any phone. Only the saved identity and the cache are dropped; the server keeps the account.
+  /// The next start registers a fresh guest, or logs in to another account (login sheet).
+  Future<void> signOut() async {
+    for (final k in const ['player', 'secret', 'token', 'token_exp']) {
+      await _p.remove(k);
+    }
+    _playerId = _secret = _token = null;
+    _tokenExp = 0;
+    _clientReported = false;
+    await _clearCache();
+    profile = null;
+    account++;
+    notifyListeners();
+  }
+
   Future<void> _storeLogin(Map<String, dynamic> j) async {
     await ClaimNoteStore(_p).migrateLegacy(_playerId);
     final newId = j['player_id'] as String;

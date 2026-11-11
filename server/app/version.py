@@ -1,5 +1,6 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.59.0"
+VERSION = "1.60.0"
+# server 1.60.0: promo case hours counted from each new detective's signup, `free_until` in the case list (11 Nov 2026)
 # server 1.59.0: UX pack release (build 87): update thank-you coins, archive picks, leaderboard data, art registry and portrait contract (11 Nov 2026)
 # server 1.49.0: nightly cases c057, c058 (1 Nov 2026)
 # server 1.54.0: nightly cases c065, c066 (8 Nov 2026)

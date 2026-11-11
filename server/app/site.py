@@ -105,7 +105,7 @@ async def case_page(case_id: str, session: AsyncSession = Depends(get_session)):
     if ends is not None:
         hours = max(1, int((ends - utcnow()).total_seconds() // 3600))
         badge = f'<span class="badge">رایگان برای کارآگاه‌های تازه · حدود {hours} ساعت دیگر</span>'.translate(_FA)
-        note = "برنامه را نصب کن، پرونده را در بخش بایگانی پیدا کن و بدون سکه بازش کن. این فرصت برای حساب‌های تازه است."
+        note = "برنامه را نصب کن؛ این پرونده در صفحه‌ی اصلی منتظرته و بدون سکه بازش می‌کنی. این فرصت برای حساب‌های تازه است."
     elif today is not None and today.id == case_id:
         badge, note = '<span class="badge">پرونده‌ی امشب</span>', "این پرونده امشب برای همه رایگان است."
     else:

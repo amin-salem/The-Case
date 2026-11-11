@@ -1,5 +1,6 @@
 """Cases: today's case (free), the archive (bought with coins), hints and accusations."""
 import logging
+from datetime import timezone
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import and_, func, or_, select
@@ -69,6 +70,15 @@ def _unlock_cost(c: Case, p: CaseProgress | None = None, offers: welcome.Offers 
         return base if weekend else welcome.reopen_cost(base, offers)
     base = eco.archive_unlock_cost(c.data.get("difficulty"), weekend=weekend)
     return base if weekend else welcome.archive_cost(base, c.data.get("difficulty"), offers)
+
+
+def _free_until(c: Case, p: CaseProgress | None, offers: welcome.Offers) -> int:
+    """Unix seconds until which this case is free to open for the player (a promo window); 0 when it is not, or he already
+    opened, solved or lost it (the card in the app only shows what he can still take)."""
+    end = offers.promo.get(c.id)
+    if end is None or (p and (p.unlocked or p.solved or p.failed)):
+        return 0
+    return int(end.replace(tzinfo=timezone.utc).timestamp())
 
 
 def _shows_allowed(c: Case) -> int:
@@ -204,6 +214,7 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
         s = c.summary()
         return CaseRow(**s, today=today is not None and c.id == today.id,
                        weekend=content.is_weekly(c.id), locked=not _can_open(c, p, player, today), unlock_cost=_unlock_cost(c, p, offers),
+                       free_until=_free_until(c, p, offers),
                        base_solve_rewards={stars: eco.solve_reward(c.data.get("difficulty"), stars, live_weekend=_weekly_live(c) and not (p and (p.unlocked or (p.failed and not p.solved)))) for stars in (1, 2, 3)},
                        solved=bool(p and p.solved), failed=bool(p and p.failed),
                        stars=p.stars if p else 0, solvers=int(counts.get(c.id, 0)),

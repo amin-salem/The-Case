@@ -787,6 +787,18 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
 - What to watch: ledger lines `promo:<case>` (one per new player who opened it) against `solve` lines of that case.
 - The effect is in the panel: «🗂 پرونده‌ها» → «📈 اثر رایگان‌کردن» (signups in the window against the same length before it, free opens, solves, coin buyers). All panel times are Tehran time.
 - Not built yet: opening the app straight on the case from the link (needs a change in the APK build).
+- Since server 1.60.0 / app 88 (11 Nov 2026): the «hours» field is the length of the CAMPAIGN (set up to 168 = a week while the video
+  is on); every new detective gets 48 free hours counted from HIS signup (`promo.PERSONAL_HOURS`), so someone who installs on day 3 of
+  the ad still has two days. «پایان» ends it for everybody at once (the kill switch). The app shows the case on the home page under
+  tonight's case («پرونده‌ی هدیه‌ی تو · رایگان برای تو · N ساعت دیگه», `free_until` in `GET /v1/cases`) and pins it at the top of the
+  archive; it disappears when he opens, solves or loses it, or when his hours end.
+
+## Sign out of an account (app 88, 11 Nov 2026)
+- Settings → «خروج از حساب»: only a secured account (phone or e-mail) can leave; a guest is asked to secure it first (no way back).
+  The account stays on the server. The phone then shows «از حسابت خارج شدی»: log in to another account (phone number, old e-mail,
+  transfer code) or start as a fresh detective. No account is registered until he chooses. A fresh guest still goes through the
+  normal registration (strict limit `register_device`: 3 new accounts a day per install), so signing out again and again cannot farm
+  the start coins.
 
 ## Update thank-you coins («هدیه‌ی آپدیت») (UX pack, 10 Nov 2026)
 - Order matters: first publish the new build on Cafe Bazaar, and only THEN set «آخرین نسخه» in the admin panel (block «📲 بروزرسانی اپ»).

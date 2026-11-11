@@ -1,3 +1,13 @@
+# server 1.60.0 / app 1.43.1+88: gift case for new detectives, sign out of an account (11 Nov 2026, urgent)
+
+- Promo case (ad campaign): the free 48 hours are counted from each new detective's own signup while the admin window (the campaign, up to 168 h) is open;
+  `GET /v1/cases` rows carry `free_until` (unix seconds, 0 = not a gift; gone once he opened, solved or lost it). Before, a viewer who installed late in
+  the window had little or no time left. «پایان» in the panel still ends it for everybody.
+- App: «پرونده‌ی هدیه‌ی تو» card on the home page under tonight's case (title, «رایگان برای تو · N ساعت دیگه», ✕ closes it for this launch) and the same card
+  pinned at the top of the archive. Real data only: no `free_until`, no card.
+- App: settings «خروج از حساب» (secured accounts only; a guest is sent to secure first) and a screen to log in to another account or start fresh.
+- Tests: `server/tests/test_promo.py` (personal hours, free_until, kill switch), `app/test/gift_case_test.dart`, `app/test/sign_out_test.dart`.
+
 # server 1.59.0 / app 1.43.0+87: UX pack release (11 Nov 2026)
 
 - One release of the eight UX sessions (docs/ux-pack.md): an update reminder with a one-time thank-you gift, a next-case card and the starter-pack sheet after a solve,

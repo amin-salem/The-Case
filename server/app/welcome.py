@@ -28,7 +28,7 @@ NEWBIE_ARCHIVE_MAX_DIFFICULTY = 2
 class Offers:
     reopen: bool = False
     archive: bool = False
-    promo: frozenset = field(default_factory=frozenset)   # case ids that are free to open for him right now (services/promo.py)
+    promo: dict = field(default_factory=dict)   # case id -> end of HIS free hours, for the cases free to open for him now (services/promo.py)
 
 
 NONE = Offers()
@@ -47,7 +47,9 @@ async def offers_for(session: AsyncSession, player: Player, now: datetime | None
                func.coalesce(func.sum(case((CoinLog.reason.like("unlock:%"), 1), else_=0)), 0))
         .where(CoinLog.player_id == player.id, CoinLog.reason.like("reopen:%") | CoinLog.reason.like("unlock:%")))).one()
     from .services import promo
-    return Offers(reopen=not reopened, archive=not unlocked, promo=frozenset(await promo.active(session, now)))
+    mine = {cid: end for cid, (start, _) in (await promo.open_windows(session, now)).items()
+            if now < (end := promo.personal_end(player.created_at, start))}
+    return Offers(reopen=not reopened, archive=not unlocked, promo=mine)
 
 
 def reopen_cost(base: int, offers: Offers) -> int:

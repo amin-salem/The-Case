@@ -17,6 +17,7 @@ import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/crime_tape.dart';
 import '../widgets/engagement.dart';
+import '../widgets/gift_case.dart';
 import '../widgets/missions_card.dart';
 import '../widgets/notifications_card.dart';
 import '../widgets/name_sheet.dart';
@@ -376,6 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return [
       if (!finished) FadeSlideIn(child: _hero(c)) else if (c.solved) _solvedCard(c, cs) else _lostCard(c, cs),
       const SizedBox(height: 10),
+      _giftCard(cs),
       if (finished) ...[
         _archiveInvite(cs),
         _weekendRow(),
@@ -1020,6 +1022,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  static final Set<String> _giftHidden = {}; // closed with the ✕ in this launch: «case id:player id»
+
+  /// A promo case that is free for this new detective right now: one card under tonight's case, with the time left.
+  /// Gone once he opens, solves or loses it, when the hours end, or when he closes it.
+  Widget _giftCard(CasesList cs) {
+    final c = giftCase(cs.archive, DateTime.now());
+    final key = '${c?.id}:${Api.i.playerId}';
+    if (c == null || _giftHidden.contains(key)) return const SizedBox.shrink();
+    return GiftCaseCard(
+      row: c,
+      onClose: () => setState(() => _giftHidden.add(key)),
+      onOpen: () async {
+        await openCaseRow(context, c);
+        if (mounted) _load();
+      },
     );
   }
 

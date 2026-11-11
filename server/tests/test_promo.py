@@ -195,3 +195,61 @@ async def test_impact_counts_signups_free_opens_solves_and_buyers(client, monkey
 
 async def test_impact_with_no_windows_is_empty(client):
     assert (await client.get("/admin/api/promo/impact", headers=ADMIN)).json() == {"items": []}
+
+
+# ---- 11 Nov 2026: the free hours of a detective are counted from HIS signup, and the app is told until when ----
+
+def test_personal_end_counts_from_the_signup_or_the_window_start():
+    start = datetime(2026, 11, 12, 10, 0)
+    assert promo.personal_end(datetime(2026, 11, 14, 8, 0), start) == datetime(2026, 11, 16, 8, 0)   # signed up on day 3 of the ad
+    assert promo.personal_end(datetime(2026, 11, 11, 8, 0), start) == datetime(2026, 11, 14, 10, 0)  # signed up before the window
+    w = promo.windows([{"case_id": "c020", "starts_at": "2026-11-12T10:00:00", "ends_at": "2026-11-19T10:00:00"}],
+                      datetime(2026, 11, 13, 0, 0))
+    assert w == {"c020": (datetime(2026, 11, 12, 10, 0), datetime(2026, 11, 19, 10, 0))}
+    assert promo.windows("x", datetime(2026, 11, 13)) == {} and promo.windows(None, datetime(2026, 11, 13)) == {}
+
+
+async def _save_window(case_id, start_ago_h, end_in_h):
+    from app.models import utcnow
+    now = utcnow()
+    async with db.SessionLocal() as s:
+        await promo._save(s, [{"case_id": case_id, "starts_at": (now - timedelta(hours=start_ago_h)).isoformat(timespec="seconds"),
+                               "ends_at": (now + timedelta(hours=end_in_h)).isoformat(timespec="seconds")}])
+
+
+async def _age(pid, hours):
+    from sqlalchemy import update
+    from app.models import Player, utcnow
+    async with db.SessionLocal() as s:
+        await s.execute(update(Player).where(Player.id == pid).values(created_at=utcnow() - timedelta(hours=hours)))
+        await s.commit()
+
+
+async def test_a_late_signup_still_gets_his_own_free_hours_and_free_until_is_sent(client, monkeypatch):
+    c = setup_clock(monkeypatch)
+    await _save_window(c.id, start_ago_h=100, end_in_h=60)   # the ad has been running for four days, a week in all
+    late = await new_player(client, "promo-late", aged=False)   # signed up just now
+    r = row((await client.get("/v1/cases", headers=late["headers"])).json(), c.id)
+    assert r["unlock_cost"] == 0 and r["free_until"] > 0
+    from datetime import timezone
+    from app.models import utcnow
+    assert 47 * 3600 < r["free_until"] - utcnow().replace(tzinfo=timezone.utc).timestamp() <= 48 * 3600
+    # the same window gives nothing to a detective whose own 48 hours are over, and no free_until
+    spent = await new_player(client, "promo-spent", aged=False)
+    await _age(spent["player_id"], 60)
+    r = row((await client.get("/v1/cases", headers=spent["headers"])).json(), c.id)
+    assert r["unlock_cost"] == 180 and r["free_until"] == 0
+
+
+async def test_free_until_disappears_once_the_case_is_opened_and_when_the_window_is_ended(client, monkeypatch):
+    c = setup_clock(monkeypatch)
+    assert (await start(client, c.id)).status_code == 200
+    p = await new_player(client, "promo-open", aged=False)
+    h = p["headers"]
+    assert row((await client.get("/v1/cases", headers=h)).json(), c.id)["free_until"] > 0
+    assert (await client.post(f"/v1/cases/{c.id}/unlock", headers=h, json={"expected_cost": 0})).status_code == 200
+    assert row((await client.get("/v1/cases", headers=h)).json(), c.id)["free_until"] == 0
+    other = await new_player(client, "promo-ended", aged=False)
+    assert row((await client.get("/v1/cases", headers=other["headers"])).json(), c.id)["free_until"] > 0
+    await client.post("/admin/api/promo/end", headers=ADMIN, json={"case_id": c.id})   # the kill switch ends it for everybody
+    assert row((await client.get("/v1/cases", headers=other["headers"])).json(), c.id)["free_until"] == 0
