@@ -250,51 +250,73 @@ void main() {
       Finder streakRow() => find.byKey(const ValueKey('home-streak'));
       Finder secureRow() => find.byKey(const ValueKey('home-secure'));
 
-      testWidgets('streak row: at risk shown; solved tonight, a short streak and a far step hide it', (t) async {
+      /// The page is a lazy list: scroll to the end so the rows near «بیشتر» are built before we look for them.
+      Future<void> toBottom(WidgetTester t) async {
+        await t.drag(find.byType(Scrollable).first, const Offset(0, -3000));
+        await t.pump(const Duration(milliseconds: 300));
+      }
+
+      /// A fresh home page for the next seed (the previous one would keep its old cases).
+      Future<void> fresh(WidgetTester t) => t.pumpWidget(const SizedBox());
+
+      Future<void> showHome(WidgetTester t, {double scale = 1}) async {
+        await pumpApp(t, scale: scale);
+        await toBottom(t);
+      }
+
+      testWidgets('streak row: at risk (tonight open, 4 nights) is shown', (t) async {
         await seedHome(streak: 4);
-        await pumpApp(t);
+        await showHome(t);
         expect(streakRow(), findsOneWidget);
+      });
 
-        await seedHome(streak: 4, tonight: 'solved'); // the night is safe and the next step (7) is 3 nights away
-        await pumpApp(t);
+      testWidgets('streak row: solved tonight with the next step 3 nights away hides it', (t) async {
+        await seedHome(streak: 4, tonight: 'solved');
+        await showHome(t);
         expect(streakRow(), findsNothing);
+      });
 
-        await seedHome(streak: 1); // short streak, next step (3) is 2 nights away
-        await pumpApp(t);
+      testWidgets('streak row: a short streak with the next step 2 nights away hides it', (t) async {
+        await seedHome(streak: 1);
+        await showHome(t);
         expect(streakRow(), findsNothing);
       });
 
       testWidgets('streak row: the next step one night away shows it even when tonight is solved', (t) async {
         await seedHome(streak: 2, tonight: 'solved'); // the ladder starts 3, 7, ...
-        await pumpApp(t);
+        await showHome(t);
         expect(streakRow(), findsOneWidget);
         expect(find.text('۱ شب مونده تا «${kMilestoneNames[3]}»'), findsOneWidget);
       });
 
-      testWidgets('secure row: hidden before the 3rd solve, shown after it, never for a secured account', (t) async {
+      testWidgets('secure row: hidden before the 3rd solve', (t) async {
         await seedHome(secured: false, casesSolved: 2);
-        await pumpApp(t);
+        await showHome(t);
         expect(secureRow(), findsNothing);
+      });
 
+      testWidgets('secure row: shown after the 3rd solve', (t) async {
         await seedHome(secured: false, casesSolved: 3);
-        await pumpApp(t);
+        await showHome(t);
         expect(secureRow(), findsOneWidget);
         expect(find.text('حسابت هنوز امن نیست'), findsOneWidget);
+      });
 
-        await seedHome(secured: true, casesSolved: 9);
-        await pumpApp(t);
+      testWidgets('secure row: never for a secured account', (t) async {
+        await seedHome(secured: true, casesSolved: 9, bought: true);
+        await showHome(t);
         expect(secureRow(), findsNothing);
       });
 
       testWidgets('secure row: a purchase is enough, even with no solved case', (t) async {
         await seedHome(secured: false, casesSolved: 0, bought: true);
-        await pumpApp(t);
+        await showHome(t);
         expect(secureRow(), findsOneWidget);
       });
 
-      testWidgets('secure row: the ✕ is at least 48 dp, closes it and it stays away for 7 days', (t) async {
+      testWidgets('secure row: the ✕ is at least 48 dp and closes it', (t) async {
         await seedHome(secured: false, casesSolved: 4);
-        await pumpApp(t);
+        await showHome(t);
         final r = t.getRect(find.byKey(const ValueKey('secure-close')));
         expect(r.width, greaterThanOrEqualTo(48));
         expect(r.height, greaterThanOrEqualTo(48));
@@ -302,13 +324,15 @@ void main() {
         await t.pump(const Duration(milliseconds: 300));
         expect(secureRow(), findsNothing);
         expect(Api.i.secureRowClosedAt, isNotNull);
-        // the same account after a restart: still closed
+      });
+
+      testWidgets('secure row: closed 3 days ago stays away; closed 8 days ago it is back', (t) async {
         await seedHome(secured: false, casesSolved: 4, secureClosedAt: DateTime.now().subtract(const Duration(days: 3)));
-        await pumpApp(t);
+        await showHome(t);
         expect(secureRow(), findsNothing);
-        // 8 days later it comes back
+        await fresh(t);
         await seedHome(secured: false, casesSolved: 4, secureClosedAt: DateTime.now().subtract(const Duration(days: 8)));
-        await pumpApp(t);
+        await showHome(t);
         expect(secureRow(), findsOneWidget);
       });
 
@@ -318,6 +342,7 @@ void main() {
         expect(find.byKey(const ValueKey('home-hero')), findsOneWidget);
         expect(find.byKey(const ValueKey('quick-archive')), findsOneWidget);
         expect(find.byKey(const ValueKey('quick-weekend')), findsOneWidget);
+        await toBottom(t);
         expect(streakRow(), findsNothing);
         expect(secureRow(), findsNothing);
         expect(find.byKey(const ValueKey('home-missions')), findsNothing);
@@ -337,8 +362,8 @@ void main() {
           return jsonResponse({});
         });
         await pumpApp(t);
+        await toBottom(t);
         expect(find.byKey(const ValueKey('more-chest')), findsOneWidget);
-        await t.scrollUntilVisible(find.byKey(const ValueKey('more-toggle')), 200, scrollable: find.byType(Scrollable).first);
         await t.tap(find.byKey(const ValueKey('more-toggle')));
         await t.pump(const Duration(milliseconds: 300));
         expect(find.byKey(const ValueKey('more-chest')), findsNothing); // open: the card itself says it
@@ -358,11 +383,12 @@ void main() {
       for (final scale in [1.0, 1.3, 2.0]) {
         testWidgets('everything at once at font $scale: no overflow', (t) async {
           await seedHome(streak: 4, secured: false, casesSolved: 5, weekend: 'open');
-          await pumpApp(t, scale: scale);
+          await showHome(t, scale: scale);
           expect(streakRow(), findsOneWidget);
           expect(secureRow(), findsOneWidget);
           expect(t.takeException(), isNull);
-          await t.scrollUntilVisible(find.byKey(const ValueKey('more-toggle')), 200, scrollable: find.byType(Scrollable).first);
+          await t.tap(find.byKey(const ValueKey('more-toggle')));
+          await t.pump(const Duration(milliseconds: 300));
           expect(t.takeException(), isNull);
         });
       }
@@ -382,8 +408,8 @@ void main() {
           if (r.url.path == '/v1/cases') return jsonResponse(casesBody());
           return jsonResponse({});
         });
-        await t.runAsync(() => Api.i.missions().then<void>((_) {}, onError: (Object _) {}));
-        for (int i = 0; i < 6; i++) {
+        await Api.i.missions().then<void>((_) {}, onError: (Object _) {});
+        for (int i = 0; i < 8; i++) {
           await t.pump(const Duration(milliseconds: 300));
         }
         expect(Api.i.online, isTrue);
@@ -391,20 +417,20 @@ void main() {
         expect(find.byKey(const ValueKey('home-hero')), findsOneWidget);
       });
 
-      testWidgets('a server error: the error page says coins and progress are safe', (t) async {
+      testWidgets('a server error: the error page says coins and progress are safe, and the button works', (t) async {
         await seedHome();
         Api.i.httpClient = MockClient((r) async => jsonResponse({'detail': 'x'}, 500));
         await pumpApp(t);
         expect(find.text('پرونده‌خانه یه لحظه شلوغه'), findsOneWidget);
         expect(find.textContaining('سکه'), findsWidgets);
         expect(find.textContaining('کد خطا'), findsNothing);
-        // the retry button works once the server is back
         Api.i.httpClient = MockClient((r) async {
           if (r.url.path == '/v1/cases') return jsonResponse(casesBody());
           return jsonResponse({});
         });
+        await t.ensureVisible(find.byKey(const ValueKey('state-primary')));
         await t.tap(find.byKey(const ValueKey('state-primary')));
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
           await t.pump(const Duration(milliseconds: 300));
         }
         expect(find.byKey(const ValueKey('home-hero')), findsOneWidget);
