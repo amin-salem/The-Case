@@ -1,0 +1,330 @@
+{
+  "date": "2026-11-11",
+  "main_base": "b4913a5f40e513590cd7e706cbaa9c9ea91d7da3",
+  "assets": [
+    {
+      "id": "league_0",
+      "path": "app/assets/leagues/league_0.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 13028,
+      "quality": 82,
+      "method": 6,
+      "sha256": "7887c07cd9dc7a05f0f25cbf18b5ff605a8835a17b4aeca21d2fb868cc275794",
+      "limit_bytes": 18000,
+      "ssim_vs_export_source": 0.95983,
+      "alpha": true,
+      "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+      "ssim_background": "#101724 for compositing transparent assets",
+      "reused_from_commit": "18662f9769263ae487243940c7fd3ddb9b7c451f"
+    },
+    {
+      "id": "league_1",
+      "path": "app/assets/leagues/league_1.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 11424,
+      "quality": 82,
+      "method": 6,
+      "sha256": "5aab5b1fe7935328253b2ae809db4e7d2a76db44d4368e4eb0dd9b45b3468a6e",
+      "limit_bytes": 18000,
+      "ssim_vs_export_source": 0.98778,
+      "alpha": true,
+      "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+      "ssim_background": "#101724 for compositing transparent assets",
+      "reused_from_commit": "18662f9769263ae487243940c7fd3ddb9b7c451f"
+    },
+    {
+      "id": "league_2",
+      "path": "app/assets/leagues/league_2.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 13674,
+      "quality": 82,
+      "method": 6,
+      "sha256": "e0b9af150ccaa28e5248d60e375642f1e4b163cc13df704f423afa947aebf85d",
+      "limit_bytes": 18000,
+      "ssim_vs_export_source": 0.94103,
+      "alpha": true,
+      "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+      "ssim_background": "#101724 for compositing transparent assets",
+      "reused_from_commit": "18662f9769263ae487243940c7fd3ddb9b7c451f"
+    },
+    {
+      "id": "league_3",
+      "path": "app/assets/leagues/league_3.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 17760,
+      "quality": 79,
+      "method": 6,
+      "sha256": "7820a32306e1285dec20c2e85e896e3e28c78be6cd77b094eb81fe785147c71b",
+      "limit_bytes": 18000,
+      "ssim_vs_export_source": 0.92616,
+      "alpha": true,
+      "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+      "ssim_background": "#101724 for compositing transparent assets",
+      "reused_from_commit": "18662f9769263ae487243940c7fd3ddb9b7c451f"
+    },
+    {
+      "id": "medal_bronze",
+      "path": "app/assets/medals/medal_bronze.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 13058,
+      "quality": 82,
+      "method": 6,
+      "sha256": "92f7014c8c50c41766cc5696f440ad11b82d41f4f28099e04e27b31aced02a61",
+      "limit_bytes": 15000,
+      "ssim_vs_export_source": 0.97174,
+      "alpha": true,
+      "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+      "ssim_background": "#101724 for compositing transparent assets",
+      "reused_from_commit": "18662f9769263ae487243940c7fd3ddb9b7c451f"
+    },
+    {
+      "id": "medal_silver",
+      "path": "app/assets/medals/medal_silver.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 14170,
+      "quality": 82,
+      "method": 6,
+      "sha256": "2021638b30e5924c7941f6f44a471f3d36a319b3a5f5e35e931a6f0f394b1281",
+      "limit_bytes": 15000,
+      "ssim_vs_export_source": 0.99586,
+      "alpha": true,
+      "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+      "ssim_background": "#101724 for compositing transparent assets",
+      "reused_from_commit": "18662f9769263ae487243940c7fd3ddb9b7c451f"
+    },
+    {
+      "id": "medal_gold",
+      "path": "app/assets/medals/medal_gold.webp",
+      "dimensions": [
+        256,
+        256
+      ],
+      "size_bytes": 14766,
+      "quality": 80,
+      "method": 6,
+      "sha256": "6a049392864e1bc3cdc4e443abb7f2e8568d209a96c3dc1614c731b5c1ee7208",
+      "limit_bytes": 15000,
+      "ssim_vs_export_source": 0.97726,
+      "alpha": true,
+      "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+      "ssim_background": "#101724 for compositing transparent assets",
+      "reused_from_commit": "18662f9769263ae487243940c7fd3ddb9b7c451f"
+    },
+    {
+      "id": "podium_stage",
+      "path": "app/assets/banners/podium_stage.webp",
+      "dimensions": [
+        1080,
+        720
+      ],
+      "size_bytes": 42560,
+      "encoding": "VP8L RGB lossless container after q82 sampling/export preparation",
+      "export_working_grid": [
+        360,
+        240
+      ],
+      "method": 6,
+      "sha256": "2eb2c5cd15dc9a57ce522b9838679ce5559bd4bd2d9bde4be72c7b3196d117f3",
+      "limit_bytes": 45000,
+      "ssim_vs_export_source": 0.9782,
+      "alpha": false,
+      "visual_review": "Reviewed at native size and, for shields, at48px/32px against midnight navy. No text, number, logo or people.",
+      "ssim_background": "#101724 for compositing transparent assets",
+      "reused_from_commit": "18662f9769263ae487243940c7fd3ddb9b7c451f"
+    },
+    {
+      "id": "kraft",
+      "path": "app/assets/textures/kraft.webp",
+      "size_bytes": 23332,
+      "quality": 95,
+      "edge_mae_x": 0.9414,
+      "edge_mae_y": 1.0482,
+      "normal_step_mae_x": 0.8776,
+      "normal_step_mae_y": 1.2077,
+      "mean_rgb": [
+        200.01,
+        160.52,
+        93.97
+      ],
+      "base_color": "#C9A15E",
+      "dimensions": [
+        512,
+        512
+      ],
+      "limit_bytes": 25000,
+      "sha256": "f12a1959f90870fd0f825972c27e8f21946270a93b66c8f5d5083b81a8fba5f0",
+      "ssim_vs_export_source": 0.97029,
+      "alpha": false,
+      "method": 6,
+      "visual_review": "Compared alongside det_01 and ex_champion; no text/numerals/logos; material and top-left brass light match. Texture swatches additionally reviewed in a 2x2 repeat.",
+      "tiling_export": "Mirrored period in both axes; flat illumination; mean RGB calibrated to requested base before WebP export."
+    },
+    {
+      "id": "paper",
+      "path": "app/assets/textures/paper.webp",
+      "size_bytes": 7972,
+      "quality": 95,
+      "edge_mae_x": 0.4889,
+      "edge_mae_y": 0.6901,
+      "normal_step_mae_x": 0.2356,
+      "normal_step_mae_y": 0.3074,
+      "mean_rgb": [
+        235.37,
+        228.98,
+        210.27
+      ],
+      "base_color": "#ECE5D3",
+      "dimensions": [
+        512,
+        512
+      ],
+      "limit_bytes": 25000,
+      "sha256": "07a1bfd9539a6bc262a663440d5b8167d13555a91408ecc26d22c8e826baca4f",
+      "ssim_vs_export_source": 0.98358,
+      "alpha": false,
+      "method": 6,
+      "visual_review": "Compared alongside det_01 and ex_champion; no text/numerals/logos; material and top-left brass light match. Texture swatches additionally reviewed in a 2x2 repeat.",
+      "tiling_export": "Mirrored period in both axes; flat illumination; mean RGB calibrated to requested base before WebP export."
+    },
+    {
+      "id": "cork",
+      "path": "app/assets/textures/cork.webp",
+      "size_bytes": 24172,
+      "quality": 79,
+      "edge_mae_x": 2.4557,
+      "edge_mae_y": 2.5892,
+      "normal_step_mae_x": 3.6323,
+      "normal_step_mae_y": 4.2733,
+      "mean_rgb": [
+        109.53,
+        78.43,
+        45.34
+      ],
+      "base_color": "#6E4F2E",
+      "dimensions": [
+        512,
+        512
+      ],
+      "limit_bytes": 25000,
+      "sha256": "54d80d1daf59c0f110527ba7c258db721513a782e0513ec21ae96cb7b381ebd0",
+      "ssim_vs_export_source": 0.8519,
+      "alpha": false,
+      "method": 6,
+      "visual_review": "Compared alongside det_01 and ex_champion; no text/numerals/logos; material and top-left brass light match. Texture swatches additionally reviewed in a 2x2 repeat.",
+      "tiling_export": "Mirrored period in both axes; flat illumination; mean RGB calibrated to requested base before WebP export."
+    },
+    {
+      "id": "steel",
+      "path": "app/assets/textures/steel.webp",
+      "size_bytes": 15342,
+      "quality": 95,
+      "edge_mae_x": 0.5658,
+      "edge_mae_y": 0.7708,
+      "normal_step_mae_x": 0.3174,
+      "normal_step_mae_y": 1.139,
+      "mean_rgb": [
+        37.39,
+        38.99,
+        44.78
+      ],
+      "base_color": "#26282D",
+      "dimensions": [
+        512,
+        512
+      ],
+      "limit_bytes": 25000,
+      "sha256": "29b6b0ed72b28ae9b77d5b59e0dcc15fe91601eca42b0bfde43e50be56aeb76e",
+      "ssim_vs_export_source": 0.97905,
+      "alpha": false,
+      "method": 6,
+      "visual_review": "Compared alongside det_01 and ex_champion; no text/numerals/logos; material and top-left brass light match. Texture swatches additionally reviewed in a 2x2 repeat.",
+      "tiling_export": "Mirrored period in both axes; flat illumination; mean RGB calibrated to requested base before WebP export."
+    },
+    {
+      "id": "ev_object",
+      "kind": "evidence",
+      "path": "app/assets/evidence/ev_object.webp",
+      "size_bytes": 11976,
+      "dimensions": [
+        192,
+        192
+      ],
+      "quality": 60,
+      "alpha": true,
+      "limit_bytes": 12000,
+      "sha256": "7d8157ecb27f91cb0f9b8269a95fbdb88e65d17003b6914ffa6524133fd7b7fe",
+      "ssim_vs_export_source": 0.99758,
+      "method": 6,
+      "visual_review": "Compared alongside det_01 and ex_champion; no text/numerals/logos; material and top-left brass light match. Texture swatches additionally reviewed in a 2x2 repeat."
+    },
+    {
+      "id": "ev_document",
+      "kind": "evidence",
+      "path": "app/assets/evidence/ev_document.webp",
+      "size_bytes": 6406,
+      "dimensions": [
+        192,
+        192
+      ],
+      "quality": 82,
+      "alpha": true,
+      "limit_bytes": 12000,
+      "sha256": "81f5c667a8f69539e870f08e47244ca078da81b3bfd6c4f08f9338a78c0b9907",
+      "ssim_vs_export_source": 0.97555,
+      "method": 6,
+      "visual_review": "Compared alongside det_01 and ex_champion; no text/numerals/logos; material and top-left brass light match. Texture swatches additionally reviewed in a 2x2 repeat."
+    },
+    {
+      "id": "ev_witness",
+      "kind": "evidence",
+      "path": "app/assets/evidence/ev_witness.webp",
+      "size_bytes": 7558,
+      "dimensions": [
+        192,
+        192
+      ],
+      "quality": 82,
+      "alpha": true,
+      "limit_bytes": 12000,
+      "sha256": "d2ad0842bdb55e0c9be37809c5674c33244cceb52f79ad44e86b6d88aaf89cb7",
+      "ssim_vs_export_source": 0.96047,
+      "method": 6,
+      "visual_review": "Compared alongside det_01 and ex_champion; no text/numerals/logos; material and top-left brass light match. Texture swatches additionally reviewed in a 2x2 repeat."
+    },
+    {
+      "id": "ev_photo",
+      "kind": "evidence",
+      "path": "app/assets/evidence/ev_photo.webp",
+      "size_bytes": 7362,
+      "dimensions": [
+        192,
+        192
+      ],
+      "quality": 82,
+      "alpha": true,
+      "limit_bytes": 12000,
+      "sha256": "c6e9054c57e44b1ddf8de9df2520cbff026d4cd866721dfdc30d9d2d64fb111e",
+      "ssim_vs_export_source": 0.97772,
+      "method": 6,
+      "visual_review": "Compared alongside det_01 and ex_champion; no text/numerals/logos; material and top-left brass light match. Texture swatches additionally reviewed in a 2x2 repeat."
+    }
+  ]
+}
