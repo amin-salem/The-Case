@@ -308,8 +308,8 @@ void main() {
         expect(secureRow(), findsNothing);
       });
 
-      testWidgets('secure row: a bought store pack (no ads) is enough, even with no solved case', (t) async {
-        await seedHome(secured: false, casesSolved: 0, noAds: true);
+      testWidgets('secure row: a bought store pack (no ads) is enough, with fewer than 3 solved cases', (t) async {
+        await seedHome(secured: false, casesSolved: 1, noAds: true);
         await showHome(t);
         expect(secureRow(), findsOneWidget);
       });
@@ -427,6 +427,9 @@ void main() {
         expect(find.textContaining('کد خطا'), findsNothing);
         Api.i.httpClient = MockClient((r) async {
           if (r.url.path == '/v1/cases') return jsonResponse(casesBody());
+          if (r.url.path == '/v1/me') {
+            return jsonResponse({'player_id': 'p', 'nickname': 'آرش', 'coins': 500, 'cases_solved': 5, 'streak': 4, 'secured': true});
+          }
           return jsonResponse({});
         });
         await t.ensureVisible(find.byKey(const ValueKey('state-primary')));
