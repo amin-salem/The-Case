@@ -9,6 +9,7 @@ import pytest
 from sqlalchemy import update
 
 from app import content, db
+from app.routers import leaderboard as lb
 from app.models import CaseProgress, Player, utcnow
 
 from .conftest import new_player
@@ -24,13 +25,24 @@ def _hide_new_accounts(monkeypatch):
     monkeypatch.setattr(get_settings(), "show_new_accounts_on_boards", False)
 
 
+@pytest.fixture(autouse=True)
+async def _undo_big_numbers():
+    """These tests use huge plaque and streak numbers to stay on top of the shared database; other tests (the tester board)
+    count on small ones, so everything above the marker is put back after each test."""
+    yield
+    async with db.SessionLocal() as s:
+        await s.execute(update(Player).where((Player.stars_total >= 90000) | (Player.streak >= 7000))
+                        .values(stars_total=0, streak=0, best_streak=0, cases_solved=0))
+        await s.commit()
+
+
 async def get(client, p, url):
     return await client.get(url, headers=p["headers"])
 
 
 # ------------------------------------------------------------------ all time
 async def test_all_time_gap_paging_and_hidden_accounts(client):
-    a, b, c = (await new_player(client, f"bd-all-{i}", aged=True) for i in range(3))
+    a, b, c = [await new_player(client, f"bd-all-{i}", aged=True) for i in range(3)]
     ghost = await new_player(client, "bd-all-ghost")      # a new unsecured guest: hidden from the boards for 48 h
     await set_player(a["player_id"], stars_total=90010, cases_solved=5)
     await set_player(b["player_id"], stars_total=90005, cases_solved=3)
@@ -80,7 +92,7 @@ async def test_boards_need_a_token(client):
 @pytest.fixture
 def tonight(monkeypatch):
     fake = SimpleNamespace(id="zbd-tonight", data={"title": "پرونده‌ی آزمون"})
-    monkeypatch.setattr(content, "todays_case", lambda *a, **k: fake)
+    monkeypatch.setattr(lb, "_tonight", lambda: fake)
     return fake
 
 
@@ -122,7 +134,7 @@ async def test_daily_board_with_nobody_has_zero_stats_not_an_error(client, tonig
 
 
 async def test_daily_without_a_case_is_a_stable_404(client, monkeypatch):
-    monkeypatch.setattr(content, "todays_case", lambda *a, **k: None)
+    monkeypatch.setattr(lb, "_tonight", lambda: None)
     p = await new_player(client, "bd-day-none", aged=True)
     r = await get(client, p, "/v1/leaderboard?period=daily")
     assert r.status_code == 404 and r.json()["detail"] == "no_case"
@@ -141,7 +153,7 @@ async def test_a_banned_player_is_not_on_the_daily_stats(client, tonight):
 async def test_weekly_gap_inside_and_far_below_the_page(client, clock, single_board, week_of_fake_cases):
     ws = date(2027, 1, 8)
     clock(T(2027, 1, 12, 12))
-    a, b, c = (await new_player(client, f"bd-wk-{i}", aged=True) for i in range(3))
+    a, b, c = [await new_player(client, f"bd-wk-{i}", aged=True) for i in range(3)]
     await solve(a["player_id"], wid(ws, 0), 3, T(2027, 1, 8, 22))
     await solve(b["player_id"], wid(ws, 0), 2, T(2027, 1, 8, 22))
     await solve(c["player_id"], wid(ws, 0), 1, T(2027, 1, 8, 22))
@@ -189,7 +201,6 @@ async def test_streak_board_hides_dead_streaks_and_shows_the_gap(client, clock):
 
 
 async def test_streak_board_is_calm_when_nobody_has_a_streak(client, clock, monkeypatch):
-    from app.routers import leaderboard as lb
     async def none(session, live):
         return []
     monkeypatch.setattr(lb, "_streak_ranking", none)

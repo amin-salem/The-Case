@@ -30,6 +30,11 @@ _daily_stats = TTLCache("daily_stats", ttl=30, max_size=4)
 _streaks = TTLCache("streak_board", ttl=60, max_size=2)
 
 
+def _tonight():
+    """Tonight's case (one place, so a test can name its own)."""
+    return content.todays_case()
+
+
 def _row(pl: Player, live: streakrepair.LiveStreak, rank: int, value: int, *, me_id: str, stars: int = 0, league: str = "") -> LeaderRow:
     return LeaderRow(rank=rank, nickname=pl.nickname, avatar=pl.avatar, avatar_id=avatars.avatar_key(pl),
                      avatar_frame=avatars.frame_key(pl), streak=live.of(pl), value=value, stars=stars, me=pl.id == me_id,
@@ -69,7 +74,7 @@ _DAILY_ORDER = (CaseProgress.stars.desc(), CaseProgress.seconds.asc(), CaseProgr
 
 
 async def _daily(player, limit, offset, session, live) -> LeaderboardOut:
-    c = content.todays_case()
+    c = _tonight()
     if c is None:
         raise HTTPException(404, "no_case")
     conds = _daily_conds(c.id)

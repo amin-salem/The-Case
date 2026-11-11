@@ -121,7 +121,7 @@ void main() {
     expect(find.textContaining('۱۴ کارآگاه حلش کردن'), findsOneWidget);
     expect(find.textContaining('سریع‌ترین ۹:۴۲'), findsOneWidget);
     expect(find.textContaining('۴۲ ثانیه تا رتبه‌ی بالاتر'), findsOneWidget);
-    final x = (int rank) => t.getCenter(find.byKey(ValueKey('podium-$rank'))).dx;
+    double x(int rank) => t.getCenter(find.byKey(ValueKey('podium-$rank'))).dx;
     expect(x(2), greaterThan(x(1)), reason: 'second place sits on the right');
     expect(x(1), greaterThan(x(3)));
   });
