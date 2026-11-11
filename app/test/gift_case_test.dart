@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:the_case/models/models.dart';
-import 'package:the_case/theme.dart';
 import 'package:the_case/widgets/gift_case.dart';
 
 CaseRow row(String id, {int? freeUntil, bool solved = false, bool failed = false}) => CaseRow({
