@@ -133,3 +133,10 @@ AI, Claude, prompts or "generated"; no technical details (builds, servers, anti-
 - هر ردیف reviewed_on و waiting_until دارد؛ انتظار حداکثر ۱۴ روز است. مهلت فعلی 2026-11-25 ساعت ۰۰:۰۰ Asia/Tehran است؛ تاریخ مجاز عرضه جعل نشده و usable_from نامعلوم همچنان null می‌ماند.
 - انتظار در اولینِ usable_from واقعی و waiting_until تمام می‌شود و در خود آن روز، خطای حل‌نشده شکست واقعی می‌دهد. تاریخ خالی/نامعتبر در مهلت انتظار قابل قبول نیست. مهلت با گذشت زمان خودکار تمدید نمی‌شود.
 - این فقط وضعیت گزارش تست است: کنترل عرضه، سن/نقش، پوشش سر و یکتایی همچنان فعال‌اند؛ هیچ تصویر staged پیش از عرضه و usable_from وارد پرونده نمی‌شود. قاعدهٔ تاریخی case.publish نیز عوض نشده است.
+
+## Minimal design (Amin, 11 Nov 2026)
+Every design is minimal: no clutter, no decoration that does not carry meaning, as few words as possible.
+- Status is shown by the design itself (size, colour, glow, greyscale), not by labels. Example: on a league ladder, never
+  write «گذشتی» or «تو اینجایی» under the shields; the current one is larger and lit, passed ones are in colour, the ones
+  ahead are grey.
+- One idea per surface (the back of the ID card shows one big number, not a stats grid).
