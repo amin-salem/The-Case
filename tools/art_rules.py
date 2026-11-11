@@ -1,5 +1,23 @@
 """Shared editorial rules; filenames never grant age or occupation permission."""
 import re
+from datetime import date
+
+
+def pending_remap_deadline(row, release):
+    """Finite review window; never an asset release date or usage permission.
+
+    A confirmed/declared earlier usable_from ends the window immediately.
+    Unknown release dates do not extend the 14-day maximum review period.
+    """
+    reviewed = date.fromisoformat(row['reviewed_on'])
+    deadline = date.fromisoformat(row['waiting_until'])
+    if not 0 < (deadline - reviewed).days <= 14:
+        raise ValueError('pending review must expire within 14 days')
+    dates = [deadline]
+    for value in (row.get('allowed_from'), release.get('usable_from')):
+        if value and value != '9999-12-31':
+            dates.append(date.fromisoformat(value))
+    return min(dates)
 
 WOMEN_HEAD_COVERINGS = frozenset({'scarf', 'scarf_hair_visible'})
 

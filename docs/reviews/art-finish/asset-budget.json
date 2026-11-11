@@ -1,10 +1,10 @@
 {
   "assets_before_bytes": 8316768,
-  "assets_after_bytes": 8633574,
-  "increase_bytes": 316806,
-  "new_portrait_bytes": 353706,
-  "new_portraits": 26,
-  "generated_portraits": 16,
+  "assets_after_bytes": 8723878,
+  "increase_bytes": 407110,
+  "new_portrait_bytes": 444010,
+  "new_portraits": 34,
+  "generated_portraits": 24,
   "imported_staged_portraits": 10,
   "new_avatar_files": 0,
   "new_frame_files": 0,
@@ -180,6 +180,54 @@
       "before": 0,
       "after": 17588,
       "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_36_round.webp",
+      "before": 0,
+      "after": 9572,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_42_diamond.webp",
+      "before": 0,
+      "after": 7792,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_48_square.webp",
+      "before": 0,
+      "after": 9662,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_54_heart.webp",
+      "before": 0,
+      "after": 15726,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_58_pear.webp",
+      "before": 0,
+      "after": 13046,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_64_long.webp",
+      "before": 0,
+      "after": 10132,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_70_soft.webp",
+      "before": 0,
+      "after": 14228,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_77_angular.webp",
+      "before": 0,
+      "after": 10146,
+      "revision": "Eight neutral covered women, 2026-11-11"
     }
   ],
   "existing_avatars_above_18000": [
@@ -230,5 +278,12 @@
     "avatar_after_bytes": 17946,
     "new_portraits": 10,
     "apk_built": false
+  },
+  "women_revision": {
+    "before": 8633574,
+    "after": 8723878,
+    "delta": 90304,
+    "new_portraits": 8,
+    "existing_assets_recompressed": 0
   }
 }

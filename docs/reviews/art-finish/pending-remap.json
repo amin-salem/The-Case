@@ -1,9 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "review_date": "2026-11-11",
   "source_commit": "ccc8fc2b60c76a7a3b613fb8ad212caece10238f",
-  "status": "۱۵ خطا تا آزادشدن چهره‌های جدید",
-  "test_exemption": false,
+  "status": "در انتظار با مهلت محدود؛ شکست واقعی از usable_from یا پایان مهلت",
+  "test_exemption": "time-limited pending skip explicitly requested by Amin on 2026-11-11",
   "automatic_apply": false,
   "allowed_from": null,
   "reason_date_is_empty": "No APK built or released. Amin confirms the shipping build and majority-availability day; never invent or backdate.",
@@ -23,10 +23,12 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-10-01",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c007/s1",
@@ -42,10 +44,12 @@
       "replacement_source": "existing_unreleased_neutral",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-10-05",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c020/s2",
@@ -61,10 +65,12 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-10-18",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c026/s3",
@@ -81,10 +87,12 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-10-24",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c029/s5",
@@ -101,10 +109,12 @@
       "replacement_source": "existing_unreleased_neutral",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-10-27",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c033/s1",
@@ -121,10 +131,12 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-10-31",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c038/s1",
@@ -140,10 +152,12 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-11-05",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c039/s5",
@@ -159,10 +173,12 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-11-06",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c043/s4",
@@ -178,10 +194,12 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-11-10",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c051/s4",
@@ -197,10 +215,12 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-11-18",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c055/s5",
@@ -216,10 +236,12 @@
       "replacement_source": "existing_unreleased_neutral",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-11-22",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "c063/s3",
@@ -235,10 +257,12 @@
       "replacement_source": "existing_unreleased_neutral",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-11-30",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "w002/s6",
@@ -254,10 +278,12 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-10-15",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "w004/s5",
@@ -273,10 +299,12 @@
       "replacement_source": "existing_unreleased_neutral",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-10-29",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     },
     {
       "slot": "w007/s5",
@@ -292,10 +320,14 @@
       "replacement_source": "new_this_revision",
       "first_build": null,
       "allowed_from": null,
-      "status": "pending_release_and_historical_case_policy",
+      "status": "waiting_with_finite_deadline",
       "case_publish": "2026-11-19",
       "apply_to_case_files": false,
-      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case.",
+      "reviewed_on": "2026-11-11",
+      "waiting_until": "2026-11-25"
     }
-  ]
+  ],
+  "waiting_timezone": "Asia/Tehran",
+  "waiting_policy": "Until the earlier of actual usable_from and waiting_until. Missing or invalid dates fail; no indefinite skip. waiting_until is a review deadline, never a release/usage date."
 }

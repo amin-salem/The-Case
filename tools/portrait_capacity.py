@@ -59,9 +59,10 @@ if __name__=='__main__':
     from finish_portrait_mapping import blocked_pairs
     pairs=blocked_pairs()
     new={p['id'] for p in read(ROOT/'docs/reviews/art-finish/generation-prompts.json')}
-    pending_prompts=ROOT/'docs/reviews/art-finish/pending-generation-prompts.json'
-    if pending_prompts.exists():
-        new.update(p['id'] for p in read(pending_prompts) if p['id'] in reg)
+    for filename in ('pending-generation-prompts.json', 'women-generation-prompts.json'):
+        prompts=ROOT/'docs/reviews/art-finish'/filename
+        if prompts.exists():
+            new.update(p['id'] for p in read(prompts) if p['id'] in reg)
     demand=Counter()
     for row in csv.DictReader((O/'future-slots.csv').open()):
         if row['written']=='False' and row['gender'] in ('m','f'):

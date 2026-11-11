@@ -151,5 +151,13 @@
   "m_neutral_52_curls": 52,
   "m_neutral_55_brow": 55,
   "m_neutral_64_lined": 64,
-  "m_neutral_62_soft": 62
+  "m_neutral_62_soft": 62,
+  "f_neutral_36_round": 36,
+  "f_neutral_42_diamond": 42,
+  "f_neutral_48_square": 48,
+  "f_neutral_54_heart": 54,
+  "f_neutral_58_pear": 58,
+  "f_neutral_64_long": 64,
+  "f_neutral_70_soft": 70,
+  "f_neutral_77_angular": 77
 }

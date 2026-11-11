@@ -6656,6 +6656,358 @@
       "path": "app/assets/portraits/m_neutral_62_soft.webp",
       "usable_from": null,
       "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "f_neutral_36_round",
+      "apparent_age": 36,
+      "hair_color": "black",
+      "hair_style": "few tight curls at forehead",
+      "glasses": false,
+      "skin_tone": "deep warm brown",
+      "face_shape": "broad round with full cheeks",
+      "clothing": "warm grey blouse",
+      "head_covering": "scarf_hair_visible",
+      "apparent_gender": "f",
+      "apparent_age_range": [
+        31,
+        41
+      ],
+      "age_band": "mid",
+      "facial_hair": "none",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "928dc1689ef5425bf3f54f3a4fe4865e5be8bb319ce9f61b8bb2adaebed25b6e",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual source and final WebP inspected; editorial apparent age estimate; clothing and actual scarf-on-head verified.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / gentle closed-mouth expression",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "Unreleased; never assign to a case until confirmed usable_from.",
+        "Neutral clothing; no occupational depiction."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/f_neutral_36_round.webp",
+      "usable_from": null,
+      "release_basis": "Not released; first_build and majority availability unknown"
+    },
+    {
+      "id": "f_neutral_42_diamond",
+      "apparent_age": 42,
+      "hair_color": "dark brown",
+      "hair_style": "few straight front strands",
+      "glasses": true,
+      "skin_tone": "light olive",
+      "face_shape": "long diamond with high cheekbones",
+      "clothing": "moss-green everyday top",
+      "head_covering": "scarf_hair_visible",
+      "apparent_gender": "f",
+      "apparent_age_range": [
+        37,
+        47
+      ],
+      "age_band": "mid",
+      "facial_hair": "none",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "be9f311211756f0ae0a70d86b09a9de015dfb8343aa11496be42c89c6cadc340",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual source and final WebP inspected; editorial apparent age estimate; clothing and actual scarf-on-head verified.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / gentle closed-mouth expression",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "Unreleased; never assign to a case until confirmed usable_from.",
+        "Neutral clothing; no occupational depiction."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/f_neutral_42_diamond.webp",
+      "usable_from": null,
+      "release_basis": "Not released; first_build and majority availability unknown"
+    },
+    {
+      "id": "f_neutral_48_square",
+      "apparent_age": 48,
+      "hair_color": "black with silver temples",
+      "hair_style": "two small wisps at forehead",
+      "glasses": false,
+      "skin_tone": "medium warm tan with sun marks",
+      "face_shape": "wide rectangular and broad jaw",
+      "clothing": "dark indigo casual blouse",
+      "head_covering": "scarf_hair_visible",
+      "apparent_gender": "f",
+      "apparent_age_range": [
+        43,
+        53
+      ],
+      "age_band": "mid",
+      "facial_hair": "none",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "fac81a6b0cb05ebb0b1ccb8ab8be48cdbb7574ae9b498f401ca3d20bb99e2647",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual source and final WebP inspected; editorial apparent age estimate; clothing and actual scarf-on-head verified.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / gentle closed-mouth expression",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "Unreleased; never assign to a case until confirmed usable_from.",
+        "Neutral clothing; no occupational depiction."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/f_neutral_48_square.webp",
+      "usable_from": null,
+      "release_basis": "Not released; first_build and majority availability unknown"
+    },
+    {
+      "id": "f_neutral_54_heart",
+      "apparent_age": 54,
+      "hair_color": "silver grey",
+      "hair_style": "few front wisps",
+      "glasses": true,
+      "skin_tone": "light warm beige with freckles",
+      "face_shape": "heart shaped with narrow chin",
+      "clothing": "brick-red everyday cardigan",
+      "head_covering": "scarf_hair_visible",
+      "apparent_gender": "f",
+      "apparent_age_range": [
+        49,
+        59
+      ],
+      "age_band": "mid",
+      "facial_hair": "none",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "bfc3b2b9c9bf9220ee345f1eb5133a7b93e212211994099e16d7f7f1ea677792",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual source and final WebP inspected; editorial apparent age estimate; clothing and actual scarf-on-head verified.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / gentle closed-mouth expression",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "Unreleased; never assign to a case until confirmed usable_from.",
+        "Neutral clothing; no occupational depiction."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/f_neutral_54_heart.webp",
+      "usable_from": null,
+      "release_basis": "Not released; first_build and majority availability unknown"
+    },
+    {
+      "id": "f_neutral_58_pear",
+      "apparent_age": 58,
+      "hair_color": "grey",
+      "hair_style": "few short wisps",
+      "glasses": false,
+      "skin_tone": "deep warm olive with age spots",
+      "face_shape": "full pear shaped with heavy cheeks",
+      "clothing": "navy everyday shirt",
+      "head_covering": "scarf_hair_visible",
+      "apparent_gender": "f",
+      "apparent_age_range": [
+        53,
+        63
+      ],
+      "age_band": "old",
+      "facial_hair": "none",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "c20743a642ee0d6fadb3f16134d1d3b1c04d11c1bb9d85fe439ebdae53d2fb4d",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual source and final WebP inspected; editorial apparent age estimate; clothing and actual scarf-on-head verified.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / gentle closed-mouth expression",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "Unreleased; never assign to a case until confirmed usable_from.",
+        "Neutral clothing; no occupational depiction."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/f_neutral_58_pear.webp",
+      "usable_from": null,
+      "release_basis": "Not released; first_build and majority availability unknown"
+    },
+    {
+      "id": "f_neutral_64_long",
+      "apparent_age": 64,
+      "hair_color": "silver",
+      "hair_style": "few straight front strands",
+      "glasses": false,
+      "skin_tone": "medium olive",
+      "face_shape": "very narrow long oval",
+      "clothing": "charcoal everyday blouse",
+      "head_covering": "scarf_hair_visible",
+      "apparent_gender": "f",
+      "apparent_age_range": [
+        59,
+        69
+      ],
+      "age_band": "old",
+      "facial_hair": "none",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "6666a44540199ae5b17548e31409edf5f432194aeb55c51afcaef6153495cf8e",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual source and final WebP inspected; editorial apparent age estimate; clothing and actual scarf-on-head verified.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / gentle closed-mouth expression",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "Unreleased; never assign to a case until confirmed usable_from.",
+        "Neutral clothing; no occupational depiction."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/f_neutral_64_long.webp",
+      "usable_from": null,
+      "release_basis": "Not released; first_build and majority availability unknown"
+    },
+    {
+      "id": "f_neutral_70_soft",
+      "apparent_age": 70,
+      "hair_color": "white",
+      "hair_style": "few front strands",
+      "glasses": true,
+      "skin_tone": "warm beige with age spots",
+      "face_shape": "wide softly rounded with hooded eyes",
+      "clothing": "faded blue everyday cardigan",
+      "head_covering": "scarf_hair_visible",
+      "apparent_gender": "f",
+      "apparent_age_range": [
+        65,
+        75
+      ],
+      "age_band": "old",
+      "facial_hair": "none",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "06a78cb100c4c0e7b320aacbdf12dbc17c466215baefabd7b9b4a5bc852f3715",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual source and final WebP inspected; editorial apparent age estimate; clothing and actual scarf-on-head verified.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / gentle closed-mouth expression",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "Unreleased; never assign to a case until confirmed usable_from.",
+        "Neutral clothing; no occupational depiction."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/f_neutral_70_soft.webp",
+      "usable_from": null,
+      "release_basis": "Not released; first_build and majority availability unknown"
+    },
+    {
+      "id": "f_neutral_77_angular",
+      "apparent_age": 77,
+      "hair_color": "white",
+      "hair_style": "small white wisps at forehead",
+      "glasses": false,
+      "skin_tone": "deep warm tan with age spots",
+      "face_shape": "long angular square with high cheekbones",
+      "clothing": "stone-grey everyday blouse",
+      "head_covering": "scarf_hair_visible",
+      "apparent_gender": "f",
+      "apparent_age_range": [
+        72,
+        82
+      ],
+      "age_band": "old",
+      "facial_hair": "none",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "a7a7792d54ddd657f08b302b6315778ef5e07db4dd4a605b5b2b49f1ef7f30ce",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual source and final WebP inspected; editorial apparent age estimate; clothing and actual scarf-on-head verified.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / gentle closed-mouth expression",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "Unreleased; never assign to a case until confirmed usable_from.",
+        "Neutral clothing; no occupational depiction."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/f_neutral_77_angular.webp",
+      "usable_from": null,
+      "release_basis": "Not released; first_build and majority availability unknown"
     }
   ],
   "cosmetics": [
@@ -7252,7 +7604,7 @@
     {
       "path": "docs/reviews/portrait-quality/candidates-3.jpg",
       "kind": "review_only",
-      "sha256": "1c2402de699bf0225873412f1837e546ff7d69f2c5ad606489972af95c732877",
+      "sha256": "5d804e37e03055961333eb06fd8f0049f275421393e564110f60ac1cc1c5b12b",
       "usable_from": null,
       "restrictions": [
         "Documentation only; never referenced by a case or packaged as an app portrait"
@@ -7261,7 +7613,16 @@
     {
       "path": "docs/reviews/portrait-quality/candidates-4.jpg",
       "kind": "review_only",
-      "sha256": "49f6ac66657aba8351aa038063e7695d1a5b86cfbd144db0589a1a72e879da40",
+      "sha256": "e2e037b3efc2eed6b47941a454dbce2ebf7998e7e6740d5ba2a620841d88b63e",
+      "usable_from": null,
+      "restrictions": [
+        "Documentation only; never referenced by a case or packaged as an app portrait"
+      ]
+    },
+    {
+      "path": "docs/reviews/portrait-quality/candidates-5.jpg",
+      "kind": "review_only",
+      "sha256": "1166abcbe721febbfefc2f1a48dbc2712437b57179fa3802961107e1c31b9a10",
       "usable_from": null,
       "restrictions": [
         "Documentation only; never referenced by a case or packaged as an app portrait"
@@ -7941,6 +8302,70 @@
       "review_date": "2026-11-11",
       "decision": "اصلاح شد؛ روسری ساده روی سر، لباس روزمره و لوپ کوچکِ مجاز",
       "notes": "با مجوز امین ۱۱ نوامبر ۲۰۲۶؛ همان چهره و فضای ساعت‌ساز"
+    },
+    {
+      "id": "f_neutral_36_round",
+      "path": "app/assets/portraits/f_neutral_36_round.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "928dc1689ef5425bf3f54f3a4fe4865e5be8bb319ce9f61b8bb2adaebed25b6e",
+      "review_date": "2026-11-11",
+      "decision": "تولید تازه؛ روسری ساده و مات روی سر، لباس روزمره؛ هنوز عرضه‌نشده"
+    },
+    {
+      "id": "f_neutral_42_diamond",
+      "path": "app/assets/portraits/f_neutral_42_diamond.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "be9f311211756f0ae0a70d86b09a9de015dfb8343aa11496be42c89c6cadc340",
+      "review_date": "2026-11-11",
+      "decision": "تولید تازه؛ روسری ساده و مات روی سر، لباس روزمره؛ هنوز عرضه‌نشده"
+    },
+    {
+      "id": "f_neutral_48_square",
+      "path": "app/assets/portraits/f_neutral_48_square.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "fac81a6b0cb05ebb0b1ccb8ab8be48cdbb7574ae9b498f401ca3d20bb99e2647",
+      "review_date": "2026-11-11",
+      "decision": "تولید تازه؛ روسری ساده و مات روی سر، لباس روزمره؛ هنوز عرضه‌نشده"
+    },
+    {
+      "id": "f_neutral_54_heart",
+      "path": "app/assets/portraits/f_neutral_54_heart.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "bfc3b2b9c9bf9220ee345f1eb5133a7b93e212211994099e16d7f7f1ea677792",
+      "review_date": "2026-11-11",
+      "decision": "تولید تازه؛ روسری ساده و مات روی سر، لباس روزمره؛ هنوز عرضه‌نشده"
+    },
+    {
+      "id": "f_neutral_58_pear",
+      "path": "app/assets/portraits/f_neutral_58_pear.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "c20743a642ee0d6fadb3f16134d1d3b1c04d11c1bb9d85fe439ebdae53d2fb4d",
+      "review_date": "2026-11-11",
+      "decision": "تولید تازه؛ روسری ساده و مات روی سر، لباس روزمره؛ هنوز عرضه‌نشده"
+    },
+    {
+      "id": "f_neutral_64_long",
+      "path": "app/assets/portraits/f_neutral_64_long.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "6666a44540199ae5b17548e31409edf5f432194aeb55c51afcaef6153495cf8e",
+      "review_date": "2026-11-11",
+      "decision": "تولید تازه؛ روسری ساده و مات روی سر، لباس روزمره؛ هنوز عرضه‌نشده"
+    },
+    {
+      "id": "f_neutral_70_soft",
+      "path": "app/assets/portraits/f_neutral_70_soft.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "06a78cb100c4c0e7b320aacbdf12dbc17c466215baefabd7b9b4a5bc852f3715",
+      "review_date": "2026-11-11",
+      "decision": "تولید تازه؛ روسری ساده و مات روی سر، لباس روزمره؛ هنوز عرضه‌نشده"
+    },
+    {
+      "id": "f_neutral_77_angular",
+      "path": "app/assets/portraits/f_neutral_77_angular.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "a7a7792d54ddd657f08b302b6315778ef5e07db4dd4a605b5b2b49f1ef7f30ce",
+      "review_date": "2026-11-11",
+      "decision": "تولید تازه؛ روسری ساده و مات روی سر، لباس روزمره؛ هنوز عرضه‌نشده"
     }
   ],
   "head_covering_policy": {
@@ -7951,6 +8376,6 @@
     "uncovered_forbidden": true,
     "legacy_bypass": false,
     "legacy_uncovered_pending_owner": [],
-    "note": "All 84 female images visually covered on the head. ex_watchmaker replaced with owner authorisation on 2026-11-11; no legacy bypass."
+    "note": "All 92 female images reviewed with actual scarf on head; no uncovered exception. Eight new women are unreleased."
   }
 }

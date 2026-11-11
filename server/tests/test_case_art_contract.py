@@ -1,4 +1,4 @@
-"""Contract on actual case files; historical defects are reported, never allowlisted."""
+"""Contract on actual cases; only explicitly dated pending remaps may wait."""
 import base64
 import hashlib
 import itertools
@@ -7,11 +7,15 @@ import re
 import struct
 import unittest
 import sys
+from datetime import datetime, date
+from zoneinfo import ZoneInfo
+from unittest.mock import patch
+import pytest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools'))
-from art_rules import age_band, incompatibilities, available, head_covering_errors  # noqa: E402
+from art_rules import age_band, incompatibilities, available, head_covering_errors, pending_remap_deadline  # noqa: E402
 REVIEW = ROOT / 'docs/reviews/portrait-quality'
 
 def read(path):
@@ -21,6 +25,10 @@ def cases():
     for mode in ('cases', 'weekly'):
         for path in sorted((ROOT / 'server/app/content' / mode).glob('*.json')):
             yield read(path)
+
+
+def review_today():
+    return datetime.now(ZoneInfo('Asia/Tehran')).date()
 
 class CaseArtContract(unittest.TestCase):
     @classmethod
@@ -110,18 +118,78 @@ class CaseArtContract(unittest.TestCase):
                     self.assertTrue(available(s['avatar']['portrait'],c,ledger), (c['id'],s['id']))
 
     def test_all_ages_and_uniforms(self):
-        errors=[]
-        slots=set()
+        pending=read(ROOT/'docs/reviews/art-finish/pending-remap.json')
+        rows={r['slot']:r for r in pending['remaps']}
+        self.assertEqual(len(rows),len(pending['remaps']))
+        releases=read(ROOT/'docs/portrait-release.json')['portraits']
+        today=review_today()
+        failures=[]
+        waiting=[]
         for c in cases():
             for s in c['suspects']:
                 r=self.reg[s['avatar']['portrait']]
                 slot=f"{c['id']}/{s['id']}"
-                for reason in incompatibilities(r,s):
-                    slots.add(slot)
-                    errors.append(f"{slot}: {reason}; character age {s['age']}, portrait {r['id']} age {r['apparent_age']}; {s['role']}")
-        count=str(len(slots)).translate(str.maketrans('0123456789','۰۱۲۳۴۵۶۷۸۹'))
-        status=f"{count} خطا تا آزادشدن چهره‌های جدید؛ pending-remap.json مجوز عبور از تست نیست."
-        self.assertEqual(errors, [], status+'\n'+'\n'.join(errors))
+                reasons=incompatibilities(r,s)
+                if not reasons:
+                    continue
+                detail=f"{slot}: {', '.join(reasons)}; character age {s['age']}, portrait {r['id']} age {r['apparent_age']}; {s['role']}"
+                row=rows.get(slot)
+                if not row or row['current_portrait']!=r['id'] or not set(reasons)<={'age','role/clothing'}:
+                    failures.append(detail)
+                    continue
+                try:
+                    deadline=pending_remap_deadline(row,releases[row['replacement_portrait']])
+                except (KeyError,TypeError,ValueError) as exc:
+                    failures.append(f'{detail}; invalid pending date: {exc}')
+                    continue
+                if today>=deadline:
+                    failures.append(f'{detail}; pending expired / usable_from reached: {deadline}')
+                else:
+                    waiting.append(f"{slot} → {row['replacement_portrait']}؛ تا {deadline}")
+        self.assertEqual(failures,[], '\n'.join(failures))
+        if waiting:
+            count=str(len(waiting)).translate(str.maketrans('0123456789','۰۱۲۳۴۵۶۷۸۹'))
+            pytest.skip(f"در انتظار: {count} جایگاه؛ مهلت‌ها به وقت تهران؛ این وضعیت مجوز استفاده از تصویر نیست. " + ' | '.join(waiting))
+
+    def test_pending_window_expires_on_the_day_and_never_hides_other_errors(self):
+        row={'reviewed_on':'2026-11-11','waiting_until':'2026-11-25','allowed_from':None}
+        for release,expected in (({'usable_from':None},'2026-11-25'),
+                                 ({'usable_from':'2026-11-19'},'2026-11-19'),
+                                 ({'usable_from':'2026-12-01'},'2026-11-25')):
+            self.assertEqual(pending_remap_deadline(row,release),date.fromisoformat(expected))
+        for value in (None,'','2099-01-01','2026-11-11'):
+            with self.assertRaises((KeyError,TypeError,ValueError)):
+                pending_remap_deadline(dict(row,waiting_until=value),{})
+        fixture={'id':'fixture','suspects':[{'id':'s1','age':40,'role':'fixture',
+                 'avatar':{'gender':'m','portrait':'old'}}]}
+        entry=dict(row,slot='fixture/s1',current_portrait='old',replacement_portrait='new')
+        def exercise(day,usable=None,entries=None,reason=None):
+            def fixture_read(path):
+                if path==ROOT/'docs/reviews/art-finish/pending-remap.json':
+                    return {'remaps':[entry] if entries is None else entries}
+                return {'portraits':{'new':{'usable_from':usable}}}
+            with patch(f'{__name__}.read',side_effect=fixture_read), \
+                 patch(f'{__name__}.cases',return_value=[fixture]), \
+                 patch(f'{__name__}.review_today',return_value=day), \
+                 patch(f'{__name__}.incompatibilities',return_value=['age'] if reason is None else reason), \
+                 patch.object(self,'reg',{'old':{'id':'old','apparent_age':80}}):
+                self.test_all_ages_and_uniforms()
+        # Before the boundary it really calls pytest.skip; on/after it fails.
+        with patch.object(pytest,'skip',side_effect=RuntimeError('waiting fixture')) as skip:
+            with self.assertRaisesRegex(RuntimeError,'waiting fixture'):
+                exercise(date(2026,11,24))
+            self.assertIn('fixture/s1',skip.call_args.args[0])
+            self.assertIn('2026-11-25',skip.call_args.args[0])
+        for day in (date(2026,11,25),date(2026,11,26)):
+            with self.assertRaises(AssertionError):
+                exercise(day)
+        # An earlier usable_from ends the wait immediately, not tomorrow.
+        with self.assertRaises(AssertionError):
+            exercise(date(2026,11,12),usable='2026-11-12')
+        # Unlisted, undated and non-age/role defects cannot be skipped.
+        for entries,reason in (([],None),([dict(entry,waiting_until=None)],None),(None,['gender'])):
+            with self.assertRaises(AssertionError):
+                exercise(date(2026,11,11),entries=entries,reason=reason)
 
     def test_staged_assets_have_dimensions_budget_and_blocking_date(self):
         releases=read(ROOT/'docs/portrait-release.json')['portraits']
@@ -172,8 +240,9 @@ class CaseArtContract(unittest.TestCase):
             self.assertNotIn(key,album)
             self.assertNotIn(key,replacements)
             replacements.add(key)
-            self.assertIsNone(row['allowed_from'])
-            self.assertIsNone(ledger['portraits'][key]['first_build'])
+            self.assertEqual(row['reviewed_on'],'2026-11-11')
+            self.assertEqual(row['waiting_until'],'2026-11-25')
+            pending_remap_deadline(row,ledger['portraits'][key])
             self.assertFalse(available(key,c,ledger))
             self.assertNotIn(key,{a['avatar']['portrait'] for a in c['suspects']})
             self.assertFalse(any(frozenset((key,a['avatar']['portrait'])) in blocked

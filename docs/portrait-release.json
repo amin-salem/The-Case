@@ -143,6 +143,46 @@
       "first_build": null,
       "usable_from": null,
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
+    },
+    "f_neutral_36_round": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
+    },
+    "f_neutral_42_diamond": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
+    },
+    "f_neutral_48_square": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
+    },
+    "f_neutral_54_heart": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
+    },
+    "f_neutral_58_pear": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
+    },
+    "f_neutral_64_long": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
+    },
+    "f_neutral_70_soft": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
+    },
+    "f_neutral_77_angular": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
     }
   }
 }

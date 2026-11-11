@@ -322,6 +322,17 @@
       "sha256_b": "dee8c26ea5553e3b7b1b6e6383b806904369497a3e63fe29cff2fa50fe4ca2fd"
     },
     {
+      "a": "f_neutral_48_square",
+      "b": "f_neutral_64_long",
+      "phash_distance": 10,
+      "hog_cosine": 0.76884,
+      "decision": "visually_distinguishable",
+      "sha256_a": "fac81a6b0cb05ebb0b1ccb8ab8be48cdbb7574ae9b498f401ca3d20bb99e2647",
+      "sha256_b": "6666a44540199ae5b17548e31409edf5f432194aeb55c51afcaef6153495cf8e",
+      "review_date": "2026-11-11",
+      "review_note": "Broad full square jaw and low cheekbones versus very thin long oval face, prominent narrow nose and sunken cheeks; age48 versus64."
+    },
+    {
       "a": "f_mid_pastry",
       "b": "f_mid_singer",
       "phash_distance": 10,
@@ -331,6 +342,17 @@
       "review_date": "2026-11-07",
       "sha256_a": "2bb1951d9472c7350f53b3a4632d2541cabce932afda26afe1d2c051d114b408",
       "sha256_b": "47f1d8cdafac8d21e89c911f4d7756c99d8787c7a3180886b92f777461307681"
+    },
+    {
+      "a": "f_neutral_64_long",
+      "b": "f_neutral_77_angular",
+      "phash_distance": 10,
+      "hog_cosine": 0.76097,
+      "decision": "visually_distinguishable",
+      "sha256_a": "6666a44540199ae5b17548e31409edf5f432194aeb55c51afcaef6153495cf8e",
+      "sha256_b": "a7a7792d54ddd657f08b302b6315778ef5e07db4dd4a605b5b2b49f1ef7f30ce",
+      "review_date": "2026-11-11",
+      "review_note": "Narrow oval tapering chin and long straight nose versus angular square jaw, bent broad nose, wider-set amber eyes, deeper jowls and darker skin; distinct visible facial structure."
     },
     {
       "a": "m_old_schoolmaster",
@@ -476,6 +498,17 @@
       "sha256_b": "7e53a6292d95521b4975b2d4faaed38b5f8893aa01a64af450845d93fa82e2c6"
     },
     {
+      "a": "f_mid_officer",
+      "b": "f_neutral_64_long",
+      "phash_distance": 10,
+      "hog_cosine": 0.69795,
+      "decision": "visually_distinguishable",
+      "sha256_a": "8122aa06bb4274cc7d713d48b8b1ad3055eef2fb5de199a3751421bc9dbb3fce",
+      "sha256_b": "6666a44540199ae5b17548e31409edf5f432194aeb55c51afcaef6153495cf8e",
+      "review_date": "2026-11-11",
+      "review_note": "Younger smooth rounder cheeks and small nose versus aged long narrow face with pronounced nose and grey hair; face differences visible beyond clothing."
+    },
+    {
       "a": "m_mid_photographer",
       "b": "m_young_designer",
       "phash_distance": 6,
@@ -507,6 +540,17 @@
       "review_date": "2026-11-07",
       "sha256_a": "fb1b5809b2e16f7709af7ce4d0cdd4029a5cb2985a16b676ae68c331a82867a1",
       "sha256_b": "a376f9d29dad7649464ffa05dca4f4233a65c8493f6106387057045e59c36285"
+    },
+    {
+      "a": "f_neutral_48_square",
+      "b": "f_young_athlete",
+      "phash_distance": 10,
+      "hog_cosine": 0.64837,
+      "decision": "visually_distinguishable",
+      "sha256_a": "fac81a6b0cb05ebb0b1ccb8ab8be48cdbb7574ae9b498f401ca3d20bb99e2647",
+      "sha256_b": "5d6bcef8d19809c22bc7e609a3df1c6cddafc7474039e28b28ba0414f587b535",
+      "review_date": "2026-11-11",
+      "review_note": "Older broad jaw, silver temple wisps and wide hooked nose versus young smooth tapered face, high tight brow and small nose."
     }
   ]
 }

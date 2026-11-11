@@ -18,8 +18,8 @@
       "before_distinct": 35,
       "target": 12,
       "shortage": 0,
-      "generated": 0,
-      "after_distinct": 35,
+      "generated": 4,
+      "after_distinct": 39,
       "unwritten_slots": 35
     },
     {
@@ -29,8 +29,8 @@
       "before_distinct": 18,
       "target": 12,
       "shortage": 0,
-      "generated": 0,
-      "after_distinct": 18,
+      "generated": 4,
+      "after_distinct": 22,
       "unwritten_slots": 6
     },
     {
