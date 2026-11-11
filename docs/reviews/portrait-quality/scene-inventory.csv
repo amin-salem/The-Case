@@ -1,0 +1,95 @@
+case,base_scene,exact_location,source,status,proposed_variant,asset_key
+c001,bazaar_night,بازار بزرگ تهران، راسته‌ی زرگرها,published JSON location and introduction (main a920b716),written,goldsmith,bazaar_night_goldsmith
+c002,office,برج اداری آرمان، طبقه‌ی پنجم,published JSON location and introduction (main a920b716),written,executive,office_executive
+c003,train,قطار شبانه‌ی تهران–تبریز، واگن ۴,published JSON location and introduction (main a920b716),written,sleeper,train_sleeper
+c004,museum,موزه‌ی هنرهای ملی، سالن نقاشی قاجار,published JSON location and introduction (main a920b716),written,qajar_gallery,museum_qajar_gallery
+c005,villa_rain,ویلای خانواده‌ی رستگار، نوشهر,published JSON location and introduction (main a920b716),written,,villa_rain
+c006,warehouse,انبار فرش توکلی، جاده‌ی قدیم کرج,published JSON location and introduction (main a920b716),written,carpet_depot,warehouse_carpet_depot
+c007,harbor,اسکله‌ی تجاری بندرعباس,published JSON location and introduction (main a920b716),written,cargo_quay,harbor_cargo_quay
+c008,hospital,بیمارستان امید، بخش مراقبت‌های ویژه، تهران,published JSON location and introduction (main a920b716),written,icu,hospital_icu
+c009,library,کتابخانه‌ی عمومی نیلوفر، تالار نسخه‌های قدیمی، رشت,published JSON location and introduction (main a920b716),written,manuscripts,library_manuscripts
+c010,theater,تالار نمایش «سپهر»، تهران,published JSON location and introduction (main a920b716),written,stage,theater_stage
+c011,hotel,هتل قدیمی نارون، رامسر,published JSON location and introduction (main a920b716),written,heritage_reception,hotel_heritage_reception
+c012,kitchen,سفره‌خانه‌ی نارنج، شیراز,published JSON location and introduction (main a920b716),written,traditional_kitchen,kitchen_traditional_kitchen
+c013,snow_lodge,پناهگاه کوهستانی برف‌چال,published JSON location and introduction (main a920b716),written,alpine_refuge,snow_lodge_alpine_refuge
+c014,desert,رباط ریگ‌سفید، حاشیه‌ی کویر,published JSON location and introduction (main a920b716),written,,desert
+c015,subway,ایستگاه مترو باغ‌نسترن,published JSON location and introduction (main a920b716),written,,subway
+c016,lab,پژوهشکده‌ی زیست‌فناوری، پردیس دانشگاه,published JSON location and introduction (main a920b716),written,biotech,lab_biotech
+c017,wedding,تالار آینه، شیراز,published JSON location and introduction (main a920b716),written,reception,wedding_reception
+c018,school,دبیرستان پسرانه‌ی «آینده»، شهر آبگینه، شب قبل از امتحان نهایی فیزیک,published JSON location and introduction (main a920b716),written,exam_office,school_exam_office
+c019,airport,فرودگاه بین‌المللی تهران، سالن بارهای خروجی,published JSON location and introduction (main a920b716),written,departure_screening,airport_departure_screening
+c020,tower,برج ساعت میدان قدیم، شهر سرخ‌آباد,published JSON location and introduction (main a920b716),written,clock,tower_clock
+c021,bazaar_night,سرای گلشن، بازار قدیم شهر کهن‌دژ,published JSON location and introduction (main a920b716),written,bazaar_courtyard,bazaar_night_bazaar_courtyard
+c022,office,شرکت ساختمانی آرین‌سازه، برج اداری نگین، طبقه‌های پنج تا هفت,published JSON location and introduction (main a920b716),written,executive,office_executive
+c023,train,قطار شبانه‌ی سپیدان ـ کویرشهر، واگن سه,published JSON location and introduction (main a920b716),written,sleeper,train_sleeper
+c024,museum,موزه‌ی هنرهای دستی، شهر نیلوفر، شب افتتاح تالار جواهرات,published JSON location and introduction (main a920b716),written,jewelry_gallery,museum_jewelry_gallery
+c025,villa_rain,ویلای بهروزی، شهرک چنارک,published JSON location and introduction (main a920b716),written,family_interior,villa_rain_family_interior
+c026,warehouse,انبار شرکت بارآور، شهرک صنعتی سروش,published JSON location and introduction (main a920b716),written,pallet_depot,warehouse_pallet_depot
+c027,harbor,اسکلهٔ نیلگون و سردخانهٔ جزیرهٔ سنگاب,published JSON location and introduction (main a920b716),written,island_coldstore,harbor_island_coldstore
+c028,hospital,بیمارستان مهرآیین، بخش مراقبت‌های ویژه,published JSON location and introduction (main a920b716),written,icu,hospital_icu
+c029,library,کتابخانهٔ سپیدار، بخش نسخه‌های خطی,published JSON location and introduction (main a920b716),written,manuscripts,library_manuscripts
+c030,theater,تماشاخانهٔ آفتاب، پشت صحنهٔ نمایش «تاج خاکستر»,published JSON location and introduction (main a920b716),written,backstage,theater_backstage
+c031,hotel,هتل‌باغ سرو، حیاط پشتی و دفتر مدیریت,published JSON location and introduction (main a920b716),written,garden_office,hotel_garden_office
+c032,kitchen,رستوران ایوان، سالن اصلی و آشپزخانه,published JSON location and introduction (main a920b716),written,restaurant_kitchen,kitchen_restaurant_kitchen
+c033,snow_lodge,پناهگاه برفیِ سپیددره، یال شمالی,published JSON location and introduction (main a920b716),written,alpine_refuge,snow_lodge_alpine_refuge
+c034,desert,اردوگاه کاوشِ چاه‌سایه، دشت شور,published JSON location and introduction (main a920b716),written,excavation_camp,desert_excavation_camp
+c035,subway,ایستگاهِ میدان سپیدار، دفتر اشیای پیدا‌شده,published JSON location and introduction (main a920b716),written,lost_property,subway_lost_property
+c036,lab,پژوهشکدهٔ زیست‌پژوهیِ سپهر، بخش کنترل کیفیت,published JSON location and introduction (main a920b716),written,quality_control,lab_quality_control
+c037,wedding,تالار «آبنوس»، اهواز,published JSON location and introduction (main a920b716),written,reception,wedding_reception
+c038,school,دبیرستان «سروستان»، شیراز,published JSON location and introduction (main a920b716),written,exam_office,school_exam_office
+c039,airport,سالنِ پروازِ «نیلگون»، فرودگاهِ مشهد,published JSON location and introduction (main a920b716),written,lounge,airport_lounge
+c040,tower,برجِ ساعتِ سپیدار و بایگانیِ فرهنگیِ آن، تبریز,published JSON location and introduction (main a920b716),written,clock,tower_clock
+c041,bazaar_night,سرای نقشینه، راستهٔ فرش‌فروش‌های بازار,published JSON location and introduction (main a920b716),written,carpet_arcade,bazaar_night_carpet_arcade
+c042,office,دفتر مهندسی آبان‌سازه، دفترِ موقتِ مناقصه,published JSON location and introduction (main a920b716),written,engineering,office_engineering
+c043,train,قطار شبانه‌ی دشت‌آباد، واگن خواب,published JSON location and introduction (main a920b716),written,sleeper,train_sleeper
+c044,museum,موزه‌ی خصوصی آینه‌سرا، شهر بهارک,published JSON location and introduction (main a920b716),written,private_gallery,museum_private_gallery
+c045,villa_rain,ویلای نقاشِ بازنشسته در آبادیِ نارون‌دره,published JSON location and introduction (main a920b716),written,artist_villa,villa_rain_artist_villa
+c046,warehouse,انبارِ سروِ نو، شهرکِ صنعتیِ دشت‌بان,published JSON location and introduction (main a920b716),written,pallet_depot,warehouse_pallet_depot
+c047,library,کتابخانه‌ی وقفیِ خاندانِ مشکات، اتاقِ نسخه‌های خطی، کاشان,published JSON location and introduction (main a920b716),written,manuscripts,library_manuscripts
+c048,hotel,هتلِ بزرگِ دیبا، اصفهان,published JSON location and introduction (main a920b716),written,,hotel
+c049,harbor,اسکله‌ی صیادانِ بندر کنگ,published JSON location and introduction (main a920b716),written,fishing_quay,harbor_fishing_quay
+c050,villa_rain,ویلای ملک‌آرا، باغ‌های بالای کوه‌سار,published JSON location and introduction (main a920b716),written,family_interior,villa_rain_family_interior
+c051,hospital,بیمارستان نارون، بخش ۴ (انکولوژی)، شهر سبزدشت,published JSON location and introduction (main a920b716),written,oncology,hospital_oncology
+c052,lab,اتاقک رشد آزمایشگاه فیزیولوژی گیاهی، دانشکده‌ی کشاورزی کوهسر,published JSON location and introduction (main a920b716),written,plant_growth,lab_plant_growth
+c053,school,بایگانی مجتمع آموزشی سپیده، ساختمانی که دارد تخلیه می‌شود,published JSON location and introduction (main a920b716),written,school_archive,school_school_archive
+c054,lab,کارگاه آزمایش ابزارهای آموزشی، پارک فناوری مهرگان، طبقه‌ی اول,published JSON location and introduction (main a920b716),written,educational_workshop,lab_educational_workshop
+c055,wedding,تالار شیشه‌ای باغ‌خانه‌ی خانواده‌ی پارسا، کرج,published JSON location and introduction (main a920b716),written,glass_garden,wedding_glass_garden
+c056,airport,سوله‌ی کالای درمانی، ترمینال بار فرودگاه منطقه‌ای نیک‌دشت,published JSON location and introduction (main a920b716),written,medical_warehouse,airport_medical_warehouse
+c057,office,دفتر انتخاب طرح‌های پژوهشی، طبقه‌ی سوم بنیاد پژوهشی نارون,published JSON location and introduction (main a920b716),written,research_office,office_research_office
+c058,tower,آپارتمان ناهید وزیری، طبقه‌ی دوازدهم برج سپیدار,published JSON location and introduction (main a920b716),written,apartment,tower_apartment
+c059,theater,سالن تمرین گروه عروسکی مهتاب، خانه‌ی فرهنگ اقاقیا,published JSON location and introduction (main a920b716),written,puppet_rehearsal,theater_puppet_rehearsal
+c060,kitchen,آشپزخانه‌ی مهمان‌سرای سروناز، روستای کهربادره,published JSON location and introduction (main a920b716),written,guesthouse_kitchen,kitchen_guesthouse_kitchen
+c061,library,کتابخانه‌ی خانوادگی نیک‌نهاد، خانه‌ی باغ قدیمی خانواده,published JSON location and introduction (main a920b716),written,family_library,library_family_library
+c062,hospital,اتاق نمایش ۳۰۴، بخش آموزش و نمایش تجهیزات، بیمارستان آموزشی کوهسار,published JSON location and introduction (main a920b716),written,equipment_training,hospital_equipment_training
+w001,snow_lodge,ویلای خاندان صدری، دره‌ی سپیدار، جاده‌ی کوهستانی شمال,published JSON location and introduction (main a920b716),written,snow_villa,snow_lodge_snow_villa
+w002,wedding,باغ نارنجستانِ امیری، روستای کوشک‌سر، حاشیه‌ی شهر ترنج‌آباد,published JSON location and introduction (main a920b716),written,orchard,wedding_orchard
+w003,museum,عمارت موزه عتیقه، میدان نیاوران، شمیران,published JSON location and introduction (main a920b716),written,home_auction,museum_home_auction
+w004,desert,کاروانسرای صفا، کیلومتر ۴۵ جاده‌ی فرعی کویر,published JSON location and introduction (main a920b716),written,caravanserai,desert_caravanserai
+w005,library,کتابخانه‌ی تخصصی اسناد کهن نسترن، خیابان انقلاب,published JSON location and introduction (main a920b716),written,manuscripts,library_manuscripts
+w006,wedding,هتل نارون، بلوار چمران، شیراز,published JSON location and introduction (main a920b716),written,garden_hotel,wedding_garden_hotel
+w007,hotel,هتل آبشار، تالار بلور,published JSON location and introduction (main a920b716),written,event_ballroom,hotel_event_ballroom
+c063,lab,کارگاه سازه‌های سبک، دانشکده‌ی عمران دانشگاه صنعتی آرین‌دشت,published JSON location and introduction (main a920b716),written,structures,lab_structures
+c064,villa_rain,خانه‌ی خانوادگی شمسایی‌ها، کنار رود سیاه‌آب,published JSON location and introduction (main a920b716),written,riverside,villa_rain_riverside
+c065,office,دفتر رسیدگی به شکایت‌ها، مرکز توان‌بخشی گل‌آذین,published JSON location and introduction (main a920b716),written,complaints,office_complaints
+c066,school,گلخانه‌ی آموزشی مرکز پژوهش دانش‌آموزی بیدستان,published JSON location and introduction (main a920b716),written,greenhouse,school_greenhouse
+c067,tower,ساختمان پنج‌طبقه‌ی خانواده‌ی نیک‌آیین,published JSON location and introduction (main a920b716),written,residential,tower_residential
+c068,warehouse,انبار قدیمی تعاونی ترمه‌بافان نسیم‌آباد,published JSON location and introduction (main a920b716),written,textile_depot,warehouse_textile_depot
+c069,museum,نگارخانه‌ی ترنج، نمایشگاه «مُهر و نقش»,published JSON location and introduction (main a920b716),written,print_gallery,museum_print_gallery
+c070,wedding,خانه‌باغ منیژه‌خانم، شب عروسی ترانه,published JSON location and introduction (main a920b716),written,garden_puppets,wedding_garden_puppets
+c071,hospital,hospital، سالن تحویل وسایل بیماران مرخص‌شده,outline; not a final generation brief,outline only; no assets,discharge_desk,hospital_discharge_desk
+c072,desert,desert، پایگاه پژوهش خاک در حاشیهٔ کویر,outline; not a final generation brief,outline only; no assets,soil_station,desert_soil_station
+c073,bazaar_night,bazaar_night، دفتر حساب یک تیمچهٔ پارچه,outline; not a final generation brief,outline only; no assets,textile_office,bazaar_night_textile_office
+c074,train,train، واگن قطار یک سفر گروهی,outline; not a final generation brief,outline only; no assets,sleeper,train_sleeper
+c075,snow_lodge,snow_lodge، مهمان‌خانه‌ای کوهستانی در شب برفی,outline; not a final generation brief,outline only; no assets,alpine_guesthouse,snow_lodge_alpine_guesthouse
+c076,school,school، موزهٔ کوچک پژوهش‌های یک دبیرستان قدیمی,outline; not a final generation brief,outline only; no assets,school_museum,school_school_museum
+c077,airport,airport، سالن استراحت یک گروه گردشگری,outline; not a final generation brief,outline only; no assets,lounge,airport_lounge
+c078,theater,theater، سالن آماده‌سازی یک اجرای خیریه,outline; not a final generation brief,outline only; no assets,backstage,theater_backstage
+c079,subway,subway، غرفهٔ سلامت در سالن ایستگاه,outline; not a final generation brief,outline only; no assets,station_clinic,subway_station_clinic
+c080,library,library، اتاق اهدای اسناد شخصی,outline; not a final generation brief,outline only; no assets,donations,library_donations
+c081,kitchen,kitchen، آشپزخانهٔ رستوران محل مذاکرهٔ تجاری,outline; not a final generation brief,outline only; no assets,restaurant_kitchen,kitchen_restaurant_kitchen
+c082,harbor,harbor، انبار وسایل توقیف‌شدهٔ یک شرکت بندری,outline; not a final generation brief,outline only; no assets,impound,harbor_impound
+w008,harbor,harbor، کارگاه تعمیر قایق‌های چوبی,outline; not a final generation brief,outline only; no assets,boat_workshop,harbor_boat_workshop
+w009,lab,lab، سالن تحویل یک دستگاه اندازه‌گیری پژوهشی,outline; not a final generation brief,outline only; no assets,instrument_hall,lab_instrument_hall
+w010,theater,theater، اجرای نهایی یک نمایشنامهٔ تازه,outline; not a final generation brief,outline only; no assets,stage,theater_stage
+w011,villa_rain,villa_rain، خانهٔ محل تحویل مجموعهٔ خانوادگی,outline; not a final generation brief,outline only; no assets,family_interior,villa_rain_family_interior
+w012,snow_lodge,snow_lodge، اقامتگاه میزبان اردوی توان‌بخشی,outline; not a final generation brief,outline only; no assets,recovery_lodge,snow_lodge_recovery_lodge

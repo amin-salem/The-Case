@@ -1,0 +1,176 @@
+--- a/server/app/content/cases/c031.json
++++ b/server/app/content/cases/c031.json
+@@ -69 +69 @@
+-    "portrait": "m_mid_guard"
++    "portrait": "m_mid_tycoon"
+@@ -155 +155 @@
+-    "portrait": "m_old_farmer"
++    "portrait": "m_old_flatcap"
+--- a/server/app/content/cases/c047.json
++++ b/server/app/content/cases/c047.json
+@@ -69 +69 @@
+-    "portrait": "f_mid_scientist"
++    "portrait": "f_mid_clerk"
+@@ -151 +151 @@
+-    "portrait": "f_mid_director"
++    "portrait": "f_mid_attorney"
+@@ -192 +192 @@
+-    "portrait": "m_mid_policeman"
++    "portrait": "m_mid_tycoon"
+--- a/server/app/content/cases/c048.json
++++ b/server/app/content/cases/c048.json
+@@ -28 +28 @@
+-    "portrait": "m_young_waiter"
++    "portrait": "m_young_athlete"
+@@ -69 +69 @@
+-    "portrait": "f_mid_widow"
++    "portrait": "f_mid_scholar"
+@@ -151 +151 @@
+-    "portrait": "m_mid_fixer"
++    "portrait": "m_mid_technician"
+@@ -192 +192 @@
+-    "portrait": "m_mid_barista"
++    "portrait": "m_mid_photographer"
+--- a/server/app/content/cases/c049.json
++++ b/server/app/content/cases/c049.json
+@@ -151 +151 @@
+-    "portrait": "m_old_captain"
++    "portrait": "m_mid_captain"
+@@ -192 +192 @@
+-    "portrait": "m_mid_captain"
++    "portrait": "m_mid_merchant"
+--- a/server/app/content/cases/c050.json
++++ b/server/app/content/cases/c050.json
+@@ -110 +110 @@
+-    "portrait": "m_old_rich"
++    "portrait": "m_mid_business"
+@@ -151 +151 @@
+-    "portrait": "f_mid_inspector"
++    "portrait": "f_mid_housewife"
+@@ -192 +192 @@
+-    "portrait": "f_mid_banker"
++    "portrait": "f_mid_journalist"
+--- a/server/app/content/cases/c051.json
++++ b/server/app/content/cases/c051.json
+@@ -28 +28 @@
+-    "portrait": "m_mid_doctor"
++    "portrait": "m_young_courier"
+@@ -114 +114 @@
+-    "portrait": "m_young_dj"
++    "portrait": "m_young_casual"
+--- a/server/app/content/cases/c052.json
++++ b/server/app/content/cases/c052.json
+@@ -28 +28 @@
+-    "portrait": "m_old_scientist"
++    "portrait": "m_old_captain"
+@@ -241 +241 @@
+-    "portrait": "m_mid_chef"
++    "portrait": "m_mid_tycoon"
+--- a/server/app/content/cases/c056.json
++++ b/server/app/content/cases/c056.json
+@@ -110 +110 @@
+-    "portrait": "m_mid_barista"
++    "portrait": "m_young_boxer"
+@@ -151 +151 @@
+-    "portrait": "f_young_firefighter"
++    "portrait": "f_young_waitress"
+@@ -192 +192 @@
+-    "portrait": "m_old_warden"
++    "portrait": "m_old_gardener"
+--- a/server/app/content/cases/c057.json
++++ b/server/app/content/cases/c057.json
+@@ -28 +28 @@
+-    "portrait": "m_mid_barista"
++    "portrait": "m_young_courier"
+@@ -69 +69 @@
+-    "portrait": "m_mid_technician"
++    "portrait": "m_mid_driver"
+--- a/server/app/content/cases/c058.json
++++ b/server/app/content/cases/c058.json
+@@ -151 +151 @@
+-    "portrait": "f_mid_clerk"
++    "portrait": "f_mid_witness"
+--- a/server/app/content/cases/c059.json
++++ b/server/app/content/cases/c059.json
+@@ -28 +28 @@
+-    "portrait": "m_mid_lecturer"
++    "portrait": "m_mid_roadworker"
+@@ -69 +69 @@
+-    "portrait": "f_mid_restorer"
++    "portrait": "f_mid_banker"
+@@ -151 +151 @@
+-    "portrait": "m_mid_technician"
++    "portrait": "m_mid_worker"
+@@ -192 +192 @@
+-    "portrait": "m_old_warden"
++    "portrait": "m_old_schoolmaster"
+--- a/server/app/content/cases/c060.json
++++ b/server/app/content/cases/c060.json
+@@ -110 +110 @@
+-    "portrait": "m_mid_barista"
++    "portrait": "m_mid_worker"
+@@ -151 +151 @@
+-    "portrait": "f_mid_chef"
++    "portrait": "f_mid_pastry"
+@@ -192 +192 @@
+-    "portrait": "m_young_waiter"
++    "portrait": "m_young_worker"
+--- a/server/app/content/cases/c061.json
++++ b/server/app/content/cases/c061.json
+@@ -151 +151 @@
+-    "portrait": "m_old_flatcap"
++    "portrait": "m_old_professor"
+--- a/server/app/content/cases/c062.json
++++ b/server/app/content/cases/c062.json
+@@ -69 +69 @@
+-    "portrait": "m_mid_fixer"
++    "portrait": "m_mid_researcher"
+--- a/server/app/content/weekly/w001.json
++++ b/server/app/content/weekly/w001.json
+@@ -116 +116 @@
+-    "portrait": "f_mid_soldier"
++    "portrait": "f_mid_doctor"
+@@ -196 +196 @@
+-    "portrait": "m_young_conscript"
++    "portrait": "m_young_athlete"
+@@ -276 +276 @@
+-    "portrait": "m_mid_tycoon"
++    "portrait": "m_mid_resident"
+@@ -364 +364 @@
+-    "portrait": "m_mid_lawyer"
++    "portrait": "m_mid_business"
+--- a/server/app/content/weekly/w002.json
++++ b/server/app/content/weekly/w002.json
+@@ -127 +127 @@
+-    "portrait": "f_mid_pilot"
++    "portrait": "f_mid_cleaner"
+@@ -320 +320 @@
+-    "portrait": "m_old_rich"
++    "portrait": "m_old_schoolmaster"
+--- a/server/app/content/weekly/w003.json
++++ b/server/app/content/weekly/w003.json
+@@ -120 +120 @@
+-        "portrait": "m_old_professor"
++        "portrait": "m_mid_merchant"
+@@ -161 +161 @@
+-        "portrait": "f_mid_commander"
++        "portrait": "f_mid_mechanic"
+@@ -243 +243 @@
+-        "portrait": "m_old_schoolmaster"
++        "portrait": "m_old_captain"
+@@ -284 +284 @@
+-        "portrait": "f_mid_judge"
++        "portrait": "f_mid_inspector"
+--- a/server/app/content/weekly/w005.json
++++ b/server/app/content/weekly/w005.json
+@@ -381 +381 @@
+-        "portrait": "m_young_student"
++        "portrait": "m_young_boxer"
+--- a/server/app/content/weekly/w006.json
++++ b/server/app/content/weekly/w006.json
+@@ -306 +306 @@
+-        "portrait": "m_young_waiter"
++        "portrait": "m_young_athlete"
+@@ -391 +391 @@
+-        "portrait": "m_mid_doctor"
++        "portrait": "m_mid_sailor"

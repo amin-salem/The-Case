@@ -1,0 +1,407 @@
+case,slot,name,role,gender,age,before,after,photo_age,reason,remaining,scope,branch_portrait,delivery
+c001,s1,کاوه ملکی,پسر حاج‌مرتضی,m,28,m_young_boxer,m_young_boxer,28,retained,,apply,m_young_boxer,unchanged
+c001,s2,نسرین فرهادی,حسابدار مغازه,f,34,f_young_painter,f_young_photographer,33,wardrobe,,apply,f_young_photographer,on branch
+c001,s3,حاج‌مرتضی ملکی,صاحب مغازه,m,62,m_old_painter,m_old_painter,68,retained,,apply,m_old_painter,unchanged
+c001,s4,رحیم صفری,نگهبان شب راسته,m,55,m_mid_guard,m_mid_guard,40,retained,age,apply,m_mid_guard,unchanged
+c002,s1,پریا شمس,منشی مدیرعامل,f,29,f_young_photographer,f_young_athlete,28,"cast separation, eligible wardrobe and pool allocation",,apply,f_young_athlete,on branch
+c002,s2,جواد رستمی,نگهبان ساختمان,m,60,m_old_warden,m_old_warden,62,retained,,apply,m_old_warden,unchanged
+c002,s3,شهرام نیک‌پور,مدیر مالی,m,42,m_mid_tycoon,m_mid_lawyer,42,age,,apply,m_mid_lawyer,on branch
+c002,s4,مهندس آرمان,مدیرعامل,m,55,m_old_boss,m_old_boss,60,retained,,apply,m_old_boss,unchanged
+c002,s5,سامان کریمی,برنامه‌نویس,m,31,m_young_casual,m_young_casual,26,retained,,apply,m_young_casual,unchanged
+c003,s1,عباس قاسمی,مهماندار واگن ۴,m,50,m_mid_nurse,m_mid_business,50,"wardrobe, age",,apply,m_mid_business,on branch
+c003,s2,فرشید نوری,دستیار سابق مقتول,m,45,m_mid_chef,m_mid_chef,42,retained,wardrobe,apply,m_mid_chef,unchanged
+c003,s3,مهتاب کریمی,دانشجوی دکترای شیمی,f,27,f_young_chemist,f_young_chemist,32,retained,,apply,f_young_chemist,unchanged
+c003,s4,لیلا سعیدی,دختر مقتول,f,38,f_mid_witness,f_mid_witness,36,retained,,apply,f_mid_witness,unchanged
+c004,s1,علی مرادی,نظافتچی موزه,m,24,m_young_designer,m_young_designer,30,retained,,apply,m_young_designer,unchanged
+c004,s2,آقای آقازاده,مجموعه‌دار هنری,m,61,m_old_fisher,m_old_fisher,65,retained,,apply,m_old_fisher,unchanged
+c004,s3,دکتر حمیدی,مدیر موزه,m,58,m_old_professor,m_old_boss,60,age,,apply,m_old_boss,on branch
+c004,s4,نادر شریفی,نگهبان شب,m,47,m_mid_guard,m_mid_guard,40,retained,,apply,m_mid_guard,unchanged
+c004,s5,سیما رادمنش,مرمتگر آثار,f,36,f_young_waitress,f_young_photographer,33,age,,apply,f_young_photographer,on branch
+c005,s1,پیمان رستگار,برادرزاده‌ی مقتول,m,22,m_young_dj,m_young_student,21,wardrobe,,apply,m_young_student,on branch
+c005,s2,کامران فرهی,برادرِ رویا,m,45,m_mid_resident,m_mid_resident,52,retained,,apply,m_mid_resident,unchanged
+c005,s3,رویا رستگار,همسر مقتول,f,49,f_mid_gallery,f_mid_cleaner,48,age,,apply,f_mid_cleaner,on branch
+c005,s4,مش‌قربان,باغبان ویلا,m,67,m_old_gardener,m_old_gardener,62,retained,,apply,m_old_gardener,unchanged
+c005,s5,دکتر نیک‌نام,وکیل خانوادگی,m,56,m_old_jurist,m_mid_lecturer,52,age,,apply,m_mid_lecturer,on branch
+c006,s1,یدالله,نگهبان شب انبار,m,65,m_old_grandpa,m_old_grandpa,70,retained,,apply,m_old_grandpa,unchanged
+c006,s2,سهیل احمدی,مدیر سابق انبار,m,36,m_young_boxer,m_young_courier,32,age,,apply,m_young_courier,on branch
+c006,s3,حسین توکلی,صاحب انبار,m,58,m_old_painter,m_old_captain,65,age,,apply,m_old_captain,on branch
+c006,s4,رضا ناصری,صاحب شرکت فرش رقیب,m,50,m_mid_merchant,m_mid_merchant,50,retained,,apply,m_mid_merchant,unchanged
+c007,s1,مهدی کریمی,بازرس گمرک,m,45,m_mid_policeman,m_mid_policeman,50,retained,wardrobe,apply,m_mid_policeman,unchanged
+c007,s2,حمید زارعی,اپراتور جرثقیل,m,32,m_mid_technician,m_young_courier,32,"wardrobe, age",,apply,m_young_courier,on branch
+c007,s3,نسرین فروتن,نگهبان دروازه,f,50,f_mid_journalist,f_mid_director,48,age,,apply,f_mid_director,on branch
+c007,s4,سارا داوودی,نماینده‌ی صادرکننده,f,38,f_mid_archaeologist,f_mid_archaeologist,45,retained,,apply,f_mid_archaeologist,unchanged
+c007,s5,جلال رحمانی,ناخدای کشتی,m,54,m_mid_sailor,m_mid_sailor,50,retained,,apply,m_mid_sailor,unchanged
+c008,s1,امیر افتخاری,پسر بیمار,m,36,m_mid_officer,m_mid_driver,36,age,,apply,m_mid_driver,on branch
+c008,s2,دکتر ماندانا شریفی,پزشک کشیک,f,44,f_mid_surgeon,f_mid_banker,45,age,,apply,f_mid_banker,on branch
+c008,s3,شهلا پورحسن,نظافتچی بخش,f,63,f_old_rich,f_old_rich,65,retained,,apply,f_old_rich,unchanged
+c008,s4,زهره رحیمی,داروساز,f,39,f_mid_pharmacist,f_mid_pharmacist,38,retained,,apply,f_mid_pharmacist,unchanged
+c008,s5,فرشته عزیزی,پرستار شب,f,33,f_young_nurse,f_young_nurse,28,retained,,apply,f_young_nurse,unchanged
+c009,s1,دکتر فریدون ملکی,استاد بازنشسته‌ی تاریخ,m,68,m_old_professor,m_old_professor,68,retained,,apply,m_old_professor,unchanged
+c009,s2,کامران تهرانی,کتاب‌فروش عتیقه، بازار قدیم رشت,m,47,m_mid_barista,m_mid_officer,45,"wardrobe, age",,apply,m_mid_officer,on branch
+c009,s3,مهسا رضوانی,دانشجوی دکتری تاریخ، دستیار دکتر ملکی,f,29,f_young_researcher,f_young_bookworm,27,wardrobe,,apply,f_young_bookworm,on branch
+c009,s4,یدالله باقری,نگهبان ساختمان,m,59,m_old_jurist,m_old_boss,60,age,,apply,m_old_boss,on branch
+c009,s5,شیوا نیک‌پی,کتابدار تالار نسخه‌های قدیمی,f,36,f_mid_scholar,f_mid_designer,36,age,,apply,f_mid_designer,on branch
+c010,s1,سهراب نیک‌نام,بازیگر نقش اول مرد,m,46,m_mid_artist,m_mid_photographer,45,age,,apply,m_mid_photographer,on branch
+c010,s2,پروانه سلطانی,کارگردان,f,52,f_mid_laborer,f_mid_housewife,48,age,,apply,f_mid_housewife,on branch
+c010,s3,نادر جهانگیری,مسئول صحنه,m,38,m_mid_photographer,m_mid_artist,38,"cast separation, eligible wardrobe and pool allocation",,apply,m_mid_artist,on branch
+c010,s4,ملیکا سلطانی‌فر,بازیگر جایگزین نقش اول زن,f,25,f_young_artist,f_young_artist,27,retained,,apply,f_young_artist,unchanged
+c010,s5,آرش رحیمی,بازیگر نقش نوکر، جایگزین نقش اول مرد,m,27,m_young_athlete,m_young_athlete,24,retained,,apply,m_young_athlete,unchanged
+c011,s1,بهمن طاهرخانی,مدیر هتل,m,56,m_old_woolcap,m_old_gardener,62,age,,apply,m_old_gardener,on branch
+c011,s2,فرهاد عبادی,برادرزاده‌ی خانم عبادی، مهمان اتاق ۲۱۶,m,41,m_mid_nurse,m_mid_lawyer,42,wardrobe,,apply,m_mid_lawyer,on branch
+c011,s3,زری مرادی,سرخدمه‌ی هتل,f,47,f_mid_guest,f_mid_scholar,48,age,,apply,f_mid_scholar,on branch
+c011,s4,پویا رستگار,کارمند پذیرش,m,24,m_young_dj,m_young_undergrad,24,wardrobe,,apply,m_young_undergrad,on branch
+c011,s5,ساغر نوروزی,دلال عتیقه، مهمان اتاق ۳۰۵,f,39,f_mid_housewife,f_mid_attorney,38,age,,apply,f_mid_attorney,on branch
+c012,s1,علی نادری,ظرف‌شور,m,22,m_young_it,m_young_it,28,retained,,apply,m_young_it,unchanged
+c012,s2,حسین هاشمی,سرآشپز,m,50,m_mid_cook,m_mid_cook,50,retained,,apply,m_mid_cook,unchanged
+c012,s3,مهدی توکلی,صاحب سفره‌خانه,m,44,m_mid_merchant,m_mid_merchant,50,retained,,apply,m_mid_merchant,unchanged
+c012,s4,آزاده نصیری,کمک‌آشپز,f,33,f_mid_chef,f_mid_witness,36,age,,apply,f_mid_witness,on branch
+c012,s5,پریا نوری,صندوق‌دار,f,27,f_young_athlete,f_young_athlete,28,retained,,apply,f_young_athlete,unchanged
+c013,s1,کاوه رزاقی,اسکی‌باز کوهستان، قهرمان پارسال,m,29,m_young_undergrad,m_young_undergrad,24,retained,,apply,m_young_undergrad,unchanged
+c013,s2,مسعود فرجی,رئیس کمیته‌ی برگزاری مسابقه,m,51,m_mid_business,m_mid_business,50,retained,,apply,m_mid_business,unchanged
+c013,s3,فرهاد کرمی,مدیر پناهگاه,m,46,m_mid_tycoon,m_mid_tycoon,50,retained,,apply,m_mid_tycoon,unchanged
+c013,s4,شهلا امیری,آشپز پناهگاه,f,44,f_mid_housewife,f_mid_housewife,48,retained,,apply,f_mid_housewife,unchanged
+c013,s5,بهرام نیک‌نام,راهنمای کوهستان و امدادگر پناهگاه,m,58,m_old_gardener,m_old_gardener,62,retained,,apply,m_old_gardener,unchanged
+c014,s1,غلامرضا صالحی,سرایدار رباط,m,67,m_old_grandpa,m_old_grandpa,70,retained,,apply,m_old_grandpa,unchanged
+c014,s2,لیلا ارجمند,ستاره‌شناس، سرپرست تور رصد,f,45,f_mid_manager,f_mid_manager,40,retained,,apply,f_mid_manager,unchanged
+c014,s3,آرش مولایی,دانشجوی عکاسی، مهمان تور,m,26,m_young_undergrad,m_young_undergrad,24,retained,,apply,m_young_undergrad,unchanged
+c014,s4,نگار شریفی,دستیار کلکسیونر,f,31,f_young_bookworm,f_young_bookworm,27,retained,,apply,f_young_bookworm,unchanged
+c014,s5,فرشته کاویانی,معلم، مهمان تور,f,38,f_mid_teacher,f_mid_teacher,42,retained,,apply,f_mid_teacher,unchanged
+c015,s1,کامران افشار,سرپرست شیفت شب ایستگاه,m,44,m_mid_photographer,m_mid_photographer,45,retained,,apply,m_mid_photographer,unchanged
+c015,s2,یوسف قنبری,تکنسین فنی شیفت شب,m,34,m_mid_technician,m_mid_technician,40,retained,,apply,m_mid_technician,unchanged
+c015,s3,نسرین تهرانی,اپراتور اتاق کنترل,f,38,f_mid_singer,f_mid_singer,36,retained,,apply,f_mid_singer,unchanged
+c015,s4,زهرا مرادی,نظافتچی شیفت شب,f,52,f_mid_cleaner,f_mid_cleaner,48,retained,,apply,f_mid_cleaner,unchanged
+c015,s5,بهزاد نیک‌خو,کارگر پیمانکار تعمیرات خروجی ۲,m,27,m_young_worker,m_young_worker,27,retained,,apply,m_young_worker,unchanged
+c016,s1,دکتر هوشنگ وفایی,استاد راهنما و رئیس آزمایشگاه ۲۰۴,m,63,m_old_scientist,m_old_physician,65,wardrobe,,apply,m_old_physician,on branch
+c016,s2,نیلوفر صدری,دانشجوی دکترا، هم‌آزمایشگاهی و هم‌اتاقی خوابگاه مهسا,f,29,f_young_chemist,f_young_receptionist,27,wardrobe,,apply,f_young_receptionist,on branch
+c016,s3,مهسا کرمانی,دانشجوی دکترا، صاحب نمونه‌های دزدیده‌شده,f,27,f_young_student,f_young_student,24,retained,,apply,f_young_student,unchanged
+c016,s4,مجید طاهری,تکنسین آزمایشگاه,m,41,m_mid_technician,m_mid_lawyer,42,wardrobe,,apply,m_mid_lawyer,on branch
+c016,s5,اکبر فتحی,نگهبان شب ساختمان پژوهشکده,m,56,m_mid_conductor,m_mid_lecturer,52,"wardrobe, age",,apply,m_mid_lecturer,on branch
+c017,s1,سینا رحمانی,عکاس تالار,m,31,m_mid_artist,m_mid_artist,38,retained,,apply,m_mid_artist,unchanged
+c017,s2,کاوه صدری,پسرعموی داماد,m,26,m_young_casual,m_young_worker,27,"cast separation, eligible wardrobe and pool allocation",,apply,m_young_worker,on branch
+c017,s3,میلاد بهروزی,دی‌جی تالار,m,29,m_young_designer,m_young_designer,30,retained,,apply,m_young_designer,unchanged
+c017,s4,فرهاد نیک‌نام,پسرعمه‌ی عروس، حسابدار حجره‌ی فرش پدر عروس,m,33,m_mid_merchant,m_young_casual,26,age,legacy age band,apply,m_young_casual,on branch
+c017,s5,زهرا شاکری,عمه‌ی عروس، خواهر منصور شاکری,f,61,f_old_widow,f_old_widow,68,retained,,apply,f_old_widow,unchanged
+c018,s1,حسین ابراهیمی,معاون مدرسه,m,54,m_mid_teacher,m_mid_resident,52,age,,apply,m_mid_resident,on branch
+c018,s2,جلال کریمی,دبیر فیزیک,m,49,m_mid_driver,m_mid_sailor,50,age,,apply,m_mid_sailor,on branch
+c018,s3,شیرین مرادی,منشی مدرسه,f,38,f_mid_teacher,f_mid_teacher,42,retained,,apply,f_mid_teacher,unchanged
+c018,s4,آرمان تقوی,دانش‌آموز دوازدهم، ادمین کانال مدرسه,m,17,m_young_student,m_young_student,21,retained,,apply,m_young_student,unchanged
+c018,s5,بهزاد صفایی,مسئول آزمایشگاه مدرسه,m,29,m_young_waiter,m_young_undergrad,24,wardrobe,,apply,m_young_undergrad,on branch
+c019,s1,بهنام ملکی,باربر و بارگیر,m,37,m_mid_officer,m_mid_driver,36,age,,apply,m_mid_driver,on branch
+c019,s2,رضا اکبری,مسئول امنیت شیفت,m,48,m_old_butler,m_mid_teacher,45,"wardrobe, legacy age band",,apply,m_mid_teacher,on branch
+c019,s3,هاشمی,مسافر، تاجر فرش,m,56,m_old_boss,m_old_boss,60,retained,,apply,m_old_boss,unchanged
+c019,s4,مینا ایزدی,مسئول پذیرش,f,29,f_young_receptionist,f_young_receptionist,27,retained,,apply,f_young_receptionist,unchanged
+c019,s5,سحر یوسفی,بازرس اتاق دستی,f,34,f_mid_officer,f_mid_singer,36,wardrobe,,apply,f_mid_singer,on branch
+c020,s1,هومن رزاقی,ساعت‌ساز، پیمانکار مرمت ساعت برج,m,54,m_mid_resident,m_mid_resident,52,retained,,apply,m_mid_resident,unchanged
+c020,s2,کاوه پاکزاد,شاگرد ساعت‌ساز، دستیار مرمت,m,29,m_young_worker,m_young_worker,27,retained,,apply,m_young_worker,unchanged
+c020,s3,حاج عباس قنبری,متصدی برج ساعت، ساکن اتاقک پای برج,m,71,m_old_farmer,m_old_farmer,70,retained,,apply,m_old_farmer,unchanged
+c020,s4,گلنار شیرازی,صاحب کافه‌ی قدیمی روبه‌روی برج,f,46,f_mid_gallery,f_mid_gallery,40,retained,,apply,f_mid_gallery,unchanged
+c020,s5,مهندس بهزاد فرخی,معاون عمرانی شهرداری سرخ‌آباد,m,49,m_mid_lecturer,m_mid_lecturer,52,retained,,apply,m_mid_lecturer,unchanged
+c021,s1,مرتضی کاشی,پارچه‌فروش، حجره‌ی روبه‌روی حاج ناصر,m,55,m_mid_merchant,m_mid_merchant,50,retained,,apply,m_mid_merchant,unchanged
+c021,s2,فرشته نوری,عطار، حجره‌ی کناری حاج ناصر,f,41,f_mid_curator,f_mid_curator,42,retained,,apply,f_mid_curator,unchanged
+c021,s3,سعید ناصری,پسر حاج ناصر,m,31,m_young_athlete,m_young_athlete,24,retained,,apply,m_young_athlete,unchanged
+c021,s4,بهروز رحمانی,شاگرد حجره‌ی حاج ناصر,m,26,m_young_student,m_young_student,21,retained,,apply,m_young_student,unchanged
+c021,s5,مش رجب صفایی,نگهبان شب بازار,m,63,m_old_warden,m_old_warden,62,retained,,apply,m_old_warden,unchanged
+c022,s1,فرهاد صبوری,معاون مالی، قدیمی‌ترین همکار مدیرعامل,m,48,m_mid_lawyer,m_mid_lawyer,42,retained,,apply,m_mid_lawyer,unchanged
+c022,s2,مریم احمدوند,منشی مدیرعامل,f,33,f_young_waitress,f_young_photographer,33,age,,apply,f_young_photographer,on branch
+c022,s3,بهنام کریمی,حسابدار,m,36,m_mid_teacher,m_mid_driver,36,age,,apply,m_mid_driver,on branch
+c022,s4,آرش محبی,مسئول فناوری اطلاعات,m,29,m_young_it,m_young_it,28,retained,,apply,m_young_it,unchanged
+c022,s5,صغری اکبری,نظافتچی شب طبقه‌های پنج تا هفت,f,58,f_mid_cleaner,f_mid_cleaner,48,retained,age,apply,f_mid_cleaner,unchanged
+c023,s1,نازنین سلطانی,نقاش، خواهرزاده‌ی منیژه، هم‌کوپه‌ای,f,27,f_young_painter,f_young_painter,30,retained,,apply,f_young_painter,unchanged
+c023,s2,حمید جهانی,مهماندار واگن سه,m,45,m_mid_business,m_mid_business,50,retained,,apply,m_mid_business,unchanged
+c023,s3,کیان معتمدی,نوازنده‌ی سه‌تار، مسافر کوپه‌ی هشت,m,30,m_young_waiter,m_young_designer,30,"wardrobe, age",,apply,m_young_designer,on branch
+c023,s4,فرشید بهرامی,بازرگان، هم‌کوپه‌ای,m,52,m_mid_merchant,m_mid_merchant,50,retained,,apply,m_mid_merchant,unchanged
+c023,s5,جلال رضوانی,کارمند بازنشسته‌ی راه‌آهن، هم‌کوپه‌ای,m,63,m_old_schoolmaster,m_old_tailor,68,"cast separation, eligible wardrobe and pool allocation",,apply,m_old_tailor,on branch
+c024,s1,دکتر فریبا نوروزی,مدیر موزه,f,57,f_mid_business,f_mid_director,48,age,age,apply,f_mid_director,on branch
+c024,s2,اصغر مرادی,سرپرست نگهبان‌های موزه,m,52,m_mid_guard,m_mid_tycoon,50,age,,apply,m_mid_tycoon,on branch
+c024,s3,بردیا شمس,عکاس مراسم افتتاح,m,38,m_mid_artist,m_mid_artist,38,retained,,apply,m_mid_artist,unchanged
+c024,s4,حاج کیومرث بهادری,مجموعه‌دار عتیقه، مهمان ویژه,m,70,m_old_fisher,m_old_fisher,65,retained,,apply,m_old_fisher,unchanged
+c024,s5,مهتاب کیانی,مرمت‌گر موزه، سخنران شب افتتاح,f,36,f_mid_restorer,f_mid_restorer,38,retained,,apply,f_mid_restorer,unchanged
+c025,s1,سیاوش بهروزی,پسر رضا بهروزی,m,46,m_young_courier,m_mid_officer,45,age,,apply,m_mid_officer,on branch
+c025,s2,حسین فروزان,رانندهٔ خانواده و برادر زری,m,44,m_mid_driver,m_mid_sailor,50,age,,apply,m_mid_sailor,on branch
+c025,s3,زری فروزان,خدمتکار خانه و ذی‌نفع وصیت,f,30,f_mid_clerk,f_young_photographer,33,age,,apply,f_young_photographer,on branch
+c025,s4,دکتر جهانگیر سامی,پزشک خانواده,m,62,m_old_physician,m_old_physician,65,retained,,apply,m_old_physician,unchanged
+c025,s5,مهناز صبوری,منشی مخصوص بهروزی,f,35,f_mid_officer,f_mid_designer,36,wardrobe,,apply,f_mid_designer,on branch
+c026,s1,تکتم ملکی,حسابدار انبار,f,39,f_mid_lawyer,f_mid_lawyer,42,retained,,apply,f_mid_lawyer,unchanged
+c026,s2,پیمان گودرزی,اپراتور لیفتراک,m,37,m_mid_technician,m_mid_technician,40,retained,,apply,m_mid_technician,unchanged
+c026,s3,کیوان رادمهر,نگهبان شب انبار,m,53,m_mid_conductor,m_mid_conductor,42,retained,"wardrobe, age",apply,m_mid_conductor,unchanged
+c026,s4,سهراب کیانی,مسئول توزیع انبار,m,43,m_mid_photographer,m_mid_photographer,45,retained,,apply,m_mid_photographer,unchanged
+c026,s5,منوچهر افشار,صاحب انبار,m,63,m_old_flatcap,m_old_flatcap,66,retained,,apply,m_old_flatcap,unchanged
+c027,s1,کوروش بحری,ناخدای قایق طوفان,m,41,m_mid_sailor,m_mid_driver,36,age,,apply,m_mid_driver,on branch
+c027,s2,جمشید رضایی,ناخدای قایق موج,m,59,m_old_captain,m_old_captain,65,retained,,apply,m_old_captain,unchanged
+c027,s3,نادر هرمزی,ناخدای قایق صدف,m,36,m_mid_lawyer,m_mid_lawyer,42,retained,,apply,m_mid_lawyer,unchanged
+c027,s4,یوسف صیادی,ناخدای قایق ساحل,m,48,m_mid_nurse,m_mid_teacher,45,"wardrobe, age",,apply,m_mid_teacher,on branch
+c027,s5,عباس دهقانی,ناخدای قایق مروارید,m,55,m_old_cleric,m_mid_captain,55,"wardrobe, age",,apply,m_mid_captain,on branch
+c028,s1,سهراب جهانبخش,پرستار شب بخش مراقبت ویژه,m,41,m_mid_nurse,m_mid_nurse,38,retained,,apply,m_mid_nurse,unchanged
+c028,s2,پریسا فرهمند,داروساز شیفت عصر بیمارستان,f,37,f_mid_pharmacist,f_mid_pharmacist,38,retained,,apply,f_mid_pharmacist,unchanged
+c028,s3,فریده ناصری,پرستار شب بخش مراقبت ویژه,f,33,f_mid_inspector,f_mid_inspector,40,retained,,apply,f_mid_inspector,unchanged
+c028,s4,دکتر مازیار راد,دستیار ارشد جراحی,m,32,m_mid_doctor,m_young_courier,32,age,,apply,m_young_courier,on branch
+c028,s5,غلامرضا صمدی,بهیار بخش مراقبت ویژه,m,30,m_young_conscript,m_young_designer,30,wardrobe,,apply,m_young_designer,on branch
+c029,s1,دکتر ناصر فاضلی,پژوهشگر مهمان,m,52,m_mid_lecturer,m_mid_lecturer,52,retained,,apply,m_mid_lecturer,unchanged
+c029,s2,حسن عطایی,نگهبان کتابخانه,m,57,m_old_rich,m_old_warden,62,age,,apply,m_old_warden,on branch
+c029,s3,زهره راد,کتابدار بخش نسخه‌ها,f,44,f_mid_scholar,f_mid_scholar,48,retained,,apply,f_mid_scholar,unchanged
+c029,s4,مریم صمیمی,پژوهشگر متن‌های کهن,f,33,f_mid_scientist,f_mid_guest,38,wardrobe,,apply,f_mid_guest,on branch
+c029,s5,بابک کمالی,مسئول ثبت امانت,m,36,m_old_butler,m_young_boxer,28,"wardrobe, age, legacy age band","age, legacy age band",apply,m_young_boxer,on branch
+c030,s1,نیلوفر خسروی,مدیر صحنه,f,40,f_mid_manager,f_mid_manager,40,retained,,apply,f_mid_manager,unchanged
+c030,s2,مهتاب صالحی,لباس‌دار,f,35,f_mid_soldier,f_mid_agent,42,wardrobe,,apply,f_mid_agent,on branch
+c030,s3,کامیار نظری,بازیگر نقش پادشاه,m,45,m_mid_artist,m_mid_artist,38,retained,,apply,m_mid_artist,unchanged
+c030,s4,رسول طاهری,تهیه‌کننده,m,58,m_old_woolcap,m_old_boss,60,age,,apply,m_old_boss,on branch
+c030,s5,امید فرجی,اپراتور نور,m,31,m_mid_resident,m_young_courier,32,age,,apply,m_young_courier,on branch
+c031,s1,بهاره کاشانی,مسئول پذیرش,f,29,f_young_receptionist,f_young_receptionist,27,retained,,apply,f_young_receptionist,unchanged
+c031,s2,پرویز ملکی,نگهبان شب,m,50,m_mid_guard,m_mid_tycoon,50,age,,apply,m_mid_guard,pending patch
+c031,s3,نسرین حیدری,حسابدار,f,42,f_mid_lawyer,f_mid_lawyer,42,retained,,apply,f_mid_lawyer,unchanged
+c031,s4,منوچهر زمانی,صاحب هتل,m,56,m_old_farmer,m_old_flatcap,66,age,age,apply,m_old_farmer,pending patch
+c031,s5,هاشم رنجبر,سرآشپز,m,47,m_mid_cook,m_mid_cook,50,retained,,apply,m_mid_cook,unchanged
+c032,s1,سعید جعفرزاده,گارسون,m,26,m_young_designer,m_young_designer,30,retained,,apply,m_young_designer,unchanged
+c032,s2,حمید ثقفی,سرآشپز,m,54,m_mid_cook,m_mid_cook,50,retained,,apply,m_mid_cook,unchanged
+c032,s3,مینو شیرازی,مدیر رستوران,f,47,f_mid_business,f_mid_business,42,retained,,apply,f_mid_business,unchanged
+c032,s4,آزیتا مهرجو,کمک‌آشپز,f,28,f_young_cook,f_young_cook,28,retained,,apply,f_young_cook,unchanged
+c032,s5,ابراهیم غفاری,ظرف‌شور,m,33,m_mid_chef,m_mid_barista,35,age,,apply,m_mid_barista,on branch
+c033,s1,بهنام نوروزی,راهنمای کوه,m,38,m_mid_fixer,m_mid_fixer,48,retained,age,apply,m_mid_fixer,unchanged
+c033,s2,روشنک آذری,آشپز پناهگاه,f,41,f_mid_chef,f_mid_chef,42,retained,,apply,f_mid_chef,unchanged
+c033,s3,کاوه شفیعی,سرپرست پناهگاه,m,46,m_mid_conductor,m_mid_officer,45,wardrobe,,apply,m_mid_officer,on branch
+c033,s4,دکتر عاطفه سرمدی,مهمان، پزشک,f,45,f_mid_surgeon,f_mid_archaeologist,45,wardrobe,,apply,f_mid_archaeologist,on branch
+c033,s5,ناصر رحمتی,برادر مقتول,m,60,m_old_woolcap,m_old_gardener,62,age,,apply,m_old_gardener,on branch
+c034,s1,علیرضا بلوچی,راهنمای کویر,m,44,m_mid_doctor,m_mid_teacher,45,wardrobe,,apply,m_mid_teacher,on branch
+c034,s2,سارا تقوی,دانشجوی کارآموز,f,23,f_young_student,f_young_student,24,retained,,apply,f_young_student,unchanged
+c034,s3,دکتر مینا ایمانی,سرپرست کاوش,f,50,f_mid_manager,f_mid_director,48,age,,apply,f_mid_director,on branch
+c034,s4,پژمان شهابی,کارگر کاوش,m,31,m_mid_roadworker,m_young_courier,32,age,,apply,m_young_courier,on branch
+c034,s5,فرهاد توکلی,فیلم‌بردار مستند,m,37,m_mid_lecturer,m_young_designer,30,age,legacy age band,apply,m_young_designer,on branch
+c035,s1,بهروز سلطانی,مسافر یابنده‌ی کیف,m,34,m_mid_chef,m_mid_driver,36,"wardrobe, age",,apply,m_mid_driver,on branch
+c035,s2,مرتضی اکبری,صاحب کیف,m,57,m_old_grandpa,m_mid_resident,52,age,,apply,m_mid_resident,on branch
+c035,s3,پروانه عباسی,مأمور میز اشیای گمشده,f,41,f_mid_baker,f_mid_baker,42,retained,,apply,f_mid_baker,unchanged
+c035,s4,هاشم نوری,نظافتچی ایستگاه,m,56,m_old_jurist,m_mid_lecturer,52,age,,apply,m_mid_lecturer,on branch
+c035,s5,حسین رحیمی,نگهبان ایستگاه,m,49,m_mid_officer,m_mid_officer,45,retained,,apply,m_mid_officer,unchanged
+c036,s1,مجتبی نیکزاد,مسئول ایمنی زیستی,m,48,m_mid_business,m_mid_business,50,retained,,apply,m_mid_business,unchanged
+c036,s2,دکتر شیما غفاری,پسادکتری,f,36,f_mid_widow,f_mid_widow,40,retained,,apply,f_mid_widow,unchanged
+c036,s3,نگار حیدری,دانشجوی دکتری,f,27,f_young_researcher,f_young_artist,27,wardrobe,,apply,f_young_artist,on branch
+c036,s4,علیرضا قاسمی,تکنسین,m,40,m_mid_barista,m_mid_artist,38,wardrobe,,apply,m_mid_artist,on branch
+c036,s5,دکتر پیمان آریا,رئیس آزمایشگاه,m,55,m_old_scientist,m_old_scientist,56,retained,,apply,m_old_scientist,unchanged
+c037,s1,سهراب ابراهیمی,مهمانِ همراه خانواده‌ی داماد,m,35,m_mid_fixer,m_mid_driver,36,"wardrobe, age",,apply,m_mid_driver,on branch
+c037,s2,مریم داوودی,خاله‌ی عروس,f,57,f_mid_director,f_mid_director,48,retained,age,apply,f_mid_director,unchanged
+c037,s3,آیدین رحیمی,برادر داماد,m,28,m_young_boxer,m_young_boxer,28,retained,,apply,m_young_boxer,unchanged
+c037,s4,نسرین توکلی,هماهنگ‌کننده‌ی تالار,f,38,f_mid_journalist,f_mid_journalist,40,retained,,apply,f_mid_journalist,unchanged
+c037,s5,کیومرث نظری,دی‌جی عروسی,m,32,m_mid_policeman,m_mid_artist,38,"wardrobe, age",,apply,m_mid_artist,on branch
+c038,s1,داریوش مرادی,معاون آموزشی,m,52,m_mid_roadworker,m_mid_lecturer,52,wardrobe,,apply,m_mid_lecturer,on branch
+c038,s2,غلام‌رضا شفیعی,سرایدار مدرسه,m,61,m_old_schoolmaster,m_old_schoolmaster,66,retained,,apply,m_old_schoolmaster,unchanged
+c038,s3,آرمین کاظمی,دانش‌آموز پایه‌ی یازدهم,m,17,m_young_casual,m_young_student,21,age,,apply,m_young_student,on branch
+c038,s4,کامبیز رحیمی,دبیر ریاضی,m,46,m_mid_teacher,m_mid_teacher,45,retained,,apply,m_mid_teacher,unchanged
+c038,s5,فاطمه راستی,دبیر ادبیات و مسئول دبیرخانه,f,38,f_mid_agent,f_mid_agent,42,retained,,apply,f_mid_agent,unchanged
+c039,s1,کریم عابدی,متصدی پذیرش سالن,m,36,m_mid_tycoon,m_mid_driver,36,age,,apply,m_mid_driver,on branch
+c039,s2,ایرج منصوری,تاجر و صاحب کیف,m,58,m_old_painter,m_old_boss,60,age,,apply,m_old_boss,on branch
+c039,s3,لیلا نظری,میزبان سالن,f,31,f_mid_attorney,f_mid_attorney,38,retained,,apply,f_mid_attorney,unchanged
+c039,s4,طاهره صادقی,نظافتچی سالن,f,47,f_mid_laborer,f_mid_banker,45,wardrobe,,apply,f_mid_banker,on branch
+c039,s5,بهمن زارعی,مسافر و شاهدِ داوطلب,m,50,m_mid_doctor,m_mid_doctor,48,retained,wardrobe,apply,m_mid_doctor,unchanged
+c040,s1,دکتر لیدا زند,مسئول مالی بایگانی فرهنگی سپیدار,f,51,f_mid_lawyer,f_mid_cleaner,48,age,,apply,f_mid_cleaner,on branch
+c040,s2,ناره پطروسیان,همسایه‌ی برج و میزبان داوطلب نشست,f,60,f_mid_librarian,f_mid_librarian,56,retained,,apply,f_mid_librarian,unchanged
+c040,s3,هرانت قریبیان,برادرزاده‌ی آرام؛ کارمند داروخانه,m,33,m_mid_photographer,m_young_courier,32,age,,apply,m_young_courier,on branch
+c040,s4,رافائل خسروی,مرمت‌گر برج و اسناد معماری بایگانی,m,47,m_mid_conductor,m_mid_fixer,48,wardrobe,,apply,m_mid_fixer,on branch
+c040,s5,داوود فرجی,نگهبان محوطه و مسئول رساندن وسایل به برج,m,54,m_mid_guard,m_mid_resident,52,age,,apply,m_mid_resident,on branch
+c040,s6,گئورگ آواکیان,مدیر بایگانی فرهنگی سپیدار,m,62,m_old_bakerman,m_old_gardener,62,age,,apply,m_old_gardener,on branch
+c041,s1,جمشید حکیمی,ارزیاب فرش,m,63,m_old_cleric,m_old_schoolmaster,66,wardrobe,,apply,m_old_schoolmaster,on branch
+c041,s2,مینا قاسمی,بافنده و تأمین‌کننده,f,43,f_mid_guest,f_mid_guest,38,retained,,apply,f_mid_guest,unchanged
+c041,s3,اکبر فاضلی,خریدار فرش,m,58,m_old_tailor,m_old_fisher,65,age,,apply,m_old_fisher,on branch
+c041,s4,بهمن عبدی,فروشندهٔ فرش,m,49,m_mid_officer,m_mid_officer,45,retained,,apply,m_mid_officer,unchanged
+c041,s5,نادر وکیلی,فروشندهٔ همسایه,m,45,m_mid_chef,m_mid_photographer,45,wardrobe,,apply,m_mid_photographer,on branch
+c042,s1,محسن شفیعی,مهندس ارشد,m,41,m_mid_resident,m_mid_lawyer,42,age,,apply,m_mid_lawyer,on branch
+c042,s2,دکتر ساناز میرزایی,مدیر پروژه,f,46,f_mid_witness,f_mid_archaeologist,45,age,,apply,f_mid_archaeologist,on branch
+c042,s3,بهزاد اعتمادی,مهندس محاسب,m,38,m_mid_sailor,m_mid_artist,38,age,,apply,m_mid_artist,on branch
+c042,s4,نغمه ایزدی,دبیر پروژه,f,30,f_mid_teacher,f_young_photographer,33,age,,apply,f_young_photographer,on branch
+c042,s5,حامد خلیلی,کارشناس فناوری,m,33,m_mid_conductor,m_young_courier,32,"wardrobe, age",,apply,m_young_courier,on branch
+c043,s1,افسانه سرافراز,صاحب گردنبند، مسافر کوپه‌ی پنج,f,52,f_mid_singer,f_mid_housewife,48,age,,apply,f_mid_housewife,on branch
+c043,s2,جهانگیر بهنام,رئیس قطار,m,56,m_old_boss,m_old_boss,60,retained,,apply,m_old_boss,unchanged
+c043,s3,سیروس پرنیان,نقاش، مسافر کوپه‌ی شش,m,44,m_mid_artist,m_mid_artist,38,retained,,apply,m_mid_artist,unchanged
+c043,s4,یونس مهرجو,مأمور واگن خواب,m,50,m_mid_officer,m_mid_officer,45,retained,,apply,m_mid_officer,unchanged
+c043,s5,تهمینه شکیبا,همسفر افسانه، معرف خریدار,f,36,f_mid_business,f_mid_business,42,retained,,apply,f_mid_business,unchanged
+c044,s1,گلنار صدری,مسئول پذیرش,f,34,f_mid_agent,f_mid_guest,38,age,,apply,f_mid_guest,on branch
+c044,s2,عزیز مدنی,نگهبان,m,55,m_old_warden,m_old_warden,62,retained,,apply,m_old_warden,unchanged
+c044,s3,نگین ساعی,عکاس,f,31,f_mid_mechanic,f_mid_designer,36,age,,apply,f_mid_designer,on branch
+c044,s4,دکتر رویا کوشا,سرپرست مجموعه,f,49,f_mid_baker,f_mid_baker,42,retained,,apply,f_mid_baker,unchanged
+c044,s5,سیروس نیک‌پی,مرمت‌گر,m,52,m_mid_lecturer,m_mid_lecturer,52,retained,,apply,m_mid_lecturer,unchanged
+c045,s1,بهاره شفق,دستیار نقاش,f,35,f_mid_banker,f_mid_singer,36,age,,apply,f_mid_singer,on branch
+c045,s2,سامان روشن,پسر نقاش,m,29,m_young_student,m_young_it,28,age,,apply,m_young_it,on branch
+c045,s3,زهره بلوری,آشپز ویلا,f,48,f_mid_clerk,f_mid_pastry,48,age,,apply,f_mid_pastry,on branch
+c045,s4,وحید پناه,راننده,m,44,m_mid_driver,m_mid_photographer,45,age,,apply,m_mid_photographer,on branch
+c045,s5,اسفندیار وفامنش,باغبان و مباشر باغ,m,62,m_old_gardener,m_old_painter,68,"cast separation, eligible wardrobe and pool allocation",,apply,m_old_painter,on branch
+c046,s1,منوچهر کاشانی,مالک انبار,m,61,m_old_fisher,m_old_fisher,65,retained,,apply,m_old_fisher,unchanged
+c046,s2,کتایون زرگری,مسئول باسکول,f,36,f_mid_archaeologist,f_mid_chef,42,age,,apply,f_mid_chef,on branch
+c046,s3,تورج باقری,رانندهٔ کامیون,m,52,m_mid_driver,m_mid_sailor,50,age,,apply,m_mid_sailor,on branch
+c046,s4,رامین مقدم,اپراتور لیفتراک,m,39,m_mid_technician,m_mid_technician,40,retained,,apply,m_mid_technician,unchanged
+c046,s5,شاهرخ وثوق,مسئول توزیع,m,45,m_old_butler,m_mid_teacher,45,"wardrobe, age, legacy age band",,apply,m_mid_teacher,on branch
+c047,s1,طهمورث پاک‌نیت,مسئول بخش نسخه‌های خطی,m,44,m_mid_teacher,m_mid_teacher,45,retained,,apply,m_mid_teacher,unchanged
+c047,s2,دکتر فرنگیس رهنورد,پژوهشگر نسخه‌شناس,f,41,f_mid_scientist,f_mid_clerk,40,wardrobe,,apply,f_mid_scientist,pending patch
+c047,s3,مسیب آراسته,نظافتچی,m,59,m_old_flatcap,m_old_flatcap,66,retained,,apply,m_old_flatcap,unchanged
+c047,s4,ارغوان نقره‌کار,کتابدار,f,38,f_mid_director,f_mid_attorney,38,age,,apply,f_mid_director,pending patch
+c047,s5,عزت‌الله بهاری,نگهبان شب,m,50,m_mid_policeman,m_mid_tycoon,50,wardrobe,,apply,m_mid_policeman,pending patch
+c048,s1,پوریا اسکویی,باربر,m,24,m_young_waiter,m_young_athlete,24,wardrobe,,apply,m_young_waiter,pending patch
+c048,s2,شمسی کاووسی,خدمتکار طبقه‌ی ششم,f,49,f_mid_widow,f_mid_scholar,48,age,,apply,f_mid_widow,pending patch
+c048,s3,فرزانه قدیری,متصدی پذیرش,f,33,f_mid_attorney,f_mid_attorney,38,retained,,apply,f_mid_attorney,unchanged
+c048,s4,تیمور گلریز,تعمیرکار,m,38,m_mid_fixer,m_mid_technician,40,age,,apply,m_mid_fixer,pending patch
+c048,s5,حسام مشهدی,مهمان اتاق ۶۰۵,m,46,m_mid_barista,m_mid_photographer,45,"wardrobe, age",,apply,m_mid_barista,pending patch
+c049,s1,یحیی دشتی‌پور,ناخدای صیاد-۳,m,43,m_mid_sailor,m_mid_sailor,50,retained,,apply,m_mid_sailor,unchanged
+c049,s2,عبدالله سلگی,ناخدای صیاد-۲,m,51,m_mid_resident,m_mid_resident,52,retained,,apply,m_mid_resident,unchanged
+c049,s3,مهیار تنگسیری,ناخدای صیاد-۴,m,38,m_mid_teacher,m_mid_teacher,45,retained,,apply,m_mid_teacher,unchanged
+c049,s4,غلامعلی کنگی,ناخدای صیاد-۵,m,55,m_old_captain,m_mid_captain,55,age,,apply,m_old_captain,pending patch
+c049,s5,حمدان گله‌داری,ناخدای صیاد-۱,m,46,m_mid_captain,m_mid_merchant,50,"age, legacy age band",,apply,m_mid_captain,pending patch
+c050,s1,دکتر نصرالله دانشور,پزشک خانواده,m,58,m_old_physician,m_old_physician,65,retained,,apply,m_old_physician,unchanged
+c050,s2,هادی صدرایی,وکیل مقتول,m,47,m_mid_lawyer,m_mid_lawyer,42,retained,,apply,m_mid_lawyer,unchanged
+c050,s3,اسکندر زرنگار,دلالِ مینیاتور,m,55,m_old_rich,m_mid_business,50,age,,apply,m_old_rich,pending patch
+c050,s4,پریوش امیرخیزی,همسر مقتول,f,52,f_mid_inspector,f_mid_housewife,48,age,,apply,f_mid_inspector,pending patch
+c050,s5,آیدا افخمی,منشی مقتول,f,34,f_mid_banker,f_mid_journalist,40,age,,apply,f_mid_banker,pending patch
+c050,s6,سورنا ملک‌آرا,پسر مقتول,m,29,m_young_athlete,m_young_athlete,24,retained,,apply,m_young_athlete,unchanged
+c051,s1,دکتر کیارش امینی,دستیار کشیک داخلی، پزشک شب بخش ۴,m,33,m_mid_doctor,m_young_courier,32,age,,apply,m_mid_doctor,pending patch
+c051,s2,الهام توسلی,پرستار شیفت شب بخش ۴,f,31,f_young_nurse,f_young_nurse,28,retained,,apply,f_young_nurse,unchanged
+c051,s3,یاسین قربانی,کمک‌بهیار شیفت شب، طبقه‌های سه و چهار,m,26,m_young_dj,m_young_casual,26,wardrobe,,apply,m_young_dj,pending patch
+c051,s4,اسماعیل رستگار,سرپرستار شیفت شب، طبقه‌های چهار و پنج,m,55,m_mid_nurse,m_mid_nurse,38,retained,age,apply,m_mid_nurse,unchanged
+c051,s5,دکتر سپیده امینی,داروساز کشیک شب بیمارستان,f,38,f_mid_pharmacist,f_mid_pharmacist,38,retained,,apply,f_mid_pharmacist,unchanged
+c052,s1,دکتر فریدون نیک‌سرشت,مدیر گروه و سرپرست آزمایشگاه فیزیولوژی گیاهی,m,64,m_old_scientist,m_old_captain,65,"wardrobe, age",,apply,m_old_scientist,pending patch
+c052,s2,دکتر ژاله فرزین‌فر,دانشیار دانشکده، استاد مشاور پایان‌نامه‌ی نیوشا,f,47,f_mid_curator,f_mid_curator,42,retained,,apply,f_mid_curator,unchanged
+c052,s3,نیوشا طاهرخانی,دانشجوی دکتری، صاحب سینی خشک‌شده,f,29,f_young_athlete,f_young_athlete,28,retained,,apply,f_young_athlete,unchanged
+c052,s4,دکتر پویان شهرکی,پژوهشگر پسادکتری، مجری آزمون تکرار کوهسر-۷,m,35,m_young_it,m_young_it,28,retained,,apply,m_young_it,unchanged
+c052,s5,بهراد سلیمی,دانشجوی دکتری آزمایشگاه فیزیولوژی گیاهی,m,31,m_young_undergrad,m_young_undergrad,24,retained,,apply,m_young_undergrad,unchanged
+c052,s6,جواد کریمیان,تکنسین آزمایشگاه و گلخانه‌ی دانشکده,m,52,m_mid_chef,m_mid_tycoon,50,"wardrobe, age",,apply,m_mid_chef,pending patch
+c053,s1,بهروز امیرخانی,حسابدار دبستان سپیده در سال ۸۵؛ حالا حسابدار یک شرکت پخش,m,51,m_mid_resident,m_mid_resident,52,retained,,apply,m_mid_resident,unchanged
+c053,s2,لادن امیرخانی,معلم کلاس سوم دبستان سپیده و دستیار طرح شنوایی‌سنجی در سال ۸۵؛ حالا معاون یک دبیرستان,f,45,f_mid_teacher,f_mid_teacher,42,retained,,apply,f_mid_teacher,unchanged
+c053,s3,مهین سبحانی,مسئول طرح شنوایی‌سنجی دبستان سپیده در سال‌های ۸۴ و ۸۵؛ حالا مدیر مرکز شنوایی‌سنجی نوا,f,58,f_old_retired,f_old_retired,60,retained,,apply,f_old_retired,unchanged
+c053,s4,اردشیر دادفر,تعمیرکار سمعک؛ در سال ۸۵ تعمیر دستگاه‌های طرح با او بود,m,60,m_old_flatcap,m_old_flatcap,66,retained,,apply,m_old_flatcap,unchanged
+c053,s5,نسرین شکیبا,نماینده‌ی اولیا در دبستان سپیده در سال ۸۵؛ خاله‌ی یکی از بچه‌های طرح,f,49,f_mid_housewife,f_mid_housewife,48,retained,,apply,f_mid_housewife,unchanged
+c054,s1,مژگان فرهمند,مسئول نمایش و طراح ویترین‌های نمایشگاه؛ خواهر داریوش فرهمند,f,46,f_mid_gallery,f_mid_gallery,40,retained,,apply,f_mid_gallery,unchanged
+c054,s2,شروین فراهانی,طراح و سازنده‌ی حجم‌نما؛ استاد نسترن,m,42,m_mid_artist,m_mid_artist,38,retained,,apply,m_mid_artist,unchanged
+c054,s3,نسترن بهنام,دستیار شروین در ساخت حجم‌نما,f,28,f_young_artist,f_young_artist,27,retained,,apply,f_young_artist,unchanged
+c054,s4,کامیار صبوری,بسته‌بند کارگاه و سازنده‌ی ویترین‌های نمایشگاه,m,33,m_young_courier,m_young_courier,32,retained,,apply,m_young_courier,unchanged
+c054,s5,داریوش فرهمند,سرمایه‌گذار حجم‌نما؛ برادر بزرگ مژگان,m,55,m_old_boss,m_old_boss,60,retained,,apply,m_old_boss,unchanged
+c055,s1,گیتی پارسا,میزبان مهمانی؛ دختر بزرگ خانم‌جان، خواهر فرهاد و مادر پریسا,f,54,f_mid_housewife,f_mid_housewife,48,retained,,apply,f_mid_housewife,unchanged
+c055,s2,پریسا آذرنوش,دختر گیتی و نوه‌ی خانم‌جان,f,30,f_young_bookworm,f_young_bookworm,27,retained,,apply,f_young_bookworm,unchanged
+c055,s3,نوید سپهری,دوست پریسا؛ برادرزاده‌ی هما کیانی,m,32,m_young_casual,m_young_casual,26,retained,,apply,m_young_casual,unchanged
+c055,s4,هما کیانی,همسایه و دوست سی‌ساله‌ی خانم‌جان؛ عمه‌ی نوید,f,61,f_old_grandma,f_old_grandma,65,retained,,apply,f_old_grandma,unchanged
+c055,s5,فرهاد پارسا,برادر کوچک گیتی؛ مجلس‌دار، که پذیرایی و برنامه‌ی امشب کار او بود,m,49,m_mid_cook,m_mid_cook,50,retained,wardrobe,apply,m_mid_cook,unchanged
+c056,s1,سوسن بهشتی,مدیر خیریه‌ی درمانی رهاورد؛ خواهر بزرگ مانی,f,47,f_mid_manager,f_mid_manager,40,retained,,apply,f_mid_manager,unchanged
+c056,s2,آبتین کاویانی,هماهنگ‌کننده‌ی محموله‌های خیریه در فرودگاه؛ داماد فریبرز نامدار,m,34,m_young_it,m_young_it,28,retained,,apply,m_young_it,unchanged
+c056,s3,مانی بهشتی,تعمیرکار تجهیزات خیریه؛ برادر سوسن و شاگرد سابق فریبرز نامدار,m,35,m_mid_barista,m_young_boxer,28,wardrobe,,apply,m_mid_barista,pending patch
+c056,s4,ترانه یزدانی,انباردار شیفت شب سوله‌ی درمانی؛ مستأجر سابق سوسن,f,31,f_young_firefighter,f_young_waitress,25,wardrobe,,apply,f_young_firefighter,pending patch
+c056,s5,فریبرز نامدار,نماینده‌ی شرکت اهداکننده و بازرس بازنشسته‌ی تجهیزات پزشکی؛ پدرزن آبتین,m,58,m_old_warden,m_old_gardener,62,wardrobe,,apply,m_old_warden,pending patch
+c057,s1,روزبه افشار,متقاضی مسابقه و صاحب طرح شماره‌ی ۹؛ شاگرد دکتری دکتر دادبین و همکار سابق نسیم شایگان در فصلنامه,m,30,m_mid_barista,m_young_courier,32,wardrobe,,apply,m_mid_barista,pending patch
+c057,s2,بردیا شایگان,مسئول میز دریافت طرح‌ها؛ برادر نسیم شایگان و رفیق دکتر سرابی,m,38,m_mid_technician,m_mid_driver,36,wardrobe,,apply,m_mid_technician,pending patch
+c057,s3,نسیم شایگان,ویراستار فصلنامه‌ی نارون؛ خواهر بردیا شایگان و همکار سابق روزبه افشار,f,34,f_mid_journalist,f_mid_journalist,40,retained,,apply,f_mid_journalist,unchanged
+c057,s4,دکتر منیژه دادبین,دبیر داوری مسابقه از اول آبان؛ استاد دانشگاه و استاد راهنمای روزبه افشار,f,45,f_mid_scholar,f_mid_scholar,48,retained,,apply,f_mid_scholar,unchanged
+c057,s5,دکتر کیوان سرابی,داور ارشد مسابقه و دبیر موقت داوری تا آخر مهر؛ دبیر سابق فصلنامه‌ی نارون و همکار قدیمی دکتر دادبین,m,52,m_mid_lecturer,m_mid_lecturer,52,retained,,apply,m_mid_lecturer,unchanged
+c058,s1,ناهید وزیری,صاحب‌خانه و یکی از دو وارث؛ خواهر فرامرز وزیری و مادر شاهین نیک‌خواه,f,53,f_mid_housewife,f_mid_housewife,48,retained,,apply,f_mid_housewife,unchanged
+c058,s2,شاهین نیک‌خواه,ارزیاب املاک؛ پسر ناهید وزیری و دوست دانشگاهی مهسا ارجمند,m,29,m_young_casual,m_young_casual,26,retained,,apply,m_young_casual,unchanged
+c058,s3,فرامرز وزیری,مدیر املاک خانواده و وارث دیگر؛ برادر ناهید وزیری,m,57,m_old_boss,m_old_boss,60,retained,,apply,m_old_boss,unchanged
+c058,s4,مهسا ارجمند,منشی دفترخانه‌ی ۱۸۲ و منشی جلسه‌ی تقسیم؛ دوست دانشگاهی شاهین نیک‌خواه,f,32,f_mid_clerk,f_mid_witness,36,age,,apply,f_mid_clerk,pending patch
+c058,s5,عباس رهنما,دایی ناهید و فرامرز و شاهد امضای توافق‌نامه؛ ضامن وام شاهین,m,66,m_old_flatcap,m_old_flatcap,66,retained,,apply,m_old_flatcap,unchanged
+c059,s1,هوشنگ آذرپور,کارگردان و سرپرست گروه عروسکی مهتاب؛ همسر سابق شیرین مستوفی,m,50,m_mid_lecturer,m_mid_roadworker,50,"cast separation, eligible wardrobe and pool allocation",,apply,m_mid_lecturer,pending patch
+c059,s2,شیرین مستوفی,طراح عروسک و صحنه‌ی گروه مهتاب؛ استاد شبنم دلنواز و همسر سابق هوشنگ آذرپور,f,46,f_mid_restorer,f_mid_banker,45,"wardrobe, age",,apply,f_mid_restorer,pending patch
+c059,s3,شبنم دلنواز,عروسک‌گردان اصلی گروه مهتاب؛ شاگرد شیرین مستوفی و خواهر اشکان دلنواز,f,27,f_young_artist,f_young_artist,27,retained,,apply,f_young_artist,unchanged
+c059,s4,اشکان دلنواز,نورپرداز گروه مهتاب؛ برادر شبنم دلنواز و دوست قدیمی مجید توانا,m,31,m_mid_technician,m_mid_worker,36,"wardrobe, age",,apply,m_mid_technician,pending patch
+c059,s5,مجید توانا,مسئول سالن تمرین خانه‌ی فرهنگ اقاقیا؛ طلبکار هوشنگ آذرپور,m,60,m_old_warden,m_old_schoolmaster,66,wardrobe,,apply,m_old_warden,pending patch
+c060,s1,ایرج فروتن,داور همیشگی مسابقه و بزرگ خانواده‌ی فروتن؛ پدر سحر فروتن,m,63,m_old_bakerman,m_old_bakerman,70,retained,,apply,m_old_bakerman,unchanged
+c060,s2,سحر فروتن,برگزارکننده‌ی مسابقه؛ دختر ایرج فروتن و همسر آرش نامور,f,35,f_mid_manager,f_mid_manager,40,retained,,apply,f_mid_manager,unchanged
+c060,s3,آرش نامور,شرکت‌کننده‌ی مسابقه؛ داماد ایرج فروتن و همسر سحر فروتن,m,38,m_mid_barista,m_mid_worker,36,wardrobe,,apply,m_mid_barista,pending patch
+c060,s4,میترا خوشدل,مدیر آشپزخانه‌ی مهمان‌سرای سروناز؛ خاله‌ی پدرام یوسفی,f,51,f_mid_chef,f_mid_pastry,48,age,,apply,f_mid_chef,pending patch
+c060,s5,پدرام یوسفی,دستیار ایرج فروتن در مسابقه؛ خواهرزاده‌ی میترا خوشدل و بدهکار ایرج,m,26,m_young_waiter,m_young_worker,27,wardrobe,,apply,m_young_waiter,pending patch
+c061,s1,پروین اردلان,کتابدار کتابخانه‌ی خانوادگی نیک‌نهاد؛ خواهر منصور اردلان و استاد قدیم کامران زرین‌دست,f,55,f_mid_librarian,f_mid_librarian,56,retained,,apply,f_mid_librarian,unchanged
+c061,s2,کامران زرین‌دست,صحاف و مرمت‌گر، صاحب کارگاه صحافی؛ شاگرد قدیم پروین اردلان,m,49,m_mid_photographer,m_mid_photographer,45,retained,,apply,m_mid_photographer,unchanged
+c061,s3,افروز تابان,دختر و وارث شوکت تابان؛ دخترخاله‌ی منصور و پروین اردلان، صاحب خیاطی مادرش,f,45,f_mid_housewife,f_mid_housewife,48,retained,,apply,f_mid_housewife,unchanged
+c061,s4,منصور اردلان,مدیر صندوق خانواده‌ی نیک‌نهاد از ۱۳۷۴؛ برادر پروین اردلان و پسرخاله‌ی افروز تابان,m,61,m_old_flatcap,m_old_professor,68,"cast separation, eligible wardrobe and pool allocation",,apply,m_old_flatcap,pending patch
+c061,s5,خسروان پاکدل,حسابدار پیشین صندوق خانواده‌ی نیک‌نهاد تا اسفند ۱۳۸۰؛ ضامن قرارداد شاگردی کامران زرین‌دست,m,67,m_old_schoolmaster,m_old_schoolmaster,66,retained,,apply,m_old_schoolmaster,unchanged
+c062,s1,منیر آگاه,مسئول آموزش بخش آموزش و نمایش تجهیزات؛ همکار حمید دادرس در کمیته‌ی تجهیزات,f,40,f_mid_teacher,f_mid_teacher,42,retained,,apply,f_mid_teacher,unchanged
+c062,s2,نصرت سپنتا,تعمیرکار تجهیزات بیمارستان؛ طلبکار حمید دادرس و استاد سابق پیمانه رفیعی,m,52,m_mid_fixer,m_mid_researcher,46,"cast separation, eligible wardrobe and pool allocation",,apply,m_mid_fixer,pending patch
+c062,s3,آزاده دادرس,نماینده‌ی خیریه‌ی همدم؛ خواهر بزرگ حمید دادرس و همسایه‌ی ده‌ساله‌ی پیمانه رفیعی,f,44,f_mid_business,f_mid_business,42,retained,,apply,f_mid_business,unchanged
+c062,s4,حمید دادرس,کارشناس تدارکات بیمارستان؛ برادر آزاده دادرس و بدهکار نصرت سپنتا,m,39,m_mid_barista,m_mid_barista,35,retained,wardrobe,apply,m_mid_barista,unchanged
+c062,s5,پیمانه رفیعی,طراح نمایشگاه و سازنده‌ی دیوار نمایش اتاق ۳۰۴؛ شاگرد سابق نصرت سپنتا و همسایه‌ی آزاده دادرس,f,36,f_mid_designer,f_mid_designer,36,retained,,apply,f_mid_designer,unchanged
+c063,s1,ویدا ناظمی,پژوهشگر کارگاه؛ شاگرد کوروش رهگذر و دوست یلدا کهربایی,f,33,f_young_researcher,f_young_researcher,30,retained,wardrobe,read-only,f_young_researcher,not in requested remap range
+c063,s2,کوروش رهگذر,استاد دانشکده و سرپرست علمی مسابقه؛ شریک سابق هرمز اردکانی,m,46,m_mid_lecturer,m_mid_lecturer,52,retained,,read-only,m_mid_lecturer,not in requested remap range
+c063,s3,هرمز اردکانی,مسئول آماده‌سازی کارگاه؛ همسر سابق ستاره مهدوی و رئیس یلدا کهربایی,m,52,m_old_scientist,m_old_scientist,56,retained,wardrobe,read-only,m_old_scientist,not in requested remap range
+c063,s4,یلدا کهربایی,داوطلب گروه آماده‌سازی؛ دوست ویدا ناظمی,f,29,f_young_artist,f_young_artist,27,retained,,read-only,f_young_artist,not in requested remap range
+c063,s5,ستاره مهدوی,داور ارشد مسابقه؛ همکار کوروش رهگذر و همسر سابق هرمز اردکانی,f,51,f_mid_judge,f_mid_judge,48,retained,wardrobe,read-only,f_mid_judge,not in requested remap range
+c064,s1,عشرت شمسایی,صاحب گردنبند؛ خواهر بزرگ خسرو شمسایی و خاله‌ی آناهیتا بهروان,f,67,f_old_grandma,f_old_grandma,65,retained,,read-only,f_old_grandma,not in requested remap range
+c064,s2,گلاره آذرکیش,مرمتگر؛ دختر خسرو شمسایی و همسر فرشید آذرکیش,f,34,f_young_chemist,f_young_chemist,32,retained,wardrobe,read-only,f_young_chemist,not in requested remap range
+c064,s3,خسرو شمسایی,مدیر خانه؛ برادر عشرت شمسایی و پدر گلاره آذرکیش,m,62,m_old_gardener,m_old_gardener,62,retained,,read-only,m_old_gardener,not in requested remap range
+c064,s4,فرشید آذرکیش,پیمانکار ساختمان؛ همسر گلاره آذرکیش و بدهکار آناهیتا بهروان,m,36,m_mid_driver,m_mid_driver,36,retained,,read-only,m_mid_driver,not in requested remap range
+c064,s5,آناهیتا بهروان,خواهرزاده‌ی عشرت شمسایی؛ طلبکار فرشید آذرکیش,f,41,f_mid_manager,f_mid_manager,40,retained,,read-only,f_mid_manager,not in requested remap range
+c065,s1,قدسی برومند,نماینده‌ی مراجعان در شورای مرکز؛ کارفرمای سابق پرهام آشتیانی و دوست بیتا آشتیانی,f,59,f_old_seamstress,f_old_seamstress,63,retained,,read-only,f_old_seamstress,not in requested remap range
+c065,s2,پرهام آشتیانی,مدیر خدمات و مسئول رسیدگی به شکایت‌ها؛ برادر بیتا آشتیانی و شاگرد سابق سهیلا شهنواز,m,37,m_mid_lawyer,m_mid_lawyer,42,retained,,read-only,m_mid_lawyer,not in requested remap range
+c065,s3,بیتا آشتیانی,حسابدار مرکز؛ خواهر پرهام آشتیانی و دوست قدسی برومند,f,44,f_mid_banker,f_mid_banker,45,retained,,read-only,f_mid_banker,not in requested remap range
+c065,s4,یاشار نیک‌روش,پیک و راننده‌ی مرکز؛ مستأجر سهیلا شهنواز,m,28,m_young_courier,m_young_courier,32,retained,,read-only,m_young_courier,not in requested remap range
+c065,s5,سهیلا شهنواز,مسئول پذیرش؛ مربی سابق پرهام آشتیانی و صاحب‌خانه‌ی یاشار نیک‌روش,f,52,f_mid_clerk,f_mid_clerk,40,retained,age,read-only,f_mid_clerk,not in requested remap range
+c066,s1,بابک نامجو,مسئول گلخانه؛ استاد سابق نغمه امیری و بدهکار حشمت مهرپرور,m,44,m_mid_worker,m_mid_worker,36,retained,age,read-only,m_mid_worker,not in requested remap range
+c066,s2,مازیار سهرابی,پژوهشگر و مجری طرح؛ شاگرد سابق بابک نامجو و نامزد سابق نغمه امیری,m,32,m_young_designer,m_young_designer,30,retained,,read-only,m_young_designer,not in requested remap range
+c066,s3,شادی مهرپرور,مدیر مرکز پژوهش؛ خواهر حشمت مهرپرور,f,39,f_mid_director,f_mid_director,48,retained,age,read-only,f_mid_director,not in requested remap range
+c066,s4,نغمه امیری,دستیار گلخانه؛ شاگرد سابق بابک نامجو و نامزد سابق مازیار سهرابی,f,30,f_young_painter,f_young_painter,30,retained,wardrobe,read-only,f_young_painter,not in requested remap range
+c066,s5,حشمت مهرپرور,مالک زمین گلخانه؛ برادر شادی مهرپرور و طلبکار بابک نامجو,m,56,m_old_warden,m_old_warden,62,retained,wardrobe,read-only,m_old_warden,not in requested remap range
+c067,s1,پروانه نیک‌آیین,مدیر ساختمان؛ خواهر فیروزه نیک‌آیین و مادر دارا صفاریان,f,58,f_old_retired,f_old_retired,60,retained,,read-only,f_old_retired,not in requested remap range
+c067,s2,دارا صفاریان,تعمیرکار ساختمان؛ پسر پروانه نیک‌آیین و خواهرزاده‌ی فیروزه,m,35,m_mid_technician,m_mid_technician,40,retained,,read-only,m_mid_technician,not in requested remap range
+c067,s3,شقایق آرین‌فر,نوه‌ی عطاالله نیک‌آیین و وارث واحد پنج؛ شاگرد مهران پرتوی,f,31,f_young_researcher,f_young_researcher,30,retained,wardrobe,read-only,f_young_researcher,not in requested remap range
+c067,s4,مهران پرتوی,کارشناس اشیای عتیقه و مستأجر طبقه‌ی سوم؛ استاد شقایق آرین‌فر,m,60,m_old_physician,m_old_physician,65,retained,,read-only,m_old_physician,not in requested remap range
+c067,s5,فیروزه نیک‌آیین,مالک صندوق یادگاری و صاحب‌خانه‌ی مهران پرتوی؛ خواهر پروانه و خاله‌ی دارا,f,64,f_old_grandma,f_old_grandma,65,retained,,read-only,f_old_grandma,not in requested remap range
+c068,s1,رحیم نیک‌بین,انباردار تعاونی تا ۱۳۸۴ (آن زمستان ۴۹ ساله)؛ ضامن استخدام یوسف اقبالی,m,71,m_old_woolcap,m_old_woolcap,72,retained,,read-only,m_old_woolcap,not in requested remap range
+c068,s2,شهرام نکوفر,مسئول فروش تعاونی (آن زمستان ۴۴ ساله)؛ برادر رخشنده، شریک و بدهکار فریده کامیار,m,66,m_old_jurist,m_old_jurist,72,retained,,read-only,m_old_jurist,not in requested remap range
+c068,s3,فریده کامیار,مدیرعامل تعاونی (آن زمستان ۴۰ ساله)؛ شریک شهرام نکوفر در کارگاه رنگرزی,f,62,f_old_professor,f_old_professor,62,retained,,read-only,f_old_professor,not in requested remap range
+c068,s4,یوسف اقبالی,باربر تعاونی (آن زمستان ۲۶ ساله)، امروز سرایدار انبار؛ رحیم نیک‌بین ضامنش بود,m,48,m_mid_roadworker,m_mid_roadworker,50,retained,wardrobe,read-only,m_mid_roadworker,not in requested remap range
+c068,s5,رخشنده نکوفر,حسابدار تعاونی (آن زمستان ۳۵ ساله)؛ خواهر شهرام نکوفر,f,57,f_mid_publisher,f_mid_publisher,58,retained,,read-only,f_mid_publisher,not in requested remap range
+c069,s1,پویا شادمان,دستیار مجموعه‌دار,m,27,m_young_student,m_young_student,21,retained,,read-only,m_young_student,not in requested remap range
+c069,s2,وحید سپهری,نصاب ویترین,m,40,m_mid_technician,m_mid_technician,40,retained,wardrobe,read-only,m_mid_technician,not in requested remap range
+c069,s3,بهناز معتمدی,مجموعه‌دار,f,44,f_mid_publisher,f_mid_publisher,58,retained,"age, legacy age band",read-only,f_mid_publisher,not in requested remap range
+c069,s4,پگاه سپهری,طراح نمایشگاه,f,35,f_mid_designer,f_mid_designer,36,retained,,read-only,f_mid_designer,not in requested remap range
+c069,s5,اسفندیار تهرانی,مرمتگر چوب,m,63,m_old_painter,m_old_painter,68,retained,,read-only,m_old_painter,not in requested remap range
+c070,s1,فرشاد تابنده,نویسنده‌ی نمایش، پدر عروس,m,46,m_mid_teacher,m_mid_teacher,45,retained,,read-only,m_mid_teacher,not in requested remap range
+c070,s2,کتایون فرهی,کارگردان نمایش، مادر عروس,f,42,f_mid_director,f_mid_director,48,retained,,read-only,f_mid_director,not in requested remap range
+c070,s3,امید نیکزاد,بازیگر نقش داماد,m,24,m_young_casual,m_young_casual,26,retained,,read-only,m_young_casual,not in requested remap range
+c070,s4,منیژه آراسته,میزبان، مادربزرگ عروس,f,68,f_old_grandma,f_old_grandma,65,retained,,read-only,f_old_grandma,not in requested remap range
+c070,s5,نرگس نیکزاد,طراح لباس نمایش,f,28,f_young_artist,f_young_artist,27,retained,,read-only,f_young_artist,not in requested remap range
+w001,s1,کاوه صدری,پسر بزرگ منصور,m,52,m_mid_photographer,m_mid_photographer,45,retained,,apply,m_mid_photographer,unchanged
+w001,s2,دکتر لیلا صدری,دختر منصور، متخصص قلب,f,47,f_mid_soldier,f_mid_doctor,40,wardrobe,,apply,f_mid_soldier,pending patch
+w001,s3,پریسا صدری,همسر کاوه,f,45,f_mid_mechanic,f_mid_mechanic,42,retained,,apply,f_mid_mechanic,unchanged
+w001,s4,نیما صدری,نوه‌ی منصور، پسر کاوه,m,24,m_young_conscript,m_young_athlete,24,wardrobe,,apply,m_young_conscript,pending patch
+w001,s5,اکبر نوروزی,سرایدار ویلا,m,66,m_old_farmer,m_old_farmer,70,retained,,apply,m_old_farmer,unchanged
+w001,s6,هوشنگ راد,مدیر مالی شرکت، دوست قدیمی منصور,m,58,m_mid_tycoon,m_mid_resident,52,age,,apply,m_mid_tycoon,pending patch
+w001,s7,شیرین مقدم,پرستار منصور,f,38,f_mid_designer,f_mid_designer,36,retained,,apply,f_mid_designer,unchanged
+w001,s8,مهرداد کیانی,وکیل خانواده,m,50,m_mid_lawyer,m_mid_business,50,age,,apply,m_mid_lawyer,pending patch
+w002,s1,بهروز امیری,برادر کوچک جمشید، شریک باغ,m,55,m_mid_lecturer,m_mid_lecturer,52,retained,,apply,m_mid_lecturer,unchanged
+w002,s2,مهتاب امیری,همسر جمشید، مادر عروس,f,50,f_mid_pilot,f_mid_cleaner,48,"wardrobe, age",,apply,f_mid_pilot,pending patch
+w002,s3,حمید رستمی,گارسون شرکت پذیرایی؛ سرکارگر سابق باغ,m,33,m_young_worker,m_young_worker,27,retained,,apply,m_young_worker,unchanged
+w002,s4,لادن امیری,دختر بهروز، طراح لباس عروس,f,34,f_young_bookworm,f_young_bookworm,27,retained,,apply,f_young_bookworm,unchanged
+w002,s5,آرش فراهانی,برادر بزرگ داماد، حسابدار تعاونی صادرات مرکبات,m,36,m_mid_lawyer,m_mid_lawyer,42,retained,,apply,m_mid_lawyer,unchanged
+w002,s6,سیامک رهبر,حسابدار و مباشر باغ، رفیق قدیمی جمشید,m,57,m_old_rich,m_old_schoolmaster,66,age,age,apply,m_old_rich,pending patch
+w002,s7,امید کاظمی,مسئول آتش‌بازی,m,31,m_young_casual,m_young_casual,26,retained,,apply,m_young_casual,unchanged
+w002,s8,پریسا نوری,عکاس عروسی,f,29,f_young_artist,f_young_artist,27,retained,,apply,f_young_artist,unchanged
+w003,s1,کامران پرند,مدیر حراج,m,48,m_mid_tycoon,m_mid_tycoon,50,retained,,apply,m_mid_tycoon,unchanged
+w003,s2,ایرج مستوفی,کارشناس ساعت‌ساز,m,52,m_old_professor,m_mid_merchant,50,age,,apply,m_old_professor,pending patch
+w003,s3,پرناز سالاری,وارث بزرگ‌تر,f,44,f_mid_commander,f_mid_mechanic,42,"wardrobe, age",,apply,f_mid_commander,pending patch
+w003,s4,پویا سالاری,وارث کوچک‌تر,m,34,m_young_boxer,m_young_boxer,28,retained,,apply,m_young_boxer,unchanged
+w003,s5,بهروز پارسا,دلال فرش و دوست قدیمی,m,58,m_old_schoolmaster,m_old_captain,65,age,,apply,m_old_schoolmaster,pending patch
+w003,s6,ملیحه روشن,نگهبان موزه‌ی خانگی,f,41,f_mid_judge,f_mid_inspector,40,wardrobe,,apply,f_mid_judge,pending patch
+w003,s7,گلرخ منوچهری,خدمتکار و آشپز خانه,f,46,f_mid_chef,f_mid_chef,42,retained,,apply,f_mid_chef,unchanged
+w003,s8,محسن عمادی,خریدار تلفنی,m,50,m_mid_business,m_mid_business,50,retained,,apply,m_mid_business,unchanged
+w004,s1,فرشاد بخشعلی,فروشنده‌ی تجهیزات معدنی,m,49,m_mid_business,m_mid_business,50,retained,,apply,m_mid_business,unchanged
+w004,s2,ترانه شریفی,عکاس طبیعت و مستندساز,f,31,f_young_photographer,f_young_photographer,33,retained,,apply,f_young_photographer,unchanged
+w004,s3,دکتر نوشین پارسا,پزشک عمومی درمانگاه‌های بین‌راهی,f,45,f_mid_doctor,f_mid_doctor,40,retained,,apply,f_mid_doctor,unchanged
+w004,s4,رویا ملک‌پور,دختر صاحب کاروانسرا,f,28,f_young_receptionist,f_young_receptionist,27,retained,,apply,f_young_receptionist,unchanged
+w004,s5,کیان جهانبخش,راهنمای تورهای کویر,m,44,m_mid_technician,m_mid_technician,40,retained,wardrobe,apply,m_mid_technician,unchanged
+w004,s6,منصور صفری,آشپز کاروانسرای صفا,m,46,m_mid_cook,m_mid_cook,50,retained,,apply,m_mid_cook,unchanged
+w004,s7,سامان ناصری,استادیار باستان‌شناسی,m,33,m_young_designer,m_young_designer,30,retained,,apply,m_young_designer,unchanged
+w004,s8,آرش کاظمی,نامزد رویا ملک‌پور,m,30,m_young_casual,m_young_casual,26,retained,,apply,m_young_casual,unchanged
+w005,s1,بیژن کیوان‌فر,مدیر کتابخانه‌ی اسناد کهن,m,54,m_mid_lecturer,m_mid_lecturer,52,retained,,apply,m_mid_lecturer,unchanged
+w005,s2,تارا بهبهانی,مرمتگر اسناد و نسخه‌های خطی,f,39,f_mid_restorer,f_mid_restorer,38,retained,,apply,f_mid_restorer,unchanged
+w005,s3,سیاوش نامور,پژوهشگر مهمان و نسخه‌شناس,m,46,m_mid_researcher,m_mid_researcher,46,retained,,apply,m_mid_researcher,unchanged
+w005,s4,پریسا رادمنش,کتابدار بخش نسخه‌های خطی,f,36,f_mid_attorney,f_mid_attorney,38,retained,,apply,f_mid_attorney,unchanged
+w005,s5,فریدون همتی,مجموعه‌دار نسخه‌های خطی,m,61,m_old_boss,m_old_boss,60,retained,,apply,m_old_boss,unchanged
+w005,s6,مرجان صادقی,نگهبان شب کتابخانه,f,43,f_mid_agent,f_mid_agent,42,retained,,apply,f_mid_agent,unchanged
+w005,s7,لاله عارف‌نیا,اهداکننده‌ی دیوان,f,58,f_mid_publisher,f_mid_publisher,58,retained,,apply,f_mid_publisher,unchanged
+w005,s8,کامران شاهرخی,فهرست‌نویس انبار مجله‌ها,m,29,m_young_student,m_young_boxer,28,age,,apply,m_young_student,pending patch
+w006,s1,شهلا ملکی,مادر عروس,f,47,f_mid_housewife,f_mid_housewife,48,retained,,apply,f_mid_housewife,unchanged
+w006,s2,کاوه ملکی,دایی عروس,m,51,m_mid_merchant,m_mid_merchant,50,retained,,apply,m_mid_merchant,unchanged
+w006,s3,یلدا رستمی,متصدی پذیرش شیفت شب,f,27,f_young_receptionist,f_young_receptionist,27,retained,,apply,f_young_receptionist,unchanged
+w006,s4,جواد نیک‌روش,نگهبان شب هتل,m,41,m_mid_guard,m_mid_guard,40,retained,,apply,m_mid_guard,unchanged
+w006,s5,مهتاب سلطانی,مدیر تشریفات عروسی,f,39,f_mid_manager,f_mid_manager,40,retained,,apply,f_mid_manager,unchanged
+w006,s6,رسول کرمی,باربر هتل,m,23,m_young_waiter,m_young_athlete,24,wardrobe,,apply,m_young_waiter,pending patch
+w006,s7,پدرام شریفی,داماد,m,31,m_young_designer,m_young_designer,30,retained,,apply,m_young_designer,unchanged
+w006,s8,دکتر فرامرز آذرنوش,میهمان بی‌رزرو اتاق ۴۰۸,m,48,m_mid_doctor,m_mid_sailor,50,wardrobe,,apply,m_mid_doctor,pending patch
+w007,s1,نیلوفر کیافر,طراح، یکی از چهار فینالیست,f,36,f_mid_designer,f_mid_designer,36,retained,,read-only,f_mid_designer,not in requested remap range
+w007,s2,بهمنیار رادکیش,برگزارکننده، شرکت رویدادهای رادکیش,m,58,m_old_boss,m_old_boss,60,retained,,read-only,m_old_boss,not in requested remap range
+w007,s3,آریا سروش‌فر,دستیار فنی، صدا و نور,m,29,m_young_it,m_young_it,28,retained,,read-only,m_young_it,not in requested remap range
+w007,s4,دلارام آذری‌نیا,مجری مراسم,f,41,f_mid_journalist,f_mid_journalist,40,retained,,read-only,f_mid_journalist,not in requested remap range
+w007,s5,آرمین رهی‌زاد,مسئول صحنه,m,32,m_young_courier,m_young_courier,32,retained,,read-only,m_young_courier,not in requested remap range
+w007,s6,مهرنوش دادپوی,داور مسابقه، استاد دانشگاه,f,47,f_mid_judge,f_mid_judge,48,retained,wardrobe,read-only,f_mid_judge,not in requested remap range
+w007,s7,کیومرث به‌آیین,معمار پیشکسوت، سخنران ویژه,m,63,m_old_professor,m_old_professor,68,retained,,read-only,m_old_professor,not in requested remap range
+w007,s8,شهنام فرهی‌نیا,بازرس سابق ساختمان,m,52,m_mid_lecturer,m_mid_lecturer,52,retained,,read-only,m_mid_lecturer,not in requested remap range
