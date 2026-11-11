@@ -9,6 +9,8 @@ import '../widgets/profile_bell.dart';
 import '../widgets/avatar_frame.dart';
 import '../widgets/engagement.dart' show faDuration;
 import '../widgets/streak_flame.dart';
+import '../widgets/player_sheet.dart';
+import '../services/board_text.dart';
 
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
@@ -130,6 +132,11 @@ class LeaderboardBoard extends StatefulWidget {
 
 class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientMixin {
   int? _picked; // weekly: the league chosen with the switch (null = my own)
+  bool _streak = false; // «همیشه»: the streak board instead of the plaques board
+  final List<LeaderRow> _extra = []; // rows of the next pages («بیشتر نشون بده»)
+  int? _nextOffset; // null = no more pages
+  bool _loadingMore = false;
+  String get _period => widget.period == 'all' && _streak ? 'streak' : widget.period;
   Leaderboard? _lb; // the last board we got: the header and the league switch stay on screen while a new one loads
   Object? _error;
   bool _loading = true;
@@ -150,11 +157,13 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
       });
     }
     try {
-      final lb = await Api.i.leaderboard(widget.period, league: _picked);
+      final lb = _streak && widget.period == 'all' ? await Api.i.streakBoard() : await Api.i.leaderboard(widget.period, league: _picked);
       if (!mounted || mine != _serial) return;
       if (widget.period == 'weekly' && lb.leagueInfos.isNotEmpty) _knownLeagues = lb.leagueInfos;
       setState(() {
         _lb = lb;
+        _extra.clear();
+        _nextOffset = lb.nextOffset;
         _loading = false;
       });
     } catch (e) {
@@ -171,13 +180,41 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     _load();
   }
 
+  void _setStreak(bool on) {
+    if (_streak == on) return;
+    _streak = on;
+    _load();
+  }
+
+  /// The next page of the same board (the server bounds every page and says where the next one starts).
+  Future<void> _loadMore() async {
+    final off = _nextOffset;
+    if (off == null || _loadingMore) return;
+    final mine = _serial;
+    setState(() => _loadingMore = true);
+    try {
+      final lb = _streak && widget.period == 'all' ? await Api.i.streakBoard(offset: off) : await Api.i.leaderboard(widget.period, league: _picked, offset: off);
+      if (!mounted || mine != _serial) return;
+      final seen = {for (final r in [...?_lb?.top, ..._extra]) r.rank};
+      setState(() {
+        _extra.addAll(lb.top.where((r) => !seen.contains(r.rank)));
+        _nextOffset = lb.nextOffset;
+        _loadingMore = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _loadingMore = false); // the button stays: one more tap tries again
+    }
+  }
+
   @override
   bool get wantKeepAlive => true;
 
-  String _value(LeaderRow r) {
-    if (widget.period != 'daily') return '${fa(r.value)} پلاک';
-    final m = r.value ~/ 60, s = r.value % 60;
-    return '${fa(m)}:${fa(s).padLeft(2, '۰')}';
+  String _value(LeaderRow r) => boardValue(_period, r.value);
+
+  void _openSheet(LeaderRow r) {
+    if (r.pid.isEmpty) return; // an old server sends no id: nothing to open
+    showPlayerSheet(context, r);
   }
 
   Widget _errorView(Object e) => StateView.forError(e, key: const ValueKey('lb-state'), onRetry: () => _load());
@@ -191,27 +228,25 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
       return const Center(child: CircularProgressIndicator(color: K.brass));
     }
     final weekly = widget.period == 'weekly';
-    final podium = lb.top.where((r) => r.rank <= 3).toList();
-    final rest = lb.top.where((r) => r.rank > 3).toList();
+    final all = [...lb.top, ..._extra];
+    final podium = all.where((r) => r.rank >= 1 && r.rank <= 3).toList();
+    final rest = all.where((r) => r.rank > 3).toList();
     LeaderRow? me = lb.me;
-    for (final r in lb.top) {
+    for (final r in all) {
       if (r.me) me = r;
     }
     final selected = _picked ?? lb.myLeague;
     final selName = selected != null && selected >= 0 && selected < lb.leagues.length ? lb.leagues[selected] : '';
     // the header (one short line + the league switch) is ALWAYS built, whatever the chosen league holds
     final body = <Widget>[
-      if (widget.period == 'daily')
-        Padding(
-          padding: const EdgeInsets.only(bottom: 6),
-          child: Text('${lb.title.replaceFirst(RegExp(r'^پرونده‌ی امروز:\s*'), '')} · بیشترین پلاک و کمترین زمان', textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
-        ),
+      if (widget.period == 'daily') ..._dailyHeader(lb),
+      if (widget.period == 'all') ..._allHeader(lb),
       if (weekly) ..._weeklyHeader(lb, selected),
       if (_loading)
         const Padding(padding: EdgeInsets.symmetric(vertical: 28), child: Center(child: CircularProgressIndicator(color: K.brass)))
       else if (_error != null)
         SizedBox(height: 400, child: _errorView(_error!))
-      else if (lb.top.isEmpty)
+      else if (all.isEmpty)
         StateView.empty(
           key: const ValueKey('lb-empty'),
           icon: Icons.emoji_events_outlined,
@@ -226,13 +261,76 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
         if (podium.isNotEmpty) _podium(podium),
         const SizedBox(height: 12),
         for (final r in rest) _row(r),
+        if (_nextOffset != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4, bottom: 8),
+            child: OutlinedButton(
+              key: const ValueKey('lb-more'),
+              style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+              onPressed: _loadingMore ? null : _loadMore,
+              child: _loadingMore
+                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: K.brass))
+                  : const Text('بیشتر نشون بده'),
+            ),
+          ),
       ],
     ];
     return Column(children: [
       Expanded(child: ListView(padding: const EdgeInsets.fromLTRB(16, 12, 16, 12), children: body)),
-      if (me != null && me.rank > 0 && !_loading) _pinned(me, leagues: weekly && lb.leagues.isNotEmpty),
+      if (me != null && me.rank > 0 && !_loading) _pinned(me, gap: gapLine(lb.gap), leagues: weekly && lb.leagues.isNotEmpty),
     ]);
   }
+
+  /// Daily board: the case's name and, when the server sends them, simple solver numbers (how many, fastest, median).
+  List<Widget> _dailyHeader(Leaderboard lb) {
+    final stats = dailyStatsLine(lb.daily);
+    return [
+      Container(
+        key: const ValueKey('daily-stats'),
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(16), border: Border.all(color: K.night3)),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('پرونده‌ی امشب', style: tBody(11.5, color: K.textSoft, w: FontWeight.w800)),
+          Text(lb.title.replaceFirst(RegExp(r'^پرونده‌ی امروز:\s*'), ''), style: tBody(15, w: FontWeight.w900)),
+          if (stats != null) Text(stats, key: const ValueKey('daily-stats-line'), style: tBody(12.5, color: K.text)),
+          Text('بیشترین پلاک و بعد کمترین زمان', style: tBody(11.5, color: K.textSoft)),
+        ]),
+      ),
+    ];
+  }
+
+  /// «همیشه»: the plaques board or the streak board (live streaks only).
+  List<Widget> _allHeader(Leaderboard lb) => [
+        Wrap(spacing: 8, children: [
+          ChoiceChip(
+            key: const ValueKey('mode-stars'),
+            label: Text('پلاک‌ها', style: tBody(12.5, w: FontWeight.w900)),
+            selected: !_streak,
+            selectedColor: K.brass,
+            backgroundColor: K.night2,
+            onSelected: (_) => _setStreak(false),
+          ),
+          ChoiceChip(
+            key: const ValueKey('mode-streak'),
+            label: Text('زنجیره', style: tBody(12.5, w: FontWeight.w900)),
+            selected: _streak,
+            selectedColor: K.brass,
+            backgroundColor: K.night2,
+            onSelected: (_) => _setStreak(true),
+          ),
+        ]),
+        if (_streak)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              lb.myBest > 0 ? 'بلندترین زنجیره‌ی زنده · رکورد خودت: ${fa(lb.myBest)} شب' : 'بلندترین زنجیره‌ی زنده',
+              key: const ValueKey('streak-sub'),
+              style: tBody(12.5, color: K.textSoft),
+            ),
+          ),
+        const SizedBox(height: 10),
+      ];
 
   String _weekLeft(Duration d) => d.inHours >= 24
       ? '${fa(d.inDays)} روز و ${fa(d.inHours % 24)} ساعت'
@@ -296,7 +394,11 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
       final ring = _medal(rank);
       final face = first ? 72.0 : 58.0;
       return Expanded(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
+        child: InkWell(
+          key: ValueKey('podium-$rank'),
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => _openSheet(r),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
           if (first) const CustomPaint(size: Size(34, 22), painter: _CrownPainter()),
           if (first) const SizedBox(height: 2),
           Container(
@@ -312,7 +414,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
           const SizedBox(height: 6),
           Text(r.me ? 'تو' : r.nickname,
               maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: tBody(13.5, w: FontWeight.w900)),
-          if (widget.period == 'daily') Plaques(count: r.stars, size: 13),
+          if (_period == 'daily') Plaques(count: r.stars, size: 13),
           Text(_value(r), maxLines: 1, style: tBody(12.5, color: ring, w: FontWeight.w900)),
           const SizedBox(height: 4),
           Container(
@@ -327,6 +429,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
             child: Text(fa(rank), style: tDisplay(first ? 24 : 19, color: ring)),
           ),
         ]),
+        ),
       );
     }
 
@@ -335,22 +438,22 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
   }
 
   /// The player's own row, always at the bottom.
-  Widget _pinned(LeaderRow me, {bool leagues = false}) {
+  Widget _pinned(LeaderRow me, {String? gap, bool leagues = false}) {
     // weekly with leagues: the prizes go to the first 3 of each league
     final n = leagues ? 3 : 10;
     final inTop = me.rank >= 1 && me.rank <= n;
-    final line = inTop ? 'جزو ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}! 🏆' : '${fa(me.rank - n)} رتبه مونده تا ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}';
+    final line = gap ?? (inTop ? 'جزو ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}! 🏆' : '${fa(me.rank - n)} رتبه مونده تا ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}');
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
       decoration: const BoxDecoration(color: K.night2, border: Border(top: BorderSide(color: K.night3))),
-      child: _row(me, title: line),
+      child: _row(me, title: line, tappable: false),
     );
   }
 
-  Widget _row(LeaderRow r, {String? title}) {
+  Widget _row(LeaderRow r, {String? title, bool tappable = true}) {
     final medal = _medal(r.rank);
     final pinned = title != null;
-    return Container(
+    final card = Container(
       margin: EdgeInsets.only(bottom: pinned ? 0 : 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -386,10 +489,13 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
                   style: tBody(11.5, color: pinned ? K.textSoft : K.brass), maxLines: 1, overflow: TextOverflow.ellipsis),
           ]),
         ),
-        if (widget.period == 'daily') ...[Plaques(count: r.stars, size: 16), const SizedBox(width: 8)],
+        if (_period == 'daily') ...[Plaques(count: r.stars, size: 16), const SizedBox(width: 8)],
         Text(_value(r), style: tBody(14, color: K.brass, w: FontWeight.w900)),
       ]),
     );
+    if (!tappable || r.pid.isEmpty) return card;
+    // the whole row opens the player sheet (a 60 px tall target)
+    return InkWell(key: ValueKey('row-${r.rank}'), borderRadius: BorderRadius.circular(14), onTap: () => _openSheet(r), child: card);
   }
 }
 

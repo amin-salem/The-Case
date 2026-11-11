@@ -175,10 +175,12 @@ def _order():
 
 
 async def standings(session: AsyncSession, ws: date, *, league: int | None = None, limit: int = 100,
-                    prize: bool = False) -> list[Standing]:
+                    prize: bool = False, offset: int = 0) -> list[Standing]:
     """The top `limit` players of the week (of one league, or of everybody when league is None). `prize=True` is the list the
     prize settlement uses: it always skips new unsecured accounts (the board may show them)."""
     q = _base(ws, league, prize).order_by(*_order()).limit(limit)
+    if offset:
+        q = q.offset(offset)
     return [Standing(pl, int(p), int(n), int(s or 0), int(o or 0)) for pl, p, n, s, o in (await session.execute(q)).all()]
 
 

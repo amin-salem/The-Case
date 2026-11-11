@@ -99,6 +99,7 @@ DEFAULTS: dict[str, Policy] = {p.name: p for p in [
     _p("client_info", [(2, 60), (10, 3600)], "player", note="app reports its version"),
     # generous
     _p("read", [(60, 10), (1500, 600)], "player", note="GET under /v1"),
+    _p("player_card", [(20, 10), (300, 600)], "player", note="GET /v1/players/<id>/card (the sheet of a board row)"),
     _p("write", [(30, 10), (900, 600)], "player", note="other POST/PATCH under /v1"),
     # Restricted aggregate reports: expensive queries, shared limit, fail closed.
     _p("analytics", [(6, 60), (60, 3600)], "ip", "strict", "closed", "report-only API, including failed authentication"),
@@ -130,6 +131,7 @@ ROUTES: list[tuple[str, re.Pattern, str]] = [(m, re.compile(rx), pol) for m, rx,
     ("POST", r"^/v1/cases/[^/]+/comments$", "comment"),
     ("POST", r"^/v1/me/client$", "client_info"),
     ("*", r"^/v1/analytics(/|$)", "analytics"),
+    ("GET", r"^/v1/players/[^/]+/card$", "player_card"),
     ("GET", r"^/v1/", "read"),
     ("*", r"^/v1/", "write"),
     ("*", r"^/admin(/|$)", "admin"),

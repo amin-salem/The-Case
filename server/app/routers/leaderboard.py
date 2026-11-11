@@ -1,72 +1,257 @@
-"""Leaderboards: today's case (fastest with most stars), this week (stars of the week's own cases, per league), all time."""
+"""Leaderboards: today's case (most plaques, then fastest), this week (plaques of the week's own cases, per league), all time,
+a streak board and the player sheet.
+
+Every list is bounded (limit <= 100, offset <= 1000), ordered by a total order (so pages never overlap) and answers
+`next_offset` while more rows exist. My own place and the gap to the place above are computed with COUNT queries, never by
+loading the whole board. Nothing here writes."""
+from datetime import timedelta
+
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select
+from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import anticheat as ac
 from .. import avatars, content, gameclock, streakrepair, weekboard
+from ..cache import TTLCache
 from ..db import get_session
-from ..models import CaseProgress, Player
-from ..schemas import LeagueInfo, LeaderboardOut, LeaderRow
+from ..models import CaseProgress, Player, WeekLeague
+from ..schemas import (DailyStats, LeagueInfo, LeagueWeek, LeaderboardOut, LeaderRow, PlayerCardOut, RankGap,
+                       StreakBoardOut)
 from ..security import current_player
 from .common import rank_title
 
 router = APIRouter(prefix="/v1", tags=["leaderboard"])
 
+MAX_OFFSET = 1000
+WEEKLY_WINDOW = 200            # the weekly board is cached per worker as the first N rows
+STREAK_CANDIDATES = 300        # the streak board looks at the N longest STORED streaks, then drops the dead ones
+CARD_WEEKS = 6                 # league history on the player sheet
+_daily_stats = TTLCache("daily_stats", ttl=30, max_size=4)
+_streaks = TTLCache("streak_board", ttl=60, max_size=2)
+
+
+def _row(pl: Player, live: streakrepair.LiveStreak, rank: int, value: int, *, me_id: str, stars: int = 0, league: str = "") -> LeaderRow:
+    return LeaderRow(rank=rank, nickname=pl.nickname, avatar=pl.avatar, avatar_id=avatars.avatar_key(pl),
+                     avatar_frame=avatars.frame_key(pl), streak=live.of(pl), value=value, stars=stars, me=pl.id == me_id,
+                     rank_title=rank_title(pl), league_name=league, pid=pl.id)
+
+
+def _gap(rank: int, mine: int, above: int | None, unit: str, *, lower_is_better: bool = False) -> RankGap | None:
+    """The distance to the place above, as the amount needed to PASS it (so never 0)."""
+    if rank <= 1 or above is None:
+        return None
+    diff = (mine - above + 1) if lower_is_better else (above - mine + 1)
+    return RankGap(next_rank=rank - 1, diff=max(1, diff), unit=unit)
+
 
 @router.get("/leaderboard", response_model=LeaderboardOut)
 async def leaderboard(period: str = Query("daily", pattern="^(daily|weekly|all)$"),
                       limit: int = Query(50, ge=1, le=100),
+                      offset: int = Query(0, ge=0, le=MAX_OFFSET),
                       league: int | None = Query(None, ge=0, le=3),
                       player: Player = Depends(current_player),
                       session: AsyncSession = Depends(get_session)):
-    visible = ac.visible_player()
     live = streakrepair.LiveStreak()  # the flame: one lookup per row, no extra query
     if period == "daily":
-        c = content.todays_case()
-        if c is None:
-            raise HTTPException(404, "no_case")
-        q = (select(Player, CaseProgress.stars, CaseProgress.seconds)
-             .join(CaseProgress, CaseProgress.player_id == Player.id)
-             .where(CaseProgress.case_id == c.id, CaseProgress.solved.is_(True),
-                    CaseProgress.was_daily.is_(True), CaseProgress.ranked.is_(True), visible)
-             .order_by(CaseProgress.stars.desc(), CaseProgress.seconds.asc()))
-        rows = (await session.execute(q)).all()
-        out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, avatar_id=avatars.avatar_key(pl), avatar_frame=avatars.frame_key(pl), streak=live.of(pl), value=secs, stars=st,
-                         me=pl.id == player.id, rank_title=rank_title(pl)) for i, (pl, st, secs) in enumerate(rows)]
-        title = f"پرونده‌ی امروز: {c.data['title']}"
-    elif period == "weekly":
-        return await _weekly(player, league, limit, session, live)
-    else:
-        q = (select(Player).where(visible, Player.stars_total > 0)
-             .order_by(Player.stars_total.desc(), Player.cases_solved.desc()))
-        rows = (await session.execute(q)).scalars().all()
-        out = [LeaderRow(rank=i + 1, nickname=pl.nickname, avatar=pl.avatar, avatar_id=avatars.avatar_key(pl), avatar_frame=avatars.frame_key(pl), streak=live.of(pl), value=pl.stars_total,
-                         stars=pl.stars_total, me=pl.id == player.id, rank_title=rank_title(pl)) for i, pl in enumerate(rows)]
-        title = "همه‌ی زمان‌ها"
+        return await _daily(player, limit, offset, session, live)
+    if period == "weekly":
+        return await _weekly(player, league, limit, offset, session, live)
+    return await _all_time(player, limit, offset, session, live)
+
+
+# ------------------------------------------------------------------ daily
+def _daily_conds(case_id: str):
+    return [CaseProgress.case_id == case_id, CaseProgress.solved.is_(True), CaseProgress.was_daily.is_(True),
+            CaseProgress.ranked.is_(True), ac.visible_player()]
+
+
+_DAILY_ORDER = (CaseProgress.stars.desc(), CaseProgress.seconds.asc(), CaseProgress.id.asc())
+
+
+async def _daily(player, limit, offset, session, live) -> LeaderboardOut:
+    c = content.todays_case()
+    if c is None:
+        raise HTTPException(404, "no_case")
+    conds = _daily_conds(c.id)
+    q = (select(Player, CaseProgress.stars, CaseProgress.seconds)
+         .join(CaseProgress, CaseProgress.player_id == Player.id).where(*conds)
+         .order_by(*_DAILY_ORDER).offset(offset).limit(limit + 1))
+    rows = (await session.execute(q)).all()
+    more = len(rows) > limit
+    out = [_row(pl, live, offset + i + 1, secs, me_id=player.id, stars=st) for i, (pl, st, secs) in enumerate(rows[:limit])]
     me = next((r for r in out if r.me), None)
-    return LeaderboardOut(period=period, title=title, top=out[:limit], me=me)
+    gap = None
+    mine = (await session.execute(
+        select(CaseProgress.id, CaseProgress.stars, CaseProgress.seconds).join(Player, CaseProgress.player_id == Player.id)
+        .where(*conds, CaseProgress.player_id == player.id))).first()
+    if mine is not None:
+        pid, st, secs = mine
+        ahead = await session.scalar(
+            select(func.count()).select_from(CaseProgress).join(Player, CaseProgress.player_id == Player.id).where(
+                *conds, or_(CaseProgress.stars > st,
+                            and_(CaseProgress.stars == st, CaseProgress.seconds < secs),
+                            and_(CaseProgress.stars == st, CaseProgress.seconds == secs, CaseProgress.id < pid))))
+        rank = int(ahead or 0) + 1
+        if me is None:
+            me = _row(player, live, rank, secs, me_id=player.id, stars=st)
+        if rank > 1:
+            above = (await session.execute(
+                select(CaseProgress.stars, CaseProgress.seconds).join(Player, CaseProgress.player_id == Player.id)
+                .where(*conds).order_by(*_DAILY_ORDER).offset(rank - 2).limit(1))).first()
+            if above is not None:
+                a_st, a_secs = above
+                # more plaques up there: the gap is in plaques; the same plaques: in seconds (to be faster)
+                gap = (_gap(rank, st, a_st, "plaque") if a_st > st
+                       else _gap(rank, secs, a_secs, "seconds", lower_is_better=True))
+    stats = await _daily_summary(session, c.id)
+    return LeaderboardOut(period="daily", title=f"پرونده‌ی امروز: {c.data['title']}", top=out, me=me, gap=gap, daily=stats,
+                          next_offset=offset + limit if more else None)
 
 
-async def _weekly(player: Player, league: int | None, limit: int, session: AsyncSession,
+async def _daily_summary(session: AsyncSession, case_id: str) -> DailyStats:
+    """Fair numbers: how many visible detectives solved tonight's case that night; fastest and median time among the ranked
+    (properly investigated) solves only, so a rushed solve cannot set the record. Cached per worker for 30 s."""
+    async def load():
+        solved = int(await session.scalar(select(func.count()).select_from(CaseProgress).join(
+            Player, CaseProgress.player_id == Player.id).where(
+            CaseProgress.case_id == case_id, CaseProgress.solved.is_(True), CaseProgress.was_daily.is_(True), ac.visible_player())) or 0)
+        ranked = [CaseProgress.case_id == case_id, CaseProgress.solved.is_(True), CaseProgress.was_daily.is_(True),
+                  CaseProgress.ranked.is_(True), CaseProgress.seconds > 0, ac.visible_player()]
+        base = select(CaseProgress.seconds).join(Player, CaseProgress.player_id == Player.id).where(*ranked)
+        n = int(await session.scalar(select(func.count()).select_from(base.subquery())) or 0)
+        fastest = median = None
+        if n:
+            fastest = int(await session.scalar(base.order_by(CaseProgress.seconds.asc()).limit(1)))
+            lo = int(await session.scalar(base.order_by(CaseProgress.seconds.asc()).offset((n - 1) // 2).limit(1)))
+            hi = int(await session.scalar(base.order_by(CaseProgress.seconds.asc()).offset(n // 2).limit(1)))
+            median = (lo + hi) // 2
+        return DailyStats(solved=solved, fastest=fastest, median=median)
+    return await _daily_stats.get_or_load(case_id, load)
+
+
+# ------------------------------------------------------------------ all time
+async def _all_time(player, limit, offset, session, live) -> LeaderboardOut:
+    visible = ac.visible_player()
+    order = (Player.stars_total.desc(), Player.cases_solved.desc(), Player.id.asc())
+    rows = (await session.execute(select(Player).where(visible, Player.stars_total > 0)
+                                  .order_by(*order).offset(offset).limit(limit + 1))).scalars().all()
+    more = len(rows) > limit
+    out = [_row(pl, live, offset + i + 1, pl.stars_total, me_id=player.id, stars=pl.stars_total) for i, pl in enumerate(rows[:limit])]
+    me = next((r for r in out if r.me), None)
+    gap = None
+    if player.stars_total > 0 and ac.is_visible(player):
+        ahead = await session.scalar(select(func.count()).select_from(Player).where(
+            visible, or_(Player.stars_total > player.stars_total,
+                         and_(Player.stars_total == player.stars_total, Player.cases_solved > player.cases_solved),
+                         and_(Player.stars_total == player.stars_total, Player.cases_solved == player.cases_solved,
+                              Player.id < player.id))))
+        rank = int(ahead or 0) + 1
+        if me is None:
+            me = _row(player, live, rank, player.stars_total, me_id=player.id, stars=player.stars_total)
+        if rank > 1:
+            above = await session.scalar(select(Player.stars_total).where(visible, Player.stars_total > 0)
+                                         .order_by(*order).offset(rank - 2).limit(1))
+            gap = _gap(rank, player.stars_total, above, "plaque")
+    return LeaderboardOut(period="all", title="همه‌ی زمان‌ها", top=out, me=me, gap=gap,
+                          next_offset=offset + limit if more else None)
+
+
+# ------------------------------------------------------------------ weekly
+async def _weekly(player: Player, league: int | None, limit: int, offset: int, session: AsyncSession,
                   live: streakrepair.LiveStreak) -> LeaderboardOut:
     """The week's own cases only (weekboard.py has the rule); one league at a time, the player's own by default."""
     ws = gameclock.week_of(content.now_local())
     on = weekboard.leagues_on()
     mine = await weekboard.league_of(session, ws, player.id) if on else None
     shown = (league if league is not None else mine) if on else None
-    rows = await weekboard.cached_rows(session, ws, shown, limit)
+    window = min(offset + limit + 1, WEEKLY_WINDOW)
+    rows = await weekboard.cached_rows(session, ws, shown, window)
+    page = rows[offset:offset + limit] if offset < WEEKLY_WINDOW else []
+    more = len(rows) > offset + limit and offset + limit < WEEKLY_WINDOW
     lname = weekboard.LEAGUES[shown] if shown is not None else ""
-    out = [LeaderRow(rank=i + 1, nickname=r["nickname"], avatar=r["avatar"], avatar_id=r["avatar_id"],
-                     avatar_frame=r["avatar_frame"], streak=r.get("streak", 0), value=r["points"], stars=r["points"], me=r["id"] == player.id,
-                     rank_title=r["rank_title"], league_name=lname) for i, r in enumerate(rows)]
+    out = [LeaderRow(rank=offset + i + 1, nickname=r["nickname"], avatar=r["avatar"], avatar_id=r["avatar_id"],
+                     avatar_frame=r["avatar_frame"], streak=r.get("streak", 0), value=r["points"], stars=r["points"],
+                     me=r["id"] == player.id, rank_title=r["rank_title"], league_name=lname, pid=r["id"])
+           for i, r in enumerate(page)]
     me = next((r for r in out if r.me), None)
-    if me is None and (shown is None or shown == mine):
-        st = await weekboard.my_standing(session, ws, player, shown)
-        if st is not None and ac.is_visible(player):
-            me = LeaderRow(rank=st[0], nickname=player.nickname, avatar=player.avatar, avatar_id=avatars.avatar_key(player),
-                           avatar_frame=avatars.frame_key(player), streak=live.of(player), value=st[1], stars=st[1], me=True, rank_title=rank_title(player), league_name=lname)
+    gap = None
+    if (shown is None or shown == mine) and ac.is_visible(player):
+        idx = next((i for i, r in enumerate(rows) if r["id"] == player.id), None)
+        if idx is not None:
+            rank, pts = idx + 1, rows[idx]["points"]
+            above = rows[idx - 1]["points"] if idx > 0 else None
+            if me is None:
+                me = LeaderRow(rank=rank, nickname=player.nickname, avatar=player.avatar, avatar_id=avatars.avatar_key(player),
+                               avatar_frame=avatars.frame_key(player), streak=live.of(player), value=pts, stars=pts, me=True,
+                               rank_title=rank_title(player), league_name=lname, pid=player.id)
+        else:
+            st = await weekboard.my_standing(session, ws, player, shown)
+            rank, pts, above = (st[0], st[1], None) if st is not None else (0, 0, None)
+            if st is not None:
+                me = LeaderRow(rank=rank, nickname=player.nickname, avatar=player.avatar, avatar_id=avatars.avatar_key(player),
+                               avatar_frame=avatars.frame_key(player), streak=live.of(player), value=pts, stars=pts, me=True,
+                               rank_title=rank_title(player), league_name=lname, pid=player.id)
+                if rank > 1:
+                    prev = await weekboard.standings(session, ws, league=shown, limit=1, offset=rank - 2)
+                    above = prev[0].points if prev else None
+        if rank:
+            gap = _gap(rank, pts, above, "plaque")
     title = "این هفته" + (f" · لیگ {weekboard.LEAGUES[shown]}" if shown is not None else "")
     return LeaderboardOut(period="weekly", title=title, top=out, me=me, week_ends_at=int(gameclock.week_end(ws).timestamp()),
-                          league=shown, my_league=mine,
+                          league=shown, my_league=mine, gap=gap, next_offset=offset + limit if more else None,
                           leagues=[LeagueInfo(**weekboard.league_info(i)) for i in range(len(weekboard.LEAGUES))] if on else [])
+
+
+# ------------------------------------------------------------------ streaks
+async def _streak_ranking(session: AsyncSession, live: streakrepair.LiveStreak) -> list[LeaderRow]:
+    """Visible players by LIVE streak, longest first. Reads the STREAK_CANDIDATES longest stored streaks (indexed), then drops
+    the ones that are already dead (LiveStreak). Same for everybody, cached per worker for 60 s as plain rows (never ORM objects)."""
+    async def load():
+        q = (select(Player).where(ac.visible_player(), Player.streak > 0)
+             .order_by(Player.streak.desc(), Player.id.asc()).limit(STREAK_CANDIDATES))
+        found = [(live.of(pl), pl) for pl in (await session.execute(q)).scalars().all()]
+        found = sorted([f for f in found if f[0] > 0], key=lambda f: (-f[0], f[1].id))
+        return [_row(pl, live, 0, n, me_id="") for n, pl in found]
+    return await _streaks.get_or_load("all", load)
+
+
+@router.get("/leaderboard/streaks", response_model=StreakBoardOut)
+async def streak_board(limit: int = Query(30, ge=1, le=100), offset: int = Query(0, ge=0, le=MAX_OFFSET),
+                       player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    live = streakrepair.LiveStreak()
+    ranking = await _streak_ranking(session, live)
+    top = [r.model_copy(update={"rank": offset + i + 1, "me": r.pid == player.id})
+           for i, r in enumerate(ranking[offset:offset + limit])]
+    mine_live = live.of(player)
+    me, gap = None, None
+    if ac.is_visible(player) and mine_live > 0:
+        idx = next((i for i, r in enumerate(ranking) if r.pid == player.id), None)
+        if idx is not None:
+            me = ranking[idx].model_copy(update={"rank": idx + 1, "me": True})
+            gap = _gap(idx + 1, mine_live, ranking[idx - 1].value if idx > 0 else None, "nights")
+        else:
+            me = _row(player, live, 0, mine_live, me_id=player.id)   # rank 0 = below the candidates: no place is shown
+    return StreakBoardOut(top=top, me=me, my_best=max(int(player.best_streak or 0), mine_live), gap=gap,
+                          next_offset=offset + limit if offset + limit < len(ranking) else None)
+
+
+# ------------------------------------------------------------------ player sheet
+@router.get("/players/{pid}/card", response_model=PlayerCardOut)
+async def player_card(pid: str, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """Public numbers of one detective for the sheet that opens from a board row. Hidden players (banned, testers, new
+    unsecured accounts) answer 404 like a missing one, so the endpoint cannot be used to find them."""
+    if len(pid) > 32:
+        raise HTTPException(404, "no_player")
+    pl = player if pid == player.id else await session.get(Player, pid)
+    if pl is None or (pl.id != player.id and not ac.is_visible(pl)):
+        raise HTTPException(404, "no_player")
+    ws = gameclock.week_of(content.now_local())
+    weeks = [(ws - timedelta(days=7 * k)).isoformat() for k in range(CARD_WEEKS)]
+    got = {w: lg for w, lg in (await session.execute(
+        select(WeekLeague.week, WeekLeague.league).where(WeekLeague.week.in_(weeks), WeekLeague.player_id == pl.id))).all()}
+    hist = [LeagueWeek(week=w, league=weekboard.LEAGUES[min(int(got[w]), len(weekboard.LEAGUES) - 1)]) for w in weeks if w in got]
+    live = streakrepair.LiveStreak().of(pl)
+    return PlayerCardOut(pid=pl.id, nickname=pl.nickname, avatar=pl.avatar, avatar_id=avatars.avatar_key(pl),
+                         avatar_frame=avatars.frame_key(pl), rank_title=rank_title(pl), cases_solved=int(pl.cases_solved or 0),
+                         stars_total=int(pl.stars_total or 0), streak=live, best_streak=max(int(pl.best_streak or 0), live),
+                         league_history=hist)

@@ -122,3 +122,36 @@ Boards `HomeLean.dc.html` and `States.dc.html`. App only (no server change, no m
   `secureClosedAt`.
 - Revenue note: the streak-at-risk row and the starter/after-solve cards stay in front; the securing row now meets players who have
   something to lose (3 solves or a purchase), which protects paying accounts. Nothing sellable was given away.
+
+## Session 6: leaderboard redesign (11 Nov 2026)
+Board `Leaders.dc.html` (read). Real data only; `portrait-ages.json` untouched (no portrait was added, `test_content.py` still pins it).
+- App (`leaderboard_screen.dart`, `services/board_text.dart`, `widgets/player_sheet.dart`): the three tabs keep their podium (2 – 1 – 3, second
+  place on the right in RTL), my pinned row and the league switch. New: (a) my pinned row says «N امتیاز تا رتبه‌ی بالاتر (رتبه‌ی X)»
+  (weekly and all time), «N ثانیه …» (daily, same plaques) or «N شب …» (streaks), from the server's `gap` (the number that PASSES the place
+  above, never 0); with no gap the old «جزو ۱۰ کارآگاه اول» line stays. (b) Daily tab: a card with tonight's case and «N کارآگاه حلش کردن ·
+  سریع‌ترین ۹:۴۲ · میانه ۱۳:۱۸» (each part hidden when unknown). (c) «همیشه» has two chips: «پلاک‌ها» and «زنجیره» (the live streak board, a line
+  with «رکورد خودت: N شب»). (d) Tap a podium place or a row → player sheet: cases solved, streak, best streak, league history of the last weeks;
+  a failing load keeps the sheet with a retry state and a «بستن» button. (e) «بیشتر نشون بده» loads the next page (`next_offset`), at most 1000 deep.
+  Old server: no `gap`, `daily`, `pid` or `next_offset` = the old board (rows not tappable, no paging button).
+- Server (`routers/leaderboard.py`): `GET /v1/leaderboard` got `offset`, `gap`, `daily`, `next_offset` and a `pid` on each row. The daily and all-time
+  boards no longer load every player: a page (`limit` ≤ 100 + 1 row to know if more exist), my rank by COUNT with a total order
+  (stars, seconds, progress id / stars_total, cases_solved, id) so pages never overlap, and one OFFSET read for the place above.
+  Weekly keeps its 45 s per-worker cache (first `offset+limit+1` rows, window 200) and `weekboard.standings(offset=)` for the place above me.
+  `GET /v1/leaderboard/streaks`: the 300 longest STORED streaks of visible players (index `ix_players_streak`), filtered by
+  `streakrepair.LiveStreak` (a dead streak never shows), cached 60 s per worker as plain rows; `my_best`, `gap` in nights; my `rank` is 0 (no place)
+  when I am below the 300 candidates. `GET /v1/players/{pid}/card`: public numbers only (nickname, avatar, rank title, cases solved, plaques, live
+  and best streak, league of the last 6 weeks read by the primary key `(week, player_id)`); hidden accounts (banned, testers, new unsecured when
+  the 48-hour switch is on) and unknown ids answer the same 404 `no_player`. Own policy `player_card` (20/10 s, 300/10 min; env `RL_PLAYER_CARD`).
+  Daily stats: solved = visible players who solved tonight's case that night; fastest and median come from RANKED solves only (a rush cannot
+  set the record); cached 30 s.
+- `Player.id` is now sent to other players as `pid`. It is a random 32-character value, not a credential (the token is signed with the server secret
+  and a per-account generation), and only the card endpoint accepts it, behind the limiter.
+- Migration `0037_board_indexes` (additive, guarded for databases built from the models): `ix_players_stars_total`, `ix_players_streak`; the CI
+  index check in `.github/workflows/ci.yml` lists both.
+- Not done on purpose: the temporary «قهرمان هفته» frame. It needs a new frame item, an expiry per player and an idempotent grant inside the weekly
+  settlement, which is more than a simple change; it can be its own task. The design's «زنده» chip and the next-case clock were left out (no real data on this board).
+- Kept working (grep checked): update modal (`UpdateModal`), next-case card and starter sheet, shop value + voice lint, archive picks row, lean home
+  («بیشتر» row still lists the leaderboard), `StateView` on the board's error/empty states.
+- Tests: `server/tests/test_board_redesign.py` (paging, gaps, hidden/banned accounts, rushes excluded from stats, empty boards, dead streaks, card
+  privacy and bounds, rate policy; runs on SQLite and PostgreSQL), `app/test/board_redesign_test.dart` (texts, old server, RTL podium, sheet and its
+  failure, streak switch, paging, text scale 1.3 / 2.0). The existing `leaderboard_screen_test.dart` and `leaderboard_week_test.dart` stay as they were.

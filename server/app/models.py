@@ -23,6 +23,8 @@ class Player(Base):
         Index("ix_players_referred_by", "referred_by"),  # the invite status lists the players I invited
         Index("ix_players_created_at", "created_at"),    # admin funnel: signups per day
         Index("ix_players_last_seen", "last_seen"),      # admin funnel / overview: active in the last 24 h / 7 days
+        Index("ix_players_stars_total", "stars_total"),  # the all-time board: order and rank counting
+        Index("ix_players_streak", "streak"),            # the streak board
     )
 
     id: Mapped[str] = mapped_column(String(32), primary_key=True, default=new_id)

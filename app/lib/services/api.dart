@@ -1029,9 +1029,17 @@ class Api extends ChangeNotifier {
       ? config['share_url'] as String
       : (config['update_url'] is String ? config['update_url'] as String : kShareLinkPlaceholder);
 
-  Future<Leaderboard> leaderboard(String period, {int? league}) async =>
-      Leaderboard((await _call('GET', '/v1/leaderboard?period=$period${league != null ? '&league=$league' : ''}') as Map)
+  Future<Leaderboard> leaderboard(String period, {int? league, int offset = 0}) async =>
+      Leaderboard((await _call('GET', '/v1/leaderboard?period=$period${league != null ? '&league=$league' : ''}${offset > 0 ? '&offset=$offset' : ''}') as Map)
           .cast<String, dynamic>());
+
+  /// The streak board under «همیشه» (live streaks only; the server already drops the dead ones).
+  Future<Leaderboard> streakBoard({int offset = 0}) async =>
+      Leaderboard.streaks((await _call('GET', '/v1/leaderboard/streaks${offset > 0 ? '?offset=$offset' : ''}') as Map).cast<String, dynamic>());
+
+  /// The player sheet of a board row.
+  Future<PlayerCard> playerCard(String pid) async =>
+      PlayerCard((await _call('GET', '/v1/players/${Uri.encodeComponent(pid)}/card') as Map).cast<String, dynamic>());
 
   // ---------------------------------------------------------------- shop
 

@@ -321,6 +321,7 @@ class LeaderRow(BaseModel):
     me: bool = False
     rank_title: str = ""      # the player's CURRENT detective rank (same as the profile)
     league_name: str = ""     # weekly board: the league this row plays in this week (decided at the week's start)
+    pid: str = ""             # opens the player sheet (GET /v1/players/{pid}/card); "" on old servers
 
 
 class LeagueInfo(BaseModel):
@@ -329,6 +330,20 @@ class LeagueInfo(BaseModel):
     min_xp: int = 0               # the XP the league starts at (its first profile rank)
     from_rank: str = ""           # the profile rank titles inside the league: first .. last
     to_rank: str = ""
+
+
+class RankGap(BaseModel):
+    """What separates the player from the place above. `diff` is what he needs to PASS the player above (never 0)."""
+    next_rank: int               # the place above (rank - 1)
+    diff: int
+    unit: str                    # plaque | seconds | nights
+
+
+class DailyStats(BaseModel):
+    """Tonight's case, plain numbers: detectives who solved it, fastest and median time of the ranked solves (seconds)."""
+    solved: int
+    fastest: int | None = None
+    median: int | None = None
 
 
 class LeaderboardOut(BaseModel):
@@ -340,6 +355,36 @@ class LeaderboardOut(BaseModel):
     league: int | None = None                  # weekly: the league shown (None = the single board)
     my_league: int | None = None
     leagues: list[LeagueInfo] = []             # weekly: the choices of the league switch (empty = leagues are off)
+    gap: RankGap | None = None                 # my distance to the place above (None = first place / not on the board)
+    daily: DailyStats | None = None            # daily board: stats of tonight's case
+    next_offset: int | None = None             # more rows exist after this page: ask with offset=next_offset
+
+
+class StreakBoardOut(BaseModel):
+    top: list[LeaderRow]          # value = streak = the LIVE streak (a dead streak never shows)
+    me: LeaderRow | None = None
+    my_best: int = 0              # my record
+    gap: RankGap | None = None
+    next_offset: int | None = None
+
+
+class LeagueWeek(BaseModel):
+    week: str                     # first game day of the week, YYYY-MM-DD
+    league: str
+
+
+class PlayerCardOut(BaseModel):
+    pid: str
+    nickname: str
+    avatar: int
+    avatar_id: str = ""
+    avatar_frame: str = "frame_brass"
+    rank_title: str = ""
+    cases_solved: int = 0
+    stars_total: int = 0
+    streak: int = 0
+    best_streak: int = 0
+    league_history: list[LeagueWeek] = []   # the last weeks he played, newest first (bounded)
 
 
 # ---- purchases, inbox, referral, analytics

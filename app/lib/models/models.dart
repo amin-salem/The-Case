@@ -486,9 +486,12 @@ class LeaderRow {
         stars = _i(j['stars']),
         me = _b(j['me']),
         rankTitle = _s(j['rank_title']),
-        leagueName = _s(j['league_name']);
+        leagueName = _s(j['league_name']),
+        pid = _s(j['pid']);
   final int rank, avatar, value, stars, streak; // streak: the flame next to the name (0 = none)
   final String nickname, rankTitle, avatarId, avatarFrame;
+  /// Opens the player sheet (`/v1/players/<pid>/card`); empty from an old server = the row is not tappable.
+  final String pid;
   /// Weekly board: the league this row plays in this week (empty on old servers / other boards).
   final String leagueName;
   final bool me;
@@ -504,7 +507,21 @@ class Leaderboard {
         league = j['league'] is num ? (j['league'] as num).toInt() : null,
         myLeague = j['my_league'] is num ? (j['my_league'] as num).toInt() : null,
         leagues = [for (final l in _maps(j['leagues'])) _s(l['name'])],
-        leagueInfos = [for (final l in _maps(j['leagues'])) LeagueInfo(l)];
+        leagueInfos = [for (final l in _maps(j['leagues'])) LeagueInfo(l)],
+        gap = j['gap'] is Map ? RankGap((j['gap'] as Map).cast<String, dynamic>()) : null,
+        daily = j['daily'] is Map ? DailyStats((j['daily'] as Map).cast<String, dynamic>()) : null,
+        nextOffset = j['next_offset'] is num ? (j['next_offset'] as num).toInt() : null,
+        myBest = _i(j['my_best']);
+  /// The streak board answers `{top, me, my_best, gap, next_offset}` without period/title: same shape, period `streak`.
+  factory Leaderboard.streaks(Map<String, dynamic> j) => Leaderboard({...j, 'period': 'streak', 'title': 'زنجیره'});
+  /// Distance to the place above (null = first place, not on the board, or an old server).
+  final RankGap? gap;
+  /// Tonight's solver numbers (daily board only; null from an old server).
+  final DailyStats? daily;
+  /// More rows exist: ask again with this offset (null = that was the last page).
+  final int? nextOffset;
+  /// Streak board: my record in nights.
+  final int myBest;
   final String period, title;
   final List<LeaderRow> top;
   final LeaderRow? me;
@@ -515,6 +532,46 @@ class Leaderboard {
   final List<String> leagues;
   /// The same leagues with the profile ranks inside each (empty on old servers).
   final List<LeagueInfo> leagueInfos;
+}
+
+/// What separates me from the place above: [diff] is what passes it (never 0); [unit] is plaque | seconds | nights.
+class RankGap {
+  RankGap(Map<String, dynamic> j)
+      : nextRank = _i(j['next_rank']),
+        diff = _i(j['diff']),
+        unit = _s(j['unit']);
+  final int nextRank, diff;
+  final String unit;
+}
+
+/// Tonight's case in plain numbers; [fastest] and [median] are seconds of the properly investigated solves (null = unknown).
+class DailyStats {
+  DailyStats(Map<String, dynamic> j)
+      : solved = _i(j['solved']),
+        fastest = j['fastest'] is num && (j['fastest'] as num) > 0 ? (j['fastest'] as num).toInt() : null,
+        median = j['median'] is num && (j['median'] as num) > 0 ? (j['median'] as num).toInt() : null;
+  final int solved;
+  final int? fastest, median;
+}
+
+/// The sheet that opens from a board row: public numbers only.
+class PlayerCard {
+  PlayerCard(Map<String, dynamic> j)
+      : pid = _s(j['pid']),
+        nickname = _s(j['nickname']),
+        avatar = _i(j['avatar']),
+        avatarId = _s(j['avatar_id']).isNotEmpty ? _s(j['avatar_id']) : detId(_i(j['avatar'])),
+        avatarFrame = _s(j['avatar_frame'], 'frame_brass'),
+        rankTitle = _s(j['rank_title']),
+        casesSolved = _i(j['cases_solved']),
+        starsTotal = _i(j['stars_total']),
+        streak = _i(j['streak']),
+        bestStreak = _i(j['best_streak']),
+        leagueHistory = [for (final w in _maps(j['league_history'])) (week: _s(w['week']), league: _s(w['league']))];
+  final String pid, nickname, avatarId, avatarFrame, rankTitle;
+  final int avatar, casesSolved, starsTotal, streak, bestStreak;
+  /// The last weeks he played, newest first.
+  final List<({String week, String league})> leagueHistory;
 }
 
 /// One league of the weekly board: a RANGE of profile ranks, [fromRank] .. [toRank], starting at [minXp].
