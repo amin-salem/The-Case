@@ -1,9 +1,11 @@
 """Offline candidate discovery, NOT identity recognition. Requires Pillow/numpy/scipy."""
 from pathlib import Path
-import json,numpy as np
+import base64,hashlib,json,numpy as np
 from scipy.fft import dctn
 from PIL import Image,ImageDraw
 R=Path(__file__).resolve().parents[1];O=R/'docs/reviews/portrait-quality';O.mkdir(parents=True,exist_ok=True)
+previous=json.loads((O/'machine-candidates.json').read_text()) if (O/'machine-candidates.json').exists() else {'candidates':[]}
+reviewed={(x['a'],x['b']):x for x in previous['candidates']}
 features={}
 for p in sorted((R/'app/assets/portraits').glob('*.webp')):
  im=Image.open(p).convert('L');w,h=im.size
@@ -15,6 +17,9 @@ for p in sorted((R/'app/assets/portraits').glob('*.webp')):
   for x in range(0,64,8):
    hist=np.bincount(np.floor(ang[y:y+8,x:x+8]).astype(int).ravel().clip(0,8),weights=mag[y:y+8,x:x+8].ravel(),minlength=9);hist/=np.linalg.norm(hist)+1e-8;v.extend(hist)
  v=np.array(v);v/=np.linalg.norm(v)+1e-8;features[p.stem]=(ph,v)
+digests={key:hashlib.sha256((R/'app/assets/portraits'/f'{key}.webp').read_bytes()).hexdigest() for key in features}
+fingerprints={key:{'sha256':digests[key],'phash':format(int(''.join('1' if bit else '0' for bit in ph),2),'016x'),'hog_f32le':base64.b64encode(v.astype('<f4').tobytes()).decode()} for key,(ph,v) in features.items()}
+(O/'fingerprints.json').write_text(json.dumps(fingerprints,indent=1)+'\n')
 pairs=[]
 keys=sorted(features)
 for i,k in enumerate(keys):
@@ -22,6 +27,10 @@ for i,k in enumerate(keys):
   if k[0]!=l[0]:continue
   a,b=features[k],features[l];hd=int(np.count_nonzero(a[0]!=b[0]));cos=float(a[1]@b[1])
   if hd<=10 or cos>=.88:pairs.append(dict(a=k,b=l,phash_distance=hd,hog_cosine=round(cos,5),decision='pending'))
+for pair in pairs:
+ old=reviewed.get((pair['a'],pair['b']))
+ if old and old.get('sha256_a')==digests[pair['a']] and old.get('sha256_b')==digests[pair['b']]:pair.update(old)
+ pair.update(sha256_a=digests[pair['a']],sha256_b=digests[pair['b']])
 pairs.sort(key=lambda p:(-p['hog_cosine'],p['phash_distance']))
 (O/'machine-candidates.json').write_text(json.dumps({'method':'63-bit DCT pHash plus 576-dimensional gradient-orientation histogram of fixed face crop. Not a learned face embedding or identity test.','threshold':'same gender key AND (pHash Hamming <=10 OR face-crop HOG cosine >=0.88)','candidates':pairs},indent=2))
 for start in range(0,len(pairs),12):

@@ -1,0 +1,657 @@
+{
+  "c001/s4": {
+    "role": "نگهبان شب راسته",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c002/s2": {
+    "role": "نگهبان ساختمان",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c003/s1": {
+    "role": "مهماندار واگن ۴",
+    "role_tags": [
+      "hospitality",
+      "railway"
+    ]
+  },
+  "c003/s3": {
+    "role": "دانشجوی دکترای شیمی",
+    "role_tags": [
+      "laboratory"
+    ]
+  },
+  "c004/s4": {
+    "role": "نگهبان شب",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c004/s5": {
+    "role": "مرمتگر آثار",
+    "role_tags": [
+      "restoration"
+    ]
+  },
+  "c006/s1": {
+    "role": "نگهبان شب انبار",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c007/s2": {
+    "role": "اپراتور جرثقیل",
+    "role_tags": [
+      "construction"
+    ]
+  },
+  "c007/s3": {
+    "role": "نگهبان دروازه",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c007/s5": {
+    "role": "ناخدای کشتی",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c008/s2": {
+    "role": "پزشک کشیک",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c008/s4": {
+    "role": "داروساز",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c008/s5": {
+    "role": "پرستار شب",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c009/s4": {
+    "role": "نگهبان ساختمان",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c010/s2": {
+    "role": "کارگردان",
+    "role_tags": [
+      "fieldwork",
+      "construction"
+    ]
+  },
+  "c011/s3": {
+    "role": "سرخدمه‌ی هتل",
+    "role_tags": [
+      "hospitality"
+    ]
+  },
+  "c012/s1": {
+    "role": "ظرف‌شور",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c012/s2": {
+    "role": "سرآشپز",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c012/s4": {
+    "role": "کمک‌آشپز",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c013/s4": {
+    "role": "آشپز پناهگاه",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c013/s5": {
+    "role": "راهنمای کوهستان و امدادگر پناهگاه",
+    "role_tags": [
+      "fieldwork"
+    ]
+  },
+  "c015/s2": {
+    "role": "تکنسین فنی شیفت شب",
+    "role_tags": [
+      "maintenance"
+    ]
+  },
+  "c015/s5": {
+    "role": "کارگر پیمانکار تعمیرات خروجی ۲",
+    "role_tags": [
+      "fieldwork",
+      "construction"
+    ]
+  },
+  "c016/s4": {
+    "role": "تکنسین آزمایشگاه",
+    "role_tags": [
+      "laboratory"
+    ]
+  },
+  "c016/s5": {
+    "role": "نگهبان شب ساختمان پژوهشکده",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c017/s3": {
+    "role": "دی‌جی تالار",
+    "role_tags": [
+      "music"
+    ]
+  },
+  "c018/s5": {
+    "role": "مسئول آزمایشگاه مدرسه",
+    "role_tags": [
+      "laboratory"
+    ]
+  },
+  "c019/s2": {
+    "role": "مسئول امنیت شیفت",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c020/s1": {
+    "role": "ساعت‌ساز، پیمانکار مرمت ساعت برج",
+    "role_tags": [
+      "maintenance"
+    ]
+  },
+  "c021/s5": {
+    "role": "نگهبان شب بازار",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c023/s1": {
+    "role": "نقاش، خواهرزاده‌ی منیژه، هم‌کوپه‌ای",
+    "role_tags": [
+      "painting"
+    ]
+  },
+  "c023/s2": {
+    "role": "مهماندار واگن سه",
+    "role_tags": [
+      "hospitality",
+      "railway"
+    ]
+  },
+  "c024/s2": {
+    "role": "سرپرست نگهبان‌های موزه",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c024/s5": {
+    "role": "مرمت‌گر موزه، سخنران شب افتتاح",
+    "role_tags": [
+      "fieldwork",
+      "restoration"
+    ]
+  },
+  "c025/s4": {
+    "role": "پزشک خانواده",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c026/s2": {
+    "role": "اپراتور لیفتراک",
+    "role_tags": [
+      "construction",
+      "maintenance"
+    ]
+  },
+  "c026/s3": {
+    "role": "نگهبان شب انبار",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c027/s1": {
+    "role": "ناخدای قایق طوفان",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c027/s2": {
+    "role": "ناخدای قایق موج",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c027/s3": {
+    "role": "ناخدای قایق صدف",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c027/s4": {
+    "role": "ناخدای قایق ساحل",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c027/s5": {
+    "role": "ناخدای قایق مروارید",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c028/s1": {
+    "role": "پرستار شب بخش مراقبت ویژه",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c028/s2": {
+    "role": "داروساز شیفت عصر بیمارستان",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c028/s3": {
+    "role": "پرستار شب بخش مراقبت ویژه",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c028/s4": {
+    "role": "دستیار ارشد جراحی",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c028/s5": {
+    "role": "بهیار بخش مراقبت ویژه",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c029/s2": {
+    "role": "نگهبان کتابخانه",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c031/s2": {
+    "role": "نگهبان شب",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c031/s5": {
+    "role": "سرآشپز",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c032/s1": {
+    "role": "گارسون",
+    "role_tags": [
+      "catering",
+      "hospitality"
+    ]
+  },
+  "c032/s2": {
+    "role": "سرآشپز",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c032/s4": {
+    "role": "کمک‌آشپز",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c032/s5": {
+    "role": "ظرف‌شور",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c033/s1": {
+    "role": "راهنمای کوه",
+    "role_tags": [
+      "fieldwork"
+    ]
+  },
+  "c033/s2": {
+    "role": "آشپز پناهگاه",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c034/s1": {
+    "role": "راهنمای کویر",
+    "role_tags": [
+      "fieldwork"
+    ]
+  },
+  "c034/s4": {
+    "role": "کارگر کاوش",
+    "role_tags": [
+      "fieldwork",
+      "construction"
+    ]
+  },
+  "c035/s5": {
+    "role": "نگهبان ایستگاه",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c036/s5": {
+    "role": "رئیس آزمایشگاه",
+    "role_tags": [
+      "laboratory"
+    ]
+  },
+  "c037/s5": {
+    "role": "دی‌جی عروسی",
+    "role_tags": [
+      "music"
+    ]
+  },
+  "c040/s4": {
+    "role": "مرمت‌گر برج و اسناد معماری بایگانی",
+    "role_tags": [
+      "fieldwork",
+      "restoration"
+    ]
+  },
+  "c040/s5": {
+    "role": "نگهبان محوطه و مسئول رساندن وسایل به برج",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c043/s2": {
+    "role": "رئیس قطار",
+    "role_tags": [
+      "railway"
+    ]
+  },
+  "c043/s3": {
+    "role": "نقاش، مسافر کوپه‌ی شش",
+    "role_tags": [
+      "painting"
+    ]
+  },
+  "c043/s4": {
+    "role": "مأمور واگن خواب",
+    "role_tags": [
+      "railway"
+    ]
+  },
+  "c044/s2": {
+    "role": "نگهبان",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c044/s5": {
+    "role": "مرمت‌گر",
+    "role_tags": [
+      "fieldwork",
+      "restoration"
+    ]
+  },
+  "c045/s1": {
+    "role": "دستیار نقاش",
+    "role_tags": [
+      "painting"
+    ]
+  },
+  "c045/s3": {
+    "role": "آشپز ویلا",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c046/s4": {
+    "role": "اپراتور لیفتراک",
+    "role_tags": [
+      "construction",
+      "maintenance"
+    ]
+  },
+  "c047/s5": {
+    "role": "نگهبان شب",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "c048/s4": {
+    "role": "تعمیرکار",
+    "role_tags": [
+      "fieldwork",
+      "maintenance"
+    ]
+  },
+  "c049/s1": {
+    "role": "ناخدای صیاد-۳",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c049/s2": {
+    "role": "ناخدای صیاد-۲",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c049/s3": {
+    "role": "ناخدای صیاد-۴",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c049/s4": {
+    "role": "ناخدای صیاد-۵",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c049/s5": {
+    "role": "ناخدای صیاد-۱",
+    "role_tags": [
+      "nautical"
+    ]
+  },
+  "c050/s1": {
+    "role": "پزشک خانواده",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c051/s1": {
+    "role": "دستیار کشیک داخلی، پزشک شب بخش ۴",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c051/s2": {
+    "role": "پرستار شیفت شب بخش ۴",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c051/s3": {
+    "role": "کمک‌بهیار شیفت شب، طبقه‌های سه و چهار",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c051/s4": {
+    "role": "سرپرستار شیفت شب، طبقه‌های چهار و پنج",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c051/s5": {
+    "role": "داروساز کشیک شب بیمارستان",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "c052/s6": {
+    "role": "تکنسین آزمایشگاه و گلخانه‌ی دانشکده",
+    "role_tags": [
+      "laboratory"
+    ]
+  },
+  "c053/s4": {
+    "role": "تعمیرکار سمعک؛ در سال ۸۵ تعمیر دستگاه‌های طرح با او بود",
+    "role_tags": [
+      "fieldwork",
+      "maintenance"
+    ]
+  },
+  "c056/s3": {
+    "role": "تعمیرکار تجهیزات خیریه؛ برادر سوسن و شاگرد سابق فریبرز نامدار",
+    "role_tags": [
+      "fieldwork",
+      "maintenance"
+    ]
+  },
+  "c059/s1": {
+    "role": "کارگردان و سرپرست گروه عروسکی مهتاب؛ همسر سابق شیرین مستوفی",
+    "role_tags": [
+      "fieldwork",
+      "construction"
+    ]
+  },
+  "c060/s4": {
+    "role": "مدیر آشپزخانه‌ی مهمان‌سرای سروناز؛ خاله‌ی پدرام یوسفی",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "c061/s2": {
+    "role": "صحاف و مرمت‌گر، صاحب کارگاه صحافی؛ شاگرد قدیم پروین اردلان",
+    "role_tags": [
+      "restoration"
+    ]
+  },
+  "c062/s2": {
+    "role": "تعمیرکار تجهیزات بیمارستان؛ طلبکار حمید دادرس و استاد سابق پیمانه رفیعی",
+    "role_tags": [
+      "fieldwork",
+      "maintenance"
+    ]
+  },
+  "c064/s2": {
+    "role": "مرمتگر؛ دختر خسرو شمسایی و همسر فرشید آذرکیش",
+    "role_tags": [
+      "restoration"
+    ]
+  },
+  "c067/s2": {
+    "role": "تعمیرکار ساختمان؛ پسر پروانه نیک‌آیین و خواهرزاده‌ی فیروزه",
+    "role_tags": [
+      "fieldwork",
+      "maintenance"
+    ]
+  },
+  "c069/s5": {
+    "role": "مرمتگر چوب",
+    "role_tags": [
+      "restoration"
+    ]
+  },
+  "c070/s2": {
+    "role": "کارگردان نمایش، مادر عروس",
+    "role_tags": [
+      "fieldwork",
+      "construction"
+    ]
+  },
+  "w001/s2": {
+    "role": "دختر منصور، متخصص قلب",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "w001/s7": {
+    "role": "پرستار منصور",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "w002/s3": {
+    "role": "گارسون شرکت پذیرایی؛ سرکارگر سابق باغ",
+    "role_tags": [
+      "catering",
+      "hospitality"
+    ]
+  },
+  "w003/s6": {
+    "role": "نگهبان موزه‌ی خانگی",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "w003/s7": {
+    "role": "خدمتکار و آشپز خانه",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "w004/s3": {
+    "role": "پزشک عمومی درمانگاه‌های بین‌راهی",
+    "role_tags": [
+      "medical"
+    ]
+  },
+  "w004/s5": {
+    "role": "راهنمای تورهای کویر",
+    "role_tags": [
+      "fieldwork"
+    ]
+  },
+  "w004/s6": {
+    "role": "آشپز کاروانسرای صفا",
+    "role_tags": [
+      "catering"
+    ]
+  },
+  "w005/s2": {
+    "role": "مرمتگر اسناد و نسخه‌های خطی",
+    "role_tags": [
+      "restoration"
+    ]
+  },
+  "w005/s6": {
+    "role": "نگهبان شب کتابخانه",
+    "role_tags": [
+      "security"
+    ]
+  },
+  "w006/s4": {
+    "role": "نگهبان شب هتل",
+    "role_tags": [
+      "security"
+    ]
+  }
+}
