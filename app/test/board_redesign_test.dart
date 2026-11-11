@@ -205,13 +205,15 @@ void main() {
 
   testWidgets('«همیشه»: the streak board from a server that fails keeps the switch and shows a calm error', (t) async {
     server({'/v1/leaderboard': (_) => {'period': 'all', 'title': 'همه', 'top': [row(1, value: 50)], 'me': null},
-      '/v1/leaderboard/streaks': (_) => response({'detail': 'x'}, 500)});
+      '/v1/leaderboard/streaks': (_) => response({'detail': 'x'}, 404)});
     await t.pumpWidget(host(const LeaderboardBoard('all')));
     await pump(t);
     await t.tap(find.byKey(const ValueKey('mode-streak')));
     await pump(t);
     expect(find.byKey(const ValueKey('mode-stars')), findsOneWidget);
     expect(find.byKey(const ValueKey('lb-state')), findsOneWidget);
+    await t.pumpWidget(const SizedBox()); // the error view's own retry timer must not outlive the test
+    await t.pump(const Duration(seconds: 15));
   });
 
   testWidgets('paging: «بیشتر نشون بده» loads the next page once and goes away on the last page', (t) async {

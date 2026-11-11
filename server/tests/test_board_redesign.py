@@ -2,8 +2,9 @@
 Abuse and failure paths first: hidden accounts, bad limits, unknown ids. Runs on SQLite and PostgreSQL (CI job server-postgres).
 Boards share one database with other tests, so these tests use very large numbers / their own fake case ids and compare
 places relative to their own players."""
-from datetime import date
+from datetime import timedelta
 from types import SimpleNamespace
+from uuid import uuid4
 
 import pytest
 from sqlalchemy import update
@@ -91,7 +92,7 @@ async def test_boards_need_a_token(client):
 # ------------------------------------------------------------------ daily
 @pytest.fixture
 def tonight(monkeypatch):
-    fake = SimpleNamespace(id="zbd-tonight", data={"title": "پرونده‌ی آزمون"})
+    fake = SimpleNamespace(id=f"zbd-{uuid4().hex[:10]}", data={"title": "پرونده‌ی آزمون"})   # its own id: no other test's rows
     monkeypatch.setattr(lb, "_tonight", lambda: fake)
     return fake
 
@@ -151,12 +152,14 @@ async def test_a_banned_player_is_not_on_the_daily_stats(client, tonight):
 
 # ------------------------------------------------------------------ weekly
 async def test_weekly_gap_inside_and_far_below_the_page(client, clock, single_board, week_of_fake_cases):
-    ws = date(2027, 1, 8)
-    clock(T(2027, 1, 12, 12))
+    from app import gameclock
+    now = T(2029, 3, 14, 12)                    # a week no other test uses (fake case ids are per week)
+    clock(now)
+    ws = gameclock.week_of(now)
     a, b, c = [await new_player(client, f"bd-wk-{i}", aged=True) for i in range(3)]
-    await solve(a["player_id"], wid(ws, 0), 3, T(2027, 1, 8, 22))
-    await solve(b["player_id"], wid(ws, 0), 2, T(2027, 1, 8, 22))
-    await solve(c["player_id"], wid(ws, 0), 1, T(2027, 1, 8, 22))
+    await solve(a["player_id"], wid(ws, 0), 3, gameclock.week_end(ws) - timedelta(days=2))
+    await solve(b["player_id"], wid(ws, 0), 2, gameclock.week_end(ws) - timedelta(days=2))
+    await solve(c["player_id"], wid(ws, 0), 1, gameclock.week_end(ws) - timedelta(days=2))
     r = (await get(client, c, "/v1/leaderboard?period=weekly")).json()
     assert r["me"]["rank"] == 3 and r["gap"] == {"next_rank": 2, "diff": 2, "unit": "plaque"}
     far = (await get(client, c, "/v1/leaderboard?period=weekly&limit=1")).json()      # I am not in the first page
