@@ -125,5 +125,11 @@
 "m_young_student": 21,
 "m_young_undergrad": 24,
 "m_young_waiter": 22,
-"m_young_worker": 27
+"m_young_worker": 27,
+"m_neutral_56_round": 56,
+"m_neutral_44_long": 44,
+"m_neutral_53_square": 53,
+"m_neutral_41_oval": 41,
+"m_neutral_56_angular": 60,
+"m_neutral_39_broad": 39
 }

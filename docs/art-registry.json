@@ -1718,10 +1718,10 @@
       "skin_tone": "light to medium olive (warm amber illumination; approximate)",
       "face_shape": "oval/angular",
       "clothing": "paint-marked shirt and patterned scarf",
-      "uniform": false,
-      "uniform_type": null,
+      "uniform": true,
+      "uniform_type": "painting",
       "role_tags": [
-        "neutral"
+        "painting"
       ],
       "sha256": "e6667057608ea1c3b3ce74a1e50647a1139e2eafe85d539ccc0cf0f8f85ef4aa",
       "visual_review": {
@@ -2123,10 +2123,10 @@
       "skin_tone": "light to medium olive (warm amber illumination; approximate)",
       "face_shape": "oval",
       "clothing": "brown work shirt",
-      "uniform": false,
-      "uniform_type": null,
+      "uniform": true,
+      "uniform_type": "fieldwork",
       "role_tags": [
-        "neutral"
+        "fieldwork"
       ],
       "sha256": "3a4edcc1cbf80e17465770abc91f7af6dad26745c521fd3fadca58632a880e26",
       "visual_review": {
@@ -2501,10 +2501,10 @@
       "skin_tone": "light to medium olive (warm amber illumination; approximate)",
       "face_shape": "oval",
       "clothing": "dark work clothes with cap and straps",
-      "uniform": false,
-      "uniform_type": null,
+      "uniform": true,
+      "uniform_type": "maintenance",
       "role_tags": [
-        "neutral"
+        "maintenance"
       ],
       "sha256": "bdc3d6d4932282022b66b0f195f754e376a1d2194b086830375455bf089ee39e",
       "visual_review": {
@@ -3429,6 +3429,168 @@
         "method": "human inspection of labelled contact sheet; three recovered portraits individually opened",
         "date": "2026-11-07",
         "status": "provisional editorial labels; not biometric measurements"
+      }
+    },
+    {
+      "id": "m_neutral_56_round",
+      "apparent_gender": "m",
+      "apparent_age": 56,
+      "apparent_age_range": [
+        51,
+        61
+      ],
+      "hair_color": "silver",
+      "hair_style": "short straight",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "medium warm olive under amber light",
+      "face_shape": "round",
+      "clothing": "navy collarless shirt",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "035b36ebbfa6c22161d27f3dc49f767b4b0c5ff6e3ef00fc5e235971ffdc5f24",
+      "visual_review": {
+        "method": "individual generated output and six-portrait comparison sheet inspected",
+        "date": "2026-11-07",
+        "status": "editorial apparent age; angular portrait assessed at 60 rather than prompt target 56"
+      }
+    },
+    {
+      "id": "m_neutral_44_long",
+      "apparent_gender": "m",
+      "apparent_age": 44,
+      "apparent_age_range": [
+        39,
+        49
+      ],
+      "hair_color": "black",
+      "hair_style": "shaved bald crown",
+      "facial_hair": "narrow moustache",
+      "glasses": false,
+      "skin_tone": "medium warm olive under amber light",
+      "face_shape": "long narrow",
+      "clothing": "charcoal collared shirt",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "4927967a67d3f677097ca66e88842d5c850ddb931a025a090dc74cdcd788a31b",
+      "visual_review": {
+        "method": "individual generated output and six-portrait comparison sheet inspected",
+        "date": "2026-11-07",
+        "status": "editorial apparent age; angular portrait assessed at 60 rather than prompt target 56"
+      }
+    },
+    {
+      "id": "m_neutral_53_square",
+      "apparent_gender": "m",
+      "apparent_age": 53,
+      "apparent_age_range": [
+        48,
+        58
+      ],
+      "hair_color": "salt pepper",
+      "hair_style": "short curled",
+      "facial_hair": "none",
+      "glasses": true,
+      "skin_tone": "medium warm olive under amber light",
+      "face_shape": "broad square",
+      "clothing": "dark brown jacket cream collar",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "716681d78460470d382202552812e0d846ce4c13e8c433ef954ae96b33aa3a95",
+      "visual_review": {
+        "method": "individual generated output and six-portrait comparison sheet inspected",
+        "date": "2026-11-07",
+        "status": "editorial apparent age; angular portrait assessed at 60 rather than prompt target 56"
+      }
+    },
+    {
+      "id": "m_neutral_41_oval",
+      "apparent_gender": "m",
+      "apparent_age": 41,
+      "apparent_age_range": [
+        36,
+        46
+      ],
+      "hair_color": "black",
+      "hair_style": "short side part",
+      "facial_hair": "small goatee",
+      "glasses": false,
+      "skin_tone": "medium warm olive under amber light",
+      "face_shape": "oval narrow chin",
+      "clothing": "muted teal crewneck",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "5c262f9b58143a6c3de381b60e8c31d8450e46d95f98181534bc8f17b286c905",
+      "visual_review": {
+        "method": "individual generated output and six-portrait comparison sheet inspected",
+        "date": "2026-11-07",
+        "status": "editorial apparent age; angular portrait assessed at 60 rather than prompt target 56"
+      }
+    },
+    {
+      "id": "m_neutral_56_angular",
+      "apparent_gender": "m",
+      "apparent_age": 60,
+      "apparent_age_range": [
+        55,
+        65
+      ],
+      "hair_color": "silver",
+      "hair_style": "bald crown",
+      "facial_hair": "short white beard moustache",
+      "glasses": true,
+      "skin_tone": "medium warm olive under amber light",
+      "face_shape": "diamond angular",
+      "clothing": "plum shirt charcoal blazer",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "91d266b84eeee66c633325c4f3b7e49d0b985e85c4abacfcc357c74fdae2169e",
+      "visual_review": {
+        "method": "individual generated output and six-portrait comparison sheet inspected",
+        "date": "2026-11-07",
+        "status": "editorial apparent age; angular portrait assessed at 60 rather than prompt target 56"
+      }
+    },
+    {
+      "id": "m_neutral_39_broad",
+      "apparent_gender": "m",
+      "apparent_age": 39,
+      "apparent_age_range": [
+        34,
+        44
+      ],
+      "hair_color": "black",
+      "hair_style": "short wavy",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "medium warm olive under amber light",
+      "face_shape": "broad oblong",
+      "clothing": "grey blue collared shirt",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "dfb9d6917e70884a61c15792f396e2d410838fabc9f45e02e0f268c84ffc9793",
+      "visual_review": {
+        "method": "individual generated output and six-portrait comparison sheet inspected",
+        "date": "2026-11-07",
+        "status": "editorial apparent age; angular portrait assessed at 60 rather than prompt target 56"
       }
     }
   ]
