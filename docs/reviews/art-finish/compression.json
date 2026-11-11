@@ -1,0 +1,211 @@
+{
+  "method": "Mean of RGB SSIM, Gaussian sigma=1.5, 11px window, population covariance, 5px border excluded; data_range=255",
+  "files": [
+    {
+      "path": "app/assets/portraits/m_neutral_20_round.webp",
+      "source": "new generation",
+      "before": 2322758,
+      "after": 14080,
+      "quality": 82,
+      "ssim": 0.93949,
+      "comparison": "448 resized RGB source vs decoded WebP"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_24_freckles.webp",
+      "source": "new generation",
+      "before": 2239594,
+      "after": 10964,
+      "quality": 82,
+      "ssim": 0.94494,
+      "comparison": "448 resized RGB source vs decoded WebP"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_29_coils.webp",
+      "source": "new generation",
+      "before": 2301245,
+      "after": 12870,
+      "quality": 82,
+      "ssim": 0.94129,
+      "comparison": "448 resized RGB source vs decoded WebP"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_20_pixie.webp",
+      "source": "new generation",
+      "before": 2361305,
+      "after": 14904,
+      "quality": 82,
+      "ssim": 0.92461,
+      "comparison": "448 resized RGB source vs decoded WebP"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_27_coils.webp",
+      "source": "new generation",
+      "before": 2362038,
+      "after": 15240,
+      "quality": 82,
+      "ssim": 0.9422,
+      "comparison": "448 resized RGB source vs decoded WebP"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_53_square.webp",
+      "source": "staged neutral",
+      "before": 34278,
+      "after": 17096,
+      "quality": 81,
+      "ssim": 0.95715,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_56_round.webp",
+      "source": "staged neutral",
+      "before": 27280,
+      "after": 13994,
+      "quality": 82,
+      "ssim": 0.95866,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_45_freckles.webp",
+      "source": "staged neutral",
+      "before": 27224,
+      "after": 10794,
+      "quality": 82,
+      "ssim": 0.96301,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_mid_researcher.webp",
+      "source": "existing >25k",
+      "before": 32146,
+      "after": 21782,
+      "quality": 82,
+      "ssim": 0.9677,
+      "comparison": "native-size decoded original vs re-encoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_41_oval.webp",
+      "source": "staged neutral",
+      "before": 32328,
+      "after": 12916,
+      "quality": 82,
+      "ssim": 0.95675,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/f_young_painter.webp",
+      "source": "existing >25k",
+      "before": 25752,
+      "after": 25248,
+      "quality": 74,
+      "ssim": 0.98339,
+      "comparison": "native-size decoded original vs re-encoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_56_angular.webp",
+      "source": "staged neutral",
+      "before": 34618,
+      "after": 13190,
+      "quality": 82,
+      "ssim": 0.96043,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_mid_worker.webp",
+      "source": "existing >25k",
+      "before": 30408,
+      "after": 20912,
+      "quality": 82,
+      "ssim": 0.96977,
+      "comparison": "native-size decoded original vs re-encoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_45_waves.webp",
+      "source": "staged neutral",
+      "before": 32068,
+      "after": 14690,
+      "quality": 82,
+      "ssim": 0.95316,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_39_broad.webp",
+      "source": "staged neutral",
+      "before": 28678,
+      "after": 14810,
+      "quality": 82,
+      "ssim": 0.95885,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_44_long.webp",
+      "source": "staged neutral",
+      "before": 24840,
+      "after": 9846,
+      "quality": 82,
+      "ssim": 0.96292,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_38_coils.webp",
+      "source": "staged neutral",
+      "before": 26652,
+      "after": 10272,
+      "quality": 82,
+      "ssim": 0.96096,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_46_angular.webp",
+      "source": "staged neutral",
+      "before": 30740,
+      "after": 12000,
+      "quality": 82,
+      "ssim": 0.95942,
+      "comparison": "448 resized original vs decoded WebP",
+      "alpha_unchanged": null
+    },
+    {
+      "path": "app/assets/frames/frame_ice.webp",
+      "source": "existing >25k",
+      "before": 47472,
+      "after": 39908,
+      "quality": 50,
+      "ssim": 0.98989,
+      "comparison": "native-size original vs re-encoded WebP, composited on grey; alpha exact",
+      "alpha_unchanged": true,
+      "review": "Visually inspected at native icon size; ice details and circular alpha preserved. Lower quality needed to meet 40,000-byte cap."
+    },
+    {
+      "path": "app/assets/frames/frame_persian.webp",
+      "source": "existing >25k",
+      "before": 42636,
+      "after": 39612,
+      "quality": 70,
+      "ssim": 0.99322,
+      "comparison": "native-size original vs re-encoded WebP, composited on grey; alpha exact",
+      "alpha_unchanged": true,
+      "review": "Visually inspected at native icon size; ice details and circular alpha preserved. Lower quality needed to meet 40,000-byte cap."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_29_square.webp",
+      "source": "new generation",
+      "before": 2158583,
+      "after": 11650,
+      "quality": 82,
+      "ssim": 0.94635,
+      "comparison": "448 resized RGB source vs decoded WebP"
+    }
+  ]
+}

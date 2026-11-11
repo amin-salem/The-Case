@@ -1,0 +1,152 @@
+[
+  {
+    "id": "m_old_farmer",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/m_old_farmer.webp",
+    "prior": null,
+    "batch": "33802ee8e75c1bcfde25df9bc71b5fd551aa59f0",
+    "main": "33802ee8e75c1bcfde25df9bc71b5fd551aa59f0"
+  },
+  {
+    "id": "m_old_cleric",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/m_old_cleric.webp",
+    "prior": null,
+    "batch": "ed23e736a9771af01292db900b45849e0d874ab9",
+    "main": "ed23e736a9771af01292db900b45849e0d874ab9"
+  },
+  {
+    "id": "m_old_tailor",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/m_old_tailor.webp",
+    "prior": null,
+    "batch": "f3a4b8d8212fb233725cc9e755a159722dfa5cdd",
+    "main": "f3a4b8d8212fb233725cc9e755a159722dfa5cdd"
+  },
+  {
+    "id": "m_mid_cook",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/m_mid_cook.webp",
+    "prior": null,
+    "batch": "29d91f7dd2698b4059e7517f32cff81a86b22010",
+    "main": "29d91f7dd2698b4059e7517f32cff81a86b22010"
+  },
+  {
+    "id": "m_young_courier",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/m_young_courier.webp",
+    "prior": null,
+    "batch": "114230808fa7a0b529c934017dce41eb9eb0b4bf",
+    "main": "114230808fa7a0b529c934017dce41eb9eb0b4bf"
+  },
+  {
+    "id": "m_young_designer",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/m_young_designer.webp",
+    "prior": null,
+    "batch": "14142c0074c04392d90b041d78ff722c5c76c0a9",
+    "main": "14142c0074c04392d90b041d78ff722c5c76c0a9"
+  },
+  {
+    "id": "m_young_boxer",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/m_young_boxer.webp",
+    "prior": null,
+    "batch": "ece708809432db040388410686e606eb035b4516",
+    "main": "ece708809432db040388410686e606eb035b4516"
+  },
+  {
+    "id": "f_young_photographer",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/f_young_photographer.webp",
+    "prior": null,
+    "batch": "4bc2cf11182806fabe1223a3fd583ecfec800ac8",
+    "main": "4bc2cf11182806fabe1223a3fd583ecfec800ac8"
+  },
+  {
+    "id": "f_mid_judge",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/f_mid_judge.webp",
+    "prior": null,
+    "batch": "821d0670de747c7a969c3eee99aae7cb2cc834a0",
+    "main": "821d0670de747c7a969c3eee99aae7cb2cc834a0"
+  },
+  {
+    "id": "f_mid_surgeon",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/portraits/f_mid_surgeon.webp",
+    "prior": null,
+    "batch": "220777b1d6bd033a0ca855e48ce2a9d9830f0432",
+    "main": "220777b1d6bd033a0ca855e48ce2a9d9830f0432"
+  },
+  {
+    "id": "frame_chain",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/frames/frame_chain.webp",
+    "prior": null,
+    "batch": "a21e42b2538c44e20b53014e81d6cc9336511242",
+    "main": "a21e42b2538c44e20b53014e81d6cc9336511242"
+  },
+  {
+    "id": "frame_scroll",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/frames/frame_scroll.webp",
+    "prior": null,
+    "batch": "fa57f297a22788b1581eb0db55a6fa27ff8b6472",
+    "main": "fa57f297a22788b1581eb0db55a6fa27ff8b6472"
+  },
+  {
+    "id": "frame_siren",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/frames/frame_siren.webp",
+    "prior": null,
+    "batch": "d4c865e1b0bb1080eab8860065f636d8b33eb788",
+    "main": "d4c865e1b0bb1080eab8860065f636d8b33eb788"
+  },
+  {
+    "id": "frame_laurel",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/frames/frame_laurel.webp",
+    "prior": null,
+    "batch": "3c433491b767e41056b992a2277973c1ec83bc93",
+    "main": "3c433491b767e41056b992a2277973c1ec83bc93"
+  },
+  {
+    "id": "frame_ice",
+    "sha": "a0299b3e746f1d35f776aa54dd08e1aae7474344",
+    "date": "2026-10-26T09:00:44Z",
+    "message": "44 new faces, 10 avatars, 8 picture frames; all images re-compressed; faces re-assigned by age\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\nClaude-Session: https://claude.ai/code/session_01DqEoGJtGaDGFoVcJbmaPm3",
+    "path": "app/assets/frames/frame_ice.webp",
+    "prior": null,
+    "batch": "7ef4fb0461323276c2ba87cf1903a0daa30543ca",
+    "main": "7ef4fb0461323276c2ba87cf1903a0daa30543ca"
+  }
+]

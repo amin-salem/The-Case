@@ -236,6 +236,22 @@ const Set<String> kPortraits = {
   'm_young_undergrad',
   'm_young_waiter',
   'm_young_worker',
+  'f_neutral_20_pixie',
+  'f_neutral_27_coils',
+  'm_neutral_20_round',
+  'm_neutral_24_freckles',
+  'm_neutral_29_coils',
+  'm_neutral_38_coils',
+  'm_neutral_39_broad',
+  'm_neutral_41_oval',
+  'm_neutral_44_long',
+  'm_neutral_45_freckles',
+  'm_neutral_45_waves',
+  'm_neutral_46_angular',
+  'm_neutral_53_square',
+  'm_neutral_56_angular',
+  'm_neutral_56_round',
+  'f_neutral_29_square',
 };
 
 /// Draws a character in a 200 x 220 box, scaled to the widget size.

@@ -1,0 +1,72 @@
+{
+  "groups": [
+    {
+      "gender": "f",
+      "age_band": "young",
+      "before_files": 10,
+      "before_distinct": 9,
+      "target": 12,
+      "shortage": 3,
+      "generated": 3,
+      "after_distinct": 12,
+      "unwritten_slots": 5
+    },
+    {
+      "gender": "f",
+      "age_band": "mid",
+      "before_files": 41,
+      "before_distinct": 35,
+      "target": 12,
+      "shortage": 0,
+      "generated": 0,
+      "after_distinct": 35,
+      "unwritten_slots": 35
+    },
+    {
+      "gender": "f",
+      "age_band": "old",
+      "before_files": 18,
+      "before_distinct": 18,
+      "target": 12,
+      "shortage": 0,
+      "generated": 0,
+      "after_distinct": 18,
+      "unwritten_slots": 6
+    },
+    {
+      "gender": "m",
+      "age_band": "young",
+      "before_files": 11,
+      "before_distinct": 9,
+      "target": 12,
+      "shortage": 3,
+      "generated": 3,
+      "after_distinct": 12,
+      "unwritten_slots": 6
+    },
+    {
+      "gender": "m",
+      "age_band": "mid",
+      "before_files": 35,
+      "before_distinct": 30,
+      "target": 12,
+      "shortage": 0,
+      "generated": 0,
+      "after_distinct": 30,
+      "unwritten_slots": 33
+    },
+    {
+      "gender": "m",
+      "age_band": "old",
+      "before_files": 22,
+      "before_distinct": 18,
+      "target": 12,
+      "shortage": 0,
+      "generated": 0,
+      "after_distinct": 18,
+      "unwritten_slots": 13
+    }
+  ],
+  "unknown_gender_slots": 2,
+  "note": "Distinct count = maximum independent set under reviewed similarity pairs. Includes retained occupational images and staged assets. This is not current neutral release capacity."
+}

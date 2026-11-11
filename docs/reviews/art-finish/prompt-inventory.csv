@@ -1,0 +1,63 @@
+prompt_name,exact_on_main,runtime_id,runtime_path,status,main_blob
+m_old_baker,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_clerk,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_farmer,True,m_old_farmer,app/assets/portraits/m_old_farmer.webp,نام دقیق موجود,33802ee8e75c1bcfde25df9bc71b5fd551aa59f0
+m_old_doctor,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_cleric,True,m_old_cleric,app/assets/portraits/m_old_cleric.webp,نام دقیق موجود,ed23e736a9771af01292db900b45849e0d874ab9
+m_old_watchman,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_tailor,True,m_old_tailor,app/assets/portraits/m_old_tailor.webp,نام دقیق موجود,f3a4b8d8212fb233725cc9e755a159722dfa5cdd
+m_old_merchant,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_retired,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_driver,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_judge,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_fisherman,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_artist,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_old_porter,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_mid_pharmacist,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_mid_engineer,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_mid_cook,True,m_mid_cook,app/assets/portraits/m_mid_cook.webp,نام دقیق موجود,29d91f7dd2698b4059e7517f32cff81a86b22010
+m_mid_clerk,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_mid_cop,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_mid_journalist,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_mid_teacher2,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_mid_butler,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_mid_mechanic,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_mid_banker,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_young_courier,True,m_young_courier,app/assets/portraits/m_young_courier.webp,نام دقیق موجود,114230808fa7a0b529c934017dce41eb9eb0b4bf
+m_young_barista,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_young_soldier,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+m_young_designer,True,m_young_designer,app/assets/portraits/m_young_designer.webp,نام دقیق موجود,14142c0074c04392d90b041d78ff722c5c76c0a9
+m_young_boxer,True,m_young_boxer,app/assets/portraits/m_young_boxer.webp,نام دقیق موجود,ece708809432db040388410686e606eb035b4516
+m_young_student2,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_young_chef,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_young_pilot,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_young_lawyer,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_young_photographer,True,f_young_photographer,app/assets/portraits/f_young_photographer.webp,نام دقیق موجود,4bc2cf11182806fabe1223a3fd583ecfec800ac8
+f_young_cleaner,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_young_courier,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_young_pharmacist,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_young_singer,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_mid_judge,True,f_mid_judge,app/assets/portraits/f_mid_judge.webp,نام دقیق موجود,821d0670de747c7a969c3eee99aae7cb2cc834a0
+f_mid_accountant,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_mid_vendor,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_mid_surgeon,True,f_mid_surgeon,app/assets/portraits/f_mid_surgeon.webp,نام دقیق موجود,220777b1d6bd033a0ca855e48ce2a9d9830f0432
+f_mid_captain,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+f_mid_baker2,False,,,نام دقیق نیست؛ تولید شغلی با کمبود خنثی جایگزین شد,
+av_dawn_fisher,False,ex_fisherman,app/assets/avatars/ex_fisherman.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,5011154b21112a0fb042e740028cca807f156466
+av_librarian,False,ex_librarian,app/assets/avatars/ex_librarian.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,3f540d05b392fabe8c285ac3e6aa2a586a4b49bc
+av_rain_inspector,False,ex_rainman,app/assets/avatars/ex_rainman.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,d12f021651870e640cfcc5ec65e3165d37bd9890
+av_crime_writer,False,ex_writer,app/assets/avatars/ex_writer.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,f7a228791b6395873e1002b36ec0d71032939d93
+av_space_noir,False,ex_cyber,app/assets/avatars/ex_cyber.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,3c90299efc537d6abd354e7d1466a399b5ddb258
+av_coroner,False,ex_forensic,app/assets/avatars/ex_forensic.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,3ea73c400c13541b83c50472b03c5f3c1b339351
+av_night_taxi,False,ex_taxi,app/assets/avatars/ex_taxi.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,dc80013af8f337e729261e7b7ec545ec6958e7c1
+av_clockmaker,False,ex_watchmaker,app/assets/avatars/ex_watchmaker.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,3e444fbe46da4a68099ce99d4f5bc2e01ca2c18f
+av_twilight,False,ex_masked,app/assets/avatars/ex_masked.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,f9956eb62aac8780e357b1e4790165be9807d7dd
+av_old_guard,False,ex_keeper,app/assets/avatars/ex_keeper.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,082a01a58bdf19ba345c1a5b0ccb4c66dc6a683f
+frame_chain,True,frame_chain,app/assets/frames/frame_chain.webp,نام دقیق موجود,a21e42b2538c44e20b53014e81d6cc9336511242
+frame_midnight_moon,False,frame_moon,app/assets/frames/frame_moon.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,f291ce7e260cb9a383ec9ef8e0883329e3903db5
+frame_scroll,True,frame_scroll,app/assets/frames/frame_scroll.webp,نام دقیق موجود,fa57f297a22788b1581eb0db55a6fa27ff8b6472
+frame_qajar,False,frame_persian,app/assets/frames/frame_persian.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,63ec9452ccbbf7c7fc679fc856c0a3eca17a1f63
+frame_siren,True,frame_siren,app/assets/frames/frame_siren.webp,نام دقیق موجود,d4c865e1b0bb1080eab8860065f636d8b33eb788
+frame_noir_keys,False,frame_piano,app/assets/frames/frame_piano.webp,موجود با نام اجرایی دیگر؛ تطبیق بصری شد,25b80d1f0ff48ef6c876beaade020a454eb7cdaa
+frame_laurel,True,frame_laurel,app/assets/frames/frame_laurel.webp,نام دقیق موجود,3c433491b767e41056b992a2277973c1ec83bc93
+frame_ice,True,frame_ice,app/assets/frames/frame_ice.webp,نام دقیق موجود,7ef4fb0461323276c2ba87cf1903a0daa30543ca

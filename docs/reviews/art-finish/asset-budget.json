@@ -1,0 +1,157 @@
+{
+  "assets_before_bytes": 8316768,
+  "assets_after_bytes": 8495132,
+  "increase_bytes": 178364,
+  "new_portrait_bytes": 209316,
+  "new_portraits": 16,
+  "generated_portraits": 6,
+  "imported_staged_portraits": 10,
+  "new_avatar_files": 0,
+  "new_frame_files": 0,
+  "new_scene_files": 0,
+  "changed_files": [
+    {
+      "path": "app/assets/portraits/m_neutral_53_square.webp",
+      "before": 0,
+      "after": 17096
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_24_freckles.webp",
+      "before": 0,
+      "after": 10964
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_20_pixie.webp",
+      "before": 0,
+      "after": 14904
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_56_round.webp",
+      "before": 0,
+      "after": 13994
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_27_coils.webp",
+      "before": 0,
+      "after": 15240
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_45_freckles.webp",
+      "before": 0,
+      "after": 10794
+    },
+    {
+      "path": "app/assets/portraits/m_mid_researcher.webp",
+      "before": 32146,
+      "after": 21782
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_41_oval.webp",
+      "before": 0,
+      "after": 12916
+    },
+    {
+      "path": "app/assets/portraits/f_young_painter.webp",
+      "before": 25752,
+      "after": 25248
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_56_angular.webp",
+      "before": 0,
+      "after": 13190
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_29_square.webp",
+      "before": 0,
+      "after": 11650
+    },
+    {
+      "path": "app/assets/portraits/m_mid_worker.webp",
+      "before": 30408,
+      "after": 20912
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_45_waves.webp",
+      "before": 0,
+      "after": 14690
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_20_round.webp",
+      "before": 0,
+      "after": 14080
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_39_broad.webp",
+      "before": 0,
+      "after": 14810
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_44_long.webp",
+      "before": 0,
+      "after": 9846
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_38_coils.webp",
+      "before": 0,
+      "after": 10272
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_46_angular.webp",
+      "before": 0,
+      "after": 12000
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_29_coils.webp",
+      "before": 0,
+      "after": 12870
+    },
+    {
+      "path": "app/assets/frames/frame_ice.webp",
+      "before": 47472,
+      "after": 39908
+    },
+    {
+      "path": "app/assets/frames/frame_persian.webp",
+      "before": 42636,
+      "after": 39612
+    }
+  ],
+  "existing_avatars_above_18000": [
+    [
+      "ex_cyber",
+      21634
+    ],
+    [
+      "ex_fisherman",
+      23816
+    ],
+    [
+      "ex_forensic",
+      20262
+    ],
+    [
+      "ex_keeper",
+      24678
+    ],
+    [
+      "ex_librarian",
+      21616
+    ],
+    [
+      "ex_rainman",
+      23540
+    ],
+    [
+      "ex_taxi",
+      22372
+    ],
+    [
+      "ex_watchmaker",
+      23894
+    ],
+    [
+      "ex_writer",
+      22262
+    ]
+  ]
+}
