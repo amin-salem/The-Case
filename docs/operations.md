@@ -45,8 +45,8 @@ Panel → «سلامت» (works in a browser too). Each card has a green / amber
   The alert limit is `LIARA_MIN_BALANCE` (default 300000): amber up to 1.5× the limit, red at or below it. Cached 5 minutes; the
   button makes at most one real call per 30 seconds. **You must add `LIARA_API_TOKEN` (the same token as the GitHub secret) to
   the Liara app's environment**; until then the card says «LIARA_API_TOKEN روی لیارا تنظیم نشده». The token never leaves the server.
-- **GitHub watch:** results are not visible to the server; the card only names the workflows (Server watch every 30 min,
-  Liara balance daily 08:00 Tehran).
+- **GitHub watch:** results are not visible to the server; the card only names the workflow (Liara balance daily 08:00 Tehran).
+  The 30-minute «Server watch» (uptime.yml) was removed on 11 Nov 2026 (Amin): it used most of the Actions minutes.
 
 Also set on Liara (the Health page shows red/amber until then): a long random `ADMIN_API_KEY` (24+ characters) and `JWT_SECRET` (32+).
 
@@ -829,5 +829,5 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
   payments have failed or your spending limit needs to be increased»). Fix: GitHub → Settings → Billing and plans (payment method or the
   Actions spending limit), or wait for the next month.
 - To spend less: CI skips the build branches, newer pushes cancel older runs, the admin menu browser test runs only when the admin page
-  changes (`admin-menu.yml`, also by hand from the Actions tab), the server watch runs every 2 hours.
+  changes (`admin-menu.yml`, also by hand from the Actions tab), and the server watch (`uptime.yml`) is gone.
 

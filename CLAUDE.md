@@ -59,7 +59,7 @@ push to `main`). Only server changes may use a Liara deployment.
   must know or set.
 
 ## Server unreachable from GitHub (Amin, 12 Oct 2026)
-The server watch, the live check in the release notes and the smoke tests run from GitHub's servers OUTSIDE Iran, and
+The live check in the release notes and the smoke tests run from GitHub's servers OUTSIDE Iran, and
 `gaamly.ir` is often unreachable from abroad while it works fine inside Iran (Amin sees the same with a VPN on).
 So a failed health check from a workflow is NOT proof that the server is down.
 - When you see "did not answer /health" / `(health failed)`: do not try to fix it by pushing or redeploying.

@@ -1,6 +1,6 @@
 # Health watch (spec, built by the hardening run)
 
-Extend `.github/workflows/uptime.yml` (every 30 min; GitHub runners are the only place that can reach Liara and gaamly.ir).
+(Historical: `.github/workflows/uptime.yml` was removed on 11 Nov 2026 by Amin to save Actions minutes.)
 Alert = a failed run (GitHub emails/pushes Amin). Add an optional Telegram message if secrets TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID exist.
 
 Checks:

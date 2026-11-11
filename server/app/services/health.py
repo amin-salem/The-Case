@@ -37,7 +37,6 @@ TLS_TIMEOUT = 5.0
 _RANK = {"ok": 0, "warn": 1, "bad": 2}
 
 WATCH_NOTE = [
-    {"name": "Server watch", "schedule": "هر ۳۰ دقیقه (uptime.yml)"},
     {"name": "Liara balance", "schedule": "هر روز ساعت ۸ صبح به وقت تهران (liara-balance.yml)"},
 ]
 
