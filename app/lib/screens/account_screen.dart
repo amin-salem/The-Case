@@ -143,7 +143,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   _stat('بهترین زنجیره', fa(p.bestStreak)),
                 ]),
                 const SizedBox(height: 12),
-                ..._shelf(p),
+                ...honorShelf(p),
                 _achievements(p),
                 const SizedBox(height: 12),
                 _invite(p),
@@ -306,7 +306,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   // ---------------------------------------------------------------- shelf
 
-  List<Widget> _shelf(Profile p) {
+  List<Widget> honorShelf(Profile p) {
     final d = ShelfData.build(profile: p, catalog: _catalog, cases: _cases);
     return [
       HonorShelf(key: const ValueKey('honor-shelf'), data: d, boundaryKey: _shelfKey, onFrames: _openFrames),
