@@ -426,6 +426,10 @@ void main() {
         expect(find.textContaining('سکه'), findsWidgets);
         expect(find.textContaining('کد خطا'), findsNothing);
         expect(find.byKey(const ValueKey('state-primary')), findsOneWidget); // the way forward is always there
+        // a failed call starts Api's 20-second retry timer: one good call stops it, so no timer is left pending
+        Api.i.httpClient = MockClient((r) async => jsonResponse({}));
+        await Api.i.missions().then<void>((_) {}, onError: (Object _) {});
+        await t.pump(const Duration(milliseconds: 300));
       });
     });
 
