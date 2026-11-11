@@ -66,10 +66,9 @@ class CaseArtContract(unittest.TestCase):
         self.assertEqual(set(reviewed), expected)
         self.assertEqual(len(reviewed),len(self.review))
 
-    def test_all_casts_and_global_culprit_album(self):
+    def test_distinct_casts_preserve_gender(self):
         blocked={frozenset(p) for p in read(REVIEW/'editorial-neighbours.json')}
         blocked.update(frozenset((p['a'],p['b'])) for p in self.review if p['decision']=='avoid_same_cast')
-        album={}
         for c in cases():
             used=[]
             for s in c['suspects']:
@@ -79,10 +78,22 @@ class CaseArtContract(unittest.TestCase):
                 self.assertNotIn(key,used,c['id'])
                 self.assertFalse(any(frozenset((key,other)) in blocked for other in used), (c['id'],key,used))
                 used.append(key)
-                if s['id']==c['solution']['culprit']:
-                    self.assertNotIn(key,album,(key,c['id'],album.get(key)))
-                    album[key]=c['id']
-            self.assertIn(c['id'],album.values())
+
+    def test_culprit_album_is_unique_without_exceptions(self):
+        album={}
+        for c in cases():
+            suspect=next(s for s in c['suspects'] if s['id']==c['solution']['culprit'])
+            key=suspect['avatar']['portrait']
+            self.assertIn(key,self.reg)
+            self.assertNotIn(key,album,(key,c['id'],album.get(key)))
+            album[key]=c['id']
+
+    def test_no_unreleased_portrait_leaks_to_an_old_case(self):
+        releases=read(ROOT/'docs/portrait-release.json')['portraits']
+        staged={k for k,v in releases.items() if v.get('first_build') is None}
+        for c in cases():
+            for s in c['suspects']:
+                self.assertNotIn(s['avatar']['portrait'],staged,(c['id'],s['id']))
 
     def test_all_ages_and_uniforms(self):
         errors=[]

@@ -1,20 +1,44 @@
-# Portrait and scene quality — execution checkpoint
+# بررسی هنر پرونده — ۱۱ نوامبر ۲۰۲۶
+**شاخه برای بازبینی است؛ آمادهٔ ادغام یا انتشار نیست.** مبنا: `a920b716e14185d679557fdc4f7ececfaf30ab7f` روی main. بررسی ۷ نوامبر بر مبنای قدیمی‌تر بود. شاخهٔ جدا با تاریخچهٔ قبلی حفظ و با main همگام شد. هیچ APK ساخته نشد.
+   
+## سه خروجی متفاوت
+- **آنچه روی شاخه است:** در ۳۹ پرونده، ۱۰۵ مقدار موجود `avatar.portrait` عوض شده است. جنسیت، سایر فیلدهای آواتار، داستان، مدارک، جواب‌ها و برنامهٔ انتشار هیچ تغییری ندارند. c038/s1 (معاون آموزشی، ۵۲ ساله) اکنون کتِ `m_mid_lecturer` دارد. پرترهٔ نسخه‌شناس w005/s3 روی main هم `m_mid_researcher` است؛ آن فایل در build 83 اضافه شده و استقرار سرور آن را به APK قدیمی نمی‌رساند.
+- **[اصلاحات پیشنهادیِ اعمال‌نشده](portrait-quality/remaining-portraits.patch):** آخرین پیشنهاد، ۹۰ مقدار در ۴۸ فایل نسبت به وضعیت همین شاخه است. علاوه بر دستهٔ متوقف‌شده، اصلاحات حاصل از بازبینیِ مجدد لباس‌ها را هم دارد. مثال: w001/s2، متخصص قلب، در شاخه هنوز لباس سرباز دارد؛ در پیشنهاد، روپوش پزشکی `f_mid_doctor`. این patch فقط خطوط portrait دارد. روی کپی جداگانه اعمال و هر ۴۸ فایل از نظر برابری تمام فیلدهای دیگر و هش خروجی بررسی شد: [هش‌ها](portrait-quality/patch-verification.json). هنگام تغییر main باید دوباره اعتبارسنجی شود.
+- **[مطالعه برای کلاینت سازگار](portrait-quality/client-rollout-study.csv):** برای هر ۳۵۸ مظنون در ۶۸ پرونده، انتخابی در مجموعهٔ ۱۳۷ تصویر که اختلاف سن حداکثر ۷، لباس مجاز، جنسیت اصلی، جدایی جفت‌های نزدیک در پرونده و یکتایی مجرم را رعایت کند. پرتره‌های مجرمان ۹ پروندهٔ دیگر رزرو شده‌اند. این مطالعه JSON اجرایی نیست؛ ۳۷ انتخابِ آن برای تاریخ پرونده و کلاینت قدیمی مجاز نیست. نصب APK بعدی تاریخ انتشار پرونده‌های قبلی را عوض نمی‌کند. فعال‌سازی گذشته‌نگر نیازمند سیاست سازگاری جداگانه است؛ پیشنهاد فنی برای بررسی، نگاشت نسخه‌دار در کلاینت با حفظ portrait فعلی برای کلاینت قدیمی است. این رفتار پیاده‌سازی نشده است.
 
-Base main: 1db49849ade2a9de7510d39069dc0ffe94be585b. Branch: portrait-scene-quality.
+[جدول هر مظنون](portrait-quality/before-after.csv): ستون before از main، branch_portrait مقدار واقعی شاخه، after پیشنهادِ patch با دارایی‌های قابل‌استفاده، و ستون‌های issues ایرادهای هر وضعیت‌اند. ستون remaining شامل کنترل دستهٔ سنی قدیمی هم هست. پرونده‌های c063–c070 و w007 فقط بررسی شدند و در نگاشت اجرایی دست نخوردند. all-slots، mapping-draft و before-after-draft یادداشت‌های تاریخی ۷ نوامبر هستند؛ آن‌ها را روی main فعلی اعمال نکنید.
 
-Scope: annotate all 127 portraits (124 main + 3 verified recovery assets), enforce age/wardrobe/visual-neighbour rules, review c001-c062 and w001-w006; w007 also included in global uniqueness checks. No main/release push, no APK. Content changes restricted to avatar fields; scene_variant implementation requires owner approval first.
+| سنجه در ۶۸ پرونده / ۳۵۸ جایگاه | مبنا | شاخه | پس از patch پیشنهادی |
+|---|---:|---:|---:|
+| اختلاف سن بیش از ۷ | ۱۰۷ | ۳۴ | ۱۰ |
+| لباس یا ابزار شغلی بدون تأیید نقش | ۸۰ | ۵۲ | ۷ |
+| دست‌کم یکی از این دو ایراد | ۱۶۱ | ۷۸ | ۱۶ |
 
-## Scene-variant design — awaiting owner approval
+این شمارش از جدول نقش‌ها و تخمین‌های رجیستری است، نه سن واقعی یک مدل انسانی. دو ردیف اول هم‌پوشانی دارند. در ۹ پروندهٔ فقط‌خواندنی، ۴ ایراد سن و ۱۲ ایراد لباس ثبت شد. در کل ۷۷ پرونده، ۴۰۶ مظنون بررسی شدند.
 
-- Keep existing scene enum unchanged. Add optional scene_variant, restricted to lowercase ASCII letters/digits/underscores, length 1..48, and a checked-in allowed variant registry keyed by base scene. Reject path separators/traversal and unknown pairs.
-- Server public case payload and summary expose scene_variant additively. No changes to rewards, solutions or schedules.
-- Flutter model defaults absent variant to null; scene widget receives both fields. Try assets/scenes/<scene>_<variant>.webp; on asset-load failure use the original assets/scenes/<scene>.webp, preserving the current base-scene animation and procedural last fallback. All call sites must pass variant.
-- Tests: legacy case JSON, valid/invalid variants, unknown pair rejection, public API propagation, successful variant display, missing-asset fallback, same base weather behavior.
-- Illustrations are atmospheric establishing views, never forensic evidence or culprit clues. Proposed first pairs: tower/clock, tower/apartment, library/binding, library/silver, lab/plant_growth, lab/educational_workshop, airport/lounge, airport/medical_warehouse.
-- Do not implement this design or add variant fields until Amin approves. Variant counts and scene briefs still pending the full location inventory.
-
-## Progress and verification
-
-- Ran requested git ls-remote --heads origin 'portrait-scene*': failed because this workspace is not an authenticated git checkout. Checked branch existence using authenticated GitHub branch API instead; no matching branch existed. Created portrait-scene-quality successfully from the base SHA.
-- Read main remotely; SHA unchanged from prior audit. Existing asset snapshot previously checked against remote blob SHAs. Three recovery images checked by Git blob SHA and opened visually this turn.
-- No tests claimed green at this checkpoint. No implementation complete yet.
+## رجیستری و شباهت
+[رجیستری](../art-registry.json) شامل ۱۲۷ تصویرِ مرجع و ۱۰ تصویر تازه است. سن تخمین هنری است؛ مبنای اولیهٔ بسیاری از سن‌ها portrait-ages قبلی بود، نه برآورد کور مستقل. رنگ پوست، رنگِ دیده‌شده در نقاشی زیر نور کهربایی است. جایی که مو پوشیده است نمی‌توان مدل زیر پوشش را تعیین کرد. برچسب یونیفرم از **چیزی که دیده می‌شود** می‌آید: در بازبینی مجدد، عینک پزشک، متر خیاط، تی نظافت، پیش‌بند آردی، کلاه دوچرخه و نشان سینه اصلاح شد. مجوز لباس برای هر جایگاه به متن دقیق نقش گره خورده؛ تغییر نقش مجوز را بی‌اعتبار می‌کند. کراپ کوچک f_mid_business و تیرگی دور چشم m_young_boxer نیازمند نظر هنری‌اند؛ مطالعهٔ کلاینت از این تصاویر استفاده نکرد.
+   
+برای تمام زوج‌های ۱۳۷ تصویر، برش نسبی مرکز صورت (x: ۲۰–۸۲٪، y: ۱۰–۷۳٪) مقایسه شد. pHash طیفی ۶۳ بیتی با فاصلهٔ همینگ حداکثر ۱۰ **یا** شباهت کسینوسی حداقل ۰٫۸۸ در بردار ۵۷۶تایی جهت گرادیان. این روش هویت‌سنج نیست؛ زاویه و نور می‌توانند شباهت کاذب بسازند. تمام ۴۵ زوج ماشینی با ورق تصویری بررسی شدند، شامل [زوج بین دو گروه](portrait-quality/cross-pool.webp). [نتیجه و هش هر تصمیم](portrait-quality/machine-candidates.json)؛ [۲۲ زوج ممنوع برای هم‌بازی‌شدن، شامل موارد چشم‌دیدهٔ بیرون آستانه](portrait-quality/editorial-neighbours.json). تست، اثرانگشت‌ها، هش فایل‌ها و تطابق مجموعهٔ تصمیم‌ها با محاسبهٔ زوج‌ها را می‌سنجد. تغییر فایل تصویر تصمیم قدیمی را باطل می‌کند. این فرآیند تضمین نمی‌کند هیچ شباهت ادراکی از چشم نیفتاده است.
+   
+ورق‌های ترکیب فعلی: [۱](portrait-quality/branch-casts-1.webp)، [۲](portrait-quality/branch-casts-2.webp)، [۳](portrait-quality/branch-casts-3.webp)، [۴](portrait-quality/branch-casts-4.webp). تصاویر تازه: [شش تصویر اول](portrait-quality/new-portraits.jpg)، [چهار تصویر بعد](portrait-quality/additional-portraits.webp)، [هر چهرهٔ جدید کنار سه همسایهٔ محاسباتی](portrait-quality/new-neighbours.webp). هر ده خروجی WebP با چشم دیده شد؛ هیچ لباس فرم، ابزار یا نوشته‌ای در آن‌ها لازم نیست. برداشت بازیکن از حالت چهره با تست کاربری سنجیده نشده است.
+   
+## ظرفیت و هزینه
+با محاسبهٔ تطبیق دوبخشی در `python tools/portrait_capacity.py`، پس از رزرو مجرم‌های بیرون دامنه، فقط **۵۸ از ۶۸** مجرم با فایل قابل‌استفاده در تاریخ پرونده، جنسیت، سن و لباس قابل تخصیص یکتایند. این سقف حتی قبل از محدودیت شباهتِ داخل پرونده است. با شش عکس تازه و حذف *فرضی* قید عرضه، ظرفیت ۶۴ بود؛ با چهار عکس تکمیلی، ۶۸ شد. شناسه‌های تازه با first_build نامعلوم و تاریخ مسدودکنندهٔ 9999-12-31 ثبت شده‌اند؛ این تاریخ وعدهٔ انتشار نیست و فقط پس از تأیید عرضه باید جایگزین شود. هیچ پروندهٔ اجرایی به این ده شناسه اشاره نمی‌کند.
+   
+**حجم واقعی اضافه‌شده به دارایی‌های اپ: ۲۹۸٬۷۰۶ بایت**؛ ۱۰ فایل ۵۱۲×۵۱۲ WebP، هر کدام ۲۴٬۸۴۰ تا ۳۴٬۶۱۸ بایت. سه فایل بازیابی‌شدهٔ قبلی اکنون در main هستند و دوباره در این اختلاف حساب نشده‌اند. عکس‌های داخل docs بسته‌بندی نمی‌شوند. حجم APK اندازه‌گیری نشده چون ساخت APK ممنوع بود. [فهرست مسیر، ابعاد، حجم و SHA-256](portrait-quality/new-assets.csv)، [مشخصات تمایز و پرامپت‌ها ۱–۶](portrait-quality/new-portrait-briefs.json)، [۷–۱۰](portrait-quality/additional-briefs.json).
+   
+## صحنه‌ها: تصمیم لازم پیش از کدنویسی
+[موجودی مکان و واریانت پیشنهادی هر پرونده](portrait-quality/scene-inventory.csv) و [شمارش به تفکیک ۲۰ نوع صحنه](portrait-quality/scene-counts.csv). روی main فعلی ۷۷ پرونده نوشته شده است. در ۶۹ پروندهٔ مبنای اولیه ۵۲ کلید واریانت پیشنهاد می‌شود؛ در ۷۷ پروندهٔ فعلی ۶۰ کلید؛ با ۱۷ ایدهٔ هنوز ننوشته ۷۱ کلید. این تعداد پیشنهاد طراحی است، نه اثبات حداقل بهینه یا تعداد فایل ساخته‌شده. بعضی پرونده‌ها تصویر پایه را حفظ می‌کنند. نمونه: تالار نسخه‌های خطی، کتابخانهٔ خانوادگی و اتاق دریافت اسناد یک محیط واحد نیستند. c061 طبق متن فعلی کتابخانهٔ خانوادگی است؛ شغل صحاف در داستان به‌تنهایی دلیل انتخاب کارگاه صحافی نیست.
+   
+طرح پیشنهادی: scene پایه ثابت بماند؛ scene_variant اختیاری با کلید مجاز زیر هر پایه و الگوی ASCII کوچک [a-z0-9_]، طول ۱ تا ۴۸. سرور جفت ناشناخته و مسیر فایل را رد کند، فیلد را به جزئیات و خلاصهٔ عمومی بدهد. Flutter ابتدا scenes/<scene>_<variant>.webp، سپس تصویر پایه و در آخر fallback موجود را نشان دهد؛ آب‌وهوا و حرکت متعلق به scene پایه بماند. تست‌ها: فایل قدیمی بدون variant، جفت معتبر/نامعتبر، انتشار به مدل، خواندن فایل، fallback و حفظ انیمیشن. **هنوز کد یا JSON صحنه عوض نشده؛ منتظر تأیید مالک.**
+   
+دو اثبات تصویری فقط در docs (مجموع ۲۲۷٬۴۶۴ بایت): [برج ساعت برای c020](portrait-quality/scene-proofs/tower_clock.webp) و [داخل آپارتمان برای c058](portrait-quality/scene-proofs/tower_apartment.webp). این دو صحنه عمداً در APK قرار نگرفته‌اند. در بازبینی تصویریِ نسخهٔ دوم، ساعت از سطح میدان خوانا نیست و از پنجرهٔ آپارتمان فقط ساختمان‌های مسکونی دیده می‌شوند. [پرامپت‌های صحنه](portrait-quality/scene-proofs/prompts.json). سایر واریانت‌ها تولید نشده‌اند.
+   
+## آینده و اعتبارسنجی
+[فرم و گردش کار نویسنده](../art-request-template.md)، [۱۹۸ جایگاه ایده‌های ۱ تا ۳۶](portrait-quality/future-slots.csv)؛ در نسخهٔ فعلی ۹۸ جایگاه متعلق به ایده‌های نوشته‌شده و ۱۰۰ جایگاه مربوط به ۱۷ ایدهٔ ننوشته‌اند. مبنای ایده‌ها blob a6396b588d63ce954564c63f2153429efad989d5 در docs/writing-plan است. برای ایده‌های ننوشته تصویر یا تخصیص شخصی تولید نشده است.
+   
+- `python tools/verify_portrait_changes.py --base a920b716e14185d679557fdc4f7ececfaf30ab7f` برای بازتولید کنترل JSON در clone کامل. در این محیط همان کنترل روی ۷۷ فایل اصلی با هش گیـت تأییدشده اجرا شد. پیش از بازگرداندن c031، ۷۷ blob شاخه دوباره از GitHub تطبیق داده شدند؛ c031 برای جلوگیری از تکرار موقت در آلبوم، به blob خود main بازگردانده شد. نتیجهٔ نهایی: ۳۹ فایل، ۱۰۵ رشتهٔ portrait، بدون تغییر فیلد دیگر.
+- `python server/tests/test_case_art_contract.py -v`: شش تست، چهار پاس؛ تست سن/لباس و تست جدایی چهره‌ها در وضعیت واقعی شاخه رد می‌شوند. مثال جدایی: c048. تست یکتایی مجرم، رجیستری و هش فایل‌ها، ثبت تصمیم شباهت‌ها و عدم استفاده از عکس منتشرنشده پاس شدند. هیچ استثنایی برای سبز نشان دادن تست‌ها اضافه نشده است.
+- پنج تابع واقعی test_content.py مستقیماً با loader مخزن اجرا شدند: تعداد و زمان‌بندی ۷۰ شبانه، وجود فایل‌ها، یکتایی مجرم، دستهٔ سنی قدیمی و محدودیت انتشار عکس. هر پنج پاس شدند. این اجرای همهٔ pytest نیست. همهٔ ۱۳۷ WebP با Pillow باز و decode شدند. تست Flutter برای asset manifest، decode و مسیر نمایش تعبیه شده؛ Flutter SDK در محیط محلی موجود نبود. تست روی دستگاه انجام نشده است.
+- بررسی خودکار نوشتن دسته‌ای از JSONهای کامل را به علت احتمال تغییر داستان/مدارک/راه‌حل رد کرد. آن نوشتن تکرار نشد؛ تغییرات باقی‌مانده به‌صورت patch محدود و قابل‌آزمایش تحویل شده‌اند. برای ادغام، نتیجهٔ CI همین سرشاخه، عرضهٔ سازگار برای تصاویر و ایرادهای باز باید جدا بررسی شوند. وضعیت CI را از لینک دقیق کامیت تحویل‌شده ببینید؛ نتیجهٔ محلی جای نتیجهٔ GitHub نیست.
