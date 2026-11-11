@@ -48,7 +48,7 @@ jobs:
         working-directory: server
         run: |
           set -o pipefail
-          pytest -q 2>&1 | tee ../pytest.log
+          pytest -q -rs 2>&1 | tee ../pytest.log
       - name: Report pytest failure
         if: failure()
         run: echo "::error title=pytest::$(tail -c 6000 pytest.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"
@@ -248,7 +248,7 @@ jobs:
           TEST_AUX_DATABASE_URL: postgresql+asyncpg://suite_ci:isolated-ci-only@localhost:5432/aux_test
         run: |
           set -o pipefail
-          pytest -q -p no:cacheprovider 2>&1 | tee ../pytest-pg.log
+          pytest -q -rs -p no:cacheprovider 2>&1 | tee ../pytest-pg.log
       - name: Report pytest failure
         if: failure()
         run: echo "::error title=pytest-postgres::$(tail -c 6000 pytest-pg.log | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')"

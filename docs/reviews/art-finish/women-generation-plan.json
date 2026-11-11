@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-11",
+  "source_commit": "3960e65b0ecff48b3d8963aa0c0fc7c79114109a",
+  "capacity_tool_run": true,
+  "future_slots_checked": "docs/reviews/portrait-quality/future-slots.csv",
+  "before_capacity": {
+    "groups": [
+      {
+        "gender": "f",
+        "age_band": "young",
+        "before_files": 10,
+        "before_distinct": 9,
+        "target": 12,
+        "shortage": 3,
+        "generated": 3,
+        "after_distinct": 12,
+        "unwritten_slots": 5
+      },
+      {
+        "gender": "f",
+        "age_band": "mid",
+        "before_files": 41,
+        "before_distinct": 35,
+        "target": 12,
+        "shortage": 0,
+        "generated": 0,
+        "after_distinct": 35,
+        "unwritten_slots": 35
+      },
+      {
+        "gender": "f",
+        "age_band": "old",
+        "before_files": 18,
+        "before_distinct": 18,
+        "target": 12,
+        "shortage": 0,
+        "generated": 0,
+        "after_distinct": 18,
+        "unwritten_slots": 6
+      },
+      {
+        "gender": "m",
+        "age_band": "young",
+        "before_files": 11,
+        "before_distinct": 9,
+        "target": 12,
+        "shortage": 3,
+        "generated": 4,
+        "after_distinct": 13,
+        "unwritten_slots": 6
+      },
+      {
+        "gender": "m",
+        "age_band": "mid",
+        "before_files": 35,
+        "before_distinct": 30,
+        "target": 12,
+        "shortage": 0,
+        "generated": 7,
+        "after_distinct": 37,
+        "unwritten_slots": 33
+      },
+      {
+        "gender": "m",
+        "age_band": "old",
+        "before_files": 22,
+        "before_distinct": 18,
+        "target": 12,
+        "shortage": 0,
+        "generated": 2,
+        "after_distinct": 20,
+        "unwritten_slots": 13
+      }
+    ],
+    "unknown_gender_slots": 2,
+    "note": "Distinct count = maximum independent set under reviewed similarity pairs. Includes retained occupational images and staged assets. This is not current neutral release capacity."
+  },
+  "requested_new_neutral_capacity": [
+    {
+      "gender": "f",
+      "age_band": "mid",
+      "new": 4
+    },
+    {
+      "gender": "f",
+      "age_band": "old",
+      "new": 4
+    }
+  ],
+  "note": "Owner explicitly requested four additional neutral everyday women in each band. Broad existing file counts already exceed 12 but include legacy styles and occupational/formal variants; this is an authorised neutral-pool expansion, not a claim that the generic 12-per-band target was unmet.",
+  "all_unreleased": true,
+  "no_case_changes": true
+}

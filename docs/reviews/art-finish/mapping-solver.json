@@ -1,0 +1,9 @@
+{
+  "status": 0,
+  "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "optimal": true,
+  "mip_gap": 0.0,
+  "unresolved_original_slots": 15,
+  "constraints": "Only a valid new assignment or retention of the original; global unique culprit, no repeated/lookalike cast, release ledger, gender, <=7-year age gap, role permissions, existing legacy fallback-category budget <=8.",
+  "note": "Run against an unchanged main input to reproduce the before/after report; keep the candidate copy separate."
+}

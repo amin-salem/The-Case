@@ -109,6 +109,28 @@ class _AnimatedSuspectState extends State<AnimatedSuspect> with SingleTickerProv
 /// Painted portraits shipped with the app (assets/portraits). A suspect whose avatar names one of
 /// these is shown with it; everyone else is drawn by CharacterPainter.
 const Set<String> kPortraits = {
+  'f_neutral_36_round',
+  'f_neutral_42_diamond',
+  'f_neutral_48_square',
+  'f_neutral_54_heart',
+  'f_neutral_58_pear',
+  'f_neutral_64_long',
+  'f_neutral_70_soft',
+  'f_neutral_77_angular',
+
+  'm_neutral_29_long',
+  'm_neutral_34_dimples',
+  'm_neutral_41_shaved',
+  'm_neutral_44_nose',
+  'm_neutral_47_copper',
+  'm_neutral_50_silver',
+  'm_neutral_52_curls',
+  'm_neutral_55_brow',
+  'm_neutral_64_lined',
+  'm_neutral_62_soft',
+
+
+
   'm_mid_researcher',
   'm_mid_worker',
   'f_mid_waitress',
@@ -236,6 +258,22 @@ const Set<String> kPortraits = {
   'm_young_undergrad',
   'm_young_waiter',
   'm_young_worker',
+  'f_neutral_20_pixie',
+  'f_neutral_27_coils',
+  'm_neutral_20_round',
+  'm_neutral_24_freckles',
+  'm_neutral_29_coils',
+  'm_neutral_38_coils',
+  'm_neutral_39_broad',
+  'm_neutral_41_oval',
+  'm_neutral_44_long',
+  'm_neutral_45_freckles',
+  'm_neutral_45_waves',
+  'm_neutral_46_angular',
+  'm_neutral_53_square',
+  'm_neutral_56_angular',
+  'm_neutral_56_round',
+  'f_neutral_29_square',
 };
 
 /// Draws a character in a 200 x 220 box, scaled to the widget size.

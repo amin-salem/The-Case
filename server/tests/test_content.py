@@ -216,6 +216,10 @@ def test_case_uses_only_portraits_players_have():
             continue
         for s in c.data["suspects"]:
             p = s["avatar"].get("portrait")
-            if p in rel["portraits"] and day < rel["portraits"][p]["usable_from"]:
+            if p in rel["portraits"] and (
+                rel["portraits"][p].get("first_build") is None
+                or not rel["portraits"][p].get("usable_from")
+                or day < rel["portraits"][p]["usable_from"]
+            ):
                 early.append((c.id, day, s["id"], p, rel["portraits"][p]["usable_from"]))
     assert not early, f"these cases use a portrait most players do not have yet: {early}"

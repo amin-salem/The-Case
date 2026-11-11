@@ -1,0 +1,289 @@
+{
+  "assets_before_bytes": 8316768,
+  "assets_after_bytes": 8723878,
+  "increase_bytes": 407110,
+  "new_portrait_bytes": 444010,
+  "new_portraits": 34,
+  "generated_portraits": 24,
+  "imported_staged_portraits": 10,
+  "new_avatar_files": 0,
+  "new_frame_files": 0,
+  "new_scene_files": 0,
+  "changed_files": [
+    {
+      "path": "app/assets/portraits/m_neutral_53_square.webp",
+      "before": 0,
+      "after": 17096
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_24_freckles.webp",
+      "before": 0,
+      "after": 10964
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_20_pixie.webp",
+      "before": 0,
+      "after": 11288
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_56_round.webp",
+      "before": 0,
+      "after": 13994
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_27_coils.webp",
+      "before": 0,
+      "after": 15240
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_45_freckles.webp",
+      "before": 0,
+      "after": 10794
+    },
+    {
+      "path": "app/assets/portraits/m_mid_researcher.webp",
+      "before": 32146,
+      "after": 21782
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_41_oval.webp",
+      "before": 0,
+      "after": 12916
+    },
+    {
+      "path": "app/assets/portraits/f_young_painter.webp",
+      "before": 25752,
+      "after": 25248
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_56_angular.webp",
+      "before": 0,
+      "after": 13190
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_29_square.webp",
+      "before": 0,
+      "after": 9774
+    },
+    {
+      "path": "app/assets/portraits/m_mid_worker.webp",
+      "before": 30408,
+      "after": 20912
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_45_waves.webp",
+      "before": 0,
+      "after": 14690
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_20_round.webp",
+      "before": 0,
+      "after": 14080
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_39_broad.webp",
+      "before": 0,
+      "after": 14810
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_44_long.webp",
+      "before": 0,
+      "after": 9846
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_38_coils.webp",
+      "before": 0,
+      "after": 10272
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_46_angular.webp",
+      "before": 0,
+      "after": 12000
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_29_coils.webp",
+      "before": 0,
+      "after": 12870
+    },
+    {
+      "path": "app/assets/frames/frame_ice.webp",
+      "before": 47472,
+      "after": 39908
+    },
+    {
+      "path": "app/assets/frames/frame_persian.webp",
+      "before": 42636,
+      "after": 39612
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_29_long.webp",
+      "before": 0,
+      "after": 11828,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_34_dimples.webp",
+      "before": 0,
+      "after": 13424,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_41_shaved.webp",
+      "before": 0,
+      "after": 15742,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_44_nose.webp",
+      "before": 0,
+      "after": 11700,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_47_copper.webp",
+      "before": 0,
+      "after": 17482,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/avatars/ex_watchmaker.webp",
+      "before": 23894,
+      "after": 17946,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_50_silver.webp",
+      "before": 0,
+      "after": 13712,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_52_curls.webp",
+      "before": 0,
+      "after": 17712,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_55_brow.webp",
+      "before": 0,
+      "after": 12916,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_64_lined.webp",
+      "before": 0,
+      "after": 17778,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/m_neutral_62_soft.webp",
+      "before": 0,
+      "after": 17588,
+      "revision": "pending remap / authorised watchmaker scarf"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_36_round.webp",
+      "before": 0,
+      "after": 9572,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_42_diamond.webp",
+      "before": 0,
+      "after": 7792,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_48_square.webp",
+      "before": 0,
+      "after": 9662,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_54_heart.webp",
+      "before": 0,
+      "after": 15726,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_58_pear.webp",
+      "before": 0,
+      "after": 13046,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_64_long.webp",
+      "before": 0,
+      "after": 10132,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_70_soft.webp",
+      "before": 0,
+      "after": 14228,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_77_angular.webp",
+      "before": 0,
+      "after": 10146,
+      "revision": "Eight neutral covered women, 2026-11-11"
+    }
+  ],
+  "existing_avatars_above_18000": [
+    [
+      "ex_cyber",
+      21634
+    ],
+    [
+      "ex_fisherman",
+      23816
+    ],
+    [
+      "ex_forensic",
+      20262
+    ],
+    [
+      "ex_keeper",
+      24678
+    ],
+    [
+      "ex_librarian",
+      21616
+    ],
+    [
+      "ex_rainman",
+      23540
+    ],
+    [
+      "ex_taxi",
+      22372
+    ],
+    [
+      "ex_watchmaker",
+      23894
+    ],
+    [
+      "ex_writer",
+      22262
+    ]
+  ],
+  "scarf_revision_delta_bytes": -5492,
+  "pending_revision": {
+    "assets_before_bytes": 8489640,
+    "assets_after_bytes": 8633574,
+    "delta_bytes": 143934,
+    "new_portrait_bytes": 149882,
+    "avatar_before_bytes": 23894,
+    "avatar_after_bytes": 17946,
+    "new_portraits": 10,
+    "apk_built": false
+  },
+  "women_revision": {
+    "before": 8633574,
+    "after": 8723878,
+    "delta": 90304,
+    "new_portraits": 8,
+    "existing_assets_recompressed": 0
+  }
+}

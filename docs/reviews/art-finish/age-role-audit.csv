@@ -1,0 +1,144 @@
+id,filename_band,apparent_age,correct_band,age_label_error,decision,clothing,formality,roles_ok,roles_not_ok,restrictions
+f_mid_agent,mid,42,mid,False,خنثی هست و بمونه,charcoal jacket and black scarf,everyday,*,,
+f_mid_archaeologist,mid,45,mid,False,خنثی هست و بمونه,olive scarf and dark coat,everyday,*,,
+f_mid_attorney,mid,38,mid,False,خنثی هست و بمونه,dark burgundy scarf and dark jacket,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+f_mid_baker,mid,42,mid,False,خنثی هست و بمونه,pink scarf and black blouse,everyday,*,,
+f_mid_banker,mid,45,mid,False,خنثی هست و بمونه,camel blazer and black scarf,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+f_mid_business,mid,42,mid,False,جایگزین خنثی تولید بشه,black scarf and plain black top,everyday,*,,Existing image retained. Avoid for new cast assignments pending crop/eye-shadow replacement.
+f_mid_chef,mid,42,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,black double-breasted chef jacket and black scarf,everyday,آشپز | سرآشپز | قناد | شیرینی پز | نانوا | شیرینی | ظرف شور | آشپزخانه,,Visible double-breasted chef jacket; only kitchen/catering roles.
+f_mid_cleaner,mid,48,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark work smock with a mop head visible behind the shoulder,everyday,نظافت | خدمتکار | نظافتچی,,Visible occupational clothing/accessory; only listed roles.
+f_mid_clerk,mid,40,mid,False,خنثی هست و بمونه,dark teal scarf and brown jacket,everyday,*,,
+f_mid_commander,mid,52,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark formal uniform and black scarf,everyday,نظامی | سرباز | ارتش | فرمانده,,Visible occupational clothing/accessory; only listed roles.
+f_mid_curator,mid,42,mid,False,خنثی هست و بمونه,cream scarf and dark jacket,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+f_mid_designer,mid,36,mid,False,خنثی هست و بمونه,mauve scarf and dark blouse,everyday,*,,
+f_mid_director,mid,48,mid,False,خنثی هست و بمونه,black scarf and black coat,everyday,*,,
+f_mid_doctor,mid,40,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,white medical coat and black scarf,everyday,پزشک | پرستار | بهیار | جراح | متخصص قلب | داروساز | سرپرستار,,Visible occupational clothing/accessory; only listed roles.
+f_mid_gallery,mid,40,mid,False,خنثی هست و بمونه,mustard scarf and dark coat,everyday,*,,
+f_mid_guest,mid,38,mid,False,خنثی هست و بمونه,olive jacket and black scarf,everyday,*,,
+f_mid_housewife,mid,48,mid,False,خنثی هست و بمونه,patterned russet scarf and dark top,everyday,*,,
+f_mid_inspector,mid,40,mid,False,خنثی هست و بمونه,black scarf and dark coat,everyday,*,,
+f_mid_journalist,mid,40,mid,False,خنثی هست و بمونه,burgundy scarf and brown jacket,everyday,*,,
+f_mid_judge,mid,48,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark formal robe and black scarf,everyday,قاضی | بازپرس,,Visible occupational clothing/accessory; only listed roles.
+f_mid_laborer,mid,42,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,yellow work jacket and black scarf,everyday,کارگر ساختم | کارگاه ساختم | اپراتور جرثقیل | کارگر راه | راه ساز,,Visible occupational clothing/accessory; only listed roles.
+f_mid_lawyer,mid,42,mid,False,خنثی هست و بمونه,black scarf and dark blazer,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+f_mid_librarian,mid,56,old,True,خنثی هست و بمونه,burgundy scarf and textured cardigan,everyday,*,,
+f_mid_manager,mid,40,mid,False,خنثی هست و بمونه,black scarf and dark top,everyday,*,,
+f_mid_mechanic,mid,42,mid,False,خنثی هست و بمونه,brown work jacket and blue-grey scarf,everyday,*,,
+f_mid_officer,mid,38,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark uniform and black scarf,everyday,نگهبان | حراست | امنیت | حفاظت | زندانبان,,Visible occupational clothing/accessory; only listed roles.
+f_mid_pastry,mid,48,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,patterned scarf and light apron,everyday,آشپز | سرآشپز | قناد | شیرینی پز | نانوا | شیرینی | ظرف شور | آشپزخانه,,Visible occupational clothing/accessory; only listed roles.
+f_mid_pharmacist,mid,38,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,cream white coat and black scarf,everyday,پزشک | پرستار | بهیار | جراح | متخصص قلب | داروساز | سرپرستار,,Visible occupational clothing/accessory; only listed roles.
+f_mid_pilot,mid,36,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,black uniform jacket white shirt and tie,everyday,خلبان | مهماندار هواپیما,,Visible occupational clothing/accessory; only listed roles.
+f_mid_publisher,mid,58,old,True,خنثی هست و بمونه,dark tailored jacket and black scarf,everyday,*,,
+f_mid_restorer,mid,38,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark coat scarf and goggles on head,everyday,مرمتگر | مرمت کار | مرمت,,Visible occupational clothing/accessory; only listed roles.
+f_mid_scholar,mid,48,mid,False,خنثی هست و بمونه,tan scarf and dark jacket,everyday,*,,
+f_mid_scientist,mid,40,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,white laboratory coat tan scarf and goggles on head,everyday,آزمایشگاه | آزمایشگاهی | پژوهشگر آزمایش,,Visible occupational clothing/accessory; only listed roles.
+f_mid_singer,mid,36,mid,False,خنثی هست و بمونه,patterned burgundy scarf and dark top,everyday,*,,
+f_mid_soldier,mid,40,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,olive military shirt and green scarf,everyday,نظامی | سرباز | ارتش | فرمانده,,Visible occupational clothing/accessory; only listed roles.
+f_mid_surgeon,mid,52,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,blue surgical clothing and lowered mask,everyday,پزشک | پرستار | بهیار | جراح | متخصص قلب | داروساز | سرپرستار,,Visible occupational clothing/accessory; only listed roles.
+f_mid_teacher,mid,42,mid,False,خنثی هست و بمونه,black scarf and dark top,everyday,*,,
+f_mid_waitress,mid,32,mid,False,خنثی هست و بمونه,plain charcoal blouse and black scarf,everyday,*,,
+f_mid_widow,mid,40,mid,False,خنثی هست و بمونه,black scarf and black clothing,everyday,*,,
+f_mid_witness,mid,36,mid,False,خنثی هست و بمونه,green scarf and dark coat,everyday,*,,
+f_old_aristocrat,old,62,old,False,خنثی هست و بمونه,green scarf jewellery and dark top,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+f_old_baker,old,68,old,False,خنثی هست و بمونه,patterned scarf and dark top,everyday,*,,
+f_old_cook,old,62,old,False,شغلی هست؛ فقط برای همون شغل بمونه,olive scarf and apron,everyday,آشپز | سرآشپز | قناد | شیرینی پز | نانوا | شیرینی | ظرف شور | آشپزخانه,,Visible occupational clothing/accessory; only listed roles.
+f_old_countess,old,65,old,False,خنثی هست و بمونه,black scarf and dark patterned jacket,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+f_old_fortune,old,62,old,False,خنثی هست و بمونه,burgundy scarf and dark clothing,everyday,*,,
+f_old_grandma,old,65,old,False,خنثی هست و بمونه,black scarf and dark top,everyday,*,,
+f_old_neighbor,old,78,old,False,خنثی هست و بمونه,patterned brown scarf and brown cardigan,everyday,*,,
+f_old_professor,old,62,old,False,خنثی هست و بمونه,black scarf and dark jacket,everyday,*,,
+f_old_retired,old,60,old,False,خنثی هست و بمونه,mustard scarf and brown cardigan,everyday,*,,
+f_old_retiree,old,66,old,False,خنثی هست و بمونه,burgundy scarf and knitted cardigan,everyday,*,,
+f_old_rich,old,65,old,False,خنثی هست و بمونه,black scarf and formal dark clothing,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+f_old_seamstress,old,63,old,False,خنثی هست و بمونه,rust scarf and brown clothing,everyday,*,,
+f_old_shopkeeper,old,62,old,False,خنثی هست و بمونه,black scarf and black top,everyday,*,,
+f_old_socialite,old,62,old,False,خنثی هست و بمونه,black scarf pearl necklace and dark jacket,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+f_old_villager,old,70,old,False,خنثی هست و بمونه,patterned rust scarf and brown knitwear,everyday,*,,
+f_old_widow,old,68,old,False,خنثی هست و بمونه,cream scarf and dark coat,everyday,*,,
+f_young_artist,young,27,young,False,خنثی هست و بمونه,brown scarf and patterned top,everyday,*,,
+f_young_athlete,young,28,young,False,خنثی هست و بمونه,dark zipped sports jacket and black scarf,everyday,*,,
+f_young_bookworm,young,27,young,False,خنثی هست و بمونه,teal scarf and brown coat with bag strap,everyday,*,,
+f_young_chemist,young,32,mid,True,شغلی هست؛ فقط برای همون شغل بمونه,white laboratory coat and light grey scarf,everyday,آزمایشگاه | آزمایشگاهی | پژوهشگر آزمایش,,Visible occupational clothing/accessory; only listed roles.
+f_young_cook,young,28,young,False,شغلی هست؛ فقط برای همون شغل بمونه,black double-breasted kitchen jacket and dark headscarf,everyday,آشپز | سرآشپز | قناد | شیرینی پز | نانوا | شیرینی | ظرف شور | آشپزخانه,,Visible occupational clothing/accessory; only listed roles.
+f_young_firefighter,young,32,mid,True,شغلی هست؛ فقط برای همون شغل بمونه,reflective black yellow protective jacket,everyday,آتش نشان,,Visible occupational clothing/accessory; only listed roles.
+f_young_nurse,young,28,young,False,شغلی هست؛ فقط برای همون شغل بمونه,white medical uniform and white head covering,everyday,پزشک | پرستار | بهیار | جراح | متخصص قلب | داروساز | سرپرستار,,Visible occupational clothing/accessory; only listed roles.
+f_young_painter,young,30,young,False,شغلی هست؛ فقط برای همون شغل بمونه,paint-marked shirt and patterned scarf,everyday,نقاش | رنگ کار,,Visible occupational clothing/accessory; only listed roles.
+f_young_photographer,young,33,mid,True,خنثی هست و بمونه,mustard scarf and dark coat with strap,everyday,*,,
+f_young_receptionist,young,27,young,False,شغلی هست؛ فقط برای همون شغل بمونه,dark headscarf and top with a rectangular name badge,everyday,پذیرش | مهماندار,,Visible occupational clothing/accessory; only listed roles.
+f_young_researcher,young,30,young,False,شغلی هست؛ فقط برای همون شغل بمونه,white laboratory coat and dark scarf,everyday,آزمایشگاه | آزمایشگاهی | پژوهشگر آزمایش,,Visible occupational clothing/accessory; only listed roles.
+f_young_student,young,24,young,False,خنثی هست و بمونه,dark scarf and plain dark clothing,everyday,*,,
+f_young_waitress,young,25,young,False,خنثی هست و بمونه,black scarf and plain black top,everyday,*,,
+m_mid_artist,mid,38,mid,False,خنثی هست و بمونه,dark artistic work jacket; hand visible,everyday,*,,
+m_mid_barista,mid,35,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark shirt and brown apron,everyday,آشپز | سرآشپز | قناد | شیرینی پز | نانوا | شیرینی | ظرف شور | آشپزخانه,,Visible occupational clothing/accessory; only listed roles.
+m_mid_business,mid,50,mid,False,خنثی هست و بمونه,grey formal jacket white shirt,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+m_mid_captain,mid,60,old,True,خنثی هست و بمونه,"plain dark peacoat and civilian fisherman-style flat cap, no insignia",everyday,*,,
+m_mid_chef,mid,42,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,white chef coat,everyday,آشپز | سرآشپز | قناد | شیرینی پز | نانوا | شیرینی | ظرف شور | آشپزخانه,,Visible occupational clothing/accessory; only listed roles.
+m_mid_conductor,mid,42,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark formal uniform and peaked cap,everyday,رئیس قطار | مسئول قطار | مهماندار واگن | مهماندار قطار,,Visible occupational clothing/accessory; only listed roles.
+m_mid_cook,mid,50,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,white kitchen coat and brown apron,everyday,آشپز | سرآشپز | قناد | شیرینی پز | نانوا | شیرینی | ظرف شور | آشپزخانه,,Visible occupational clothing/accessory; only listed roles.
+m_mid_doctor,mid,48,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,white medical coat and stethoscope,everyday,پزشک | پرستار | بهیار | جراح | متخصص قلب | داروساز | سرپرستار,,Visible occupational clothing/accessory; only listed roles.
+m_mid_driver,mid,36,mid,False,خنثی هست و بمونه,brown rugged jacket,everyday,*,,
+m_mid_fixer,mid,48,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,brown work shirt with leather work-apron straps,everyday,تعمیرکار | مکانیک | کارگر | تکنسین | برق کار | تأسیسات,گارسون | پیشخدمت | پیش خدمت,Visible occupational clothing/accessory; only listed roles.
+m_mid_guard,mid,40,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark uniform and cap,everyday,نگهبان | حراست | امنیت | حفاظت | زندانبان,,Visible occupational clothing/accessory; only listed roles.
+m_mid_lawyer,mid,42,mid,False,خنثی هست و بمونه,black suit white shirt and tie,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+m_mid_lecturer,mid,52,mid,False,خنثی هست و بمونه,brown tweed jacket and white open collar,everyday,*,,
+m_mid_merchant,mid,50,mid,False,خنثی هست و بمونه,brown textured coat,everyday,*,,
+m_mid_nurse,mid,38,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,blue medical scrubs,everyday,پزشک | پرستار | بهیار | جراح | متخصص قلب | داروساز | سرپرستار,,Visible occupational clothing/accessory; only listed roles.
+m_mid_officer,mid,45,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark tailored suit with a rectangular name badge,everyday,پذیرش | مهماندار,,Visible occupational clothing/accessory; only listed roles.
+m_mid_photographer,mid,45,mid,False,خنثی هست و بمونه,brown jacket with shoulder strap,everyday,*,,
+m_mid_policeman,mid,50,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark police uniform with epaulettes,everyday,پلیس | افسر انتظامی | مامور انتظامی | مأمور انتظامی,,Visible occupational clothing/accessory; only listed roles.
+m_mid_researcher,mid,46,mid,False,خنثی هست و بمونه,plain teal jacket and cream collarless shirt,everyday,*,,
+m_mid_resident,mid,52,mid,False,خنثی هست و بمونه,plain beige collared shirt,everyday,*,,
+m_mid_roadworker,mid,50,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,yellow reflective work jacket,everyday,کارگر ساختم | کارگاه ساختم | اپراتور جرثقیل | کارگر راه | راه ساز,,Visible occupational clothing/accessory; only listed roles.
+m_mid_sailor,mid,50,mid,False,خنثی هست و بمونه,dark hooded heavy coat,everyday,*,,
+m_mid_teacher,mid,45,mid,False,خنثی هست و بمونه,plain olive shirt,everyday,*,,
+m_mid_technician,mid,40,mid,False,شغلی هست؛ فقط برای همون شغل بمونه,dark work clothes with cap and straps,everyday,تعمیرکار | مکانیک | تکنسین | نصاب | تأسیسات | نورپرداز,,Visible occupational clothing/accessory; only listed roles.
+m_mid_tycoon,mid,50,mid,False,خنثی هست و بمونه,dark formal suit and tie,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+m_mid_worker,mid,36,mid,False,خنثی هست و بمونه,plain olive collared shirt,everyday,*,,
+m_old_bakerman,old,70,old,False,شغلی هست؛ فقط برای همون شغل بمونه,dark apron dusted with flour over a collared shirt,everyday,نانوا | نانوایی,,Visible occupational clothing/accessory; only listed roles.
+m_old_boss,old,60,old,False,خنثی هست و بمونه,dark formal jacket and black shirt,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+m_old_butler,old,55,mid,True,شغلی هست؛ فقط برای همون شغل بمونه,white shirt black waistcoat and bow tie,everyday,گارسون | پیشخدمت | مهماندار | پیش خدمت,,Visible occupational clothing/accessory; only listed roles.
+m_old_captain,old,65,old,False,خنثی هست و بمونه,dark coat and flat cap,everyday,*,,
+m_old_cleric,old,70,old,False,شغلی هست؛ فقط برای همون شغل بمونه,white turban and brown religious robe,everyday,روحانی | آخوند | امام جماعت,,Visible occupational clothing/accessory; only listed roles.
+m_old_farmer,old,70,old,False,خنثی هست و بمونه,brown jacket and flat cap,everyday,*,,
+m_old_fisher,old,65,old,False,خنثی هست و بمونه,brown coat and knitted cap,everyday,*,,
+m_old_flatcap,old,66,old,False,خنثی هست و بمونه,brown jacket and flat cap,everyday,*,,
+m_old_gardener,old,62,old,False,خنثی هست و بمونه,plain olive work shirt,everyday,*,,
+m_old_grandpa,old,70,old,False,خنثی هست و بمونه,beige cardigan and open collar,everyday,*,,
+m_old_jurist,old,72,old,False,خنثی هست و بمونه,dark formal jacket white shirt,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+m_old_painter,old,68,old,False,خنثی هست و بمونه,brown jacket and scarf,everyday,*,,
+m_old_physician,old,65,old,False,خنثی هست و بمونه,dark jacket white collar and tie,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+m_old_professor,old,68,old,False,خنثی هست و بمونه,dark textured jacket,everyday,*,,
+m_old_rich,old,70,old,False,خنثی هست و بمونه,black formal coat,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+m_old_schoolmaster,old,66,old,False,خنثی هست و بمونه,brown formal jacket and tie,formal,*,نظافت | نظافتچی | خدمتکار | سرایدار | باربر | کارگر | رختشوی,Formal or affluent styling: avoid manual-service/cleaning roles.
+m_old_scientist,old,56,old,False,شغلی هست؛ فقط برای همون شغل بمونه,white laboratory coat and tie,everyday,آزمایشگاه | آزمایشگاهی | پژوهشگر آزمایش,,Visible occupational clothing/accessory; only listed roles.
+m_old_tailor,old,68,old,False,شغلی هست؛ فقط برای همون شغل بمونه,tailor measuring tape over a dark waistcoat and collared shirt,everyday,خیاط,,Visible occupational clothing/accessory; only listed roles.
+m_old_warden,old,62,old,False,شغلی هست؛ فقط برای همون شغل بمونه,brown uniform with shoulder insignia,everyday,نگهبان | حراست | امنیت | حفاظت | زندانبان,,Visible occupational clothing/accessory; only listed roles.
+m_old_woolcap,old,72,old,False,خنثی هست و بمونه,brown coat and knitted cap,everyday,*,,
+m_young_athlete,young,24,young,False,خنثی هست و بمونه,dark sports jacket,everyday,*,,
+m_young_boxer,young,28,young,False,جایگزین خنثی تولید بشه,dark hooded sweatshirt,everyday,*,,Existing image retained. Avoid for new cast assignments pending crop/eye-shadow replacement.
+m_young_casual,young,26,young,False,خنثی هست و بمونه,plain dark jacket,everyday,*,,
+m_young_conscript,young,24,young,False,شغلی هست؛ فقط برای همون شغل بمونه,olive military shirt,everyday,نظامی | سرباز | ارتش | فرمانده,,Visible occupational clothing/accessory; only listed roles.
+m_young_courier,young,32,mid,True,شغلی هست؛ فقط برای همون شغل بمونه,cycle helmet and dark casual jacket,everyday,پیک | دوچرخه,,Visible occupational clothing/accessory; only listed roles.
+m_young_designer,young,30,young,False,خنثی هست و بمونه,plain dark turtleneck,everyday,*,,
+m_young_dj,young,28,young,False,شغلی هست؛ فقط برای همون شغل بمونه,dark shirt and headphones,everyday,نوازنده | موسیقی | دی جی | صدابردار | خواننده,,Visible occupational clothing/accessory; only listed roles.
+m_young_it,young,28,young,False,خنثی هست و بمونه,plain dark shirt,everyday,*,,
+m_young_student,young,21,young,False,خنثی هست و بمونه,plain dark clothing,everyday,*,,
+m_young_undergrad,young,24,young,False,خنثی هست و بمونه,brown jacket with backpack straps,everyday,*,,
+m_young_waiter,young,22,young,False,شغلی هست؛ فقط برای همون شغل بمونه,white shirt black waistcoat and tie,everyday,گارسون | پیشخدمت | مهماندار | پیش خدمت,,Visible occupational clothing/accessory; only listed roles.
+m_young_worker,young,27,young,False,شغلی هست؛ فقط برای همون شغل بمونه,blue shirt with work-overall straps,everyday,تعمیرکار | مکانیک | کارگر | تکنسین | برق کار | تأسیسات,گارسون | پیشخدمت | پیش خدمت,Visible occupational clothing/accessory; only listed roles.
+m_neutral_56_round,,56,old,False,خنثی هست و بمونه,navy collarless shirt,everyday,*,,
+m_neutral_44_long,,44,mid,False,خنثی هست و بمونه,charcoal collared shirt,everyday,*,,
+m_neutral_53_square,,53,mid,False,خنثی هست و بمونه,dark brown jacket cream collar,everyday,*,,
+m_neutral_41_oval,,41,mid,False,خنثی هست و بمونه,muted teal crewneck,everyday,*,,
+m_neutral_56_angular,,60,old,False,خنثی هست و بمونه,plum shirt charcoal blazer,everyday,*,,
+m_neutral_39_broad,,39,mid,False,خنثی هست و بمونه,grey blue collared shirt,everyday,*,,
+m_neutral_45_waves,,45,mid,False,خنثی هست و بمونه,charcoal knit polo,everyday,*,,
+m_neutral_45_freckles,,44,mid,False,خنثی هست و بمونه,olive blazer and grey shirt,everyday,*,,
+m_neutral_38_coils,,39,mid,False,خنثی هست و بمونه,indigo collared shirt,everyday,*,,
+m_neutral_46_angular,,49,mid,False,خنثی هست و بمونه,brown overshirt and grey crewneck,everyday,*,,
+m_neutral_20_round,,20,young,False,خنثی هست و بمونه,muted brown crewneck T-shirt,everyday,*,,
+m_neutral_24_freckles,,24,young,False,خنثی هست و بمونه,navy crewneck T-shirt,everyday,*,,
+m_neutral_29_coils,,29,young,False,خنثی هست و بمونه,olive collarless cotton shirt,everyday,*,,
+f_neutral_20_pixie,,20,young,False,خنثی هست و بمونه,indigo knitted crewneck top,everyday,*,,
+f_neutral_27_coils,,27,young,False,خنثی هست و بمونه,grey scarf and olive casual blouse,everyday,*,,
+f_neutral_29_square,,29,young,False,خنثی هست و بمونه,rust collared casual shirt,everyday,*,,

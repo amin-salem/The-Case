@@ -1,0 +1,32 @@
+[
+  {
+    "id": "f_neutral_20_pixie",
+    "path": "app/assets/portraits/f_neutral_20_pixie.webp",
+    "before_bytes": 14904,
+    "after_bytes": 11288,
+    "quality": 82,
+    "method": 6,
+    "width": 448,
+    "height": 448,
+    "sha256": "f8d6b07d5a99f04140ef6cb118498bf45db1de427f08eeccd38f603a5f5db66d",
+    "original_sha256": "71175fcf91cf163e56861146caa14e4d31a95307bfe827e5835d08677e49b8a3",
+    "review": "Face identity, eyes, freckles/mole and matte scarf visually reviewed; no occupation cues.",
+    "compression_ssim": 0.94643,
+    "comparison": "Resized edited source vs final WebP, not a similarity claim between different scarf revisions."
+  },
+  {
+    "id": "f_neutral_29_square",
+    "path": "app/assets/portraits/f_neutral_29_square.webp",
+    "before_bytes": 11650,
+    "after_bytes": 9774,
+    "quality": 82,
+    "method": 6,
+    "width": 448,
+    "height": 448,
+    "sha256": "38b318bc0cb9d54e39cb6b0b7c48a676a8c31f99e027561cda387b3cb0124271",
+    "original_sha256": "f83c81670b2d9bc75a80edf72c6584faac5ee48a520c6b978b2513a101ea0455",
+    "review": "Face identity, eyes, freckles/mole and matte scarf visually reviewed; no occupation cues.",
+    "compression_ssim": 0.9596,
+    "comparison": "Resized edited source vs final WebP, not a similarity claim between different scarf revisions."
+  }
+]

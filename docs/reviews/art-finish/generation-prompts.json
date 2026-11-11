@@ -1,0 +1,32 @@
+[
+  {
+    "id": "m_neutral_20_round",
+    "prompt": "Single square head-and-shoulders Iranian man visibly age 20, wide round face, broad flat nose, almond dark brown eyes, clean shaven, thick brows, short neat chestnut side part, warm medium tan skin, light brown crewneck T-shirt. Neutral calm expression. Painted cinematic noir, amber key light and charcoal fill on plain deep navy background. No tools, occupational clothing, hats, suits, text or logos."
+  },
+  {
+    "id": "m_neutral_24_freckles",
+    "prompt": "Use case: illustration-story. One square head-and-shoulders character portrait for Persian detective game Parvandeh. Fictional Iranian man visibly age 24, narrow oblong face with a broad square chin, prominent wide-set grey-green eyes, long straight nose, very short reddish brown buzzcut, very faint ginger stubble, light warm skin with a few freckles. Plain muted navy crewneck T-shirt. No glasses. Neutral calm expression, relaxed brows and mouth. Head turned 10 degrees, chest and both shoulders visible, head occupies 55 percent of image height. Realistic cinematic painted noir illustration with subtle brush texture, warm amber key light and soft charcoal fill, deep navy plain background, natural clear eyes and distinct hair texture. No occupation cues, uniforms, tools, badges, hats, formal suits, text, letters, logos or watermarks. One individual only."
+  },
+  {
+    "id": "m_neutral_29_coils",
+    "prompt": "Use case: illustration-story. One square head-and-shoulders character portrait for Persian detective game Parvandeh. Fictional Iranian man visibly age 29, long diamond face, high cheekbones, short broad nose, round thin silver wire spectacles, dark brown eyes, tight black short curls with high hairline, thin short goatee and clean jaw, deep warm brown Iranian skin. Plain muted olive collarless casual cotton shirt. Neutral calm expression, relaxed brows and mouth. Head turned 10 degrees, chest and both shoulders visible, head occupies 55 percent of image height. Realistic cinematic painted noir illustration with subtle brush texture, warm amber key light and soft charcoal fill, deep navy plain background, natural clear eyes and distinct hair texture. No occupation cues, uniforms, tools, badges, hats, formal suits, text, letters, logos or watermarks. One individual only."
+  },
+  {
+    "id": "f_neutral_20_pixie",
+    "prompt": "Use case: identity-preserve. Edit THIS fictional Iranian woman's game portrait. Preserve the exact same young woman: round face, hazel eyes, natural freckles, small nose, chestnut wavy front hair strands, neutral expression, face angle, shoulders, indigo/charcoal knitted top, amber lighting and plain navy background. Add a plain matte charcoal-grey headscarf worn loosely and naturally over the crown and sides of the head, draped around the neck, in everyday Iranian style. A few wavy brown strands may remain visible only at the forehead. Cover the rest of the short hair and the neck; no fully exposed neck, no bare crown. Keep her original face identity and subtle painted texture unchanged. Everyday modest casual clothing only, no job symbols, badge, uniform, tools, earrings, writing, logo or watermark. Square portrait.",
+    "operation": "identity-preserving edit with original portrait reference",
+    "revision_date": "2026-11-11",
+    "head_covering": "scarf_hair_visible"
+  },
+  {
+    "id": "f_neutral_27_coils",
+    "prompt": "Use case: illustration-story. One square head-and-shoulders character portrait for Persian detective game Parvandeh. Fictional Iranian woman visibly age 27, long oval face with high cheekbones and broad gently rounded nose, almond dark brown eyes, deep warm brown Iranian skin, dense black curly strands visible along forehead under a plain loosely worn muted pale grey headscarf, no jewelry, no makeup, no glasses. Plain modest dark olive casual blouse. Everyday Iranian civilian clothing. Neutral calm expression, relaxed brows and mouth. Head turned 10 degrees, chest and both shoulders visible, head occupies 55 percent of image height. Realistic cinematic painted noir illustration with subtle brush texture, warm amber key light and soft charcoal fill, deep navy plain background, natural clear eyes and distinct hair texture. No occupation cues, uniforms, tools, badges, hats, formal suits, text, letters, logos or watermarks. One individual only."
+  },
+  {
+    "id": "f_neutral_29_square",
+    "prompt": "Use case: identity-preserve. Edit THIS fictional Iranian woman's game portrait. Preserve the same woman and recognisable identity: square face and broad jaw, thin rectangular dark spectacles, dark eyes, natural mole on her LEFT cheek, black hair, rust casual collared blouse, same pose, amber light and navy background. Make her female appearance clearer with slightly softer eyebrows and subtly softened face contours, keeping the square face, age around 29, glasses and left-cheek mole, no glamour makeup. Add a plain matte dark aubergine headscarf worn loosely and naturally on the head and draped around the neck in everyday Iranian style; crown, sides of hair and neck covered, a few black strands at the forehead are fine. No fully uncovered pixie cut, no fully exposed neck. Plain everyday Iranian clothing, no occupation cues, uniforms, tools, jewelry, text, logos or watermark. Square realistic painted noir portrait.",
+    "operation": "identity-preserving edit with original portrait reference",
+    "revision_date": "2026-11-11",
+    "head_covering": "scarf_hair_visible"
+  }
+]

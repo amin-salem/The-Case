@@ -1,0 +1,31 @@
+{
+  "basis": "Relaxed rollout diagnostic on a920b716: 64 of 68 unique compatible culprit portraits, other written cases reserved; four unmatched slots below. Generation only, never permission to assign early.",
+  "common_prompt": "Square cinematic realistic painted character portrait for the Iranian detective game Parvandeh. Head AND shoulders, head occupies around 55% of square, pose turned 15 degrees, not a passport photo. Plain deep navy background and warm amber light from upper left, soft charcoal fill, realistic individual head proportions and subtle brushwork. Neutral composed expression, relaxed brows, no smirk or anger, no objects, hats, uniforms, insignia, lettering, watermark or logos. ",
+  "portraits": [
+    {
+      "id": "m_neutral_45_waves",
+      "age": 45,
+      "slot": "c003/s2",
+      "distinction": "An Iranian man, age 45, with a wide pear-shaped jaw tapering at the temples, a short straight nose with broad nostrils, slightly hooded brown eyes, sweeping ear-length chestnut hair with a few grey strands, clean shave, no glasses, light beige skin. Muted charcoal knit polo, open at the neck."
+    },
+    {
+      "id": "m_neutral_45_freckles",
+      "age": 45,
+      "slot": "c007/s1",
+      "distinction": "An Iranian man of 45, narrow triangular chin, slightly convex long nose, pale hazel wide-set eyes, short reddish brown hair receding at the temples, neat cropped ginger-brown beard and light freckles over warm pale skin, no glasses. Plain dark olive blazer over light grey shirt."
+    },
+    {
+      "id": "m_neutral_38_coils",
+      "age": 38,
+      "slot": "c033/s1",
+      "distinction": "An Iranian man of 38, elongated rounded face, high arched nose bridge, rounded dark eyes, very short black tight curls, thick rounded black moustache and clean cheeks, no glasses, deep brown skin. Plain indigo woven collared shirt. Framed to see the shoulders."
+    },
+    {
+      "id": "m_neutral_46_angular",
+      "age": 46,
+      "slot": "c049/s5",
+      "distinction": "A fictional 46-year-old Iranian man. Angular long face, pronounced cheekbones, rounded chin, broad slightly upturned nose, narrow grey-green eyes, cropped nearly white hair with natural dark lowlights, no facial hair, thin oval dark wire spectacles, light warm olive skin. Plain dark grey crewneck and soft brown overshirt."
+    }
+  ]
+}
+
