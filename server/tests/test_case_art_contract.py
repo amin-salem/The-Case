@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools'))
-from art_rules import age_band, incompatibilities, available  # noqa: E402
+from art_rules import age_band, incompatibilities, available, head_covering_errors  # noqa: E402
 REVIEW = ROOT / 'docs/reviews/portrait-quality'
 
 def read(path):
@@ -152,5 +152,46 @@ class CaseArtContract(unittest.TestCase):
             if not r['existing_main']:
                 self.assertLessEqual(len(data),18000 if r['kind']=='avatars' else 40000,r['id'])
         self.assertEqual(len(aliases),13)
+
+    def test_every_female_asset_has_allowed_head_covering(self):
+        registry=read(ROOT/'docs/art-registry.json')
+        rows=registry['portraits']+registry['cosmetics']
+        cosmetics=registry['cosmetics']
+        self.assertEqual({r['path'] for r in cosmetics}, {
+            str(p.relative_to(ROOT)) for folder in ('avatars','frames')
+            for p in (ROOT/'app/assets'/folder).glob('*.webp')
+        })
+        errors=[]
+        for row in rows:
+            self.assertIn(row['apparent_gender'], ('m','f','none','unspecified'),row['id'])
+            errors.extend(head_covering_errors(row))
+        self.assertEqual(errors, [], '\n'.join(errors))
+
+    def test_head_covering_gate_rejects_missing_uncovered_and_invalid_values(self):
+        for value in (None,'','uncovered','short_hair','hat','hijab',False):
+            with self.subTest(value=value):
+                self.assertTrue(head_covering_errors({'id':'fixture','apparent_gender':'f','head_covering':value}))
+        self.assertTrue(head_covering_errors({'id':'missing','apparent_gender':'f'}))
+        for value in ('scarf','scarf_hair_visible'):
+            self.assertEqual(head_covering_errors({'id':'fixture','apparent_gender':'f','head_covering':value}),[])
+
+    def test_staged_women_are_covered_and_wear_neutral_clothes(self):
+        releases=read(ROOT/'docs/portrait-release.json')['portraits']
+        for row in self.rows:
+            if row['apparent_gender']!='f' or row['id'] not in releases or releases[row['id']]['first_build'] is not None:
+                continue
+            with self.subTest(portrait=row['id']):
+                self.assertEqual(head_covering_errors(row),[])
+                self.assertFalse(row['uniform'])
+                self.assertEqual(row['clothing_formality'],'everyday')
+
+    def test_head_covering_review_is_bound_to_the_actual_image(self):
+        registry=read(ROOT/'docs/art-registry.json')
+        women={r['path']:r for r in registry['portraits']+registry['cosmetics'] if r['apparent_gender']=='f'}
+        review={r['path']:r for r in registry['head_covering_visual_audit']}
+        self.assertEqual(set(women),set(review))
+        for path,row in women.items():
+            self.assertEqual(review[path]['head_covering'],row['head_covering'])
+            self.assertEqual(review[path]['sha256'],hashlib.sha256((ROOT/path).read_bytes()).hexdigest())
 
 if __name__=='__main__': unittest.main()

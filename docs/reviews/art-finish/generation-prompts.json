@@ -13,7 +13,10 @@
   },
   {
     "id": "f_neutral_20_pixie",
-    "prompt": "Use case: illustration-story. One square head-and-shoulders character portrait for Persian detective game Parvandeh. Fictional Iranian woman visibly age 20, round face with full cheeks, small upturned nose, wide-set hazel eyes, light warm olive skin with subtle freckles, short softly wavy chestnut pixie hair, no headscarf, no jewelry or makeup, no glasses. Plain modest indigo crewneck knitted top. Everyday contemporary Iranian civilian clothing. Neutral calm expression, relaxed brows and mouth. Head turned 10 degrees, chest and both shoulders visible, head occupies 55 percent of image height. Realistic cinematic painted noir illustration with subtle brush texture, warm amber key light and soft charcoal fill, deep navy plain background, natural clear eyes and distinct hair texture. No occupation cues, uniforms, tools, badges, hats, formal suits, text, letters, logos or watermarks. One individual only."
+    "prompt": "Use case: identity-preserve. Edit THIS fictional Iranian woman's game portrait. Preserve the exact same young woman: round face, hazel eyes, natural freckles, small nose, chestnut wavy front hair strands, neutral expression, face angle, shoulders, indigo/charcoal knitted top, amber lighting and plain navy background. Add a plain matte charcoal-grey headscarf worn loosely and naturally over the crown and sides of the head, draped around the neck, in everyday Iranian style. A few wavy brown strands may remain visible only at the forehead. Cover the rest of the short hair and the neck; no fully exposed neck, no bare crown. Keep her original face identity and subtle painted texture unchanged. Everyday modest casual clothing only, no job symbols, badge, uniform, tools, earrings, writing, logo or watermark. Square portrait.",
+    "operation": "identity-preserving edit with original portrait reference",
+    "revision_date": "2026-11-11",
+    "head_covering": "scarf_hair_visible"
   },
   {
     "id": "f_neutral_27_coils",
@@ -21,6 +24,9 @@
   },
   {
     "id": "f_neutral_29_square",
-    "prompt": "Use case: illustration-story. Single square head-and-shoulders portrait for Iranian Persian detective game Parvandeh. A fictional Iranian woman visibly age 29, unmistakably square face with a broad angular jaw, low straight cheekbones, straight wide nose, small deep-set dark brown eyes, thin rectangular black spectacles, straight black very short cropped hair combed flat with a side part, no headscarf, warm medium olive skin with a small natural mole on the left cheek, no makeup, no earrings. Plain modest muted rust collared everyday shirt. Neutral relaxed expression and closed relaxed mouth, head turned slightly, both shoulders in frame. Cinematic realistic painted noir illustration, soft amber key light and charcoal fill, deep navy background, natural skin and sharp eyes. No uniform, profession cues, tools, hats, formal suit, jewelry, text, letters, logo or watermark. One person only."
+    "prompt": "Use case: identity-preserve. Edit THIS fictional Iranian woman's game portrait. Preserve the same woman and recognisable identity: square face and broad jaw, thin rectangular dark spectacles, dark eyes, natural mole on her LEFT cheek, black hair, rust casual collared blouse, same pose, amber light and navy background. Make her female appearance clearer with slightly softer eyebrows and subtly softened face contours, keeping the square face, age around 29, glasses and left-cheek mole, no glamour makeup. Add a plain matte dark aubergine headscarf worn loosely and naturally on the head and draped around the neck in everyday Iranian style; crown, sides of hair and neck covered, a few black strands at the forehead are fine. No fully uncovered pixie cut, no fully exposed neck. Plain everyday Iranian clothing, no occupation cues, uniforms, tools, jewelry, text, logos or watermark. Square realistic painted noir portrait.",
+    "operation": "identity-preserving edit with original portrait reference",
+    "revision_date": "2026-11-11",
+    "head_covering": "scarf_hair_visible"
   }
 ]

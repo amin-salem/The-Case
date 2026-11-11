@@ -30,12 +30,13 @@
     },
     {
       "path": "app/assets/portraits/f_neutral_20_pixie.webp",
-      "source": "new generation",
-      "before": 2361305,
-      "after": 14904,
+      "source": "identity-preserving scarf edit, 11 Nov 2026",
+      "before": 2185683,
+      "after": 11288,
       "quality": 82,
-      "ssim": 0.92461,
-      "comparison": "448 resized RGB source vs decoded WebP"
+      "ssim": 0.94643,
+      "comparison": "Resized edited source vs final WebP, not a similarity claim between different scarf revisions.",
+      "supersedes_sha256": "71175fcf91cf163e56861146caa14e4d31a95307bfe827e5835d08677e49b8a3"
     },
     {
       "path": "app/assets/portraits/f_neutral_27_coils.webp",
@@ -200,12 +201,13 @@
     },
     {
       "path": "app/assets/portraits/f_neutral_29_square.webp",
-      "source": "new generation",
-      "before": 2158583,
-      "after": 11650,
+      "source": "identity-preserving scarf edit, 11 Nov 2026",
+      "before": 1920755,
+      "after": 9774,
       "quality": 82,
-      "ssim": 0.94635,
-      "comparison": "448 resized RGB source vs decoded WebP"
+      "ssim": 0.9596,
+      "comparison": "Resized edited source vs final WebP, not a similarity claim between different scarf revisions.",
+      "supersedes_sha256": "f83c81670b2d9bc75a80edf72c6584faac5ee48a520c6b978b2513a101ea0455"
     }
   ]
 }

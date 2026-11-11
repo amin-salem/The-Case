@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "age_note": "Apparent age is an editorial visual estimate (+/-5 years), not a biological measurement. Age bands are young 18-30, mid 31-55, old 56+. Legacy filename is an immutable identifier, never the source of age/role permission.",
   "portraits": [
     {
@@ -40,7 +40,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_agent.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_archaeologist",
@@ -80,7 +81,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_archaeologist.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_attorney",
@@ -130,7 +132,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_attorney.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_baker",
@@ -170,7 +173,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_baker.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_banker",
@@ -220,7 +224,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_banker.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_business",
@@ -263,7 +268,8 @@
       "new_assignments_ok": false,
       "path": "app/assets/portraits/f_mid_business.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf"
     },
     {
       "id": "f_mid_chef",
@@ -312,7 +318,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_chef.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_cleaner",
@@ -356,7 +363,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_cleaner.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_clerk",
@@ -396,7 +404,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_clerk.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_commander",
@@ -441,7 +450,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_commander.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_curator",
@@ -491,7 +501,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_curator.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_designer",
@@ -531,7 +542,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_designer.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_director",
@@ -571,7 +583,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_director.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_doctor",
@@ -619,7 +632,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_doctor.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_gallery",
@@ -659,7 +673,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_gallery.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_guest",
@@ -699,7 +714,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_guest.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_housewife",
@@ -739,7 +755,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_housewife.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_inspector",
@@ -779,7 +796,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_inspector.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_journalist",
@@ -819,7 +837,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_journalist.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_judge",
@@ -862,7 +881,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_judge.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_laborer",
@@ -908,7 +928,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_laborer.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_lawyer",
@@ -958,7 +979,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_lawyer.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_librarian",
@@ -998,7 +1020,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_librarian.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_manager",
@@ -1038,7 +1061,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_manager.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_mechanic",
@@ -1078,7 +1102,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_mechanic.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_officer",
@@ -1124,7 +1149,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_officer.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf"
     },
     {
       "id": "f_mid_pastry",
@@ -1173,7 +1199,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_pastry.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_pharmacist",
@@ -1221,7 +1248,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_pharmacist.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_pilot",
@@ -1264,7 +1292,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_pilot.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_publisher",
@@ -1304,7 +1333,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_publisher.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_restorer",
@@ -1348,7 +1378,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_restorer.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_scholar",
@@ -1388,7 +1419,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_scholar.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_scientist",
@@ -1432,7 +1464,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_scientist.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_singer",
@@ -1472,7 +1505,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_singer.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_soldier",
@@ -1517,7 +1551,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_soldier.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_surgeon",
@@ -1565,7 +1600,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_surgeon.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_teacher",
@@ -1605,7 +1641,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_teacher.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_waitress",
@@ -1645,7 +1682,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_waitress.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_widow",
@@ -1685,7 +1723,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_widow.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_mid_witness",
@@ -1725,7 +1764,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_witness.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_aristocrat",
@@ -1775,7 +1815,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_aristocrat.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_baker",
@@ -1815,7 +1856,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_baker.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_cook",
@@ -1864,7 +1906,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_cook.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_countess",
@@ -1914,7 +1957,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_countess.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_fortune",
@@ -1954,7 +1998,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_fortune.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_grandma",
@@ -1994,7 +2039,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_grandma.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf"
     },
     {
       "id": "f_old_neighbor",
@@ -2034,7 +2080,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_neighbor.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_professor",
@@ -2074,7 +2121,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_professor.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_retired",
@@ -2114,7 +2162,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_retired.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_retiree",
@@ -2154,7 +2203,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_retiree.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_rich",
@@ -2204,7 +2254,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_rich.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_seamstress",
@@ -2244,7 +2295,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_seamstress.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_shopkeeper",
@@ -2284,7 +2336,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_shopkeeper.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_socialite",
@@ -2334,7 +2387,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_socialite.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_villager",
@@ -2374,7 +2428,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_villager.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_old_widow",
@@ -2414,7 +2469,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_old_widow.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_artist",
@@ -2454,7 +2510,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_artist.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_athlete",
@@ -2494,7 +2551,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_athlete.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_bookworm",
@@ -2534,7 +2592,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_bookworm.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_chemist",
@@ -2578,7 +2637,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_chemist.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_cook",
@@ -2627,7 +2687,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_cook.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_firefighter",
@@ -2669,7 +2730,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_firefighter.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_nurse",
@@ -2717,7 +2779,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_nurse.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_painter",
@@ -2760,7 +2823,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_painter.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_photographer",
@@ -2800,7 +2864,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_photographer.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_receptionist",
@@ -2843,7 +2908,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_receptionist.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_researcher",
@@ -2887,7 +2953,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_researcher.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_student",
@@ -2927,7 +2994,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_student.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_young_waitress",
@@ -2967,7 +3035,8 @@
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_young_waitress.webp",
       "usable_from": null,
-      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
+      "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "m_mid_artist",
@@ -6044,12 +6113,12 @@
       ],
       "age_band": "young",
       "hair_color": "chestnut",
-      "hair_style": "short wavy pixie, uncovered",
+      "hair_style": "a few wavy chestnut strands at forehead under matte charcoal scarf",
       "facial_hair": "none",
       "glasses": false,
       "skin_tone": "light warm freckled olive",
       "face_shape": "round",
-      "clothing": "indigo knitted crewneck top",
+      "clothing": "plain matte charcoal headscarf over indigo knitted top",
       "uniform": false,
       "uniform_type": null,
       "role_tags": [
@@ -6068,11 +6137,12 @@
       "release_basis": "Not released; first_build unknown",
       "visual_review": {
         "date": "2026-11-11",
-        "method": "Individual generated image and final 448px WebP inspected; editorial age estimate, not biological measurement",
+        "method": "Identity-preserving scarf edit; source and final 448px WebP individually inspected. Round face/hazel eyes/freckles or square face/thin rectangular glasses/left-cheek mole retained.",
         "status": "reviewed"
       },
       "path": "app/assets/portraits/f_neutral_20_pixie.webp",
-      "sha256": "71175fcf91cf163e56861146caa14e4d31a95307bfe827e5835d08677e49b8a3"
+      "sha256": "f8d6b07d5a99f04140ef6cb118498bf45db1de427f08eeccd38f603a5f5db66d",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_neutral_27_coils",
@@ -6112,7 +6182,8 @@
         "status": "reviewed"
       },
       "path": "app/assets/portraits/f_neutral_27_coils.webp",
-      "sha256": "bcd85fcad1b26f2d56644b0f15b4d545794c7ba2c161ea3daabdcd89113e729d"
+      "sha256": "bcd85fcad1b26f2d56644b0f15b4d545794c7ba2c161ea3daabdcd89113e729d",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "f_neutral_29_square",
@@ -6125,12 +6196,12 @@
       ],
       "age_band": "young",
       "hair_color": "black",
-      "hair_style": "very short straight crop, uncovered",
+      "hair_style": "a few black front strands under matte aubergine scarf",
       "facial_hair": "none",
       "glasses": true,
       "skin_tone": "warm medium olive",
-      "face_shape": "broad square",
-      "clothing": "rust collared casual shirt",
+      "face_shape": "square with softer eyebrow and cheek contours",
+      "clothing": "plain matte dark aubergine headscarf over rust casual collared shirt",
       "uniform": false,
       "uniform_type": null,
       "role_tags": [
@@ -6147,12 +6218,13 @@
       "new_assignments_ok": true,
       "usable_from": "9999-12-31",
       "release_basis": "Not released; first_build unknown",
-      "sha256": "f83c81670b2d9bc75a80edf72c6584faac5ee48a520c6b978b2513a101ea0455",
+      "sha256": "38b318bc0cb9d54e39cb6b0b7c48a676a8c31f99e027561cda387b3cb0124271",
       "visual_review": {
         "date": "2026-11-11",
-        "method": "Individual generated image and final 448px WebP inspected",
+        "method": "Identity-preserving scarf edit; source and final 448px WebP individually inspected. Round face/hazel eyes/freckles or square face/thin rectangular glasses/left-cheek mole retained.",
         "status": "reviewed"
-      }
+      },
+      "head_covering": "scarf_hair_visible"
     }
   ],
   "cosmetics": [
@@ -6165,7 +6237,8 @@
       "size_bytes": 10434,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "det_02",
@@ -6176,7 +6249,9 @@
       "size_bytes": 7974,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "det_03",
@@ -6187,7 +6262,8 @@
       "size_bytes": 9670,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "det_04",
@@ -6198,7 +6274,9 @@
       "size_bytes": 8132,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "det_05",
@@ -6209,7 +6287,8 @@
       "size_bytes": 11600,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "det_06",
@@ -6220,7 +6299,9 @@
       "size_bytes": 15628,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "det_07",
@@ -6231,7 +6312,8 @@
       "size_bytes": 10612,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "det_08",
@@ -6242,7 +6324,9 @@
       "size_bytes": 8060,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "det_09",
@@ -6253,7 +6337,8 @@
       "size_bytes": 8620,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "det_10",
@@ -6264,7 +6349,9 @@
       "size_bytes": 9642,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "ex_alchemist",
@@ -6275,7 +6362,8 @@
       "size_bytes": 15004,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_cat",
@@ -6286,7 +6374,9 @@
       "size_bytes": 10442,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "ex_champion",
@@ -6297,7 +6387,8 @@
       "size_bytes": 12362,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_chef",
@@ -6308,7 +6399,8 @@
       "size_bytes": 14876,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_cyber",
@@ -6321,7 +6413,8 @@
       "size_bytes": 21634,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_diva",
@@ -6332,7 +6425,9 @@
       "size_bytes": 10878,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "ex_fisherman",
@@ -6345,7 +6440,8 @@
       "size_bytes": 23816,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_forensic",
@@ -6358,7 +6454,9 @@
       "size_bytes": 20262,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "ex_gold",
@@ -6369,7 +6467,8 @@
       "size_bytes": 11978,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_ironstreak",
@@ -6380,7 +6479,8 @@
       "size_bytes": 9756,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_journalist",
@@ -6391,7 +6491,9 @@
       "size_bytes": 12720,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "ex_keeper",
@@ -6404,7 +6506,8 @@
       "size_bytes": 24678,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_librarian",
@@ -6417,7 +6520,9 @@
       "size_bytes": 21616,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "ex_masked",
@@ -6430,7 +6535,8 @@
       "size_bytes": 14148,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_nightowl",
@@ -6441,7 +6547,8 @@
       "size_bytes": 9870,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_nohint",
@@ -6452,7 +6559,8 @@
       "size_bytes": 12662,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_partner",
@@ -6463,7 +6571,8 @@
       "size_bytes": 8124,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_qajar",
@@ -6474,7 +6583,8 @@
       "size_bytes": 11026,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_rainman",
@@ -6487,7 +6597,8 @@
       "size_bytes": 23540,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_rookie",
@@ -6498,7 +6609,8 @@
       "size_bytes": 7754,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_shadow",
@@ -6509,7 +6621,8 @@
       "size_bytes": 5040,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "unspecified"
     },
     {
       "id": "ex_taxi",
@@ -6522,7 +6635,8 @@
       "size_bytes": 22372,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_threestar",
@@ -6533,7 +6647,9 @@
       "size_bytes": 8730,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "scarf_hair_visible"
     },
     {
       "id": "ex_watchmaker",
@@ -6546,7 +6662,9 @@
       "size_bytes": 23894,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "f",
+      "head_covering": "uncovered"
     },
     {
       "id": "ex_weekend",
@@ -6557,7 +6675,8 @@
       "size_bytes": 11790,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "ex_writer",
@@ -6570,7 +6689,8 @@
       "size_bytes": 22262,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "m"
     },
     {
       "id": "frame_chain",
@@ -6581,7 +6701,8 @@
       "size_bytes": 35566,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "none"
     },
     {
       "id": "frame_ice",
@@ -6592,7 +6713,8 @@
       "size_bytes": 39908,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "none"
     },
     {
       "id": "frame_laurel",
@@ -6603,7 +6725,8 @@
       "size_bytes": 38926,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "none"
     },
     {
       "id": "frame_moon",
@@ -6616,7 +6739,8 @@
       "size_bytes": 39080,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "none"
     },
     {
       "id": "frame_persian",
@@ -6629,7 +6753,8 @@
       "size_bytes": 39612,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "none"
     },
     {
       "id": "frame_piano",
@@ -6642,7 +6767,8 @@
       "size_bytes": 35650,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "none"
     },
     {
       "id": "frame_scroll",
@@ -6653,7 +6779,8 @@
       "size_bytes": 35216,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "none"
     },
     {
       "id": "frame_siren",
@@ -6664,7 +6791,8 @@
       "size_bytes": 35204,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
-      "existing_main": true
+      "existing_main": true,
+      "apparent_gender": "none"
     }
   ],
   "review_assets": [
@@ -6704,5 +6832,691 @@
         "Documentation only; never referenced by a case or packaged as an app portrait"
       ]
     }
-  ]
+  ],
+  "head_covering_visual_audit": [
+    {
+      "id": "f_mid_agent",
+      "path": "app/assets/portraits/f_mid_agent.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "ed8a50d10697109a8cb50b9016629820fb98be75f71cc52491adf4e2ab3ae3ea",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_archaeologist",
+      "path": "app/assets/portraits/f_mid_archaeologist.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "563b2aa064af4e29ca465800522a0204a14ff2e188a54f52fced04fdb133dabf",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_attorney",
+      "path": "app/assets/portraits/f_mid_attorney.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "d5f73f5830de387736b1865710f099f55afa86740feb1f37ade644a9988b8f3d",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_baker",
+      "path": "app/assets/portraits/f_mid_baker.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "4142311b7616e8784668ce75ad5b477293e11539f0786d9c9cedd55a5d7ddd55",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_banker",
+      "path": "app/assets/portraits/f_mid_banker.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "b96920c9e13ea99926d28222e48a4525f00496f489b5159fe9de1b3489e402df",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_business",
+      "path": "app/assets/portraits/f_mid_business.webp",
+      "head_covering": "scarf",
+      "sha256": "5e86641260f3be6815533455675b3a3e584e6256da15afa8c3db5c59db06a5f8",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_chef",
+      "path": "app/assets/portraits/f_mid_chef.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "cff635a41985745fd0c4039505bde898762b864ea7c2a9cc5580da75dcdd3af9",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_cleaner",
+      "path": "app/assets/portraits/f_mid_cleaner.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "2641f9c538332d7cc75f96296d48ff26d2c2b60949a72c99f8d372a4a2ca8786",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_clerk",
+      "path": "app/assets/portraits/f_mid_clerk.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "5c2196fc3078cd2ec7745c042ac43b2a990526506bceb2769c92fa714cb780ec",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_commander",
+      "path": "app/assets/portraits/f_mid_commander.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "97c66e47952594e7ddd12d8c6ff5b81a045bacea81a6ee6240190715fbcddbbf",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_curator",
+      "path": "app/assets/portraits/f_mid_curator.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "7d88240a332d6ef626a9a030fdbecfc563e425c8d3d403610914fb60f31aaed7",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_designer",
+      "path": "app/assets/portraits/f_mid_designer.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "86c156634f2caf4f2205d45b63bc89e2ab40c5c706b75bf67da9b9a0e1fe715d",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_director",
+      "path": "app/assets/portraits/f_mid_director.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "e9d1886578cbb13d0e5e6f695da2cea9c38a0f17aa3a33608a22f690625ef086",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_doctor",
+      "path": "app/assets/portraits/f_mid_doctor.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "11af7a042e7660982729e4b35c131fd847af88c8c93f511633e3478689958e2b",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_gallery",
+      "path": "app/assets/portraits/f_mid_gallery.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "53fb949d2f1901fe649dada84346d7ad21b422235d8e803f91b612d32883fa27",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_guest",
+      "path": "app/assets/portraits/f_mid_guest.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "29c693624ee3115ffd70bbe7dd5463351fa6151bcbfcd15b27a95870feeebf78",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_housewife",
+      "path": "app/assets/portraits/f_mid_housewife.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "0e509bac7f57d1f53db1aa64daa67647dc671a397f12563ffedec76d4a8604fa",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_inspector",
+      "path": "app/assets/portraits/f_mid_inspector.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "bb53047060f98761bdff7fe6c49477feab0e89346f935b0446a86a350a66f8d8",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_journalist",
+      "path": "app/assets/portraits/f_mid_journalist.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "d6da44dd7a5cc54c2873cd246262f9fb60d841b341053e939278b24116843812",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_judge",
+      "path": "app/assets/portraits/f_mid_judge.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "6fe34efb2e340c3a0f11422db9fda9651b0b544f628ea69984bd71fb0785f8ef",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_laborer",
+      "path": "app/assets/portraits/f_mid_laborer.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "08e64924d57191b47b232f7d9faebeab3de4731393fdee02972cc33b8d1318ea",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_lawyer",
+      "path": "app/assets/portraits/f_mid_lawyer.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "945349beed60d5d4681a77aaf6a380e1b557b766aaee39c1bbcd840e4eced57d",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_librarian",
+      "path": "app/assets/portraits/f_mid_librarian.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "b127b687f215872ae41ae4e9af0cfedabe68d569b492014528cb230fb7a54f21",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_manager",
+      "path": "app/assets/portraits/f_mid_manager.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "3c2961f3ce17c0b2836a66ab89737fa88311cb49276428c1f67a10816630b32b",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_mechanic",
+      "path": "app/assets/portraits/f_mid_mechanic.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "d132b5bd8bee0b5e59c630b6627c9bcbb22f098bc829827aa57fa81148540f33",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_officer",
+      "path": "app/assets/portraits/f_mid_officer.webp",
+      "head_covering": "scarf",
+      "sha256": "8122aa06bb4274cc7d713d48b8b1ad3055eef2fb5de199a3751421bc9dbb3fce",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_pastry",
+      "path": "app/assets/portraits/f_mid_pastry.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "2bb1951d9472c7350f53b3a4632d2541cabce932afda26afe1d2c051d114b408",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_pharmacist",
+      "path": "app/assets/portraits/f_mid_pharmacist.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "7308bb5e04558c5b4ea9dd944e78e7b00a53adf3d4d599e58253e5be995765ab",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_pilot",
+      "path": "app/assets/portraits/f_mid_pilot.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "893f0fcb5ca05b6c4afe92cc9e80e10059cc2010e6f6a4611654d3de983eb562",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_publisher",
+      "path": "app/assets/portraits/f_mid_publisher.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "9dd34affbaccfaa5e1ad0a5ad0601d79673f8dd6d435ab8f76c294aff0f78548",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_restorer",
+      "path": "app/assets/portraits/f_mid_restorer.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "c6a92738efc89707554c445ddeb5b84c23d0fa79157b76b60de6a6567f77a735",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_scholar",
+      "path": "app/assets/portraits/f_mid_scholar.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "4573829800ce9252ee5da35512e23c18091e38e0dc182dde238109de1703fd01",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_scientist",
+      "path": "app/assets/portraits/f_mid_scientist.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "0e8e46ea6ea0f181352f64a542cf21ec680a42b9da762934a7764923364ed686",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_singer",
+      "path": "app/assets/portraits/f_mid_singer.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "47f1d8cdafac8d21e89c911f4d7756c99d8787c7a3180886b92f777461307681",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_soldier",
+      "path": "app/assets/portraits/f_mid_soldier.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "0f6bc0592333e7a3dcf418c52bd7fc6edc21ed4547041489096c001762fcfe45",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_surgeon",
+      "path": "app/assets/portraits/f_mid_surgeon.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "326806b73242937e6ff115fca4027e364c5fcd55b52aa24eb36c101c00cbc916",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_mid_teacher",
+      "path": "app/assets/portraits/f_mid_teacher.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "0890f2386bbf7ae20e225abf01f7f24b9826576203ddf6c19760ec940cece55a",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_waitress",
+      "path": "app/assets/portraits/f_mid_waitress.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "c49d05858c0dd1e42fa3f3c01fb7a99246dcb266624aba9f60bddf3a9402e992",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_widow",
+      "path": "app/assets/portraits/f_mid_widow.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "77547ad336903b08ed6167b4e19b7e7754a4cf4cc1922275e17c65691f55ad78",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_mid_witness",
+      "path": "app/assets/portraits/f_mid_witness.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "a995d5e20831e226c1a71a002642ba425a7409165df49f0c59b920625179c3a3",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_old_aristocrat",
+      "path": "app/assets/portraits/f_old_aristocrat.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "36c31c12aa122feb91666f495c46c0049b826242a80685d4a4e1e0961e0d0814",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_baker",
+      "path": "app/assets/portraits/f_old_baker.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "e15d0841fe9d9650ab1b30c263ccc62d32748b7bc459eb842033356955962906",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_cook",
+      "path": "app/assets/portraits/f_old_cook.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "0361557dea599fea48a03f1ff61c0a0d9f6785e1a6548991921b68b0bde8e532",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_countess",
+      "path": "app/assets/portraits/f_old_countess.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "bbef842b198d1133f4d5becef6ab4cd8c56bf9f44cab3042016945ccc1cef654",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_fortune",
+      "path": "app/assets/portraits/f_old_fortune.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "5edbfa48b36b3aa2617dfba3a6395f5d45e338c371db1432951db670b5ae4e82",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_grandma",
+      "path": "app/assets/portraits/f_old_grandma.webp",
+      "head_covering": "scarf",
+      "sha256": "c6155c857710f472d1075857641a83e69126d4800eaa6f279cafb47766735b24",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_old_neighbor",
+      "path": "app/assets/portraits/f_old_neighbor.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "4a5e899e203184d2a004eb5a1c682312c4473301437036a1bb30e828b0ee6766",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_professor",
+      "path": "app/assets/portraits/f_old_professor.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "b39d54c3a3b6bb87994a659c08b207a2ee11885b2bab2675aed02301558709fc",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_old_retired",
+      "path": "app/assets/portraits/f_old_retired.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "290b9be79ce6b9a4622f169f8df809d93fc081a14c7ee70a925ba1ac0b67499b",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_old_retiree",
+      "path": "app/assets/portraits/f_old_retiree.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "46e467da7ad2e2e7e711aeb5950f0ff721e7a3e4b2ec023ccc46a3ae5aadd9a9",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_old_rich",
+      "path": "app/assets/portraits/f_old_rich.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "7a74efce850c649d26e16114e4bd3c77e575f0c60cecb6f5916c7fe9d474538e",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_seamstress",
+      "path": "app/assets/portraits/f_old_seamstress.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "7e8267c09a6521c36699a8c8b86537396d503c464e118498ea763b6fbc62e12a",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_shopkeeper",
+      "path": "app/assets/portraits/f_old_shopkeeper.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "b40691556b01a8678cb3bcc16dff469be3910b30b67a851c683beac352b1ea45",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_old_socialite",
+      "path": "app/assets/portraits/f_old_socialite.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "b904ed2e7c9d2942c4d2b1dc243da55a48159eef8cd23abe23adf85d51527f47",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_villager",
+      "path": "app/assets/portraits/f_old_villager.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "c2712ce738b1f08da3225454fa6767837dc109dbcdff051be3bb44ba9e7a1930",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_old_widow",
+      "path": "app/assets/portraits/f_old_widow.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "f0c7918488c145f20fc29b2f2ffa738e04148749d3cefe60261fe4ecbf953e42",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_young_artist",
+      "path": "app/assets/portraits/f_young_artist.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "067c32324634eb91ee095811dcbad62c746453133668cda851ca8d6f233745b8",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_young_athlete",
+      "path": "app/assets/portraits/f_young_athlete.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "5d6bcef8d19809c22bc7e609a3df1c6cddafc7474039e28b28ba0414f587b535",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_young_bookworm",
+      "path": "app/assets/portraits/f_young_bookworm.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "62456f25aa23316622ee2b8ab3f79533da6fcbb09c9081da20991a8ca0d5218b",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_young_chemist",
+      "path": "app/assets/portraits/f_young_chemist.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "a648572cbc13320a850f6efa0241bf6e70b00b565c0b301caff49f56d76413d7",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_young_cook",
+      "path": "app/assets/portraits/f_young_cook.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "9c32f5f836974c2fa2f5cb9e001a16c60ee9c6453f210c43b64efdeb711d4f24",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_young_firefighter",
+      "path": "app/assets/portraits/f_young_firefighter.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "05d210f2133bc01e22176ea041289111bed5f608e7ab8a0386e7140dc08ea027",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_young_nurse",
+      "path": "app/assets/portraits/f_young_nurse.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "3404a30c7f4eacb87fcab0ad7b06ec37a82439334b77298b11b256c5b34c54df",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_young_painter",
+      "path": "app/assets/portraits/f_young_painter.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "bf8659f346725876c853ed38b022771384022f622192f3dcc741e2e6cbcb31b6",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_young_photographer",
+      "path": "app/assets/portraits/f_young_photographer.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "f77d7ba7f508678a379ade56116753e2b5b431c8680cd3bff62a9371fde39b3d",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_young_receptionist",
+      "path": "app/assets/portraits/f_young_receptionist.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "cc00b2e7f573d319ad6e9d71f42065a716b07c98175b990a907f407b0f287ddb",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_young_researcher",
+      "path": "app/assets/portraits/f_young_researcher.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "84fdc9dd4fce3527c43bd27e086c5359dca226918714dbcc5b3e12e24fe6d3dc",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_young_student",
+      "path": "app/assets/portraits/f_young_student.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "c681cb0b1fe956786af9eb5a154c17082d21d055902b8e0c7fec217aec3f3e30",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "f_young_waitress",
+      "path": "app/assets/portraits/f_young_waitress.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "3b51a6dc892450f6489d24984f19face75954faa1d7a5a023656890a5d63207f",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "f_neutral_20_pixie",
+      "path": "app/assets/portraits/f_neutral_20_pixie.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "f8d6b07d5a99f04140ef6cb118498bf45db1de427f08eeccd38f603a5f5db66d",
+      "review_date": "2026-11-11",
+      "decision": "اصلاح شد؛ چهره حفظ و روسری ساده اضافه شد"
+    },
+    {
+      "id": "f_neutral_27_coils",
+      "path": "app/assets/portraits/f_neutral_27_coils.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "bcd85fcad1b26f2d56644b0f15b4d545794c7ba2c161ea3daabdcd89113e729d",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ مطابق دستور فقط head_covering ثبت شد"
+    },
+    {
+      "id": "f_neutral_29_square",
+      "path": "app/assets/portraits/f_neutral_29_square.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "38b318bc0cb9d54e39cb6b0b7c48a676a8c31f99e027561cda387b3cb0124271",
+      "review_date": "2026-11-11",
+      "decision": "اصلاح شد؛ چهره حفظ و روسری ساده اضافه شد"
+    },
+    {
+      "id": "det_02",
+      "path": "app/assets/avatars/det_02.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "4bfca0092b90f350627a3057757f0286663f8f6badf9c3bf321ebcc1ee222b3c",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "det_04",
+      "path": "app/assets/avatars/det_04.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "087a9a965d19479644ed1cc62163fbc405b153642c4031946222013d722baa3e",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "det_06",
+      "path": "app/assets/avatars/det_06.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "19d5e17b4f96bc1dccb98ee80d995e06b9a032751e3405ea59fdffcabc2c85ea",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "det_08",
+      "path": "app/assets/avatars/det_08.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "682e229339e957c391d84a8b4fd98462ca46b8047f38bb3d1dfae1aeac31dcb3",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "det_10",
+      "path": "app/assets/avatars/det_10.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "43a20ef07a5dae571af1889124a1bd36b55864ea6fc0539070348660023a22d5",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "ex_cat",
+      "path": "app/assets/avatars/ex_cat.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "bc8eb81d2233be84902bbdfd167845d4b9069d5fe11d0a9f085e6264bfb109e3",
+      "review_date": "2026-11-11",
+      "decision": "بماند؛ روسری روی سر دارد"
+    },
+    {
+      "id": "ex_diva",
+      "path": "app/assets/avatars/ex_diva.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "da3a190bdff8dcd7f9d6d96b27f324e1d4bfcf49b28feb45af356c29fff44dc7",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "ex_forensic",
+      "path": "app/assets/avatars/ex_forensic.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "0d2db0a2d20b1e22cbe08845659e1bda26a44c4e9457bac293dbc96e5b530ace",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "ex_journalist",
+      "path": "app/assets/avatars/ex_journalist.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "8fdd20a3a6d8feae40d4ee4a5d92d01a8e52eeee6ac2592a3db76bd653134317",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "ex_librarian",
+      "path": "app/assets/avatars/ex_librarian.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "cddad78aa403b9470679a51a4c2b8b764a5f44d7c21ea0938a1e3063256746e0",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "ex_threestar",
+      "path": "app/assets/avatars/ex_threestar.webp",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "02afd82aba5f274cd1917ce67a6e751491860194461a04b379973f88d2c81743",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    },
+    {
+      "id": "ex_watchmaker",
+      "path": "app/assets/avatars/ex_watchmaker.webp",
+      "head_covering": "uncovered",
+      "sha256": "e981a954c663420eda03a8160a6e9a49c8df5b9c0dd0938576b3ead4edfc7c7a",
+      "review_date": "2026-11-11",
+      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+    }
+  ],
+  "head_covering_policy": {
+    "female_allowed_values": [
+      "scarf",
+      "scarf_hair_visible"
+    ],
+    "uncovered_forbidden": true,
+    "legacy_bypass": false,
+    "legacy_uncovered_pending_owner": [
+      "ex_watchmaker"
+    ],
+    "note": "Actual visual metadata is preserved. The strict registry test intentionally reports the untouched legacy uncovered image; no false scarf label or test exemption."
+  }
 }

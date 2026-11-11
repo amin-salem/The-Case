@@ -1,8 +1,8 @@
 {
   "assets_before_bytes": 8316768,
-  "assets_after_bytes": 8495132,
-  "increase_bytes": 178364,
-  "new_portrait_bytes": 209316,
+  "assets_after_bytes": 8489640,
+  "increase_bytes": 172872,
+  "new_portrait_bytes": 203824,
   "new_portraits": 16,
   "generated_portraits": 6,
   "imported_staged_portraits": 10,
@@ -23,7 +23,7 @@
     {
       "path": "app/assets/portraits/f_neutral_20_pixie.webp",
       "before": 0,
-      "after": 14904
+      "after": 11288
     },
     {
       "path": "app/assets/portraits/m_neutral_56_round.webp",
@@ -63,7 +63,7 @@
     {
       "path": "app/assets/portraits/f_neutral_29_square.webp",
       "before": 0,
-      "after": 11650
+      "after": 9774
     },
     {
       "path": "app/assets/portraits/m_mid_worker.webp",
@@ -153,5 +153,6 @@
       "ex_writer",
       22262
     ]
-  ]
+  ],
+  "scarf_revision_delta_bytes": -5492
 }

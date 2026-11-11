@@ -1,6 +1,19 @@
 """Shared editorial rules; filenames never grant age or occupation permission."""
 import re
 
+WOMEN_HEAD_COVERINGS = frozenset({'scarf', 'scarf_hair_visible'})
+
+
+def head_covering_errors(asset):
+    """Metadata contract; visual review must still check the actual image.
+
+    No legacy bypass: a preserved noncompliant image is reported as a failure
+    until its owner authorises a replacement. Never relabel bare hair as a scarf.
+    """
+    if asset.get('apparent_gender') == 'f' and asset.get('head_covering') not in WOMEN_HEAD_COVERINGS:
+        return [f"{asset.get('id', '<unknown>')}: female head_covering must be scarf or scarf_hair_visible; got {asset.get('head_covering')!r}"]
+    return []
+
 
 def age_band(age):
     if age < 18:
@@ -44,7 +57,7 @@ def available(portrait_id, case, releases, original_id=None):
 
 
 def incompatibilities(portrait, suspect):
-    errors = []
+    errors = head_covering_errors(portrait)
     if portrait['apparent_gender'] != suspect['avatar']['gender']:
         errors.append('gender')
     if abs(portrait['apparent_age'] - suspect['age']) > 7:
