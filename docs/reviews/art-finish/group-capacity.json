@@ -40,8 +40,8 @@
       "before_distinct": 9,
       "target": 12,
       "shortage": 3,
-      "generated": 3,
-      "after_distinct": 12,
+      "generated": 4,
+      "after_distinct": 13,
       "unwritten_slots": 6
     },
     {
@@ -51,8 +51,8 @@
       "before_distinct": 30,
       "target": 12,
       "shortage": 0,
-      "generated": 0,
-      "after_distinct": 30,
+      "generated": 7,
+      "after_distinct": 37,
       "unwritten_slots": 33
     },
     {
@@ -62,8 +62,8 @@
       "before_distinct": 18,
       "target": 12,
       "shortage": 0,
-      "generated": 0,
-      "after_distinct": 18,
+      "generated": 2,
+      "after_distinct": 20,
       "unwritten_slots": 13
     }
   ],

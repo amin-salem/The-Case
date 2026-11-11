@@ -1,0 +1,145 @@
+{
+  "date": "2026-11-11",
+  "before_capacity_source": "group-capacity.json",
+  "demand_source": "released-repair-errors.csv",
+  "future_slots_checked": "docs/reviews/portrait-quality/future-slots.csv",
+  "actual_errors": 15,
+  "currently_free_released_for_each": 0,
+  "new_portraits": 10,
+  "groups": [
+    {
+      "gender": "m",
+      "age_range": "28-35",
+      "new": 2
+    },
+    {
+      "gender": "m",
+      "age_range": "40-55",
+      "new": 6
+    },
+    {
+      "gender": "m",
+      "age_range": "56+",
+      "new": 2
+    }
+  ],
+  "additional_staged_reused_for_pending": 5,
+  "reason": "Owner requested neutral capacity for the 15 written-case defects. Generic 12-per-band file counts include uniforms and are not neutral/release capacity. Ten new identities plus five distinct already-staged neutral identities will cover the 15 pending slots; none will enter a case before a real release and a valid date.",
+  "before_capacity_snapshot": {
+    "groups": [
+      {
+        "gender": "f",
+        "age_band": "young",
+        "before_files": 10,
+        "before_distinct": 9,
+        "target": 12,
+        "shortage": 3,
+        "generated": 3,
+        "after_distinct": 12,
+        "unwritten_slots": 5
+      },
+      {
+        "gender": "f",
+        "age_band": "mid",
+        "before_files": 41,
+        "before_distinct": 35,
+        "target": 12,
+        "shortage": 0,
+        "generated": 0,
+        "after_distinct": 35,
+        "unwritten_slots": 35
+      },
+      {
+        "gender": "f",
+        "age_band": "old",
+        "before_files": 18,
+        "before_distinct": 18,
+        "target": 12,
+        "shortage": 0,
+        "generated": 0,
+        "after_distinct": 18,
+        "unwritten_slots": 6
+      },
+      {
+        "gender": "m",
+        "age_band": "young",
+        "before_files": 11,
+        "before_distinct": 9,
+        "target": 12,
+        "shortage": 3,
+        "generated": 3,
+        "after_distinct": 12,
+        "unwritten_slots": 6
+      },
+      {
+        "gender": "m",
+        "age_band": "mid",
+        "before_files": 35,
+        "before_distinct": 30,
+        "target": 12,
+        "shortage": 0,
+        "generated": 0,
+        "after_distinct": 30,
+        "unwritten_slots": 33
+      },
+      {
+        "gender": "m",
+        "age_band": "old",
+        "before_files": 22,
+        "before_distinct": 18,
+        "target": 12,
+        "shortage": 0,
+        "generated": 0,
+        "after_distinct": 18,
+        "unwritten_slots": 13
+      }
+    ],
+    "unknown_gender_slots": 2,
+    "note": "Distinct count = maximum independent set under reviewed similarity pairs. Includes retained occupational images and staged assets. This is not current neutral release capacity."
+  },
+  "age_band_note": "Owner cohort 28-35 contains young age29 and mid age34; strict registry young18-30, mid31-55, old56+ is unchanged.",
+  "final_ages": [
+    {
+      "id": "m_neutral_29_long",
+      "age": 29
+    },
+    {
+      "id": "m_neutral_34_dimples",
+      "age": 34
+    },
+    {
+      "id": "m_neutral_41_shaved",
+      "age": 41
+    },
+    {
+      "id": "m_neutral_44_nose",
+      "age": 44
+    },
+    {
+      "id": "m_neutral_47_copper",
+      "age": 47
+    },
+    {
+      "id": "m_neutral_50_silver",
+      "age": 50
+    },
+    {
+      "id": "m_neutral_52_curls",
+      "age": 52
+    },
+    {
+      "id": "m_neutral_55_brow",
+      "age": 55
+    },
+    {
+      "id": "m_neutral_64_lined",
+      "age": 64
+    },
+    {
+      "id": "m_neutral_62_soft",
+      "age": 62
+    }
+  ],
+  "regenerated_discarded_variants": 2,
+  "note": "Ten final new portrait files. Two first variants discarded after similarity review; not shipped. Final older identities estimated 62 and64; the brief age58 was corrected to64 from actual appearance."
+}

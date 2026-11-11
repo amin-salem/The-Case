@@ -111,21 +111,26 @@ class CaseArtContract(unittest.TestCase):
 
     def test_all_ages_and_uniforms(self):
         errors=[]
+        slots=set()
         for c in cases():
             for s in c['suspects']:
                 r=self.reg[s['avatar']['portrait']]
                 slot=f"{c['id']}/{s['id']}"
                 for reason in incompatibilities(r,s):
+                    slots.add(slot)
                     errors.append(f"{slot}: {reason}; character age {s['age']}, portrait {r['id']} age {r['apparent_age']}; {s['role']}")
-        self.assertEqual(errors, [], '\n'.join(errors))
+        count=str(len(slots)).translate(str.maketrans('0123456789','۰۱۲۳۴۵۶۷۸۹'))
+        status=f"{count} خطا تا آزادشدن چهره‌های جدید؛ pending-remap.json مجوز عبور از تست نیست."
+        self.assertEqual(errors, [], status+'\n'+'\n'.join(errors))
 
     def test_staged_assets_have_dimensions_budget_and_blocking_date(self):
         releases=read(ROOT/'docs/portrait-release.json')['portraits']
         for key,release in releases.items():
             if release.get('first_build') is not None:
                 continue
-            self.assertEqual(release['usable_from'],'9999-12-31')
-            self.assertEqual(self.reg[key]['usable_from'],'9999-12-31')
+            self.assertIn(release['usable_from'], (None, '9999-12-31'))
+            self.assertEqual(self.reg[key]['usable_from'],release['usable_from'])
+            self.assertFalse(available(key, {'publish':'9999-12-31'}, {'portraits':releases}))
             data=(ROOT/'app/assets/portraits'/f'{key}.webp').read_bytes()
             self.assertLessEqual(len(data),18000,key)
             self.assertEqual(data[:4],b'RIFF')
@@ -139,6 +144,40 @@ class CaseArtContract(unittest.TestCase):
                     value=int.from_bytes(body[1:5],'little');dims=((value & 0x3fff)+1,((value>>14)&0x3fff)+1)
                 pos+=8+size+(size%2)
             self.assertEqual(dims,(448,448),key)
+
+    def test_unconfirmed_release_never_grants_access(self):
+        for build,day in ((None,None),(None,'2000-01-01'),(99,None),(99,'')):
+            ledger={'portraits':{'fixture':{'first_build':build,'usable_from':day}}}
+            self.assertFalse(available('fixture', {'publish':'2099-01-01'}, ledger, 'fixture'))
+
+    def test_pending_remaps_are_compatible_unique_and_not_live(self):
+        plan=read(ROOT/'docs/reviews/art-finish/pending-remap.json')
+        actual={f"{c['id']}/{s['id']}" for c in cases() for s in c['suspects']
+                if incompatibilities(self.reg[s['avatar']['portrait']],s)}
+        self.assertEqual({r['slot'] for r in plan['remaps']},actual)
+        self.assertEqual(len(plan['remaps']),len(actual))
+        ledger=read(ROOT/'docs/portrait-release.json')
+        blocked={frozenset(p) for p in read(REVIEW/'editorial-neighbours.json')}
+        blocked.update(frozenset((p['a'],p['b'])) for p in self.review if p['decision']=='avoid_same_cast')
+        indexed={c['id']:c for c in cases()}
+        album={next(s for s in c['suspects'] if s['id']==c['solution']['culprit'])['avatar']['portrait'] for c in cases()}
+        replacements=set()
+        for row in plan['remaps']:
+            c=indexed[row['case_id']]
+            s=next(s for s in c['suspects'] if s['id']==row['suspect_id'])
+            key=row['replacement_portrait']
+            self.assertEqual(row['slot'],f"{c['id']}/{s['id']}")
+            self.assertEqual(s['avatar']['portrait'],row['current_portrait'])
+            self.assertEqual(incompatibilities(self.reg[key],s),[])
+            self.assertNotIn(key,album)
+            self.assertNotIn(key,replacements)
+            replacements.add(key)
+            self.assertIsNone(row['allowed_from'])
+            self.assertIsNone(ledger['portraits'][key]['first_build'])
+            self.assertFalse(available(key,c,ledger))
+            self.assertNotIn(key,{a['avatar']['portrait'] for a in c['suspects']})
+            self.assertFalse(any(frozenset((key,a['avatar']['portrait'])) in blocked
+                                 for a in c['suspects'] if a['id']!=s['id']))
 
     def test_cosmetic_aliases_reference_one_existing_asset(self):
         rows=read(ROOT/'docs/art-registry.json')['cosmetics']

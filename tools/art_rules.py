@@ -48,7 +48,7 @@ def available(portrait_id, case, releases, original_id=None):
     record = releases['portraits'].get(portrait_id)
     if not record:
         return True  # pre-existing pool, per the repository's release ledger
-    if record.get('first_build') is None:
+    if record.get('first_build') is None or not record.get('usable_from'):
         return False
     if case['publish'] >= record['usable_from']:
         return True

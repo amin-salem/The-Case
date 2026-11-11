@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-11",
+  "source_commit": "ccc8fc2b60c76a7a3b613fb8ad212caece10238f",
+  "status": "۱۵ خطا تا آزادشدن چهره‌های جدید",
+  "test_exemption": false,
+  "automatic_apply": false,
+  "allowed_from": null,
+  "reason_date_is_empty": "No APK built or released. Amin confirms the shipping build and majority-availability day; never invent or backdate.",
+  "historical_case_policy": "The existing case.publish >= usable_from rule remains in force. These old cases need an explicitly approved version-aware rollout policy before a future remap can be applied.",
+  "remaps": [
+    {
+      "slot": "c003/s2",
+      "case_id": "c003",
+      "suspect_id": "s2",
+      "current_portrait": "m_mid_chef",
+      "character_age": 45,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_44_nose",
+      "replacement_apparent_age": 44,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-10-01",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c007/s1",
+      "case_id": "c007",
+      "suspect_id": "s1",
+      "current_portrait": "m_mid_policeman",
+      "character_age": 45,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_45_waves",
+      "replacement_apparent_age": 45,
+      "replacement_source": "existing_unreleased_neutral",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-10-05",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c020/s2",
+      "case_id": "c020",
+      "suspect_id": "s2",
+      "current_portrait": "m_young_worker",
+      "character_age": 29,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_29_long",
+      "replacement_apparent_age": 29,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-10-18",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c026/s3",
+      "case_id": "c026",
+      "suspect_id": "s3",
+      "current_portrait": "m_mid_conductor",
+      "character_age": 53,
+      "issues": [
+        "age",
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_55_brow",
+      "replacement_apparent_age": 55,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-10-24",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c029/s5",
+      "case_id": "c029",
+      "suspect_id": "s5",
+      "current_portrait": "m_old_butler",
+      "character_age": 36,
+      "issues": [
+        "age",
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_38_coils",
+      "replacement_apparent_age": 39,
+      "replacement_source": "existing_unreleased_neutral",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-10-27",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c033/s1",
+      "case_id": "c033",
+      "suspect_id": "s1",
+      "current_portrait": "m_mid_fixer",
+      "character_age": 38,
+      "issues": [
+        "age",
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_41_shaved",
+      "replacement_apparent_age": 41,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-10-31",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c038/s1",
+      "case_id": "c038",
+      "suspect_id": "s1",
+      "current_portrait": "m_mid_roadworker",
+      "character_age": 52,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_52_curls",
+      "replacement_apparent_age": 52,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-11-05",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c039/s5",
+      "case_id": "c039",
+      "suspect_id": "s5",
+      "current_portrait": "m_mid_doctor",
+      "character_age": 50,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_50_silver",
+      "replacement_apparent_age": 50,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-11-06",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c043/s4",
+      "case_id": "c043",
+      "suspect_id": "s4",
+      "current_portrait": "m_mid_officer",
+      "character_age": 50,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_47_copper",
+      "replacement_apparent_age": 47,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-11-10",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c051/s4",
+      "case_id": "c051",
+      "suspect_id": "s4",
+      "current_portrait": "m_mid_nurse",
+      "character_age": 55,
+      "issues": [
+        "age"
+      ],
+      "replacement_portrait": "m_neutral_62_soft",
+      "replacement_apparent_age": 62,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-11-18",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c055/s5",
+      "case_id": "c055",
+      "suspect_id": "s5",
+      "current_portrait": "m_mid_cook",
+      "character_age": 49,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_46_angular",
+      "replacement_apparent_age": 49,
+      "replacement_source": "existing_unreleased_neutral",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-11-22",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "c063/s3",
+      "case_id": "c063",
+      "suspect_id": "s3",
+      "current_portrait": "m_old_scientist",
+      "character_age": 52,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_53_square",
+      "replacement_apparent_age": 53,
+      "replacement_source": "existing_unreleased_neutral",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-11-30",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "w002/s6",
+      "case_id": "w002",
+      "suspect_id": "s6",
+      "current_portrait": "m_old_rich",
+      "character_age": 57,
+      "issues": [
+        "age"
+      ],
+      "replacement_portrait": "m_neutral_64_lined",
+      "replacement_apparent_age": 64,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-10-15",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "w004/s5",
+      "case_id": "w004",
+      "suspect_id": "s5",
+      "current_portrait": "m_mid_technician",
+      "character_age": 44,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_44_long",
+      "replacement_apparent_age": 44,
+      "replacement_source": "existing_unreleased_neutral",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-10-29",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    },
+    {
+      "slot": "w007/s5",
+      "case_id": "w007",
+      "suspect_id": "s5",
+      "current_portrait": "m_young_courier",
+      "character_age": 32,
+      "issues": [
+        "role/clothing"
+      ],
+      "replacement_portrait": "m_neutral_34_dimples",
+      "replacement_apparent_age": 34,
+      "replacement_source": "new_this_revision",
+      "first_build": null,
+      "allowed_from": null,
+      "status": "pending_release_and_historical_case_policy",
+      "case_publish": "2026-11-19",
+      "apply_to_case_files": false,
+      "release_gate": "Confirmed APK release, majority availability and a real usable_from; current case publication must also satisfy the ledger. A later release alone does not authorise changing a historical case."
+    }
+  ]
+}

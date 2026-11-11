@@ -1,0 +1,178 @@
+[
+  {
+    "id": "m_neutral_29_long",
+    "path": "app/assets/portraits/m_neutral_29_long.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2188838,
+    "after_bytes": 11828,
+    "quality": 82,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.94723,
+    "sha256": "f9ec84653f566df2787de3e1e55bacf8251752f153e6b6ee50cf31797a47bb8f",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "m_neutral_34_dimples",
+    "path": "app/assets/portraits/m_neutral_34_dimples.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2241278,
+    "after_bytes": 13424,
+    "quality": 82,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.94163,
+    "sha256": "4e2d65595b14dbac9c301a43bd86a1489e95a252c268e96e1e47a378701f8295",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "m_neutral_41_shaved",
+    "path": "app/assets/portraits/m_neutral_41_shaved.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2496283,
+    "after_bytes": 15742,
+    "quality": 82,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.93219,
+    "sha256": "1c17ffb31a1b4bf8d28a55a2152cbfed227516604b80e8b43baa0133b7d9f79e",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "m_neutral_44_nose",
+    "path": "app/assets/portraits/m_neutral_44_nose.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2262915,
+    "after_bytes": 11700,
+    "quality": 82,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.94874,
+    "sha256": "0bf66f71da93191c1951d91f6e97f2617b1a2fd23e5efb764ccd8faa24c32055",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "m_neutral_47_copper",
+    "path": "app/assets/portraits/m_neutral_47_copper.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2486566,
+    "after_bytes": 17482,
+    "quality": 80,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.92507,
+    "sha256": "4a177b0c0c792ebe25c4543a0decaecfce0bc989624d767b320b06ae339fd49d",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "ex_watchmaker",
+    "path": "app/assets/avatars/ex_watchmaker.webp",
+    "before_asset_bytes": 23894,
+    "source_bytes": 2045345,
+    "after_bytes": 17946,
+    "quality": 73,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.90912,
+    "sha256": "966e4a4300c50f5b2f58f5489c29e1a40ff6f20896abda17e88f4017877acd7f",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "m_neutral_50_silver",
+    "path": "app/assets/portraits/m_neutral_50_silver.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2302974,
+    "after_bytes": 13712,
+    "quality": 82,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.95328,
+    "sha256": "4affddd053fd7fc469a2588cb38cbef67ad3727365897980f9077de0fb26e917",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "m_neutral_52_curls",
+    "path": "app/assets/portraits/m_neutral_52_curls.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2635388,
+    "after_bytes": 17712,
+    "quality": 78,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.8975,
+    "sha256": "ce8c4e2d60207cc21f1e362da1db89897060634f888335e7acc2fe6606c1e3f1",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "m_neutral_55_brow",
+    "path": "app/assets/portraits/m_neutral_55_brow.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2378588,
+    "after_bytes": 12916,
+    "quality": 82,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.94215,
+    "sha256": "b0ab7ff61f9cf1c5c465dd25a1d2caed17c2aebd26fd6cba9a1fe2e4e39a1c55",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "m_neutral_64_lined",
+    "path": "app/assets/portraits/m_neutral_64_lined.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2838901,
+    "after_bytes": 17778,
+    "quality": 73,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.90192,
+    "sha256": "a1c5a556505ff330ede3559266312b47f2f76c384a9c1a339425a286b2437e94",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  },
+  {
+    "id": "m_neutral_62_soft",
+    "path": "app/assets/portraits/m_neutral_62_soft.webp",
+    "before_asset_bytes": 0,
+    "source_bytes": 2637430,
+    "after_bytes": 17588,
+    "quality": 77,
+    "method": 6,
+    "dimensions": [
+      448,
+      448
+    ],
+    "ssim": 0.92279,
+    "sha256": "a1ed3f26b1e8ddc932d2a6d40fb9abdca7643389f1cdee360800b7d69e93fafe",
+    "comparison": "Resized source versus WebP compression only; final face/eyes/hair reviewed visually."
+  }
+]

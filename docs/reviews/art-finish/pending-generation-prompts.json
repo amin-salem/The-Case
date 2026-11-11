@@ -1,0 +1,129 @@
+[
+  {
+    "id": "m_neutral_29_long",
+    "apparent_age": 29,
+    "prompt": "Use case: stylized-concept. Asset: one neutral male suspect portrait for the Persian noir mystery game Parvandeh. Single Iranian adult man, apparent age 29, a long narrow face, close-set deep brown eyes, prominent straight nose, short dark auburn hair with a deep side part, a thin pencil moustache, no beard, no glasses, light olive skin, faded charcoal crewneck T-shirt. Calm serious expression, lifelike ordinary person, natural age lines appropriate to 29, clearly distinct identity. Square head-and-shoulders portrait centered with full top of head, slightly turned toward viewer. Cinematic painterly realism matching the existing portraits, warm soft amber key light from upper left, subtle muted navy-black gradient background, gentle shadow, visible clear eyes, restrained skin and hair texture, readable at 448x448. Everyday inexpensive Iranian casual clothing; no suit, tie, uniform, badge, apron, tool, occupational prop, jewellery or luxury cues. No other people, no text, no letters, no watermark.",
+    "face_shape": "long",
+    "hair_color": "dark auburn",
+    "hair_style": "short deep side part",
+    "facial_hair": "thin pencil moustache",
+    "glasses": false,
+    "skin_tone": "light olive",
+    "clothing": "faded charcoal crewneck T-shirt"
+  },
+  {
+    "id": "m_neutral_34_dimples",
+    "apparent_age": 34,
+    "prompt": "Use case: stylized-concept. Asset: one neutral male suspect portrait for the Persian noir mystery game Parvandeh. Single Iranian adult man, apparent age 34, a softly square face with clear cheek dimples, broad nose, warm brown eyes, short coarse black curls, a small trimmed goatee with clean cheeks, no glasses, deep warm brown Iranian skin, plain muted teal casual open-collar shirt. Calm serious expression, lifelike ordinary person, natural age lines appropriate to 34, clearly distinct identity. Square head-and-shoulders portrait centered with full top of head, slightly turned toward viewer. Cinematic painterly realism matching the existing portraits, warm soft amber key light from upper left, subtle muted navy-black gradient background, gentle shadow, visible clear eyes, restrained skin and hair texture, readable at 448x448. Everyday inexpensive Iranian casual clothing; no suit, tie, uniform, badge, apron, tool, occupational prop, jewellery or luxury cues. No other people, no text, no letters, no watermark.",
+    "face_shape": "soft square with cheek dimples",
+    "hair_color": "black",
+    "hair_style": "short coarse curls",
+    "facial_hair": "small trimmed goatee",
+    "glasses": false,
+    "skin_tone": "deep warm brown",
+    "clothing": "plain muted teal casual shirt"
+  },
+  {
+    "id": "m_neutral_41_shaved",
+    "apparent_age": 41,
+    "prompt": "Use case: stylized-concept. Asset: one neutral male suspect portrait for the Persian noir mystery game Parvandeh. Single Iranian adult man, apparent age 41, a compact round face, wide-set dark eyes, a fully shaved scalp with subtle stubble, clean-shaven jaw, thin oval wire-frame glasses, medium olive skin, plain stone-grey crewneck sweater. Calm serious expression, lifelike ordinary person, natural age lines appropriate to 41, clearly distinct identity. Square head-and-shoulders portrait centered with full top of head, slightly turned toward viewer. Cinematic painterly realism matching the existing portraits, warm soft amber key light from upper left, subtle muted navy-black gradient background, gentle shadow, visible clear eyes, restrained skin and hair texture, readable at 448x448. Everyday inexpensive Iranian casual clothing; no suit, tie, uniform, badge, apron, tool, occupational prop, jewellery or luxury cues. No other people, no text, no letters, no watermark.",
+    "face_shape": "compact round",
+    "hair_color": "black scalp stubble",
+    "hair_style": "shaved scalp",
+    "facial_hair": "clean shaven",
+    "glasses": true,
+    "skin_tone": "medium olive",
+    "clothing": "stone-grey crewneck sweater"
+  },
+  {
+    "id": "m_neutral_44_nose",
+    "apparent_age": 44,
+    "prompt": "Use case: stylized-concept. Asset: one neutral male suspect portrait for the Persian noir mystery game Parvandeh. Single Iranian adult man, apparent age 44, a lean triangular face, a distinctive gently hooked long nose, deep hazel eyes, straight black hair brushed forward with two silver temple streaks, clean shaven, no glasses, light warm beige skin, plain dark plum cotton casual shirt. Calm serious expression, lifelike ordinary person, natural age lines appropriate to 44, clearly distinct identity. Square head-and-shoulders portrait centered with full top of head, slightly turned toward viewer. Cinematic painterly realism matching the existing portraits, warm soft amber key light from upper left, subtle muted navy-black gradient background, gentle shadow, visible clear eyes, restrained skin and hair texture, readable at 448x448. Everyday inexpensive Iranian casual clothing; no suit, tie, uniform, badge, apron, tool, occupational prop, jewellery or luxury cues. No other people, no text, no letters, no watermark.",
+    "face_shape": "lean triangular with hooked nose",
+    "hair_color": "black with silver temple streaks",
+    "hair_style": "straight brushed forward",
+    "facial_hair": "clean shaven",
+    "glasses": false,
+    "skin_tone": "light warm beige",
+    "clothing": "plain dark plum cotton casual shirt"
+  },
+  {
+    "id": "m_neutral_47_copper",
+    "apparent_age": 47,
+    "prompt": "Use case: stylized-concept. Asset: one neutral male suspect portrait for the Persian noir mystery game Parvandeh. Single Iranian adult man, apparent age 47, a broad rectangular face, heavy eyebrows, slightly asymmetrical smile, short copper-brown hair with a receding hairline, thick copper-brown moustache and short stubble, no glasses, medium warm tan Iranian skin, plain sand-coloured knit jumper. Calm serious expression, lifelike ordinary person, natural age lines appropriate to 47, clearly distinct identity. Square head-and-shoulders portrait centered with full top of head, slightly turned toward viewer. Cinematic painterly realism matching the existing portraits, warm soft amber key light from upper left, subtle muted navy-black gradient background, gentle shadow, visible clear eyes, restrained skin and hair texture, readable at 448x448. Everyday inexpensive Iranian casual clothing; no suit, tie, uniform, badge, apron, tool, occupational prop, jewellery or luxury cues. No other people, no text, no letters, no watermark.",
+    "face_shape": "broad rectangular",
+    "hair_color": "copper brown",
+    "hair_style": "short receding",
+    "facial_hair": "thick moustache with short stubble",
+    "glasses": false,
+    "skin_tone": "medium warm tan",
+    "clothing": "plain sand knit jumper"
+  },
+  {
+    "id": "ex_watchmaker",
+    "prompt": "Use case: identity-preserve. Edit target: the supplied ex_watchmaker game avatar. Preserve exactly this Iranian woman's facial identity, eyes, nose, lips, age, gaze, pose, amber and cobalt noir lighting, painterly cinematic style and clockwork atmosphere. Replace her bare head with a simple matte dark charcoal headscarf worn ON THE HEAD, loosely covering the crown and wrapping the neck; a few existing dark hair wisps may show at the front. Remove the leather apron, work harness and decorated outer scarf. Dress her in a plain everyday Iranian dark indigo top. Keep one small brass watchmaker loupe tucked at her forehead over the scarf; tiny gears in the blurred background can remain. No large occupational equipment on her clothing. Square centered head-and-shoulders crop, single person, face clear at thumbnail size. No text, letters or watermark. Keep the same face; change head covering and clothing only."
+  },
+  {
+    "id": "m_neutral_50_silver",
+    "apparent_age": 50,
+    "prompt": "Use case: stylized-concept. Asset: one neutral male suspect portrait for the Persian noir mystery game Parvandeh. Single Iranian adult man, apparent age 50, an elongated oval face, narrow thoughtful eyes, grey-green eyes, very short salt-and-pepper hair, a close-cropped full salt-and-pepper beard, small round dark glasses, medium olive skin, plain dark navy cotton polo. Calm serious expression, lifelike ordinary person, natural age lines appropriate to 50, clearly distinct identity. Square head-and-shoulders portrait centered with full top of head, slightly turned toward viewer. Cinematic painterly realism matching the existing portraits, warm soft amber key light from upper left, subtle muted navy-black gradient background, gentle shadow, visible clear eyes, restrained skin and hair texture, readable at 448x448. Everyday inexpensive Iranian casual clothing; no suit, tie, uniform, badge, apron, tool, occupational prop, jewellery or luxury cues. No other people, no text, no letters, no watermark.",
+    "face_shape": "elongated oval",
+    "hair_color": "salt and pepper",
+    "hair_style": "very short cropped",
+    "facial_hair": "close full salt-and-pepper beard",
+    "glasses": true,
+    "skin_tone": "medium olive",
+    "clothing": "plain dark navy cotton polo"
+  },
+  {
+    "id": "m_neutral_52_curls",
+    "apparent_age": 52,
+    "prompt": "Use case: stylized-concept. Create one clearly distinctive fictional Iranian man visibly age 52. Unusual ordinary face: very broad ROUND plump face with full cheeks and a small round chin; wide-set small slightly squinting pale hazel eyes; SHORT small upturned nose with a wide tip, very thin pale eyebrows, thin smiling lips, large protruding ears. Light warm beige freckled Iranian skin, soft forehead lines and crow's feet. HIGH balding forehead, sparse loose grey-black curls only at the sides, no dense black curly cap. Completely CLEAN SHAVEN; no beard, no moustache, no glasses. Plain brick brown everyday cardigan over a simple cream crewneck top. Friendly closed mouth. NOT an angular dark-haired handsome man, not heavy eyebrows, no high cheekbones. Single square head-and-shoulders neutral game portrait, cinematic painterly realism, warm amber side light, simple deep navy background. Eyes clear at 448px. Everyday inexpensive Iranian clothes, no uniform, suit, tie, tools, badge or job cues. No text or watermark.",
+    "face_shape": "very broad round face, plump cheeks, small rounded chin",
+    "hair_color": "grey-black",
+    "hair_style": "sparse loose curls with high receding hairline",
+    "facial_hair": "clean shaven",
+    "glasses": false,
+    "skin_tone": "light warm freckled beige",
+    "clothing": "plain brick-brown everyday cardigan and cream crewneck",
+    "revision_reason": "First variant resembled another new identity; regenerated with a distinct facial structure."
+  },
+  {
+    "id": "m_neutral_55_brow",
+    "apparent_age": 55,
+    "prompt": "Use case: stylized-concept. Asset: one neutral male suspect portrait for the Persian noir mystery game Parvandeh. Single Iranian adult man, apparent age 55, a broad pear-shaped face with a narrow forehead, deep-set amber brown eyes, thinning sandy grey hair combed back, a thick drooping salt-and-pepper moustache, no beard, no glasses, light olive freckled skin, plain moss-green collared everyday shirt. Calm serious expression, lifelike ordinary person, natural age lines appropriate to 55, clearly distinct identity. Square head-and-shoulders portrait centered with full top of head, slightly turned toward viewer. Cinematic painterly realism matching the existing portraits, warm soft amber key light from upper left, subtle muted navy-black gradient background, gentle shadow, visible clear eyes, restrained skin and hair texture, readable at 448x448. Everyday inexpensive Iranian casual clothing; no suit, tie, uniform, badge, apron, tool, occupational prop, jewellery or luxury cues. No other people, no text, no letters, no watermark.",
+    "face_shape": "pear shaped",
+    "hair_color": "sandy grey",
+    "hair_style": "thinning combed back",
+    "facial_hair": "drooping salt-and-pepper moustache",
+    "glasses": false,
+    "skin_tone": "light olive with age freckles",
+    "clothing": "plain moss-green everyday shirt"
+  },
+  {
+    "id": "m_neutral_64_lined",
+    "apparent_age": 64,
+    "prompt": "Use case: stylized-concept. A completely distinct fictional Iranian male character, visibly age 58. Large broad rectangular jowled face with a heavy broad chin, very broad flared nose, low straight forehead, small deep-set dark brown eyes, thick grey eyebrows, large attached earlobes and deep smile lines. Deep warm tan Iranian skin with age spots and pronounced forehead wrinkles. Full straight SILVER hair reaching ear length swept back, no bald crown. One heavy WHITE HORSESHOE MOUSTACHE around the corners of the mouth; cheeks and chin clean shaven. NO full beard, NO glasses. Plain dark brown everyday zip cardigan, no collar insignia. Calm slight frown, eyes looking toward viewer. Single square head-and-shoulders neutral suspect portrait; cinematic painterly realism, warm amber light against deep plain navy background, clear facial detail and hair at 448px. No uniform, suit, tie, tools, badge, hat, luxury cues or occupation symbols. No text, letters or watermark.",
+    "face_shape": "broad rectangular jowled face with heavy chin and broad nose",
+    "hair_color": "silver",
+    "hair_style": "straight ear-length swept-back silver hair",
+    "facial_hair": "heavy white horseshoe moustache, clean cheeks and chin",
+    "glasses": false,
+    "skin_tone": "deep warm tan",
+    "clothing": "plain dark brown everyday zip cardigan",
+    "revision_reason": "First variant resembled another new identity; regenerated with a distinct facial structure.",
+    "visual_age_note": "Generated brief asked for 58; visual review estimated 64 from pronounced lines, jowls and silver hair. Filename and metadata corrected before release."
+  },
+  {
+    "id": "m_neutral_62_soft",
+    "apparent_age": 62,
+    "prompt": "Use case: stylized-concept. Asset: one neutral male suspect portrait for the Persian noir mystery game Parvandeh. Single Iranian adult man, apparent age 62, a full softly rounded face, drooping eyelids and visible fine wrinkles, dark brown eyes, thick white wavy hair parted off-centre, clean-shaven rounded chin, no glasses, light warm beige Iranian skin, plain muted blue everyday shirt and grey knit cardigan. Calm serious expression, lifelike ordinary person, natural age lines appropriate to 62, clearly distinct identity. Square head-and-shoulders portrait centered with full top of head, slightly turned toward viewer. Cinematic painterly realism matching the existing portraits, warm soft amber key light from upper left, subtle muted navy-black gradient background, gentle shadow, visible clear eyes, restrained skin and hair texture, readable at 448x448. Everyday inexpensive Iranian casual clothing; no suit, tie, uniform, badge, apron, tool, occupational prop, jewellery or luxury cues. No other people, no text, no letters, no watermark.",
+    "face_shape": "full softly rounded",
+    "hair_color": "white",
+    "hair_style": "thick wavy side part",
+    "facial_hair": "clean shaven",
+    "glasses": false,
+    "skin_tone": "light warm beige",
+    "clothing": "muted blue shirt and grey knit cardigan"
+  }
+]

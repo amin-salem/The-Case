@@ -6225,6 +6225,437 @@
         "status": "reviewed"
       },
       "head_covering": "scarf_hair_visible"
+    },
+    {
+      "id": "m_neutral_29_long",
+      "apparent_age": 29,
+      "hair_color": "dark auburn",
+      "hair_style": "short deep side part",
+      "facial_hair": "thin pencil moustache",
+      "glasses": false,
+      "skin_tone": "light olive",
+      "face_shape": "long",
+      "clothing": "faded charcoal crewneck T-shirt",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        24,
+        34
+      ],
+      "age_band": "young",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "f9ec84653f566df2787de3e1e55bacf8251752f153e6b6ee50cf31797a47bb8f",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / serious",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_29_long.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "m_neutral_34_dimples",
+      "apparent_age": 34,
+      "hair_color": "black",
+      "hair_style": "short coarse curls",
+      "facial_hair": "small trimmed goatee",
+      "glasses": false,
+      "skin_tone": "deep warm brown",
+      "face_shape": "soft square with cheek dimples",
+      "clothing": "plain muted teal casual shirt",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        29,
+        39
+      ],
+      "age_band": "mid",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "4e2d65595b14dbac9c301a43bd86a1489e95a252c268e96e1e47a378701f8295",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / serious",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_34_dimples.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "m_neutral_41_shaved",
+      "apparent_age": 41,
+      "hair_color": "black scalp stubble",
+      "hair_style": "shaved scalp",
+      "facial_hair": "clean shaven",
+      "glasses": true,
+      "skin_tone": "medium olive",
+      "face_shape": "compact round",
+      "clothing": "stone-grey crewneck sweater",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        36,
+        46
+      ],
+      "age_band": "mid",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "1c17ffb31a1b4bf8d28a55a2152cbfed227516604b80e8b43baa0133b7d9f79e",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / serious",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_41_shaved.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "m_neutral_44_nose",
+      "apparent_age": 44,
+      "hair_color": "black with silver temple streaks",
+      "hair_style": "straight brushed forward",
+      "facial_hair": "clean shaven",
+      "glasses": false,
+      "skin_tone": "light warm beige",
+      "face_shape": "lean triangular with hooked nose",
+      "clothing": "plain dark plum cotton casual shirt",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        39,
+        49
+      ],
+      "age_band": "mid",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "0bf66f71da93191c1951d91f6e97f2617b1a2fd23e5efb764ccd8faa24c32055",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / serious",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_44_nose.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "m_neutral_47_copper",
+      "apparent_age": 47,
+      "hair_color": "copper brown",
+      "hair_style": "short receding",
+      "facial_hair": "thick moustache with short stubble",
+      "glasses": false,
+      "skin_tone": "medium warm tan",
+      "face_shape": "broad rectangular",
+      "clothing": "plain sand knit jumper",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        42,
+        52
+      ],
+      "age_band": "mid",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "4a177b0c0c792ebe25c4543a0decaecfce0bc989624d767b320b06ae339fd49d",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed"
+      },
+      "facial_expression": "slight asymmetric smile",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_47_copper.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "m_neutral_50_silver",
+      "apparent_age": 50,
+      "hair_color": "salt and pepper",
+      "hair_style": "very short cropped",
+      "facial_hair": "close full salt-and-pepper beard",
+      "glasses": true,
+      "skin_tone": "medium olive",
+      "face_shape": "elongated oval",
+      "clothing": "plain dark navy cotton polo",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        45,
+        55
+      ],
+      "age_band": "mid",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "4affddd053fd7fc469a2588cb38cbef67ad3727365897980f9077de0fb26e917",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / serious",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_50_silver.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "m_neutral_52_curls",
+      "apparent_age": 52,
+      "hair_color": "grey-black",
+      "hair_style": "sparse loose curls with high receding hairline",
+      "facial_hair": "clean shaven",
+      "glasses": false,
+      "skin_tone": "light warm freckled beige",
+      "face_shape": "very broad round face, plump cheeks, small rounded chin",
+      "clothing": "plain brick-brown everyday cardigan and cream crewneck",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        47,
+        57
+      ],
+      "age_band": "mid",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "ce8c4e2d60207cc21f1e362da1db89897060634f888335e7acc2fe6606c1e3f1",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed"
+      },
+      "facial_expression": "gentle closed-mouth smile",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_52_curls.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "m_neutral_55_brow",
+      "apparent_age": 55,
+      "hair_color": "sandy grey",
+      "hair_style": "thinning combed back",
+      "facial_hair": "drooping salt-and-pepper moustache",
+      "glasses": false,
+      "skin_tone": "light olive with age freckles",
+      "face_shape": "pear shaped",
+      "clothing": "plain moss-green everyday shirt",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        50,
+        60
+      ],
+      "age_band": "mid",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "b0ab7ff61f9cf1c5c465dd25a1d2caed17c2aebd26fd6cba9a1fe2e4e39a1c55",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / serious",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_55_brow.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "m_neutral_64_lined",
+      "apparent_age": 64,
+      "hair_color": "silver",
+      "hair_style": "straight ear-length swept-back silver hair",
+      "facial_hair": "heavy white horseshoe moustache, clean cheeks and chin",
+      "glasses": false,
+      "skin_tone": "deep warm tan",
+      "face_shape": "broad rectangular jowled face with heavy chin and broad nose",
+      "clothing": "plain dark brown everyday zip cardigan",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        59,
+        69
+      ],
+      "age_band": "old",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "a1c5a556505ff330ede3559266312b47f2f76c384a9c1a339425a286b2437e94",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed",
+        "note": "Brief asked for 58; actual visible lines, jowls and hair suggest 64. Metadata and filename corrected before release."
+      },
+      "facial_expression": "composed / serious",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_64_lined.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
+    },
+    {
+      "id": "m_neutral_62_soft",
+      "apparent_age": 62,
+      "hair_color": "white",
+      "hair_style": "thick wavy side part",
+      "facial_hair": "clean shaven",
+      "glasses": false,
+      "skin_tone": "light warm beige",
+      "face_shape": "full softly rounded",
+      "clothing": "muted blue shirt and grey knit cardigan",
+      "apparent_gender": "m",
+      "apparent_age_range": [
+        57,
+        67
+      ],
+      "age_band": "old",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "sha256": "a1ed3f26b1e8ddc932d2a6d40fb9abdca7643389f1cdee360800b7d69e93fafe",
+      "visual_review": {
+        "date": "2026-11-11",
+        "method": "Individual generated source and final 448px WebP inspected; editorial apparent age estimate, not biological measurement.",
+        "status": "reviewed"
+      },
+      "facial_expression": "composed / serious",
+      "clothing_formality": "everyday",
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No occupation-specific depiction; narrative supplies occupation.",
+        "Not available to any case until confirmed release and usable_from."
+      ],
+      "legacy_disposition": "خنثی هست و بمونه",
+      "new_assignments_ok": true,
+      "path": "app/assets/portraits/m_neutral_62_soft.webp",
+      "usable_from": null,
+      "release_basis": "Staged; first_build and usable_from unknown; not released"
     }
   ],
   "cosmetics": [
@@ -6658,13 +7089,17 @@
       "aliases": [
         "av_clockmaker"
       ],
-      "sha256": "e981a954c663420eda03a8160a6e9a49c8df5b9c0dd0938576b3ead4edfc7c7a",
-      "size_bytes": 23894,
+      "sha256": "966e4a4300c50f5b2f58f5489c29e1a40ff6f20896abda17e88f4017877acd7f",
+      "size_bytes": 17946,
       "usable_from": null,
       "release_basis": "Existing main asset; cosmetic only, forbidden as a case portrait",
       "existing_main": true,
       "apparent_gender": "f",
-      "head_covering": "uncovered"
+      "head_covering": "scarf_hair_visible",
+      "clothing": "plain dark indigo everyday top",
+      "occupational_prop": "one small brass loupe; reward-avatar exception authorised by Amin, 2026-11-11",
+      "revision_date": "2026-11-11",
+      "prompt": "Use case: identity-preserve. Edit target: the supplied ex_watchmaker game avatar. Preserve exactly this Iranian woman's facial identity, eyes, nose, lips, age, gaze, pose, amber and cobalt noir lighting, painterly cinematic style and clockwork atmosphere. Replace her bare head with a simple matte dark charcoal headscarf worn ON THE HEAD, loosely covering the crown and wrapping the neck; a few existing dark hair wisps may show at the front. Remove the leather apron, work harness and decorated outer scarf. Dress her in a plain everyday Iranian dark indigo top. Keep one small brass watchmaker loupe tucked at her forehead over the scarf; tiny gears in the blurred background can remain. No large occupational equipment on her clothing. Square centered head-and-shoulders crop, single person, face clear at thumbnail size. No text, letters or watermark. Keep the same face; change head covering and clothing only."
     },
     {
       "id": "ex_weekend",
@@ -7501,10 +7936,11 @@
     {
       "id": "ex_watchmaker",
       "path": "app/assets/avatars/ex_watchmaker.webp",
-      "head_covering": "uncovered",
-      "sha256": "e981a954c663420eda03a8160a6e9a49c8df5b9c0dd0938576b3ead4edfc7c7a",
+      "head_covering": "scarf_hair_visible",
+      "sha256": "966e4a4300c50f5b2f58f5489c29e1a40ff6f20896abda17e88f4017877acd7f",
       "review_date": "2026-11-11",
-      "decision": "بدون تغییر؛ فقط گزارش و منتظر تصمیم امین"
+      "decision": "اصلاح شد؛ روسری ساده روی سر، لباس روزمره و لوپ کوچکِ مجاز",
+      "notes": "با مجوز امین ۱۱ نوامبر ۲۰۲۶؛ همان چهره و فضای ساعت‌ساز"
     }
   ],
   "head_covering_policy": {
@@ -7514,9 +7950,7 @@
     ],
     "uncovered_forbidden": true,
     "legacy_bypass": false,
-    "legacy_uncovered_pending_owner": [
-      "ex_watchmaker"
-    ],
-    "note": "Actual visual metadata is preserved. The strict registry test intentionally reports the untouched legacy uncovered image; no false scarf label or test exemption."
+    "legacy_uncovered_pending_owner": [],
+    "note": "All 84 female images visually covered on the head. ex_watchmaker replaced with owner authorisation on 2026-11-11; no legacy bypass."
   }
 }
