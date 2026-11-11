@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../models/avatars.dart';
 import '../models/models.dart';
 import '../models/progress.dart';
 import '../services/api.dart';
@@ -9,6 +10,7 @@ import '../widgets/name_sheet.dart';
 import '../widgets/profile_bell.dart';
 import '../widgets/avatar_frame.dart';
 import '../widgets/crime_tape.dart';
+import '../widgets/honor_shelf.dart';
 import '../widgets/offline.dart';
 import '../widgets/rank.dart';
 import '../widgets/state_view.dart';
@@ -30,12 +32,42 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   AchievementsList? _ach;
   ReferralStatus? _ref;
+  AvatarCatalog? _catalog; // for the shelf: owned and next frames (null: offline / not loaded)
+  CasesList? _cases; // for the shelf: three-plaque cases (null: nothing saved and offline)
+  final GlobalKey _shelfKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _loadAchievements();
     _loadReferral();
+    _loadShelf();
+  }
+
+  Future<void> _loadShelf() async {
+    try {
+      final c = await Api.i.avatarCatalog();
+      if (mounted) setState(() => _catalog = c);
+    } catch (_) {
+      // the frames part of the shelf stays hidden
+    }
+    try {
+      final l = await Api.i.cases();
+      if (mounted) setState(() => _cases = l);
+    } catch (_) {
+      // the cases part of the shelf stays hidden
+    }
+  }
+
+  Future<void> _openFrames() async {
+    if (!needOnline(context)) return;
+    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AvatarPickerScreen(startOnFrames: true)));
+    if (mounted) _loadShelf();
+  }
+
+  Future<void> _shareShelf(Profile p, ShelfData d) async {
+    final ok = await shareShelfImage(_shelfKey, shelfShareText(p, d));
+    if (!ok && mounted) toast(context, 'عکس قفسه ساخته نشد؛ دوباره امتحان کن');
   }
 
   Future<void> _loadReferral() async {
@@ -111,6 +143,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   _stat('بهترین زنجیره', fa(p.bestStreak)),
                 ]),
                 const SizedBox(height: 12),
+                ..._shelf(p),
                 _achievements(p),
                 const SizedBox(height: 12),
                 _invite(p),
@@ -270,6 +303,30 @@ class _AccountScreenState extends State<AccountScreen> {
           ]),
         ),
       );
+
+  // ---------------------------------------------------------------- shelf
+
+  List<Widget> _shelf(Profile p) {
+    final d = ShelfData.build(profile: p, catalog: _catalog, cases: _cases);
+    return [
+      HonorShelf(key: const ValueKey('honor-shelf'), data: d, boundaryKey: _shelfKey, onFrames: _openFrames),
+      if (p.inviteCode.isNotEmpty && (d.catalogKnown || d.casesKnown)) ...[
+        const SizedBox(height: 8),
+        OutlinedButton.icon(
+          key: const ValueKey('shelf-share'),
+          onPressed: () => _shareShelf(p, d),
+          icon: const Icon(Icons.share_rounded, size: 18, color: K.brass),
+          label: Text('عکس قفسه‌ام رو بفرست (با کد دعوت)', textAlign: TextAlign.center, style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size.fromHeight(46),
+            side: BorderSide(color: K.brass.withValues(alpha: 0.5)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+      ],
+      const SizedBox(height: 12),
+    ];
+  }
 
   // ---------------------------------------------------------------- achievements
 

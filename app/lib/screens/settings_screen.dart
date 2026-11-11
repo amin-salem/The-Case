@@ -8,6 +8,7 @@ import '../services/about.dart';
 import '../services/api.dart';
 import '../services/billing.dart' show kStoreName;
 import '../services/font_pref.dart';
+import '../services/haptics.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
 import '../theme.dart';
@@ -68,7 +69,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(backgroundColor: K.night, title: Text('تنظیمات', style: tDisplay(20))),
       body: GrainBackground(
         child: ListenableBuilder(
-          listenable: Listenable.merge([Api.i, Sfx.i, Reminders.i, FontPref.family, FontPref.scale]),
+          listenable: Listenable.merge([Api.i, Sfx.i, Haptics.i, Reminders.i, FontPref.family, FontPref.scale]),
           builder: (context, _) {
             final p = Api.i.profile;
             final secured = p?.secured ?? false;
@@ -121,17 +122,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ]),
                 _group('صدا و اعلان', [
-                  SettingsRow(
-                    icon: Sfx.i.muted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
-                    title: 'صدا و موسیقی',
-                    end: _switch(!Sfx.i.muted, (v) => Sfx.i.setMuted(!v)),
-                    onTap: () => Sfx.i.setMuted(!Sfx.i.muted),
-                  ),
+                  ...feedbackToggleRows(),
                   SettingsRow(
                     icon: Icons.notifications_active_rounded,
                     title: 'یادآوری پرونده‌ی هر شب',
                     sub: 'ساعت ۹ شب؛ و ساعت ۸ شب اگه زنجیره‌ات در خطر باشه',
-                    end: _switch(Reminders.i.enabled, (v) => Reminders.i.setEnabled(v)),
+                    end: settingsSwitch(Reminders.i.enabled, (v) => Reminders.i.setEnabled(v)),
                     onTap: () => Reminders.i.setEnabled(!Reminders.i.enabled),
                   ),
                   if (!Reminders.i.systemOn)
@@ -196,15 +192,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _switch(bool v, ValueChanged<bool> on) => Switch(
-        value: v,
-        onChanged: on,
-        thumbColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? Colors.white : K.textSoft),
-        trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? K.stamp : K.night3),
-        trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      );
-
   Widget _group(String title, List<Widget> rows) => Padding(
         padding: const EdgeInsets.only(top: 14),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -225,6 +212,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ]),
       );
 }
+
+/// The two feedback switches, separate on purpose: «صدا» (all game sound, saved by [Sfx]) and «لرزش» (haptics, saved by
+/// [Haptics]). Both default to on and are respected everywhere (the stamp moment included).
+List<Widget> feedbackToggleRows() => [
+      SettingsRow(
+        key: const ValueKey('setting-sound'),
+        icon: Sfx.i.muted ? Icons.volume_off_rounded : Icons.volume_up_rounded,
+        title: 'صدا',
+        sub: 'جلوه‌ها، مهر و موسیقی',
+        end: settingsSwitch(!Sfx.i.muted, (v) => Sfx.i.setMuted(!v)),
+        onTap: () => Sfx.i.setMuted(!Sfx.i.muted),
+      ),
+      SettingsRow(
+        key: const ValueKey('setting-haptics'),
+        icon: Icons.vibration_rounded,
+        title: 'لرزش',
+        sub: 'یه لرزش کوتاه موقع مهر و دکمه‌ها',
+        end: settingsSwitch(Haptics.i.on, (v) => Haptics.i.setOn(v)),
+        onTap: () => Haptics.i.setOn(!Haptics.i.on),
+      ),
+    ];
+
+Widget settingsSwitch(bool v, ValueChanged<bool> on) => Switch(
+      value: v,
+      onChanged: on,
+      thumbColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? Colors.white : K.textSoft),
+      trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? K.stamp : K.night3),
+      trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    );
 
 /// One settings line: icon, title (and an optional small line under it), and what is at the end.
 class SettingsRow extends StatelessWidget {

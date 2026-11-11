@@ -155,3 +155,28 @@ Board `Leaders.dc.html` (read). Real data only; `portrait-ages.json` untouched (
 - Tests: `server/tests/test_board_redesign.py` (paging, gaps, hidden/banned accounts, rushes excluded from stats, empty boards, dead streaks, card
   privacy and bounds, rate policy; runs on SQLite and PostgreSQL), `app/test/board_redesign_test.dart` (texts, old server, RTL podium, sheet and its
   failure, streak switch, paging, text scale 1.3 / 2.0). The existing `leaderboard_screen_test.dart` and `leaderboard_week_test.dart` stay as they were.
+
+## Session 7: honor shelf and the stamp moment (11 Nov 2026)
+Board `Shelf.dc.html` (read). App only (no server change, no migration, nothing in `ci.yml`). Real data only.
+- Profile «قفسه‌ی افتخار» (`widgets/honor_shelf.dart`, pure `ShelfData.build`, used by `account_screen.dart` between the stat tiles and the
+  achievements card). Headline «N پرونده · M با سه پلاک · بهترین زنجیره K شب»: each part is dropped when its number is 0 or unknown (the
+  three-plaque count needs the case list; offline with nothing saved it is hidden). Frames shelf: owned frames from the avatar catalog (the
+  equipped one first, at most 7 + «+N»), then up to 3 locked ones as dashed circles: the closest goals first (the real `goal` text under
+  the circle), then the cheapest shop frame labelled «فروشگاه». A tap on any frame opens «چهره و قاب» on its frames tab (where goals are
+  explained and shop frames are bought with coins), so a locked frame always shows how to get it. Cases shelf: solved with 3 plaques, newest
+  number first, paper cards slightly tilted, 3 cards or 2 + «+N»; none = one calm line. Catalog or case list not loaded (offline) = that
+  shelf is hidden, nothing invented.
+- «لحظه‌ی مهر» (`result_screen.dart`, `StampIn(drop: true)`): the «حل شد» stamp now also falls a little from above onto the file.
+  The sound is the existing `stamp.ogg` (no new audio file, already played at 200 ms); a short medium haptic is added when the stamp lands
+  (`Haptics.i.stamp()`, 520 ms). With reduced motion (`MediaQuery.disableAnimations`) `StampIn` shows the stamp at once, no animation and no
+  timer (this holds for every `StampIn` in the app).
+- Settings: two separate switches «صدا» (the old «صدا و موسیقی» row, same saved key `muted`, so nobody's choice is lost) and «لرزش»
+  (new `services/haptics.dart`, key `haptics_on`, default on, loaded in `main.dart`). Every haptic goes through `Haptics` (the button
+  press in `theme.dart` too), so «لرزش» off silences all vibration.
+- Optional share: DONE, simple. «عکس قفسه‌ام رو بفرست (با کد دعوت)» renders the shelf (`RepaintBoundary.toImage`, 2x) to a PNG and shares it
+  with `SharePlus` plus a spoiler-free text: the headline, the invite line with the code (same wording as the invite card) and the usual
+  link; no case title is named. If the picture cannot be made, a toast says so.
+- Revenue: locked frames show their goal and shop frames lead to the frame store; the invite code travels with every shared shelf.
+  Nothing sellable is given away.
+- Tests: `app/test/honor_shelf_test.dart` (data rules, 0 / few / many items, offline, text scale 1.0 / 1.3 / 2.0, share text),
+  `app/test/stamp_moment_test.dart` (stamp animation on and off with reduced motion, haptics default / off / saved, the two switches are separate and saved).

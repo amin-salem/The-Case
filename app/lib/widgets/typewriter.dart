@@ -61,11 +61,13 @@ class _TypewriterState extends State<Typewriter> {
   }
 }
 
-/// Slams a stamp onto the screen (scale + fade in).
+/// Slams a stamp onto the screen (scale + fade in). With «reduce motion» on (`MediaQuery.disableAnimations`) the stamp
+/// is simply there, with no animation. [drop]: the stamp also falls a little from above onto the paper.
 class StampIn extends StatefulWidget {
-  const StampIn({super.key, required this.child, this.delay = Duration.zero});
+  const StampIn({super.key, required this.child, this.delay = Duration.zero, this.drop = false});
   final Widget child;
   final Duration delay;
+  final bool drop;
 
   @override
   State<StampIn> createState() => _StampInState();
@@ -73,12 +75,21 @@ class StampIn extends StatefulWidget {
 
 class _StampInState extends State<StampIn> with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 420));
+  bool _started = false;
+  bool _still = false; // reduce motion: no animation at all
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _still = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (_started) return;
+    _started = true;
+    if (_still) {
+      _c.value = 1;
+      return;
+    }
     Future.delayed(widget.delay, () {
-      if (mounted) _c.forward();
+      if (mounted && !_still) _c.forward();
     });
   }
 
@@ -89,14 +100,19 @@ class _StampInState extends State<StampIn> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) => AnimatedBuilder(
+  Widget build(BuildContext context) {
+    if (_still) return widget.child;
+    return AnimatedBuilder(
         animation: _c,
         builder: (_, child) {
           final v = Curves.easeOutBack.transform(_c.value);
-          return Opacity(opacity: _c.value.clamp(0.0, 1.0), child: Transform.scale(scale: 2.2 - 1.2 * v, child: child));
+          Widget w = Transform.scale(scale: 2.2 - 1.2 * v, child: child);
+          if (widget.drop) w = Transform.translate(offset: Offset(0, -46 * (1 - _c.value)), child: w);
+          return Opacity(opacity: _c.value.clamp(0.0, 1.0), child: w);
         },
         child: widget.child,
       );
+  }
 }
 
 /// Fades and slides a child in after a delay (for lists appearing one by one).

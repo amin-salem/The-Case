@@ -5,6 +5,7 @@ import 'package:share_plus/share_plus.dart';
 import '../models/album.dart';
 import '../models/models.dart';
 import '../services/api.dart';
+import '../services/haptics.dart';
 import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/album_strip.dart';
@@ -62,7 +63,11 @@ class _ResultScreenState extends State<ResultScreen> {
     }
     // stamp, then the verdict music
     Sfx.i.duck();
-    Future<void>.delayed(const Duration(milliseconds: 200), () => Sfx.i.play('stamp', volume: 0.8));
+    Future<void>.delayed(const Duration(milliseconds: 200), () => Sfx.i.play('stamp', volume: 0.8)); // «صدا» off = Sfx muted
+    // «لحظه‌ی مهر»: one short tap when the stamp lands on the file («لرزش» off = nothing)
+    Future<void>.delayed(const Duration(milliseconds: 520), () {
+      if (mounted) Haptics.i.stamp();
+    });
     Future<void>.delayed(const Duration(milliseconds: 700), () => Sfx.i.play(solved ? 'win' : 'lose'));
     if (solved) Future<void>.delayed(const Duration(milliseconds: 1800), () => Sfx.i.play('music_result', volume: 0.55));
     Future<void>.delayed(const Duration(milliseconds: 4500), Sfx.i.unduck);
@@ -106,6 +111,7 @@ class _ResultScreenState extends State<ResultScreen> {
             Center(
               child: StampIn(
                 delay: const Duration(milliseconds: 250),
+                drop: true,
                 child: StampMark(solved ? 'حل شد' : 'پرونده رو باختی', size: 40, color: solved ? K.brass : K.stamp),
               ),
             ),

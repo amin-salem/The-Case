@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'services/font_pref.dart';
+import 'services/haptics.dart';
 import 'services/sound.dart';
 import 'widgets/fx.dart';
 
@@ -134,7 +134,7 @@ class _StampButtonState extends State<StampButton> {
       onTapUp: enabled
           ? (_) {
               setState(() => _down = false);
-              HapticFeedback.lightImpact();
+              Haptics.i.light();
               Sfx.i.play('tap', volume: 0.5);
               widget.onTap!();
             }

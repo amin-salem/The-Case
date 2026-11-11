@@ -9,6 +9,7 @@ import 'services/whats_new.dart';
 import 'services/billing.dart';
 import 'services/font_pref.dart';
 import 'services/reminders.dart';
+import 'services/haptics.dart';
 import 'services/sound.dart';
 import 'theme.dart';
 import 'widgets/fx.dart';
@@ -32,6 +33,7 @@ Future<void> main() async {
   await step(() => WhatsNew.i.init()); // before Api.init: a phone with no saved player is a fresh install
   await step(() => Api.i.init());
   await step(() => Sfx.i.init());
+  await step(() => Haptics.i.init());
   await step(() => FontPref.init());
   await step(() => Reminders.i.init());
   unawaited(Billing.i.init());
