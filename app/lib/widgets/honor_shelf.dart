@@ -122,17 +122,15 @@ class HonorShelf extends StatelessWidget {
   }
 
   Widget _plank(Widget child) => Container(
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
         decoration: BoxDecoration(
           color: const Color(0xFF3A2C1C),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: const Color(0xFF4A3A25)),
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          child,
+          Padding(padding: const EdgeInsets.fromLTRB(10, 10, 10, 8), child: child),
           Container(
             height: 9,
-            margin: const EdgeInsets.fromLTRB(-10, 8, -10, 0),
             decoration: const BoxDecoration(
               color: Color(0xFF5A4128),
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(11)),
