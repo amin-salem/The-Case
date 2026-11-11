@@ -308,8 +308,8 @@ void main() {
         expect(secureRow(), findsNothing);
       });
 
-      testWidgets('secure row: a purchase is enough, even with no solved case', (t) async {
-        await seedHome(secured: false, casesSolved: 0, bought: true);
+      testWidgets('secure row: a bought store pack (no ads) is enough, even with no solved case', (t) async {
+        await seedHome(secured: false, casesSolved: 0, noAds: true);
         await showHome(t);
         expect(secureRow(), findsOneWidget);
       });
@@ -387,6 +387,7 @@ void main() {
           expect(streakRow(), findsOneWidget);
           expect(secureRow(), findsOneWidget);
           expect(t.takeException(), isNull);
+          await t.scrollUntilVisible(find.byKey(const ValueKey('more-toggle')), 200, scrollable: find.byType(Scrollable).first);
           await t.tap(find.byKey(const ValueKey('more-toggle')));
           await t.pump(const Duration(milliseconds: 300));
           expect(t.takeException(), isNull);
@@ -433,6 +434,8 @@ void main() {
         for (int i = 0; i < 8; i++) {
           await t.pump(const Duration(milliseconds: 300));
         }
+        await t.drag(find.byType(Scrollable).first, const Offset(0, 3000)); // back to the top
+        await t.pump(const Duration(milliseconds: 300));
         expect(find.byKey(const ValueKey('home-hero')), findsOneWidget);
       });
     });

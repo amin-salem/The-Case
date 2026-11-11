@@ -56,6 +56,7 @@ Future<void> seedHome({
   bool secured = true,
   int casesSolved = 5,
   bool bought = false,
+  bool noAds = false,
   DateTime? secureClosedAt,
 }) async {
   SharedPreferences.setMockInitialValues({'player': 'p', 'secret': 's', 'token': 't',
@@ -64,7 +65,7 @@ Future<void> seedHome({
     if (secureClosedAt != null) 'secure_row_closed_p': secureClosedAt.millisecondsSinceEpoch});
   await Api.i.init();
   Api.i.online = online;
-  Api.i.profile = Profile({'player_id': 'p', 'nickname': 'آرش', 'coins': 500, 'cases_solved': casesSolved, 'streak': streak, 'secured': secured});
+  Api.i.profile = Profile({'player_id': 'p', 'nickname': 'آرش', 'coins': 500, 'cases_solved': casesSolved, 'streak': streak, 'secured': secured, 'no_ads': noAds});
   Api.i.httpClient = MockClient((r) async {
     if (!online) throw http.ClientException('offline');
     if (r.url.path == '/v1/cases') return jsonResponse(casesBody(tonight: tonight, weekend: weekend));
