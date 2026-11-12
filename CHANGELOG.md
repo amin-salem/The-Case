@@ -1,3 +1,7 @@
+# server 1.61.2: «سریع‌ترین» counts ranked solves only (12 Nov 2026)
+
+- The ID card's `fastest` ignored retired quick puzzles but still counted a main case solved WITHOUT enough investigation (`ranked=false`, not on any board), which could show 10 seconds. It now counts ranked solves of main cases only. No migration, no app change.
+
 # app 1.44.4+93: solve time on the daily board (12 Nov 2026)
 
 - «برترها» · today's case: every row (and the podium) shows the detective's solve time under the plaques. The order was already plaques first, then less time; now the tie-breaker is visible. The «i» sheet says: more plaques first, equal plaques: less time, equal time: who solved first. An old server that sends no time shows plaques only.

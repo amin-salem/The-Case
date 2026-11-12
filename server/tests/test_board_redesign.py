@@ -246,6 +246,7 @@ async def test_player_card_id_card_fields(client, clock):
     await solve(b["player_id"], ids[i], 3, evening_of(ids[i]), seconds=95)
     await solve(b["player_id"], ids[i - 1], 2, evening_of(ids[i]), seconds=61)
     await solve(b["player_id"], ids[i - 2], 1, evening_of(ids[i]), seconds=3)        # below the floor: never a record
+    await solve(b["player_id"], ids[i - 3], 1, evening_of(ids[i]), seconds=10, ranked=False)  # a main case solved without enough investigation: unranked, never a record
     await solve(b["player_id"], "quick-old-1", 1, evening_of(ids[i]), seconds=14)   # a retired quick puzzle: not a main case, never a record
     async with db.SessionLocal() as s:
         for n, aid in enumerate(["first_case", "cases_5", "cases_10", "cases_25"]):          # the 4th is the newest
