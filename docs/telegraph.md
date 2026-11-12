@@ -3,7 +3,7 @@
 Design source: Design canvas https://claude.ai/artifact/QFarByYdV94LXsfJSbzJw9 (Artifact tool, action read),
 boards `TelHub`, `TelDecode`, `TelHard`, `TelHint`, `TelSolved`, `TelBook`, `TelSend` (component `Tel.dc.html`).
 Style = the new top list and «کارت من»: minimal, RTL, status by design not by labels, as few words as possible.
-The brass telegraph key image is `telegraph_key.webp` (transparent, hub hero); Amin supplies the file, ask if it is not in the repo.
+The brass telegraph key image is `telegraph_key.webp` (transparent, hub hero); It is in the repo at `app/assets/banners/telegraph_key.webp` (branch app/id-card).
 
 ## What it is
 - A quick night puzzle next to the daily case: the player decodes a Morse telegram. Four levels: آسان (word), متوسط (phrase),
