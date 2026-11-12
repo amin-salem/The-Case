@@ -169,3 +169,17 @@ Build 91
 
 ## developer_note
 Build 92
+
+<!-- build: 93 -->
+## changelog_fa
+- در جدول برترِ پرونده‌ی امروز، زمان حل هر کارآگاه زیر پلاک‌هایش دیده می‌شود
+- توضیح ترتیب جدول در راهنما
+- بهبودهای کوچک
+
+## changelog_en
+- The daily leaderboard now shows each detective's solve time under their plaques
+- The ranking order is explained in the help sheet
+- Small improvements
+
+## developer_note
+Build 93

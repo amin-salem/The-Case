@@ -128,6 +128,32 @@ void main() {
     expect(x(1), greaterThan(x(3)));
   });
 
+  testWidgets('daily: every row shows its solve time under the plaques, so equal plaques explain the order', (t) async {
+    final b = dailyBoard();
+    b['top'] = [row(1, value: 582), row(2, value: 640), row(3, value: 681), row(4, value: 700), row(5, value: 733, me: true)];
+    server({'/v1/leaderboard': (_) => b});
+    await t.pumpWidget(host(const LeaderboardBoard('daily')));
+    await pump(t);
+    expect(find.descendant(of: find.byKey(const ValueKey('podium-1')), matching: find.text('۹:۴۲')), findsOneWidget);
+    expect(find.byKey(const ValueKey('time-4')), findsOneWidget);
+    expect(find.text('۱۱:۴۰'), findsOneWidget);
+    expect(find.text('۱۲:۱۳'), findsOneWidget);
+    // the info sheet says how ties are broken
+    await t.tap(find.byKey(const ValueKey('lb-info')));
+    await pump(t);
+    expect(find.textContaining('زمان کمتر بالاتره'), findsOneWidget);
+  });
+
+  testWidgets('daily from an old server with no time (0): plaques only, no «۰:۰۰»', (t) async {
+    final b = dailyBoard(oldServer: true);
+    b['top'] = [row(1, value: 0), row(2, value: 0), row(3, value: 0), row(4, value: 0)];
+    server({'/v1/leaderboard': (_) => b});
+    await t.pumpWidget(host(const LeaderboardBoard('daily')));
+    await pump(t);
+    expect(find.text('۰:۰۰'), findsNothing);
+    expect(find.byKey(const ValueKey('time-4')), findsNothing);
+  });
+
   testWidgets('daily from an old server: no stats line, no gap line, the board still shows', (t) async {
     server({'/v1/leaderboard': (_) => dailyBoard(oldServer: true)});
     await t.pumpWidget(host(const LeaderboardBoard('daily')));

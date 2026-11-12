@@ -120,7 +120,7 @@ const _kPrizeText = 'اول ۱۲۰ سکه، دوم ۸۰ سکه، سوم ۵۰ س�
 /// The full explanation of the boards, in a bottom sheet (opens from the «i» next to the title, closes in one tap).
 /// [tab] 0 = today's case, 1 = this week, 2 = all time; the sheet shows that tab's part first.
 Future<void> showBoardInfo(BuildContext context, int tab, {List<LeagueInfo> leagues = const []}) {
-  final daily = _infoBlock('پرونده‌ی امروز', 'کارآگاه‌هایی که پرونده‌ی امروز رو همون روز حل کردن. برای جایگاه جدول باید پرونده رو واقعاً بررسی کرده باشی (بازجویی و مدارک)؛ پلاک و جایزه‌ات در هر حال مال خودته.');
+  final daily = _infoBlock('پرونده‌ی امروز', 'کارآگاه‌هایی که پرونده‌ی امروز رو همون روز حل کردن. ترتیب: پلاک بیشتر بالاتره؛ اگه پلاک‌ها برابر بود، زمان کمتر بالاتره (زیر هر نام می‌بینی)؛ اگه زمان هم برابر بود، اونی که زودتر حل کرده. برای جایگاه جدول باید پرونده رو واقعاً بررسی کرده باشی (بازجویی و مدارک)؛ پلاک و جایزه‌ات در هر حال مال خودته.');
   final all = _infoBlock('همیشه', 'جمع همه‌ی پلاک‌هایی که هر کارآگاه از اول تا حالا گرفته.');
   final weekly = <Widget>[
     _infoBlock('این هفته', 'فقط پرونده‌های همین هفته حساب می‌شن. بایگانی پلاک می‌ده، ولی توی جدول هفتگی نیست.'),
@@ -499,6 +499,17 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
 
   Color _medal(int rank) => switch (rank) { 1 => K.brass, 2 => _silver, 3 => _bronze, _ => K.night3 };
 
+  /// Daily board: plaques first, and under them his solve time (the tie-breaker made visible: equal plaques, less time = higher).
+  /// An old server sends no time (0): then only the plaques show.
+  Widget _dailyEnd(LeaderRow r, {double size = 16, Color? color}) => Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end, children: [
+        _shields(r.stars, size),
+        if (r.value > 0)
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Text(boardTime(r.value), key: ValueKey('time-${r.rank}'), maxLines: 1, style: tBody(11.5, w: FontWeight.w800, color: color ?? const Color(0xFF9C998F))),
+          ),
+      ]);
+
   Widget _shields(int count, double size) => Row(mainAxisSize: MainAxisSize.min, children: [
         for (int i = 0; i < 3; i++)
           Icon(Icons.shield_rounded, size: size, color: i < count ? K.brass : const Color(0xFF3A3B3F)),
@@ -553,10 +564,10 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
               child: Text(r.me ? 'تو' : r.nickname, maxLines: 1, textAlign: TextAlign.center, style: tBody(13.5, w: FontWeight.w900, color: K.text)),
             ),
             SizedBox(
-              height: 22,
+              height: _period == 'daily' ? 40 : 22,
               child: Center(
                 child: _period == 'daily'
-                    ? _shields(r.stars, 15)
+                    ? FittedBox(fit: BoxFit.scaleDown, child: _dailyEnd(r, size: 15, color: ring))
                     : Text(_value(r), maxLines: 1, style: tBody(12.5, color: ring, w: FontWeight.w900)),
               ),
             ),
@@ -682,7 +693,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
               Text(r.rankTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, w: FontWeight.w700, color: const Color(0xFFA59C83))),
           ]),
         ),
-        if (daily) _shields(r.stars, 16) else Text(_value(r), style: tBody(14, color: K.brass, w: FontWeight.w900)),
+        if (daily) _dailyEnd(r) else Text(_value(r), style: tBody(14, color: K.brass, w: FontWeight.w900)),
       ]),
     );
     if (r.pid.isEmpty) return content;

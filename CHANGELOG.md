@@ -1,3 +1,7 @@
+# app 1.44.4+93: solve time on the daily board (12 Nov 2026)
+
+- «برترها» · today's case: every row (and the podium) shows the detective's solve time under the plaques. The order was already plaques first, then less time; now the tie-breaker is visible. The «i» sheet says: more plaques first, equal plaques: less time, equal time: who solved first. An old server that sends no time shows plaques only.
+
 # app 1.44.3+92: arrow directions (12 Nov 2026)
 
 - «کارت من» rows and the weekend back button used the wrong icon names for RTL; fixed, with `rtl_icons_test.dart` and a rule in CLAUDE.md.
