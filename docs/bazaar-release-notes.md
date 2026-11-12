@@ -129,3 +129,17 @@ Build 88
 
 ## developer_note
 Build 89
+
+<!-- build: 90 -->
+## changelog_fa
+- صفحهٔ برترها تازه و ساده‌تر شد: لیگ‌ها با سپر، سکوی برندگان با جایزه و نوار شناور جایگاه تو
+- در کارت من، دستاوردها، کمد کارآگاه و دعوت دوستان یک‌جا و مرتب شد
+- بهبودهای کوچک
+
+## changelog_en
+- A cleaner top list: leagues with shields, a winners' stage with prizes and a floating bar for your place
+- My card: achievements, wardrobe and invites in one tidy place
+- Small improvements
+
+## developer_note
+Build 90

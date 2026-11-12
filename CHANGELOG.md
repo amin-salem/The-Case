@@ -1,3 +1,9 @@
+# app 1.44.1+90: top list as designed, my card rows (12 Nov 2026)
+
+- «برترها»: new header (big title, pill tabs), league cards with shields on the weekly board, winners' stage with prizes, one list card, floating «تو» bar with progress. Removed the «پرونده‌ی امشب» label, the «بیشترین پلاک و بعد کمترین زمان» line and «سریع‌ترین».
+- «کارت من»: the big invite code at the bottom is gone (the code is on the back of the card); three rows instead: achievements (medals + latest), wardrobe, invite (opens the rules and the share button).
+- Flutter pinned to 3.47.9 in the workflows.
+
 # server 1.61.0 / app 1.44.0+89: the detective ID card, four-item bar, new top list (11 Nov 2026)
 
 - «کارت من» is now a national-ID-style card dressed by the league (leather, steel, black and gold, royal blue): front with photo, name, rank, number and
