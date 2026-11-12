@@ -138,8 +138,11 @@ void main() {
     expect(find.byKey(const ValueKey('time-4')), findsOneWidget);
     expect(find.text('۱۱:۴۰'), findsOneWidget);
     expect(find.text('۱۲:۱۳'), findsOneWidget);
-    // the info sheet says how ties are broken
-    await t.tap(find.byKey(const ValueKey('lb-info')));
+  });
+
+  testWidgets('the info sheet says how a tie on plaques is broken', (t) async {
+    await t.pumpWidget(host(Builder(builder: (c) => TextButton(onPressed: () => showBoardInfo(c, 0), child: const Text('open')))));
+    await t.tap(find.text('open'));
     await pump(t);
     expect(find.textContaining('زمان کمتر بالاتره'), findsOneWidget);
   });
