@@ -360,7 +360,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             Icon(icon, size: 15, color: _gold),
             const SizedBox(width: 6),
-            Text(text, style: tBody(12.5, w: FontWeight.w800, color: K.text)),
+            Flexible(child: Text(text, style: tBody(12.5, w: FontWeight.w800, color: K.text))),
           ]),
         );
     return [
