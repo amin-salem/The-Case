@@ -267,9 +267,12 @@ async def member_no(session: AsyncSession, pl: Player) -> int:
 
 
 async def fastest_solve(session: AsyncSession, pid: str) -> int:
+    """The fastest solve of a MAIN case. Only cases that exist in today's content count: the old quick puzzles (solved in
+    10-20 seconds) are gone from the game, and their rows must not become anybody's record (Amin, 12 Nov 2026)."""
     secs = case((CaseProgress.active_seconds > 0, CaseProgress.active_seconds), else_=CaseProgress.seconds)
+    main_ids = [c.id for c in content.all_cases()] + [c.id for c in content.weekly_cases()]
     best = await session.scalar(select(func.min(secs)).where(
-        CaseProgress.player_id == pid, CaseProgress.solved.is_(True), secs >= MIN_FASTEST))
+        CaseProgress.player_id == pid, CaseProgress.solved.is_(True), CaseProgress.case_id.in_(main_ids), secs >= MIN_FASTEST))
     return int(best or 0)
 
 @router.get("/players/{pid}/card", response_model=PlayerCardOut)

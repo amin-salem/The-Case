@@ -543,7 +543,7 @@ class _Front extends StatelessWidget {
         end: 74,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
           _label('نام'),
-          Text(d.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: tDisplay(28, color: look.ink).copyWith(height: 1.05)),
+          FittedBox(fit: BoxFit.scaleDown, alignment: AlignmentDirectional.centerStart, child: Text(d.name, maxLines: 1, style: tDisplay(28, color: look.ink).copyWith(height: 1.05))),
           const SizedBox(height: 6),
           _label('درجه'),
           Text(d.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(13.5, color: look.accent, w: FontWeight.w900).copyWith(height: 1.25)),

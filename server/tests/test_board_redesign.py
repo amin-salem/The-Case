@@ -243,9 +243,10 @@ async def test_player_card_id_card_fields(client, clock):
     clock(evening_of(ids[i]))
     xp_inspector = next(n for n, t in economy.RANKS if t == "بازرس")                    # first rank of league 2
     await set_player(b["player_id"], xp=xp_inspector, last_daily_solved=pub(ids, i))
-    await solve(b["player_id"], "idc-1", 3, evening_of(ids[i]), seconds=95)
-    await solve(b["player_id"], "idc-2", 2, evening_of(ids[i]), seconds=61)
-    await solve(b["player_id"], "idc-3", 1, evening_of(ids[i]), seconds=3)           # below the floor: never a record
+    await solve(b["player_id"], ids[i], 3, evening_of(ids[i]), seconds=95)
+    await solve(b["player_id"], ids[i - 1], 2, evening_of(ids[i]), seconds=61)
+    await solve(b["player_id"], ids[i - 2], 1, evening_of(ids[i]), seconds=3)        # below the floor: never a record
+    await solve(b["player_id"], "quick-old-1", 1, evening_of(ids[i]), seconds=14)   # a retired quick puzzle: not a main case, never a record
     async with db.SessionLocal() as s:
         for n, aid in enumerate(["first_case", "cases_5", "cases_10", "cases_25"]):          # the 4th is the newest
             s.add(PlayerAchievement(player_id=b["player_id"], achievement_id=aid, at=utcnow() - timedelta(days=9 - n)))

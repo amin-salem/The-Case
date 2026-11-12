@@ -548,8 +548,10 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
               ]),
             ),
             const SizedBox(height: 12),
-            Text(r.me ? 'تو' : r.nickname,
-                maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: tBody(13.5, w: FontWeight.w900, color: K.text)),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(r.me ? 'تو' : r.nickname, maxLines: 1, textAlign: TextAlign.center, style: tBody(13.5, w: FontWeight.w900, color: K.text)),
+            ),
             SizedBox(
               height: 22,
               child: Center(
@@ -666,7 +668,14 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
         Expanded(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
-              Flexible(child: Text(r.me ? '${r.nickname} (تو)' : r.nickname, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14.5, w: FontWeight.w800, color: K.text))),
+              // a long name gets smaller instead of ending in «…»
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(r.me ? '${r.nickname} (تو)' : r.nickname, maxLines: 1, style: tBody(14, w: FontWeight.w800, color: K.text)),
+                ),
+              ),
               if (r.streak >= 2) ...[const SizedBox(width: 6), StreakFlame(r.streak, size: 12)],
             ]),
             if (r.rankTitle.isNotEmpty)
