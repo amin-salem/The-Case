@@ -354,8 +354,8 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     final title = lb.title.replaceFirst(RegExp(r'^پرونده‌ی امروز:\s*'), '');
     Widget chip(IconData icon, String text, {Key? key}) => Container(
           key: key,
-          height: 30,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          constraints: const BoxConstraints(minHeight: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(color: const Color(0x8C0A0A0C), borderRadius: BorderRadius.circular(99), border: Border.all(color: const Color(0x1AFFFFFF))),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             Icon(icon, size: 15, color: _gold),
@@ -366,8 +366,8 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     return [
       Container(
         key: const ValueKey('daily-stats'),
-        height: 136,
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+        constraints: const BoxConstraints(minHeight: 136),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
         alignment: Alignment.bottomRight,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(22),
@@ -378,9 +378,9 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
           Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(21, w: FontWeight.w900, color: K.text).copyWith(height: 1.3)),
           if (d != null && d.solved > 0) ...[
             const SizedBox(height: 8),
-            Row(key: const ValueKey('daily-stats-line'), mainAxisSize: MainAxisSize.min, children: [
+            Wrap(key: const ValueKey('daily-stats-line'), spacing: 8, runSpacing: 6, children: [
               chip(Icons.groups_rounded, '${fa(d.solved)} کارآگاه'),
-              if (d.median != null) ...[const SizedBox(width: 8), chip(Icons.timer_outlined, 'میانه ${boardTime(d.median!)}')],
+              if (d.median != null) chip(Icons.timer_outlined, 'میانه ${boardTime(d.median!)}'),
             ]),
           ],
         ]),

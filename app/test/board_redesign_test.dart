@@ -253,7 +253,9 @@ void main() {
       await t.pumpWidget(host(const LeaderboardBoard('daily'), scale: scale));
       await pump(t);
       expect(find.byKey(const ValueKey('daily-stats-line')), findsOneWidget);
-      expect(t.takeException(), isNull);
+      final e = t.takeException();
+      if (e != null) debugPrint('OVERFLOW DETAILS: $e');
+      expect(e, isNull);
     });
   }
 }
