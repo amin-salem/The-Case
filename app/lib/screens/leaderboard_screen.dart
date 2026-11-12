@@ -621,8 +621,8 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     }
     return Container(
       key: const ValueKey('lb-me'),
-      height: 76,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      constraints: const BoxConstraints(minHeight: 76),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: const Color(0xEB221C11),
         borderRadius: BorderRadius.circular(22),
@@ -655,8 +655,8 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
   Widget _row(LeaderRow r) {
     final daily = _period == 'daily';
     final content = Container(
-      height: 64,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      constraints: const BoxConstraints(minHeight: 64),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(color: r.me ? const Color(0x1AE0A526) : null, border: const Border(bottom: BorderSide(color: Color(0x0BFFFFFF)))),
       child: Row(children: [
         SizedBox(width: 24, child: Text(fa(r.rank), textAlign: TextAlign.center, maxLines: 1, style: tBody(14, w: FontWeight.w900, color: const Color(0xFF8E8B82)))),
