@@ -27,7 +27,6 @@ String? dailyStatsLine(DailyStats? d) {
   if (d == null || d.solved <= 0) return null;
   return [
     '${fa(d.solved)} کارآگاه حلش کردن',
-    if (d.fastest != null) 'سریع‌ترین ${boardTime(d.fastest!)}',
     if (d.median != null) 'میانه ${boardTime(d.median!)}',
   ].join(' · ');
 }

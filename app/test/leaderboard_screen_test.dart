@@ -67,8 +67,8 @@ void main() {
 
   void expectAllChips(WidgetTester t, int selected) {
     for (int i = 0; i < 4; i++) {
-      final chip = t.widget<ChoiceChip>(find.byKey(ValueKey('league-$i')));
-      expect(chip.selected, i == selected, reason: 'chip $i, selected league is $selected');
+      expect(find.byKey(ValueKey('league-$i')), findsOneWidget, reason: 'card $i stays');
+      expect(find.byKey(ValueKey('league-on-$i')), i == selected ? findsOneWidget : findsNothing, reason: 'card $i, selected league is $selected');
     }
   }
 
@@ -121,10 +121,12 @@ void main() {
   });
 
   testWidgets('weekly «i»: prizes, the weekly clock, fair week, leagues with their rank ranges and ties are all in the sheet', (t) async {
-    await t.pumpWidget(MaterialApp(theme: buildTheme(), home: const Scaffold(body: LeaderboardBoard('weekly'))));
+    await t.pumpWidget(MaterialApp(theme: buildTheme(), home: const LeaderboardScreen()));
+    await pump(t);
+    await t.tap(find.byKey(const ValueKey('lb-tab-1')));
     await pump(t);
     expect(find.textContaining('جمعه‌ها ساعت ۲۱'), findsNothing);
-    await t.tap(find.byKey(const ValueKey('lb-info-inline')));
+    await t.tap(find.byKey(const ValueKey('lb-info')));
     await pump(t);
     for (final part in ['جمعه‌ها ساعت ۲۱', 'هفته‌ی منصفانه', 'اول ۱۲۰ سکه، دوم ۸۰ سکه، سوم ۵۰ سکه', 'اگه امتیازها برابر شد', 'از «بازرس» تا «سربازرس»']) {
       expect(find.textContaining(part, skipOffstage: false), findsOneWidget, reason: part);

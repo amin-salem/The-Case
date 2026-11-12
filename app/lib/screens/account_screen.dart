@@ -93,7 +93,7 @@ class _AccountScreenState extends State<AccountScreen> {
         backgroundColor: K.night,
         leadingWidth: 64,
         leading: const Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: Center(child: ProfileBell(size: 34))),
-        title: Text('پرونده‌ی شخصی', style: tDisplay(20)),
+        title: Text('کارت من', style: tDisplay(20)),
         actions: [
           IconButton(
             tooltip: 'تنظیمات',
@@ -127,9 +127,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 const SizedBox(height: 20),
                 _ladder(p),
                 const SizedBox(height: 20),
-                _achievements(p),
-                const SizedBox(height: 12),
-                _invite(p),
+                _rows(p),
               ]),
             );
           },
@@ -158,15 +156,8 @@ class _AccountScreenState extends State<AccountScreen> {
           onPressed: _editName,
           icon: const Icon(Icons.edit_rounded, color: K.textSoft, size: 20),
         ),
-        IconButton(
-          key: const ValueKey('card-avatar'),
-          tooltip: 'تغییر آواتار',
-          onPressed: _pickAvatar,
-          icon: const Icon(Icons.face_retouching_natural_rounded, color: K.textSoft, size: 22),
-        ),
         Expanded(child: Center(child: CardDots(back: _back, look: look))),
         icon,
-        const SizedBox(width: 48),
       ]),
     ]);
   }
@@ -252,72 +243,82 @@ class _AccountScreenState extends State<AccountScreen> {
   // ---------------------------------------------------------------- achievements
 
   /// The 4 most recent badges earned, then the next locked ones.
-  List<AchievementRow> _shelf(AchievementsList l) {
-    final earned = l.items.where((a) => a.earned).toList()
-      ..sort((a, b) => (b.earnedAt?.millisecondsSinceEpoch ?? 0).compareTo(a.earnedAt?.millisecondsSinceEpoch ?? 0));
-    double frac(AchievementRow a) => a.target == 0 ? 0 : a.progress / a.target;
-    final locked = l.items.where((a) => !a.earned).toList()..sort((a, b) => frac(b).compareTo(frac(a)));
-    return [...earned.take(4), ...locked].take(4).toList();
-  }
-
-  Widget _achievements(Profile p) {
+  /// The newest earned badge (title), for the line under «دستاوردها».
+  String? _latestAchievement() {
     final l = _ach;
-    final count = l == null ? '${fa(p.achievements)} تا' : '${fa(l.earned)} از ${fa(l.total)}';
-    final shelf = l == null ? const <AchievementRow>[] : _shelf(l);
-    void openAll() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AchievementsScreen()));
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 8, 8, 14),
-      decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(16)),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Row(children: [
-          const Icon(Icons.military_tech_rounded, color: K.brass, size: 22),
-          const SizedBox(width: 6),
-          Text('دستاوردها', style: tDisplay(16.5)),
-          const SizedBox(width: 10),
-          Expanded(child: Text(count, style: tBody(13.5, color: K.textSoft, w: FontWeight.w700))),
-          TextButton(
-            onPressed: openAll,
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              Text('همه', style: tBody(13.5, color: K.brass, w: FontWeight.w900)),
-              const Icon(Icons.chevron_right_rounded, color: K.brass, size: 20),
-            ]),
-          ),
-        ]),
-        if (shelf.isNotEmpty) ...[
-          const SizedBox(height: 6),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(end: 6),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              for (final a in shelf) Expanded(child: _badge(a, openAll)),
-              for (int i = shelf.length; i < 4; i++) const Expanded(child: SizedBox()),
-            ]),
-          ),
-        ],
-      ]),
-    );
+    if (l == null) return null;
+    AchievementRow? best;
+    for (final a in l.items) {
+      if (!a.earned) continue;
+      if (best == null || (a.earnedAt?.millisecondsSinceEpoch ?? 0) > (best.earnedAt?.millisecondsSinceEpoch ?? 0)) best = a;
+    }
+    return best?.title;
   }
 
-  Widget _badge(AchievementRow a, VoidCallback onTap) {
-    final icon = kAchievementGroups[a.group]?.$1 ?? Icons.military_tech_rounded;
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(children: [
-        Container(
-          width: 52,
-          height: 52,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: a.earned ? K.brass : K.night3,
-            border: Border.all(color: a.earned ? const Color(0xFF9C7420) : K.textSoft.withValues(alpha: 0.3), width: 2),
+  /// Three quiet rows under the ladder: achievements, the wardrobe, inviting. Each one tap.
+  Widget _rows(Profile p) {
+    final l = _ach;
+    final earned = l?.earned ?? p.achievements;
+    final latest = _latestAchievement();
+    Widget row({required Key key, required Widget lead, required String title, required String sub, required VoidCallback onTap, bool last = false}) => InkWell(
+          key: key,
+          onTap: onTap,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 72),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(border: last ? null : const Border(bottom: BorderSide(color: Color(0x0DFFFFFF)))),
+            child: Row(children: [
+              lead,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                  Text(title, style: tBody(14.5, w: FontWeight.w900, color: K.text)),
+                  Text(sub, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, w: FontWeight.w700, color: const Color(0xFF9C998F))),
+                ]),
+              ),
+              const Icon(Icons.chevron_left_rounded, color: Color(0xFF8E8B82)),
+            ]),
           ),
-          child: Icon(a.earned ? icon : Icons.lock_outline_rounded, color: a.earned ? K.ink : K.textSoft, size: 26),
+        );
+    Widget stack(List<String> assets, double size, double overlap) => SizedBox(
+          height: size,
+          width: size + (assets.length - 1) * (size - overlap),
+          child: Stack(children: [
+            for (var i = 0; i < assets.length; i++)
+              PositionedDirectional(start: i * (size - overlap), child: Image.asset(assets[i], width: size, height: size, fit: BoxFit.contain, errorBuilder: (_, __, ___) => SizedBox(width: size))),
+          ]),
+        );
+    return Container(
+      decoration: BoxDecoration(color: const Color(0x09FFFFFF), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0x0FFFFFFF))),
+      clipBehavior: Clip.antiAlias,
+      child: Column(children: [
+        row(
+          key: const ValueKey('row-achievements'),
+          lead: stack(const ['assets/medals/medal_gold.webp', 'assets/medals/medal_silver.webp', 'assets/medals/medal_bronze.webp'], 44, 12),
+          title: '${fa(earned)} دستاورد',
+          sub: latest == null ? 'اولین دستاوردت رو بگیر' : 'آخری: $latest',
+          onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AchievementsScreen())),
         ),
-        const SizedBox(height: 4),
-        Text(a.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: tBody(11.5, color: a.earned ? K.text : K.textSoft, w: FontWeight.w700).copyWith(height: 1.35)),
+        row(
+          key: const ValueKey('row-wardrobe'),
+          lead: stack(const ['assets/frames/frame_laurel.webp', 'assets/frames/frame_moon.webp'], 42, 14),
+          title: 'کمد کارآگاه',
+          sub: 'آواتار و قاب‌ها',
+          onTap: _pickAvatar,
+        ),
+        row(
+          key: const ValueKey('row-invite'),
+          lead: Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(color: const Color(0x1FE0A526), borderRadius: BorderRadius.circular(12)),
+            child: const Icon(Icons.group_add_rounded, color: K.brass, size: 24),
+          ),
+          title: 'دوستات رو دعوت کن',
+          sub: 'کد دعوتت پشت کارته؛ کارت رو بچرخون',
+          onTap: () => showNoirSheet<void>(context, child: _inviteSheet(p)),
+          last: true,
+        ),
       ]),
     );
   }
@@ -345,20 +346,16 @@ class _AccountScreenState extends State<AccountScreen> {
         Text('${fa(done)} از ${fa(of)} روز', style: tBody(12.5, w: FontWeight.w900, color: K.brass)),
       ]);
 
-  Widget _invite(Profile p) {
+  /// The rules and progress of inviting, in a sheet; the code itself is on the back of the card.
+  Widget _inviteSheet(Profile p) {
     final code = p.inviteCode;
     final r = _ref;
     final mine = r?.inviterReward ?? Api.i.inviteReward;
     final theirs = r?.newPlayerReward ?? Api.i.inviteNewPlayer;
     final days = r?.needDays ?? 3;
     final canRedeem = r?.canRedeem ?? !p.referred;
-    return Container(
+    return Padding(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
-      decoration: BoxDecoration(
-        color: K.night2,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: K.stamp.withValues(alpha: 0.35)),
-      ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Row(children: [
           const Icon(Icons.group_add_rounded, color: K.stamp, size: 22),
@@ -392,30 +389,12 @@ class _AccountScreenState extends State<AccountScreen> {
           if (!r.myInviterPaid) ...[const SizedBox(height: 4), _bar(r.myDays, days)],
           const SizedBox(height: 8),
         ],
-        Row(children: [
-          Expanded(
-            child: Container(
-              height: 46,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: K.night,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: K.brass.withValues(alpha: 0.5)),
-              ),
-              child: SelectableText(code, textDirection: TextDirection.ltr, style: tDisplay(22, color: K.brass)),
-            ),
-          ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 112,
-            child: StampButton(
-              label: 'بفرست',
-              height: 46,
-              onTap: () => SharePlus.instance.share(ShareParams(
-                  text: 'بیا «پرونده» بازی کنیم! هر شب یه جنایت تازه 🕵️ موقع شروع کد دعوت من رو بزن تا ${fa(theirs)} سکه هدیه بگیری: $code')),
-            ),
-          ),
-        ]),
+        StampButton(
+          label: 'بفرست برای دوستت',
+          height: 46,
+          onTap: () => SharePlus.instance.share(ShareParams(
+              text: 'بیا «پرونده» بازی کنیم! هر شب یه جنایت تازه 🕵️ موقع شروع کد دعوت من رو بزن تا ${fa(theirs)} سکه هدیه بگیری: $code')),
+        ),
         if (canRedeem && !p.referred)
           Align(
             alignment: AlignmentDirectional.centerStart,

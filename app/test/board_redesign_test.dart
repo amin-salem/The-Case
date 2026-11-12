@@ -85,7 +85,7 @@ void main() {
     });
 
     test('tonight line drops what it does not know', () {
-      expect(dailyStatsLine(DailyStats({'solved': 14, 'fastest': 582, 'median': 798})), '۱۴ کارآگاه حلش کردن · سریع‌ترین ۹:۴۲ · میانه ۱۳:۱۸');
+      expect(dailyStatsLine(DailyStats({'solved': 14, 'fastest': 582, 'median': 798})), '۱۴ کارآگاه حلش کردن · میانه ۱۳:۱۸');
       expect(dailyStatsLine(DailyStats({'solved': 3, 'fastest': null, 'median': null})), '۳ کارآگاه حلش کردن');
       expect(dailyStatsLine(DailyStats({'solved': 0})), isNull);
       expect(dailyStatsLine(null), isNull);
@@ -118,8 +118,10 @@ void main() {
     await t.pumpWidget(host(const LeaderboardBoard('daily')));
     await pump(t);
     expect(find.byKey(const ValueKey('daily-stats-line')), findsOneWidget);
-    expect(find.textContaining('۱۴ کارآگاه حلش کردن'), findsOneWidget);
-    expect(find.textContaining('سریع‌ترین ۹:۴۲'), findsOneWidget);
+    expect(find.text('۱۴ کارآگاه'), findsOneWidget);
+    expect(find.textContaining('میانه ۱۳:۱۸'), findsOneWidget);
+    expect(find.textContaining('سریع‌ترین'), findsNothing);
+    expect(find.text('پرونده‌ی امشب'), findsNothing);
     expect(find.textContaining('۴۲ ثانیه تا رتبه‌ی بالاتر'), findsOneWidget);
     double x(int rank) => t.getCenter(find.byKey(ValueKey('podium-$rank'))).dx;
     expect(x(2), greaterThan(x(1)), reason: 'second place sits on the right');

@@ -5,52 +5,107 @@ import 'main_shell.dart';
 import '../models/models.dart';
 import '../services/api.dart';
 import '../theme.dart';
-import '../widgets/profile_bell.dart';
 import '../widgets/avatar_frame.dart';
 import '../widgets/engagement.dart' show faDuration;
+import '../widgets/id_card.dart' show LeagueLook;
 import '../widgets/streak_flame.dart';
 import '../widgets/player_card_overlay.dart';
 import '../services/board_text.dart';
 
+const _bg = Color(0xFF0E0F11);
+const _panel = Color(0xFF17181B);
+const _line = Color(0x0DFFFFFF);
+const _gold = Color(0xFFF4CF73);
+
 class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
+
+  static const _labels = ['پرونده‌ی امروز', 'این هفته', 'همیشه'];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: K.night,
-          leadingWidth: 64,
-          leading: const Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: Center(child: ProfileBell(size: 34))),
-          // the long explanation lives behind the «i» next to the title (one tap opens, one tap closes)
-          title: Builder(
-            builder: (context) => Row(mainAxisSize: MainAxisSize.min, children: [
-              Flexible(child: Text('کارآگاه‌های برتر', style: tDisplay(20), overflow: TextOverflow.ellipsis)),
-              IconButton(
-                key: const ValueKey('lb-info'),
-                tooltip: 'این جدول چطور کار می‌کنه؟',
-                icon: const Icon(Icons.info_outline_rounded, color: K.brass),
-                onPressed: () => showBoardInfo(context, DefaultTabController.of(context).index, leagues: _knownLeagues),
+        backgroundColor: _bg,
+        body: Stack(children: [
+          // a soft brass glow at the top, like the design
+          const PositionedDirectional(
+            top: -140,
+            start: 0,
+            end: 0,
+            height: 360,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(center: Alignment(0, -1), radius: .9, colors: [Color(0x29E0A526), Color(0x00E0A526)]),
+                ),
               ),
+            ),
+          ),
+          SafeArea(
+            bottom: false,
+            child: Column(children: [
+              Builder(builder: (context) {
+                final c = DefaultTabController.of(context);
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+                  child: Column(children: [
+                    SizedBox(
+                      height: 44,
+                      child: Row(children: [
+                        Expanded(child: Text('برترها', style: tBody(26, w: FontWeight.w900, color: K.text).copyWith(height: 1.2))),
+                        // the long explanation lives behind this «i» (one tap opens, one tap closes)
+                        IconButton(
+                          key: const ValueKey('lb-info'),
+                          tooltip: 'این جدول چطور کار می‌کنه؟',
+                          constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                          style: IconButton.styleFrom(backgroundColor: const Color(0x0AFFFFFF), side: const BorderSide(color: Color(0x14FFFFFF))),
+                          icon: const Icon(Icons.info_outline_rounded, color: Color(0xFFB9B5AA), size: 20),
+                          onPressed: () => showBoardInfo(context, c.index, leagues: _knownLeagues),
+                        ),
+                      ]),
+                    ),
+                    const SizedBox(height: 14),
+                    AnimatedBuilder(
+                      animation: c.animation!,
+                      builder: (_, __) => Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(color: _panel, borderRadius: BorderRadius.circular(16), border: Border.all(color: _line)),
+                        child: Row(children: [
+                          for (var i = 0; i < 3; i++)
+                            Expanded(
+                              child: GestureDetector(
+                                key: ValueKey('lb-tab-$i'),
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () => c.animateTo(i),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  height: 40,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    gradient: c.animation!.value.round() == i
+                                        ? const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [_gold, K.brass])
+                                        : null,
+                                    boxShadow: c.animation!.value.round() == i ? const [BoxShadow(color: Color(0x40E0A526), blurRadius: 14, offset: Offset(0, 4))] : null,
+                                  ),
+                                  child: Text(_labels[i],
+                                      maxLines: 1,
+                                      style: tBody(13.5, w: FontWeight.w900, color: c.animation!.value.round() == i ? const Color(0xFF17120A) : const Color(0xFFB9B5AA))),
+                                ),
+                              ),
+                            ),
+                        ]),
+                      ),
+                    ),
+                  ]),
+                );
+              }),
+              const Expanded(child: TabBarView(children: [LeaderboardBoard('daily'), LeaderboardBoard('weekly'), LeaderboardBoard('all')])),
             ]),
           ),
-          bottom: TabBar(
-            indicatorColor: K.stamp,
-            labelStyle: tBody(14, w: FontWeight.w900),
-            labelColor: K.text,
-            unselectedLabelColor: K.textSoft,
-            tabs: const [Tab(text: 'پرونده‌ی امروز'), Tab(text: 'این هفته'), Tab(text: 'همیشه')],
-          ),
-        ),
-        body: const GrainBackground(
-          // SafeArea: the player's own row at the bottom stays above the phone's navigation bar
-          child: SafeArea(
-            top: false,
-            child: TabBarView(children: [LeaderboardBoard('daily'), LeaderboardBoard('weekly'), LeaderboardBoard('all')]),
-          ),
-        ),
+        ]),
       ),
     );
   }
@@ -65,7 +120,7 @@ const _kPrizeText = 'اول ۱۲۰ سکه، دوم ۸۰ سکه، سوم ۵۰ س�
 /// The full explanation of the boards, in a bottom sheet (opens from the «i» next to the title, closes in one tap).
 /// [tab] 0 = today's case, 1 = this week, 2 = all time; the sheet shows that tab's part first.
 Future<void> showBoardInfo(BuildContext context, int tab, {List<LeagueInfo> leagues = const []}) {
-  final daily = _infoBlock('پرونده‌ی امروز', 'کارآگاه‌هایی که پرونده‌ی امروز رو همون روز حل کردن؛ بیشترین پلاک و بعد کمترین زمان بالاتره. برای جایگاه جدول باید پرونده رو واقعاً بررسی کرده باشی (بازجویی و مدارک)؛ پلاک و جایزه‌ات در هر حال مال خودته.');
+  final daily = _infoBlock('پرونده‌ی امروز', 'کارآگاه‌هایی که پرونده‌ی امروز رو همون روز حل کردن. برای جایگاه جدول باید پرونده رو واقعاً بررسی کرده باشی (بازجویی و مدارک)؛ پلاک و جایزه‌ات در هر حال مال خودته.');
   final all = _infoBlock('همیشه', 'جمع همه‌ی پلاک‌هایی که هر کارآگاه از اول تا حالا گرفته.');
   final weekly = <Widget>[
     _infoBlock('این هفته', 'فقط پرونده‌های همین هفته حساب می‌شن. بایگانی پلاک می‌ده، ولی توی جدول هفتگی نیست.'),
@@ -237,7 +292,6 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     }
     final selected = _picked ?? lb.myLeague;
     final selName = selected != null && selected >= 0 && selected < lb.leagues.length ? lb.leagues[selected] : '';
-    // the header (one short line + the league switch) is ALWAYS built, whatever the chosen league holds
     final body = <Widget>[
       if (widget.period == 'daily') ..._dailyHeader(lb),
       if (widget.period == 'all') ..._allHeader(lb),
@@ -258,128 +312,200 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
           onPrimary: () => MainShell.tab.value = MainShell.home,
         )
       else ...[
-        if (podium.isNotEmpty) _podium(podium),
-        const SizedBox(height: 12),
-        for (final r in rest) _row(r),
+        if (podium.isNotEmpty) _podium(podium, prizes: weekly),
+        if (rest.isNotEmpty)
+          Container(
+            decoration: BoxDecoration(color: const Color(0xFF15161A), borderRadius: BorderRadius.circular(20), border: Border.all(color: _line)),
+            clipBehavior: Clip.antiAlias,
+            child: Column(children: [for (final r in rest) _row(r)]),
+          ),
         if (_nextOffset != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 4, bottom: 8),
-            child: OutlinedButton(
-              key: const ValueKey('lb-more'),
-              style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-              onPressed: _loadingMore ? null : _loadMore,
-              child: _loadingMore
-                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: K.brass))
-                  : const Text('بیشتر نشون بده'),
-            ),
+          OutlinedButton(
+            key: const ValueKey('lb-more'),
+            style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+            onPressed: _loadingMore ? null : _loadMore,
+            child: _loadingMore
+                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: K.brass))
+                : const Text('بیشتر نشون بده'),
           ),
       ],
     ];
-    return Column(children: [
-      Expanded(child: ListView(padding: const EdgeInsets.fromLTRB(16, 12, 16, 12), children: body)),
-      if (me != null && me.rank > 0 && !_loading) _pinned(me, gap: gapLine(lb.gap), leagues: weekly && lb.leagues.isNotEmpty),
+    final showMe = me != null && me.rank > 0 && !_loading;
+    return Stack(children: [
+      ListView.separated(
+        padding: EdgeInsets.fromLTRB(16, 2, 16, showMe ? 112 : 24),
+        itemCount: body.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 16),
+        itemBuilder: (_, i) => body[i],
+      ),
+      if (showMe)
+        PositionedDirectional(
+          start: 12,
+          end: 12,
+          bottom: 14,
+          child: SafeArea(top: false, child: _pinned(me, lb, leagues: weekly && lb.leagues.isNotEmpty)),
+        ),
     ]);
   }
 
-  /// Daily board: the case's name and, when the server sends them, simple solver numbers (how many, fastest, median).
+  /// Daily board: one card with the case's name and two small chips (how many solved, the middle time).
   List<Widget> _dailyHeader(Leaderboard lb) {
-    final stats = dailyStatsLine(lb.daily);
+    final d = lb.daily;
+    final title = lb.title.replaceFirst(RegExp(r'^پرونده‌ی امروز:\s*'), '');
+    Widget chip(IconData icon, String text, {Key? key}) => Container(
+          key: key,
+          height: 30,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(color: const Color(0x8C0A0A0C), borderRadius: BorderRadius.circular(99), border: Border.all(color: const Color(0x1AFFFFFF))),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            Icon(icon, size: 15, color: _gold),
+            const SizedBox(width: 6),
+            Text(text, style: tBody(12.5, w: FontWeight.w800, color: K.text)),
+          ]),
+        );
     return [
       Container(
         key: const ValueKey('daily-stats'),
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(16), border: Border.all(color: K.night3)),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('پرونده‌ی امشب', style: tBody(11.5, color: K.textSoft, w: FontWeight.w800)),
-          Text(lb.title.replaceFirst(RegExp(r'^پرونده‌ی امروز:\s*'), ''), style: tBody(15, w: FontWeight.w900)),
-          if (stats != null) Text(stats, key: const ValueKey('daily-stats-line'), style: tBody(12.5, color: K.text)),
-          Text('بیشترین پلاک و بعد کمترین زمان', style: tBody(11.5, color: K.textSoft)),
+        height: 136,
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+        alignment: Alignment.bottomRight,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: const Color(0x0FFFFFFF)),
+          gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF2B2414), Color(0xFF15130E), Color(0xFF0E0F11)]),
+        ),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(21, w: FontWeight.w900, color: K.text).copyWith(height: 1.3)),
+          if (d != null && d.solved > 0) ...[
+            const SizedBox(height: 8),
+            Row(key: const ValueKey('daily-stats-line'), mainAxisSize: MainAxisSize.min, children: [
+              chip(Icons.groups_rounded, '${fa(d.solved)} کارآگاه'),
+              if (d.median != null) ...[const SizedBox(width: 8), chip(Icons.timer_outlined, 'میانه ${boardTime(d.median!)}')],
+            ]),
+          ],
         ]),
       ),
     ];
   }
 
-  /// «همیشه»: the plaques board or the streak board (live streaks only).
+  /// «همیشه»: the plaques board or the streak board (live streaks only), as a small pill switch.
   List<Widget> _allHeader(Leaderboard lb) => [
-        Wrap(spacing: 8, children: [
-          ChoiceChip(
-            key: const ValueKey('mode-stars'),
-            label: Text('پلاک‌ها', style: tBody(12.5, w: FontWeight.w900)),
-            selected: !_streak,
-            selectedColor: K.brass,
-            backgroundColor: K.night2,
-            onSelected: (_) => _setStreak(false),
+        Center(
+          child: Container(
+            width: 230,
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(color: _panel, borderRadius: BorderRadius.circular(99), border: Border.all(color: _line)),
+            child: Row(children: [
+              for (final m in [(false, 'پلاک‌ها', 'mode-stars'), (true, 'زنجیره', 'mode-streak')])
+                Expanded(
+                  child: GestureDetector(
+                    key: ValueKey(m.$3),
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => _setStreak(m.$1),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      height: 36,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(99), color: _streak == m.$1 ? K.brass : Colors.transparent),
+                      child: Text(m.$2, style: tBody(13, w: FontWeight.w900, color: _streak == m.$1 ? const Color(0xFF17120A) : const Color(0xFFB9B5AA))),
+                    ),
+                  ),
+                ),
+            ]),
           ),
-          ChoiceChip(
-            key: const ValueKey('mode-streak'),
-            label: Text('زنجیره', style: tBody(12.5, w: FontWeight.w900)),
-            selected: _streak,
-            selectedColor: K.brass,
-            backgroundColor: K.night2,
-            onSelected: (_) => _setStreak(true),
-          ),
-        ]),
-        if (_streak)
-          Padding(
-            padding: const EdgeInsets.only(top: 6),
-            child: Text(
-              lb.myBest > 0 ? 'بلندترین زنجیره‌ی زنده · رکورد خودت: ${fa(lb.myBest)} شب' : 'بلندترین زنجیره‌ی زنده',
-              key: const ValueKey('streak-sub'),
-              style: tBody(12.5, color: K.textSoft),
-            ),
-          ),
-        const SizedBox(height: 10),
+        ),
+        if (_streak && lb.myBest > 0)
+          Center(child: Text('رکورد خودت: ${fa(lb.myBest)} شب', key: const ValueKey('streak-sub'), style: tBody(12.5, color: K.textSoft))),
       ];
 
-  String _weekLeft(Duration d) => d.inHours >= 24
-      ? '${fa(d.inDays)} روز و ${fa(d.inHours % 24)} ساعت'
-      : faDuration(d.inSeconds);
+  String _weekLeft(Duration d) => d.inHours >= 24 ? '${fa(d.inDays)} روز و ${fa(d.inHours % 24)} ساعت' : faDuration(d.inSeconds);
 
-  /// The weekly board: ONE short line (what it is and when the week ends) and the league switch.
-  /// The long explanation is behind the «i» in the app bar.
+  /// The weekly board: the four league shields (the chosen one lit) and one pill with the time left.
   List<Widget> _weeklyHeader(Leaderboard lb, int? selected) {
     final end = lb.weekEndsAt;
     final left = end?.difference(DateTime.now());
-    final line = left != null && !left.isNegative
-        ? 'پلاک‌های پرونده‌های همین هفته · ${_weekLeft(left)} دیگه بسته می‌شه'
-        : 'پلاک‌های پرونده‌های همین هفته';
     return [
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Flexible(child: Text(line, textAlign: TextAlign.center, style: tBody(12.5, color: K.brass, w: FontWeight.w700))),
-        const SizedBox(width: 4),
-        InkResponse(
-          key: const ValueKey('lb-info-inline'),
-          radius: 20,
-          onTap: () => showBoardInfo(context, 1, leagues: lb.leagueInfos),
-          child: const Padding(padding: EdgeInsets.all(4), child: Icon(Icons.info_outline_rounded, size: 17, color: K.textSoft)),
-        ),
-      ]),
-      if (lb.leagues.isNotEmpty) ...[
-        const SizedBox(height: 8),
-        Wrap(alignment: WrapAlignment.center, spacing: 8, runSpacing: 6, children: [
-          for (int i = 0; i < lb.leagues.length; i++)
-            ChoiceChip(
-              key: ValueKey('league-$i'),
-              label: Text(lb.leagues[i] + (lb.myLeague == i ? ' (تو)' : ''), style: tBody(12.5, w: FontWeight.w900)),
-              selected: selected == i,
-              selectedColor: K.brass,
-              backgroundColor: K.night2,
-              onSelected: (_) => _pick(i == lb.myLeague ? null : i),
-            ),
+      if (lb.leagues.isNotEmpty)
+        Row(children: [
+          for (int i = 0; i < lb.leagues.length; i++) ...[
+            if (i > 0) const SizedBox(width: 8),
+            Expanded(child: _leagueCard(i, lb, selected)),
+          ],
         ]),
-      ],
-      const SizedBox(height: 10),
+      if (left != null && !left.isNegative)
+        Center(
+          child: Container(
+            key: const ValueKey('week-left'),
+            height: 32,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(color: _panel, borderRadius: BorderRadius.circular(99), border: Border.all(color: _line)),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              const Icon(Icons.timer_outlined, size: 15, color: K.brass),
+              const SizedBox(width: 7),
+              Text('${_weekLeft(left)} تا پایان هفته', style: tBody(12.5, w: FontWeight.w800, color: const Color(0xFFCFCABE))),
+            ]),
+          ),
+        ),
     ];
+  }
+
+  Widget _leagueCard(int i, Leaderboard lb, int? selected) {
+    final on = selected == i;
+    final look = LeagueLook.of(i);
+    return GestureDetector(
+      key: ValueKey('league-$i'),
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _pick(i == lb.myLeague ? null : i),
+      child: Semantics(
+        selected: on,
+        label: lb.leagues[i],
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          height: 106,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            color: on ? look.glow.withValues(alpha: 0.2) : _panel,
+            border: Border.all(color: on ? look.accent.withValues(alpha: 0.7) : _line),
+            boxShadow: on ? [BoxShadow(color: look.glow.withValues(alpha: 0.35), blurRadius: 20, offset: const Offset(0, 6))] : null,
+          ),
+          child: Stack(alignment: Alignment.center, children: [
+            if (on) SizedBox.shrink(key: ValueKey('league-on-$i')),
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Opacity(opacity: on ? 1 : 0.62, child: Image.asset(look.shield, width: 54, height: 54, fit: BoxFit.contain)),
+              const SizedBox(height: 6),
+              Text(lb.leagues[i], maxLines: 1, style: tBody(12, w: FontWeight.w900, color: on ? K.text : const Color(0xFFB9B5AA))),
+            ]),
+            if (lb.myLeague == i)
+              PositionedDirectional(
+                top: 7,
+                start: 7,
+                child: Container(
+                  height: 18,
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(99)),
+                  child: Text('تو', style: tBody(10, w: FontWeight.w900, color: const Color(0xFF1A1407)).copyWith(height: 1.1)),
+                ),
+              ),
+          ]),
+        ),
+      ),
+    );
   }
 
   static const _silver = Color(0xFFC9CED8);
   static const _bronze = Color(0xFFCD8B52);
+  static const _prizes = {1: 120, 2: 80, 3: 50};
 
   Color _medal(int rank) => switch (rank) { 1 => K.brass, 2 => _silver, 3 => _bronze, _ => K.night3 };
 
-  /// The top three: 2 – 1 – 3, the first one raised with a crown.
-  Widget _podium(List<LeaderRow> top) {
+  Widget _shields(int count, double size) => Row(mainAxisSize: MainAxisSize.min, children: [
+        for (int i = 0; i < 3; i++)
+          Icon(Icons.shield_rounded, size: size, color: i < count ? K.brass : const Color(0xFF3A3B3F)),
+      ]);
+
+  /// The top three on the stage: 2 – 1 – 3, the first one raised and crowned; weekly shows the prize on each step.
+  Widget _podium(List<LeaderRow> top, {bool prizes = false}) {
     LeaderRow? at(int rank) {
       for (final r in top) {
         if (r.rank == rank) return r;
@@ -392,110 +518,167 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
       if (r == null) return const Expanded(child: SizedBox());
       final first = rank == 1;
       final ring = _medal(rank);
-      final face = first ? 72.0 : 58.0;
+      final face = first ? 104.0 : 82.0;
       return Expanded(
         child: InkWell(
           key: ValueKey('podium-$rank'),
           borderRadius: BorderRadius.circular(12),
           onTap: () => _openSheet(r),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-          if (first) const CustomPaint(size: Size(34, 22), painter: _CrownPainter()),
-          if (first) const SizedBox(height: 2),
-          Container(
-            width: face + 8,
-            height: face + 8,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              boxShadow: [BoxShadow(color: ring.withValues(alpha: 0.35), blurRadius: first ? 18 : 10)],
+            if (first) const CustomPaint(size: Size(34, 24), painter: _CrownPainter()),
+            SizedBox(
+              width: face,
+              height: face,
+              child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+                DecoratedBox(
+                  decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [BoxShadow(color: ring.withValues(alpha: 0.4), blurRadius: first ? 30 : 18)]),
+                  child: SizedBox(width: face * 0.8, height: face * 0.8),
+                ),
+                AvatarWithFrame(avatar: r.avatarId, frame: r.avatarFrame, size: face, animate: true),
+                Positioned(
+                  bottom: -6,
+                  child: Container(
+                    width: 26,
+                    height: 26,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: ring, border: Border.all(color: _bg, width: 2)),
+                    child: Text(fa(rank), style: tBody(13, w: FontWeight.w900, color: const Color(0xFF17120A)).copyWith(height: 1.1)),
+                  ),
+                ),
+              ]),
             ),
-            child: AvatarWithFrame(avatar: r.avatarId, frame: r.avatarFrame, size: face + 8, animate: true),
-          ),
-          const SizedBox(height: 6),
-          Text(r.me ? 'تو' : r.nickname,
-              maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: tBody(13.5, w: FontWeight.w900)),
-          if (_period == 'daily') Plaques(count: r.stars, size: 13),
-          Text(_value(r), maxLines: 1, style: tBody(12.5, color: ring, w: FontWeight.w900)),
-          const SizedBox(height: 4),
-          Container(
-            height: switch (rank) { 1 => 54.0, 2 => 40.0, _ => 30.0 },
-            margin: const EdgeInsets.symmetric(horizontal: 6),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: ring.withValues(alpha: 0.2),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-              border: Border(top: BorderSide(color: ring, width: 2)),
+            const SizedBox(height: 12),
+            Text(r.me ? 'تو' : r.nickname,
+                maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: tBody(13.5, w: FontWeight.w900, color: K.text)),
+            SizedBox(
+              height: 22,
+              child: Center(
+                child: _period == 'daily'
+                    ? _shields(r.stars, 15)
+                    : Text(_value(r), maxLines: 1, style: tBody(12.5, color: ring, w: FontWeight.w900)),
+              ),
             ),
-            child: Text(fa(rank), style: tDisplay(first ? 24 : 19, color: ring)),
-          ),
-        ]),
+            Container(
+              height: switch (rank) { 1 => 54.0, 2 => 40.0, _ => 30.0 },
+              margin: const EdgeInsets.fromLTRB(4, 6, 4, 0),
+              alignment: Alignment.topCenter,
+              padding: const EdgeInsets.only(top: 9),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(14), bottom: Radius.circular(4)),
+                gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [ring.withValues(alpha: 0.28), const Color(0x3317181B)]),
+                border: Border(top: BorderSide(color: ring)),
+              ),
+              child: prizes
+                  ? Container(
+                      key: ValueKey('prize-$rank'),
+                      height: 24,
+                      padding: const EdgeInsets.symmetric(horizontal: 9),
+                      decoration: BoxDecoration(color: const Color(0x800A0A0C), borderRadius: BorderRadius.circular(99), border: Border.all(color: const Color(0x59F4CF73))),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        const Icon(Icons.monetization_on_rounded, size: 13, color: K.brass),
+                        const SizedBox(width: 4),
+                        Text(fa(_prizes[rank]!), style: tBody(11.5, w: FontWeight.w900, color: _gold).copyWith(height: 1.1)),
+                      ]),
+                    )
+                  : null,
+            ),
+          ]),
         ),
       );
     }
 
     // children run right to left: 2 on the right, 1 in the middle, 3 on the left
-    return Row(crossAxisAlignment: CrossAxisAlignment.end, children: [place(2), place(1), place(3)]);
+    return Stack(children: [
+      Positioned.fill(
+        top: -24,
+        child: IgnorePointer(
+          child: ShaderMask(
+            shaderCallback: (r) => const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.black, Colors.black, Colors.transparent], stops: [0, .55, 1]).createShader(r),
+            blendMode: BlendMode.dstIn,
+            child: Image.asset('assets/banners/podium_stage.webp', fit: BoxFit.cover, alignment: Alignment.topCenter, errorBuilder: (_, __, ___) => const SizedBox()),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 18),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [place(2), place(1), place(3)]),
+      ),
+    ]);
   }
 
-  /// The player's own row, always at the bottom.
-  Widget _pinned(LeaderRow me, {String? gap, bool leagues = false}) {
-    // weekly with leagues: the prizes go to the first 3 of each league
+  /// The player's own row: a floating bar at the bottom with his place, how far the next place is and a thin bar.
+  Widget _pinned(LeaderRow me, Leaderboard lb, {bool leagues = false}) {
     final n = leagues ? 3 : 10;
     final inTop = me.rank >= 1 && me.rank <= n;
-    final line = gap ?? (inTop ? 'جزو ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}! 🏆' : '${fa(me.rank - n)} رتبه مونده تا ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}');
+    final gap = lb.gap;
+    final line = gapLine(gap) ?? (inTop ? 'جزو ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}! 🏆' : '${fa(me.rank - n)} رتبه مونده تا ${fa(n)} کارآگاه اول${leagues ? ' لیگ' : ''}');
+    // how close he is to the place above: my score against the score of that place
+    double progress = inTop && gap == null ? 1 : 0;
+    if (gap != null && gap.diff > 0) {
+      final mine = me.value.toDouble();
+      final target = gap.unit == 'seconds' ? (mine - gap.diff) : (mine + gap.diff);
+      progress = target <= 0 || mine <= 0 ? 0 : (gap.unit == 'seconds' ? target / mine : mine / target).clamp(0.0, 1.0);
+    }
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
-      decoration: const BoxDecoration(color: K.night2, border: Border(top: BorderSide(color: K.night3))),
-      child: _row(me, title: line, tappable: false),
+      key: const ValueKey('lb-me'),
+      height: 76,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: const Color(0xEB221C11),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: K.brass.withValues(alpha: 0.38)),
+        boxShadow: const [BoxShadow(color: Color(0x8C000000), blurRadius: 40, offset: Offset(0, 18))],
+      ),
+      child: Row(children: [
+        SizedBox(width: 34, child: Text(fa(me.rank), textAlign: TextAlign.center, maxLines: 1, style: tBody(22, w: FontWeight.w900, color: _gold))),
+        const SizedBox(width: 12),
+        AvatarWithFrame(avatar: me.avatarId, frame: me.avatarFrame, size: 48),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Row(children: [
+              Text('تو', style: tBody(14.5, w: FontWeight.w900, color: K.text)),
+              const SizedBox(width: 8),
+              Expanded(child: Text(line, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.end, style: tBody(12, w: FontWeight.w800, color: const Color(0xFFE7DCC0)))),
+            ]),
+            const SizedBox(height: 6),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(99),
+              child: LinearProgressIndicator(value: progress, minHeight: 6, backgroundColor: const Color(0x1AFFFFFF), color: K.brass),
+            ),
+          ]),
+        ),
+      ]),
     );
   }
 
-  Widget _row(LeaderRow r, {String? title, bool tappable = true}) {
-    final medal = _medal(r.rank);
-    final pinned = title != null;
-    final card = Container(
-      margin: EdgeInsets.only(bottom: pinned ? 0 : 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: r.me ? const Color(0xFF2E2416) : K.night2,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: r.me ? K.brass : K.night3),
-      ),
+  Widget _row(LeaderRow r) {
+    final daily = _period == 'daily';
+    final content = Container(
+      height: 64,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(color: r.me ? const Color(0x1AE0A526) : null, border: const Border(bottom: BorderSide(color: Color(0x0BFFFFFF)))),
       child: Row(children: [
-        Container(
-          constraints: const BoxConstraints(minWidth: 32),
-          height: 32,
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(color: medal, borderRadius: BorderRadius.circular(99)),
-          child: Text(fa(r.rank), style: tBody(13, color: r.rank <= 3 ? K.ink : K.text, w: FontWeight.w900)),
-        ),
-        const SizedBox(width: 10),
-        AvatarWithFrame(avatar: r.avatarId, frame: r.avatarFrame, size: 44),
-        const SizedBox(width: 10),
+        SizedBox(width: 24, child: Text(fa(r.rank), textAlign: TextAlign.center, maxLines: 1, style: tBody(14, w: FontWeight.w900, color: const Color(0xFF8E8B82)))),
+        const SizedBox(width: 12),
+        AvatarWithFrame(avatar: r.avatarId, frame: r.avatarFrame, size: 46),
+        const SizedBox(width: 12),
         Expanded(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
-              Flexible(
-                child: Text(title ?? (r.me ? '${r.nickname} (تو)' : r.nickname),
-                    style: tBody(pinned ? 14 : 15, w: FontWeight.w900, color: pinned ? K.brass : K.text),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
-              ),
-              if (!pinned && r.streak >= 2) ...[const SizedBox(width: 6), StreakFlame(r.streak, size: 13)],
+              Flexible(child: Text(r.me ? '${r.nickname} (تو)' : r.nickname, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14.5, w: FontWeight.w800, color: K.text))),
+              if (r.streak >= 2) ...[const SizedBox(width: 6), StreakFlame(r.streak, size: 12)],
             ]),
-            if (r.rankTitle.isNotEmpty || pinned)
-              Text(pinned ? [r.nickname, if (r.rankTitle.isNotEmpty) r.rankTitle, if (r.leagueName.isNotEmpty) 'لیگ ${r.leagueName}'].join(' · ') : r.rankTitle,
-                  style: tBody(11.5, color: pinned ? K.textSoft : K.brass), maxLines: 1, overflow: TextOverflow.ellipsis),
+            if (r.rankTitle.isNotEmpty)
+              Text(r.rankTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, w: FontWeight.w700, color: const Color(0xFFA59C83))),
           ]),
         ),
-        if (_period == 'daily') ...[Plaques(count: r.stars, size: 16), const SizedBox(width: 8)],
-        Text(_value(r), style: tBody(14, color: K.brass, w: FontWeight.w900)),
+        if (daily) _shields(r.stars, 16) else Text(_value(r), style: tBody(14, color: K.brass, w: FontWeight.w900)),
       ]),
     );
-    if (!tappable || r.pid.isEmpty) return card;
-    // the whole row opens the player sheet (a 60 px tall target)
-    return InkWell(key: ValueKey('row-${r.rank}'), borderRadius: BorderRadius.circular(14), onTap: () => _openSheet(r), child: card);
+    if (r.pid.isEmpty) return content;
+    // the avatar and the whole row open his card (a 64 px tall target)
+    return InkWell(key: ValueKey('row-${r.rank}'), onTap: () => _openSheet(r), child: content);
   }
 }
 
