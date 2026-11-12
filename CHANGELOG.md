@@ -1,3 +1,7 @@
+# app 1.44.3+92: arrow directions (12 Nov 2026)
+
+- «کارت من» rows and the weekend back button used the wrong icon names for RTL; fixed, with `rtl_icons_test.dart` and a rule in CLAUDE.md.
+
 # server 1.61.1 / app 1.44.2+91: names fit, fastest solve counts main cases only (12 Nov 2026)
 
 - Top list and ID card: a long name shrinks to fit instead of ending in «…».

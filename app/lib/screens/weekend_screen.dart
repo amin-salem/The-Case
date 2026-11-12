@@ -168,7 +168,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
                 key: const ValueKey('weekend-back'),
                 tooltip: 'برگشت',
                 onPressed: () => MainShell.tab.value = MainShell.home,
-                icon: const Icon(Icons.arrow_back_rounded, color: K.text),
+                icon: const Icon(Icons.arrow_forward_rounded, color: K.text),
               ),
               const ProfileBell(size: 40),
               const SizedBox(width: 8),

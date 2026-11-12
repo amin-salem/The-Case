@@ -276,7 +276,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   Text(sub, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, w: FontWeight.w700, color: const Color(0xFF9C998F))),
                 ]),
               ),
-              const Icon(Icons.chevron_left_rounded, color: Color(0xFF8E8B82)),
+              const Icon(Icons.chevron_right_rounded, color: Color(0xFF8E8B82)),
             ]),
           ),
         );

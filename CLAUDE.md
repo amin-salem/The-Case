@@ -112,6 +112,15 @@ The app is Persian and RTL. Every mockup or screen I design must be RTL: progres
 carousels fill and start from the RIGHT (rings turn counter-clockwise from the top), the first item sits on the right,
 and "back" arrows point right. In Flutter use the ambient `Directionality` (never hard-code left/right).
 
+## Arrows in RTL (Amin, 12 Nov 2026) — a mistake I keep repeating
+Flutter mirrors direction icons in RTL, so the names are reversed. In this app:
+- forward / «open this row» chevron at the end of a row: `Icons.chevron_right_rounded` (it SHOWS «<»). Never `chevron_left` there.
+- back button: `Icons.arrow_forward_rounded` (it shows «→»). Never `arrow_back`.
+- `chevron_left` only means «previous» (e.g. the wizard step back).
+`app/test/rtl_icons_test.dart` fails the build if the natural names are used. Before finishing ANY UI change, grep the new
+code for `chevron_`, `arrow_` and `Icons.*left|right`, and check each against the rows above (see commit fd299a6, where
+this was fixed once already).
+
 ## Check the code before you build (Amin, 25 Oct 2026)
 Before building anything he asks for, look at the code, CHANGELOG and git log: it may already be done (for example as
 an urgent earlier request).

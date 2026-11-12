@@ -157,3 +157,15 @@ Build 90
 
 ## developer_note
 Build 91
+
+<!-- build: 92 -->
+## changelog_fa
+- جهت فلش‌ها در کارت من و صفحهٔ آخر هفته درست شد
+- بهبودهای کوچک
+
+## changelog_en
+- Arrow directions fixed on My card and the weekend page
+- Small improvements
+
+## developer_note
+Build 92
