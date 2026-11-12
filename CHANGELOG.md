@@ -1,3 +1,8 @@
+# server 1.61.1 / app 1.44.2+91: names fit, fastest solve counts main cases only (12 Nov 2026)
+
+- Top list and ID card: a long name shrinks to fit instead of ending in «…».
+- `fastest` on the player card counts only cases that exist in today's content (main nightly and weekend cases): rows of the retired quick puzzles (10-20 s) no longer become anybody's record.
+
 # app 1.44.1+90: top list as designed, my card rows (12 Nov 2026)
 
 - «برترها»: new header (big title, pill tabs), league cards with shields on the weekly board, winners' stage with prizes, one list card, floating «تو» bar with progress. Removed the «پرونده‌ی امشب» label, the «بیشترین پلاک و بعد کمترین زمان» line and «سریع‌ترین».

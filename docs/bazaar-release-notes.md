@@ -143,3 +143,17 @@ Build 89
 
 ## developer_note
 Build 90
+
+<!-- build: 91 -->
+## changelog_fa
+- نام‌های بلند در برترها کامل دیده می‌شود
+- «سریع‌ترین حل» فقط از پرونده‌های اصلی حساب می‌شود
+- بهبودهای کوچک
+
+## changelog_en
+- Long names now fit in the top list
+- Fastest solve counts main cases only
+- Small improvements
+
+## developer_note
+Build 91
