@@ -250,12 +250,17 @@ void main() {
       server({'/v1/leaderboard': (_) => dailyBoard()});
       await t.binding.setSurfaceSize(const Size(360, 740));
       addTearDown(() => t.binding.setSurfaceSize(null));
+      final errors = <FlutterErrorDetails>[];
+      final previous = FlutterError.onError;
+      FlutterError.onError = errors.add;
+      addTearDown(() => FlutterError.onError = previous);
       await t.pumpWidget(host(const LeaderboardBoard('daily'), scale: scale));
       await pump(t);
       expect(find.byKey(const ValueKey('daily-stats-line')), findsOneWidget);
-      final e = t.takeException();
-      if (e != null) debugPrint('OVERFLOW DETAILS: $e');
-      expect(e, isNull);
+      for (final d in errors) {
+        debugPrint('OVERFLOW DETAILS: ${d.exception.toString().split('\n').take(14).join(' | ')}');
+      }
+      expect(errors, isEmpty);
     });
   }
 }
