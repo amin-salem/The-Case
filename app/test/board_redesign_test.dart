@@ -258,7 +258,7 @@ void main() {
       await pump(t);
       expect(find.byKey(const ValueKey('daily-stats-line')), findsOneWidget);
       for (final d in errors) {
-        debugPrint('OVERFLOW DETAILS: ${d.exception.toString().split('\n').take(14).join(' | ')}');
+        debugPrint('OVERFLOW DETAILS: ${d.toStringDeep().split('\n').where((l) => l.contains('leaderboard_screen') || l.contains('overflowing') || l.contains('relevant')).join(' | ')}');
       }
       expect(errors, isEmpty);
     });
