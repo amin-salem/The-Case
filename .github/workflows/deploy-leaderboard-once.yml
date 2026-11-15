@@ -19,12 +19,19 @@ jobs:
           node-version: "22"
       - name: Install official Liara CLI
         run: npm install --global @liara/cli@9
+      - name: Package Docker build context
+        run: |
+          mkdir -p deployment-source/server
+          cp Dockerfile liara.json deployment-source/
+          cp server/requirements.txt server/alembic.ini server/start.sh deployment-source/server/
+          cp -a server/app server/alembic deployment-source/server/
+          test -s deployment-source/Dockerfile
       - name: Deploy audited server to existing app
         env:
           LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
         run: |
           test -n "$LIARA_TOKEN" || { echo "Liara deployment credential is not configured"; exit 1; }
-          liara deploy --app="thecase" --api-token="$LIARA_TOKEN" --no-app-logs
+          liara deploy --path="deployment-source" --app="thecase" --api-token="$LIARA_TOKEN" --no-app-logs
       - name: Confirm production version
         run: |
           python3 - <<'PY'
