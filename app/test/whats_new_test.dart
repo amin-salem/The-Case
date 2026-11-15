@@ -21,9 +21,9 @@ void main() {
   });
 
   test('list: newest first, titles for this release, no «نفر»', () {
-    expect(kWhatsNew.first.id, 82);
-    expect(kWhatsNew.first.items.length, 5);
-    expect(kWhatsNew.first.items.first.title, 'با دکمه‌ی برگشت از خونه بیرون نمی‌ری؛ اول می‌پرسیم می‌خوای از برنامه خارج بشی');
+    expect(kWhatsNew.first.id, 94);
+    expect(kWhatsNew.first.items.length, 2);
+    expect(kWhatsNew.first.items.first.title, 'میز کار خلوت‌تر و دسترسی به ماموریت‌ها ساده‌تر شد');
     for (final r in kWhatsNew) {
       for (final it in r.items) {
         expect(it.title.contains('نفر'), isFalse);
