@@ -392,6 +392,7 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - c069 trick: the block never left the locked case; hidden under the reversed velvet lid of the stand. Guilty knowledge: on Thursday night, with the stand still sealed, the owner says the block «is lying on its back, pattern up». Fixes after test 1: selfie card e13 at 15:51 closes the assistant's window, guard now saw «something shiny» (the empty holder), «پایه» split into جعبه/سرپوش/نگهدارنده, block and cavity sizes, dating logic of the blunt tip stated (old prints sharp, broken years tipless, only post-1398 blunt), why the stand was sealed unopened (owner's request). After test 2: Vahid no longer alone with the key after locking, glass door vs lid wording, small sentences.
 - c070 chain: ribbon with the iron burn -> the bolt tied with the mask's own ribbons -> bolt rolled after the tent curtain was cut (matching zigzag edge) -> curtain hung 19:27 with the sewing table already empty -> only Narges in the room from the 19:15 doorbell (Tarane, tablet video) -> motive: the «window» joke is her mother Simin's real story and the old suitor was secretly invited. Rework after test 1: grandmother's two answers that named Narges removed, Farshad's hidden 2-minute visit added as a second strong false trail, show time unified, ribbon ends consistent. After test 2: Narges no longer admits rolling the bolt; Kian's sighting and the 19:27 window bracket it. After test 3: Simin named as Narges's mother, pins/pencil in her apron, small wording.
 
+<<<<<<< HEAD
 ### 2026-11-15 nightly (Sonnet coordinator, Opus writer): c071, c072 from the idea bank (ideas session 7 of 15)
 | id | publish | idea / style / type | culprit | result |
 |---|---|---|---|---|
@@ -401,3 +402,13 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Logic plans and two fix rounds: docs/reviews/c071-c072-plan.md. Name changes: نیما آراسته -> نیما دلاوری, فرزاد -> جهانگیر, نسرین اردلان -> ثریا ورزنده, مسعود اردلان -> مسعود ورزنده; اردوان نیک‌پی -> اردوان بهادری.
 - Soft spots fixed after blind test 1 (carbon copy of receipt 0388, bin timing, Jahangir's gap, intro overclaim, shoes on a card, corridor/door wording, receipt time, why the notebook was thrown out, heater, e4 page list) and after test 2 (debtor link and how she knew, audit rule, Nima's call time, Soorayya 11:20, the card name, bin window; wind and window, job-offer hearsay, no rewrite from memory). Text changed after the last retest was confirmed only by check_case.py and the offline tests. Receipts/forms that clear people: c071 e4, e5; c072 e9, e10.
 
+=======
+### 2026-11-15 weekend session (Sonnet coordinator, Opus writer): w008 from the idea bank
+| id | publish | idea / style / type | culprit | result |
+|---|---|---|---|---|
+| w008 «قایقِ برگشت» (format 3) | 2026-11-26 | idea #32, style S7, puzzle type 9 (harbor / business), difficulty 5 | s4 بهادر دریامنش (m3) | day 1 (2 runs): first 85% (too strong) -> hardened with a second day-1 suspect (Fariar: seal 208 could be pocketed at 15:36, alone in the upper office) and weaker cover-story breaks; second run Bahador 55% leaning, Fariar 20%, m3 65%, no single card decides. Full (2 runs): 97% then 95%, m3, chapter-2 cards needed, fair, helper difficulty 4 (field kept at 5). |
+
+- Plan and revisions: docs/reviews/w008-plan.md. Name changes from the idea: گلرخ -> ماهرخ (siblings share «دریامنش»), فریناز -> آیلار بادبان, نیک‌دریا -> امین‌زاده, فرخ‌نیا -> فرخ‌زاد, بهروان‌فر -> نوذری.
+- Chain: strap 207 at 16:02 vs 208 at 17:05 + double-plus-half knot + soaked rope -> Kakai took 29 min instead of 10 -> day 2: pump handed to Bahador at the rear slip 16:12 (e11), photo 16:13 with bare seat and key ring on his belt (e12), pouch and cut strap 207 hidden under the launch floor with Monday's brass screws (e13).
+- Fixed after the tests: 186M bundle arithmetic (18x10M + 6M), envelope/engines explained, chest weight, bag dry in the launch, 17:30 search coverage, e1/e10 times, fence timing, second source for strap 207. Receipts/forms that clear people: e6, e8.
+>>>>>>> origin/main

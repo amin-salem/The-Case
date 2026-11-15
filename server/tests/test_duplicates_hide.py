@@ -57,9 +57,11 @@ async def test_hidden_rows_leave_the_groups_the_boards_and_the_counts(session):
     before = await dup.groups(session)
     assert before["summary"]["groups"] == 1 and before["groups"][0]["players"][0]["keep"] is True
     assert [i["can_hide"] for i in before["groups"][0]["players"]] == [False, True]
+    assert before["summary"]["probable_orphans"] == 1
     await dup.hide(session, [g1])
     after = await dup.groups(session)
     assert after["summary"]["groups"] == 0 and after["summary"]["hidden"] == 1 and after["groups"] == []
+    assert after["summary"]["probable_orphans"] == 0          # a hidden orphan is no longer counted as an orphan
     assert ac.is_visible(await session.get(Player, sec)) is True
     assert ac.is_visible(await session.get(Player, g1)) is False
     hid = await dup.hidden_list(session)
