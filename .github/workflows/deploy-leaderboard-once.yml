@@ -1,0 +1,44 @@
+name: Deploy verified leaderboard server
+on:
+  push:
+    branches: [fix/leaderboard-desk-cleanup-20261115]
+    paths: [.github/workflows/deploy-leaderboard-once.yml]
+permissions:
+  contents: read
+jobs:
+  deploy:
+    if: github.event.head_commit.message == 'Deploy verified server 1.61.3 to Liara'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 0cc4b30e3f05130ded657a51dba67541d1b57e69
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install official Liara CLI
+        run: npm install --global @liara/cli@9
+      - name: Deploy audited server to existing app
+        env:
+          LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
+        run: |
+          test -n "$LIARA_TOKEN" || { echo "Liara deployment credential is not configured"; exit 1; }
+          liara deploy --app="thecase" --api-token="$LIARA_TOKEN" --no-app-logs
+      - name: Confirm production version
+        run: |
+          python3 - <<'PY'
+          import json, time, urllib.request
+          for attempt in range(12):
+              try:
+                  with urllib.request.urlopen("https://gaamly.ir/health", timeout=20) as r:
+                      body = json.load(r)
+                  if body.get("ok") and body.get("version") == "1.61.3":
+                      print("Production healthy: server 1.61.3")
+                      break
+              except Exception:
+                  pass
+              if attempt == 11:
+                  raise SystemExit("Production version could not be verified; do not redeploy automatically")
+              time.sleep(15)
+          PY
