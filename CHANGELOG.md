@@ -1,3 +1,7 @@
+# server 1.62.2: weekend case w008 «قایقِ برگشت» (15 Nov 2026)
+
+- New weekend case w008 (format 3, publish Thu 2026-11-26, difficulty 5, harbor / business) with its notify entry. Content only, no migration.
+
 # server 1.62.1: orphan count ignores hidden accounts (15 Nov 2026)
 
 - «حساب‌های تکراری»: the «مهمان یتیم» number still counted accounts that were already hidden. It now counts visible accounts only. No migration.
