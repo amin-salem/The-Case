@@ -213,3 +213,16 @@ s7 Radin, card e8 (day 1). Not the culprit, not the newcomer. The question is sp
    Radin (end screw under the lacquer, lacquer pen cap: tightened before 09:06), Arsam (carry-case handle, brass clasp round seal
    ۵۵۱۸). No line names who turned the end screw after 09:06.
 Clue chain and proof unchanged: proof is still e10 and e14; e10 keeps clauses 3, 7, 9 and annex 1 (the protocol).
+
+## Revision 2 (after the day-1 rerun: Kiyanoush ~75 %, nothing single-decisive, difficulty 4). Balance kept.
+1. The four why/how options are now impersonal and parallel (85-102 chars); none names a contract, a role or «himself». m3 = cards
+   reversed so the test fails once and is held again (right); m4 = cards reversed so the balance is rejected for good and the order
+   goes to the rival; m1 = a real cell fault hidden behind a sabotage claim; m2 = weights swapped inside the box, seal refitted.
+2. No later print on the end screw: a knurled screw holds no fingerprints (Hirbod's answer: «that is why we use lacquer»); Radin's
+   print line now says the knurled surface carries no trace, only a partial print of his under the lacquer. Nobody is named as the
+   one who turned it.
+3. Why nobody reacted to «م-۱۰» read aloud first: Mahshid's answer: during the test she watched the tweezers and the reading; the
+   names were only labels to everyone and nobody had memorised their order.
+4. Yasaman's 09:54 save is confirmed by a second person: Hirbod's answer (she asked aloud for the time to save her file; Radin read
+   09:54 off the wall clock). Her 09:54-09:57 minutes stay open on day 1.
+Clue chain and proof (e10, e14) unchanged.
