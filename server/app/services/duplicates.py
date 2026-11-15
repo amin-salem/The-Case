@@ -52,10 +52,10 @@ async def summary(session: AsyncSession) -> dict:
     groups = int(await session.scalar(select(func.count()).select_from(grouped)) or 0)
     rows_in_groups = int(await session.scalar(select(func.coalesce(func.sum(grouped.c.n), 0))) or 0)
     other = aliased(Player)
-    has_secured_twin = exists().where(and_(other.device_id == Player.device_id, other.id != Player.id, _secured(other)))
+    has_secured_twin = exists().where(and_(other.device_id == Player.device_id, other.id != Player.id, _secured(other), other.hidden_at.is_(None)))
     has_purchase = exists().where(Purchase.player_id == Player.id)
     orphans = int(await session.scalar(select(func.count()).select_from(Player).where(
-        _guest(Player), Player.cases_solved == 0, Player.banned.is_(False), Player.tester.is_(False),
+        Player.hidden_at.is_(None), _guest(Player), Player.cases_solved == 0, Player.banned.is_(False), Player.tester.is_(False),
         has_secured_twin, not_(has_purchase))) or 0)
     return {"players": total, "devices": devices, "groups": groups, "rows_in_groups": rows_in_groups,
             "probable_orphans": orphans, "real_people_estimate": total - orphans, "hidden": hidden}

@@ -1,3 +1,7 @@
+# server 1.62.1: orphan count ignores hidden accounts (15 Nov 2026)
+
+- «حساب‌های تکراری»: the «مهمان یتیم» number still counted accounts that were already hidden. It now counts visible accounts only. No migration.
+
 # server 1.62.0: admin panel redesign, member numbers, hide duplicate accounts (15 Nov 2026)
 
 - Admin panel, all screens: new calm look (bottom tab bar with a «بیشتر» sheet, tables become readable cards on a phone, fewer numbers per screen, extra charts folded away).
