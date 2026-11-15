@@ -101,8 +101,11 @@ async def test_http_endpoints_need_confirm_and_the_key_and_list_member_numbers(c
     a, b, c = [await new_player(client, f"hide-dev-{i}") for i in range(3)]
     pl = (await client.get("/admin/api/players?sort=created_asc&segment=all", headers=ADMIN)).json()["items"]
     nums = [p["member_no"] for p in pl]
-    assert nums[:3] == [1, 2, 3] and nums == sorted(nums)                              # oldest first, numbered from 1
-    assert {p["id"] for p in pl[:3]} == {a["player_id"], b["player_id"], c["player_id"]}      # same created_at second: the id breaks the tie
+    assert nums[0] == 1 and nums == sorted(nums)                                       # oldest first, numbered from 1
+    newest = (await client.get("/admin/api/players?sort=created&segment=all&limit=200", headers=ADMIN)).json()["items"]
+    mine = {a["player_id"], b["player_id"], c["player_id"]}
+    got = [p["member_no"] for p in newest if p["id"] in mine]                           # other tests share the database: look at mine only
+    assert len(got) == 3 and got == sorted(got, reverse=True) and len(set(got)) == 3
     body = {"ids": [b["player_id"]]}
     assert (await client.post("/admin/api/duplicate-accounts/hide", json={**body, "confirm": True})).status_code == 403
     assert (await client.post("/admin/api/duplicate-accounts/hide", headers=ADMIN, json=body)).status_code == 422
