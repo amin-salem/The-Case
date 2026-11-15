@@ -1,3 +1,8 @@
+# server 1.62.0: nightly cases c071, c072 (15 Nov 2026)
+
+- Two new nightly cases from the idea bank: c071 «همراهی که نسبت نداشت» (idea 19, style S6 conflicting accounts, puzzle type 2 hidden relation, hospital / medical, difficulty 5, publish 8 Dec 2026) and c072 «مسیرِ کوتاهِ طوفان» (idea 20, style S7 crime inside a crisis, puzzle type 3a cover crime, desert / science, difficulty 5, publish 9 Dec 2026). notify.json entries added; case counts in tests 70 -> 72.
+- Blind tests: c071 85% / 85%, c072 92% / 93%; no single card decides. All findings fixed in two rounds (see `docs/case-log.md`).
+
 # app 1.44.5+94 / server 1.61.3: fresh daily stats and a simpler desk (15 Nov 2026)
 
 - Daily leaderboard totals, fastest and median are computed by one uncached SQL statement. Visibility, daily eligibility and ranked-time rules remain intact; concurrent solves cannot shift separate median reads. Pull to refresh and foreground resume reload the board.

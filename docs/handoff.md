@@ -37,7 +37,7 @@ If a branch or commit already names the id, take the next one. Then push your br
 
 ## Status (newest first; keep each entry to a few lines)
 - **10 Nov 2026 (account A):** server 1.58.0 on `main`: c069, c070 (ideas 17, 18), w007 rewritten, c067/c068, admin panel in Tehran time with promo impact. Not yet
-  deployed by Amin at the time of writing. Idea bank batch 1: ideas 1-18 written (c053-c070); 19-30 → c071-c082 are scheduled (nightly sessions 10, 12, 13, 14, 15, 16 Nov,
+  deployed by Amin at the time of writing. Idea bank batch 1: ideas 1-20 written (c053-c072; 19, 20 on 15 Nov, server 1.62.0); 21-30 → c073-c082 are scheduled (nightly sessions 10, 12, 13, 14, 15, 16 Nov,
   two cases each); weekend ideas 32-35 → w008-w011 scheduled (Wednesdays 11, 18, 25 Nov, 2 Dec); idea 36 → w012 has no session. Last nightly publish date after c082 is
   2026-12-19; last weekend after w012 would be Thu 2026-12-24. **The bank is therefore empty from c083 (2026-12-20): batch 2 of ideas is the first job of account B.**
 - **10 Nov 2026 (account A):** UX pack (8 scheduled sessions, 10-19 Nov, branch `app/ux-pack`) ends in ONE Bazaar release, build 87. Do not publish build 86.
