@@ -26,7 +26,7 @@ MIN_KEY = 5               # shortest e-mail name (letters only) that may link tw
 
 
 def _excluded():
-    return or_(Player.tester.is_(True), Player.banned.is_(True), Player.device_id.startswith("smoke-load-"))
+    return or_(Player.tester.is_(True), Player.banned.is_(True), Player.hidden_at.is_not(None), Player.device_id.startswith("smoke-load-"))
 
 
 def _has_purchase():
@@ -133,7 +133,7 @@ async def label_rows(session: AsyncSession, rows: list[Player], dup: dict[str, s
         CaseProgress.player_id.in_(ids)).distinct())).all()) if ids else set()
     out = {}
     for p in rows:
-        if p.tester or p.banned or (p.device_id or "").startswith("smoke-load-"):
+        if p.tester or p.banned or p.hidden_at is not None or (p.device_id or "").startswith("smoke-load-"):
             seg = "excluded"
         elif p.id in dup:
             seg = "duplicate"

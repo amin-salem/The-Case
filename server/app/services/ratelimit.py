@@ -79,6 +79,7 @@ DEFAULTS: dict[str, Policy] = {p.name: p for p in [
     _p("admin_promo", [(30, 60), (120, 3600)], "key", "strict", "closed", "admin: start or end a promo case window"),
     _p("admin_app_update", [(20, 60), (100, 3600)], "key", "strict", "closed", "admin: save the app update notice"),
     _p("admin_purge", [(5, 60), (30, 3600)], "key", "strict", "closed", "admin: delete worthless accounts"),
+    _p("admin_dups", [(10, 60), (60, 3600)], "key", "strict", "closed", "admin: hide / restore / delete duplicate accounts"),
     _p("admin_case_reset", [(10, 60), (100, 3600)], "key", "strict", "closed", "admin: reset a case for a player"),
     _p("sms_verify", [(10, 600)], "key", "strict", "closed", "wrong-code guessing, per phone number"),
     _p("sms_verify_ip", [(20, 600)], "ip", "strict", "closed", "code checks, per IP"),

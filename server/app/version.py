@@ -1,6 +1,6 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.62.0"
-# server 1.62.0: nightly cases c071, c072 (15 Nov 2026)
+VERSION = "1.63.0"
+# server 1.63.0: nightly cases c071, c072 (15 Nov 2026)
 # server 1.61.0: the player card carries the ID-card fields (league, card number, joined, fastest solve, 3 newest badges) (11 Nov 2026)
 # server 1.60.0: promo case hours counted from each new detective's signup, `free_until` in the case list (11 Nov 2026)
 # server 1.59.0: UX pack release (build 87): update thank-you coins, archive picks, leaderboard data, art registry and portrait contract (11 Nov 2026)

@@ -175,7 +175,7 @@ async def feed(limit: int = Query(60, ge=1, le=200), session: AsyncSession = Dep
     return items
 
 
-_SORTS = {"last_seen": Player.last_seen, "created": Player.created_at, "coins": Player.coins,
+_SORTS = {"last_seen": Player.last_seen, "created": Player.created_at, "created_asc": Player.created_at, "coins": Player.coins,
           "solved": Player.cases_solved, "stars": Player.stars_total, "streak": Player.streak}
 
 
@@ -196,9 +196,17 @@ async def players(q: str = Query("", max_length=60), sort: str = "last_seen", li
     if segment != "all":
         stmt = stmt.where(real_users.where_segment(segment, list(dup)))
     total = int(await session.scalar(select(func.count()).select_from(stmt.subquery())) or 0)
-    rows = (await session.execute(stmt.order_by(col.desc(), Player.id).limit(limit).offset(offset))).scalars().all()
+    order = col.asc() if sort == "created_asc" else col.desc()
+    rows = (await session.execute(stmt.order_by(order, Player.id).limit(limit).offset(offset))).scalars().all()
     lab = await real_users.label_rows(session, list(rows), dup)
+    # signup number (1 = the first player ever): the same order as the ID card (created_at, then id)
+    members = {}
+    if rows:
+        numbered = select(Player.id, func.row_number().over(order_by=(Player.created_at, Player.id)).label("n")).subquery()
+        members = {pid: int(n) for pid, n in (await session.execute(
+            select(numbered.c.id, numbered.c.n).where(numbered.c.id.in_([p.id for p in rows])))).all()}
     return {"total": total, "items": [{
+        "member_no": members.get(p.id, 0), "hidden": p.hidden_at is not None,
         "id": p.id, "nickname": p.nickname, "coins": p.coins, "solved": p.cases_solved, "stars": p.stars_total,
         "streak": p.streak, "secured": bool(p.email or p.phone_hash), "banned": p.banned, "app_version": p.client_build or p.app_version,
         "segment": lab[p.id]["segment"], "dup_reason": lab[p.id]["reason"],
@@ -301,6 +309,56 @@ async def duplicate_accounts(limit: int = Query(50, ge=1, le=200), offset: int =
                              session: AsyncSession = Depends(get_session)):
     """READ ONLY. Device ids shared by 2+ player rows (one person counted twice), at most 200 groups, plus the numbers."""
     return await duplicates_service.groups(session, limit, offset)
+
+
+class DupIn(BaseModel):
+    ids: list[str] = Field(..., min_length=1, max_length=100)
+    confirm: bool = False
+
+
+class ConfirmIn(BaseModel):
+    confirm: bool = False
+
+
+def _dup_ids_ok(ids: list[str]) -> None:
+    if any(not isinstance(i, str) or not 0 < len(i) <= 32 for i in ids):
+        raise HTTPException(422, "bad_ids")
+
+
+@router.get("/duplicate-accounts/hidden")
+async def duplicate_hidden(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. The hidden duplicate rows and the day each is deleted for good."""
+    return await duplicates_service.hidden_list(session)
+
+
+@router.post("/duplicate-accounts/hide")
+async def duplicate_hide(body: DupIn, session: AsyncSession = Depends(get_session)):
+    """Hide duplicate guest rows of one device (never the last row of a device, never a secured row or one with a purchase).
+    Reversible for 30 days; needs confirm=true."""
+    if not body.confirm:
+        raise HTTPException(422, "confirm_needed")
+    _dup_ids_ok(body.ids)
+    from ..services.ratelimit import enforce
+    await enforce("admin_dups", "all")
+    return await duplicates_service.hide(session, body.ids)
+
+
+@router.post("/duplicate-accounts/restore")
+async def duplicate_restore(body: DupIn, session: AsyncSession = Depends(get_session)):
+    _dup_ids_ok(body.ids)
+    from ..services.ratelimit import enforce
+    await enforce("admin_dups", "all")
+    return await duplicates_service.restore(session, body.ids)
+
+
+@router.post("/duplicate-accounts/purge-hidden")
+async def duplicate_purge_hidden(body: ConfirmIn, session: AsyncSession = Depends(get_session)):
+    """Delete for good the rows hidden 30+ days ago that nobody used since. Needs confirm=true."""
+    if not body.confirm:
+        raise HTTPException(422, "confirm_needed")
+    from ..services.ratelimit import enforce
+    await enforce("admin_dups", "all")
+    return await duplicates_service.purge_expired(session)
 
 
 @router.get("/duplicate-accounts/summary")
