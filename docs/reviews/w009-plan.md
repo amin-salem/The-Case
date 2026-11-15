@@ -189,3 +189,27 @@ s7 Radin, card e8 (day 1). Not the culprit, not the newcomer. The question is sp
 - No «امشب», «همین شب», «ساعت ۲۱», «همان شب», «شب اول/دوم»; chapter-2 text starts «صبح جمعه».
 - The newcomer is not named in any day-1 text (day-1 texts say «نماینده‌ی آزمایشگاه مرجع»; the slip copy is signed by the role).
 - Every reaction answers what its card says; camera and print lines placed on this timeline.
+
+## Revision 1 (after the day-1 blind test: Kiyanoush ~60 %, Yasaman 25 %, difficulty 4, no single card decides). Balance kept; loose ends fixed. Overrides the parts above where they differ.
+1. Four vs twelve tests: e10 no longer has annex 2. The contradiction is now deliberate and resolved by people: Kiyanoush says he
+   supervised four; Mahshid's answer admits her recommendation letter claimed twelve and that Avang sent him on that letter
+   (her statement «no role in choosing him» is contradicted by her own answer, not by a card).
+2. Hirbod's torque screwdriver: closed by a second person. Radin's new answer: Hirbod took him to «سمساری ابزار نارون» in Mehr and
+   sold a torque screwdriver engraved «سنجش‌گستر»; the seller then offered the used cradle and rail. Neda's answer (she saw it in the
+   window) and Hirbod's e8 reaction agree. No new receipt.
+3. The white-bearded man with a reference-lab badge (Yasaman's answer) is Neda's anonymous consultant: on day 1 Neda's answer admits a
+   consultant «from a lab» worked two nights on the cell and refuses to name him; day 2 Arsam's answer and Neda's e13 reaction name
+   him (Arsam: undeclared private repair, 25 M).
+4. Exactly one card-proven personal-secret lie on day 1: Radin (e8). Yasaman no longer denies the rival work: her statement drops
+   «never worked for anyone else», and her answer admits the translation job, which she hides from Neda (Neda's answer: «she would
+   have told me»). e9 stays as the clearing form for that trail (clearing forms in the case: e9, e13). Mahshid's secret is shown by
+   her answer (item 1). Kiyanoush's own card-contradicted lies are about the crime, not a personal secret.
+5. Yasaman's camera line is now neutral: 09:53 at the laptop with the test-settings form open. Checkable by Neda's new answer: the
+   settings file was saved at 09:54 (it leaves her 09:54-09:57 open on day 1, so day 1 is not stronger).
+6. Print lines rewritten, each a named object and a checkable fact: Neda (printout and slip copy, by the number columns: her 11:30
+   comparison), Shahrzad (rubber band of the card stack and the envelope seal: she opened it), Hirbod (four knobs and his spirit
+   level: he levelled at 07:45), Yasaman (tweezers, laptop keyboard), Mahshid (margin of the slip copy beside the ten rows: the 09:08
+   check), Kiyanoush (frame handles and the room-2 surface plate around the cradle feet: the frame really stood on the plate),
+   Radin (end screw under the lacquer, lacquer pen cap: tightened before 09:06), Arsam (carry-case handle, brass clasp round seal
+   ۵۵۱۸). No line names who turned the end screw after 09:06.
+Clue chain and proof unchanged: proof is still e10 and e14; e10 keeps clauses 3, 7, 9 and annex 1 (the protocol).
