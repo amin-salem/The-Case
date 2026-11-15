@@ -1,3 +1,9 @@
+# server 1.62.0: admin panel redesign, member numbers, hide duplicate accounts (15 Nov 2026)
+
+- Admin panel, all screens: new calm look (bottom tab bar with a «بیشتر» sheet, tables become readable cards on a phone, fewer numbers per screen, extra charts folded away).
+- Players list: «شماره‌ی عضویت» column and the sort «قدیمی‌ترین (از شماره‌ی ۱)», so the first accounts can be found.
+- Duplicate accounts: pick rows (never a secured account, never one with a purchase, never the last of a device) and hide them. A hidden account is out of every list and count (`players.hidden_at`, migration 0038). After 30 days, if nobody used it, the button «حذف نهایی» deletes it for good; before that «برگردان» restores it. All three actions are rate limited and logged in the admin log.
+
 # server 1.61.2: «سریع‌ترین» counts ranked solves only (12 Nov 2026)
 
 - The ID card's `fastest` ignored retired quick puzzles but still counted a main case solved WITHOUT enough investigation (`ranked=false`, not on any board), which could show 10 seconds. It now counts ranked solves of main cases only. No migration, no app change.

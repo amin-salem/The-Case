@@ -831,3 +831,7 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
 - To spend less: CI skips the build branches, newer pushes cancel older runs, the admin menu browser test runs only when the admin page
   changes (`admin-menu.yml`, also by hand from the Actions tab), and the server watch (`uptime.yml`) is gone.
 
+## Hiding duplicate accounts (15 Nov 2026)
+- Admin panel → Players → «حساب‌های تکراری»: select guest rows of a device and «پنهان‌کن». They disappear from lists and counts at once.
+- 30 days later the screen shows «حذف نهایی N حساب سررسیده»; there is NO automatic job, so press it yourself. Accounts used after hiding are never deleted (they show «بعد از پنهان‌شدن استفاده شده»); restore them.
+- Migration 0038 adds `players.hidden_at` (nullable); nothing to set.

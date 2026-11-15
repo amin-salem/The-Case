@@ -39,7 +39,7 @@ async def test_empty_database(session):
     r = await dup.groups(session)
     assert r["groups"] == []
     assert r["summary"] == {"players": 0, "devices": 0, "groups": 0, "rows_in_groups": 0,
-                            "probable_orphans": 0, "real_people_estimate": 0}
+                            "probable_orphans": 0, "real_people_estimate": 0, "hidden": 0}
 
 
 async def test_groups_and_orphan_detection(session):

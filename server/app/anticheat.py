@@ -155,7 +155,7 @@ def visible_player(prize: bool = False):
     Accounts younger than 48 hours that are not secured with an email or phone are hidden only when the switch
     SHOW_NEW_ACCOUNTS_ON_BOARDS is off. With `prize=True` (weekly prizes, the daily draw) the 48-hour rule always applies,
     so throw-away accounts cannot farm coins."""
-    base = and_(Player.banned.is_(False), Player.tester.is_(False))
+    base = and_(Player.banned.is_(False), Player.tester.is_(False), Player.hidden_at.is_(None))
     if _show_new() and not prize:
         return base
     cutoff = utcnow() - timedelta(hours=eco.HIDE_NEW_ACCOUNT_HOURS)
@@ -163,7 +163,7 @@ def visible_player(prize: bool = False):
 
 
 def is_visible(pl: Player, prize: bool = False) -> bool:
-    if pl.banned or pl.tester:
+    if pl.banned or pl.tester or pl.hidden_at is not None:
         return False
     if _show_new() and not prize:
         return True
