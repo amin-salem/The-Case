@@ -128,6 +128,33 @@ async def test_daily_stats_gap_and_unranked_rushes(client, tonight):
     assert rush["me"] is None and rush["gap"] is None
 
 
+async def test_daily_summary_is_fresh_after_two_more_solves(client, tonight):
+    ps = [await new_player(client, f"bd-fresh-{i}", aged=True) for i in range(17)]
+    for p in ps[:15]:
+        await put_solve(p["player_id"], tonight.id, 3, 300)
+    first = (await get(client, ps[0], "/v1/leaderboard?period=daily")).json()
+    assert first["daily"]["solved"] == 15
+    for p in ps[15:]:
+        await put_solve(p["player_id"], tonight.id, 3, 100)
+    # No sleep, cache clearing or worker affinity: the next request sees both new solves.
+    latest = (await get(client, ps[0], "/v1/leaderboard?period=daily")).json()
+    assert len(latest["top"]) == 17
+    assert latest["daily"] == {"solved": 17, "fastest": 100, "median": 300}
+
+
+@pytest.mark.parametrize("seconds, expected", [([10], 10), ([10, 20], 15),
+                                               ([10, 20, 30], 20), ([10, 20, 30, 40], 25),
+                                               ([5, 10, 20, 30, 40], 20), ([10, 10, 20, 20], 15), ([10, 11], 10)])
+async def test_daily_median_odd_even_and_duplicates(client, tonight, seconds, expected):
+    ps = [await new_player(client, f"bd-mid-{i}", aged=True) for i in range(len(seconds) + 2)]
+    for p, secs in zip(ps, seconds):
+        await put_solve(p["player_id"], tonight.id, 3, secs)
+    await put_solve(ps[-2]["player_id"], tonight.id, 1, 1, ranked=False)
+    await put_solve(ps[-1]["player_id"], tonight.id, 3, 0)
+    r = (await get(client, ps[0], "/v1/leaderboard?period=daily")).json()
+    assert r["daily"] == {"solved": len(ps), "fastest": min(seconds), "median": expected}
+
+
 async def test_daily_board_with_nobody_has_zero_stats_not_an_error(client, tonight):
     p = await new_player(client, "bd-day-empty", aged=True)
     r = (await get(client, p, "/v1/leaderboard?period=daily")).json()

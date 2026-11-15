@@ -84,7 +84,6 @@ Future<void> showBatteryHelpSheet(BuildContext context) {
         step('۱', 'تنظیمات گوشی ← برنامه‌ها ← «پرونده» ← باتری ← گزینه‌ی «بدون محدودیت» (Unrestricted) رو بزن.'),
         step('۲', 'تنظیمات گوشی ← باتری ← محدودیت‌های پس‌زمینه ← «خوابوندن برنامه‌های استفاده‌نشده» '
             '(Put unused apps to sleep) رو خاموش کن، یا «پرونده» رو از لیست خوابیده‌ها دربیار.'),
-        step('۳', 'بعدش یه بار «اعلان آزمایشی» رو از تنظیمات پرونده امتحان کن.'),
         const SizedBox(height: 4),
         OutlinedButton.icon(
           onPressed: () async {

@@ -1,3 +1,7 @@
+## Daily leaderboard freshness (15 Nov 2026, server 1.61.3)
+
+Daily summary no longer uses a per-worker TTL cache. One SQL statement counts visible daily solves and computes fastest/median for positive ranked times using window rows in the same snapshot. This works across workers without Redis or cache invalidation. The all-time case-list solver count still includes archive solves; it is a different metric. No migration or environment change. App 1.44.5+94 adds pull-to-refresh and foreground resume refresh to the board, and simplifies desk/settings/shop. Notification battery help no longer points at the removed test row; ordinary reminder scheduling is unchanged.
+
 # Operations
 
 Notes for the operator (Amin). Other documents: `health-watch.md` (the GitHub watch workflows), `CLAUDE.md` (deploy budget).
@@ -242,7 +246,7 @@ shows `WEEKEND_SHOWS_PER_CHAPTER` 3 per opened chapter, archive price `WEEKEND_A
 the weekend price is higher on purpose). The new column `case_progress.shows` is additive (migration 0021, listed in the CI check).
 
 ## Checking notifications on a phone (27 Oct 2026, app 1.40.4+78)
-If nightly/weekend notifications stop: open the app → ⚙ → «صدا و اعلان». A line «اعلان‌ها روی گوشی خاموشه» means Android blocks them; tap it (it re-asks, or opens the app's notification settings). Then tap «اعلان آزمایشی»: a notification must appear at once. If it does but nightly ones come late or never (Samsung), open «اگه اعلان‌ها دیر میاد» and set the app's battery to Unrestricted and switch off «Put unused apps to sleep». The server side (`notify.json` teasers, `/v1/config` `notify` plan) is unchanged; the phone schedules a week ahead and again each time the app opens or returns to the foreground.
+If nightly/weekend notifications stop: open the app → ⚙ → «صدا و اعلان». A line «اعلان‌ها روی گوشی خاموشه» means Android blocks them; tap it (it re-asks, or opens the app's notification settings). If nightly reminders come late or never (Samsung), open «اگه اعلان‌ها دیر میاد» and set the app's battery to Unrestricted and switch off «Put unused apps to sleep». The server side (`notify.json` teasers, `/v1/config` `notify` plan) is unchanged; the phone schedules a week ahead and again each time the app opens or returns to the foreground.
 
 ## What's new («چی تازه شده؟», 14 Oct 2026)
 The list is data in `app/lib/data/whats_new.dart` (`kWhatsNew`, newest first). To announce a release: add one `WhatsNewRelease(<build number>, '<version>', '<yyyy-mm-dd>', [WhatsNewItem(id, title, target, tags: [...])])` at the TOP of the list, in the same commit that bumps the build number in `pubspec.yaml`.
@@ -830,4 +834,3 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
   Actions spending limit), or wait for the next month.
 - To spend less: CI skips the build branches, newer pushes cancel older runs, the admin menu browser test runs only when the admin page
   changes (`admin-menu.yml`, also by hand from the Actions tab), and the server watch (`uptime.yml`) is gone.
-

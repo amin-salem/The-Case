@@ -185,7 +185,7 @@ class LeaderboardBoard extends StatefulWidget {
   State<LeaderboardBoard> createState() => _BoardState();
 }
 
-class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientMixin {
+class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   int? _picked; // weekly: the league chosen with the switch (null = my own)
   bool _streak = false; // «همیشه»: the streak board instead of the plaques board
   final List<LeaderRow> _extra = []; // rows of the next pages («بیشتر نشون بده»)
@@ -200,7 +200,21 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _load(first: true);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && MainShell.tab.value == MainShell.leaderboard && !_loading) {
+      _load();
+    }
   }
 
   Future<void> _load({bool first = false}) async {
@@ -332,11 +346,16 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     ];
     final showMe = me != null && me.rank > 0 && !_loading;
     return Stack(children: [
-      ListView.separated(
-        padding: EdgeInsets.fromLTRB(16, 2, 16, showMe ? 112 : 24),
-        itemCount: body.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
-        itemBuilder: (_, i) => body[i],
+      RefreshIndicator(
+        onRefresh: () => _load(),
+        color: K.brass,
+        child: ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.fromLTRB(16, 2, 16, showMe ? 112 : 24),
+          itemCount: body.length,
+          separatorBuilder: (_, __) => const SizedBox(height: 16),
+          itemBuilder: (_, i) => body[i],
+        ),
       ),
       if (showMe)
         PositionedDirectional(

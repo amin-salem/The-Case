@@ -1,4 +1,3 @@
-import 'account_sheets.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -6,10 +5,8 @@ import '../services/api.dart';
 import '../services/billing.dart';
 import '../services/shop_value.dart';
 import '../theme.dart';
-import '../widgets/engagement.dart';
 import '../widgets/offline.dart';
 import '../widgets/state_view.dart';
-import 'avatar_picker_screen.dart';
 import 'dialogs.dart';
 
 /// Coin packs and perks, paid through Cafe Bazaar. Every purchase is checked by our server with Bazaar
@@ -137,7 +134,7 @@ class _ShopScreenState extends State<ShopScreen> {
               // the «کارآگاه ویژه» card leads; the one-time starter pack is its own row below the bags
               ListenableBuilder(listenable: api, builder: (_, __) => _vipHero()),
               const SizedBox(height: 22),
-              _heading('سکه', 'برای سرنخ، پرونده‌های قدیمی و کمد'),
+              _heading('سکه', null),
               const SizedBox(height: 16),
               ListenableBuilder(
                 listenable: api,
@@ -159,10 +156,6 @@ class _ShopScreenState extends State<ShopScreen> {
                   style: tBody(11.5, color: K.textSoft)),
               ListenableBuilder(listenable: api, builder: (_, __) => _starterHero()),
               const SizedBox(height: 22),
-              _heading('با سکه چی می‌شه خرید؟', null),
-              const SizedBox(height: 10),
-              ListenableBuilder(listenable: api, builder: (_, __) => _uses()),
-              const SizedBox(height: 4),
               if (api.adsEnabled) ...[
                 const SizedBox(height: 4),
                 GhostButton(label: 'دیدن تبلیغ و گرفتن سکه رایگان', icon: Icons.play_circle_fill_rounded, color: K.brass,
@@ -287,54 +280,6 @@ class _ShopScreenState extends State<ShopScreen> {
         ),
       ),
     );
-  }
-
-  /// Four things coins buy: this is the reason to own coins.
-  Widget _uses() {
-    final api = Api.i;
-    final held = api.profile?.streakFreezes ?? 0;
-    Widget tile(IconData icon, String title, String sub, String price, {VoidCallback? onTap}) => Expanded(
-          child: GestureDetector(
-            onTap: onTap,
-            child: Container(
-              constraints: const BoxConstraints(minHeight: 96),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(14), border: Border.all(color: K.night3)),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                        color: const Color(0xFF2B2416), borderRadius: BorderRadius.circular(10), border: Border.all(color: K.brass.withValues(alpha: 0.4))),
-                    child: Icon(icon, size: 18, color: K.brass),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(title, style: tBody(13.5, w: FontWeight.w900))),
-                ]),
-                const SizedBox(height: 6),
-                Text(sub, style: tBody(11.5, color: K.textSoft).copyWith(height: 1.6)),
-                const SizedBox(height: 4),
-                Text(price, style: tBody(12, color: K.brass, w: FontWeight.w900)),
-              ]),
-            ),
-          ),
-        );
-    return Column(children: [
-      Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        tile(Icons.lightbulb_outline_rounded, 'سرنخ', 'وقتی گیر کردی؛ سه سرنخ برای هر پرونده', 'از ${fa(40)} سکه'),
-        const SizedBox(width: 10),
-        tile(Icons.inventory_2_outlined, 'بایگانی', 'پرونده‌های قدیمی را همین حالا باز کن', 'از ${fa(100)} سکه'),
-      ]),
-      const SizedBox(height: 10),
-      Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        tile(Icons.shield_outlined, 'بیمه‌ی زنجیره', 'یه شب جا بمونی، زنجیره‌ات نمی‌شکنه · داری: ${fa(held)} از ${fa(api.maxFreezes)}', '${fa(api.freezeCost)} سکه',
-            onTap: () => buyStreakInsurance(context)),
-        const SizedBox(width: 10),
-        tile(Icons.checkroom_rounded, 'کمد کارآگاه', 'قاب و چهره‌ی تازه برای پروفایل', 'از ${fa(300)} سکه',
-            onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AvatarPickerScreen()))),
-      ]),
-    ]);
   }
 
   Widget _heading(String title, String? sub) => Row(crossAxisAlignment: CrossAxisAlignment.end, children: [

@@ -14,7 +14,6 @@ import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/notifications_card.dart';
 import '../widgets/offline.dart';
-import '../widgets/whats_new_ui.dart';
 import 'account_sheets.dart';
 import 'dialogs.dart';
 import 'signed_out_screen.dart';
@@ -141,15 +140,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onTap: () => showFontSheet(context),
                   ),
                 ]),
-                _group('تازه‌ها', [
-                  SettingsRow(
-                    icon: Icons.auto_awesome_rounded,
-                    iconColor: K.brass,
-                    title: 'چه خبر؟',
-                    sub: 'تغییرهای آخرین نسخه‌ها',
-                    onTap: () => showWhatsNewSheet(context, all: true),
-                  ),
-                ]),
                 _group('صدا و اعلان', [
                   ...feedbackToggleRows(),
                   SettingsRow(
@@ -170,21 +160,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         if (ok) toast(context, 'اعلان‌ها روشن شد ✅');
                       },
                     ),
-                  SettingsRow(
-                    icon: Icons.notification_add_rounded,
-                    title: 'اعلان آزمایشی',
-                    sub: 'همین الان یه اعلان نشون بده تا ببینی گوشیت اجازه می‌ده',
-                    onTap: () async {
-                      final on = await Reminders.i.refreshSystem();
-                      if (!on) {
-                        final ok = await Reminders.i.fix();
-                        if (!ok) return;
-                      }
-                      final shown = await Reminders.i.test();
-                      if (!context.mounted) return;
-                      if (!shown) toast(context, 'اعلان نشون داده نشد؛ اعلان‌ها روی گوشی خاموشه');
-                    },
-                  ),
                   SettingsRow(
                     icon: Icons.battery_alert_rounded,
                     title: 'اگه اعلان‌ها دیر میاد',
@@ -501,15 +476,12 @@ class _AboutCardState extends State<AboutCard> {
                     const Icon(Icons.copy_rounded, size: 16, color: K.textSoft),
                   ]),
                   const SizedBox(height: 6),
-                  row('برنامه', i.appName),
                   row('نسخه', i.version.isEmpty ? '' : '${i.version} (${i.build})', ltr: true),
                   row('نصب‌شده از', i.store),
                   row('بسته', i.packageName, ltr: true),
                   row('سرور', i.serverOk ? 'متصل  •  ${i.serverVersion}' : 'در دسترس نیست',
                       color: i.serverOk ? K.ok : K.stamp),
                   row('شناسه‌ی کارآگاه', i.playerShortId, ltr: true),
-                  row('کد دعوت', i.inviteCode, ltr: true),
-                  row('زبان دستگاه', i.language, ltr: true),
                   const SizedBox(height: 6),
                   Text('برای کپی اطلاعات پشتیبانی روی کارت بزن', style: tBody(11.5, color: K.textSoft)),
                 ]),

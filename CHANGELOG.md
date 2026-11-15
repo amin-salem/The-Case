@@ -1,3 +1,9 @@
+# app 1.44.5+94 / server 1.61.3: fresh daily stats and a simpler desk (15 Nov 2026)
+
+- Daily leaderboard totals, fastest and median are computed by one uncached SQL statement. Visibility, daily eligibility and ranked-time rules remain intact; concurrent solves cannot shift separate median reads. Pull to refresh and foreground resume reload the board.
+- Missions are directly at the bottom of the desk; removed the More menu and its redundant shortcuts. Settings drops the news row, notification test and three About rows. Removed the shop coin-use list and its restrictive subtitle; prices, purchases and entitlements are unchanged.
+- Regression coverage: immediate 15-to-17 solves, odd/even/tied medians, excluded unranked/zero times, and direct mission access at large fonts. Bazaar notes stay general. No migration.
+
 # server 1.61.2: «سریع‌ترین» counts ranked solves only (12 Nov 2026)
 
 - The ID card's `fastest` ignored retired quick puzzles but still counted a main case solved WITHOUT enough investigation (`ranked=false`, not on any board), which could show 10 seconds. It now counts ranked solves of main cases only. No migration, no app change.
@@ -1129,4 +1135,3 @@ Every case has one answer, so the threats are a throwaway account that loses a c
 
 ## 1.0.0
 - First release: daily cases, interrogation, accusation with proof, coins, archive, leaderboards, shop, inbox.
-

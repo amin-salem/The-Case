@@ -176,11 +176,7 @@ void main() {
       // the streak is at risk (tonight is open, 4 nights): its row asks something of the player, so it is shown
       await t.scrollUntilVisible(find.text('۴ شب پشت سر هم'), 200, scrollable: find.byType(Scrollable).first);
       expect(find.text('۴ شب پشت سر هم'), findsOneWidget);
-      // the missions card lives behind the single «بیشتر» row now
-      expect(find.text('مأموریت‌های امروز'), findsNothing);
-      await t.scrollUntilVisible(find.byKey(const ValueKey('more-toggle')), 200, scrollable: find.byType(Scrollable).first);
-      await t.tap(find.byKey(const ValueKey('more-toggle')));
-      await t.pump(const Duration(milliseconds: 300));
+      await t.scrollUntilVisible(find.byKey(const ValueKey('home-missions')), 200, scrollable: find.byType(Scrollable).first);
       await t.scrollUntilVisible(find.text('مأموریت‌های امروز'), 200, scrollable: find.byType(Scrollable).first);
       expect(find.text('مأموریت‌های امروز'), findsOneWidget);
       expect(find.text('۱ از ۳'), findsOneWidget);
@@ -238,15 +234,14 @@ void main() {
       expect(find.byKey(const ValueKey('home-hero')), findsNothing);
     });
 
-    testWidgets('the «بیشتر» row is collapsed and opens with every other entry', (t) async {
+    testWidgets('missions are directly reachable at the bottom without a more menu', (t) async {
       await seedHome();
       await pumpApp(t);
-      await t.scrollUntilVisible(find.byKey(const ValueKey('more-toggle')), 200, scrollable: find.byType(Scrollable).first);
-      expect(find.text('چی تازه شده؟'), findsNothing);
-      await t.tap(find.byKey(const ValueKey('more-toggle')));
-      await t.pump(const Duration(milliseconds: 300));
-      for (final s in ['چی تازه شده؟', 'داستان', 'دعوت دوستان', 'جدول برترها', 'فروشگاه']) {
-        expect(find.text(s), findsWidgets, reason: s);
+      await t.scrollUntilVisible(find.byKey(const ValueKey('home-missions')), 200, scrollable: find.byType(Scrollable).first);
+      expect(find.text('مأموریت‌های امروز'), findsOneWidget);
+      expect(find.byKey(const ValueKey('more-toggle')), findsNothing);
+      for (final label in ['چی تازه شده؟', 'داستان', 'دعوت دوستان', 'جدول برترها', 'فروشگاه']) {
+        expect(find.text(label), findsNothing, reason: label);
       }
     });
 
@@ -254,7 +249,7 @@ void main() {
       Finder streakRow() => find.byKey(const ValueKey('home-streak'));
       Finder secureRow() => find.byKey(const ValueKey('home-secure'));
 
-      /// The page is a lazy list: scroll to the end so the rows near «بیشتر» are built before we look for them.
+      /// The page is a lazy list: scroll to the missions at the end before checking them.
       Future<void> toBottom(WidgetTester t) async {
         await t.drag(find.byType(Scrollable).first, const Offset(0, -3000));
         await t.pump(const Duration(milliseconds: 300));
@@ -340,7 +335,7 @@ void main() {
         expect(secureRow(), findsOneWidget);
       });
 
-      testWidgets('a quiet night: the hero and the two cards, then only «بیشتر» (no missions, album, news, invite rows)', (t) async {
+      testWidgets('a quiet night ends with missions and no more menu', (t) async {
         await seedHome(streak: 1);
         await pumpApp(t);
         expect(find.byKey(const ValueKey('home-hero')), findsOneWidget);
@@ -349,12 +344,12 @@ void main() {
         await toBottom(t);
         expect(streakRow(), findsNothing);
         expect(secureRow(), findsNothing);
-        expect(find.byKey(const ValueKey('home-missions')), findsNothing);
+        expect(find.byKey(const ValueKey('home-missions')), findsOneWidget);
         expect(find.text('دعوت دوستان'), findsNothing);
-        expect(find.byKey(const ValueKey('more-toggle')), findsOneWidget);
+        expect(find.byKey(const ValueKey('more-toggle')), findsNothing);
       });
 
-      testWidgets('«بیشتر» keeps every old feature reachable and flags a finished missions chest', (t) async {
+      testWidgets('the finished mission chest is reachable directly from the desk', (t) async {
         await seedHome(streak: 1);
         Api.i.httpClient = MockClient((r) async {
           if (r.url.path == '/v1/cases') return jsonResponse(casesBody());
@@ -367,14 +362,12 @@ void main() {
         });
         await pumpApp(t);
         await toBottom(t);
-        expect(find.byKey(const ValueKey('more-chest')), findsOneWidget);
-        await t.tap(find.byKey(const ValueKey('more-toggle')));
+        expect(find.byKey(const ValueKey('missions-claim')), findsOneWidget);
+        expect(find.byKey(const ValueKey('more-toggle')), findsNothing);
+        await t.tap(find.byKey(const ValueKey('missions-claim')));
         await t.pump(const Duration(milliseconds: 300));
-        expect(find.byKey(const ValueKey('more-chest')), findsNothing); // open: the card itself says it
-        for (final s in ['مأموریت‌های امروز', 'چی تازه شده؟', 'داستان', 'دعوت دوستان', 'جدول برترها', 'فروشگاه']) {
-          await t.scrollUntilVisible(find.text(s), 200, scrollable: find.byType(Scrollable).first);
-          expect(find.text(s), findsOneWidget, reason: s);
-        }
+        expect(find.text('مأموریت‌های امروز'), findsWidgets);
+        expect(t.takeException(), isNull);
       });
 
       testWidgets('the weekend card keeps its real state (open with time left)', (t) async {
@@ -391,9 +384,7 @@ void main() {
           expect(streakRow(), findsOneWidget);
           expect(secureRow(), findsOneWidget);
           expect(t.takeException(), isNull);
-          await t.scrollUntilVisible(find.byKey(const ValueKey('more-toggle')), 200, scrollable: find.byType(Scrollable).first);
-          await t.tap(find.byKey(const ValueKey('more-toggle')));
-          await t.pump(const Duration(milliseconds: 300));
+          await t.scrollUntilVisible(find.byKey(const ValueKey('home-missions')), 200, scrollable: find.byType(Scrollable).first);
           expect(t.takeException(), isNull);
         });
       }
@@ -479,9 +470,7 @@ void main() {
           await seedHome(tonight: state, weekend: 'open');
           await pumpApp(t, scale: scale);
           expect(t.takeException(), isNull);
-          await t.scrollUntilVisible(find.byKey(const ValueKey('more-toggle')), 200, scrollable: find.byType(Scrollable).first);
-          await t.tap(find.byKey(const ValueKey('more-toggle')));
-          await t.pump(const Duration(milliseconds: 300));
+          await t.scrollUntilVisible(find.byKey(const ValueKey('home-missions')), 200, scrollable: find.byType(Scrollable).first);
           expect(t.takeException(), isNull);
           // the other tabs are older screens; the sweep below checks the shell and home, not their own layout at 2.0
           for (final tab in scale > 1.0 ? <String>[] : ['بایگانی', 'برترها', 'کارت من']) {

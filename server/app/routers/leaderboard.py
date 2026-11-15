@@ -27,7 +27,6 @@ MAX_OFFSET = 1000
 WEEKLY_WINDOW = 200            # the weekly board is cached per worker as the first N rows
 STREAK_CANDIDATES = 300        # the streak board looks at the N longest STORED streaks, then drops the dead ones
 CARD_WEEKS = 6                 # league history on the player sheet
-_daily_stats = TTLCache("daily_stats", ttl=30, max_size=4)
 _streaks = TTLCache("streak_board", ttl=60, max_size=2)
 
 
@@ -115,24 +114,25 @@ async def _daily(player, limit, offset, session, live) -> LeaderboardOut:
 
 
 async def _daily_summary(session: AsyncSession, case_id: str) -> DailyStats:
-    """Fair numbers: how many visible detectives solved tonight's case that night; fastest and median time among the ranked
-    (properly investigated) solves only, so a rushed solve cannot set the record. Cached per worker for 30 s."""
-    async def load():
-        solved = int(await session.scalar(select(func.count()).select_from(CaseProgress).join(
-            Player, CaseProgress.player_id == Player.id).where(
-            CaseProgress.case_id == case_id, CaseProgress.solved.is_(True), CaseProgress.was_daily.is_(True), ac.visible_player())) or 0)
-        ranked = [CaseProgress.case_id == case_id, CaseProgress.solved.is_(True), CaseProgress.was_daily.is_(True),
-                  CaseProgress.ranked.is_(True), CaseProgress.seconds > 0, ac.visible_player()]
-        base = select(CaseProgress.seconds).join(Player, CaseProgress.player_id == Player.id).where(*ranked)
-        n = int(await session.scalar(select(func.count()).select_from(base.subquery())) or 0)
-        fastest = median = None
-        if n:
-            fastest = int(await session.scalar(base.order_by(CaseProgress.seconds.asc()).limit(1)))
-            lo = int(await session.scalar(base.order_by(CaseProgress.seconds.asc()).offset((n - 1) // 2).limit(1)))
-            hi = int(await session.scalar(base.order_by(CaseProgress.seconds.asc()).offset(n // 2).limit(1)))
-            median = (lo + hi) // 2
-        return DailyStats(solved=solved, fastest=fastest, median=median)
-    return await _daily_stats.get_or_load(case_id, load)
+    """Fresh totals and ranked times from one database snapshot, shared by all workers through SQL."""
+    eligible = (select(CaseProgress.seconds.label("seconds"), CaseProgress.ranked.label("ranked"))
+                .join(Player, CaseProgress.player_id == Player.id)
+                .where(CaseProgress.case_id == case_id, CaseProgress.solved.is_(True),
+                       CaseProgress.was_daily.is_(True), ac.visible_player()).cte("daily_eligible"))
+    timed = (select(eligible.c.seconds,
+                    func.row_number().over(order_by=eligible.c.seconds).label("rn"),
+                    func.count().over().label("n"))
+             .where(eligible.c.ranked.is_(True), eligible.c.seconds > 0).cte("daily_timed"))
+    middle = func.abs(2 * timed.c.rn - timed.c.n - 1) <= 1
+    q = select(
+        select(func.count()).select_from(eligible).scalar_subquery().label("solved"),
+        select(func.min(timed.c.seconds)).scalar_subquery().label("fastest"),
+        select(func.avg(timed.c.seconds)).where(middle).scalar_subquery().label("median"),
+    )
+    row = (await session.execute(q)).one()
+    return DailyStats(solved=int(row.solved),
+                      fastest=None if row.fastest is None else int(row.fastest),
+                      median=None if row.median is None else int(row.median))
 
 
 # ------------------------------------------------------------------ all time

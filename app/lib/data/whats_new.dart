@@ -43,6 +43,10 @@ class WhatsNewRelease {
 
 /// Newest first.
 const List<WhatsNewRelease> kWhatsNew = [
+  WhatsNewRelease(94, '۱.۴۴.۵', '2026-11-15', [
+    WhatsNewItem('desk_clear_94', 'میز کار خلوت‌تر و دسترسی به ماموریت‌ها ساده‌تر شد', WhatsNewTarget.missions),
+    WhatsNewItem('board_fresh_94', 'بهبود نمایش آمار و پایداری بازی', WhatsNewTarget.leaderboard),
+  ]),
   WhatsNewRelease(82, '۱.۴۱', '2026-10-31', [
     WhatsNewItem('exit_ask', 'با دکمه‌ی برگشت از خونه بیرون نمی‌ری؛ اول می‌پرسیم می‌خوای از برنامه خارج بشی', WhatsNewTarget.caseToday),
     WhatsNewItem('insurance_night', 'بیمه‌ی زنجیره همون شبی که پرونده رو از دست می‌دی خرج می‌شه و اون شب جزو زنجیره‌ت می‌مونه؛ بدون بیمه، زنجیره همون لحظه صفر نشون داده می‌شه', WhatsNewTarget.caseToday),

@@ -3,14 +3,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../models/album.dart';
 import '../models/models.dart';
 import '../models/progress.dart';
 import '../services/api.dart';
 import '../services/app_update.dart';
 import '../services/billing.dart';
 import '../services/home_rules.dart';
-import '../widgets/album_strip.dart';
 import '../widgets/category.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
@@ -32,7 +30,6 @@ import '../widgets/typewriter.dart';
 import '../widgets/whats_new_ui.dart';
 import '../data/whats_new.dart';
 import '../services/whats_new.dart';
-import 'album_screen.dart';
 import 'archive_screen.dart';
 import 'main_shell.dart';
 import 'shop_screen.dart';
@@ -47,8 +44,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   CasesList? _cases;
   MissionsDay? _missions;
-  Album? _album;
-  DateTime? _albumAt;
   String? _error;
   Object? _failure; // the exception behind _error (the state view picks offline or error from it)
   bool _loading = false;
@@ -214,27 +209,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       debugPrint('missions: $e');
     }
-    await _loadAlbum();
-  }
-
-  /// The album strip: at most one request a minute from here (the album screen itself always asks fresh); a failure hides it.
-  Future<void> _loadAlbum({bool force = false}) async {
-    final last = _albumAt;
-    if (!Api.i.online || (!force && last != null && DateTime.now().difference(last).inSeconds < 60)) return;
-    try {
-      final a = await Api.i.album();
-      _albumAt = DateTime.now();
-      if (!mounted) return;
-      setState(() => _album = a);
-      if (a.newRewards.isNotEmpty) toast(context, 'قاب تازه گرفتی: ${a.newRewards.join('، ')}');
-    } catch (e) {
-      debugPrint('album: $e');
-    }
-  }
-
-  Future<void> _openAlbum() async {
-    await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AlbumScreen()));
-    if (mounted) unawaited(_loadAlbum(force: true));
   }
 
   void _openMissions() {
@@ -386,9 +360,10 @@ class _HomeScreenState extends State<HomeScreen> {
       // only what asks something of the player now (a streak at risk, an account worth securing) ...
       _streakRow(cs),
       _secureRow(),
-      // ... and everything else, one tap away in a single collapsed row
-      const SizedBox(height: 2),
-      _moreSection(),
+      if (_missions != null) ...[
+        const SizedBox(height: 10),
+        _missionsCompact(_missions!),
+      ],
     ];
   }
 
@@ -908,81 +883,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ]),
             ),
-        ]),
-      ),
-    );
-  }
-
-  bool _moreOpen = false;
-
-  /// «بیشتر»: ONE collapsed row. Missions, the album, what's new, the story, the invite, the leaderboard and the shop
-  /// are all one tap away in it (none was removed from the app; the home page just stops shouting them).
-  Widget _moreSection() {
-    Widget row(IconData icon, String title, VoidCallback onTap, {String? sub}) => InkWell(
-          onTap: onTap,
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 48),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            child: Row(children: [
-              Icon(icon, color: K.brass, size: 20),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                  Text(title, style: tBody(13.5, w: FontWeight.w700).copyWith(height: 1.5)),
-                  if (sub != null) Text(sub, style: tBody(11.5, color: K.textSoft).copyWith(height: 1.4)),
-                ]),
-              ),
-              const Icon(Icons.chevron_right_rounded, color: K.textSoft, size: 20),
-            ]),
-          ),
-        );
-    final m = _missions;
-    final chestReady = m != null && m.allDone && !m.claimed;
-    return Container(
-      key: const ValueKey('home-more'),
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: K.night2,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: K.night3),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(14),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          InkWell(
-            key: const ValueKey('more-toggle'),
-            onTap: () => setState(() => _moreOpen = !_moreOpen),
-            child: Container(
-              constraints: const BoxConstraints(minHeight: 52),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              child: Row(children: [
-                const Icon(Icons.apps_rounded, color: K.brass, size: 20),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                    Text('بیشتر', style: tBody(14, w: FontWeight.w900).copyWith(height: 1.4)),
-                    // the one thing in here that is waiting for the player: a finished missions chest
-                    if (chestReady && !_moreOpen)
-                      Text('صندوقچه‌ی مأموریت‌ها آماده‌ست',
-                          key: const ValueKey('more-chest'), style: tBody(11.5, color: K.brass, w: FontWeight.w800).copyWith(height: 1.4)),
-                  ]),
-                ),
-                Icon(_moreOpen ? Icons.expand_less_rounded : Icons.expand_more_rounded, color: K.textSoft),
-              ]),
-            ),
-          ),
-          if (_moreOpen) ...[
-            if (m != null)
-              Padding(padding: const EdgeInsets.fromLTRB(8, 0, 8, 8), child: _missionsCompact(m)),
-            if (_album != null && _album!.total > 0)
-              Padding(padding: const EdgeInsets.fromLTRB(8, 0, 8, 8), child: AlbumStrip(album: _album!, onTap: _openAlbum)),
-            row(Icons.auto_awesome_rounded, 'چی تازه شده؟', () => showWhatsNewSheet(context, all: true)),
-            row(Icons.menu_book_rounded, 'داستان', () => MainShell.openStory(context), sub: 'پرونده‌های سرگرد ناصری'),
-            row(Icons.group_add_rounded, 'دعوت دوستان', () => MainShell.tab.value = MainShell.profile,
-                sub: 'کد دعوتت توی پروفایله'),
-            row(Icons.emoji_events_rounded, 'جدول برترها', () => MainShell.tab.value = MainShell.leaderboard),
-            row(Icons.storefront_rounded, 'فروشگاه', _openShop),
-          ],
         ]),
       ),
     );

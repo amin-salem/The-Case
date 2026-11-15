@@ -183,3 +183,16 @@ Build 92
 
 ## developer_note
 Build 93
+
+
+<!-- build: 94 -->
+## changelog_fa
+- بهبود تجربه کاربری و دسترسی ساده‌تر به بخش‌های بازی
+- بهبود دقت آمار و پایداری برنامه
+
+## changelog_en
+- A smoother experience with simpler navigation
+- Improved statistics accuracy and app stability
+
+## developer_note
+نسخه جدید با بهبود تجربه کاربری و پایداری

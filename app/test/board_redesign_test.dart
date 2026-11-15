@@ -292,4 +292,22 @@ void main() {
       expect(errors, isEmpty);
     });
   }
+  testWidgets('pull to refresh replaces stale daily totals and median', (t) async {
+    var solved = 15;
+    server({'/v1/leaderboard': (_) {
+      final b = dailyBoard();
+      b['daily'] = {'solved': solved, 'fastest': 100, 'median': solved == 15 ? 300 : 240};
+      return b;
+    }});
+    await t.pumpWidget(host(const LeaderboardBoard('daily')));
+    await pump(t);
+    expect(find.text('۱۵ کارآگاه'), findsOneWidget);
+    solved = 17;
+    await t.drag(find.byType(ListView), const Offset(0, 500));
+    await t.pump(const Duration(seconds: 1));
+    await pump(t);
+    expect(find.text('۱۷ کارآگاه'), findsOneWidget);
+    expect(find.textContaining('میانه ۴:۰۰'), findsOneWidget);
+  });
+
 }
