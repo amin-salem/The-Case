@@ -6,121 +6,115 @@
 <meta name="robots" content="noindex,nofollow">
 <title>پنل مدیریت پرونده</title>
 <style>
-:root{--bg:#17181a;--bg2:#202124;--bg3:#2b2d31;--text:#e6e2da;--soft:#9a9890;--brass:#e0a526;--ok:#5dae7e;--bad:#d0543f;--line:#34363b}
+:root{--bg:#131416;--bg2:#1b1c1f;--bg3:#25262a;--text:#efede8;--soft:#a3a099;--brass:#e0a526;--ok:#5dae7e;--bad:#e0604a;--line:#2b2c30;--r:16px}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 Tahoma,Vazirmatn,system-ui,sans-serif}
-header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-header h1{font-size:16px;margin:0 0 0 10px;color:var(--brass)}
-nav{display:flex;gap:4px;flex-wrap:wrap}
-button,input,select,textarea{font:inherit;color:var(--text);background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
-button{cursor:pointer}button:hover{border-color:var(--brass)}
-nav button.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
-.row button.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
-button.danger{border-color:var(--bad);color:var(--bad)}
-main{padding:14px;max-width:1200px;margin:auto}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
-.card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.card b{display:block;font-size:22px;color:var(--brass)}.card span{color:var(--soft);font-size:12px}
-table{width:100%;border-collapse:collapse;background:var(--bg2);border-radius:10px;overflow:hidden}
-th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
-th{color:var(--soft);font-weight:normal;font-size:12px;background:var(--bg3)}
-tr.click{cursor:pointer}tr.click:hover td{background:var(--bg3)}
-.tag{display:inline-block;padding:0 7px;border-radius:9px;font-size:11px;background:var(--bg3);color:var(--soft)}
-.tag.solved{color:var(--ok)}.tag.failed,.tag.banned{color:var(--bad)}.tag.purchase{color:var(--brass)}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
-h2{font-size:15px;margin:18px 0 8px;color:var(--brass)}
-.chart{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:12px}
-.chart svg{width:100%;height:120px;display:block}
-.plink{color:var(--brass);text-decoration:none;border-bottom:1px dotted var(--brass)}
-.muted{color:var(--soft)}.ltr{direction:ltr;unicode-bidi:embed;display:inline-block}
-#login{max-width:340px;margin:18vh auto;text-align:center}
-#login input{width:100%;margin:10px 0}
-.err{color:var(--bad)}
-dialog{background:var(--bg2);color:var(--text);border:1px solid var(--line);border-radius:12px;max-width:440px;width:92%}
-dialog::backdrop{background:#000a}
-dialog input,dialog textarea{width:100%;margin:4px 0 10px}
-.scroll{overflow-x:auto}
-.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
-.hcard{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;overflow-x:auto}.hcard h3{margin:0 0 6px;font-size:14px;color:var(--brass)}
-.hcard table{background:none}.hcard .big{display:block;font-size:24px;color:var(--brass)}.hcard small{font-size:12px;color:var(--soft)}
-.st{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--soft);vertical-align:middle}.st.ok{background:var(--ok)}.st.warn{background:#e0a526}.st.bad{background:var(--bad)}
-
-/* ---- look & feel v2 ---- */
-body{background:radial-gradient(1200px 500px at 85% -10%,#2a2412 0,transparent 60%),var(--bg);min-height:100vh}
-header{background:linear-gradient(180deg,#26241c,#1d1e20);border-bottom:1px solid #3d3a2c;box-shadow:0 4px 18px #0006;flex-wrap:nowrap;gap:6px;padding:8px 12px}
-header h1{white-space:nowrap;font-size:17px;letter-spacing:.2px;margin:0 0 0 6px;background:linear-gradient(90deg,#f3c964,#e0a526 60%,#b9801a);-webkit-background-clip:text;background-clip:text;color:transparent}
-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;flex:1;gap:6px;padding:2px 0}nav::-webkit-scrollbar{display:none}
-nav button{white-space:nowrap;border-radius:999px;padding:6px 13px;background:#25262a;transition:.15s}
-nav button.on{background:linear-gradient(135deg,#f0bd45,#d99a1c);box-shadow:0 2px 10px #e0a52655;font-weight:bold}
-header .hbtn{padding:6px 10px;border-radius:999px;white-space:nowrap}
-main{animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.card,.hcard,.chart{border-radius:14px;background:linear-gradient(180deg,#232427,#1d1e21);border-color:#33353a;box-shadow:0 2px 10px #0004}
-.cards{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
-.card{position:relative;overflow:hidden;padding:12px 14px}
-.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--ac,var(--brass))}
-.card b{font-size:26px;color:var(--ac,var(--brass))}
-.card small{display:block;margin-top:4px;font-size:11px}
-details.acwrap{margin-bottom:12px}details.acwrap>summary{cursor:pointer;padding:10px 12px;border-radius:12px;background:var(--bg2);border:1px solid var(--line)}
-.card i{position:absolute;left:10px;top:8px;font-style:normal;font-size:20px;opacity:.55}
-button:active{transform:scale(.97)}
-table{border-radius:14px}tr:nth-child(even) td{background:#ffffff05}
-h2{border-right:3px solid var(--brass);padding-right:8px}
-/* charts */
-.chart{padding:12px 12px 8px}
-.ch-head{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:4px}.ch-head b{font-size:15px}
-.ch-stats{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--soft);font-size:12px}.ch-stats em{font-style:normal;color:var(--text)}
-.ch-tip{min-height:22px;font-size:13px;color:var(--text);margin:2px 0 4px}
-.cols{display:flex;gap:3px;align-items:flex-end;height:130px;direction:ltr;position:relative}
-.col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.col .v{font-size:10px;line-height:1.2;color:var(--soft);height:14px;white-space:nowrap}
-.col .bar{width:100%;border-radius:5px 5px 2px 2px;background:var(--c);opacity:.6;min-height:2px;transition:opacity .15s}
-.col.today .bar,.col.sel .bar{opacity:1}.col.today .v,.col.sel .v{color:var(--text);font-weight:bold}
-.col.zero .bar{opacity:.25}
-.axis{display:flex;gap:3px;direction:ltr;margin-top:3px}.axis span{flex:1;text-align:center;font-size:10px;color:var(--soft);min-width:0}
-.avgline{position:absolute;left:0;right:0;border-top:1px dashed #ffffff55;pointer-events:none}
-.avgline small{position:absolute;right:0;top:-14px;font-size:9px;color:#ffffffaa;background:#1d1e21cc;padding:0 3px}
-@media(max-width:600px){main{padding:10px}.cols{height:120px}.col .v{font-size:9px}}
-
-/* ---- look & feel v3: app font, readable numbers, all tabs visible ---- */
 @font-face{font-family:Vazirmatn;font-weight:400;font-display:swap;src:url(/static/fonts/Vazirmatn-Regular.ttf)}
 @font-face{font-family:Vazirmatn;font-weight:700;font-display:swap;src:url(/static/fonts/Vazirmatn-Bold.ttf)}
 @font-face{font-family:Vazirmatn;font-weight:900;font-display:swap;src:url(/static/fonts/Vazirmatn-Black.ttf)}
 body,button,input,select,textarea{font-family:Vazirmatn,Tahoma,system-ui,sans-serif}
-body{font-size:14.5px;line-height:1.75;font-variant-numeric:tabular-nums}
-.card b,.hcard .big,.ch-head b,td,th,.col .v{font-variant-numeric:tabular-nums}
-.card b{font-size:32px;font-weight:900;line-height:1.3;display:block;letter-spacing:0}
-.card span{font-size:13px;color:var(--soft)}
-th{font-weight:700;white-space:nowrap}
-.cards{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
-h2{font-weight:900}
-.quick{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
-.quick button{flex:1 1 140px;padding:11px 12px;border-radius:14px;font-weight:700;background:#25262a}
-.quick button.hot{background:linear-gradient(135deg,#f0bd45,#d99a1c);color:#1a1a1a;border-color:transparent;font-weight:900}
-/* A bounded, scrollable menu keeps every section reachable on narrow screens. */
-header{flex-wrap:wrap}
-header h1{flex:1}
-#admin-menu{flex:none}
-#menu-toggle{display:flex;align-items:center;gap:8px;min-height:44px;padding:7px 12px;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:12px;background:var(--bg3)}
-#menu-toggle::-webkit-details-marker{display:none}
-#menu-toggle:focus-visible,nav button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
-.menu-icon{display:inline-flex;flex-direction:column;gap:4px;width:20px}
-.menu-icon i{height:2px;width:100%;background:currentColor;border-radius:2px}
-#admin-menu:not([open])>nav{display:none}
-#admin-menu>nav{position:absolute;inset-inline-start:12px;top:calc(100% + 8px);display:flex;flex-direction:column;flex-wrap:nowrap;width:min(22rem,calc(100vw - 24px));max-height:min(70vh,calc(100vh - 100% - 24px));max-height:min(70dvh,calc(100dvh - 100% - 24px));overflow-y:auto;overflow-x:hidden;gap:6px;padding:10px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px #0008;scrollbar-width:auto}
-#admin-menu nav button{flex:none;min-height:44px;white-space:normal;overflow-wrap:anywhere;text-align:start;border-radius:10px;padding:10px 12px}
-@media(max-width:700px){header h1{font-size:15px}header .hbtn{min-height:44px}}
-
-/* funnel screen */
+body{margin:0;background:var(--bg);color:var(--text);font-size:15.5px;line-height:1.85;font-variant-numeric:tabular-nums;padding-bottom:84px}
+a{color:var(--brass)}
+/* top bar: where you are, and two quiet actions */
+header{display:flex;align-items:center;gap:10px;padding:14px 18px;position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header h1{flex:1;margin:0;font-size:20px;font-weight:900}
+.hbtn{padding:8px 14px;border-radius:12px;background:transparent;border:1px solid var(--line);color:var(--soft);font-size:14px}
+button,input,select,textarea{color:var(--text);background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:15px}
+button{cursor:pointer;min-height:44px}button:hover{border-color:var(--brass)}button:active{transform:scale(.98)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+button.on,.row button.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass);font-weight:700}
+button.danger{border-color:var(--bad);color:var(--bad);background:transparent}
+button[disabled]{opacity:.45;cursor:default}
+main{padding:20px 18px;max-width:1100px;margin:auto}
+h2{font-size:18px;font-weight:900;margin:30px 0 12px}
+h3{font-size:16px;font-weight:700;margin:22px 0 8px}
+main>div>h2:first-child{margin-top:4px}
+.muted{color:var(--soft)}.ltr{direction:ltr;unicode-bidi:embed;display:inline-block}.err{color:var(--bad)}
+p{margin:8px 0}
+/* numbers first */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:0 0 20px}
+.card{background:var(--bg2);border-radius:var(--r);padding:16px 18px}
+.card b{display:block;font-size:30px;font-weight:900;line-height:1.3;color:var(--text)}
+.card span{display:block;color:var(--soft);font-size:14px;margin-top:2px}
+.card small{display:block;margin-top:6px;font-size:13px}
+.card i{display:none}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.hcard,.chart,.box{background:var(--bg2);border-radius:var(--r);padding:16px 18px;margin:0 0 14px}
+.hcard h3{margin:0 0 8px;font-size:16px}.hcard .big{display:block;font-size:28px;font-weight:900}.hcard small{color:var(--soft)}
+.hcard{overflow-x:auto}
+/* tables: calm rows, no cell borders */
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{color:var(--soft);font-weight:400;font-size:13px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tr.click{cursor:pointer}tr.click:hover td{background:var(--bg2)}
+.scroll{overflow-x:auto;background:var(--bg2);border-radius:var(--r);padding:4px 12px;margin:0 0 14px}
+.hcard table,.hcard .scroll{background:none;padding:0}
+td.num,th.num{white-space:nowrap}td.na{color:var(--soft)}
+.tag{display:inline-block;padding:1px 10px;border-radius:999px;font-size:12px;background:var(--bg3);color:var(--soft)}
+.tag.solved,.tag.purchase{color:var(--ok)}.tag.failed,.tag.banned{color:var(--bad)}
+.plink{color:var(--text);text-decoration:none;border-bottom:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+.row input[type=text],.row input:not([type]),.row input[type=search]{min-width:0}
+label{display:inline-flex;gap:8px;align-items:center}
+input[type=checkbox]{width:22px;height:22px;min-height:0;padding:0;accent-color:var(--brass)}
+/* quick actions */
+.quick{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 22px}
+.quick button{flex:1 1 150px}
+.quick button.hot{background:var(--brass);color:#1a1a1a;border-color:transparent;font-weight:900}
+details.acwrap{margin:0 0 16px}
+details.acwrap>summary,details.more>summary{cursor:pointer;padding:14px 18px;border-radius:var(--r);background:var(--bg2);list-style:none;min-height:44px}
+details>summary::-webkit-details-marker{display:none}
+details.more{margin:10px 0}
+details.more[open]>summary{margin-bottom:12px}
+/* charts */
+.ch-head b{font-size:16px}
+.ch-stats{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--soft);font-size:13px;margin-top:2px}.ch-stats em{font-style:normal;color:var(--text)}
+.ch-tip{min-height:24px;font-size:14px;margin:6px 0}
+.cols{display:flex;gap:4px;align-items:flex-end;height:130px;direction:ltr;position:relative}
+.col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.col .v{font-size:10px;line-height:1.2;color:var(--soft);height:14px;white-space:nowrap}
+.col .bar{width:100%;border-radius:6px 6px 2px 2px;background:var(--c);opacity:.55;min-height:2px}
+.col.today .bar,.col.sel .bar{opacity:1}.col.today .v,.col.sel .v{color:var(--text);font-weight:700}.col.zero .bar{opacity:.2}
+.axis{display:flex;gap:4px;direction:ltr;margin-top:4px}.axis span{flex:1;text-align:center;font-size:10px;color:var(--soft);min-width:0}
+.avgline{position:absolute;left:0;right:0;border-top:1px dashed #ffffff44;pointer-events:none}
+.avgline small{position:absolute;right:0;top:-14px;font-size:9px;color:#ffffffaa;padding:0 3px}
+/* status */
+.st{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--soft);vertical-align:middle}.st.ok{background:var(--ok)}.st.warn{background:var(--brass)}.st.bad{background:var(--bad)}
 .fbar{display:block;height:10px;min-width:60px;background:var(--bg3);border-radius:5px;overflow:hidden;direction:ltr}.fbar i{display:block;height:100%;background:var(--brass)}
 .fbar.ok i{background:var(--ok)}.fbar.bad i{background:var(--bad)}
 .spark{display:inline-flex;gap:1px;align-items:flex-end;height:22px;direction:ltr}.spark i{display:block;width:5px;background:var(--brass);opacity:.8;min-height:1px}
-td.na{color:var(--soft)}td.num,th.num{white-space:nowrap}
-/* anti-cheat watcher card */
-.ac{background:linear-gradient(180deg,#232427,#1d1e21);border:1px solid var(--line);border-right:6px solid var(--c,var(--soft));border-radius:14px;padding:12px 14px;margin:0 0 14px}
+.ac{background:var(--bg2);border-right:5px solid var(--c,var(--soft));border-radius:var(--r);padding:14px 18px;margin:0 0 14px}
 .ac.green{--c:var(--ok)}.ac.amber{--c:var(--brass)}.ac.red{--c:var(--bad)}
-.ac h3{margin:0 0 4px;font-size:15px;color:var(--c,var(--text))}.ac p{margin:4px 0}
-.ac details{margin-top:6px}.ac summary{cursor:pointer;color:var(--soft)}
-.ac .box{background:var(--bg3);border-radius:10px;padding:8px 10px;margin-top:8px}
+.ac h3{margin:0 0 4px;font-size:16px}.ac details{margin-top:8px}.ac summary{cursor:pointer;color:var(--soft)}
+.ac .box{background:var(--bg3);margin-top:10px}
+/* bottom tab bar + "more" sheet */
+#tabbar{position:fixed;inset:auto 0 0 0;z-index:8;display:flex;background:var(--bg2);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+#tabbar button{flex:1;min-width:0;background:none;border:0;border-radius:12px;color:var(--soft);font-size:13.5px;padding:10px 2px;min-height:48px}
+#tabbar button.on{color:var(--brass);font-weight:900;background:var(--bg3)}
+#more{position:fixed;inset:0;z-index:9;background:#000a;display:flex;align-items:flex-end}
+#more[hidden]{display:none}
+#more .sheet{width:100%;max-height:80vh;overflow:auto;background:var(--bg2);border-radius:22px 22px 0 0;padding:16px 16px calc(24px + env(safe-area-inset-bottom,0px))}
+#more .sheet button{display:block;width:100%;text-align:right;margin:0 0 8px;background:var(--bg3);border:0;padding:14px 16px}
+#more .sheet button.on{background:var(--brass);color:#1a1a1a;font-weight:700}
+/* dialogs, login, toast */
+dialog{background:var(--bg2);color:var(--text);border:0;border-radius:20px;max-width:460px;width:92%;padding:22px}
+dialog::backdrop{background:#000a}
+dialog input,dialog textarea{width:100%;margin:4px 0 12px}
+#login{max-width:340px;margin:18vh auto;text-align:center;padding:0 18px}
+#login h1{font-size:22px}#login input{width:100%;margin:12px 0}
+/* phone: a table becomes a list of small cards (labels come from the header row) */
+@media(max-width:720px){
+  main{padding:16px 14px}
+  table.cz,table.cz tbody{display:block}
+  table.cz tr:first-child{display:none}
+  table.cz tr{display:block;padding:10px 0;border-bottom:1px solid var(--line)}
+  table.cz tr:last-child{border-bottom:0}
+  table.cz td{display:flex;justify-content:space-between;gap:14px;border:0;padding:4px 2px;text-align:left}
+  table.cz td::before{content:attr(data-l);color:var(--soft);font-size:13px;flex:none;text-align:right}
+  table.cz td:first-child{font-weight:700;font-size:16px;justify-content:flex-start}
+  table.cz td:first-child::before{display:none}
+  .scroll{padding:2px 14px}
+}
 </style>
 </head>
 <body>
@@ -133,15 +127,13 @@ td.na{color:var(--soft)}td.num,th.num{white-space:nowrap}
 </div>
 <div id="app" hidden>
 <header>
-  <details id="admin-menu">
-    <summary id="menu-toggle" aria-label="منوی بخش‌های پنل" aria-controls="nav"><span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span><span>منو</span></summary>
-    <nav id="nav" aria-label="بخش‌های پنل مدیریت"></nav>
-  </details>
-  <h1>پنل «پرونده»</h1>
-  <button id="refresh" class="hbtn">⟳ تازه</button>
+  <h1 id="ttl">نمای کلی</h1>
+  <button id="refresh" class="hbtn">تازه‌سازی</button>
   <button id="logout" class="hbtn">خروج</button>
 </header>
 <main id="main"></main>
+<nav id="tabbar" aria-label="بخش‌های پنل"></nav>
+<div id="more" hidden><div class="sheet" id="moresheet"></div></div>
 </div>
 <dialog id="cdlg"><form method="dialog"><p id="cmsg" style="margin-top:0"></p><div class="row"><button id="cok" class="on">تأیید</button><button id="cno">انصراف</button></div></form></dialog>
 <dialog id="dlg"><form method="dialog" id="dform"></form></dialog>
@@ -180,15 +172,25 @@ async function api(path, opts = {}) {
   if (!r.ok) throw new Error('خطا ' + r.status + ': ' + (await r.text()).slice(0, 200));
   return r.json();
 }
-const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت زنده'],['players','👥 بازیکن‌ها'],['cases','🗂 پرونده‌ها'],['comments','💬 نظرها'],['reviews','⭐ نظرات بازار'],['money','💰 پول و سکه'],['funnel','🧭 قیف و ماندگاری'],['economy','🪙 اقتصاد سکه'],['health','🩺 سلامت'],['actions','⚙ اقدام‌ها']];
+const TABS = [['overview','نمای کلی'],['players','بازیکن‌ها'],['cases','پرونده‌ها'],['comments','نظرها'],['feed','فعالیت زنده'],['reviews','نظرات بازار'],['money','پول و سکه'],['funnel','قیف و ماندگاری'],['economy','اقتصاد سکه'],['health','سلامت'],['actions','اقدام‌ها']];
+const PRIMARY = ['overview', 'players', 'cases', 'comments'];
 // remember the open tab (per browser tab / app session) so a reload or a refresh never jumps elsewhere
 let tab = 'overview', timer = null;
 try { const t = sessionStorage.getItem('adminTab'); if (TABS.some(x => x[0] === t)) tab = t; } catch (e) {}
-function buildNav() { try { sessionStorage.setItem('adminTab', tab); } catch (e) {} $('#nav').innerHTML = TABS.map(([k, n]) => `<button type="button" data-k="${k}" class="${k===tab?'on':''}"${k===tab?' aria-current="page"':''}>${n}</button>`).join(''); }
-$('#nav').onclick = e => { const b = e.target.closest('button[data-k]'); if (b) { go(b.dataset.k); $('#menu-toggle').focus(); } };
-document.addEventListener('click', e => { if (!$('#admin-menu').contains(e.target)) $('#admin-menu').open = false; });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#admin-menu').open) { e.preventDefault(); $('#admin-menu').open = false; $('#menu-toggle').focus(); } });
-function go(k, arg) { $('#admin-menu').open = false; tab = k; buildNav(); clearInterval(timer); timer = null; render(arg); }
+const moreOpen = () => !$('#more').hidden;
+const closeMore = () => { $('#more').hidden = true; };
+function buildNav() {
+  try { sessionStorage.setItem('adminTab', tab); } catch (e) {}
+  const title = (TABS.find(x => x[0] === tab) || [0, ''])[1]; $('#ttl').textContent = title; document.title = title + ' · پنل پرونده';
+  const inMore = !PRIMARY.includes(tab);
+  $('#tabbar').innerHTML = PRIMARY.map(k => `<button type="button" data-k="${k}" class="${k === tab ? 'on' : ''}"${k === tab ? ' aria-current="page"' : ''}>${TABS.find(x => x[0] === k)[1]}</button>`).join('') +
+    `<button type="button" data-more="1" class="${inMore ? 'on' : ''}">بیشتر</button>`;
+  $('#moresheet').innerHTML = TABS.filter(x => !PRIMARY.includes(x[0])).map(([k, n]) => `<button type="button" data-k="${k}" class="${k === tab ? 'on' : ''}">${n}</button>`).join('');
+}
+$('#tabbar').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.more) { $('#more').hidden = false; return; } if (b.dataset.k) go(b.dataset.k); };
+$('#more').onclick = e => { if (e.target === $('#more')) { closeMore(); return; } const b = e.target.closest('button[data-k]'); if (b) go(b.dataset.k); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && moreOpen()) { e.preventDefault(); closeMore(); } });
+function go(k, arg) { closeMore(); tab = k; buildNav(); clearInterval(timer); timer = null; window.scrollTo(0, 0); render(arg); }
 async function render(arg) {
   const m = document.createElement('div'); $('#main').replaceChildren(m); // a fresh box per render: a late answer of an old tab writes into a detached box
   m.innerHTML = '<p class="muted">در حال بارگذاری…</p>';
@@ -216,7 +218,7 @@ function chart(title, rows, key, color) {
   <div class="cols">${cols}${avg > 0 ? `<div class="avgline" style="bottom:${avgTop}px"><small>میانگین</small></div>` : ''}</div>
   <div class="axis">${rows.map(r => `<span>${dayNum(r.day)}</span>`).join('')}</div></div>`;
 }
-const card = (v, l, ic, ac) => `<div class="card" style="${ac ? '--ac:' + ac : ''}">${ic ? '<i>' + ic + '</i>' : ''}<b>${num(v)}</b><span>${l}</span></div>`;
+const card = (v, l) => `<div class="card"><b>${num(v)}</b><span>${l}</span></div>`;
 const LV = {ok: 'سالم', warn: 'هشدار', bad: 'خطا'};
 const dot = st => `<span class="st ${esc(st || 'warn')}" title="${esc(LV[st] || '')}"></span>`;
 const dur = s => s == null ? '—' : s < 3600 ? Math.round(s/60) + ' دقیقه' : s < 172800 ? (s/3600).toFixed(1) + ' ساعت' : Math.round(s/86400) + ' روز';
@@ -288,6 +290,25 @@ function acWire() {
     } catch (e) { box.innerHTML = '<p class="err">' + esc(e.message) + '</p>'; btn.disabled = false; }
   };
 }
+
+// ---- reading comfort, applied to every screen after it is drawn ----
+const EMOJI = /\p{Extended_Pictographic}️?\s?/gu;
+function tidy(root) {
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const todo = [];
+  while (w.nextNode()) { const n = w.currentNode; if (EMOJI.test(n.nodeValue)) todo.push(n); EMOJI.lastIndex = 0; }
+  todo.forEach(n => { n.nodeValue = n.nodeValue.replace(EMOJI, ''); });
+  root.querySelectorAll('table').forEach(t => {
+    if (t.classList.contains('cz') || t.classList.contains('kv')) return;
+    const rows = t.rows; if (!rows.length) return;
+    const head = [...rows[0].cells];
+    if (!head.length || head.some(c => c.tagName !== 'TH')) { t.classList.add('kv'); return; }   // key/value tables stay tables
+    const labels = head.map(c => c.textContent.trim());
+    [...rows].slice(1).forEach(r => [...r.cells].forEach((c, i) => { if (labels[i]) c.setAttribute('data-l', labels[i]); }));
+    t.classList.add('cz');
+  });
+}
+let tidying = false;
+new MutationObserver(() => { if (tidying) return; tidying = true; try { tidy($('#main')); } finally { setTimeout(() => { tidying = false; }, 0); } }).observe(document.getElementById('main'), {childList: true, subtree: true});
 const VIEWS = {
   async overview(m) {
     const d = await api('/admin/api/overview?days=14'), t = d.totals || {};
@@ -306,10 +327,10 @@ const VIEWS = {
     const promoLine = pi ? `<div class="hcard"><h3>🎁 رایگان‌کردن «${esc(pi.title || pi.case_id)}» (${pi.state === 'open' ? 'باز' : 'تمام‌شده'})</h3><p>در ${num(pi.hours)} ساعت: <b>${num(pi.signups)}</b> ثبت‌نام (همان مدت قبل‌تر: ${num(pi.signups_before)}) · <b>${num(pi.opened)}</b> نفر رایگان بازش کردند · ${num(pi.solved)} حل · ${num(pi.buyers)} خریدار سکه. <a href="#" id="qpromo">جزئیات همه‌ی پنجره‌ها</a></p></div>` : '';
     const q = dup ? `امتحان‌کننده ${num(dup.tried)} · نصب بدون پرونده ${num(dup.empty)} · تکراری ${num(dup.duplicate)} · تستر/بن ${num(dup.excluded)} · سکه‌ی در گردش ${num(t.coins_in_circulation)}` : '';
     const src = d.install_sources ? `نصب از: بازار ${num(d.install_sources.bazaar)} · مایکت ${num(d.install_sources.myket)} · مستقیم/نامشخص ${num(d.install_sources.other)}` : '';
-    m.innerHTML = acw + `<div class="quick"><button class="${pend ? 'hot' : ''}" id="qc">💬 نظرهای در انتظار (${num(pend)})</button><button id="qm">✉ پیام / هدیه به همه</button><button id="qp">👥 بازیکن‌ها (بن، سکه)</button></div>` +
-      `<h2>امروز تا الان <span class="muted" style="font-size:12px">· همه‌ی ساعت‌ها به وقت تهران</span></h2><div class="cards">${kpi('ثبت‌نام جدید', 'new', '#e0a526')}${kpi('بازیکن فعال', 'active', '#5dae7e')}${kpi('پرونده باز شد', 'opened', '#8ab4f8')}${kpi('پرونده حل شد', 'solved', '#5dae7e')}${kpi('خرید موفق', 'purchases', '#e0a526')}</div>` +
+    m.innerHTML = acw + `<div class="quick"><button class="${pend ? 'hot' : ''}" id="qc">نظرهای در انتظار (${num(pend)})</button><button id="qm">پیام / هدیه به همه</button><button id="qp">بازیکن‌ها</button></div>` +
+      `<h2>امروز تا الان <span class="muted" style="font-size:13px;font-weight:400">به وقت تهران</span></h2><div class="cards">${kpi('ثبت‌نام جدید', 'new', '#e0a526')}${kpi('بازیکن فعال', 'active', '#5dae7e')}${kpi('پرونده باز شد', 'opened', '#8ab4f8')}${kpi('پرونده حل شد', 'solved', '#5dae7e')}${kpi('خرید موفق', 'purchases', '#e0a526')}</div>` +
       (dup ? `<div class="cards">${card(dup.real, 'کارآگاه واقعی', '🕵️', '#5dae7e')}${card(dup.real_active_7d, 'واقعیِ فعال ۷ روز', '⚡', '#8ab4f8')}${card(t.active_24h, 'فعال ۲۴ ساعت', '📅', '#e0a526')}</div><p class="muted">${q} · <a href="#" id="qdup">فهرست بازیکن‌ها بر اساس گروه</a></p>` : '') + promoLine +
-      (days.length ? chart('بازیکن‌های فعال در روز', days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', days, 'new', '#e0a526') + chart('پرونده‌ی حل‌شده', days, 'solved', '#8ab4f8') + chart('خرید موفق', days, 'purchases', '#e0a526') : '') +
+      (days.length ? chart('بازیکن‌های فعال در روز', days, 'active', '#5dae7e') + chart('ثبت‌نام جدید', days, 'new', '#e0a526') + '<details class="more"><summary>نمودار حل‌شده‌ها و خریدها</summary>' + chart('پرونده‌ی حل‌شده', days, 'solved', '#8ab4f8') + chart('خرید موفق', days, 'purchases', '#e0a526') + '</details>' : '') +
       (src ? `<p class="muted">${src}. نسخه‌ی برنامه‌ی بازیکن‌ها در تب «سلامت» است.</p>` : '');
 
     acWire();
@@ -334,11 +355,11 @@ const VIEWS = {
     const SEG = {real: 'واقعی', tried: 'امتحان‌کننده', empty: 'بدون پرونده', duplicate: 'تکراری محتمل', excluded: 'تستر/بن/آزمایشی'};
     const load = async () => {
       const d = await api(`/admin/api/players?q=${encodeURIComponent(st.q)}&sort=${st.sort}&only_banned=${st.banned}&segment=${st.segment || 'real'}&limit=100`);
-      $('#plist').innerHTML = `<p class="muted">${num(d.total)} بازیکن</p><div class="scroll"><table><tr><th>نام</th><th>سکه</th><th>حل</th><th>ستاره</th><th>استریک</th><th>حساب</th><th>گروه</th><th>نسخه</th><th>ثبت‌نام</th><th>آخرین فعالیت</th></tr>` +
-        d.items.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.id.slice(0,6))} ${p.banned ? '<span class="tag banned">بن</span>' : ''}</td><td>${num(p.coins)}</td><td>${num(p.solved)}</td><td>${num(p.stars)}</td><td>${num(p.streak)}</td><td>${p.secured ? 'امن' : 'مهمان'}</td><td>${SEG[p.segment] || ''}${p.dup_reason ? ' <span class="muted">(' + (p.dup_reason === 'email' ? 'ایمیل مشابه' : 'هم‌دستگاه') + ')</span>' : ''}</td><td>${num(p.app_version)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('') + '</table></div>';
+      $('#plist').innerHTML = `<p class="muted">${num(d.total)} بازیکن</p><div class="scroll"><table><tr><th>نام</th><th>شماره‌ی عضویت</th><th>سکه</th><th>حل</th><th>ستاره</th><th>استریک</th><th>حساب</th><th>گروه</th><th>نسخه</th><th>ثبت‌نام</th><th>آخرین فعالیت</th></tr>` +
+        d.items.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.id.slice(0,6))} ${p.banned ? '<span class="tag banned">بن</span>' : ''}${p.hidden ? ' <span class="tag">پنهان</span>' : ''}</td><td>${num(p.member_no)}</td><td>${num(p.coins)}</td><td>${num(p.solved)}</td><td>${num(p.stars)}</td><td>${num(p.streak)}</td><td>${p.secured ? 'امن' : 'مهمان'}</td><td>${SEG[p.segment] || ''}${p.dup_reason ? ' <span class="muted">(' + (p.dup_reason === 'email' ? 'ایمیل مشابه' : 'هم‌دستگاه') + ')</span>' : ''}</td><td>${num(p.app_version)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('') + '</table></div>';
       $('#plist').querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
     };
-    m.innerHTML = `<div class="row"><input id="pq" placeholder="نام، ایمیل، کد دعوت، شناسه یا دستگاه" value="${esc(st.q)}" style="flex:1;min-width:200px"><select id="pseg">${[['real','واقعی'],['tried','امتحان‌کننده'],['empty','بدون پرونده'],['duplicate','تکراری محتمل'],['excluded','تستر/بن/آزمایشی'],['all','همه']].map(([k,n]) => `<option value="${k}" ${(st.segment||'real')===k?'selected':''}>${n}</option>`).join('')}</select><select id="ps">${[['last_seen','آخرین فعالیت'],['created','جدیدترین'],['coins','سکه'],['solved','حل‌شده'],['stars','ستاره'],['streak','استریک']].map(([k,n]) => `<option value="${k}" ${st.sort===k?'selected':''}>${n}</option>`).join('')}</select><label><input type="checkbox" id="pb" ${st.banned?'checked':''}> فقط بن‌شده‌ها</label><button id="pdup">🔁 حساب‌های تکراری</button><button id="ppurge">🧹 پاک‌سازی</button></div><div id="plist"></div>`;
+    m.innerHTML = `<div class="row"><input id="pq" placeholder="نام، ایمیل، کد دعوت، شناسه یا دستگاه" value="${esc(st.q)}" style="flex:1;min-width:200px"><select id="pseg">${[['real','واقعی'],['tried','امتحان‌کننده'],['empty','بدون پرونده'],['duplicate','تکراری محتمل'],['excluded','تستر/بن/آزمایشی'],['all','همه']].map(([k,n]) => `<option value="${k}" ${(st.segment||'real')===k?'selected':''}>${n}</option>`).join('')}</select><select id="ps">${[['last_seen','آخرین فعالیت'],['created','جدیدترین'],['created_asc','قدیمی‌ترین (از شماره‌ی ۱)'],['coins','سکه'],['solved','حل‌شده'],['stars','ستاره'],['streak','استریک']].map(([k,n]) => `<option value="${k}" ${st.sort===k?'selected':''}>${n}</option>`).join('')}</select><label><input type="checkbox" id="pb" ${st.banned?'checked':''}> فقط بن‌شده‌ها</label><button id="pdup">حساب‌های تکراری</button><button id="ppurge">پاک‌سازی بی‌ارزش‌ها</button></div><div id="plist"></div>`;
     $('#pq').onchange = e => { st.q = e.target.value.trim(); load(); }; $('#ps').onchange = e => { st.sort = e.target.value; load(); }; $('#pseg').onchange = e => { st.segment = e.target.value; load(); }; $('#pb').onchange = e => { st.banned = e.target.checked; load(); };
     $('#pdup').onclick = () => go('players', {dups: true});
     $('#ppurge').onclick = () => go('players', {purge: true});
@@ -347,7 +368,7 @@ const VIEWS = {
   async purge(m) {
     const d = await api('/admin/api/purge-preview'), c = d.counts;
     const WHY = {abandoned: 'رهاشده', orphan: 'مهمان یتیم', smoke: 'آزمایشی'};
-    m.innerHTML = `<div class="row"><button id="back">← فهرست</button><h2 style="margin:0">پاک‌سازی حساب‌های بی‌ارزش</h2></div>
+    m.innerHTML = `<div class="row"><button id="back">→ فهرست</button><h2 style="margin:0">پاک‌سازی حساب‌های بی‌ارزش</h2></div>
     <div class="cards">${card(c.abandoned,'رهاشده (' + d.abandoned_days + '+ روز، هیچ کاری نکرده)','👻','#9aa0a6')}${card(c.orphan,'مهمان یتیم (هم‌دستگاهِ حساب امن)','🔁','#d0543f')}${card(c.smoke,'حساب آزمایشی بار','🧪','#b48ead')}${card(d.total,'کل قابل پاک‌سازی','🧹','#e0a526')}</div>
     <p class="muted">فقط مهمان‌هایی که هیچ ارزشی ندارند: پرونده‌ای باز یا حل نکرده‌اند، خرید و نظر و XP و استریک و حکم و VIP ندارند، سکه‌شان بیشتر از هدیه‌ی شروع نیست، کسی را دعوت نکرده‌اند و دعوت‌شده هم نیستند، و تستر یا بن‌شده نیستند. اگر دستگاهی که حسابش پاک شده برگردد، برنامه خودش یک مهمان تازه می‌سازد و مشکلی پیش نمی‌آید. هر بار حداکثر ${num(d.max_batch)} حساب پاک می‌شود و هر حساب هنگام پاک شدن دوباره بررسی می‌شود.</p>
     <div class="row"><button id="pgo" class="danger" ${d.total ? '' : 'disabled'}>پاک کن (${num(Math.min(d.total, d.max_batch))} حساب)</button></div>
@@ -361,20 +382,46 @@ const VIEWS = {
     };
   },
   async dups(m) {
-    const d = await api('/admin/api/duplicate-accounts?limit=200'), u = d.summary;
+    const d = await api('/admin/api/duplicate-accounts?limit=200'), u = d.summary, hd = await api('/admin/api/duplicate-accounts/hidden');
     const ROLE = {secured: 'امن‌شده', orphan: 'مهمان یتیم', guest: 'مهمان'};
-    m.innerHTML = `<div class="row"><button id="back">← فهرست</button><h2 style="margin:0">حساب‌های تکراری</h2></div>
-    <div class="cards">${card(u.players,'کل ردیف‌ها','👥','#e0a526')}${card(u.devices,'دستگاه متفاوت','📱','#b48ead')}${card(u.groups,'دستگاه با چند حساب','🔁','#8ab4f8')}${card(u.probable_orphans,'مهمان یتیم (احتمالاً تکراری)','👻','#d0543f')}${card(u.real_people_estimate,'کارآگاه‌های واقعی (تخمین)','🕵️','#5dae7e')}</div>
-    <p class="muted">وقتی کارآگاهی با حساب امن‌شده‌اش روی گوشی جدید یا بعد از پاک کردن اطلاعات برنامه وارد می‌شود، برنامه اول یک حساب مهمان تازه می‌سازد و بعد او به حساب قدیمی‌اش می‌رود؛ مهمانِ تازه با همان دستگاه می‌ماند. «یتیم» یعنی مهمانی که پرونده‌ی حل‌شده و خرید ندارد و هم‌دستگاهش حساب امن‌شده است. این صفحه فقط نشان می‌دهد و چیزی را حذف یا ادغام نمی‌کند. حداکثر ${num(d.max_groups)} دستگاه نشان داده می‌شود.</p>` +
-    (d.groups.length ? d.groups.map(g => `<h3>دستگاه <span class="ltr">${esc(g.device)}</span> · ${num(g.rows)} حساب${g.shown < g.rows ? ' (فقط ' + num(g.shown) + ' نشان داده شد)' : ''}</h3><div class="scroll"><table><tr><th>نام</th><th>نوع</th><th>حل</th><th>سکه</th><th>خرید</th><th>ثبت‌نام</th><th>آخرین فعالیت</th></tr>` +
-      g.players.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.short_id)} <span class="muted ltr">${esc(p.short_id)}</span> ${p.banned ? '<span class="tag banned">بن</span>' : ''}${p.tester ? ' <span class="tag">تستر</span>' : ''}</td><td>${ROLE[p.role] || ''}${p.phone_last4 ? ' <span class="ltr">••••' + esc(p.phone_last4) + '</span>' : ''}${p.email ? ' ✉' : ''}</td><td>${num(p.solved)}</td><td>${num(p.coins)}</td><td>${num(p.purchases)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td></tr>`).join('') + '</table></div>').join('')
-      : '<p class="muted">هیچ دستگاهی بیش از یک حساب ندارد.</p>');
-    $('#back').onclick = () => go('players'); m.querySelectorAll('tr.click').forEach(tr => tr.onclick = () => go('players', {id: tr.dataset.p}));
+    const groups = d.groups.map(g => `<h3>دستگاه <span class="ltr">${esc(g.device)}</span> · ${num(g.rows)} حساب${g.shown < g.rows ? ' (فقط ' + num(g.shown) + ' نشان داده شد)' : ''}</h3><div class="scroll"><table><tr><th>نام</th><th>نوع</th><th>حل</th><th>سکه</th><th>خرید</th><th>ثبت‌نام</th><th>آخرین فعالیت</th><th>انتخاب</th></tr>` +
+      g.players.map(p => `<tr class="click" data-p="${esc(p.id)}"><td>${esc(p.nickname || p.short_id)} <span class="muted ltr">${esc(p.short_id)}</span> ${p.keep ? '<span class="tag solved">می‌ماند</span>' : ''}${p.banned ? '<span class="tag banned">بن</span>' : ''}${p.tester ? ' <span class="tag">تستر</span>' : ''}</td><td>${ROLE[p.role] || ''}${p.phone_last4 ? ' <span class="ltr">••••' + esc(p.phone_last4) + '</span>' : ''}${p.email ? ' ایمیل' : ''}</td><td>${num(p.solved)}</td><td>${num(p.coins)}</td><td>${num(p.purchases)}</td><td>${ago(p.created)}</td><td>${ago(p.last_seen)}</td><td>${p.can_hide ? `<input type="checkbox" class="hsel" value="${esc(p.id)}" aria-label="انتخاب برای پنهان‌کردن">` : '<span class="muted">—</span>'}</td></tr>`).join('') + '</table></div>').join('');
+    const hidden = hd.items.length ? `<h2>پنهان‌شده‌ها (${num(hd.items.length)})</h2><p class="muted">هر حساب پنهان از همه‌ی جدول‌ها و شمارش‌ها بیرون است. ${num(hd.days)} روز بعد از پنهان‌شدن، اگر کسی با آن وارد نشده باشد، برای همیشه پاک می‌شود. تا آن روز می‌توانی برش‌گردانی.</p><div class="scroll"><table><tr><th>نام</th><th>حل</th><th>سکه</th><th>پاک می‌شود</th><th>وضعیت</th><th>برگردان</th></tr>` +
+      hd.items.map(p => `<tr><td>${esc(p.nickname || p.short_id)} <span class="muted ltr">${esc(p.short_id)}</span></td><td>${num(p.solved)}</td><td>${num(p.coins)}</td><td>${fmtT(p.delete_at)}</td><td>${p.due ? 'آماده‌ی حذف نهایی' : p.used_since ? 'بعد از پنهان‌شدن استفاده شده' : 'منتظر'}</td><td><input type="checkbox" class="rsel" value="${esc(p.id)}" aria-label="انتخاب برای برگرداندن"></td></tr>`).join('') + '</table></div>' +
+      `<div class="row"><button id="drestore">برگردان انتخاب‌شده‌ها</button><button id="dpurge" class="danger" ${hd.ready ? '' : 'disabled'}>حذف نهایی ${num(hd.ready)} حساب سررسیده</button></div>` : '';
+    m.innerHTML = `<div class="row"><button id="back">→ فهرست</button><h2 style="margin:0">حساب‌های تکراری</h2></div>
+    <div class="cards">${card(u.players,'کل حساب‌ها')}${card(u.groups,'دستگاه با چند حساب')}${card(u.probable_orphans,'مهمان یتیم (احتمالاً تکراری)')}${card(u.real_people_estimate,'کارآگاه‌های واقعی (تخمین)')}${card(u.hidden || 0,'پنهان‌شده')}</div>
+    <p class="muted">وقتی کارآگاهی با حساب امن‌شده‌اش روی گوشی جدید وارد می‌شود، برنامه اول یک مهمان تازه می‌سازد؛ آن مهمان با همان دستگاه می‌ماند. در هر دستگاه یک حساب «می‌ماند» (امن‌شده، یا پرکارترین) و بقیه را می‌توانی انتخاب و پنهان کنی. حساب امن‌شده و حسابی که خرید دارد هرگز انتخاب‌شدنی نیست و آخرین حساب یک دستگاه هم پنهان نمی‌شود.</p>` +
+    (d.groups.length ? `<div class="row"><button id="dsel">انتخاب همه‌ی «مهمان یتیم»ها</button><button id="dhide" class="danger" disabled>پنهان‌کن (۰)</button></div>` + groups : '<p class="muted">هیچ دستگاهی بیش از یک حساب ندارد.</p>') + hidden;
+    $('#back').onclick = () => go('players'); m.querySelectorAll('tr.click').forEach(tr => tr.onclick = e => { if (e.target.closest('input')) return; go('players', {id: tr.dataset.p}); });
+    const sel = () => [...m.querySelectorAll('.hsel:checked')].map(i => i.value);
+    const sync = () => { const b = $('#dhide'); if (b) { const n = sel().length; b.textContent = 'پنهان‌کن (' + num(n) + ')'; b.disabled = !n; } };
+    m.querySelectorAll('.hsel').forEach(i => i.onchange = sync);
+    const ds = $('#dsel'); if (ds) ds.onclick = () => {
+      const orphans = new Set(d.groups.flatMap(g => g.players.filter(p => p.role === 'orphan' && p.can_hide).map(p => p.id)));
+      m.querySelectorAll('.hsel').forEach(i => { i.checked = orphans.has(i.value); }); sync();
+    };
+    const dh = $('#dhide'); if (dh) dh.onclick = async () => {
+      const ids = sel(); if (!ids.length) return;
+      if (!(await ask('پنهان‌کردن ' + num(ids.length) + ' حساب تکراری؟ از جدول‌ها و شمارش‌ها بیرون می‌روند و ' + num(hd.days) + ' روز بعد، اگر کسی با آن‌ها وارد نشده باشد، برای همیشه پاک می‌شوند. تا آن روز می‌توانی برگردانی.'))) return;
+      try { const r = await api('/admin/api/duplicate-accounts/hide', {method: 'POST', body: JSON.stringify({ids, confirm: true})}); note(num(r.hidden) + ' حساب پنهان شد' + (r.skipped ? ' (' + num(r.skipped) + ' تا رد شد)' : '')); go('players', {dups: true}); }
+      catch (e) { note(e.message); }
+    };
+    const dr = $('#drestore'); if (dr) dr.onclick = async () => {
+      const ids = [...m.querySelectorAll('.rsel:checked')].map(i => i.value); if (!ids.length) { note('اول حساب‌ها را انتخاب کن'); return; }
+      try { const r = await api('/admin/api/duplicate-accounts/restore', {method: 'POST', body: JSON.stringify({ids, confirm: true})}); note(num(r.restored) + ' حساب برگشت'); go('players', {dups: true}); }
+      catch (e) { note(e.message); }
+    };
+    const dp = $('#dpurge'); if (dp) dp.onclick = async () => {
+      if (!(await ask('مطمئنی؟ ' + num(hd.ready) + ' حساب پنهان که ' + num(hd.days) + ' روز گذشته و کسی با آن‌ها وارد نشده برای همیشه پاک می‌شوند. برگشت ندارد.'))) return;
+      try { const r = await api('/admin/api/duplicate-accounts/purge-hidden', {method: 'POST', body: JSON.stringify({confirm: true})}); note(num(r.deleted) + ' حساب برای همیشه پاک شد'); go('players', {dups: true}); }
+      catch (e) { note(e.message); }
+    };
   },
   async player(m, id) {
     const d = await api('/admin/api/players/' + encodeURIComponent(id)), p = d.player;
     const kv = (k, v) => `<tr><th>${k}</th><td>${v}</td></tr>`;
-    m.innerHTML = `<div class="row"><button id="back">← فهرست</button><h2 style="margin:0">${esc(p.nickname || p.id)} ${p.banned ? '<span class="tag banned">بن‌شده</span>' : ''}</h2><span style="flex:1"></span><button id="gift">هدیه / پیام</button><button id="lph">📱 وصل کردن شماره</button><button id="crs">↺ ریست پرونده</button><button id="ban" class="danger">${p.banned ? 'رفع بن' : 'بن کردن'}</button></div>
+    m.innerHTML = `<div class="row"><button id="back">→ فهرست</button><h2 style="margin:0">${esc(p.nickname || p.id)} ${p.banned ? '<span class="tag banned">بن‌شده</span>' : ''}</h2><span style="flex:1"></span><button id="gift">هدیه / پیام</button><button id="lph">📱 وصل کردن شماره</button><button id="crs">↺ ریست پرونده</button><button id="ban" class="danger">${p.banned ? 'رفع بن' : 'بن کردن'}</button></div>
     <div class="scroll"><table>${kv('شناسه', `<span class="ltr">${esc(p.id)}</span>`)}${kv('ایمیل', esc(p.email || '—'))}${kv('شماره', p.phone_last4 ? `<span class="ltr">•••• ••• ${esc(p.phone_last4)}</span>` : '—')}${kv('دستگاه', `<span class="ltr">${esc(p.device_id)}</span>`)}${kv('کد دعوت', `<span class="ltr">${esc(p.invite_code)}</span> ${p.referred_by ? '· دعوت‌شده توسط ' + esc(p.referred_by.slice(0,6)) : ''}`)}${kv('سکه / XP / حکم', `${num(p.coins)} / ${num(p.xp)} / ${num(p.warrants)}`)}${kv('حل‌شده / ستاره', `${num(p.solved)} / ${num(p.stars)}`)}${kv('استریک (بهترین)', `${num(p.streak)} (${num(p.best_streak)})`)}${kv('VIP تا', fmtT(p.vip_until))}${kv('نسخه‌ی برنامه', `<span class="ltr">${esc(p.client.version || '؟')} (${num(p.client.build)})</span> · ${esc(p.client.platform || '—')}`)}${kv('سیستم‌عامل / دستگاه', `<span class="ltr">${esc(p.client.os_version || '—')} / ${esc(p.client.device_model || '—')}</span> · گزارش: ${ago(p.client.reported)}`)}${kv('ثبت‌نام', fmtT(p.created))}${kv('آخرین فعالیت', fmtT(p.last_seen))}</table></div>
     ${d.same_device.length ? `<h2>حساب‌های دیگر روی همین دستگاه (${d.same_device.length})</h2><div class="scroll"><table>${d.same_device.map(x => `<tr class="click" data-p="${esc(x.id)}"><td>${esc(x.nickname || x.id.slice(0,6))}</td><td>${ago(x.created)}</td></tr>`).join('')}</table></div>` : ''}
     <h2>پرونده‌ها</h2><div class="scroll"><table><tr><th>پرونده</th><th>نتیجه</th><th>ستاره</th><th>سرنخ</th><th>اتهام اشتباه</th><th>زمان فعال</th><th>مظنون دیده</th><th>باز شد</th></tr>${d.cases.map(c => `<tr><td>${esc(c.title)}</td><td>${c.solved ? '<span class="tag solved">حل</span>' : c.failed ? '<span class="tag failed">شکست</span>' : 'در جریان'}</td><td>${c.stars}</td><td>${c.hints}</td><td>${c.attempts}</td><td>${c.active_seconds}ث</td><td>${c.seen}</td><td>${ago(c.opened)}</td></tr>`).join('')}</table></div>
@@ -675,8 +722,8 @@ $('#enter').onclick = enter; $('#key').onkeydown = e => { if (e.key === 'Enter')
 $('#refresh').onclick = () => render(); $('#logout').onclick = logout;
 // pull down at the top of the page to refresh (touch screens, also in the admin app)
 (() => { let y0 = null; const top = () => (window.scrollY || document.documentElement.scrollTop) <= 0;
-  addEventListener('touchstart', e => { y0 = !$('#admin-menu').open && top() && e.touches.length === 1 ? e.touches[0].clientY : null; }, {passive: true});
-  addEventListener('touchend', e => { if (y0 !== null && e.changedTouches[0].clientY - y0 > 120 && !$('#app').hidden && !$('#dlg').open && !$('#admin-menu').open) render(); y0 = null; }, {passive: true}); })();
+  addEventListener('touchstart', e => { y0 = !moreOpen() && top() && e.touches.length === 1 ? e.touches[0].clientY : null; }, {passive: true});
+  addEventListener('touchend', e => { if (y0 !== null && e.changedTouches[0].clientY - y0 > 120 && !$('#app').hidden && !$('#dlg').open && !moreOpen()) render(); y0 = null; }, {passive: true}); })();
 if (KEY) enter();
 </script>
 </body>

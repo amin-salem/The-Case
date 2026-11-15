@@ -80,6 +80,14 @@ async def preview(session: AsyncSession, limit: int = MAX_BATCH) -> dict:
             "abandoned_days": ABANDONED_DAYS}
 
 
+async def delete_rows(session: AsyncSession, ids: list[str]) -> None:
+    """Delete these player rows and everything that hangs on them (no commit; the caller holds the player locks)."""
+    for table in reversed(Base.metadata.sorted_tables):
+        if table.name != "players" and "player_id" in table.c:
+            await session.execute(delete(table).where(table.c.player_id.in_(ids)))
+    await session.execute(delete(Player).where(Player.id.in_(ids)))
+
+
 async def apply(session: AsyncSession, ids: list[str] | None) -> dict:
     """Delete the given ids (or, when None, the first MAX_BATCH candidates). Each is re-validated under its lock."""
     now = utcnow()
@@ -92,10 +100,7 @@ async def apply(session: AsyncSession, ids: list[str] | None) -> dict:
     await lock_players(session, ids)
     ok = list((await session.scalars(select(Player.id).where(Player.id.in_(ids), any_condition(now)))).all())
     if ok:
-        for table in reversed(Base.metadata.sorted_tables):
-            if table.name != "players" and "player_id" in table.c:
-                await session.execute(delete(table).where(table.c.player_id.in_(ok)))
-        await session.execute(delete(Player).where(Player.id.in_(ok)))
+        await delete_rows(session, ok)
         session.add(AdminLog(action="purge_players", target=f"{len(ok)} rows", detail={
             "n": len(ok), "skipped": len(ids) - len(ok), "ids": [i[:8] for i in ok[:50]]}))
     await session.commit()
