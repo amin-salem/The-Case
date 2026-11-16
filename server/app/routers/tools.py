@@ -1,5 +1,6 @@
 """Detective tools on the case screen: the tray (GET) and use / buy (POST). Logic and rules: app/tools.py."""
 import logging
+import re
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from sqlalchemy import select
