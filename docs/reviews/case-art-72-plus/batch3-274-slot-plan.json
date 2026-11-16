@@ -1,0 +1,2444 @@
+[
+  {
+    "idea": 1,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 46,
+        "candidate": "f_neutral_46_reserve18",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 53,
+        "candidate": "m_neutral_53_reserve17",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 38,
+        "candidate": "f_mid_guest",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 31,
+        "candidate": "m_young_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 42,
+        "candidate": "m_neutral_41_oval",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 2,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 37,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 38,
+        "candidate": "m_mid_artist",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 44,
+        "candidate": "m_neutral_44_long",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "f",
+        "age": 66,
+        "candidate": "f_old_retiree",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 69,
+        "candidate": "m_old_farmer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 3,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 58,
+        "candidate": "f_mid_publisher",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 51,
+        "candidate": "m_neutral_51_reserve13",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 43,
+        "candidate": "f_neutral_43_reserve01",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 35,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 39,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 4,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 41,
+        "candidate": "f_neutral_41_reserve11",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 49,
+        "candidate": "m_neutral_46_angular",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 33,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "f",
+        "age": 29,
+        "candidate": "f_neutral_29_square",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 62,
+        "candidate": "m_neutral_62_soft",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 5,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "m",
+        "age": 55,
+        "candidate": "m_neutral_55_brow",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "f",
+        "age": 47,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 40,
+        "candidate": "m_neutral_38_coils",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 32,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 60,
+        "candidate": "f_old_retired",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 6,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 45,
+        "candidate": "f_neutral_45_reserve02",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 37,
+        "candidate": "m_neutral_37_reserve20",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 34,
+        "candidate": "f_young_photographer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 41,
+        "candidate": "m_neutral_41_oval",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 57,
+        "candidate": "m_neutral_57_reserve09",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 7,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "m",
+        "age": 44,
+        "candidate": "m_neutral_44_long",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "f",
+        "age": 36,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 30,
+        "candidate": "m_young_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 48,
+        "candidate": "m_neutral_48_reserve03",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 52,
+        "candidate": "f_neutral_54_heart",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 8,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 39,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 34,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 46,
+        "candidate": "m_neutral_46_reserve04",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "f",
+        "age": 50,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 59,
+        "candidate": "m_mid_captain",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 9,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 33,
+        "candidate": "f_young_photographer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 61,
+        "candidate": "m_mid_captain",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 47,
+        "candidate": "m_neutral_47_copper",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "f",
+        "age": 42,
+        "candidate": "f_mid_agent",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 28,
+        "candidate": "m_young_it",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 10,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 56,
+        "candidate": "f_neutral_58_pear",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 52,
+        "candidate": "m_mid_lecturer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 27,
+        "candidate": "f_neutral_27_coils",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 36,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 63,
+        "candidate": "f_old_seamstress",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 11,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 59,
+        "candidate": "f_mid_publisher",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 55,
+        "candidate": "m_neutral_55_brow",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 48,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 50,
+        "candidate": "m_neutral_50_silver",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 70,
+        "candidate": "m_old_farmer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 12,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 40,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 47,
+        "candidate": "m_neutral_47_reserve05",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 35,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 31,
+        "candidate": "m_young_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 54,
+        "candidate": "f_neutral_54_heart",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 13,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 43,
+        "candidate": "f_neutral_43_reserve06",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 49,
+        "candidate": "m_neutral_46_angular",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 51,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 37,
+        "candidate": "m_neutral_37_reserve20",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 28,
+        "candidate": "m_young_it",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 14,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 36,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 60,
+        "candidate": "m_neutral_56_angular",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 45,
+        "candidate": "f_mid_archaeologist",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 41,
+        "candidate": "m_neutral_41_oval",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 32,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 15,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 38,
+        "candidate": "f_neutral_36_round",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 46,
+        "candidate": "m_mid_researcher",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 42,
+        "candidate": "f_mid_agent",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 50,
+        "candidate": "m_mid_merchant",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 33,
+        "candidate": "f_young_photographer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 16,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 57,
+        "candidate": "f_mid_librarian",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 39,
+        "candidate": "m_neutral_39_broad",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 35,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "f",
+        "age": 31,
+        "candidate": "f_mid_waitress",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 63,
+        "candidate": "m_neutral_62_soft",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 17,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 65,
+        "candidate": "f_old_grandma",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 48,
+        "candidate": "m_neutral_48_reserve07",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 46,
+        "candidate": "f_neutral_46_reserve18",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 51,
+        "candidate": "m_neutral_51_reserve13",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 60,
+        "candidate": "m_mid_captain",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 18,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 62,
+        "candidate": "f_old_fortune",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 37,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 34,
+        "candidate": "f_young_photographer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 45,
+        "candidate": "m_mid_photographer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 41,
+        "candidate": "f_neutral_41_reserve11",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 19,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 44,
+        "candidate": "f_neutral_44_reserve14",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 52,
+        "candidate": "m_neutral_52_curls",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 29,
+        "candidate": "m_neutral_29_coils",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "f",
+        "age": 36,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 58,
+        "candidate": "m_neutral_57_reserve09",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 20,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 48,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "f",
+        "age": 40,
+        "candidate": "f_neutral_40_reserve08",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 32,
+        "candidate": "f_mid_waitress",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 43,
+        "candidate": "m_neutral_44_long",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 56,
+        "candidate": "m_neutral_56_round",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 21,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 38,
+        "candidate": "f_mid_guest",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 58,
+        "candidate": "m_neutral_62_soft",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 44,
+        "candidate": "m_neutral_44_long",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "f",
+        "age": 40,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 27,
+        "candidate": "m_young_casual",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 22,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 47,
+        "candidate": "f_neutral_54_heart",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 52,
+        "candidate": "m_mid_lecturer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 44,
+        "candidate": "f_neutral_44_reserve14",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 36,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 59,
+        "candidate": "f_mid_publisher",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 23,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 32,
+        "candidate": "f_mid_waitress",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 57,
+        "candidate": "m_neutral_57_reserve09",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 49,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 41,
+        "candidate": "m_neutral_41_oval",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 26,
+        "candidate": "m_young_casual",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 24,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 64,
+        "candidate": "f_neutral_64_long",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 59,
+        "candidate": "m_mid_captain",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 34,
+        "candidate": "f_young_photographer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 40,
+        "candidate": "m_neutral_38_coils",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 55,
+        "candidate": "f_mid_librarian",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 25,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 54,
+        "candidate": "f_neutral_54_heart",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 46,
+        "candidate": "m_neutral_46_reserve10",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 40,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 29,
+        "candidate": "m_neutral_29_coils",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 48,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 26,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 43,
+        "candidate": "f_neutral_43_reserve01",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 38,
+        "candidate": "m_mid_artist",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 35,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 56,
+        "candidate": "m_neutral_56_round",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 30,
+        "candidate": "m_young_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 27,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 68,
+        "candidate": "f_old_baker",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 53,
+        "candidate": "m_neutral_53_square",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 50,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 57,
+        "candidate": "m_neutral_57_reserve09",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 64,
+        "candidate": "m_neutral_64_lined",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 28,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 49,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 45,
+        "candidate": "m_neutral_45_waves",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 39,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 34,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 61,
+        "candidate": "m_mid_captain",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 29,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 41,
+        "candidate": "f_neutral_41_reserve11",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 55,
+        "candidate": "m_neutral_55_brow",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 48,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 29,
+        "candidate": "m_neutral_29_coils",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 36,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 30,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 60,
+        "candidate": "f_old_retired",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 37,
+        "candidate": "m_neutral_37_reserve20",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 42,
+        "candidate": "f_mid_agent",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 50,
+        "candidate": "m_neutral_50_reserve12",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 31,
+        "candidate": "f_mid_waitress",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 31,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 46,
+        "candidate": "f_neutral_46_reserve18",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 40,
+        "candidate": "m_neutral_38_coils",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 37,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 28,
+        "candidate": "m_young_it",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 59,
+        "candidate": "m_mid_captain",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 32,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 43,
+        "candidate": "f_neutral_43_reserve01",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 62,
+        "candidate": "m_neutral_62_soft",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "m",
+        "age": 34,
+        "candidate": "m_neutral_29_coils",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 49,
+        "candidate": "m_neutral_46_angular",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 55,
+        "candidate": "f_mid_librarian",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 33,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 45,
+        "candidate": "f_mid_archaeologist",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 51,
+        "candidate": "m_neutral_51_reserve13",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 39,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 33,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 60,
+        "candidate": "f_old_retired",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 34,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 42,
+        "candidate": "f_neutral_42_diamond",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 54,
+        "candidate": "m_neutral_53_reserve17",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 47,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 36,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 58,
+        "candidate": "m_neutral_57_reserve09",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 35,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 67,
+        "candidate": "f_old_baker",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 60,
+        "candidate": "m_neutral_64_lined",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 54,
+        "candidate": "f_neutral_54_heart",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 48,
+        "candidate": "m_neutral_48_reserve03",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 72,
+        "candidate": "f_neutral_70_soft",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 36,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 35,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 56,
+        "candidate": "m_neutral_56_round",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 44,
+        "candidate": "f_neutral_44_reserve14",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 39,
+        "candidate": "m_neutral_38_coils",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 30,
+        "candidate": "m_young_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 37,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 58,
+        "candidate": "f_mid_publisher",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 36,
+        "candidate": "m_neutral_29_long",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 39,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 45,
+        "candidate": "m_mid_photographer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 41,
+        "candidate": "f_neutral_41_reserve11",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 38,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 44,
+        "candidate": "f_neutral_44_reserve14",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 48,
+        "candidate": "m_neutral_48_reserve15",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 40,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 32,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 60,
+        "candidate": "m_mid_captain",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 39,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 42,
+        "candidate": "f_neutral_42_reserve16",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 33,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 38,
+        "candidate": "f_mid_guest",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 46,
+        "candidate": "m_mid_researcher",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 57,
+        "candidate": "m_neutral_57_reserve09",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 40,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 48,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 53,
+        "candidate": "m_neutral_53_reserve17",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 43,
+        "candidate": "f_neutral_43_reserve01",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 31,
+        "candidate": "m_young_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 59,
+        "candidate": "f_mid_publisher",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 41,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 37,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 43,
+        "candidate": "m_neutral_44_nose",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 34,
+        "candidate": "f_young_photographer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 30,
+        "candidate": "m_young_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 56,
+        "candidate": "f_mid_librarian",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 42,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 46,
+        "candidate": "f_neutral_46_reserve18",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 51,
+        "candidate": "m_neutral_51_reserve13",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 42,
+        "candidate": "f_mid_agent",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 35,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 62,
+        "candidate": "f_old_fortune",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 43,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 45,
+        "candidate": "f_mid_archaeologist",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 52,
+        "candidate": "m_neutral_52_reserve19",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 38,
+        "candidate": "f_mid_guest",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 41,
+        "candidate": "m_neutral_41_oval",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 64,
+        "candidate": "m_neutral_64_lined",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 6,
+        "gender": "m",
+        "age": 29,
+        "candidate": "m_neutral_29_coils",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 7,
+        "gender": "m",
+        "age": 34,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 8,
+        "gender": "f",
+        "age": 57,
+        "candidate": "f_mid_librarian",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 44,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 49,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 44,
+        "candidate": "m_neutral_45_freckles",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 40,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 36,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 61,
+        "candidate": "m_mid_captain",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 6,
+        "gender": "f",
+        "age": 31,
+        "candidate": "f_mid_waitress",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 7,
+        "gender": "m",
+        "age": 54,
+        "candidate": "m_neutral_53_reserve17",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 8,
+        "gender": "f",
+        "age": 47,
+        "candidate": "f_mid_housewife",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 45,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 50,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 42,
+        "candidate": "m_neutral_41_shaved",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 37,
+        "candidate": "f_mid_designer",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 33,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 60,
+        "candidate": "f_old_retired",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 6,
+        "gender": "m",
+        "age": 28,
+        "candidate": "m_young_it",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 7,
+        "gender": "f",
+        "age": 46,
+        "candidate": "f_neutral_46_reserve18",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 8,
+        "gender": "m",
+        "age": 56,
+        "candidate": "m_neutral_56_round",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 46,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 48,
+        "candidate": "f_neutral_48_square",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 54,
+        "candidate": "m_neutral_53_reserve17",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 43,
+        "candidate": "f_neutral_43_reserve01",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 35,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "m",
+        "age": 59,
+        "candidate": "m_mid_captain",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 6,
+        "gender": "f",
+        "age": 30,
+        "candidate": "f_neutral_29_square",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 7,
+        "gender": "f",
+        "age": 45,
+        "candidate": "f_mid_archaeologist",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 8,
+        "gender": "m",
+        "age": 51,
+        "candidate": "m_neutral_51_reserve13",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 47,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 55,
+        "candidate": "f_mid_librarian",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 50,
+        "candidate": "m_mid_merchant",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 29,
+        "candidate": "f_neutral_29_square",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 37,
+        "candidate": "m_neutral_37_reserve20",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 42,
+        "candidate": "f_mid_agent",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 6,
+        "gender": "m",
+        "age": 47,
+        "candidate": "m_neutral_47_copper",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 7,
+        "gender": "f",
+        "age": 61,
+        "candidate": "f_old_fortune",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 8,
+        "gender": "m",
+        "age": 34,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 48,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 52,
+        "candidate": "f_neutral_54_heart",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 48,
+        "candidate": "m_neutral_48_reserve21",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 41,
+        "candidate": "f_neutral_41_reserve11",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 36,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 60,
+        "candidate": "f_old_retired",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 6,
+        "gender": "m",
+        "age": 32,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 7,
+        "gender": "f",
+        "age": 45,
+        "candidate": "f_mid_archaeologist",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 8,
+        "gender": "m",
+        "age": 57,
+        "candidate": "m_neutral_57_reserve09",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 49,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 49,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 45,
+        "candidate": "m_neutral_45_reserve22",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 38,
+        "candidate": "f_mid_guest",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 34,
+        "candidate": "m_neutral_34_dimples",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 58,
+        "candidate": "f_mid_publisher",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 6,
+        "gender": "m",
+        "age": 27,
+        "candidate": "m_young_casual",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 7,
+        "gender": "f",
+        "age": 55,
+        "candidate": "f_mid_librarian",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 8,
+        "gender": "m",
+        "age": 43,
+        "candidate": "m_neutral_44_long",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  },
+  {
+    "idea": 50,
+    "slots": [
+      {
+        "slot": 1,
+        "gender": "f",
+        "age": 47,
+        "candidate": "f_mid_director",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 2,
+        "gender": "m",
+        "age": 53,
+        "candidate": "m_neutral_53_reserve23",
+        "culprit": true,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 3,
+        "gender": "f",
+        "age": 40,
+        "candidate": "f_mid_clerk",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 4,
+        "gender": "m",
+        "age": 35,
+        "candidate": "m_mid_driver",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 5,
+        "gender": "f",
+        "age": 63,
+        "candidate": "f_old_seamstress",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 6,
+        "gender": "f",
+        "age": 31,
+        "candidate": "f_mid_waitress",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 7,
+        "gender": "m",
+        "age": 56,
+        "candidate": "m_neutral_56_round",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      },
+      {
+        "slot": 8,
+        "gender": "f",
+        "age": 44,
+        "candidate": "f_neutral_44_reserve14",
+        "culprit": false,
+        "status": "provisional; confirm role, finances, final names, release and cast visually before assignment"
+      }
+    ]
+  }
+]

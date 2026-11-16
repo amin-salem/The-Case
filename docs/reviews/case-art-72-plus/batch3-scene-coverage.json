@@ -1,0 +1,302 @@
+[
+  {
+    "idea": 1,
+    "scene": "hospital",
+    "existing_background": "app/assets/scenes/hospital.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 2,
+    "scene": "school",
+    "existing_background": "app/assets/scenes/school.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 3,
+    "scene": "villa_rain",
+    "existing_background": "app/assets/scenes/villa_rain.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 4,
+    "scene": "lab",
+    "existing_background": "app/assets/scenes/lab.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 5,
+    "scene": "bazaar_night",
+    "existing_background": "app/assets/scenes/bazaar_night.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 6,
+    "scene": "airport",
+    "existing_background": "app/assets/scenes/airport.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 7,
+    "scene": "subway",
+    "existing_background": "app/assets/scenes/subway.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 8,
+    "scene": "warehouse",
+    "existing_background": "app/assets/scenes/warehouse.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 9,
+    "scene": "theater",
+    "existing_background": "app/assets/scenes/theater.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 10,
+    "scene": "office",
+    "existing_background": "app/assets/scenes/office.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 11,
+    "scene": "harbor",
+    "existing_background": "app/assets/scenes/harbor.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 12,
+    "scene": "kitchen",
+    "existing_background": "app/assets/scenes/kitchen.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 13,
+    "scene": "tower",
+    "existing_background": "app/assets/scenes/tower.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 14,
+    "scene": "museum",
+    "existing_background": "app/assets/scenes/museum.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 15,
+    "scene": "wedding",
+    "existing_background": "app/assets/scenes/wedding.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 16,
+    "scene": "snow_lodge",
+    "existing_background": "app/assets/scenes/snow_lodge.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 17,
+    "scene": "library",
+    "existing_background": "app/assets/scenes/library.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 18,
+    "scene": "hotel",
+    "existing_background": "app/assets/scenes/hotel.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 19,
+    "scene": "desert",
+    "existing_background": "app/assets/scenes/desert.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 20,
+    "scene": "office",
+    "existing_background": "app/assets/scenes/office.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 21,
+    "scene": "desert",
+    "existing_background": "app/assets/scenes/desert.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 22,
+    "scene": "hospital",
+    "existing_background": "app/assets/scenes/hospital.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 23,
+    "scene": "theater",
+    "existing_background": "app/assets/scenes/theater.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 24,
+    "scene": "villa_rain",
+    "existing_background": "app/assets/scenes/villa_rain.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 25,
+    "scene": "train",
+    "existing_background": "app/assets/scenes/train.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 26,
+    "scene": "bazaar_night",
+    "existing_background": "app/assets/scenes/bazaar_night.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 27,
+    "scene": "lab",
+    "existing_background": "app/assets/scenes/lab.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 28,
+    "scene": "hotel",
+    "existing_background": "app/assets/scenes/hotel.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 29,
+    "scene": "museum",
+    "existing_background": "app/assets/scenes/museum.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 30,
+    "scene": "warehouse",
+    "existing_background": "app/assets/scenes/warehouse.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 31,
+    "scene": "subway",
+    "existing_background": "app/assets/scenes/subway.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 32,
+    "scene": "library",
+    "existing_background": "app/assets/scenes/library.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 33,
+    "scene": "airport",
+    "existing_background": "app/assets/scenes/airport.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 34,
+    "scene": "tower",
+    "existing_background": "app/assets/scenes/tower.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 35,
+    "scene": "kitchen",
+    "existing_background": "app/assets/scenes/kitchen.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 36,
+    "scene": "school",
+    "existing_background": "app/assets/scenes/school.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 37,
+    "scene": "snow_lodge",
+    "existing_background": "app/assets/scenes/snow_lodge.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 38,
+    "scene": "harbor",
+    "existing_background": "app/assets/scenes/harbor.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 39,
+    "scene": "train",
+    "existing_background": "app/assets/scenes/train.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 40,
+    "scene": "wedding",
+    "existing_background": "app/assets/scenes/wedding.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 41,
+    "scene": "airport",
+    "existing_background": "app/assets/scenes/airport.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 42,
+    "scene": "school",
+    "existing_background": "app/assets/scenes/school.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 43,
+    "scene": "harbor",
+    "existing_background": "app/assets/scenes/harbor.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 44,
+    "scene": "theater",
+    "existing_background": "app/assets/scenes/theater.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 45,
+    "scene": "library",
+    "existing_background": "app/assets/scenes/library.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 46,
+    "scene": "hotel",
+    "existing_background": "app/assets/scenes/hotel.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 47,
+    "scene": "wedding",
+    "existing_background": "app/assets/scenes/wedding.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 48,
+    "scene": "tower",
+    "existing_background": "app/assets/scenes/tower.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 49,
+    "scene": "school",
+    "existing_background": "app/assets/scenes/school.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  },
+  {
+    "idea": 50,
+    "scene": "museum",
+    "existing_background": "app/assets/scenes/museum.webp",
+    "status": "base atmosphere only; confirm exact final setting and spoilers before assigning a case-specific variant"
+  }
+]

@@ -1,0 +1,302 @@
+[
+  {
+    "idea": 1,
+    "gender": "m",
+    "age": 42,
+    "candidate": "m_neutral_41_oval"
+  },
+  {
+    "idea": 2,
+    "gender": "m",
+    "age": 44,
+    "candidate": "m_neutral_44_long"
+  },
+  {
+    "idea": 3,
+    "gender": "f",
+    "age": 43,
+    "candidate": null
+  },
+  {
+    "idea": 4,
+    "gender": "m",
+    "age": 49,
+    "candidate": "m_neutral_46_angular"
+  },
+  {
+    "idea": 5,
+    "gender": "m",
+    "age": 55,
+    "candidate": "m_neutral_55_brow"
+  },
+  {
+    "idea": 6,
+    "gender": "f",
+    "age": 45,
+    "candidate": null
+  },
+  {
+    "idea": 7,
+    "gender": "m",
+    "age": 48,
+    "candidate": null
+  },
+  {
+    "idea": 8,
+    "gender": "m",
+    "age": 46,
+    "candidate": null
+  },
+  {
+    "idea": 9,
+    "gender": "m",
+    "age": 47,
+    "candidate": "m_neutral_47_copper"
+  },
+  {
+    "idea": 10,
+    "gender": "f",
+    "age": 56,
+    "candidate": "f_neutral_58_pear"
+  },
+  {
+    "idea": 11,
+    "gender": "m",
+    "age": 50,
+    "candidate": "m_neutral_50_silver"
+  },
+  {
+    "idea": 12,
+    "gender": "m",
+    "age": 47,
+    "candidate": null
+  },
+  {
+    "idea": 13,
+    "gender": "f",
+    "age": 43,
+    "candidate": null
+  },
+  {
+    "idea": 14,
+    "gender": "m",
+    "age": 60,
+    "candidate": "m_neutral_56_angular"
+  },
+  {
+    "idea": 15,
+    "gender": "f",
+    "age": 38,
+    "candidate": "f_neutral_36_round"
+  },
+  {
+    "idea": 16,
+    "gender": "m",
+    "age": 39,
+    "candidate": "m_neutral_39_broad"
+  },
+  {
+    "idea": 17,
+    "gender": "m",
+    "age": 48,
+    "candidate": null
+  },
+  {
+    "idea": 18,
+    "gender": "m",
+    "age": 37,
+    "candidate": "m_neutral_34_dimples"
+  },
+  {
+    "idea": 19,
+    "gender": "m",
+    "age": 52,
+    "candidate": "m_neutral_52_curls"
+  },
+  {
+    "idea": 20,
+    "gender": "f",
+    "age": 40,
+    "candidate": null
+  },
+  {
+    "idea": 21,
+    "gender": "m",
+    "age": 58,
+    "candidate": "m_neutral_62_soft"
+  },
+  {
+    "idea": 22,
+    "gender": "f",
+    "age": 47,
+    "candidate": "f_neutral_54_heart"
+  },
+  {
+    "idea": 23,
+    "gender": "m",
+    "age": 57,
+    "candidate": null
+  },
+  {
+    "idea": 24,
+    "gender": "f",
+    "age": 64,
+    "candidate": "f_neutral_64_long"
+  },
+  {
+    "idea": 25,
+    "gender": "m",
+    "age": 46,
+    "candidate": null
+  },
+  {
+    "idea": 26,
+    "gender": "m",
+    "age": 56,
+    "candidate": "m_neutral_56_round"
+  },
+  {
+    "idea": 27,
+    "gender": "m",
+    "age": 53,
+    "candidate": "m_neutral_53_square"
+  },
+  {
+    "idea": 28,
+    "gender": "m",
+    "age": 45,
+    "candidate": "m_neutral_45_waves"
+  },
+  {
+    "idea": 29,
+    "gender": "f",
+    "age": 41,
+    "candidate": null
+  },
+  {
+    "idea": 30,
+    "gender": "m",
+    "age": 50,
+    "candidate": null
+  },
+  {
+    "idea": 31,
+    "gender": "m",
+    "age": 40,
+    "candidate": "m_neutral_38_coils"
+  },
+  {
+    "idea": 32,
+    "gender": "m",
+    "age": 34,
+    "candidate": "m_neutral_29_coils"
+  },
+  {
+    "idea": 33,
+    "gender": "m",
+    "age": 51,
+    "candidate": null
+  },
+  {
+    "idea": 34,
+    "gender": "f",
+    "age": 42,
+    "candidate": "f_neutral_42_diamond"
+  },
+  {
+    "idea": 35,
+    "gender": "m",
+    "age": 60,
+    "candidate": "m_neutral_64_lined"
+  },
+  {
+    "idea": 36,
+    "gender": "f",
+    "age": 44,
+    "candidate": null
+  },
+  {
+    "idea": 37,
+    "gender": "m",
+    "age": 36,
+    "candidate": "m_neutral_29_long"
+  },
+  {
+    "idea": 38,
+    "gender": "m",
+    "age": 48,
+    "candidate": null
+  },
+  {
+    "idea": 39,
+    "gender": "f",
+    "age": 42,
+    "candidate": null
+  },
+  {
+    "idea": 40,
+    "gender": "m",
+    "age": 53,
+    "candidate": null
+  },
+  {
+    "idea": 41,
+    "gender": "m",
+    "age": 43,
+    "candidate": "m_neutral_44_nose"
+  },
+  {
+    "idea": 42,
+    "gender": "f",
+    "age": 46,
+    "candidate": null
+  },
+  {
+    "idea": 43,
+    "gender": "m",
+    "age": 52,
+    "candidate": null
+  },
+  {
+    "idea": 44,
+    "gender": "m",
+    "age": 44,
+    "candidate": "m_neutral_45_freckles"
+  },
+  {
+    "idea": 45,
+    "gender": "m",
+    "age": 42,
+    "candidate": "m_neutral_41_shaved"
+  },
+  {
+    "idea": 46,
+    "gender": "f",
+    "age": 48,
+    "candidate": "f_neutral_48_square"
+  },
+  {
+    "idea": 47,
+    "gender": "m",
+    "age": 37,
+    "candidate": null
+  },
+  {
+    "idea": 48,
+    "gender": "m",
+    "age": 48,
+    "candidate": null
+  },
+  {
+    "idea": 49,
+    "gender": "m",
+    "age": 45,
+    "candidate": null
+  },
+  {
+    "idea": 50,
+    "gender": "m",
+    "age": 53,
+    "candidate": null
+  }
+]
