@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:the_case/models/models.dart';
+import 'package:the_case/screens/case_screen.dart' show SuspectMark;
 import 'package:the_case/screens/suspect_sheet.dart';
 import 'package:the_case/theme.dart';
 
