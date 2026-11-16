@@ -226,3 +226,14 @@ Clue chain and proof unchanged: proof is still e10 and e14; e10 keeps clauses 3,
 4. Yasaman's 09:54 save is confirmed by a second person: Hirbod's answer (she asked aloud for the time to save her file; Radin read
    09:54 off the wall clock). Her 09:54-09:57 minutes stay open on day 1.
 Clue chain and proof (e10, e14) unchanged.
+
+## Revision 3 (after the full blind run: Kiyanoush/m3 93 %, e14 the key day-2 card). Chain unchanged; loose ends only.
+1. Used cradle and rail are the ones installed: Hirbod's new answer («زیر گهواره یه خط کهنه بود ... همونه که الان روی میز نصبه»)
+   and Radin's e8 reaction; e13 (control weighing on the same frame) shows them sound (explanation step 7).
+2. Radin not an accomplice: e7's officer note now says he, upset, pointed out the broken lacquer himself and asked for a photo;
+   his e7 reaction («یکی به قاب من دست زده! ... آقای کامشاد شاهده») matches Hirbod's statement (both at the tool cart from 09:10).
+3. Arsam's Friday: phone back on Thursday evening, Mahshid's message, night train from Mashhad, in Tehran 06:15, took the master
+   copy from the lab, at the institute 07:30; he noticed the reversed cards in his photo while completing the file on the train
+   (statement, answer 1, chapter-2 text).
+4. Neda's «slope error» quote of Kiyanoush is now in his own statement (and his e4 reaction).
+5. Explanation: the sold torque screwdriver is Hirbod's own secret and unrelated to the test.
