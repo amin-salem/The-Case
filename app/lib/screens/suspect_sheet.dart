@@ -322,11 +322,14 @@ class _SuspectSheetState extends State<_SuspectSheet> {
           borderRadius: BorderRadius.circular(16),
           gradient: const RadialGradient(center: Alignment(0, -0.6), radius: 0.9, colors: [Color(0xFF4A3B22), K.night]),
         ),
-        child: OverflowBox(
-          maxWidth: height,
-          maxHeight: height,
+        child: FittedBox(
+          fit: BoxFit.cover,
           alignment: Alignment.bottomCenter,
-          child: AnimatedSuspect(avatar: widget.s.avatar, size: height, mood: _mood, talking: _talking),
+          child: SizedBox(
+            width: height,
+            height: height,
+            child: AnimatedSuspect(avatar: widget.s.avatar, size: height, mood: _mood, talking: _talking),
+          ),
         ),
       );
 
@@ -355,18 +358,16 @@ class _SuspectSheetState extends State<_SuspectSheet> {
         marks,
       ]);
     }
-    return IntrinsicHeight(
-      child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        _portraitFrame(width: 150, height: 196),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            text,
-            const SizedBox(height: 8),
-            marks,
-          ]),
-        ),
-      ]),
-    );
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      _portraitFrame(width: 150, height: 196),
+      const SizedBox(width: 14),
+      Expanded(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.min, children: [
+          text,
+          const SizedBox(height: 10),
+          marks,
+        ]),
+      ),
+    ]);
   }
 }

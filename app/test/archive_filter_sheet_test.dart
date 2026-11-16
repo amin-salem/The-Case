@@ -16,7 +16,7 @@ void main() {
       return jsonResponse({});
     });
     MainShell.resetWeekendTabLog();
-    await pumpApp(t, scale: scale);
+    await pumpApp(t, scale: scale, size: const Size(390, 2600)); // tall: nothing sits below the fold, even at 2.0
     await t.tap(find.text('بایگانی').last);
     for (var i = 0; i < 6; i++) {
       await t.pump(const Duration(milliseconds: 300));
