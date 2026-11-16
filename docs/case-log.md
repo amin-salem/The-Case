@@ -427,3 +427,13 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Plan and revisions 1-3: docs/reviews/w009-plan.md. Name changes from the idea: culprit is Radin's FATHER aged 63 (every free 37-year-old male culprit face was already used; the culprit-face album must stay unique); اردلان -> کیانوش, آزیتا -> مهشید, شهروز -> هیربد, مهراد -> یاسمن, رادین دادفر -> رادین نیک‌روش‌فر, instrument «سها».
 - Chain: names live on cards on a rail outside the seal -> e4 columns reversed vs slip e2, e7 reversed cards and broken lacquer -> correct at 09:08, frame alone with Kiyanoush behind one door 09:12-09:40 -> day 2 e14 (09:44 photo already reversed, before Yasaman's minutes), e13 control weighing passes -> motive: clause 7 repeat fee + extension, clause 9 refutes «helping the rival». Receipts/forms that clear people: e9, e13.
 - Fixed after the tests: four vs twelve tests (Mahshid's letter), wrench/Naron shop, the consultant (Arsam), single card-proven liar (Radin, e8), print lines, why/how options wording, screw prints, Yasaman's 09:54 save, Radin not an accomplice, Arsam's train timing, slope-error remark.
+
+### 2026-11-16 nightly, session 2 (Sonnet coordinator, Opus writer): c075, c076 from the idea bank (batch 1 ideas 23, 24)
+| id | publish | idea / style / type | culprit | result |
+|---|---|---|---|---|
+| c075 «جمله‌ای روی بخار» | 2026-12-12 | batch 1 idea #23, style S3, puzzle type 8 (snow_lodge / crime), difficulty 5, شکل شب: ظاهراً ماورایی | s3 ارژنگ فرهود | blind tests 88%, 88%, 90%; no single card decides |
+| c076 «بذرهایی برای نمایش» | 2026-12-13 | batch 1 idea #24, style S1, puzzle type 10 (school / science), difficulty 5, شکل شب: پرونده سرد | s4 آذین مهرآسا | blind tests 85%, 90%, 93%; no single card decides |
+
+- Plans and three fix rounds: docs/reviews/c075-c076-plan.md. Name changes: c075 ویدا -> ژیلا ماهان, کامبیز -> قباد ماهان, شیدا مانی -> شیدا آرامش, پویان -> رامتین رادفر, Arzhang's age 56 -> 65 (unused culprit face); c076 ماندانا -> سیمین اسفندیاری, امیرهوشنگ زمانی -> اسفندیاری, سهند کاشانی -> شاهوردی, آفرین -> فرخنده ورجاوند.
+- Fixed after the tests: c075 (note burn time and stove watch, Ramtin and Kiarash at the mirror, second source for the corridor and back door, how Arzhang knew the bag, cleaner cleared, fog timing, gear-room door, kettle routine, why the sentence existed, counts); c076 (second key and key times, Sahand, caretaker with a cast, Simin's measuring, swap motive, why the packets were kept, shoe sizes, petri dishes, who ordered the seed, 12-hour window, gate book, class alibi, pond window). The last round of minor items was fixed after test 3 without a fourth full test (text-only edits, no chain change).
+

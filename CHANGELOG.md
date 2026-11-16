@@ -1,3 +1,8 @@
+# server 1.65.0: nightly cases c075, c076 (16 Nov 2026)
+
+- Two new nightly cases from the idea bank: c075 «جمله‌ای روی بخار» (idea 23, style S3 seemingly supernatural, puzzle type 8 lying witness, snow_lodge / crime, difficulty 5, publish 12 Dec 2026) and c076 «بذرهایی برای نمایش» (idea 24, style S1 cold case, puzzle type 10 motive reversal, school / science, difficulty 5, publish 13 Dec 2026), with their notify entries. Content only, no migration.
+- Blind tests: c075 88% / 88% / 90%, c076 85% / 90% / 93%; no single card decides. All findings fixed in three rounds (see `docs/case-log.md`).
+
 # server 1.64.0: nightly cases c073, c074 (16 Nov 2026)
 
 - Two new nightly cases from the idea bank: c073 «حسابی که دوبار بسته شد» (idea 21, style S5 documents, puzzle type 11 concealments after the crime, bazaar_night / business, difficulty 5, publish 10 Dec 2026) and c074 «تهدیدی برای مسافر دیگر» (idea 22, classic style, puzzle type 4 wrong victim, train / travel, difficulty 5, publish 11 Dec 2026). notify.json entries added; case counts in tests 72 -> 74. Content only, no migration.

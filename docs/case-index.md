@@ -4,7 +4,7 @@ Run `python3 server/tools/case_index.py` after adding or changing a case. One li
 puzzle type, culprit slot and portrait that the last cases did NOT use, and to find the next free slot. It carries no clue text
 and no solution. Names are in `docs/case-names.md`.
 
-Nightly cases: 74 (last: c074 published 2026-12-11). Weekend cases: 9 (last: w009 published 2026-12-03). Story chapters: 1.
+Nightly cases: 76 (last: c076 published 2026-12-13). Weekend cases: 9 (last: w009 published 2026-12-03). Story chapters: 1.
 
 ## Nightly
 
@@ -84,6 +84,8 @@ c071 | 2026-12-08 | 5 | hospital | medical | همراهی که نسبت نداش
 c072 | 2026-12-09 | 5 | desert | science | مسیرِ کوتاهِ طوفان | s4 پریوش سپیدار (مدیر طرح پژوهش خاک) | f_mid_librarian | 5 | 11 | idea #20, style S7, puzzle type 3a (desert / science), difficulty 5
 c073 | 2026-12-10 | 5 | bazaar_night | business | حسابی که دوبار بسته شد | s2 هادی پارساپور (شریک حجره و خیاط برش‌کار) | m_old_tailor | 5 | 12 | batch 1 idea #21, style S5, puzzle type 11 (bazaar_night / business), difficulty 5
 c074 | 2026-12-11 | 5 | train | travel | تهدیدی برای مسافر دیگر | s4 ساغر آذرفر (مترجم رسمی، مسافر تور) | f_mid_mechanic | 5 | 11 | batch 1 idea #22, style classic, puzzle type 4 (train / travel), difficulty 5
+c075 | 2026-12-12 | 5 | snow_lodge | crime | جمله‌ای روی بخار | s3 ارژنگ فرهود (راهنمای کوهستان) | m_old_woolcap | 5 | 11 | batch 1 idea #23, style S3, puzzle type 8 (snow_lodge / crime), difficulty 5, شکل شب: ظاهر
+c076 | 2026-12-13 | 5 | school | science | بذرهایی برای نمایش | s4 آذین مهرآسا (دبیر زیست بازنشسته) | f_old_professor | 5 | 11 | batch 1 idea #24, style S1, puzzle type 10 (school / science), difficulty 5, شکل شب: پروند
 
 ## Weekend
 
@@ -105,8 +107,6 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 
 ## Last ten nightly cases (a new case differs from all of these)
 
-- c065: scene office, category medical, culprit slot s5, type: idea #13, style S5, puzzle type 8 (office / medical), difficulty 5
-- c066: scene school, category science, culprit slot s1, type: idea #14, style classic, puzzle type 10 (school / science), difficulty 5
 - c067: scene tower, category family, culprit slot s4, type: idea #15, style S3, puzzle type 5 (tower / family), difficulty 5
 - c068: scene warehouse, category business, culprit slot s2, type: idea #16, style S1, puzzle type 6 (warehouse / business), difficulty 5
 - c069: scene museum, category art, culprit slot s3, type: idea #17, style S2, puzzle type 1 (museum / art), difficulty 5
@@ -115,10 +115,12 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 - c072: scene desert, category science, culprit slot s4, type: idea #20, style S7, puzzle type 3a (desert / science), difficulty 5
 - c073: scene bazaar_night, category business, culprit slot s2, type: batch 1 idea #21, style S5, puzzle type 11 (bazaar_night / business), difficulty 5
 - c074: scene train, category travel, culprit slot s4, type: batch 1 idea #22, style classic, puzzle type 4 (train / travel), difficulty 5
+- c075: scene snow_lodge, category crime, culprit slot s3, type: batch 1 idea #23, style S3, puzzle type 8 (snow_lodge / crime), difficulty 5, شکل شب: ظاهر
+- c076: scene school, category science, culprit slot s4, type: batch 1 idea #24, style S1, puzzle type 10 (school / science), difficulty 5, شکل شب: پروند
 
 ## Counts
 
-scenes: airport 3, bazaar_night 4, desert 4, harbor 4, hospital 5, hotel 4, kitchen 3, lab 6, library 5, museum 5, office 5, school 4, snow_lodge 3, subway 2, theater 3, tower 4, train 4, villa_rain 5, warehouse 4, wedding 6
-categories: art 14, business 13, crime 11, family 11, medical 8, science 12, travel 14
-culprit slots (nightly): s1 15, s2 16, s3 15, s4 13, s5 15
-difficulty (nightly): 2 2, 3 4, 4 44, 5 24
+scenes: airport 3, bazaar_night 4, desert 4, harbor 4, hospital 5, hotel 4, kitchen 3, lab 6, library 5, museum 5, office 5, school 5, snow_lodge 4, subway 2, theater 3, tower 4, train 4, villa_rain 5, warehouse 4, wedding 6
+categories: art 14, business 13, crime 12, family 11, medical 8, science 13, travel 14
+culprit slots (nightly): s1 15, s2 16, s3 16, s4 14, s5 15
+difficulty (nightly): 2 2, 3 4, 4 44, 5 26

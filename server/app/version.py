@@ -1,6 +1,6 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.64.0"
-# server 1.64.0: nightly cases c073, c074 (16 Nov 2026)
+VERSION = "1.65.0"
+# server 1.65.0: nightly cases c075, c076 (16 Nov 2026)
 # server 1.63.1: weekend case w009 (16 Nov 2026)
 # server 1.63.0: nightly cases c071, c072 (15 Nov 2026)
 # server 1.61.0: the player card carries the ID-card fields (league, card number, joined, fastest solve, 3 newest badges) (11 Nov 2026)
