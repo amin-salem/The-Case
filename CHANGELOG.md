@@ -1,9 +1,13 @@
-<<<<<<< HEAD
+# server 1.63.1: weekend case w009 «وزنه‌های سرِ جا» (16 Nov 2026)
+
+- New weekend case w009 (format 3, publish Thu 2026-12-03, difficulty 5, lab / science) with its notify entry. Content only, no migration.
+- Blind tests: day 1 leaning (75%, no single card decides), full case 93%; findings fixed in three rounds (see `docs/case-log.md`).
+
 # server 1.63.0: nightly cases c071, c072 (15 Nov 2026)
 
 - Two new nightly cases from the idea bank: c071 «همراهی که نسبت نداشت» (idea 19, style S6 conflicting accounts, puzzle type 2 hidden relation, hospital / medical, difficulty 5, publish 8 Dec 2026) and c072 «مسیرِ کوتاهِ طوفان» (idea 20, style S7 crime inside a crisis, puzzle type 3a cover crime, desert / science, difficulty 5, publish 9 Dec 2026). notify.json entries added; case counts in tests 70 -> 72.
 - Blind tests: c071 85% / 85%, c072 92% / 93%; no single card decides. All findings fixed in two rounds (see `docs/case-log.md`).
-=======
+
 # server 1.62.2: weekend case w008 «قایقِ برگشت» (15 Nov 2026)
 
 - New weekend case w008 (format 3, publish Thu 2026-11-26, difficulty 5, harbor / business) with its notify entry. Content only, no migration.
@@ -12,7 +16,6 @@
 
 - «حساب‌های تکراری»: the «مهمان یتیم» number still counted accounts that were already hidden. It now counts visible accounts only. No migration.
 
->>>>>>> origin/main
 # server 1.62.0: admin panel redesign, member numbers, hide duplicate accounts (15 Nov 2026)
 
 - Admin panel, all screens: new calm look (bottom tab bar with a «بیشتر» sheet, tables become readable cards on a phone, fewer numbers per screen, extra charts folded away).
