@@ -4,11 +4,7 @@ Run `python3 server/tools/case_index.py` after adding or changing a case. One li
 puzzle type, culprit slot and portrait that the last cases did NOT use, and to find the next free slot. It carries no clue text
 and no solution. Names are in `docs/case-names.md`.
 
-<<<<<<< HEAD
-Nightly cases: 72 (last: c072 published 2026-12-09). Weekend cases: 7 (last: w007 published 2026-11-19). Story chapters: 1.
-=======
-Nightly cases: 70 (last: c070 published 2026-12-07). Weekend cases: 8 (last: w008 published 2026-11-26). Story chapters: 1.
->>>>>>> origin/main
+Nightly cases: 74 (last: c074 published 2026-12-11). Weekend cases: 8 (last: w008 published 2026-11-26). Story chapters: 1.
 
 ## Nightly
 
@@ -84,8 +80,10 @@ c067 | 2026-12-04 | 5 | tower | family | زنگ طبقه‌ی بی‌سکنه | 
 c068 | 2026-12-05 | 5 | warehouse | business | بار برگشتی زمستان | s2 شهرام نکوفر (مسئول فروش تعاونی (آن زمستان ۴۴ ساله)؛ برادر رخشنده، شریک و بدهکار فریده کامیار) | m_old_jurist | 5 | 10 | idea #16, style S1, puzzle type 6 (warehouse / business), difficulty 5
 c069 | 2026-12-06 | 5 | museum | art | جای خالی پشت شیشه | s3 بهناز معتمدی (مجموعه‌دار) | f_mid_lawyer | 5 | 13 | idea #17, style S2, puzzle type 1 (museum / art), difficulty 5
 c070 | 2026-12-07 | 4 | wedding | family | دامادِ پشتِ نقاب | s5 نرگس نیکزاد (طراح لباس نمایش) | f_young_artist | 5 | 12 | idea #18, style S4, puzzle type 9 (wedding / family), difficulty 4
-c071 | 2026-12-08 | 5 | hospital | medical | همراهی که نسبت نداشت | s1 گلناز بامداد (بهیار، مسئول پیشخوان امانات ترخیص) | f_mid_pharmacist | 5 | 12 | -
-c072 | 2026-12-09 | 5 | desert | science | مسیرِ کوتاهِ طوفان | s4 پریوش سپیدار (مدیر طرح پژوهش خاک) | f_mid_librarian | 5 | 11 | -
+c071 | 2026-12-08 | 5 | hospital | medical | همراهی که نسبت نداشت | s1 گلناز بامداد (بهیار، مسئول پیشخوان امانات ترخیص) | f_mid_pharmacist | 5 | 12 | idea #19, style S6, puzzle type 2 (hospital / medical), difficulty 5
+c072 | 2026-12-09 | 5 | desert | science | مسیرِ کوتاهِ طوفان | s4 پریوش سپیدار (مدیر طرح پژوهش خاک) | f_mid_librarian | 5 | 11 | idea #20, style S7, puzzle type 3a (desert / science), difficulty 5
+c073 | 2026-12-10 | 5 | bazaar_night | business | حسابی که دوبار بسته شد | s2 هادی پارساپور (شریک حجره و خیاط برش‌کار) | m_old_tailor | 5 | 12 | batch 1 idea #21, style S5, puzzle type 11 (bazaar_night / business), difficulty 5
+c074 | 2026-12-11 | 5 | train | travel | تهدیدی برای مسافر دیگر | s4 ساغر آذرفر (مترجم رسمی، مسافر تور) | f_mid_mechanic | 5 | 11 | batch 1 idea #22, style classic, puzzle type 4 (train / travel), difficulty 5
 
 ## Weekend
 
@@ -98,7 +96,7 @@ w004 | 2026-10-29 | 5 | desert | travel | کاروانسرای آخر خط | s5 
 w005 | 2026-11-05 | 5 | library | art | نسخه‌ی خطی که دو بار گم شد | s3 سیاوش نامور (پژوهشگر مهمان و نسخه‌شناس) | m_mid_researcher | 8 | 15 | 3 not what it seemed (the item taken on opening night is a fake; the original was swapped 
 w006 | 2026-11-12 | 4 | wedding | travel | میهمان اتاق ۴۰۸ | s5 مهتاب سلطانی (مدیر تشریفات عروسی) | f_mid_manager | 8 | 12 | 3 opportunity + guilty knowledge (room swap 408→411, second key card in an envelope, code 
 w007 | 2026-11-19 | 5 | hotel | art | جای سخنران | s5 آرمین رهی‌زاد (مسئول صحنه) | m_young_courier | 8 | 18 | 4 wrong victim (the leg pin was pulled for the first speaker of the OLD programme; the sta
-w008 | 2026-11-26 | 5 | harbor | business | قایقِ برگشت | s4 بهادر دریامنش (سرپرست کارگاه و نگهبان شب) | m_mid_guard | 8 | 13 | -
+w008 | 2026-11-26 | 5 | harbor | business | قایقِ برگشت | s4 بهادر دریامنش (سرپرست کارگاه و نگهبان شب) | m_mid_guard | 8 | 13 | idea #32, style S7, puzzle type 9 (harbor / business), difficulty 5
 
 ## Story chapters
 
@@ -106,27 +104,20 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 
 ## Last ten nightly cases (a new case differs from all of these)
 
-- c063: scene lab, category science, culprit slot s3, type: idea #11, style S6, puzzle type 4 (wrong victim; lab / science), difficulty 5
-- c064: scene villa_rain, category family, culprit slot s2, type: idea #12, style S7, puzzle type 9 (object biography; villa_rain / family), difficulty 5
 - c065: scene office, category medical, culprit slot s5, type: idea #13, style S5, puzzle type 8 (office / medical), difficulty 5
 - c066: scene school, category science, culprit slot s1, type: idea #14, style classic, puzzle type 10 (school / science), difficulty 5
 - c067: scene tower, category family, culprit slot s4, type: idea #15, style S3, puzzle type 5 (tower / family), difficulty 5
 - c068: scene warehouse, category business, culprit slot s2, type: idea #16, style S1, puzzle type 6 (warehouse / business), difficulty 5
 - c069: scene museum, category art, culprit slot s3, type: idea #17, style S2, puzzle type 1 (museum / art), difficulty 5
 - c070: scene wedding, category family, culprit slot s5, type: idea #18, style S4, puzzle type 9 (wedding / family), difficulty 4
-- c071: scene hospital, category medical, culprit slot s1, type: -
-- c072: scene desert, category science, culprit slot s4, type: -
+- c071: scene hospital, category medical, culprit slot s1, type: idea #19, style S6, puzzle type 2 (hospital / medical), difficulty 5
+- c072: scene desert, category science, culprit slot s4, type: idea #20, style S7, puzzle type 3a (desert / science), difficulty 5
+- c073: scene bazaar_night, category business, culprit slot s2, type: batch 1 idea #21, style S5, puzzle type 11 (bazaar_night / business), difficulty 5
+- c074: scene train, category travel, culprit slot s4, type: batch 1 idea #22, style classic, puzzle type 4 (train / travel), difficulty 5
 
 ## Counts
 
-<<<<<<< HEAD
-scenes: airport 3, bazaar_night 3, desert 4, harbor 3, hospital 5, hotel 4, kitchen 3, lab 5, library 5, museum 5, office 5, school 4, snow_lodge 3, subway 2, theater 3, tower 4, train 3, villa_rain 5, warehouse 4, wedding 6
-categories: art 14, business 11, crime 11, family 11, medical 8, science 11, travel 13
-culprit slots (nightly): s1 15, s2 15, s3 15, s4 12, s5 15
-difficulty (nightly): 2 2, 3 4, 4 44, 5 22
-=======
-scenes: airport 3, bazaar_night 3, desert 3, harbor 4, hospital 4, hotel 4, kitchen 3, lab 5, library 5, museum 5, office 5, school 4, snow_lodge 3, subway 2, theater 3, tower 4, train 3, villa_rain 5, warehouse 4, wedding 6
-categories: art 14, business 12, crime 11, family 11, medical 7, science 10, travel 13
-culprit slots (nightly): s1 14, s2 15, s3 15, s4 11, s5 15
-difficulty (nightly): 2 2, 3 4, 4 44, 5 20
->>>>>>> origin/main
+scenes: airport 3, bazaar_night 4, desert 4, harbor 4, hospital 5, hotel 4, kitchen 3, lab 5, library 5, museum 5, office 5, school 4, snow_lodge 3, subway 2, theater 3, tower 4, train 4, villa_rain 5, warehouse 4, wedding 6
+categories: art 14, business 13, crime 11, family 11, medical 8, science 11, travel 14
+culprit slots (nightly): s1 15, s2 16, s3 15, s4 13, s5 15
+difficulty (nightly): 2 2, 3 4, 4 44, 5 24
