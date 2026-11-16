@@ -195,6 +195,34 @@ async def _starter_offer(s: AsyncSession, since: datetime) -> dict:
     return {**total, "shown_players": shown_p, "tapped_players": tapped_p, "bought_players": bought_p,
             "tapped_pct": _pct(tapped_p, shown_p), "bought_pct": _pct(bought_p, shown_p), "by_moment": by_moment}
 
+NUDGE_EVENTS = ("help_nudge_shown", "help_nudge_tapped", "help_nudge_closed")
+NUDGE_KINDS = ("wrong_accusation", "half_finished", "idle")   # the three moments; anything else is counted as «other»
+NUDGE_ROW_CAP = 20000
+
+
+async def _help_nudge(s: AsyncSession, since: datetime) -> dict:
+    """The «کمک کارآگاه» nudge strip from the app's own events (`help_nudge_shown/tapped/closed`, props: `kind` only):
+    showings, taps and closes in total and per kind. Counted in Python from a bounded read (SQLite and Postgres alike);
+    player ids are not returned. The strip shows at most once per case per player, so these are small numbers."""
+    rows = (await s.execute(select(Event.name, Event.player_id, Event.props).join(Player, Player.id == Event.player_id)
+                            .where(Event.ts >= since, Event.name.in_(NUDGE_EVENTS), _valid_player())
+                            .order_by(Event.id.desc()).limit(NUDGE_ROW_CAP))).all()
+    short = {n: n.removeprefix("help_nudge_") for n in NUDGE_EVENTS}
+    total = {k: 0 for k in short.values()}
+    players = {k: set() for k in short.values()}
+    by_kind: dict[str, dict[str, int]] = {}
+    for name, pid, props in rows:
+        k = short[name]
+        total[k] += 1
+        players[k].add(pid)
+        kind = props.get("kind") if isinstance(props, dict) else None
+        kind = kind if isinstance(kind, str) and kind in NUDGE_KINDS else "other"
+        by_kind.setdefault(kind, {x: 0 for x in short.values()})[k] += 1
+    shown_p, tapped_p = len(players["shown"]), len(players["tapped"])
+    return {**total, "shown_players": shown_p, "tapped_players": tapped_p, "tapped_pct": _pct(tapped_p, shown_p),
+            "by_kind": by_kind}
+
+
 WEEKEND_TAB_EVENT = "weekend_tab_open"
 WEEKEND_ROW_CAP = 20000            # events looked at (the newest); the app sends one per launch at most
 THU_SAT = (3, 4, 5)                # Python weekday(): Thursday, Friday, Saturday
@@ -261,7 +289,7 @@ def notes(d: dict) -> list[str]:
 SECTIONS: list[tuple[str, Callable[..., Awaitable[Any]], str]] = [
     ("flows", _flows, "since"), ("balances", _balances, "now"), ("cases", _cases, "since"),
     ("after_loss", _after_loss, "since"), ("first_day", _first_day, "both"), ("starter_offer", _starter_offer, "since"),
-    ("weekend_tab", _weekend_tab, "since"),
+    ("weekend_tab", _weekend_tab, "since"), ("help_nudge", _help_nudge, "since"),
 ]
 
 

@@ -55,6 +55,8 @@ class Settings(BaseSettings):
     streak_repair_enabled: bool = True  # STREAK_REPAIR_ENABLED=false hides and refuses the paid streak repair (kill switch)
 
     detective_tools_enabled: bool = True  # DETECTIVE_TOOLS_ENABLED=false hides and refuses the detective tools (kill switch)
+    tool_kit_enabled: bool = True  # TOOL_KIT_ENABLED=false hides and refuses «کیف کارآگاه» (the tool bundle in the shop)
+    tool_kit_price: int = 280  # TOOL_KIT_PRICE: coins for 3 magnifiers + 2 fingerprint readers + 1 camera (singles cost 335)
 
     # Proof of investigation, relaxed 25 Oct 2026 (Amin). Strict (the old rules) = ACTIVE_TIME_SCALE=1, MIN_SUSPECTS_SEEN=2,
     # DEPTH_MIN_QUESTIONS=2. The admin watcher (GET /admin/anticheat-watch) always measures the strict rules.

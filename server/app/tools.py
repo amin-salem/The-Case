@@ -31,6 +31,21 @@ INFO = {
     "fingerprint": {"title": "اثر انگشت‌خوان", "desc": "برای یک مظنون یه ردِ فیزیکیِ تازه رو نشون می‌ده؛ مثلاً اثرش روی یه وسیله. حکم گناه نیست، فقط یه سرنخ مکمله."},
     "camera": {"title": "دوربین مخفی", "desc": "یک مشاهده‌ی تازه درباره‌ی یک مظنون رو نشونت می‌ده."},
 }
+# «کیف کارآگاه» (Amin, 16 Nov 2026): one coin sink that puts a few tools into the stock at a small discount.
+KIT = {"magnifier": 3, "fingerprint": 2, "camera": 1}
+KIT_PRICE_MIN, KIT_PRICE_MAX = 1, 5000
+
+
+def kit_singles_total() -> int:
+    """What the same tools cost one by one (3 x 35 + 2 x 65 + 1 x 100 = 335)."""
+    return sum(eco.TOOL_PRICES[k] * n for k, n in KIT.items())
+
+
+def kit_price(configured: int) -> int:
+    """The configured price, kept inside sane bounds so a bad environment value can neither give it away nor block the shop."""
+    return max(KIT_PRICE_MIN, min(KIT_PRICE_MAX, int(configured)))
+
+
 NOT_FOR_MODE = "ابزارهای کارآگاهی توی پرونده‌های داستانی کار نمی‌کنن."
 _TITLES = ("آقای", "خانم", "دکتر", "حاج", "سرهنگ", "استاد", "مهندس", "سردار", "سرگرد", "حاجی", "سید", "خانوم")
 

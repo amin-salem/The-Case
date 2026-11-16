@@ -9,12 +9,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .. import content, tools
 from ..config import get_settings
 from ..db import get_session
-from ..models import CaseProgress, CaseToolUse, Player
+from ..db import lock_players
+from ..models import CaseProgress, CaseToolUse, CoinLog, Player
 from ..security import current_player
 from ..util import add_coins
 from .cases import _can_open, _opened_case, _progress
 
 router = APIRouter(prefix="/v1/cases", tags=["tools"])
+kit_router = APIRouter(prefix="/v1/tools", tags=["tools"])
 log = logging.getLogger("tools")
 
 
@@ -43,10 +45,16 @@ async def _uses(session: AsyncSession, player_id: str, case_id: str) -> dict[str
     return {r.kind: r for r in rows}
 
 
+def _kit_info() -> dict:
+    s = get_settings()
+    return {"enabled": bool(s.detective_tools_enabled and s.tool_kit_enabled), "price": tools.kit_price(s.tool_kit_price),
+            "singles": tools.kit_singles_total(), "items": dict(tools.KIT)}
+
+
 async def _view(session: AsyncSession, player: Player, c, p: CaseProgress | None) -> dict:
     """The tray for one case: prices, stock, what is usable here, and the pinned results."""
     on = get_settings().detective_tools_enabled
-    out = {"enabled": on, "daily": _daily(c), "coins": player.coins, "case_id": c.id, "tools": [],
+    out = {"enabled": on, "daily": _daily(c), "coins": player.coins, "case_id": c.id, "tools": [], "kit": _kit_info(),
            "message": None if on else "ابزارهای کارآگاهی فعلاً بسته‌ست."}
     if not _daily(c):
         out["enabled"], out["message"] = False, tools.NOT_FOR_MODE
@@ -148,3 +156,39 @@ async def buy_tool(case_id: str, kind: str, body: dict = Body(default_factory=di
                    player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """Buys one tool with coins and uses it on this case in one transaction (the strict `tool_buy` limit)."""
     return await _apply(case_id, kind, body, player, session, buy=True)
+
+
+_REQ_ID = re.compile(r"^[A-Za-z0-9_-]{8,24}$")
+
+
+@kit_router.post("/kit")
+async def buy_kit(body: dict = Body(default_factory=dict), player: Player = Depends(current_player),
+                  session: AsyncSession = Depends(get_session)):
+    """«کیف کارآگاه»: coins -> 3 magnifiers + 2 fingerprint readers + 1 camera in the stock, in ONE transaction.
+
+    The server owns the price. `request_id` (8-24 chars, made by the phone per tap) makes a retry harmless: the player row
+    is locked, and a coin-log row `kit:<id>` means "already paid", so the same id never charges or grants twice. Different
+    ids are separate purchases (each one atomic: the debit is a guarded UPDATE that cannot go below zero)."""
+    s = get_settings()
+    if not (s.detective_tools_enabled and s.tool_kit_enabled):
+        raise HTTPException(503, "kit_disabled")
+    rid = body.get("request_id") if isinstance(body, dict) else None
+    if not isinstance(rid, str) or not _REQ_ID.match(rid):
+        raise HTTPException(422, "bad_request_id")
+    price = tools.kit_price(s.tool_kit_price)
+    player = (await lock_players(session, [player.id]))[player.id]
+    reason = f"kit:{rid}"
+    if await session.scalar(select(CoinLog.id).where(CoinLog.player_id == player.id, CoinLog.reason == reason)):
+        await session.rollback()
+        return {"granted": False, "already": True, "price": price, "items": dict(tools.KIT), "coins": player.coins,
+                "stock": {k: v["count"] for k, v in (await tools.stock(session, player.id)).items()}}
+    if player.coins < price:
+        await session.rollback()
+        raise HTTPException(402, {"error": "not_enough_coins", "need": price})
+    await add_coins(session, player, -price, reason)
+    for kind, n in tools.KIT.items():
+        await tools.grant(session, player.id, kind, n, why="kit")
+    await session.commit()
+    log.info("tool_kit_bought price=%d", price)
+    return {"granted": True, "already": False, "price": price, "items": dict(tools.KIT), "coins": player.coins,
+            "stock": {k: v["count"] for k, v in (await tools.stock(session, player.id)).items()}}
