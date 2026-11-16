@@ -370,38 +370,26 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
   List<Widget> _dailyHeader(Leaderboard lb) {
     final d = lb.daily;
     final title = lb.title.replaceFirst(RegExp(r'^پرونده‌ی امروز:\s*'), '');
-    Widget chip(IconData icon, String text, {Key? key}) => Container(
-          key: key,
-          constraints: const BoxConstraints(minHeight: 30),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(color: const Color(0x8C0A0A0C), borderRadius: BorderRadius.circular(99), border: Border.all(color: const Color(0x1AFFFFFF))),
-          child: Row(mainAxisSize: MainAxisSize.min, children: [
-            Icon(icon, size: 15, color: _gold),
-            const SizedBox(width: 6),
-            Flexible(child: Text(text, style: tBody(12.5, w: FontWeight.w800, color: K.text))),
-          ]),
-        );
+    // Minimal: a small flat card, the case name and one quiet line (no pills, no big gradient box).
+    Widget stat(IconData icon, String text) => Row(mainAxisSize: MainAxisSize.min, children: [
+          Icon(icon, size: 15, color: _gold),
+          const SizedBox(width: 5),
+          Flexible(child: Text(text, style: tBody(12.5, w: FontWeight.w800, color: K.textSoft))),
+        ]);
     return [
       Container(
         key: const ValueKey('daily-stats'),
-        constraints: const BoxConstraints(minHeight: 136),
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
-        alignment: Alignment.bottomRight,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: const Color(0x0FFFFFFF)),
-          gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF2B2414), Color(0xFF15130E), Color(0xFF0E0F11)]),
-        ),
+        padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+        alignment: AlignmentDirectional.centerStart,
+        decoration: BoxDecoration(color: _panel, borderRadius: BorderRadius.circular(16), border: Border.all(color: _line)),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(21, w: FontWeight.w900, color: K.text).copyWith(height: 1.3)),
-          if (d != null && d.solved > 0) ...[
-            const SizedBox(height: 8),
-            Wrap(key: const ValueKey('daily-stats-line'), spacing: 8, runSpacing: 6, children: [
-              chip(Icons.groups_rounded, '${fa(d.solved)} کارآگاه'),
-              if (d.mean != null) chip(Icons.timer_outlined, 'میانگین ${boardTime(d.mean!)}')
-              else if (d.median != null) chip(Icons.timer_outlined, 'میانه ${boardTime(d.median!)}'),
+          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(17, w: FontWeight.w900, color: K.text).copyWith(height: 1.4)),
+          if (d != null && d.solved > 0)
+            Wrap(key: const ValueKey('daily-stats-line'), spacing: 14, runSpacing: 2, children: [
+              stat(Icons.groups_rounded, '${fa(d.solved)} کارآگاه'),
+              if (d.mean != null) stat(Icons.timer_outlined, 'میانگین ${boardTime(d.mean!)}')
+              else if (d.median != null) stat(Icons.timer_outlined, 'میانه ${boardTime(d.median!)}'),
             ]),
-          ],
         ]),
       ),
     ];
