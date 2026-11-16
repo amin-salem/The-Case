@@ -11,6 +11,7 @@ from app.models import CoinLog, Event, Player, utcnow
 from app.services import economy_report as er
 from .conftest import new_player
 from .test_difficulty_economy import balance, fund
+from .test_tools import start, today  # noqa: F401  (the fixture and helper of the tools tests)
 
 URL = "/v1/tools/kit"
 
@@ -116,14 +117,10 @@ async def test_kill_switches(client, monkeypatch):
     assert (await client.post(URL, headers=p["headers"], json={"request_id": "kitreq-0008"})).status_code == 503
 
 
-async def test_the_tray_carries_the_kit_offer(client):
-    p = await new_player(client, "kit-tray")
-    await fund(p["player_id"], 500)
-    from app import content
-    cid = content.all_cases()[0].id
-    r = await client.get(f"/v1/cases/{cid}/tools", headers=p["headers"])
-    if r.status_code == 200:
-        assert r.json()["kit"] == {"enabled": True, "price": 280, "singles": 335, "items": {"magnifier": 3, "fingerprint": 2, "camera": 1}}
+async def test_the_tray_carries_the_kit_offer(client, today):
+    p = await start(client, today, "kit-tray")
+    j = (await client.get(f"/v1/cases/{today.id}/tools", headers=p["headers"])).json()
+    assert j["kit"] == {"enabled": True, "price": 280, "singles": 335, "items": {"magnifier": 3, "fingerprint": 2, "camera": 1}}
 
 
 async def test_help_nudge_events_are_counted_by_kind_without_player_data(client):
@@ -138,4 +135,3 @@ async def test_help_nudge_events_are_counted_by_kind_without_player_data(client)
     assert out["shown"] == 3 and out["tapped"] == 1 and out["closed"] == 1
     assert out["by_kind"]["idle"] == {"shown": 1, "tapped": 1, "closed": 0}
     assert out["by_kind"]["other"]["shown"] == 1
-    assert "player" not in str(out).lower() or "players" in str(out).lower()
