@@ -8710,6 +8710,98 @@
       ],
       "visual_review_date": "2026-11-11",
       "transparent": true
+    },
+    {
+      "id": "league_expansion_1",
+      "path": "app/assets/leagues/expansion/league_1.webp",
+      "kind": "leagues",
+      "league_tier": 1,
+      "display_name": "کارآموز",
+      "sha256": "87cd83aa30ad2644272dc54cc7a1b6f61e34f21957fe56aa734717bdccfdd961",
+      "size_bytes": 12054,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "first_build": null,
+      "usable_from": null,
+      "quality": 82,
+      "method": 6,
+      "release_basis": "Eight-league expansion staged for scheduled integration; existing four badges unchanged.",
+      "restrictions": [
+        "UI badge only. Move to final league path together with old shield renumbering."
+      ],
+      "visual_review_date": "2026-11-16"
+    },
+    {
+      "id": "league_expansion_3",
+      "path": "app/assets/leagues/expansion/league_3.webp",
+      "kind": "leagues",
+      "league_tier": 3,
+      "display_name": "کاردان",
+      "sha256": "034f2dc54f9624b66c18e16d7fe4e61c4badac29c13e3287e7865eb4c2dbbeed",
+      "size_bytes": 14032,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "first_build": null,
+      "usable_from": null,
+      "quality": 82,
+      "method": 6,
+      "release_basis": "Eight-league expansion staged for scheduled integration; existing four badges unchanged.",
+      "restrictions": [
+        "UI badge only. Move to final league path together with old shield renumbering."
+      ],
+      "visual_review_date": "2026-11-16"
+    },
+    {
+      "id": "league_expansion_5",
+      "path": "app/assets/leagues/expansion/league_5.webp",
+      "kind": "leagues",
+      "league_tier": 5,
+      "display_name": "سربازرس",
+      "sha256": "52babaa8c41be8f1569ab3a84d5787b7a6d7d1f9ceb11a306e2011d1441f2046",
+      "size_bytes": 17882,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "first_build": null,
+      "usable_from": null,
+      "quality": 82,
+      "method": 6,
+      "release_basis": "Eight-league expansion staged for scheduled integration; existing four badges unchanged.",
+      "restrictions": [
+        "UI badge only. Move to final league path together with old shield renumbering."
+      ],
+      "visual_review_date": "2026-11-16"
+    },
+    {
+      "id": "league_expansion_7",
+      "path": "app/assets/leagues/expansion/league_7.webp",
+      "kind": "leagues",
+      "league_tier": 7,
+      "display_name": "اسطوره",
+      "sha256": "fd2cd4412a218dd3067ae9d5e5db7707a64c79e81f15a38bc6ef9a2e64513542",
+      "size_bytes": 17878,
+      "dimensions": [
+        256,
+        256
+      ],
+      "apparent_gender": "none",
+      "first_build": null,
+      "usable_from": null,
+      "quality": 80,
+      "method": 6,
+      "release_basis": "Eight-league expansion staged for scheduled integration; existing four badges unchanged.",
+      "restrictions": [
+        "UI badge only. Move to final league path together with old shield renumbering."
+      ],
+      "visual_review_date": "2026-11-16"
     }
   ]
 }
