@@ -1,3 +1,9 @@
+# app 1.44.7+96: suspect sheet and archive filters (16 Nov 2026)
+
+- App only, no server change (server stays 1.66.0).
+- Suspect sheet: tall portrait frame on the right (first in RTL), then name, age, the one role line (`intro`) and two mark buttons (مشکوک / بی‌گناه, tap again to clear); then the speech bubble, the questions, and «یافته‌های ابزار» (camera / fingerprint findings for this suspect, one short line each with its icon, repeated sentences dropped, at most two sentences, display only). With a big font (scale 1.3 and up) or a narrow screen it stacks.
+- Archive: one search field and ONE filter button with a count badge; its sheet has «اصلی», «موضوعی», «ترتیب», «پاک کردن همه» and «نشان بده · N پرونده». Options that would show nothing stay hidden. `archive_logic.dart` is unchanged.
+
 # server 1.66.0 / app 1.44.6+95: board header, suspect list, new portraits (16 Nov 2026)
 
 - Leaderboard (server): the daily header count («N کارآگاه»), the fastest time and the time summary now come from the SAME rows as the table (`_daily_conds`: solved tonight, ranked, visible player). Before, the header also counted unranked rushes. The header time is now the arithmetic mean (`daily.mean`, rounded seconds, only durations > 0); `daily.median` is still sent for old app builds. No migration.

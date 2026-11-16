@@ -213,3 +213,18 @@ Build 93
 
 ## developer_note
 Build 95
+
+
+<!-- build: 96 -->
+## changelog_fa
+- فیلتر بایگانی ساده‌تر شد: یک جست‌وجو و یک دکمه‌ی فیلتر
+- برگه‌ی مظنون بازطراحی شد: عکس بزرگ‌تر کنار مشخصات و یافته‌های ابزار
+- بهبود پایداری برنامه
+
+## changelog_en
+- Simpler archive filters: one search field and one filter button
+- Redesigned suspect sheet with a larger portrait next to the details and tool findings
+- Improved app stability
+
+## developer_note
+Build 96
