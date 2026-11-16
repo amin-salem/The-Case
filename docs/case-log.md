@@ -401,6 +401,7 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Logic plans and two fix rounds: docs/reviews/c071-c072-plan.md. Name changes: نیما آراسته -> نیما دلاوری, فرزاد -> جهانگیر, نسرین اردلان -> ثریا ورزنده, مسعود اردلان -> مسعود ورزنده; اردوان نیک‌پی -> اردوان بهادری.
 - Soft spots fixed after blind test 1 (carbon copy of receipt 0388, bin timing, Jahangir's gap, intro overclaim, shoes on a card, corridor/door wording, receipt time, why the notebook was thrown out, heater, e4 page list) and after test 2 (debtor link and how she knew, audit rule, Nima's call time, Soorayya 11:20, the card name, bin window; wind and window, job-offer hearsay, no rewrite from memory). Text changed after the last retest was confirmed only by check_case.py and the offline tests. Receipts/forms that clear people: c071 e4, e5; c072 e9, e10.
 
+
 ### 2026-11-15 weekend session (Sonnet coordinator, Opus writer): w008 from the idea bank
 | id | publish | idea / style / type | culprit | result |
 |---|---|---|---|---|
@@ -418,3 +419,11 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 
 - Plans and two fix rounds: docs/reviews/c073-c074-plan.md. Name changes: مازیار خرم‌دل -> سامیار خرم‌دل (مازیار in c066); Hadi's age 42 -> 63 (unused culprit face).
 - Fixed after the tests: c073 (money's whereabouts and heavy bag, bin position and who could reach it, handwriting of the dummy label, sample-book habit, coat, Arsalan's timeline and pouch, counter/storeroom key coverage, cheque initial, tea count, torn page handover, times); c074 (self-service tray and second route through Homayoun, corridor window, maps all accounted for, print lines, photo print origin, 21 Aban timeline, motive, receipt for the «no family work» lie, role words, luggage move, locked compartments, pen ink). After the second round only check_case.py and offline tests were run (clue chains unchanged). Receipts/forms that clear people: c073 e11, e12; c074 e6, e10.
+### 2026-11-16 weekend session (Sonnet coordinator, Opus writer): w009 from the idea bank
+| id | publish | idea / style / type | culprit | result |
+|---|---|---|---|---|
+| w009 «وزنه‌های سرِ جا» (format 3) | 2026-12-03 | idea #33 (title was «سنگینیِ یک برچسب»), style S2, puzzle type 3c silent theft (lab / science), difficulty 5 | s6 کیانوش نیک‌روش‌فر (m3) | day 1: 60% -> 75% after fixes (leaning, no single card decides); full: 93%; difficulty 4 |
+
+- Plan and revisions 1-3: docs/reviews/w009-plan.md. Name changes from the idea: culprit is Radin's FATHER aged 63 (every free 37-year-old male culprit face was already used; the culprit-face album must stay unique); اردلان -> کیانوش, آزیتا -> مهشید, شهروز -> هیربد, مهراد -> یاسمن, رادین دادفر -> رادین نیک‌روش‌فر, instrument «سها».
+- Chain: names live on cards on a rail outside the seal -> e4 columns reversed vs slip e2, e7 reversed cards and broken lacquer -> correct at 09:08, frame alone with Kiyanoush behind one door 09:12-09:40 -> day 2 e14 (09:44 photo already reversed, before Yasaman's minutes), e13 control weighing passes -> motive: clause 7 repeat fee + extension, clause 9 refutes «helping the rival». Receipts/forms that clear people: e9, e13.
+- Fixed after the tests: four vs twelve tests (Mahshid's letter), wrench/Naron shop, the consultant (Arsam), single card-proven liar (Radin, e8), print lines, why/how options wording, screw prints, Yasaman's 09:54 save, Radin not an accomplice, Arsam's train timing, slope-error remark.

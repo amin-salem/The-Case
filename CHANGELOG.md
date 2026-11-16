@@ -2,11 +2,16 @@
 
 - Two new nightly cases from the idea bank: c073 «حسابی که دوبار بسته شد» (idea 21, style S5 documents, puzzle type 11 concealments after the crime, bazaar_night / business, difficulty 5, publish 10 Dec 2026) and c074 «تهدیدی برای مسافر دیگر» (idea 22, classic style, puzzle type 4 wrong victim, train / travel, difficulty 5, publish 11 Dec 2026). notify.json entries added; case counts in tests 72 -> 74. Content only, no migration.
 - Blind tests: c073 90% / 92%, c074 88% / 90%; no single card decides. All findings fixed in two rounds (see `docs/case-log.md`).
+# server 1.63.1: weekend case w009 «وزنه‌های سرِ جا» (16 Nov 2026)
+
+- New weekend case w009 (format 3, publish Thu 2026-12-03, difficulty 5, lab / science) with its notify entry. Content only, no migration.
+- Blind tests: day 1 leaning (75%, no single card decides), full case 93%; findings fixed in three rounds (see `docs/case-log.md`).
 
 # server 1.63.0: nightly cases c071, c072 (15 Nov 2026)
 
 - Two new nightly cases from the idea bank: c071 «همراهی که نسبت نداشت» (idea 19, style S6 conflicting accounts, puzzle type 2 hidden relation, hospital / medical, difficulty 5, publish 8 Dec 2026) and c072 «مسیرِ کوتاهِ طوفان» (idea 20, style S7 crime inside a crisis, puzzle type 3a cover crime, desert / science, difficulty 5, publish 9 Dec 2026). notify.json entries added; case counts in tests 70 -> 72.
 - Blind tests: c071 85% / 85%, c072 92% / 93%; no single card decides. All findings fixed in two rounds (see `docs/case-log.md`).
+
 # server 1.62.2: weekend case w008 «قایقِ برگشت» (15 Nov 2026)
 
 - New weekend case w008 (format 3, publish Thu 2026-11-26, difficulty 5, harbor / business) with its notify entry. Content only, no migration.
