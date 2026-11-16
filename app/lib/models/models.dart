@@ -552,9 +552,12 @@ class DailyStats {
   DailyStats(Map<String, dynamic> j)
       : solved = _i(j['solved']),
         fastest = j['fastest'] is num && (j['fastest'] as num) > 0 ? (j['fastest'] as num).toInt() : null,
-        median = j['median'] is num && (j['median'] as num) > 0 ? (j['median'] as num).toInt() : null;
+        median = j['median'] is num && (j['median'] as num) > 0 ? (j['median'] as num).toInt() : null,
+        mean = j['mean'] is num && (j['mean'] as num) > 0 ? (j['mean'] as num).toInt() : null;
   final int solved;
-  final int? fastest, median;
+
+  /// [mean] is the arithmetic mean of the table's rows (new servers); [median] is only a fallback for an old server.
+  final int? fastest, median, mean;
 }
 
 /// The sheet that opens from a board row: public numbers only.

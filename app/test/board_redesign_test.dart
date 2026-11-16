@@ -31,7 +31,7 @@ Map<String, dynamic> dailyBoard({bool oldServer = false}) => {
       'top': [row(1, value: 582), row(2, value: 640), row(3, value: 681, me: true)],
       'me': row(3, value: 681, me: true),
       if (!oldServer) 'gap': {'next_rank': 2, 'diff': 42, 'unit': 'seconds'},
-      if (!oldServer) 'daily': {'solved': 14, 'fastest': 582, 'median': 798},
+      if (!oldServer) 'daily': {'solved': 14, 'fastest': 582, 'median': 700, 'mean': 798},
     };
 
 Future<void> pump(WidgetTester t) async {
@@ -85,7 +85,8 @@ void main() {
     });
 
     test('tonight line drops what it does not know', () {
-      expect(dailyStatsLine(DailyStats({'solved': 14, 'fastest': 582, 'median': 798})), '۱۴ کارآگاه حلش کردن · میانه ۱۳:۱۸');
+      expect(dailyStatsLine(DailyStats({'solved': 14, 'fastest': 582, 'median': 700, 'mean': 798})), '۱۴ کارآگاه حلش کردن · میانگین ۱۳:۱۸');
+      expect(dailyStatsLine(DailyStats({'solved': 14, 'fastest': 582, 'median': 798})), '۱۴ کارآگاه حلش کردن · میانه ۱۳:۱۸'); // old server
       expect(dailyStatsLine(DailyStats({'solved': 3, 'fastest': null, 'median': null})), '۳ کارآگاه حلش کردن');
       expect(dailyStatsLine(DailyStats({'solved': 0})), isNull);
       expect(dailyStatsLine(null), isNull);
@@ -119,7 +120,7 @@ void main() {
     await pump(t);
     expect(find.byKey(const ValueKey('daily-stats-line')), findsOneWidget);
     expect(find.text('۱۴ کارآگاه'), findsOneWidget);
-    expect(find.textContaining('میانه ۱۳:۱۸'), findsOneWidget);
+    expect(find.textContaining('میانگین ۱۳:۱۸'), findsOneWidget);
     expect(find.textContaining('سریع‌ترین'), findsNothing);
     expect(find.text('پرونده‌ی امشب'), findsNothing);
     expect(find.textContaining('۴۲ ثانیه تا رتبه‌ی بالاتر'), findsOneWidget);
@@ -296,7 +297,7 @@ void main() {
     var solved = 15;
     server({'/v1/leaderboard': (_) {
       final b = dailyBoard();
-      b['daily'] = {'solved': solved, 'fastest': 100, 'median': solved == 15 ? 300 : 240};
+      b['daily'] = {'solved': solved, 'fastest': 100, 'mean': solved == 15 ? 300 : 240};
       return b;
     }});
     await t.pumpWidget(host(const LeaderboardBoard('daily')));
@@ -307,7 +308,7 @@ void main() {
     await t.pump(const Duration(seconds: 1));
     await pump(t);
     expect(find.text('۱۷ کارآگاه'), findsOneWidget);
-    expect(find.textContaining('میانه ۴:۰۰'), findsOneWidget);
+    expect(find.textContaining('میانگین ۴:۰۰'), findsOneWidget);
   });
 
 }

@@ -138,7 +138,6 @@ Future<void> showBoardInfo(BuildContext context, int tab, {List<LeagueInfo> leag
     _infoBlock('جایزه‌ها', 'به ۳ کارآگاه اولِ هر لیگ جایزه می‌رسه: $_kPrizeText. برای جایزه باید دست‌کم ۲ پرونده‌ی همین هفته رو حل کرده باشی.'),
     _infoBlock('ترتیب جدول هفته', 'اول پلاک، بعد تعداد شب‌ها، بعد شب‌های سر وقت، آخرش سرعت. یعنی ۱۰ پلاک توی ۴ شب از ۸ پلاک توی ۵ شب بالاتره؛ سرعت فقط وقتی حساب می‌شه که بقیه‌چیز برابر باشه.'),
     _infoBlock('اگه امتیازها برابر شد', 'اول پلاک بیشتر، بعد شب‌های بیشتر، بعد شب‌های بیشتری که همون شب حل کردی، بعد زمان کمتر، و بعد حسابِ قدیمی‌تر بالاتره.'),
-    _infoBlock('قرعه‌ی شبانه', 'بین کارآگاه‌هایی که پرونده‌ی هر شب رو با ۳ پلاک و بررسی کامل حل کنن، فردا یک نفر قرعه‌کشی می‌شه و یک حکم بازرسی هدیه می‌گیره. سرعت توی قرعه نقشی نداره.'),
   ];
   final order = tab == 1 ? [...weekly, daily, all] : tab == 2 ? [all, daily, ...weekly] : [daily, all, ...weekly];
   return showModalBottomSheet<void>(
@@ -399,7 +398,8 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
             const SizedBox(height: 8),
             Wrap(key: const ValueKey('daily-stats-line'), spacing: 8, runSpacing: 6, children: [
               chip(Icons.groups_rounded, '${fa(d.solved)} کارآگاه'),
-              if (d.median != null) chip(Icons.timer_outlined, 'میانه ${boardTime(d.median!)}'),
+              if (d.mean != null) chip(Icons.timer_outlined, 'میانگین ${boardTime(d.mean!)}')
+              else if (d.median != null) chip(Icons.timer_outlined, 'میانه ${boardTime(d.median!)}'),
             ]),
           ],
         ]),

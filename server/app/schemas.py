@@ -341,10 +341,12 @@ class RankGap(BaseModel):
 
 
 class DailyStats(BaseModel):
-    """Tonight's case, plain numbers: detectives who solved it, fastest and median time of the ranked solves (seconds)."""
+    """Tonight's case, plain numbers: the detectives listed in the table, and the fastest time, the arithmetic mean and
+    (kept for old app builds) the median of those same rows (seconds)."""
     solved: int
     fastest: int | None = None
     median: int | None = None
+    mean: int | None = None
 
 
 class LeaderboardOut(BaseModel):

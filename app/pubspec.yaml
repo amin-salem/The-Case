@@ -36,6 +36,7 @@ flutter:
     - assets/icon/
     - assets/portraits/
     - assets/scenes/
+    - assets/scenes/staged/
     - assets/avatars/
     - assets/frames/
     - assets/leagues/

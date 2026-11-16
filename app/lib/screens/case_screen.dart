@@ -1225,13 +1225,16 @@ class _CaseScreenState extends State<CaseScreen> {
                         ),
                       ),
                     Row(children: [
-                      Expanded(child: Text(s.name, style: tBody(16, w: FontWeight.w900))),
+                      Text(s.name, style: tBody(16, w: FontWeight.w900)),
+                      const SizedBox(width: 6),
+                      Text('${fa(s.age)} ساله', style: tBody(12.5, color: K.textSoft, w: FontWeight.w700)),
+                      const Spacer(),
                       if (culprit) Text('مقصر', style: tBody(12, color: K.stamp, w: FontWeight.w900))
                       else if (mark == SuspectMark.suspicious) Text('مشکوک', style: tBody(12, color: K.brass, w: FontWeight.w900))
                       else if (mark == SuspectMark.innocent) Text('بی‌گناه', style: tBody(12, color: K.ok, w: FontWeight.w900)),
                     ]),
-                    Text('${s.role} · ${fa(s.age)} ساله', style: tBody(12, color: K.textSoft)),
-                    if (s.intro.isNotEmpty) Text(s.intro, style: tBody(12, color: K.text.withValues(alpha: 0.85)).copyWith(height: 1.5)),
+                    // One role line only: the fuller `intro` (the short `role` only for an old cached case).
+                    Text(s.intro.isNotEmpty ? s.intro : s.role, style: tBody(12.5, color: K.text.withValues(alpha: 0.85)).copyWith(height: 1.6)),
                     const SizedBox(height: 4),
                     Text('«${s.statement}»', maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(13.5)),
                     Text('برای بازجویی بزن', style: tBody(11, color: K.brass)),

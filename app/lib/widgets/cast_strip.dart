@@ -153,12 +153,11 @@ class _CastStripState extends State<CastStrip> {
             ]),
             const SizedBox(height: 6),
             Text(s.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, color: K.ink, w: FontWeight.w900).copyWith(height: 1.4)),
-            Text(s.role, maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.stamp, w: FontWeight.w900).copyWith(height: 1.4)),
-            if (s.intro.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Text(s.intro, maxLines: 4, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.ink).copyWith(height: 1.5)),
-              ),
+            Text('${fa(s.age)} ساله', style: tBody(11.5, color: K.stamp, w: FontWeight.w900).copyWith(height: 1.4)),
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(s.intro.isNotEmpty ? s.intro : s.role, maxLines: 4, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.ink).copyWith(height: 1.5)),
+            ),
           ]),
         ),
       ),
@@ -209,11 +208,9 @@ Future<void> showSuspectPeek(BuildContext context, Suspect s, {required VoidCall
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                 Text(s.name, style: tDisplay(20)),
-                Text('${s.role} · ${fa(s.age)} ساله', style: tBody(12.5, color: K.brass, w: FontWeight.w700)),
-                if (s.intro.isNotEmpty) ...[
-                  const SizedBox(height: 6),
-                  Text(s.intro, style: tBody(14, color: K.text)),
-                ],
+                Text('${fa(s.age)} ساله', style: tBody(12.5, color: K.brass, w: FontWeight.w700)),
+                const SizedBox(height: 6),
+                Text(s.intro.isNotEmpty ? s.intro : s.role, style: tBody(14, color: K.text)),
               ]),
             ),
           ]),

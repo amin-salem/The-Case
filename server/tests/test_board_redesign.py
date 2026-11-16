@@ -109,10 +109,10 @@ async def test_daily_stats_gap_and_unranked_rushes(client, tonight):
     await put_solve(ps[0]["player_id"], tonight.id, 3, 300)
     await put_solve(ps[1]["player_id"], tonight.id, 3, 500)
     await put_solve(ps[2]["player_id"], tonight.id, 2, 400)
-    await put_solve(ps[3]["player_id"], tonight.id, 1, 5, ranked=False)       # a rush: counts as solved, never as the record
+    await put_solve(ps[3]["player_id"], tonight.id, 1, 5, ranked=False)       # a rush: not in the table, so not in the header
     await put_solve(ps[4]["player_id"], tonight.id, 3, 700, daily=False)      # solved later (archive): not tonight's
     r = (await get(client, ps[2], "/v1/leaderboard?period=daily")).json()
-    assert r["daily"] == {"solved": 4, "fastest": 300, "median": 400}
+    assert r["daily"] == {"solved": 3, "fastest": 300, "median": 400, "mean": 400}   # same 3 rows as the table
     assert [x["pid"] for x in r["top"]] == [ps[0]["player_id"], ps[1]["player_id"], ps[2]["player_id"]]
     assert r["me"]["rank"] == 3
     assert r["gap"] == {"next_rank": 2, "diff": 2, "unit": "plaque"}          # one plaque more ties, two pass the three-plaque player
@@ -139,7 +139,7 @@ async def test_daily_summary_is_fresh_after_two_more_solves(client, tonight):
     # No sleep, cache clearing or worker affinity: the next request sees both new solves.
     latest = (await get(client, ps[0], "/v1/leaderboard?period=daily")).json()
     assert len(latest["top"]) == 17
-    assert latest["daily"] == {"solved": 17, "fastest": 100, "median": 300}
+    assert latest["daily"] == {"solved": 17, "fastest": 100, "median": 300, "mean": 276}   # (15*300 + 2*100) / 17
 
 
 @pytest.mark.parametrize("seconds, expected", [([10], 10), ([10, 20], 15),
@@ -152,13 +152,16 @@ async def test_daily_median_odd_even_and_duplicates(client, tonight, seconds, ex
     await put_solve(ps[-2]["player_id"], tonight.id, 1, 1, ranked=False)
     await put_solve(ps[-1]["player_id"], tonight.id, 3, 0)
     r = (await get(client, ps[0], "/v1/leaderboard?period=daily")).json()
-    assert r["daily"] == {"solved": len(ps), "fastest": min(seconds), "median": expected}
+    # the header counts the table rows (the rush is out); the 0-second row is listed but has no valid time
+    assert r["daily"]["solved"] == len(ps) - 1 and r["daily"]["fastest"] == min(seconds) and r["daily"]["median"] == expected
+    assert r["daily"]["mean"] == int(sum(seconds) / len(seconds) + 0.5)
+    assert r["daily"]["solved"] == len(r["top"])
 
 
 async def test_daily_board_with_nobody_has_zero_stats_not_an_error(client, tonight):
     p = await new_player(client, "bd-day-empty", aged=True)
     r = (await get(client, p, "/v1/leaderboard?period=daily")).json()
-    assert r["top"] == [] and r["me"] is None and r["daily"] == {"solved": 0, "fastest": None, "median": None}
+    assert r["top"] == [] and r["me"] is None and r["daily"] == {"solved": 0, "fastest": None, "median": None, "mean": None}
 
 
 async def test_daily_without_a_case_is_a_stable_404(client, monkeypatch):

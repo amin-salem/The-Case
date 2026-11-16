@@ -114,25 +114,32 @@ async def _daily(player, limit, offset, session, live) -> LeaderboardOut:
 
 
 async def _daily_summary(session: AsyncSession, case_id: str) -> DailyStats:
-    """Fresh totals and ranked times from one database snapshot, shared by all workers through SQL."""
-    eligible = (select(CaseProgress.seconds.label("seconds"), CaseProgress.ranked.label("ranked"))
+    """Fresh totals and ranked times from one database snapshot, shared by all workers through SQL.
+
+    ONE definition of "the rows of tonight's table": `_daily_conds` (solved tonight, ranked, visible player). The header
+    count, the fastest time, the mean and the median all come from exactly those rows, so the header never disagrees with
+    the table. Times use only valid durations (seconds > 0)."""
+    eligible = (select(CaseProgress.seconds.label("seconds"))
                 .join(Player, CaseProgress.player_id == Player.id)
-                .where(CaseProgress.case_id == case_id, CaseProgress.solved.is_(True),
-                       CaseProgress.was_daily.is_(True), ac.visible_player()).cte("daily_eligible"))
+                .where(*_daily_conds(case_id)).cte("daily_eligible"))
     timed = (select(eligible.c.seconds,
                     func.row_number().over(order_by=eligible.c.seconds).label("rn"),
                     func.count().over().label("n"))
-             .where(eligible.c.ranked.is_(True), eligible.c.seconds > 0).cte("daily_timed"))
+             .where(eligible.c.seconds > 0).cte("daily_timed"))
     middle = func.abs(2 * timed.c.rn - timed.c.n - 1) <= 1
     q = select(
         select(func.count()).select_from(eligible).scalar_subquery().label("solved"),
         select(func.min(timed.c.seconds)).scalar_subquery().label("fastest"),
         select(func.avg(timed.c.seconds)).where(middle).scalar_subquery().label("median"),
+        select(func.avg(timed.c.seconds)).scalar_subquery().label("mean"),
     )
     row = (await session.execute(q)).one()
-    return DailyStats(solved=int(row.solved),
-                      fastest=None if row.fastest is None else int(row.fastest),
-                      median=None if row.median is None else int(row.median))
+
+    def whole(v):
+        return None if v is None else int(float(v) + 0.5)
+
+    return DailyStats(solved=int(row.solved), fastest=None if row.fastest is None else int(row.fastest),
+                      median=None if row.median is None else int(row.median), mean=whole(row.mean))
 
 
 # ------------------------------------------------------------------ all time
