@@ -7,6 +7,7 @@ import '../theme.dart';
 import '../widgets/character.dart';
 import '../widgets/whats_new_ui.dart';
 import '../services/whats_new.dart';
+import '../widgets/tool_tray.dart';
 import '../widgets/typewriter.dart';
 import 'case_screen.dart';
 
@@ -23,18 +24,40 @@ class WeekendShow {
 }
 
 Future<SuspectMark?> showSuspect(BuildContext context, Suspect s, SuspectMark mark,
-    {void Function(SuspectMark)? onMark, WeekendShow? weekend, Future<void> Function(Suspect, int)? onLinkClaim}) {
+    {void Function(SuspectMark)? onMark,
+    WeekendShow? weekend,
+    Future<void> Function(Suspect, int)? onLinkClaim,
+    List<SuspectFinding> findings = const []}) {
   return showModalBottomSheet<SuspectMark>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true, // keeps the top below the status bar; the sheet pads its own bottom
     backgroundColor: Colors.transparent,
-    builder: (_) => _SuspectSheet(s: s, mark: mark, onMark: onMark, weekend: weekend, onLinkClaim: onLinkClaim),
+    builder: (_) => _SuspectSheet(s: s, mark: mark, onMark: onMark, weekend: weekend, onLinkClaim: onLinkClaim, findings: findings),
   );
 }
 
+/// What a detective tool (camera, fingerprint reader) found about this suspect: the tool kind and the server's text.
+class SuspectFinding {
+  const SuspectFinding(this.kind, this.text);
+  final String kind, text;
+}
+
+/// A finding for the small list in the sheet: the same sentence is never shown twice, and at most the first two
+/// sentences are kept. Display only; the case content and the server's answer are untouched.
+String shortFinding(String text) {
+  final seen = <String>[];
+  for (final part in text.trim().split(RegExp(r'(?<=[.!؟?۔])\s+'))) {
+    final t = part.trim();
+    if (t.isNotEmpty && !seen.contains(t)) seen.add(t);
+    if (seen.length == 2) break;
+  }
+  return seen.join(' ');
+}
+
 class _SuspectSheet extends StatefulWidget {
-  const _SuspectSheet({required this.s, required this.mark, this.onMark, this.weekend, this.onLinkClaim});
+  const _SuspectSheet({required this.s, required this.mark, this.onMark, this.weekend, this.onLinkClaim, this.findings = const []});
+  final List<SuspectFinding> findings;
   final Future<void> Function(Suspect, int)? onLinkClaim;
   final WeekendShow? weekend;
   final Suspect s;
@@ -153,26 +176,8 @@ class _SuspectSheetState extends State<_SuspectSheet> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(9)))),
             const SizedBox(height: 10),
-            // interrogation room: lamp light behind the suspect
-            Container(
-              height: 210,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                gradient: const RadialGradient(center: Alignment(0, -0.6), radius: 0.9, colors: [Color(0xFF4A3B22), K.night]),
-              ),
-              child: Stack(children: [
-                Center(child: AnimatedSuspect(avatar: s.avatar, size: 170, mood: _mood, talking: _talking)),
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  child: _markChip(),
-                ),
-              ]),
-            ),
-            const SizedBox(height: 10),
-            Text(s.name, style: tDisplay(22)),
-            Text('${s.role} · ${fa(s.age)} ساله', style: tBody(13, color: K.textSoft)),
-            const SizedBox(height: 10),
+            _header(s),
+            const SizedBox(height: 12),
             // speech bubble
             Paper(
               padding: const EdgeInsets.all(14),
@@ -220,6 +225,24 @@ class _SuspectSheetState extends State<_SuspectSheet> {
                   ),
                 ),
               ),
+            if (widget.findings.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text('یافته‌های ابزار', style: tBody(12, color: K.textSoft, w: FontWeight.w700)),
+              const SizedBox(height: 6),
+              for (final f in widget.findings)
+                Container(
+                  key: ValueKey('suspect-finding-${f.kind}'),
+                  margin: const EdgeInsets.only(bottom: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12)),
+                  child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Padding(padding: const EdgeInsets.only(top: 2), child: Icon(toolIcon(f.kind), color: K.brass, size: 18)),
+                    const SizedBox(width: 8),
+                    Expanded(child: Text(shortFinding(f.text), style: tBody(13, w: FontWeight.w700))),
+                  ]),
+                ),
+              const SizedBox(height: 6),
+            ],
             if (widget.weekend != null) ...[
               const SizedBox(height: 4),
               Container(
@@ -263,27 +286,87 @@ class _SuspectSheetState extends State<_SuspectSheet> {
     );
   }
 
-  Widget _markChip() {
-    final (label, color) = switch (_mark) {
-      SuspectMark.none => ('علامت بزن', K.textSoft),
-      SuspectMark.suspicious => ('مشکوک', K.brass),
-      SuspectMark.innocent => ('بی‌گناه', K.ok),
-    };
-    return GestureDetector(
-      onTap: () {
-        setState(() => _mark = SuspectMark.values[(_mark.index + 1) % SuspectMark.values.length]);
-        widget.onMark?.call(_mark);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(99), border: Border.all(color: color)),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(Icons.bookmark_rounded, size: 14, color: color),
-          const SizedBox(width: 4),
-          Text(label, style: tBody(12, color: color, w: FontWeight.w700)),
-        ]),
+  void _toggleMark(SuspectMark m) {
+    setState(() => _mark = _mark == m ? SuspectMark.none : m);
+    widget.onMark?.call(_mark);
+  }
+
+  Widget _markButton(String label, SuspectMark m, Color color) {
+    final on = _mark == m;
+    return Expanded(
+      child: InkWell(
+        key: ValueKey('mark-${m.name}'),
+        onTap: () => _toggleMark(m),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 44),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: on ? color : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: on ? color : K.night3, width: on ? 2 : 1),
+          ),
+          child: Text(label, style: tBody(12.5, color: on ? K.ink : K.text, w: FontWeight.w900).copyWith(height: 1.3)),
+        ),
       ),
     );
   }
-}
 
+  /// The tall portrait frame (lamp light behind the suspect).
+  Widget _portraitFrame({required double width, required double height}) => Container(
+        key: const ValueKey('suspect-portrait-frame'),
+        width: width,
+        height: height,
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: const RadialGradient(center: Alignment(0, -0.6), radius: 0.9, colors: [Color(0xFF4A3B22), K.night]),
+        ),
+        child: OverflowBox(
+          maxWidth: height,
+          maxHeight: height,
+          alignment: Alignment.bottomCenter,
+          child: AnimatedSuspect(avatar: widget.s.avatar, size: height, mood: _mood, talking: _talking),
+        ),
+      );
+
+  /// Portrait on the right (first in RTL), then name, age, intro and the two mark buttons. With a big font or a narrow
+  /// screen it stacks: portrait on top, the rest below.
+  Widget _header(Suspect s) {
+    final narrow = MediaQuery.textScalerOf(context).scale(10) >= 13 || MediaQuery.sizeOf(context).width < 340;
+    final marks = Row(children: [
+      _markButton('مشکوک', SuspectMark.suspicious, K.brass),
+      const SizedBox(width: 6),
+      _markButton('بی‌گناه', SuspectMark.innocent, K.ok),
+    ]);
+    final text = Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+      Text(s.name, style: tDisplay(21)),
+      Text('${fa(s.age)} ساله', style: tBody(12.5, color: K.textSoft, w: FontWeight.w700)),
+      const SizedBox(height: 4),
+      // one role line only: the fuller `intro` (the short `role` only for an old cached case)
+      Text(s.intro.isNotEmpty ? s.intro : s.role, style: tBody(13, color: K.text.withValues(alpha: 0.9)).copyWith(height: 1.8)),
+    ]);
+    if (narrow) {
+      return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Center(child: _portraitFrame(width: 150, height: 196)),
+        const SizedBox(height: 10),
+        text,
+        const SizedBox(height: 10),
+        marks,
+      ]);
+    }
+    return IntrinsicHeight(
+      child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        _portraitFrame(width: 150, height: 196),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            text,
+            const SizedBox(height: 8),
+            marks,
+          ]),
+        ),
+      ]),
+    );
+  }
+}

@@ -1168,7 +1168,13 @@ class _CaseScreenState extends State<CaseScreen> {
               if (mounted) setState(() => _progress = np);
             })
         : null;
-    final m = await showSuspect(context, s, _marks[s.id] ?? SuspectMark.none, onMark: keep, weekend: show,
+    final findings = <SuspectFinding>[
+      for (final t in _tray?.pinned ?? const <ToolInfo>[])
+        if (t.result != null && t.result!.suspect == s.id) SuspectFinding(t.kind, t.result!.text),
+      for (final r in _tray?.earlier ?? const <ToolResult>[])
+        if (r.suspect == s.id) SuspectFinding(r.kind, r.text),
+    ];
+    final m = await showSuspect(context, s, _marks[s.id] ?? SuspectMark.none, onMark: keep, weekend: show, findings: findings,
       onLinkClaim: (suspect, question) => _editClaim(claim: ClaimChoice(suspect,
         question < 0 ? null : suspect.questions[question]).key));
     if (m != null && mounted) keep(m);
