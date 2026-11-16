@@ -1,0 +1,83 @@
+[
+  {
+    "case": "c077",
+    "gender": "m",
+    "story_age": 36,
+    "apparent_age": 38,
+    "candidate": "m_neutral_38_reserve25",
+    "usable_from": null,
+    "status": "provisional; confirm final text and release"
+  },
+  {
+    "case": "c078",
+    "gender": "f",
+    "story_age": 39,
+    "apparent_age": 44,
+    "candidate": "f_neutral_44_reserve26",
+    "usable_from": null,
+    "status": "provisional; confirm final text and release"
+  },
+  {
+    "case": "c079",
+    "gender": "m",
+    "story_age": 50,
+    "apparent_age": 53,
+    "candidate": "m_neutral_53_reserve27",
+    "usable_from": null,
+    "status": "provisional; confirm final text and release"
+  },
+  {
+    "case": "c080",
+    "gender": "m",
+    "story_age": 47,
+    "apparent_age": 49,
+    "candidate": "m_neutral_49_reserve28",
+    "usable_from": null,
+    "status": "provisional; confirm final text and release"
+  },
+  {
+    "case": "c081",
+    "gender": "m",
+    "story_age": 45,
+    "apparent_age": 49,
+    "candidate": "m_neutral_49_reserve29",
+    "usable_from": null,
+    "status": "provisional; confirm final text and release"
+  },
+  {
+    "case": "c082",
+    "gender": "m",
+    "story_age": 43,
+    "apparent_age": 46,
+    "candidate": "m_neutral_46_reserve30",
+    "usable_from": null,
+    "status": "provisional; confirm final text and release"
+  },
+  {
+    "case": "w010",
+    "gender": "m",
+    "story_age": 41,
+    "apparent_age": 43,
+    "candidate": "m_neutral_43_reserve31",
+    "usable_from": null,
+    "status": "provisional; confirm final text and release"
+  },
+  {
+    "case": "w011",
+    "gender": "f",
+    "story_age": 46,
+    "apparent_age": 49,
+    "candidate": "f_neutral_49_reserve32",
+    "usable_from": null,
+    "status": "provisional; confirm final text and release"
+  },
+  {
+    "case": "w012",
+    "gender": "m",
+    "story_age": 34,
+    "apparent_age": 35,
+    "candidate": "m_neutral_35_reserve33",
+    "usable_from": null,
+    "status": "provisional; confirm final text and release"
+  }
+]

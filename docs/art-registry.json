@@ -7008,6 +7008,1402 @@
       "path": "app/assets/portraits/f_neutral_77_angular.webp",
       "usable_from": null,
       "release_basis": "Not released; first_build and majority availability unknown"
+    },
+    {
+      "id": "f_neutral_43_reserve01",
+      "path": "app/assets/portraits/f_neutral_43_reserve01.webp",
+      "apparent_gender": "f",
+      "apparent_age": 43,
+      "apparent_age_range": [
+        38,
+        48
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "not visible under scarf",
+      "hair_style": "covered by matte headscarf",
+      "facial_hair": "none",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "oval",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "a3377407e33300256daf279b780c8ea46dcc113864a067e716c35db5719ed92d",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf",
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 43, visible natural age-appropriate skin and wrinkles, adult. Iranian woman, matte plain deep plum HEADSCARF ON THE HEAD covering hair and neck, tiny front hair wisps acceptable, clearly scarf not neck shawl, plain everyday Iranian clothing; NO bare head. Face shape long narrow, warm medium olive skin, thin round spectacles, calm serious expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "f_neutral_45_reserve02",
+      "path": "app/assets/portraits/f_neutral_45_reserve02.webp",
+      "apparent_gender": "f",
+      "apparent_age": 45,
+      "apparent_age_range": [
+        40,
+        50
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "not visible under scarf",
+      "hair_style": "covered by matte headscarf",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "round",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "afba94165f74b467fafb3553dd0f4cd37d3396204248c9a4034348702403cd4d",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf",
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 45, visible natural age-appropriate skin and wrinkles, adult. Iranian woman, matte plain muted teal HEADSCARF ON THE HEAD covering hair and neck, tiny front hair wisps acceptable, clearly scarf not neck shawl, plain everyday Iranian clothing; NO bare head. Face shape round broad, light warm beige skin, no glasses, attentive slightly skeptical expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "m_neutral_48_reserve03",
+      "path": "app/assets/portraits/m_neutral_48_reserve03.webp",
+      "apparent_gender": "m",
+      "apparent_age": 48,
+      "apparent_age_range": [
+        43,
+        53
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "short wavy or curly with age-appropriate recession",
+      "facial_hair": "short dark or salt-and-pepper beard/stubble and moustache",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "rectangular",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "c93692be04bf5b5e58db26969a3eb614c459674ba8a40fa1ece08bf97f3312c4",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 48, visible natural age-appropriate skin and wrinkles, adult. Iranian man, receding black hair, full short beard, simple everyday muted olive shirt or cardigan, NOT formal suit. Face shape square wide jaw, deep warm olive skin, thin rectangular spectacles, reserved thoughtful expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "m_neutral_46_reserve04",
+      "path": "app/assets/portraits/m_neutral_46_reserve04.webp",
+      "apparent_gender": "m",
+      "apparent_age": 46,
+      "apparent_age_range": [
+        41,
+        51
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "bald crown with side hair",
+      "facial_hair": "thick moustache",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "long",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "e594c1e3e688ff31c4dd45e834793ec6056798c5415680684e0422ed5c705c73",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 46, visible natural age-appropriate skin and wrinkles, adult. Iranian man, bald crown with dark side hair, thick moustache, simple everyday brown shirt or cardigan, NOT formal suit. Face shape oval high cheekbones, medium tan skin, thin round spectacles, calm serious expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "m_neutral_47_reserve05",
+      "path": "app/assets/portraits/m_neutral_47_reserve05.webp",
+      "apparent_gender": "m",
+      "apparent_age": 47,
+      "apparent_age_range": [
+        42,
+        52
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "short wavy or curly with age-appropriate recession",
+      "facial_hair": "short dark or salt-and-pepper beard/stubble and moustache",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "angular",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "79eca1eba7f94004f70e0fda18e6d7649dc29228f73fa3a80a90b2dfc9cdfc25",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 47, visible natural age-appropriate skin and wrinkles, adult. Iranian man, curly salt-and-pepper hair, trimmed beard, simple everyday charcoal shirt or cardigan, NOT formal suit. Face shape triangular tapered chin, warm medium olive skin, no glasses, attentive slightly skeptical expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "f_neutral_43_reserve06",
+      "path": "app/assets/portraits/f_neutral_43_reserve06.webp",
+      "apparent_gender": "f",
+      "apparent_age": 43,
+      "apparent_age_range": [
+        38,
+        48
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "not visible under scarf",
+      "hair_style": "covered by matte headscarf",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "long angular",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "f66a5efa1b2c5c8e0dfebf4b8e71541069c66025ec812954dc7305ad44f24350",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf",
+      "generation_specification": "ONE square 1024x1024 reusable neutral Iranian adult head-and-shoulders portrait, semi-realistic digitally painted noir, clean edges, warm brass sidelight, plain navy background. Woman age 43, long angular face with high cheekbones, narrow nose, deep warm olive skin, NO glasses, matte muted OLIVE headscarf ON HEAD fully covering hair and neck, plain navy everyday Iranian blouse. Clearly natural age-appropriate skin. Calm reserved expression. Everyday clothes, no professional markers, badges, uniforms, tools, formal suit, jewelry, text. Distinctive physical identity: follow exact face, hair and beard description. Not fashion model. Women must wear matte simple scarf on head; no exposed neck."
+    },
+    {
+      "id": "m_neutral_48_reserve07",
+      "path": "app/assets/portraits/m_neutral_48_reserve07.webp",
+      "apparent_gender": "m",
+      "apparent_age": 48,
+      "apparent_age_range": [
+        43,
+        53
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "short wavy or curly with age-appropriate recession",
+      "facial_hair": "short dark or salt-and-pepper beard/stubble and moustache",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "square",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "cd84cd9742dfb8b108af3278f8a8e351101201637098a68fdf07fb5fa8b5fa18",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 48, visible natural age-appropriate skin and wrinkles, adult. Iranian man, short black curls, light stubble, simple everyday muted olive shirt or cardigan, NOT formal suit. Face shape pear-shaped narrow temples, deep warm olive skin, thin round spectacles, calm serious expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "f_neutral_40_reserve08",
+      "path": "app/assets/portraits/f_neutral_40_reserve08.webp",
+      "apparent_gender": "f",
+      "apparent_age": 40,
+      "apparent_age_range": [
+        35,
+        45
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "not visible under scarf",
+      "hair_style": "covered by matte headscarf",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "oval",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "e57edc6c09e454f2d25c4a7ff7d4045ff5e6f6db73668b2b1c9ace4e7a7bdcbf",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf",
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 40, visible natural age-appropriate skin and wrinkles, adult. Iranian woman, matte plain rust HEADSCARF ON THE HEAD covering hair and neck, tiny front hair wisps acceptable, clearly scarf not neck shawl, plain everyday Iranian clothing; NO bare head. Face shape diamond cheekbones, medium tan skin, no glasses, attentive slightly skeptical expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "m_neutral_57_reserve09",
+      "path": "app/assets/portraits/m_neutral_57_reserve09.webp",
+      "apparent_gender": "m",
+      "apparent_age": 57,
+      "apparent_age_range": [
+        52,
+        62
+      ],
+      "age_band": "old",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "short wavy or curly with age-appropriate recession",
+      "facial_hair": "short dark or salt-and-pepper beard/stubble and moustache",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "long",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "8b7a302d0b0cfc6aeb22546a025131893540bfe4429b3d4f78f3c32f734adae5",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 57, visible natural age-appropriate skin and wrinkles, adult. Iranian man, short wavy dark brown hair, salt-pepper moustache, simple everyday charcoal shirt or cardigan, NOT formal suit. Face shape long narrow, warm medium olive skin, thin rectangular spectacles, reserved thoughtful expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "m_neutral_46_reserve10",
+      "path": "app/assets/portraits/m_neutral_46_reserve10.webp",
+      "apparent_gender": "m",
+      "apparent_age": 46,
+      "apparent_age_range": [
+        41,
+        51
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "short wavy or curly with age-appropriate recession",
+      "facial_hair": "none",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "broad oval",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "5e8f69a71828423c07d0a7114f1bee8ab755d8f6a320d8d7222d08ee7403dcca",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 46, visible natural age-appropriate skin and wrinkles, adult. Iranian man, closely cropped black hair, clean shaven, simple everyday navy shirt or cardigan, NOT formal suit. Face shape round broad, light warm beige skin, thin round spectacles, calm serious expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "f_neutral_41_reserve11",
+      "path": "app/assets/portraits/f_neutral_41_reserve11.webp",
+      "apparent_gender": "f",
+      "apparent_age": 41,
+      "apparent_age_range": [
+        36,
+        46
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "not visible under scarf",
+      "hair_style": "covered by matte headscarf",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "pear",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "bd57cd6fbf52d1f90d3e51ac68ab1dc122fdf67c13f288385a92229733373fcb",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf",
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 41, visible natural age-appropriate skin and wrinkles, adult. Iranian woman, matte plain taupe HEADSCARF ON THE HEAD covering hair and neck, tiny front hair wisps acceptable, clearly scarf not neck shawl, plain everyday Iranian clothing; NO bare head. Face shape square wide jaw, deep warm olive skin, no glasses, attentive slightly skeptical expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "m_neutral_50_reserve12",
+      "path": "app/assets/portraits/m_neutral_50_reserve12.webp",
+      "apparent_gender": "m",
+      "apparent_age": 50,
+      "apparent_age_range": [
+        45,
+        55
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "straight brushed back",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "long narrow",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "8714aca7c6d0fec2df78ec303621ff3863fc547e7639d22b5942ae34d1d8fbb9",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square 1024x1024 reusable neutral Iranian adult head-and-shoulders portrait, semi-realistic digitally painted noir, clean edges, warm brass sidelight, plain navy background. Man age 50, exceptionally LONG narrow face, straight full silver-streaked hair brushed back, clean-shaven, NO glasses, small straight nose, light warm beige skin, navy knit sweater. Clearly natural age-appropriate skin. Calm reserved expression. Everyday clothes, no professional markers, badges, uniforms, tools, formal suit, jewelry, text. Distinctive physical identity: follow exact face, hair and beard description. Not fashion model. Women must wear matte simple scarf on head; no exposed neck."
+    },
+    {
+      "id": "m_neutral_51_reserve13",
+      "path": "app/assets/portraits/m_neutral_51_reserve13.webp",
+      "apparent_gender": "m",
+      "apparent_age": 51,
+      "apparent_age_range": [
+        46,
+        56
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "short wavy or curly with age-appropriate recession",
+      "facial_hair": "short dark or salt-and-pepper beard/stubble and moustache",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "angular",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "2bd31d663c4325057ff07f8ab2029fa2c709ef85d6424b0e3206d540bcbdb4ea",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 51, visible natural age-appropriate skin and wrinkles, adult. Iranian man, curly salt-and-pepper hair, trimmed beard, simple everyday charcoal shirt or cardigan, NOT formal suit. Face shape triangular tapered chin, warm medium olive skin, thin round spectacles, calm serious expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "f_neutral_44_reserve14",
+      "path": "app/assets/portraits/f_neutral_44_reserve14.webp",
+      "apparent_gender": "f",
+      "apparent_age": 44,
+      "apparent_age_range": [
+        39,
+        49
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "not visible under scarf",
+      "hair_style": "covered by matte headscarf",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "angular oval",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "87d7e0bc108d715cd28d4d12382e9de72f273a187b28f723377c2cc30c1cc730",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf",
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 44, visible natural age-appropriate skin and wrinkles, adult. Iranian woman, matte plain charcoal HEADSCARF ON THE HEAD covering hair and neck, tiny front hair wisps acceptable, clearly scarf not neck shawl, plain everyday Iranian clothing; NO bare head. Face shape rectangular broad forehead, light warm beige skin, no glasses, attentive slightly skeptical expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "m_neutral_48_reserve15",
+      "path": "app/assets/portraits/m_neutral_48_reserve15.webp",
+      "apparent_gender": "m",
+      "apparent_age": 48,
+      "apparent_age_range": [
+        43,
+        53
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "short wavy or curly with age-appropriate recession",
+      "facial_hair": "short dark or salt-and-pepper beard/stubble and moustache",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "broad oval",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "752aabf8217d9082c2feb3af7bad4ddc9041e8327b4b9e11e10d5f50740ef7ec",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 48, visible natural age-appropriate skin and wrinkles, adult. Iranian man, short black curls, light stubble, simple everyday muted olive shirt or cardigan, NOT formal suit. Face shape pear-shaped narrow temples, deep warm olive skin, thin rectangular spectacles, reserved thoughtful expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "f_neutral_42_reserve16",
+      "path": "app/assets/portraits/f_neutral_42_reserve16.webp",
+      "apparent_gender": "f",
+      "apparent_age": 42,
+      "apparent_age_range": [
+        37,
+        47
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "not visible under scarf",
+      "hair_style": "covered by matte headscarf",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "round",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "debe87ca909fc912276f5c3f58719fc140e6b9479819456fd26080fded6d2e4a",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf",
+      "generation_specification": "ONE square 1024x1024 reusable neutral Iranian adult head-and-shoulders portrait, semi-realistic digitally painted noir, clean edges, warm brass sidelight, plain navy background. Woman age 42, very ROUND full face with broad forehead, wide nose, light warm beige skin, NO glasses, matte muted blue headscarf ON HEAD fully covering hair and neck, plain charcoal everyday Iranian cardigan. Clearly natural age-appropriate skin. Calm reserved expression. Everyday clothes, no professional markers, badges, uniforms, tools, formal suit, jewelry, text. Distinctive physical identity: follow exact face, hair and beard description. Not fashion model. Women must wear matte simple scarf on head; no exposed neck."
+    },
+    {
+      "id": "m_neutral_53_reserve17",
+      "path": "app/assets/portraits/m_neutral_53_reserve17.webp",
+      "apparent_gender": "m",
+      "apparent_age": 53,
+      "apparent_age_range": [
+        48,
+        58
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "close silver buzz cut",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "square",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "2923bf69dafdf1878a29722bcc61f18e03cccdd1049d89f94fc401079fccc384",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square 1024x1024 reusable neutral Iranian adult head-and-shoulders portrait, semi-realistic digitally painted noir, clean edges, warm brass sidelight, plain navy background. Man age 53, broad SQUARE face, closely buzzed silver hair, heavy thick straight eyebrows, completely clean-shaven, NO glasses, deep tan skin, plain muted rust cardigan. Clearly natural age-appropriate skin. Calm reserved expression. Everyday clothes, no professional markers, badges, uniforms, tools, formal suit, jewelry, text. Distinctive physical identity: follow exact face, hair and beard description. Not fashion model. Women must wear matte simple scarf on head; no exposed neck."
+    },
+    {
+      "id": "f_neutral_46_reserve18",
+      "path": "app/assets/portraits/f_neutral_46_reserve18.webp",
+      "apparent_gender": "f",
+      "apparent_age": 46,
+      "apparent_age_range": [
+        41,
+        51
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "not visible under scarf",
+      "hair_style": "covered by matte headscarf",
+      "facial_hair": "none",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "round",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "aebfe5ec7b90c6a0f4b652a7d5f1b277bbb0f30b597b5e51b34d1b92ae2c59f6",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf",
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 46, visible natural age-appropriate skin and wrinkles, adult. Iranian woman, matte plain muted teal HEADSCARF ON THE HEAD covering hair and neck, tiny front hair wisps acceptable, clearly scarf not neck shawl, plain everyday Iranian clothing; NO bare head. Face shape round broad, light warm beige skin, thin rectangular spectacles, reserved thoughtful expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "m_neutral_52_reserve19",
+      "path": "app/assets/portraits/m_neutral_52_reserve19.webp",
+      "apparent_gender": "m",
+      "apparent_age": 52,
+      "apparent_age_range": [
+        47,
+        57
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "bald",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "broad round",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "857a4007942a1b2bca4ac5d665c4e9069a86f900211269553ec74c1ebdb747d1",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square 1024x1024 reusable neutral Iranian adult head-and-shoulders portrait, semi-realistic digitally painted noir, clean edges, warm brass sidelight, plain navy background. Man age 52, very broad ROUND face, completely bald smooth head, NO facial hair, NO glasses, dark olive skin, wide nose, narrow eyes, plain light stone-gray collarless shirt. Clearly natural age-appropriate skin. Calm reserved expression. Everyday clothes, no professional markers, badges, uniforms, tools, formal suit, jewelry, text. Distinctive physical identity: follow exact face, hair and beard description. Not fashion model. Women must wear matte simple scarf on head; no exposed neck."
+    },
+    {
+      "id": "m_neutral_37_reserve20",
+      "path": "app/assets/portraits/m_neutral_37_reserve20.webp",
+      "apparent_gender": "m",
+      "apparent_age": 37,
+      "apparent_age_range": [
+        32,
+        42
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "receding side hair",
+      "facial_hair": "moustache",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "long oval",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "8849ed55bbf18d263ccfc2f1006363f97e77598e15c543f58ac78f3e31a6566b",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square head-and-shoulders portrait for Persian detective game, painted semi-realistic digital art, warm amber sidelight, deep navy background, restrained texture matching existing game portraits. Apparent age 37, visible natural age-appropriate skin and wrinkles, adult. Iranian man, bald crown with dark side hair, thick moustache, simple everyday brown shirt or cardigan, NOT formal suit. Face shape oval high cheekbones, medium tan skin, no glasses, attentive slightly skeptical expression. Unique facial identity, NOT generic model, no resemblance to previous portraits. No occupational clothes, uniform, props, tools, badges, apron, lab coat, formal jewelry, text or logo. Neutral reusable face. 1024x1024 square."
+    },
+    {
+      "id": "m_neutral_48_reserve21",
+      "path": "app/assets/portraits/m_neutral_48_reserve21.webp",
+      "apparent_gender": "m",
+      "apparent_age": 48,
+      "apparent_age_range": [
+        43,
+        53
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "shaved head",
+      "facial_hair": "short beard without moustache",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "diamond",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "179e087a7732b902e039bf7ac19ba9e509a6db324d5a97ae55c217e5292efec1",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square 1024x1024 reusable neutral Iranian adult head-and-shoulders portrait, semi-realistic digitally painted noir, clean edges, warm brass sidelight, plain navy background. Man age 48, angular DIAMOND face, shaved head, short black beard without moustache, thin rectangular black spectacles, light olive skin, muted blue casual shirt. Clearly natural age-appropriate skin. Calm reserved expression. Everyday clothes, no professional markers, badges, uniforms, tools, formal suit, jewelry, text. Distinctive physical identity: follow exact face, hair and beard description. Not fashion model. Women must wear matte simple scarf on head; no exposed neck."
+    },
+    {
+      "id": "m_neutral_45_reserve22",
+      "path": "app/assets/portraits/m_neutral_45_reserve22.webp",
+      "apparent_gender": "m",
+      "apparent_age": 45,
+      "apparent_age_range": [
+        40,
+        50
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "straight side part",
+      "facial_hair": "none",
+      "glasses": true,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "round",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "5fededeb3fd76e8054fbf8ae050348b811d258bd12009e2c847358af54ecc181",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square 1024x1024 reusable neutral Iranian adult head-and-shoulders portrait, semi-realistic digitally painted noir, clean edges, warm brass sidelight, plain navy background. Man age 45, round full face with soft jaw, straight black hair swept to side, completely CLEAN SHAVEN, rimless rectangular glasses, light warm skin, dark taupe crew-neck shirt. Clearly natural age-appropriate skin. Calm reserved expression. Everyday clothes, no professional markers, badges, uniforms, tools, formal suit, jewelry, text. Distinctive physical identity: follow exact face, hair and beard description. Not fashion model. Women must wear matte simple scarf on head; no exposed neck."
+    },
+    {
+      "id": "m_neutral_53_reserve23",
+      "path": "app/assets/portraits/m_neutral_53_reserve23.webp",
+      "apparent_gender": "m",
+      "apparent_age": 53,
+      "apparent_age_range": [
+        48,
+        58
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "long tied-back gray hair",
+      "facial_hair": "thick gray moustache",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "long oval",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "63a86f3acbab3f89e77866bf0013933a357ed039802789b00eb78257dadec7b6",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "ONE square 1024x1024 reusable neutral Iranian adult head-and-shoulders portrait, semi-realistic digitally painted noir, clean edges, warm brass sidelight, plain navy background. Man age 53, very long oval face, long straight gray hair neatly tied behind head, thick gray moustache and NO beard, deep olive skin, NO glasses, charcoal cardigan. Clearly natural age-appropriate skin. Calm reserved expression. Everyday clothes, no professional markers, badges, uniforms, tools, formal suit, jewelry, text. Distinctive physical identity: follow exact face, hair and beard description. Not fashion model. Women must wear matte simple scarf on head; no exposed neck."
+    },
+    {
+      "id": "m_neutral_38_brownotch",
+      "path": "app/assets/portraits/m_neutral_38_brownotch.webp",
+      "apparent_gender": "m",
+      "apparent_age": 38,
+      "apparent_age_range": [
+        33,
+        43
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown with age-appropriate gray",
+      "hair_style": "short wavy or curly with age-appropriate recession",
+      "facial_hair": "short dark or salt-and-pepper beard/stubble and moustache",
+      "glasses": false,
+      "skin_tone": "Iranian realistic warm olive/beige palette under amber light",
+      "face_shape": "broad trapezoid",
+      "clothing": "plain casual shirt/cardigan; women matte simple scarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No case assignment before verified release and usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "staged; first_build unknown",
+      "sha256": "f80558d6bd8332abc4ec107f314e02b5b95d3a24e6565bee7622a8f7376fc182",
+      "visual_review": {
+        "method": "Contact sheet review; appearance estimated editorially. See inventory and similarity report.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "generation_specification": "Neutral Iranian man, plain casual shirt and cardigan; apparent age visually revised from requested 32 to 38."
+    },
+    {
+      "id": "m_neutral_38_reserve25",
+      "path": "app/assets/portraits/m_neutral_38_reserve25.webp",
+      "apparent_gender": "m",
+      "apparent_age": 38,
+      "apparent_age_range": [
+        33,
+        43
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown/black with gray appropriate to age",
+      "hair_style": "short straight",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "light to medium warm olive under amber lighting",
+      "face_shape": "rectangular",
+      "clothing": "plain casual cotton shirt or cardigan; women with matte headscarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No assignment until confirmed usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "Staged, first build unknown",
+      "sha256": "a1a7f2aae56ecd728e82182a814a7b600846b143b2b7425edcf966b877858e6f",
+      "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 36. Wide rectangular face, very short straight BLACK hair, NO beard or moustache, light olive skin, no glasses, small scar on right eyebrow, plain slate-blue cotton shirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
+      "visual_review": {
+        "method": "Individual labelled sheet inspection; apparent ages revised from requested story ages.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      }
+    },
+    {
+      "id": "f_neutral_44_reserve26",
+      "path": "app/assets/portraits/f_neutral_44_reserve26.webp",
+      "apparent_gender": "f",
+      "apparent_age": 44,
+      "apparent_age_range": [
+        39,
+        49
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "covered by scarf",
+      "hair_style": "covered by scarf",
+      "facial_hair": "none",
+      "glasses": true,
+      "skin_tone": "light to medium warm olive under amber lighting",
+      "face_shape": "square",
+      "clothing": "plain casual cotton shirt or cardigan; women with matte headscarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No assignment until confirmed usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "Staged, first build unknown",
+      "sha256": "e94d02853849228d81fb5623583ca966612f0f415479d783855c8ecb86eaf7db",
+      "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult woman, apparent age 39. Broad square feminine face, strong rounded jaw, medium brown Iranian skin, thin round glasses, matte dusty rose scarf ON HEAD covering hair and neck, plain charcoal blouse. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. Scarf must be matte and visibly on head, not neck only.",
+      "visual_review": {
+        "method": "Individual labelled sheet inspection; apparent ages revised from requested story ages.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf"
+    },
+    {
+      "id": "m_neutral_53_reserve27",
+      "path": "app/assets/portraits/m_neutral_53_reserve27.webp",
+      "apparent_gender": "m",
+      "apparent_age": 53,
+      "apparent_age_range": [
+        48,
+        58
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown/black with gray appropriate to age",
+      "hair_style": "straight gray side-parted",
+      "facial_hair": "pointed gray goatee",
+      "glasses": false,
+      "skin_tone": "light to medium warm olive under amber lighting",
+      "face_shape": "pear",
+      "clothing": "plain casual cotton shirt or cardigan; women with matte headscarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No assignment until confirmed usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "Staged, first build unknown",
+      "sha256": "e25e3f7e58a742fe240c203b18d3fbeefaa42f7c5a5baef6136c990dd44fae60",
+      "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 50. Pear-shaped face with broad chin and narrow temples, thick straight GRAY side-parted hair, short pointed goatee and NO moustache, no glasses, pale warm skin, plain olive cardigan. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
+      "visual_review": {
+        "method": "Individual labelled sheet inspection; apparent ages revised from requested story ages.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      }
+    },
+    {
+      "id": "m_neutral_49_reserve28",
+      "path": "app/assets/portraits/m_neutral_49_reserve28.webp",
+      "apparent_gender": "m",
+      "apparent_age": 49,
+      "apparent_age_range": [
+        44,
+        54
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown/black with gray appropriate to age",
+      "hair_style": "short tight curls",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "light to medium warm olive under amber lighting",
+      "face_shape": "narrow oval",
+      "clothing": "plain casual cotton shirt or cardigan; women with matte headscarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No assignment until confirmed usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "Staged, first build unknown",
+      "sha256": "e4e30e75e31062e841e9f2c41c2f4e2f2419ebf5c18f1072b2d5683f55af16c2",
+      "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 47. Very narrow oval face, short tight black curls, CLEAN SHAVEN, wide nose, deep olive skin, no glasses, plain beige cotton shirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
+      "visual_review": {
+        "method": "Individual labelled sheet inspection; apparent ages revised from requested story ages.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      }
+    },
+    {
+      "id": "m_neutral_49_reserve29",
+      "path": "app/assets/portraits/m_neutral_49_reserve29.webp",
+      "apparent_gender": "m",
+      "apparent_age": 49,
+      "apparent_age_range": [
+        44,
+        54
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown/black with gray appropriate to age",
+      "hair_style": "bald crown with side hair",
+      "facial_hair": "none",
+      "glasses": true,
+      "skin_tone": "light to medium warm olive under amber lighting",
+      "face_shape": "long rectangular",
+      "clothing": "plain casual cotton shirt or cardigan; women with matte headscarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No assignment until confirmed usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "Staged, first build unknown",
+      "sha256": "256f628cf30966ead2b5d803e7e95e3e0125a25114bf7cc5eb234b604caf1df2",
+      "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 45. Long rectangular face, bald on top with black side hair, clean shaven, thin OVAL metal spectacles, warm tan skin, plain dark brown shirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
+      "visual_review": {
+        "method": "Individual labelled sheet inspection; apparent ages revised from requested story ages.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      }
+    },
+    {
+      "id": "m_neutral_46_reserve30",
+      "path": "app/assets/portraits/m_neutral_46_reserve30.webp",
+      "apparent_gender": "m",
+      "apparent_age": 46,
+      "apparent_age_range": [
+        41,
+        51
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown/black with gray appropriate to age",
+      "hair_style": "straight medium length",
+      "facial_hair": "handlebar moustache",
+      "glasses": false,
+      "skin_tone": "light to medium warm olive under amber lighting",
+      "face_shape": "round",
+      "clothing": "plain casual cotton shirt or cardigan; women with matte headscarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No assignment until confirmed usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "Staged, first build unknown",
+      "sha256": "62eb30f3a486c2f579ec0d5ed090462394027f1c7f87cd7b93239a53ca99feb1",
+      "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 43. Broad round face, straight dark brown hair worn slightly long behind ears, wide handlebar moustache and NO beard, no glasses, medium olive skin, plain navy cardigan. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
+      "visual_review": {
+        "method": "Individual labelled sheet inspection; apparent ages revised from requested story ages.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      }
+    },
+    {
+      "id": "m_neutral_43_reserve31",
+      "path": "app/assets/portraits/m_neutral_43_reserve31.webp",
+      "apparent_gender": "m",
+      "apparent_age": 43,
+      "apparent_age_range": [
+        38,
+        48
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown/black with gray appropriate to age",
+      "hair_style": "shaved head",
+      "facial_hair": "full short beard",
+      "glasses": false,
+      "skin_tone": "light to medium warm olive under amber lighting",
+      "face_shape": "triangular",
+      "clothing": "plain casual cotton shirt or cardigan; women with matte headscarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No assignment until confirmed usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "Staged, first build unknown",
+      "sha256": "2071d46c3acb5bd83dc0de231a28bfce9cd58aff332151fe2ce8d0ccc82019c9",
+      "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 41. Angular triangular face, shaved head, thick full BLACK beard with sparse gray flecks, no glasses, light warm skin, plain gray collarless cotton shirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
+      "visual_review": {
+        "method": "Individual labelled sheet inspection; apparent ages revised from requested story ages.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      }
+    },
+    {
+      "id": "f_neutral_49_reserve32",
+      "path": "app/assets/portraits/f_neutral_49_reserve32.webp",
+      "apparent_gender": "f",
+      "apparent_age": 49,
+      "apparent_age_range": [
+        44,
+        54
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "covered by scarf",
+      "hair_style": "covered by scarf",
+      "facial_hair": "none",
+      "glasses": false,
+      "skin_tone": "light to medium warm olive under amber lighting",
+      "face_shape": "heart",
+      "clothing": "plain casual cotton shirt or cardigan; women with matte headscarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No assignment until confirmed usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "Staged, first build unknown",
+      "sha256": "aaa85da4f5a05ce16140c47856cd0f490d84ae6fd9d4072e81166cecd0782514",
+      "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult woman, apparent age 46. Long heart-shaped face, narrow jaw, NO glasses, medium tan skin, fine forehead lines, matte muted cocoa-brown headscarf ON HEAD fully covering hair and neck, simple slate-blue Iranian everyday blouse. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. Scarf must be matte and visibly on head, not neck only.",
+      "visual_review": {
+        "method": "Individual labelled sheet inspection; apparent ages revised from requested story ages.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      },
+      "head_covering": "scarf"
+    },
+    {
+      "id": "m_neutral_35_reserve33",
+      "path": "app/assets/portraits/m_neutral_35_reserve33.webp",
+      "apparent_gender": "m",
+      "apparent_age": 35,
+      "apparent_age_range": [
+        30,
+        40
+      ],
+      "age_band": "mid",
+      "facial_expression": "reserved attentive",
+      "hair_color": "dark brown/black with gray appropriate to age",
+      "hair_style": "short straight",
+      "facial_hair": "none",
+      "glasses": true,
+      "skin_tone": "light to medium warm olive under amber lighting",
+      "face_shape": "round",
+      "clothing": "plain casual cotton shirt or cardigan; women with matte headscarf",
+      "clothing_formality": "everyday",
+      "uniform": false,
+      "uniform_type": null,
+      "role_tags": [
+        "neutral"
+      ],
+      "roles_ok": [
+        "*"
+      ],
+      "roles_not_ok": [],
+      "restrictions": [
+        "No assignment until confirmed usable_from."
+      ],
+      "new_assignments_ok": true,
+      "usable_from": null,
+      "release_basis": "Staged, first build unknown",
+      "sha256": "f72258c0bc271f77b920c7a5515a3999a72dfeded7b28f148d859a5205bac8fb",
+      "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 34. Soft round youthful adult face, short straight black hair brushed forward, clean-shaven, rectangular dark acetate glasses, medium warm olive skin, plain charcoal T-shirt and muted teal casual overshirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
+      "visual_review": {
+        "method": "Individual labelled sheet inspection; apparent ages revised from requested story ages.",
+        "date": "2026-11-16",
+        "status": "reviewed"
+      }
     }
   ],
   "cosmetics": [
@@ -7626,6 +9022,134 @@
       "usable_from": null,
       "restrictions": [
         "Documentation only; never referenced by a case or packaged as an app portrait"
+      ]
+    },
+    {
+      "id": "scene_c072_staged",
+      "path": "app/assets/scenes/staged/c072.webp",
+      "kind": "scene",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 94306,
+      "sha256": "2c53862088b5b113eac966df82c8c278287bcf34334484721341e0831fa07bbc",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Atmosphere only, not evidence. No active scene mapping before application support and release."
+      ]
+    },
+    {
+      "id": "scene_c073_staged",
+      "path": "app/assets/scenes/staged/c073.webp",
+      "kind": "scene",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 78144,
+      "sha256": "098698e181194783ba336df8641cb7dcea5c63ad2b47136f8e3ee5c59d56fb5d",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Atmosphere only, not evidence. No active scene mapping before application support and release."
+      ]
+    },
+    {
+      "id": "scene_c074_staged",
+      "path": "app/assets/scenes/staged/c074.webp",
+      "kind": "scene",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 55424,
+      "sha256": "21e10aaf5a5c27d4678de4d9735ce90212c4618baeb51928490b41c7f73928d5",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Atmosphere only, not evidence. No active scene mapping before application support and release."
+      ]
+    },
+    {
+      "id": "scene_c075_staged",
+      "path": "app/assets/scenes/staged/c075.webp",
+      "kind": "scene",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 84668,
+      "sha256": "78c1d1905f5139148a52db9f299a500756ea00ac7cd5f4472133813cfe3d59b8",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Atmosphere only, not evidence. No active scene mapping before application support and release."
+      ]
+    },
+    {
+      "id": "scene_c076_staged",
+      "path": "app/assets/scenes/staged/c076.webp",
+      "kind": "scene",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 67334,
+      "sha256": "df93d01f2bea967a9d1855bb9faeac16cd0a9d5c4aab420c2c845b9f86fc1148",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Atmosphere only, not evidence. No active scene mapping before application support and release."
+      ]
+    },
+    {
+      "id": "scene_w007_staged",
+      "path": "app/assets/scenes/staged/w007.webp",
+      "kind": "scene",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 69136,
+      "sha256": "57962f0993201e6cebd9117723caf5fc64cc917299b0395cedbe041991f1495e",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Atmosphere only, not evidence. No active scene mapping before application support and release."
+      ]
+    },
+    {
+      "id": "scene_w008_staged",
+      "path": "app/assets/scenes/staged/w008.webp",
+      "kind": "scene",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 107526,
+      "sha256": "4190fcc74e85fba0ecc4b49641557d60295cb653f2d68bb87ae04aa51492f5bb",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Atmosphere only, not evidence. No active scene mapping before application support and release."
+      ]
+    },
+    {
+      "id": "scene_w009_staged",
+      "path": "app/assets/scenes/staged/w009.webp",
+      "kind": "scene",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 49368,
+      "sha256": "052fab3d617abbf73d15760e94a65066791dca26945d5af384e3f1489eaa3b64",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Atmosphere only, not evidence. No active scene mapping before application support and release."
       ]
     }
   ],
@@ -8366,6 +9890,76 @@
       "sha256": "a7a7792d54ddd657f08b302b6315778ef5e07db4dd4a605b5b2b49f1ef7f30ce",
       "review_date": "2026-11-11",
       "decision": "تولید تازه؛ روسری ساده و مات روی سر، لباس روزمره؛ هنوز عرضه‌نشده"
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_43_reserve01.webp",
+      "sha256": "a3377407e33300256daf279b780c8ea46dcc113864a067e716c35db5719ed92d",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf visibly on head, hair and neck covered; neutral everyday clothing."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_45_reserve02.webp",
+      "sha256": "afba94165f74b467fafb3553dd0f4cd37d3396204248c9a4034348702403cd4d",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf visibly on head, hair and neck covered; neutral everyday clothing."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_43_reserve06.webp",
+      "sha256": "f66a5efa1b2c5c8e0dfebf4b8e71541069c66025ec812954dc7305ad44f24350",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf visibly on head, hair and neck covered; neutral everyday clothing."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_40_reserve08.webp",
+      "sha256": "e57edc6c09e454f2d25c4a7ff7d4045ff5e6f6db73668b2b1c9ace4e7a7bdcbf",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf visibly on head, hair and neck covered; neutral everyday clothing."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_41_reserve11.webp",
+      "sha256": "bd57cd6fbf52d1f90d3e51ac68ab1dc122fdf67c13f288385a92229733373fcb",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf visibly on head, hair and neck covered; neutral everyday clothing."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_44_reserve14.webp",
+      "sha256": "87d7e0bc108d715cd28d4d12382e9de72f273a187b28f723377c2cc30c1cc730",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf visibly on head, hair and neck covered; neutral everyday clothing."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_42_reserve16.webp",
+      "sha256": "debe87ca909fc912276f5c3f58719fc140e6b9479819456fd26080fded6d2e4a",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf visibly on head, hair and neck covered; neutral everyday clothing."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_46_reserve18.webp",
+      "sha256": "aebfe5ec7b90c6a0f4b652a7d5f1b277bbb0f30b597b5e51b34d1b92ae2c59f6",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf visibly on head, hair and neck covered; neutral everyday clothing."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_44_reserve26.webp",
+      "sha256": "e94d02853849228d81fb5623583ca966612f0f415479d783855c8ecb86eaf7db",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf on head covering hair and neck; plain everyday clothes."
+    },
+    {
+      "path": "app/assets/portraits/f_neutral_49_reserve32.webp",
+      "sha256": "aaa85da4f5a05ce16140c47856cd0f490d84ae6fd9d4072e81166cecd0782514",
+      "head_covering": "scarf",
+      "reviewed_on": "2026-11-16",
+      "decision": "Matte scarf on head covering hair and neck; plain everyday clothes."
     }
   ],
   "head_covering_policy": {

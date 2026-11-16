@@ -1,0 +1,452 @@
+[
+  {
+    "idea": 1,
+    "gender": "m",
+    "age": 42,
+    "candidate": "m_neutral_41_oval",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 2,
+    "gender": "m",
+    "age": 44,
+    "candidate": "m_neutral_44_long",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 3,
+    "gender": "f",
+    "age": 43,
+    "candidate": "f_neutral_43_reserve01",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 4,
+    "gender": "m",
+    "age": 49,
+    "candidate": "m_neutral_46_angular",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 5,
+    "gender": "m",
+    "age": 55,
+    "candidate": "m_neutral_55_brow",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 6,
+    "gender": "f",
+    "age": 45,
+    "candidate": "f_neutral_45_reserve02",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 7,
+    "gender": "m",
+    "age": 48,
+    "candidate": "m_neutral_48_reserve03",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 8,
+    "gender": "m",
+    "age": 46,
+    "candidate": "m_neutral_46_reserve04",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 9,
+    "gender": "m",
+    "age": 47,
+    "candidate": "m_neutral_47_copper",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 10,
+    "gender": "f",
+    "age": 56,
+    "candidate": "f_neutral_58_pear",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 11,
+    "gender": "m",
+    "age": 50,
+    "candidate": "m_neutral_50_silver",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 12,
+    "gender": "m",
+    "age": 47,
+    "candidate": "m_neutral_47_reserve05",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 13,
+    "gender": "f",
+    "age": 43,
+    "candidate": "f_neutral_43_reserve06",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 14,
+    "gender": "m",
+    "age": 60,
+    "candidate": "m_neutral_56_angular",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 15,
+    "gender": "f",
+    "age": 38,
+    "candidate": "f_neutral_36_round",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 16,
+    "gender": "m",
+    "age": 39,
+    "candidate": "m_neutral_39_broad",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 17,
+    "gender": "m",
+    "age": 48,
+    "candidate": "m_neutral_48_reserve07",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 18,
+    "gender": "m",
+    "age": 37,
+    "candidate": "m_neutral_34_dimples",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 19,
+    "gender": "m",
+    "age": 52,
+    "candidate": "m_neutral_52_curls",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 20,
+    "gender": "f",
+    "age": 40,
+    "candidate": "f_neutral_40_reserve08",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 21,
+    "gender": "m",
+    "age": 58,
+    "candidate": "m_neutral_62_soft",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 22,
+    "gender": "f",
+    "age": 47,
+    "candidate": "f_neutral_54_heart",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 23,
+    "gender": "m",
+    "age": 57,
+    "candidate": "m_neutral_57_reserve09",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 24,
+    "gender": "f",
+    "age": 64,
+    "candidate": "f_neutral_64_long",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 25,
+    "gender": "m",
+    "age": 46,
+    "candidate": "m_neutral_46_reserve10",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 26,
+    "gender": "m",
+    "age": 56,
+    "candidate": "m_neutral_56_round",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 27,
+    "gender": "m",
+    "age": 53,
+    "candidate": "m_neutral_53_square",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 28,
+    "gender": "m",
+    "age": 45,
+    "candidate": "m_neutral_45_waves",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 29,
+    "gender": "f",
+    "age": 41,
+    "candidate": "f_neutral_41_reserve11",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 30,
+    "gender": "m",
+    "age": 50,
+    "candidate": "m_neutral_50_reserve12",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 31,
+    "gender": "m",
+    "age": 40,
+    "candidate": "m_neutral_38_coils",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 32,
+    "gender": "m",
+    "age": 34,
+    "candidate": "m_neutral_29_coils",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 33,
+    "gender": "m",
+    "age": 51,
+    "candidate": "m_neutral_51_reserve13",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 34,
+    "gender": "f",
+    "age": 42,
+    "candidate": "f_neutral_42_diamond",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 35,
+    "gender": "m",
+    "age": 60,
+    "candidate": "m_neutral_64_lined",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 36,
+    "gender": "f",
+    "age": 44,
+    "candidate": "f_neutral_44_reserve14",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 37,
+    "gender": "m",
+    "age": 36,
+    "candidate": "m_neutral_29_long",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 38,
+    "gender": "m",
+    "age": 48,
+    "candidate": "m_neutral_48_reserve15",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 39,
+    "gender": "f",
+    "age": 42,
+    "candidate": "f_neutral_42_reserve16",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 40,
+    "gender": "m",
+    "age": 53,
+    "candidate": "m_neutral_53_reserve17",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 41,
+    "gender": "m",
+    "age": 43,
+    "candidate": "m_neutral_44_nose",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 42,
+    "gender": "f",
+    "age": 46,
+    "candidate": "f_neutral_46_reserve18",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 43,
+    "gender": "m",
+    "age": 52,
+    "candidate": "m_neutral_52_reserve19",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 44,
+    "gender": "m",
+    "age": 44,
+    "candidate": "m_neutral_45_freckles",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": "9999-12-31",
+    "first_build": null
+  },
+  {
+    "idea": 45,
+    "gender": "m",
+    "age": 42,
+    "candidate": "m_neutral_41_shaved",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 46,
+    "gender": "f",
+    "age": 48,
+    "candidate": "f_neutral_48_square",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 47,
+    "gender": "m",
+    "age": 37,
+    "candidate": "m_neutral_37_reserve20",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 48,
+    "gender": "m",
+    "age": 48,
+    "candidate": "m_neutral_48_reserve21",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 49,
+    "gender": "m",
+    "age": 45,
+    "candidate": "m_neutral_45_reserve22",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  },
+  {
+    "idea": 50,
+    "gender": "m",
+    "age": 53,
+    "candidate": "m_neutral_53_reserve23",
+    "status": "proposed-only; final text and release review required",
+    "usable_from": null,
+    "first_build": null
+  }
+]

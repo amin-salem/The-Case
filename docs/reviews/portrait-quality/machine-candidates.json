@@ -36,6 +36,17 @@
       "sha256_b": "a648572cbc13320a850f6efa0241bf6e70b00b565c0b301caff49f56d76413d7"
     },
     {
+      "a": "f_neutral_40_reserve08",
+      "b": "f_neutral_46_reserve18",
+      "phash_distance": 10,
+      "hog_cosine": 0.84291,
+      "decision": "visually_distinguishable",
+      "sha256_a": "e57edc6c09e454f2d25c4a7ff7d4045ff5e6f6db73668b2b1c9ace4e7a7bdcbf",
+      "sha256_b": "aebfe5ec7b90c6a0f4b652a7d5f1b277bbb0f30b597b5e51b34d1b92ae2c59f6",
+      "review_note": "Visual pair review: face shape, eyebrows, beard and hair compared. Similar age/style is not identity; flagged neighbouring men must not share a cast.",
+      "review_date": "2026-11-16"
+    },
+    {
       "a": "f_mid_commander",
       "b": "f_mid_housewife",
       "phash_distance": 10,
@@ -67,6 +78,17 @@
       "review_date": "2026-11-07",
       "sha256_a": "0e509bac7f57d1f53db1aa64daa67647dc671a397f12563ffedec76d4a8604fa",
       "sha256_b": "4573829800ce9252ee5da35512e23c18091e38e0dc182dde238109de1703fd01"
+    },
+    {
+      "a": "f_neutral_43_reserve06",
+      "b": "f_neutral_49_reserve32",
+      "phash_distance": 10,
+      "hog_cosine": 0.82027,
+      "decision": "avoid_same_cast",
+      "sha256_a": "f66a5efa1b2c5c8e0dfebf4b8e71541069c66025ec812954dc7305ad44f24350",
+      "sha256_b": "aaa85da4f5a05ce16140c47856cd0f490d84ae6fd9d4072e81166cecd0782514",
+      "review_note": "Reviewed labelled pair: scarf/face silhouette similar in women, do not share cast. Male goatee, hair and face distinguishable.",
+      "review_date": "2026-11-16"
     },
     {
       "a": "m_mid_fixer",
@@ -179,6 +201,17 @@
       "sha256_b": "05d210f2133bc01e22176ea041289111bed5f608e7ab8a0386e7140dc08ea027"
     },
     {
+      "a": "m_neutral_48_reserve15",
+      "b": "m_neutral_51_reserve13",
+      "phash_distance": 10,
+      "hog_cosine": 0.80494,
+      "decision": "avoid_same_cast",
+      "sha256_a": "752aabf8217d9082c2feb3af7bad4ddc9041e8327b4b9e11e10d5f50740ef7ec",
+      "sha256_b": "2bd31d663c4325057ff07f8ab2029fa2c709ef85d6424b0e3206d540bcbdb4ea",
+      "review_note": "Visual pair review: face shape, eyebrows, beard and hair compared. Similar age/style is not identity; flagged neighbouring men must not share a cast.",
+      "review_date": "2026-11-16"
+    },
+    {
       "a": "m_mid_photographer",
       "b": "m_mid_policeman",
       "phash_distance": 10,
@@ -201,6 +234,17 @@
       "sha256_b": "dee8c26ea5553e3b7b1b6e6383b806904369497a3e63fe29cff2fa50fe4ca2fd"
     },
     {
+      "a": "m_neutral_53_reserve27",
+      "b": "m_neutral_53_square",
+      "phash_distance": 8,
+      "hog_cosine": 0.79486,
+      "decision": "visually_distinguishable",
+      "sha256_a": "e25e3f7e58a742fe240c203b18d3fbeefaa42f7c5a5baef6136c990dd44fae60",
+      "sha256_b": "655d9c13dcd23e6bc2a9bfb99ffb0ed3b07e58e4948c1231ded47df8ca59151a",
+      "review_note": "Reviewed labelled pair: scarf/face silhouette similar in women, do not share cast. Male goatee, hair and face distinguishable.",
+      "review_date": "2026-11-16"
+    },
+    {
       "a": "m_mid_fixer",
       "b": "m_mid_tycoon",
       "phash_distance": 10,
@@ -221,6 +265,17 @@
       "review_date": "2026-11-07",
       "sha256_a": "6fe34efb2e340c3a0f11422db9fda9651b0b544f628ea69984bd71fb0785f8ef",
       "sha256_b": "f77d7ba7f508678a379ade56116753e2b5b431c8680cd3bff62a9371fde39b3d"
+    },
+    {
+      "a": "m_neutral_48_reserve07",
+      "b": "m_neutral_57_reserve09",
+      "phash_distance": 8,
+      "hog_cosine": 0.79057,
+      "decision": "avoid_same_cast",
+      "sha256_a": "cd84cd9742dfb8b108af3278f8a8e351101201637098a68fdf07fb5fa8b5fa18",
+      "sha256_b": "8b7a302d0b0cfc6aeb22546a025131893540bfe4429b3d4f78f3c32f734adae5",
+      "review_note": "Visual pair review: face shape, eyebrows, beard and hair compared. Similar age/style is not identity; flagged neighbouring men must not share a cast.",
+      "review_date": "2026-11-16"
     },
     {
       "a": "m_young_conscript",
@@ -309,6 +364,17 @@
       "review_date": "2026-11-07",
       "sha256_a": "32455a2577cd9e975c3884c03717a67d833f33fc29cc7491826d110ac556af48",
       "sha256_b": "dee8c26ea5553e3b7b1b6e6383b806904369497a3e63fe29cff2fa50fe4ca2fd"
+    },
+    {
+      "a": "f_mid_waitress",
+      "b": "f_neutral_46_reserve18",
+      "phash_distance": 10,
+      "hog_cosine": 0.77013,
+      "decision": "visually_distinguishable",
+      "sha256_a": "c49d05858c0dd1e42fa3f3c01fb7a99246dcb266624aba9f60bddf3a9402e992",
+      "sha256_b": "aebfe5ec7b90c6a0f4b652a7d5f1b277bbb0f30b597b5e51b34d1b92ae2c59f6",
+      "review_note": "Visual pair review: face shape, eyebrows, beard and hair compared. Similar age/style is not identity; flagged neighbouring men must not share a cast.",
+      "review_date": "2026-11-16"
     },
     {
       "a": "m_mid_lecturer",
@@ -410,6 +476,17 @@
       "sha256_b": "f850156c83b4d43c5fb5bb96ab061f432a0da99b1c1011354eebd12f0a31220b"
     },
     {
+      "a": "f_neutral_41_reserve11",
+      "b": "f_neutral_54_heart",
+      "phash_distance": 10,
+      "hog_cosine": 0.74827,
+      "decision": "visually_distinguishable",
+      "sha256_a": "bd57cd6fbf52d1f90d3e51ac68ab1dc122fdf67c13f288385a92229733373fcb",
+      "sha256_b": "bfc3b2b9c9bf9220ee345f1eb5133a7b93e212211994099e16d7f7f1ea677792",
+      "review_note": "Visual pair review: face shape, eyebrows, beard and hair compared. Similar age/style is not identity; flagged neighbouring men must not share a cast.",
+      "review_date": "2026-11-16"
+    },
+    {
       "a": "f_mid_librarian",
       "b": "f_young_student",
       "phash_distance": 10,
@@ -419,6 +496,17 @@
       "review_date": "2026-11-07",
       "sha256_a": "b127b687f215872ae41ae4e9af0cfedabe68d569b492014528cb230fb7a54f21",
       "sha256_b": "c681cb0b1fe956786af9eb5a154c17082d21d055902b8e0c7fec217aec3f3e30"
+    },
+    {
+      "a": "m_neutral_48_reserve21",
+      "b": "m_neutral_53_reserve17",
+      "phash_distance": 10,
+      "hog_cosine": 0.74253,
+      "decision": "visually_distinguishable",
+      "sha256_a": "179e087a7732b902e039bf7ac19ba9e509a6db324d5a97ae55c217e5292efec1",
+      "sha256_b": "2923bf69dafdf1878a29722bcc61f18e03cccdd1049d89f94fc401079fccc384",
+      "review_note": "Visual pair review: face shape, eyebrows, beard and hair compared. Similar age/style is not identity; flagged neighbouring men must not share a cast.",
+      "review_date": "2026-11-16"
     },
     {
       "a": "m_neutral_20_round",
