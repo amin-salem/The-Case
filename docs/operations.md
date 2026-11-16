@@ -844,3 +844,11 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
 ## Board header from the table rows, arithmetic mean, new portraits (16 Nov 2026, server 1.66.0, app 1.44.6+95)
 
 `GET /v1/leaderboard?period=daily` returns `daily.solved` = the number of rows the table lists (solved tonight, ranked, visible player), `daily.fastest`, `daily.mean` (arithmetic mean, rounded to whole seconds) and `daily.median` (only for old app builds); times use durations > 0 only. No migration, no environment change. 33 new portraits and 8 staged scene images ship in the app; no case uses them until `usable_from` is set. The nightly draw reward is unchanged; only its help text was removed.
+
+
+## Detective help and the tool kit (16 Nov 2026, server 1.67.0, app 1.45.0+97)
+
+- `POST /v1/tools/kit` {request_id 8-24 chars [A-Za-z0-9_-]}: buys 3 magnifiers + 2 fingerprint readers + 1 camera. Idempotent through the coin-log reason `kit:<request_id>` under the player row lock; 402 `not_enough_coins` (`need`), 503 `kit_disabled`, 422 `bad_request_id`. Route policy `tool_buy`.
+- Environment: `TOOL_KIT_ENABLED` (default true; false hides and refuses the kit; `DETECTIVE_TOOLS_ENABLED=false` also does), `TOOL_KIT_PRICE` (default 280). Public config: `economy.tool_kit` {enabled, price, items}. No migration.
+- Nudge events (`help_nudge_shown`, `help_nudge_tapped`, `help_nudge_closed`) go through `/v1/events` and appear in the admin economy report; each nudge shows once per case per player (kept on the phone).
+- Watch: kit purchases are logged as `tool_kit_bought`; coin-log rows with reason `kit:*` are the revenue trail.

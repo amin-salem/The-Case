@@ -1,3 +1,12 @@
+# server 1.67.0 / app 1.45.0+97: «کمک کارآگاه», tool kit, minimal board header (16 Nov 2026)
+
+- App: one «کمک» button on the case screen opens a sheet with all six helps, cheapest first (magnifier 35, hint 1 40, fingerprint 65, camera 100, hint 2 80, hint 3 120), a three-step hint ladder, and the price and plaque effect on every row. Tools and hint 1 never cost a plaque; hints 2 and 3 cost one.
+- App: a quiet strip (once per case per player, closable, never blocking) suggests help after a long stall; the first case teaches the button with a spotlight; the last try shows a one-line reminder and the attempts as dots on the accuse screen.
+- Shop: «کیف کارآگاه» tool kit (3 magnifiers + 2 fingerprint readers + 1 camera for 280 coins; singles cost 335). Short on coins leads to the coin packs. Note: the coin pack `coins_medium` is also titled «کیف کارآگاه» in the shop; rename one of them.
+- Server: `POST /v1/tools/kit` with `request_id`: the player row is locked, the coin-log row `kit:<id>` marks "already paid", the debit cannot go below zero, stock is granted in the same transaction. 402 `not_enough_coins` with `need`, 503 `kit_disabled`. Config `TOOL_KIT_ENABLED` (default true), `TOOL_KIT_PRICE` (default 280); public config carries `economy.tool_kit`. Rate-limit route `tool_buy` policy. No migration.
+- Server: the admin economy report shows help nudge events (shown / tapped / closed) from the existing events path.
+- Leaderboard: the nightly header is one compact card: «N کارآگاه» with the fastest time and the mean in one line, no stat boxes.
+
 # app 1.44.7+96: suspect sheet and archive filters (16 Nov 2026)
 
 - App only, no server change (server stays 1.66.0).

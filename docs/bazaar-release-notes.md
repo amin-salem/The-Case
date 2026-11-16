@@ -228,3 +228,20 @@ Build 95
 
 ## developer_note
 Build 96
+
+
+<!-- build: 97 -->
+## changelog_fa
+- دکمه‌ی «کمک» تازه: همه‌ی کمک‌ها یک‌جا، از ارزان‌ترین
+- «کیف کارآگاه» در فروشگاه
+- جدول برترها مینیمال‌تر شد
+- بهبود پایداری برنامه
+
+## changelog_en
+- New help button: all helps in one place, cheapest first
+- Detective kit in the shop
+- A more minimal leaderboard header
+- Improved app stability
+
+## developer_note
+Build 97
