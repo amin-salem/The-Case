@@ -38,10 +38,12 @@ class _ShopScreenState extends State<ShopScreen> {
     try {
       await Api.i.buyKit(_kitReq!);
       _kitReq = null;
-      if (mounted) setState(() {
-        _kitBought = true;
-        _kitShort = false;
-      });
+      if (mounted) {
+        setState(() {
+          _kitBought = true;
+          _kitShort = false;
+        });
+      }
     } on ApiException catch (e) {
       _kitReq = null;
       if (!mounted) return;

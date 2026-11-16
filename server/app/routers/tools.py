@@ -180,16 +180,19 @@ async def buy_kit(body: dict = Body(default_factory=dict), player: Player = Depe
     player = (await lock_players(session, [player.id]))[player.id]
     reason = f"kit:{rid}"
     if await session.scalar(select(CoinLog.id).where(CoinLog.player_id == player.id, CoinLog.reason == reason)):
+        coins_now, pid = player.coins, player.id
         await session.rollback()
-        return {"granted": False, "already": True, "price": price, "items": dict(tools.KIT), "coins": player.coins,
-                "stock": {k: v["count"] for k, v in (await tools.stock(session, player.id)).items()}}
+        return {"granted": False, "already": True, "price": price, "items": dict(tools.KIT), "coins": coins_now,
+                "stock": {k: v["count"] for k, v in (await tools.stock(session, pid)).items()}}
+    pid = player.id
     if player.coins < price:
         await session.rollback()
         raise HTTPException(402, {"error": "not_enough_coins", "need": price})
     await add_coins(session, player, -price, reason)
     for kind, n in tools.KIT.items():
         await tools.grant(session, player.id, kind, n, why="kit")
+    coins_now = player.coins
     await session.commit()
     log.info("tool_kit_bought price=%d", price)
-    return {"granted": True, "already": False, "price": price, "items": dict(tools.KIT), "coins": player.coins,
-            "stock": {k: v["count"] for k, v in (await tools.stock(session, player.id)).items()}}
+    return {"granted": True, "already": False, "price": price, "items": dict(tools.KIT), "coins": coins_now,
+            "stock": {k: v["count"] for k, v in (await tools.stock(session, pid)).items()}}
