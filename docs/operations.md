@@ -839,3 +839,8 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
 - Admin panel → Players → «حساب‌های تکراری»: select guest rows of a device and «پنهان‌کن». They disappear from lists and counts at once.
 - 30 days later the screen shows «حذف نهایی N حساب سررسیده»; there is NO automatic job, so press it yourself. Accounts used after hiding are never deleted (they show «بعد از پنهان‌شدن استفاده شده»); restore them.
 - Migration 0038 adds `players.hidden_at` (nullable); nothing to set.
+
+
+## Board header from the table rows, arithmetic mean, new portraits (16 Nov 2026, server 1.66.0, app 1.44.6+95)
+
+`GET /v1/leaderboard?period=daily` returns `daily.solved` = the number of rows the table lists (solved tonight, ranked, visible player), `daily.fastest`, `daily.mean` (arithmetic mean, rounded to whole seconds) and `daily.median` (only for old app builds); times use durations > 0 only. No migration, no environment change. 33 new portraits and 8 staged scene images ship in the app; no case uses them until `usable_from` is set. The nightly draw reward is unchanged; only its help text was removed.

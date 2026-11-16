@@ -1,3 +1,11 @@
+# server 1.66.0 / app 1.44.6+95: board header, suspect list, new portraits (16 Nov 2026)
+
+- Leaderboard (server): the daily header count («N کارآگاه»), the fastest time and the time summary now come from the SAME rows as the table (`_daily_conds`: solved tonight, ranked, visible player). Before, the header also counted unranked rushes. The header time is now the arithmetic mean (`daily.mean`, rounded seconds, only durations > 0); `daily.median` is still sent for old app builds. No migration.
+- Leaderboard (app): shows «میانگین» (falls back to «میانه» from an old server); the «قرعه‌ی شبانه» block is removed from the info sheet and from the public rules page. The server code of the nightly draw (`rewards.py`) is left because the reward still exists.
+- Suspect list and peek: one role line only (the fuller `intro`; the short `role` only for old cached cases), age next to the name.
+- Art: 33 new neutral portraits (from `case-art-72-plus`) are registered in `kPortraits` (ids only, owner-approved); 8 staged scene backgrounds are in the asset bundle (`assets/scenes/staged/`), not used by any case yet. `usable_from` stays empty, so no case uses the new portraits yet.
+- Not in this build (scheduled again): suspect sheet layout, archive filters, eight leagues, intro case, detective help.
+
 # server 1.65.0: nightly cases c075, c076 (16 Nov 2026)
 
 - Two new nightly cases from the idea bank: c075 «جمله‌ای روی بخار» (idea 23, style S3 seemingly supernatural, puzzle type 8 lying witness, snow_lodge / crime, difficulty 5, publish 12 Dec 2026) and c076 «بذرهایی برای نمایش» (idea 24, style S1 cold case, puzzle type 10 motive reversal, school / science, difficulty 5, publish 13 Dec 2026), with their notify entries. Content only, no migration.

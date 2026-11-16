@@ -196,3 +196,20 @@ Build 93
 
 ## developer_note
 نسخه جدید با بهبود تجربه کاربری و پایداری
+
+
+<!-- build: 95 -->
+## changelog_fa
+- معرفی مظنون‌ها خلاصه‌تر و بدون تکرار شد
+- آمار جدول امروز با فهرست کارآگاه‌ها هم‌خوان شد و زمان به‌صورت میانگین نشان داده می‌شود
+- چهره‌های تازه برای پرونده‌های آینده
+- بهبود پایداری برنامه
+
+## changelog_en
+- Cleaner suspect introductions without repeated lines
+- Today's leaderboard summary now matches the list and shows the average time
+- New faces for upcoming cases
+- Improved app stability
+
+## developer_note
+Build 95

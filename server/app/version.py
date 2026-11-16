@@ -1,5 +1,6 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.65.0"
+VERSION = "1.66.0"
+# server 1.66.0: board header from the table rows, arithmetic mean, 33 new portraits (16 Nov 2026)
 # server 1.65.0: nightly cases c075, c076 (16 Nov 2026)
 # server 1.63.1: weekend case w009 (16 Nov 2026)
 # server 1.63.0: nightly cases c071, c072 (15 Nov 2026)
