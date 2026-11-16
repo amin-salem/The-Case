@@ -12,7 +12,14 @@ class CoachMarks extends StatefulWidget {
     required this.steps,
     required this.onNext,
     required this.onSkip,
+    this.nextLabel,
+    this.skipLabel,
+    this.showCounter = true,
   });
+
+  /// Optional button texts and the «N از M» counter, for a single-step spotlight (the help teaching).
+  final String? nextLabel, skipLabel;
+  final bool showCounter;
 
   final int step;
   final List<GlobalKey> targets;
@@ -78,7 +85,8 @@ class _CoachMarksState extends State<CoachMarks> {
               boxShadow: const [BoxShadow(color: Color(0x88000000), blurRadius: 18, offset: Offset(0, 8))],
             ),
             child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('${fa(step + 1)} از ${fa(widget.steps.length)}', style: tBody(12, color: K.inkSoft, w: FontWeight.w700)),
+              if (widget.showCounter)
+                Text('${fa(step + 1)} از ${fa(widget.steps.length)}', style: tBody(12, color: K.inkSoft, w: FontWeight.w700)),
               Text(title, style: tDisplay(20, color: K.ink)),
               const SizedBox(height: 4),
               Text(text, style: tBody(14, color: K.ink)),
@@ -87,10 +95,10 @@ class _CoachMarksState extends State<CoachMarks> {
                 TextButton(
                   onPressed: widget.onSkip,
                   style: TextButton.styleFrom(foregroundColor: K.inkSoft),
-                  child: Text('رد کن', style: tBody(14, color: K.inkSoft, w: FontWeight.w700)),
+                  child: Text(widget.skipLabel ?? 'رد کن', style: tBody(14, color: K.inkSoft, w: FontWeight.w700)),
                 ),
                 const Spacer(),
-                StampButton(label: last ? 'فهمیدم' : 'بعدی', height: 42, onTap: widget.onNext),
+                StampButton(label: widget.nextLabel ?? (last ? 'فهمیدم' : 'بعدی'), height: 42, onTap: widget.onNext),
               ]),
             ]),
           ),

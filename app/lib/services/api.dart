@@ -898,6 +898,14 @@ class Api extends ChangeNotifier {
     return ToolOutcome(j);
   }
 
+  /// «کیف کارآگاه»: coins -> tools in the stock, one atomic call. [requestId] is made once per tap, so a retry is harmless.
+  /// Returns the new coin balance and the stock; throws ApiException(402, not_enough_coins) when short.
+  Future<({int coins, bool granted})> buyKit(String requestId) async {
+    final j = (await _call('POST', '/v1/tools/kit', body: {'request_id': requestId}) as Map).cast<String, dynamic>();
+    if (j['coins'] is int) _setCoins(j['coins'] as int);
+    return (coins: j['coins'] is int ? j['coins'] as int : coins, granted: j['granted'] == true);
+  }
+
   Future<AccuseResult> accuse(String caseId, String suspectId, String evidenceId, {String? motive}) async {
     final j = (await _call('POST', '/v1/cases/$caseId/accuse', body: {
       'suspect': suspectId,
@@ -1026,6 +1034,12 @@ class Api extends ChangeNotifier {
 
   Map<String, dynamic> get _economy =>
       config['economy'] is Map ? (config['economy'] as Map).cast<String, dynamic>() : const {};
+  /// «کیف کارآگاه» from the public config (null from an old server: the shop just does not show it).
+  KitOffer? get toolKit {
+    final k = _economy['tool_kit'];
+    return k is Map ? KitOffer(k.cast<String, dynamic>()) : null;
+  }
+
   int get weeklyReward => _economy['weekly_reward'] as int? ?? 300;
   int get weeklyEarlyBonus => _economy['weekly_early_bonus'] as int? ?? 80;
   int get weekendLiarReward => _economy['weekend_liar_reward'] as int? ?? 10;

@@ -60,9 +60,26 @@ class ToolInfo {
   bool get hasOne => count > 0 || freeAvailable;
 }
 
+/// «کیف کارآگاه»: the tool bundle the server offers (price, what it holds, what the same tools cost one by one).
+class KitOffer {
+  KitOffer(Map<String, dynamic> j)
+      : enabled = _b(j['enabled']),
+        price = _i(j['price']),
+        singles = _i(j['singles']),
+        items = {
+          if (j['items'] is Map)
+            for (final e in (j['items'] as Map).entries)
+              if (e.value is num) '${e.key}': (e.value as num).toInt()
+        };
+  final bool enabled;
+  final int price, singles;
+  final Map<String, int> items;
+}
+
 class ToolTray {
   ToolTray(Map<String, dynamic> j)
-      : enabled = _b(j['enabled']),
+      : kit = j['kit'] is Map ? KitOffer((j['kit'] as Map).cast<String, dynamic>()) : null,
+        enabled = _b(j['enabled']),
         daily = j['daily'] != false,
         message = _s(j['message']),
         coins = _i(j['coins']),
@@ -81,6 +98,7 @@ class ToolTray {
             if (t is Map) ToolInfo(t.cast<String, dynamic>())
         ];
 
+  final KitOffer? kit; // null from an old server
   final bool enabled;
 
   /// false for weekend and story cases (the tray says tools are for daily cases only)

@@ -12,8 +12,18 @@ import 'case_screen.dart';
 
 /// A stepper: who did it, which evidence proves their lie (and, for the weekend case, why).
 /// Pops with the server's answer.
+/// With ONE attempt left the accuse screen offers the magnifier first: «قبلش یک مدرکِ بی‌ربط را کنار بگذاری؟».
+/// [onUse] runs the normal tool flow of the case screen and says whether the magnifier was used.
+class LastTryHelp {
+  const LastTryHelp({required this.price, required this.free, required this.onUse});
+  final int price;
+  final bool free; // one is in hand (stock or the free first tool)
+  final Future<bool> Function() onUse;
+}
+
 class AccuseScreen extends StatefulWidget {
-  const AccuseScreen({super.key, required this.caseData, required this.progress, required this.marks});
+  const AccuseScreen({super.key, required this.caseData, required this.progress, required this.marks, this.lastTry});
+  final LastTryHelp? lastTry;
   final CaseData caseData;
   final Progress progress;
   final Map<String, SuspectMark> marks;
@@ -28,6 +38,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
   String? _motive; // the weekend case also asks why
   int _step = 0; // 0 who, 1 which proof, 2 why (weekend case only)
   bool _busy = false;
+  bool _magUsed = false; // the last-try magnifier was used from here
   String? _feedback;
   late int _left = widget.progress.attemptsLeft;
   late final AnimationController _shake = AnimationController(vsync: this, duration: const Duration(milliseconds: 420));
@@ -217,6 +228,7 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
                   const SizedBox(height: 10),
                 ],
                 if (_last && _picked) ...[_summary(c), const SizedBox(height: 10)],
+                if (_last && _left == 1 && widget.lastTry != null && !_magUsed) ...[_lastTryLine(widget.lastTry!), const SizedBox(height: 10)],
                 Row(children: [
                   if (_step > 0) ...[
                     GhostButton(label: 'قبلی', icon: Icons.chevron_left_rounded, onTap: _busy ? null : () => _go(_step - 1)),
@@ -229,6 +241,35 @@ class _AccuseScreenState extends State<AccuseScreen> with SingleTickerProviderSt
           ),
         ),
       ),
+    );
+  }
+
+  Widget _lastTryLine(LastTryHelp h) {
+    return Container(
+      key: const ValueKey('last-try'),
+      padding: const EdgeInsetsDirectional.fromSTEB(12, 6, 6, 6),
+      decoration: BoxDecoration(color: K.night3, borderRadius: BorderRadius.circular(12), border: Border.all(color: K.stamp.withValues(alpha: 0.6))),
+      child: Row(children: [
+        Expanded(child: Text('قبلش یک مدرکِ بی‌ربط را کنار بگذاری؟', style: tBody(13, w: FontWeight.w700).copyWith(height: 1.5))),
+        const SizedBox(width: 8),
+        InkWell(
+          key: const ValueKey('last-try-magnifier'),
+          borderRadius: BorderRadius.circular(10),
+          onTap: _busy
+              ? null
+              : () async {
+                  final used = await h.onUse();
+                  if (mounted && used) setState(() => _magUsed = true);
+                },
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 44),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(10)),
+            child: Text('ذره‌بین · ${h.free ? 'رایگان' : fa(h.price)}', style: tBody(13, color: K.ink, w: FontWeight.w900).copyWith(height: 1.3)),
+          ),
+        ),
+      ]),
     );
   }
 

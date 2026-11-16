@@ -21,6 +21,7 @@ import '../widgets/coach_marks.dart';
 import '../widgets/crime_tape.dart';
 import '../widgets/engagement.dart';
 import '../widgets/fx.dart';
+import '../widgets/help_sheet.dart';
 import '../widgets/offline.dart';
 import '../widgets/partner_card.dart';
 import '../widgets/rate_card.dart';
@@ -102,6 +103,7 @@ class _CaseScreenState extends State<CaseScreen> {
     _noteAccount = Api.i.account;
     Api.i.addListener(_noteAccountChanged);
     CaseClock.i.start(widget.caseId); // solving time counts only while this screen is open
+    _idleTimer = Timer.periodic(const Duration(seconds: 30), (_) => _idleCheck());
     _loadNotes();
     _load();
     unawaited(_loadChapterSeen());
@@ -149,6 +151,7 @@ class _CaseScreenState extends State<CaseScreen> {
   @override
   void dispose() {
     _chapterTimer?.cancel();
+    _idleTimer?.cancel();
     Api.i.removeListener(_noteAccountChanged);
     CaseClock.i.stop();
     super.dispose();
@@ -273,6 +276,13 @@ class _CaseScreenState extends State<CaseScreen> {
         _updateBanner();
       }
       unawaited(_loadTools());
+      if (!_nudgeChecked) {
+        _nudgeChecked = true;
+        // back on a case he started earlier (never in this same visit): hint 1, once
+        if (!p.finished && (Api.i.flag(_startedKey) || p.attempts > 0)) {
+          Future<void>.delayed(const Duration(seconds: 2), () => _maybeNudge('half_finished'));
+        }
+      }
       // the case file opens with its own sting and the sounds of the place
       if (_intro) {
         Sfx.i.openCase(c.scene);
@@ -306,6 +316,15 @@ class _CaseScreenState extends State<CaseScreen> {
 
   ToolTray? _tray;
   bool _toolBusy = false;
+
+  // ---------------------------------------------------------------- «کمک کارآگاه» (one button for hints and tools)
+  final _helpKey = GlobalKey();
+  String? _nudge; // 'wrong_accusation' | 'half_finished' | 'idle' while the strip shows (at most once per case per player)
+  Timer? _idleTimer;
+  DateTime _lastActive = DateTime.now();
+  int _activity = 0;
+  bool _nudgeChecked = false;
+  bool _teach = false; // the first-case spotlight on the help button
 
   Future<void> _loadTools() async {
     final t = await Api.i.toolsTray(widget.caseId);
@@ -360,7 +379,7 @@ class _CaseScreenState extends State<CaseScreen> {
   }
 
   /// One tap uses a tool the player holds; with none in hand it asks once and buys. Never blocks the case.
-  Future<void> _useTool(ToolInfo t) async {
+  Future<void> _useTool(ToolInfo t, {bool confirmed = false}) async {
     if (_toolBusy) return;
     if (t.used && t.result != null) {
       await _showToolResult(t, t.result!.text);
@@ -374,7 +393,7 @@ class _CaseScreenState extends State<CaseScreen> {
     }
     var buy = !t.hasOne;
     final who = suspect == null ? '' : ' روی ${_case!.suspects.firstWhere((x) => x.id == suspect).name}';
-    final ok = await confirm(
+    final ok = confirmed ? true : await confirm(
         context,
         '${t.title}$who',
         '${_toolDoes(t.kind)}\n${_toolNever(t.kind)}\n'
@@ -421,45 +440,6 @@ class _CaseScreenState extends State<CaseScreen> {
         _ => 'مقصر رو لو نمی‌ده و پرونده رو حل نمی‌کنه.',
       };
 
-  Future<void> _showToolHelp() async {
-    final tray = _tray;
-    if (tray == null) return;
-    await showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: K.night2,
-      builder: (ctx) => SafeArea(
-        child: SingleChildScrollView(
-          key: const ValueKey('tools-help-sheet'),
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Text('ابزارها چطور کار می‌کنن؟', style: tDisplay(18)),
-            const SizedBox(height: 4),
-            Text('کمک‌های کوچیک برای تنگ‌تر کردن جستجو. هیچ‌کدوم مقصر رو لو نمی‌دن و هیچ‌کدوم امتیاز و پلاک رو عوض نمی‌کنن.',
-                style: tBody(12.5, color: K.textSoft)),
-            for (final t in tray.tools) ...[
-              const SizedBox(height: 14),
-              Row(children: [
-                Icon(toolIcon(t.kind), color: K.brass, size: 22),
-                const SizedBox(width: 8),
-                Text('${t.title} · ${fa(t.price)} سکه', style: tBody(14.5, w: FontWeight.w900)),
-              ]),
-              const SizedBox(height: 4),
-              Text(t.desc, style: tBody(13)),
-              if (tray.how[t.kind] != null) ...[
-                const SizedBox(height: 4),
-                Text('چطور به دست میاد: ${tray.how[t.kind]!.$1}', style: tBody(12.5, color: K.textSoft)),
-                Text('کجا استفاده می‌شه: ${tray.how[t.kind]!.$2}', style: tBody(12.5, color: K.textSoft)),
-              ],
-            ],
-            const SizedBox(height: 14),
-            StampButton(label: 'باشه', height: 44, onTap: () => Navigator.pop(ctx)),
-          ]),
-        ),
-      ),
-    );
-  }
-
   /// What the tools found, pinned on the case so reopening it does not lose it.
   Widget _toolFindings() {
     final pinned = _tray?.pinned ?? const <ToolInfo>[];
@@ -493,17 +473,21 @@ class _CaseScreenState extends State<CaseScreen> {
     ]);
   }
 
-  Future<void> _hint() async {
+  /// [confirmed]: the help sheet already showed the price and the plaque tag and the player pressed its button.
+  Future<void> _hint({bool confirmed = false}) async {
     final p = _progress!;
     final cost = p.nextHintCost;
     if (cost == null) return;
     if (!needOnline(context)) return;
     final vipFree = (Api.i.profile?.vip ?? false) && p.hints.isEmpty;
-    final ok = await confirm(context, 'سرنخ ${fa(p.hints.length + 1)} از ${fa(p.hintCosts.length)}',
-        '${vipFree ? 'اولین سرنخ برای VIP رایگانه.' : 'این سرنخ ${fa(cost)} سکه هزینه داره.'} '
-            '${p.hints.isEmpty ? 'پلاکی کم نمی‌شه.' : 'یه پلاک از امتیازت کم می‌شه.'}',
-        'بگیر');
-    if (!ok || !mounted) return;
+    if (!confirmed) {
+      final ok = await confirm(context, 'سرنخ ${fa(p.hints.length + 1)} از ${fa(p.hintCosts.length)}',
+          '${vipFree ? 'اولین سرنخ برای VIP رایگانه.' : 'این سرنخ ${fa(cost)} سکه هزینه داره.'} '
+              '${p.hints.isEmpty ? 'پلاکی کم نمی‌شه.' : 'یه پلاک از امتیازت کم می‌شه.'}',
+          'بگیر');
+      if (!ok || !mounted) return;
+    }
+    if (!mounted) return;
     try {
       final (hint, progress) = await Api.i.buyHint(_case!.id);
       if (!mounted) return;
@@ -537,12 +521,140 @@ class _CaseScreenState extends State<CaseScreen> {
     }
   }
 
+  // ---- help sheet, nudges, teaching
+
+  String get _startedKey => 'started_${Api.i.playerId}_${widget.caseId}';
+  String get _nudgeFlag => 'nudge_${Api.i.playerId}_${widget.caseId}';
+
+  Future<void> _openHelp({String? preselect}) async {
+    final p = _progress;
+    if (p == null || p.finished) return;
+    final vipFree = (Api.i.profile?.vip ?? false) && p.hints.isEmpty;
+    final options = buildHelpOptions(p, _tray, vipFree: vipFree);
+    final pick = await showHelpSheet(context, options: options, hintsTaken: p.hints.length, coins: Api.i.coins, preselect: preselect);
+    if (pick == null || !mounted) return;
+    if (pick.isHint) {
+      await _hint(confirmed: true);
+    } else if (pick.tool != null) {
+      await _useTool(pick.tool!, confirmed: true);
+    }
+  }
+
+  /// What a nudge suggests: the magnifier after a wrong accusation, hint 1 otherwise. Null = nothing worth offering.
+  String? _nudgeTarget(String kind) {
+    final p = _progress;
+    if (p == null || p.finished) return null;
+    final t = _tray, m = t?.byKind('magnifier');
+    if (kind == 'wrong_accusation' && t != null && t.daily && t.enabled && m != null && m.available && m.usable) return 'magnifier';
+    if (p.hints.isEmpty && p.nextHintCost != null) return 'hint1';
+    return null;
+  }
+
+  /// A small strip above the bottom bar. At most once per case per player, never a dialog, never blocks anything.
+  void _maybeNudge(String kind) {
+    if (!mounted || _nudge != null || _coach != null || _teach || _intro) return;
+    if (Api.i.flag(_nudgeFlag) || _nudgeTarget(kind) == null) return;
+    unawaited(Api.i.setFlag(_nudgeFlag));
+    setState(() => _nudge = kind);
+    unawaited(Api.i.track('help_nudge_shown', {'kind': kind}));
+  }
+
+  void _idleCheck() {
+    if (!mounted || _intro || _progress == null || _progress!.finished) return;
+    final now = CaseClock.i.cards.length + CaseClock.i.asks.length;
+    if (now != _activity) {
+      _activity = now;
+      _lastActive = DateTime.now();
+    } else if (DateTime.now().difference(_lastActive) >= const Duration(minutes: 4)) {
+      _maybeNudge('idle');
+    }
+  }
+
+  void _nudgeTapped() {
+    final kind = _nudge;
+    if (kind == null) return;
+    final target = _nudgeTarget(kind);
+    unawaited(Api.i.track('help_nudge_tapped', {'kind': kind}));
+    setState(() => _nudge = null);
+    _openHelp(preselect: target);
+  }
+
+  void _nudgeClosed() {
+    final kind = _nudge;
+    if (kind == null) return;
+    unawaited(Api.i.track('help_nudge_closed', {'kind': kind}));
+    setState(() => _nudge = null);
+  }
+
+  Widget _nudgeStrip() {
+    final kind = _nudge!;
+    final (text, action) = switch (kind) {
+      'wrong_accusation' => ('اتهام درست نبود. ذره‌بین یه مدرک بی‌ربط رو کنار می‌ذاره.', 'ذره‌بین'),
+      'half_finished' => ('برگشتی سراغ پرونده. یه جهت فکر شاید کمک کنه.', 'جهت فکر'),
+      _ => ('یه مدت‌ه چیز تازه‌ای ندیدی. یه جهت فکر می‌خوای؟', 'جهت فکر'),
+    };
+    return HelpNudgeStrip(text: text, action: action, onTap: _nudgeTapped, onClose: _nudgeClosed);
+  }
+
+  /// The first case: after about three cards, a spotlight on the help button and the free magnifier (once).
+  void _maybeTeach() {
+    if (!mounted || _teach || _coach != null || _intro || _seen.length < 3) return;
+    final p = _progress, t = _tray, m = t?.byKind('magnifier');
+    if (p == null || p.finished || Api.i.flag('help_teach_done')) return;
+    if ((Api.i.profile?.casesSolved ?? 0) > 0) return;
+    if (t == null || !t.daily || !t.enabled || m == null || !m.available || !m.usable || !m.freeAvailable || m.count > 0) return;
+    unawaited(Api.i.setFlag('help_teach_done'));
+    setState(() => _teach = true);
+  }
+
+  void _teachTry() {
+    setState(() => _teach = false);
+    final m = _tray?.byKind('magnifier');
+    if (m != null) unawaited(_useTool(m, confirmed: true));
+  }
+
+  Widget _helpButton(Progress p) {
+    final free = freeHelpCount(_tray);
+    final nothing = buildHelpOptions(p, _tray).every((o) => !o.selectable);
+    return Stack(clipBehavior: Clip.none, children: [
+      KeyedSubtree(
+        key: _helpKey,
+        child: StampButton(
+            label: 'کمک کارآگاه', icon: Icons.lightbulb_rounded, color: K.night3, onTap: nothing ? null : () => _openHelp()),
+      ),
+      if (free > 0)
+        PositionedDirectional(
+          end: -2,
+          top: -9,
+          child: Container(
+            key: const ValueKey('help-free-badge'),
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+            decoration: BoxDecoration(color: K.ok, borderRadius: BorderRadius.circular(99)),
+            child: Text('${fa(free)} رایگان', style: tBody(10.5, color: K.ink, w: FontWeight.w900).copyWith(height: 1.4)),
+          ),
+        ),
+    ]);
+  }
+
   Future<void> _accuse() async {
     if (!needOnline(context)) return;
-    final r = await Navigator.of(context).push<AccuseResult>(
-        MaterialPageRoute(builder: (_) => AccuseScreen(caseData: _case!, progress: _progress!, marks: _marks)));
+    final t = _tray, m = t?.byKind('magnifier');
+    final lastTry = (t != null && t.daily && t.enabled && m != null && m.available && m.usable)
+        ? LastTryHelp(
+            price: m.price,
+            free: m.hasOne,
+            onUse: () async {
+              await _useTool(m);
+              return _tray?.byKind('magnifier')?.used ?? false;
+            })
+        : null;
+    final r = await Navigator.of(context).push<AccuseResult>(MaterialPageRoute(
+        builder: (_) => AccuseScreen(caseData: _case!, progress: _progress!, marks: _marks, lastTry: lastTry)));
     if (r == null || !mounted) return;
     if (r.progress != null) setState(() => _progress = r.progress);
+    if (r.result != 'solved' && r.result != 'failed') {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _maybeNudge('wrong_accusation'));
+    }
     if (r.result == 'solved' || r.result == 'failed') {
       await Navigator.of(context).push(MaterialPageRoute(builder: (_) => ResultScreen(caseData: _case!, result: r)));
       await _load();
@@ -604,7 +716,11 @@ class _CaseScreenState extends State<CaseScreen> {
         _guessBusy = false;
       }
     }
-    if (mounted) setState(() => _intro = false);
+    if (mounted) {
+      setState(() => _intro = false);
+      _lastActive = DateTime.now();
+      unawaited(Api.i.setFlag(_startedKey));
+    }
   }
 
   Widget _introView(CaseData c) {
@@ -717,6 +833,20 @@ class _CaseScreenState extends State<CaseScreen> {
                 onSkip: () => _coachTo(null),
               ),
             ),
+          if (_teach)
+            Positioned.fill(
+              child: CoachMarks(
+                key: const ValueKey('help-teach'),
+                step: 0,
+                targets: [_helpKey],
+                steps: const [('اولین ذره‌بین مهمان ماست', 'یه مدرک بی‌ربط رو برات کنار می‌ذاره تا وقتت تلف نشه. پلاکی کم نمی‌شه.')],
+                showCounter: false,
+                nextLabel: 'امتحان کن · رایگان',
+                skipLabel: 'بعداً',
+                onNext: _teachTry,
+                onSkip: () => setState(() => _teach = false),
+              ),
+            ),
         ]);
       }),
     );
@@ -784,15 +914,21 @@ class _CaseScreenState extends State<CaseScreen> {
                   Text('این پرونده رو باختی', style: tBody(13, color: K.stamp, w: FontWeight.w900))
                 else
                   Row(children: [
-                    for (int i = 0; i < p.attemptsLeft + p.attempts; i++)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 3),
-                        child: Icon(Icons.gavel_rounded, size: 16, color: i < p.attemptsLeft ? K.stamp : K.textSoft.withValues(alpha: 0.3)),
-                      ),
-                    const SizedBox(width: 6),
-                    Flexible(
-                      child: Text('${fa(p.attemptsLeft)} فرصت متهم کردن',
-                          maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(12, color: K.textSoft)),
+                    Semantics(
+                      label: '${fa(p.attemptsLeft)} فرصت متهم کردن',
+                      child: Row(key: const ValueKey('attempt-dots'), mainAxisSize: MainAxisSize.min, children: [
+                        for (int i = 0; i < p.attemptsLeft + p.attempts; i++)
+                          Container(
+                            margin: const EdgeInsetsDirectional.only(end: 5),
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: i < p.attemptsLeft ? K.stamp : Colors.transparent,
+                              border: Border.all(color: i < p.attemptsLeft ? K.stamp : K.textSoft.withValues(alpha: 0.5), width: 1.5),
+                            ),
+                          ),
+                      ]),
                     ),
                   ]),
               ]),
@@ -1073,6 +1209,7 @@ class _CaseScreenState extends State<CaseScreen> {
               });
               CaseClock.i.card(e.id);
               _saveNotes();
+              _maybeTeach();
               if (chaptered) {
                 unawaited(seen.markEvidence(e.id));
                 _chSeen ??= seen;
@@ -1121,7 +1258,15 @@ class _CaseScreenState extends State<CaseScreen> {
                       icon: const Icon(Icons.add_link_rounded, size: 18, color: K.stamp),
                       label: Text('پیوند به حرف مظنون', style: tBody(12.5, color: K.stamp))),
                     if (irrelevant)
-                      Text('بی‌ربط · ذره‌بین', key: ValueKey('irrelevant-${e.id}'), style: tBody(12, color: K.inkSoft, w: FontWeight.w900)),
+                      Transform.rotate(
+                        angle: -0.06,
+                        child: Container(
+                          key: ValueKey('irrelevant-${e.id}'),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                          decoration: BoxDecoration(border: Border.all(color: K.stamp, width: 1.6), borderRadius: BorderRadius.circular(6)),
+                          child: Text('بی‌ربط', style: tBody(12, color: K.stamp, w: FontWeight.w900).copyWith(height: 1.4)),
+                        ),
+                      ),
                     if (key) Text('مدرک کلیدی', style: tBody(12, color: K.stamp, w: FontWeight.w900)),
                     if (pinned && !key) Text('نشان‌شده', style: tBody(11, color: K.stamp, w: FontWeight.w900)),
                   ]),
@@ -1255,7 +1400,6 @@ class _CaseScreenState extends State<CaseScreen> {
   }
 
   Widget _bottomBar(Progress p) {
-    final cost = p.nextHintCost;
     return Container(
       decoration: const BoxDecoration(color: K.night2, border: Border(top: BorderSide(color: K.night3))),
       child: SafeArea(
@@ -1264,17 +1408,9 @@ class _CaseScreenState extends State<CaseScreen> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            if (_tray != null) ToolTrayBar(tray: _tray!, busy: _toolBusy, onTap: _useTool, onHelp: _showToolHelp),
+            if (_nudge != null) _nudgeStrip(),
             Row(children: [
-              Expanded(
-                flex: 2,
-                child: StampButton(
-                  label: cost == null ? 'سرنخی نمونده' : 'سرنخ · ${fa(cost)}',
-                  icon: Icons.lightbulb_rounded,
-                  color: K.night3,
-                  onTap: cost == null ? null : _hint,
-                ),
-              ),
+              Expanded(flex: 3, child: _helpButton(p)),
               const SizedBox(width: 10),
               Expanded(
                 flex: 3,
@@ -1289,4 +1425,3 @@ class _CaseScreenState extends State<CaseScreen> {
     );
   }
 }
-
