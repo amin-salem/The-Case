@@ -53,7 +53,7 @@ def _gap(rank: int, mine: int, above: int | None, unit: str, *, lower_is_better:
 async def leaderboard(period: str = Query("daily", pattern="^(daily|weekly|all)$"),
                       limit: int = Query(50, ge=1, le=100),
                       offset: int = Query(0, ge=0, le=MAX_OFFSET),
-                      league: int | None = Query(None, ge=0, le=3),
+                      league: int | None = Query(None, ge=0, le=7),
                       player: Player = Depends(current_player),
                       session: AsyncSession = Depends(get_session)):
     live = streakrepair.LiveStreak()  # the flame: one lookup per row, no extra query

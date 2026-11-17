@@ -228,8 +228,8 @@ async def test_a_prize_needs_two_cases(client, clock, single_board, week_of_fake
 # ------------------------------------------------------------------ leagues
 def test_league_thresholds_follow_the_rank_titles():
     from app import economy as eco
-    assert weekboard.league_min_xp() == (0, eco.RANKS[4][0], eco.RANKS[8][0], eco.RANKS[12][0])
-    assert [weekboard.league_for_xp(x) for x in (0, 1599, 1600, 5599, 5600, 13499, 13500, 99999)] == [0, 0, 1, 1, 2, 2, 3, 3]
+    assert weekboard.league_min_xp() == tuple(eco.RANKS[i][0] for i in (0, 2, 4, 6, 8, 10, 12, 15))
+    assert [weekboard.league_for_xp(x) for x in (0, 549, 550, 1599, 1600, 3199, 3200, 5599, 5600, 8999, 9000, 13499, 13500, 23999, 24000, 99999)] == [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7]
 
 
 async def test_league_snapshot_is_stable_and_a_player_is_in_one_league(client, clock, leagues, week_of_fake_cases):
@@ -238,20 +238,20 @@ async def test_league_snapshot_is_stable_and_a_player_is_in_one_league(client, c
     p = await new_player(client, "fw-snap", aged=True)
     await set_player(p["player_id"], xp=1700, cases_solved=5)
     async with db.SessionLocal() as s:
-        assert await weekboard.league_of(s, ws, p["player_id"]) == 1
+        assert await weekboard.league_of(s, ws, p["player_id"]) == 2
     await set_player(p["player_id"], xp=99999)                  # grows during the week: the league does not change
     async with db.SessionLocal() as s:
-        assert await weekboard.league_of(s, ws, p["player_id"]) == 1
+        assert await weekboard.league_of(s, ws, p["player_id"]) == 2
         rows = (await s.execute(select(WeekLeague).where(WeekLeague.week == ws.isoformat(), WeekLeague.player_id == p["player_id"]))).scalars().all()
         assert len(rows) == 1
         marker = await s.scalar(select(func.count()).select_from(WeekLeague).where(WeekLeague.week == ws.isoformat(), WeekLeague.player_id == weekboard.MARKER))
         assert marker == 1
     async with db.SessionLocal() as s:                         # taking it again changes nothing
         await weekboard.ensure_snapshot(s, ws)
-        assert await weekboard.league_of(s, ws, p["player_id"]) == 1
+        assert await weekboard.league_of(s, ws, p["player_id"]) == 2
     next_ws = ws + timedelta(days=7)
     async with db.SessionLocal() as s:                         # next week's snapshot is the promotion
-        assert await weekboard.league_of(s, next_ws, p["player_id"]) == 3
+        assert await weekboard.league_of(s, next_ws, p["player_id"]) == 7
     # a player who never solved anything is in league 0
     fresh = await new_player(client, "fw-snap-new", aged=True)
     async with db.SessionLocal() as s:
@@ -267,13 +267,13 @@ async def test_board_shows_own_league_with_a_switch(client, clock, leagues, week
     await solve(rookie["player_id"], wid(ws, 0), 3, T(2027, 5, 15, 10))
     await solve(boss["player_id"], wid(ws, 0), 1, T(2027, 5, 15, 10))
     mine = await board(client, rookie["headers"])
-    assert mine["league"] == 0 and mine["my_league"] == 0 and len(mine["leagues"]) == 4 and mine["me"]["rank"] == 1
+    assert mine["league"] == 0 and mine["my_league"] == 0 and len(mine["leagues"]) == 8 and mine["me"]["rank"] == 1
     assert "تازه‌کار" in mine["title"]
-    other = await board(client, rookie["headers"], league=3)
-    assert other["league"] == 3 and other["me"] is None and any(r["stars"] == 1 for r in other["top"])
+    other = await board(client, rookie["headers"], league=6)
+    assert other["league"] == 6 and other["me"] is None and any(r["stars"] == 1 for r in other["top"])
     assert not any(r["me"] for r in other["top"])
     bossb = await board(client, boss["headers"])
-    assert bossb["league"] == 3 and bossb["me"]["rank"] == 1       # 1 point wins his league, the rookie's 3 is another board
+    assert bossb["league"] == 6 and bossb["me"]["rank"] == 1       # 1 point wins his league, the rookie's 3 is another board
 
 
 async def test_settlement_pays_each_league_once(client, clock, leagues, week_of_fake_cases):
@@ -298,10 +298,10 @@ async def test_settlement_pays_each_league_once(client, clock, leagues, week_of_
     prizes = {p["player_id"]: await inbox_prizes(client, p) for p in ps}
     assert [len(v) for v in prizes.values()] == [1, 1, 1, 0, 1, 1, 1]       # the 4th rookie gets nothing; nobody twice
     amounts = [v[0]["grants"][0]["amount"] for v in list(prizes.values())[:3]]
-    assert amounts == [120, 80, 50]
-    assert [prizes[ps[i]["player_id"]][0]["grants"][0]["amount"] for i in (4, 5, 6)] == [120, 120, 120]
+    assert amounts == [60, 40, 25]
+    assert [prizes[ps[i]["player_id"]][0]["grants"][0]["amount"] for i in (4, 5, 6)] == [60, 60, 60]
     # the whole bill is lower than the old single board (1175)
-    assert sum(weekboard.LEAGUE_PRIZES.values()) * 4 <= sum(rewards.PRIZES.values()) + 7 * rewards.PRIZE_REST
+    assert sum(weekboard.LEAGUE_PRIZES.values()) * len(weekboard.LEAGUES) <= sum(rewards.PRIZES.values()) + 7 * rewards.PRIZE_REST
     # only the highest league's winner gets the champion item
     async with db.SessionLocal() as s:
         top = await s.get(Player, ps[6]["player_id"])
@@ -320,7 +320,7 @@ async def test_leagues_kill_switch_falls_back_to_one_board(client, clock, single
 
 # ------------------------------------------------------------------ league names and rank titles agree (21 Oct 2026)
 def test_every_profile_rank_is_in_exactly_one_league():
-    """19 profile ranks, 4 leagues: each rank title belongs to one league, the ranges touch and nothing is left out."""
+    """19 profile ranks, 8 leagues: each rank title belongs to one league, the ranges touch and nothing is left out."""
     from app import economy as eco
     seen = []
     for i in range(len(weekboard.LEAGUES)):
@@ -336,7 +336,7 @@ def test_every_profile_rank_is_in_exactly_one_league():
 
 
 async def test_sarbazras_row_shows_profile_rank_and_league(client, clock, leagues, week_of_fake_cases):
-    """A player at the XP of «سربازرس» (the reyhoon case): the league is «بازرس» (the range بازرس..سربازرس), and his row
+    """A player at the XP of «سربازرس» (the reyhoon case): the league is «سربازرس» (the range سربازرس..سرپرست پرونده‌ها), and his row
     shows the title «سربازرس» exactly like his profile."""
     from app import economy as eco
     idx = next(i for i, (_, t) in enumerate(eco.RANKS) if t == "سربازرس")
@@ -348,17 +348,17 @@ async def test_sarbazras_row_shows_profile_rank_and_league(client, clock, league
     prof = (await client.get("/v1/me", headers=rey["headers"])).json()
     assert prof["rank_title"] == "سربازرس"
     b = await board(client, rey["headers"])
-    assert b["my_league"] == b["league"] == 2 and b["me"]["rank"] == 1
+    assert b["my_league"] == b["league"] == 5 and b["me"]["rank"] == 1
     row = next(r for r in b["top"] if r["nickname"] == "reyhoon")
     assert row["rank_title"] == prof["rank_title"] == "سربازرس"
-    assert row["league_name"] == "بازرس" == b["leagues"][2]["name"]
-    info = b["leagues"][2]
-    assert (info["from_rank"], info["to_rank"]) == ("بازرس", "سرپرست پرونده‌ها") and info["min_xp"] == eco.RANKS[8][0]
-    assert "بازرس" in b["title"] and b["me"]["league_name"] == "بازرس"
+    assert row["league_name"] == "سربازرس" == b["leagues"][5]["name"]
+    info = b["leagues"][5]
+    assert (info["from_rank"], info["to_rank"]) == ("سربازرس", "سرپرست پرونده‌ها") and info["min_xp"] == eco.RANKS[10][0]
+    assert "سربازرس" in b["title"] and b["me"]["league_name"] == "سربازرس"
 
 
 async def test_promoted_during_the_week_keeps_the_weeks_league_but_shows_the_current_rank(client, clock, leagues, week_of_fake_cases):
-    """XP of کارآگاه ارشد at the week's start, grows to سربازرس on Monday: league stays «کارآگاه», row title is the
+    """XP of کارآگاه ارشد at the week's start, grows to سربازرس on Monday: league stays «کاردان», row title is the
     NEW profile rank. This is the by-design difference that looked like a bug."""
     from app import economy as eco
     ws = date(2027, 6, 18)
@@ -372,9 +372,9 @@ async def test_promoted_during_the_week_keeps_the_weeks_league_but_shows_the_cur
     await solve(p["player_id"], wid(ws, 0), 2, T(2027, 6, 21, 10))
     b = await board(client, p["headers"])
     row = next(r for r in b["top"] if r["me"])
-    assert b["my_league"] == 1 and row["league_name"] == "کارآگاه" and row["rank_title"] == "سربازرس"
-    # he is NOT on the board of the league «بازرس» this week
-    other = await board(client, p["headers"], league=2)
+    assert b["my_league"] == 3 and row["league_name"] == "کاردان" and row["rank_title"] == "سربازرس"
+    # he is NOT on the board of the league «سربازرس» this week
+    other = await board(client, p["headers"], league=5)
     assert not any(r["me"] for r in other["top"])
 
 

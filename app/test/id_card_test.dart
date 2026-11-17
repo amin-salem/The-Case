@@ -29,7 +29,7 @@ IdCardData _data({int league = 1, String code = ''}) => IdCardData(
 
 void main() {
   test('league of a rank follows the server ranges', () {
-    expect([for (final r in [0, 3, 4, 7, 8, 11, 12, 20]) leagueOfRank(r)], [0, 0, 1, 1, 2, 2, 3, 3]);
+    expect([for (final r in [0, 1, 2, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 20]) leagueOfRank(r)], [0, 0, 1, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7]);
   });
 
   test('Jalali dates and card texts', () {
@@ -42,7 +42,7 @@ void main() {
   });
 
   for (final scale in [1.0, 2.0]) {
-    for (var league = 0; league < 4; league++) {
+    for (var league = 0; league < 8; league++) {
       testWidgets('card at font $scale, league $league: front and back build without overflow', (t) async {
         await t.pumpWidget(_app(IdCard(data: _data(league: league, code: 'AB12CD')), scale: scale));
         await t.pump(const Duration(milliseconds: 100));

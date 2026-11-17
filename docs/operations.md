@@ -859,3 +859,10 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
 - File: `server/app/content/intro/intro01.json` (id `intro01`, number 0, difficulty 2). Never in `all_cases()`, so nothing in the nightly schedule, archive, album or tests that walk the cases sees it.
 - `GET /v1/cases` field `intro`: set for a player with `cases_solved == 0`, or one who already has progress on it. Opening and playing it is free; solving pays the normal difficulty-2 reward.
 - Kill switch: `INTRO_CASE_ENABLED=false` (default true). No migration.
+
+
+## Eight leagues (17 Nov 2026, server 1.69.0, app 1.46.0+99)
+
+- Migration 0039 (data only): `UPDATE week_leagues SET league = league * 2`. Runs once with `alembic upgrade head` on deploy. Old league k becomes 2k, and the new XP floors of those indexes equal the old ones, so every snapshot (past weeks, the current week) keeps its players in the same league. Rollback (downgrade) halves the even values.
+- `GET /v1/leaderboard?period=weekly&league=0..7`; `leagues` now lists eight entries. Prizes `LEAGUE_PRIZES` 60 / 40 / 25 per league (8 x 125 = 1000 coins a week). No new environment variable (`LEAGUES_ENABLED` still switches everything back to the single board).
+- Watch after the deploy: the first settlement (Friday 21:00) should pay up to 24 winners; the admin economy report shows the weekly prize total.

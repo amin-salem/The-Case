@@ -1,3 +1,10 @@
+# server 1.69.0 / app 1.46.0+99: eight leagues (17 Nov 2026)
+
+- Leagues: تازه‌کار، کارآموز، کارآگاه، کاردان، بازرس، سربازرس، سرپرست، اسطوره (`weekboard.LEAGUE_DEFS`, first profile ranks 0, 2, 4, 6, 8, 10, 12, 15; XP floors 0 / 550 / 1600 / 3200 / 5600 / 9000 / 13500 / 24000). Migration 0039 doubles every stored `week_leagues.league` (0,1,2,3 -> 0,2,4,6), so nobody changes league; the snapshot code builds all eight from the XP floors.
+- Prizes: per league 60 / 40 / 25 coins (was 120 / 80 / 50 for four leagues), so the weekly bill stays 1000 coins. Settlement pays each of the eight leagues once, as before.
+- App: the weekly board shows the eight shields in one row (chosen one large and lit, reached ones in colour, ahead ones grey; only the chosen name is written); the ID card and the profile ladder use eight shields and eight looks. League art renumbered (old 0,1,2,3 -> 0,2,4,6) and the four new shields moved from `assets/leagues/expansion/` to `assets/leagues/` (art registry updated).
+- Server 1.69.0 must be live with this app: an older server sends only four leagues; the app still shows them (the shield look follows the league index).
+
 # server 1.68.0 / app 1.45.1+98: free first case «intro01» (17 Nov 2026)
 
 - Content: «انگشترِ لبِ پنجره» (sweet shop on Yalda night, difficulty 2, 3 suspects, 6 cards, proof e2 e4 e5), in `server/app/content/intro/`, outside the nightly schedule, the archive and the notify list. Two blind tests: 93% and 95%, no single card names the culprit; one ambiguity (white fingertips: flour or sugar) fixed.

@@ -36,12 +36,14 @@ log = logging.getLogger("weekboard")
 # THE ONE PLACE where the league names and limits live (Amin, 21 Oct 2026: the board and the profile must agree).
 # A league is a RANGE of the 19 profile ranks of economy.RANKS and is decided by the XP the player had when the week's
 # snapshot was taken (the start of the week). The row of a player always shows his CURRENT profile rank title; the league
-# only says which board he plays on this week. Leagues are named by their range, not by one rank title:
-#   0 تازه‌کار  = تازه‌کار .. کارآگاه کارآموز     (from 0 XP)
-#   1 کارآگاه   = کارآگاه .. بازپرس               (from RANKS[4], 1600 XP)
-#   2 بازرس     = بازرس .. سرپرست پرونده‌ها        (from RANKS[8], 5600 XP)
-#   3 سرپرست    = کارآگاه نخبه .. اسطوره‌ی کارآگاهی (from RANKS[12], 13500 XP)
-LEAGUE_DEFS = (("تازه‌کار", 0), ("کارآگاه", 4), ("بازرس", 8), ("سرپرست", 12))   # (name, first rank index of economy.RANKS)
+# only says which board he plays on this week. Eight leagues since 17 Nov 2026 (Amin's design «هشت لیگ»); migration 0039
+# doubled the stored indexes of the old four (0,1,2,3 -> 0,2,4,6), so every player stays in the same league:
+#   0 تازه‌کار   from RANKS[0]  (0 XP)        4 بازرس     from RANKS[8]  (5600)
+#   1 کارآموز   from RANKS[2]  (550)         5 سربازرس   from RANKS[10] (9000)
+#   2 کارآگاه   from RANKS[4]  (1600)        6 سرپرست    from RANKS[12] (13500)
+#   3 کاردان    from RANKS[6]  (3200)        7 اسطوره    from RANKS[15] (24000)
+LEAGUE_DEFS = (("تازه‌کار", 0), ("کارآموز", 2), ("کارآگاه", 4), ("کاردان", 6),
+               ("بازرس", 8), ("سربازرس", 10), ("سرپرست", 12), ("اسطوره", 15))   # (name, first rank index of economy.RANKS)
 LEAGUES = tuple(n for n, _ in LEAGUE_DEFS)
 LEAGUE_FROM_RANK = tuple(r for _, r in LEAGUE_DEFS)
 MARKER = "*"          # WeekLeague row: «the snapshot of this week exists»
@@ -120,7 +122,7 @@ async def ensure_snapshot(session: AsyncSession, ws: date) -> None:
     if await session.scalar(select(WeekLeague.week).where(WeekLeague.week == key, WeekLeague.player_id == MARKER)):
         return
     mins = league_min_xp()
-    expr = sql_case((Player.xp >= mins[3], 3), (Player.xp >= mins[2], 2), (Player.xp >= mins[1], 1), else_=0)
+    expr = sql_case(*[(Player.xp >= mins[i], i) for i in range(len(mins) - 1, 0, -1)], else_=0)
     dialect = session.bind.dialect.name if session.bind is not None else "sqlite"
     if dialect == "postgresql":
         from sqlalchemy.dialects.postgresql import insert
@@ -227,7 +229,7 @@ async def cached_rows(session: AsyncSession, ws: date, league: int | None, limit
 
 
 # ------------------------------------------------------------------ prizes
-LEAGUE_PRIZES = {1: 120, 2: 80, 3: 50}      # per league: 4 x 250 = 1000 coins a week, less than the old single board (1175)
+LEAGUE_PRIZES = {1: 60, 2: 40, 3: 25}       # per league: 8 x 125 = 1000 coins a week (the same bill as four leagues at 120/80/50), less than the old single board (1175)
 SINGLE_PRIZES = {1: 300, 2: 200, 3: 150}    # the single board (leagues off): ranks 4..10 get SINGLE_REST
 SINGLE_REST = 75
 SINGLE_TOP_N = 10

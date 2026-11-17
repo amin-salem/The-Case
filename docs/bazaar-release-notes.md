@@ -258,3 +258,18 @@ Build 97
 
 ## developer_note
 Build 98
+
+
+<!-- build: 99 -->
+## changelog_fa
+- ۸ لیگ کارآگاهی در جدول برترهای هفته
+- کارت شناسایی و پروفایل با نشان‌های تازه
+- بهبود پایداری برنامه
+
+## changelog_en
+- Eight detective leagues on the weekly board
+- New badges on the ID card and profile
+- Improved app stability
+
+## developer_note
+Build 99

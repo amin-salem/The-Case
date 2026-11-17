@@ -13,10 +13,14 @@ http.Response response(Object body, [int status = 200]) => http.Response.bytes(u
     headers: {'content-type': 'application/json; charset=utf-8'});
 
 const _leagues = [
-  {'id': 0, 'name': 'تازه‌کار', 'min_xp': 0, 'from_rank': 'کارآگاه تازه‌کار', 'to_rank': 'دستیار کارآگاه'},
-  {'id': 1, 'name': 'کارآگاه', 'min_xp': 600, 'from_rank': 'کارآگاه', 'to_rank': 'کارآگاه ارشد'},
-  {'id': 2, 'name': 'بازرس', 'min_xp': 2500, 'from_rank': 'بازرس', 'to_rank': 'سربازرس'},
-  {'id': 3, 'name': 'سرپرست', 'min_xp': 6500, 'from_rank': 'کارآگاه نخبه', 'to_rank': 'افسانه'},
+  {'id': 0, 'name': 'تازه‌کار', 'min_xp': 0, 'from_rank': 'کارآگاه تازه‌کار', 'to_rank': 'شاگرد کارآگاه'},
+  {'id': 1, 'name': 'کارآموز', 'min_xp': 550, 'from_rank': 'دستیار کارآگاه', 'to_rank': 'کارآگاه کارآموز'},
+  {'id': 2, 'name': 'کارآگاه', 'min_xp': 1600, 'from_rank': 'کارآگاه', 'to_rank': 'کارآگاه کاردان'},
+  {'id': 3, 'name': 'کاردان', 'min_xp': 3200, 'from_rank': 'کارآگاه ارشد', 'to_rank': 'بازپرس'},
+  {'id': 4, 'name': 'بازرس', 'min_xp': 5600, 'from_rank': 'بازرس', 'to_rank': 'بازرس ارشد'},
+  {'id': 5, 'name': 'سربازرس', 'min_xp': 9000, 'from_rank': 'سربازرس', 'to_rank': 'سرپرست پرونده‌ها'},
+  {'id': 6, 'name': 'سرپرست', 'min_xp': 13500, 'from_rank': 'کارآگاه نخبه', 'to_rank': 'استاد معما'},
+  {'id': 7, 'name': 'اسطوره', 'min_xp': 24000, 'from_rank': 'استاد بزرگ', 'to_rank': 'اسطوره‌ی کارآگاهی'},
 ];
 
 Map<String, dynamic> board(int league, {bool empty = false}) => {
@@ -25,13 +29,13 @@ Map<String, dynamic> board(int league, {bool empty = false}) => {
       'top': empty
           ? []
           : [
-              {'rank': 1, 'nickname': 'نمونه$league', 'avatar': 0, 'value': 6, 'stars': 6, 'me': league == 1,
+              {'rank': 1, 'nickname': 'نمونه$league', 'avatar': 0, 'value': 6, 'stars': 6, 'me': league == 2,
                'rank_title': 'سربازرس', 'league_name': _leagues[league]['name']},
             ],
       'me': null,
       'week_ends_at': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 3 * 86400,
       'league': league,
-      'my_league': 1,
+      'my_league': 2,
       'leagues': _leagues,
     };
 
@@ -45,11 +49,11 @@ void installServer() {
   Api.i.httpClient = MockClient((r) async {
     if (r.url.path == '/v1/leaderboard') {
       final period = r.url.queryParameters['period'];
-      final league = int.tryParse(r.url.queryParameters['league'] ?? '') ?? 1;
+      final league = int.tryParse(r.url.queryParameters['league'] ?? '') ?? 2;
       if (period != 'weekly') {
         return response({'period': period, 'title': 'عنوان', 'top': [], 'me': null});
       }
-      return response(board(league, empty: league == 3)); // the league «سرپرست» is empty
+      return response(board(league, empty: league == 6)); // the league «سرپرست» is empty
     }
     return response({});
   });
@@ -66,7 +70,7 @@ void main() {
   });
 
   void expectAllChips(WidgetTester t, int selected) {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 8; i++) {
       expect(find.byKey(ValueKey('league-$i')), findsOneWidget, reason: 'card $i stays');
       expect(find.byKey(ValueKey('league-on-$i')), i == selected ? findsOneWidget : findsNothing, reason: 'card $i, selected league is $selected');
     }
@@ -75,14 +79,14 @@ void main() {
   testWidgets('weekly board: every league chip stays while selecting each league, even an empty one', (t) async {
     await t.pumpWidget(MaterialApp(theme: buildTheme(), home: const Scaffold(body: LeaderboardBoard('weekly'))));
     await pump(t);
-    expectAllChips(t, 1); // my own league is the default
-    for (final league in [0, 2, 3, 1, 3, 0]) {
+    expectAllChips(t, 2); // my own league is the default
+    for (final league in [0, 4, 6, 2, 6, 0]) {
       await t.tap(find.byKey(ValueKey('league-$league')));
       await t.pump(); // the request is still running: the switch must already be there
       expectAllChips(t, league);
       await pump(t);
       expectAllChips(t, league);
-      if (league == 3) {
+      if (league == 6) {
         expect(find.byKey(const ValueKey('lb-empty')), findsOneWidget);
         expect(find.textContaining('لیگ سرپرست'), findsWidgets);
       } else {
@@ -95,9 +99,9 @@ void main() {
     await t.pumpWidget(MaterialApp(theme: buildTheme(), home: const Scaffold(body: LeaderboardBoard('weekly'))));
     await pump(t);
     Api.i.httpClient = MockClient((r) async => response({'detail': 'x'}, 500));
-    await t.tap(find.byKey(const ValueKey('league-2')));
+    await t.tap(find.byKey(const ValueKey('league-4')));
     await pump(t);
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 8; i++) {
       expect(find.byKey(ValueKey('league-$i')), findsOneWidget);
     }
     installServer();
@@ -128,7 +132,7 @@ void main() {
     expect(find.textContaining('جمعه‌ها ساعت ۲۱'), findsNothing);
     await t.tap(find.byKey(const ValueKey('lb-info')));
     await pump(t);
-    for (final part in ['جمعه‌ها ساعت ۲۱', 'هفته‌ی منصفانه', 'اول ۱۲۰ سکه، دوم ۸۰ سکه، سوم ۵۰ سکه', 'اگه امتیازها برابر شد', 'از «بازرس» تا «سربازرس»']) {
+    for (final part in ['جمعه‌ها ساعت ۲۱', 'هفته‌ی منصفانه', 'اول ۶۰ سکه، دوم ۴۰ سکه، سوم ۲۵ سکه', 'اگه امتیازها برابر شد', 'از «سربازرس» تا «سرپرست پرونده‌ها»']) {
       expect(find.textContaining(part, skipOffstage: false), findsOneWidget, reason: part);
     }
     await t.tap(find.byKey(const ValueKey('lb-info-close')));
@@ -137,12 +141,12 @@ void main() {
   });
 
   test('rows and leagues parse the new fields and an old server still works', () {
-    final lb = Leaderboard(board(2));
+    final lb = Leaderboard(board(4));
     expect(lb.top.first.leagueName, 'بازرس');
     expect(lb.top.first.rankTitle, 'سربازرس');
-    expect(lb.leagueInfos[2].fromRank, 'بازرس');
-    expect(lb.leagueInfos[2].toRank, 'سربازرس');
-    expect(lb.leagueInfos[2].minXp, 2500);
+    expect(lb.leagueInfos[4].fromRank, 'بازرس');
+    expect(lb.leagueInfos[4].toRank, 'بازرس ارشد');
+    expect(lb.leagueInfos[4].minXp, 5600);
     final old = Leaderboard({'period': 'weekly', 'title': 't', 'top': [{'rank': 1, 'nickname': 'a', 'avatar': 0, 'value': 1}], 'me': null,
       'leagues': [{'id': 0, 'name': 'تازه‌کار'}]});
     expect(old.top.first.leagueName, '');
