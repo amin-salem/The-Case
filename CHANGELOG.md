@@ -1,3 +1,8 @@
+# server 1.70.0: admin panel back to the table look (17 Nov 2026)
+
+- Panel: the old look is back (menu at the top, real tables on every screen, smaller text, emojis in the section names). The 15 Nov redesign (bottom tab bar, tables turned into small cards on phones, larger text) is dropped because it was harder to read. Everything added since stays: member numbers, hiding duplicate accounts, the nudge events and tool kit lines in the economy report, «→ فهرست».
+- Only `server/app/admin_page.html` and the menu browser test (`server/tools/test_admin_menu.cjs`, back to the top-menu version) changed. No migration, no app build.
+
 # server 1.69.0 / app 1.46.0+99: eight leagues (17 Nov 2026)
 
 - Leagues: تازه‌کار، کارآموز، کارآگاه، کاردان، بازرس، سربازرس، سرپرست، اسطوره (`weekboard.LEAGUE_DEFS`, first profile ranks 0, 2, 4, 6, 8, 10, 12, 15; XP floors 0 / 550 / 1600 / 3200 / 5600 / 9000 / 13500 / 24000). Migration 0039 doubles every stored `week_leagues.league` (0,1,2,3 -> 0,2,4,6), so nobody changes league; the snapshot code builds all eight from the XP floors.
