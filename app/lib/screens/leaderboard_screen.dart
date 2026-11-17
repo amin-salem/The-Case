@@ -499,6 +499,10 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     );
   }
 
+  static const _silver = Color(0xFFC9CED8);
+  static const _bronze = Color(0xFFCD8B52);
+  static const _prizes = {1: 60, 2: 40, 3: 25};
+
   Color _medal(int rank) => switch (rank) { 1 => K.brass, 2 => _silver, 3 => _bronze, _ => K.night3 };
 
   /// Daily board: plaques first, and under them his solve time (the tie-breaker made visible: equal plaques, less time = higher).
