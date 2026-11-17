@@ -29,6 +29,8 @@ void main() {
     testWidgets('home: the free first case card shows for a new player (scale $scale)', (t) async {
       await _seed();
       await pumpApp(t, scale: scale, size: const Size(360, 1800));
+      // ignore: avoid_print
+      print('TEXTS: ${t.widgetList<Text>(find.byType(Text)).map((w) => w.data).take(40).toList()}');
       expect(find.byKey(const ValueKey('home-intro')), findsOneWidget);
       expect(find.text('انگشترِ لبِ پنجره'), findsOneWidget);
       expect(find.text('پرونده‌ی اول · رایگان'), findsOneWidget);
