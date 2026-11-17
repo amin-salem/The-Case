@@ -437,3 +437,12 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Plans and three fix rounds: docs/reviews/c075-c076-plan.md. Name changes: c075 ویدا -> ژیلا ماهان, کامبیز -> قباد ماهان, شیدا مانی -> شیدا آرامش, پویان -> رامتین رادفر, Arzhang's age 56 -> 65 (unused culprit face); c076 ماندانا -> سیمین اسفندیاری, امیرهوشنگ زمانی -> اسفندیاری, سهند کاشانی -> شاهوردی, آفرین -> فرخنده ورجاوند.
 - Fixed after the tests: c075 (note burn time and stove watch, Ramtin and Kiarash at the mirror, second source for the corridor and back door, how Arzhang knew the bag, cleaner cleared, fog timing, gear-room door, kettle routine, why the sentence existed, counts); c076 (second key and key times, Sahand, caretaker with a cast, Simin's measuring, swap motive, why the packets were kept, shoe sizes, petri dishes, who ordered the seed, 12-hour window, gate book, class alibi, pond window). The last round of minor items was fixed after test 3 without a fourth full test (text-only edits, no chain change).
 
+
+### 2026-11-17 nightly (Sonnet coordinator, Opus writer): c077, c078 from the idea bank (batch 1 ideas 25, 26)
+| id | publish | idea / style / type | culprit | result |
+|---|---|---|---|---|
+| c077 «اعلامِ دوم» | 2026-12-14 | batch 1 idea #25, style S2, puzzle type 5 (airport / travel), difficulty 5 | s1 حامد نوبهار | blind test 90%; no single card decides |
+| c078 «پارگی در سمتِ تماشاگر» | 2026-12-15 | batch 1 idea #26, style S6, puzzle type 6 (theater / art), difficulty 5 | s5 نوشین پاک‌نژاد | blind test 90%; no single card decides |
+
+- Plan: docs/reviews/c077-c078-plan.md. Name changes: c078 کسری دادآفرین -> کسری پاک‌نژاد (Nooshin's brother); ages adjusted to unused culprit faces (Hamed 64, Nooshin 32 etc.).
+- Fixed after the tests (one round, chains unchanged, no retest): c077 (Kowsar's sleep time, box sizes, Kowsar's sighting wording, return/search times, Sayeh's bag and coat, print lines); c078 (guard-log date, hole height, empty bridge at 19:50, Hediyeh's and Nooshin's scissors accounted, Kasra's silence, Siavash and Orang alibis, Nooshin's print line). Receipts that clear people: c077 e4, e6; c078 e7, e3.

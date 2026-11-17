@@ -1,3 +1,8 @@
+# server 1.67.0: nightly cases c077, c078 (17 Nov 2026)
+
+- Two new nightly cases from the idea bank: c077 «اعلامِ دوم» (idea 25, style S2 impossible, puzzle type 5 time trick, airport / travel, difficulty 5, publish 14 Dec 2026) and c078 «پارگی در سمتِ تماشاگر» (idea 26, style S6 conflicting accounts, puzzle type 6 staging, theater / art, difficulty 5, publish 15 Dec 2026), with their notify entries. Content only, no migration.
+- Blind tests: c077 90%, c078 90%; no single card decides. All findings fixed in one round (see `docs/case-log.md`).
+
 # server 1.66.0 / app 1.44.6+95: board header, suspect list, new portraits (16 Nov 2026)
 
 - Leaderboard (server): the daily header count («N کارآگاه»), the fastest time and the time summary now come from the SAME rows as the table (`_daily_conds`: solved tonight, ranked, visible player). Before, the header also counted unranked rushes. The header time is now the arithmetic mean (`daily.mean`, rounded seconds, only durations > 0); `daily.median` is still sent for old app builds. No migration.
