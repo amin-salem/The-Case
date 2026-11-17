@@ -745,7 +745,7 @@ class _CaseScreenState extends State<CaseScreen> {
                         ]),
                       ),
                       const Spacer(),
-                      StampIn(child: Align(alignment: Alignment.centerRight, child: StampMark(c.story != null ? 'فصل ${fa(c.number)}' : 'پرونده‌ی شماره‌ی ${fa(c.number)}', size: 22))),
+                      StampIn(child: Align(alignment: Alignment.centerRight, child: StampMark(c.story != null ? 'فصل ${fa(c.number)}' : c.number == 0 ? 'پرونده‌ی اول' : 'پرونده‌ی شماره‌ی ${fa(c.number)}', size: 22))),
                       const SizedBox(height: 14),
                       FadeSlideIn(delay: const Duration(milliseconds: 300), child: Text(c.title, style: tDisplay(32))),
                       FadeSlideIn(

@@ -1,5 +1,6 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.67.0"
+VERSION = "1.68.0"
+# server 1.68.0: free first case intro01 (INTRO_CASE_ENABLED, GET /v1/cases `intro`) (17 Nov 2026)
 # server 1.67.0: tool kit «کیف کارآگاه» (POST /v1/tools/kit), help nudge events in the economy report (16 Nov 2026)
 # server 1.66.0: board header from the table rows, arithmetic mean, 33 new portraits (16 Nov 2026)
 # server 1.65.0: nightly cases c075, c076 (16 Nov 2026)

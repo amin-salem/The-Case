@@ -245,3 +245,16 @@ Build 96
 
 ## developer_note
 Build 97
+
+
+<!-- build: 98 -->
+## changelog_fa
+- پرونده‌ی اول رایگان برای کارآگاه‌های تازه
+- بهبود پایداری برنامه
+
+## changelog_en
+- A free first case for new detectives
+- Improved app stability
+
+## developer_note
+Build 98

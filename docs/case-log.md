@@ -437,3 +437,8 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Plans and three fix rounds: docs/reviews/c075-c076-plan.md. Name changes: c075 ویدا -> ژیلا ماهان, کامبیز -> قباد ماهان, شیدا مانی -> شیدا آرامش, پویان -> رامتین رادفر, Arzhang's age 56 -> 65 (unused culprit face); c076 ماندانا -> سیمین اسفندیاری, امیرهوشنگ زمانی -> اسفندیاری, سهند کاشانی -> شاهوردی, آفرین -> فرخنده ورجاوند.
 - Fixed after the tests: c075 (note burn time and stove watch, Ramtin and Kiarash at the mirror, second source for the corridor and back door, how Arzhang knew the bag, cleaner cleared, fog timing, gear-room door, kettle routine, why the sentence existed, counts); c076 (second key and key times, Sahand, caretaker with a cast, Simin's measuring, swap motive, why the packets were kept, shoe sizes, petri dishes, who ordered the seed, 12-hour window, gate book, class alibi, pond window). The last round of minor items was fixed after test 3 without a fourth full test (text-only edits, no chain change).
 
+
+
+### 2026-11-17 intro01 «انگشترِ لبِ پنجره» (free first case, written by Opus)
+- Sweet shop on Yalda night, culprit s3 تیرداد کلانتری (cashier, nephew), difficulty 2, proof e2 e4 e5. Chain: ring seen 17:06, taken 17:10 from inside the kitchen (e2) -> only the back door and the curtain lead in (e1) -> cook outside at the cart, courier at a customer's door (e2, e3) -> counter empty 17:08-17:11 and the cashier comes out of the curtain with powdery white fingertips (e4) -> ring in the powdered-sugar tin, scoop clean, sink trap empty (e5).
+- Blind tests: 93% and 95%, no single card decides. Wrong: white fingertips could be flour. Fixed: e4 now says powdery, not flour-like. Resolved.

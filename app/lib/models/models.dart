@@ -336,6 +336,7 @@ class CasesList {
         nextCaseAt = DateTime.fromMillisecondsSinceEpoch(_i(j['next_case_at']) * 1000),
         archive = [for (final r in _maps(j['archive'])) CaseRow(r)],
         weekly = j['weekly'] is Map ? CaseRow((j['weekly'] as Map).cast<String, dynamic>()) : null,
+        intro = j['intro'] is Map ? CaseRow((j['intro'] as Map).cast<String, dynamic>()) : null,
         weeklyClosesAt = j['weekly_closes_at'] is num
             ? DateTime.fromMillisecondsSinceEpoch((j['weekly_closes_at'] as num).toInt() * 1000)
             : null,
@@ -346,6 +347,7 @@ class CasesList {
   final DateTime? weeklyNextChapterAt; // when chapter 2 opens (null once open)
   final int weeklyFormat; // 3 = two nights
   final CaseRow? weekly; // this weekend's big case, while it is open
+  final CaseRow? intro; // the free first case, only for a player who has not solved any case yet
   final DateTime? weeklyClosesAt;
   final CaseRow? today;
   final DateTime nextCaseAt;

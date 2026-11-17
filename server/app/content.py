@@ -20,6 +20,7 @@ from .content_paths import CONTENT_ROOT
 
 CASES_DIR = CONTENT_ROOT / "cases"
 WEEKLY_DIR = CONTENT_ROOT / "weekly"
+INTRO_DIR = CONTENT_ROOT / "intro"  # the free first case (intro01): never in the nightly schedule, the archive or the tests that walk all_cases()
 # `night1` (weekend format 3) holds the answer of the night-1 question; weekly_public() adds a safe copy back
 SECRET_KEYS = ("hints", "solution", "night1")
 # the scenes the app can draw and play sound for (app/lib/widgets/scene.dart, app/assets/sounds)
@@ -391,6 +392,22 @@ def weekly_cases() -> tuple[Case, ...]:
         out.append(Case(id=d["id"], number=int(d["number"]), publish=date.fromisoformat(d["publish"]), data=d))
     out.sort(key=lambda c: c.publish)
     return tuple(out)
+
+
+def is_intro(case_id: str) -> bool:
+    return case_id.startswith("intro")
+
+
+def intro_by_id(case_id: str) -> Case | None:
+    path = INTRO_DIR / f"{case_id}.json"
+    if not is_intro(case_id) or not re.fullmatch(r"intro\d{2}", case_id) or not path.is_file():
+        return None
+    d = json.loads(path.read_text(encoding="utf-8"))
+    validate(d)
+    return Case(id=d["id"], number=int(d["number"]), publish=date.fromisoformat(d["publish"]), data=d)
+
+
+INTRO_ID = "intro01"
 
 
 def is_weekly(case_id: str) -> bool:

@@ -52,7 +52,8 @@ def name_parts(name: str) -> list[str]:
 
 
 def _path(cid: str) -> Path:
-    return CONTENT / ("weekly" if cid.startswith("w") else "cases") / f"{cid}.json"
+    folder = "intro" if cid.startswith("intro") else ("weekly" if cid.startswith("w") else "cases")
+    return CONTENT / folder / f"{cid}.json"
 
 
 def _others(cid: str):
@@ -81,10 +82,14 @@ def check(cid: str) -> tuple[list[str], list[str]]:
         problems.append(f"proof has {len(sol.get('proof', []))} of {len(cards)} cards (at most half)")
     if len(cards) < 5:
         problems.append("fewer than 5 evidence cards")
-    if d.get("difficulty") not in (3, 4, 5):
+    intro = cid.startswith("intro")
+    if intro:
+        if d.get("difficulty") not in (1, 2):
+            problems.append(f"difficulty {d.get('difficulty')}: the free intro case is difficulty 1 or 2")
+    elif d.get("difficulty") not in (3, 4, 5):
         problems.append(f"difficulty {d.get('difficulty')}: new cases are 4 or 5 (3 only when the blind test measured it, rules section 9)")
     # one case per night, contiguous publish dates
-    if not weekend:
+    if not weekend and not intro:
         n = int(cid[1:])
         prev = _path(f"c{n - 1:03d}")
         if prev.exists():
@@ -94,7 +99,9 @@ def check(cid: str) -> tuple[list[str], list[str]]:
     # notification teaser
     notify = json.loads((CONTENT / "notify.json").read_text(encoding="utf-8"))
     entry = notify.get(cid)
-    if not entry:
+    if intro:
+        pass  # the intro case is never announced
+    elif not entry:
         problems.append("no entry in server/app/content/notify.json")
     else:
         if entry.get("title") != d.get("title"):
@@ -189,7 +196,7 @@ def public_copy(cid: str, day1: bool, reactions: bool) -> dict:
 
 
 def main(argv: list[str]) -> int:
-    ids = [a for a in argv if a[:1] in "cw" and a[1:].isdigit()]
+    ids = [a for a in argv if (a[:1] in "cw" and a[1:].isdigit()) or (a.startswith("intro") and a[5:].isdigit())]
     if not ids:
         print(__doc__)
         return 2

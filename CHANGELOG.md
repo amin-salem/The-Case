@@ -1,3 +1,9 @@
+# server 1.68.0 / app 1.45.1+98: free first case «intro01» (17 Nov 2026)
+
+- Content: «انگشترِ لبِ پنجره» (sweet shop on Yalda night, difficulty 2, 3 suspects, 6 cards, proof e2 e4 e5), in `server/app/content/intro/`, outside the nightly schedule, the archive and the notify list. Two blind tests: 93% and 95%, no single card names the culprit; one ambiguity (white fingertips: flour or sugar) fixed.
+- Server: `GET /v1/cases` returns `intro` (a case row) for a player with no solved case, or one who already opened it; `GET/hints/accuse` work on `intro01` like any case, free to open; normal solve rewards. `INTRO_CASE_ENABLED=false` hides and refuses it. No migration. `check_case.py` knows `intro01`.
+- App: one card above tonight's hero, «پرونده‌ی اول · رایگان»; gone once solved. The stamp reads «پرونده‌ی اول».
+
 # server 1.67.0 / app 1.45.0+97: «کمک کارآگاه», tool kit, minimal board header (16 Nov 2026)
 
 - App: one «کمک» button on the case screen opens a sheet with all six helps, cheapest first (magnifier 35, hint 1 40, fingerprint 65, camera 100, hint 2 80, hint 3 120), a three-step hint ladder, and the price and plaque effect on every row. Tools and hint 1 never cost a plaque; hints 2 and 3 cost one.

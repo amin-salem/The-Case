@@ -852,3 +852,10 @@ Admin → بازیکن‌ها → «پاک‌سازی»: lists guests that are c
 - Environment: `TOOL_KIT_ENABLED` (default true; false hides and refuses the kit; `DETECTIVE_TOOLS_ENABLED=false` also does), `TOOL_KIT_PRICE` (default 280). Public config: `economy.tool_kit` {enabled, price, items}. No migration.
 - Nudge events (`help_nudge_shown`, `help_nudge_tapped`, `help_nudge_closed`) go through `/v1/events` and appear in the admin economy report; each nudge shows once per case per player (kept on the phone).
 - Watch: kit purchases are logged as `tool_kit_bought`; coin-log rows with reason `kit:*` are the revenue trail.
+
+
+## Free first case (17 Nov 2026, server 1.68.0, app 1.45.1+98)
+
+- File: `server/app/content/intro/intro01.json` (id `intro01`, number 0, difficulty 2). Never in `all_cases()`, so nothing in the nightly schedule, archive, album or tests that walk the cases sees it.
+- `GET /v1/cases` field `intro`: set for a player with `cases_solved == 0`, or one who already has progress on it. Opening and playing it is free; solving pays the normal difficulty-2 reward.
+- Kill switch: `INTRO_CASE_ENABLED=false` (default true). No migration.
