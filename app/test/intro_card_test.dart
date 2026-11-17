@@ -6,7 +6,7 @@ import 'package:the_case/services/api.dart';
 import 'home_fixtures.dart';
 
 Future<void> _seed({bool withIntro = true, bool solved = false}) async {
-  await seedHome(casesSolved: 0);
+  await seedHome(); // the welcome overlay of a brand-new account is a separate screen; the card is driven by the server's `intro`
   Api.i.httpClient = MockClient((r) async {
     if (r.url.path == '/v1/cases') {
       return jsonResponse({
@@ -29,8 +29,6 @@ void main() {
     testWidgets('home: the free first case card shows for a new player (scale $scale)', (t) async {
       await _seed();
       await pumpApp(t, scale: scale, size: const Size(360, 1800));
-      // ignore: avoid_print
-      print('TEXTS: ${t.widgetList<Text>(find.byType(Text)).map((w) => w.data).take(40).toList()}');
       expect(find.byKey(const ValueKey('home-intro')), findsOneWidget);
       expect(find.text('انگشترِ لبِ پنجره'), findsOneWidget);
       expect(find.text('پرونده‌ی اول · رایگان'), findsOneWidget);
