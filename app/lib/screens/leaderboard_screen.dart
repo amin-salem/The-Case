@@ -115,7 +115,7 @@ class LeaderboardScreen extends StatelessWidget {
 List<LeagueInfo> _knownLeagues = const [];
 
 /// The weekly prizes (server: weekboard.LEAGUE_PRIZES) and the minimum of solved cases for one.
-const _kPrizeText = 'اول ۱۲۰ سکه، دوم ۸۰ سکه، سوم ۵۰ سکه';
+const _kPrizeText = 'اول ۶۰ سکه، دوم ۴۰ سکه، سوم ۲۵ سکه';
 
 /// The full explanation of the boards, in a bottom sheet (opens from the «i» next to the title, closes in one tap).
 /// [tab] 0 = today's case, 1 = this week, 2 = all time; the sheet shows that tab's part first.
@@ -127,7 +127,7 @@ Future<void> showBoardInfo(BuildContext context, int tab, {List<LeagueInfo> leag
     _infoBlock('ساعت هفته', 'هفته جمعه‌ها ساعت ۲۱ بسته می‌شه، همون لحظه که پرونده‌ی اولِ هفته‌ی بعد باز می‌شه.'),
     _infoBlock('هفته‌ی منصفانه', 'هر پرونده مال هفته‌ای‌ه که منتشر شده. بعد از بسته شدن هفته، حل کردنش دیگه توی جدول هفتگی حساب نمی‌شه.'),
     _infoBlock('لیگ‌ها',
-        'هر کارآگاه توی یکی از چهار لیگ بازی می‌کنه: تازه‌کار، کارآگاه، بازرس و سرپرست. لیگ هر کس با رتبه‌اش اولِ هفته معلوم می‌شه و تا آخر هفته عوض نمی‌شه؛ '
+        'هر کارآگاه توی یکی از هشت لیگ بازی می‌کنه: از تازه‌کار تا اسطوره. لیگ هر کس با رتبه‌اش اولِ هفته معلوم می‌شه و تا آخر هفته عوض نمی‌شه؛ '
         'اگه وسط هفته رتبه بگیری، هفته‌ی بعد به لیگ بالاتر می‌ری. رتبه‌ای که کنار اسمت می‌بینی همیشه رتبه‌ی فعلی توئه، مثل پروفایل.'),
     for (final l in leagues)
       if (l.fromRank.isNotEmpty)
@@ -370,38 +370,26 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
   List<Widget> _dailyHeader(Leaderboard lb) {
     final d = lb.daily;
     final title = lb.title.replaceFirst(RegExp(r'^پرونده‌ی امروز:\s*'), '');
-    Widget chip(IconData icon, String text, {Key? key}) => Container(
-          key: key,
-          constraints: const BoxConstraints(minHeight: 30),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(color: const Color(0x8C0A0A0C), borderRadius: BorderRadius.circular(99), border: Border.all(color: const Color(0x1AFFFFFF))),
-          child: Row(mainAxisSize: MainAxisSize.min, children: [
-            Icon(icon, size: 15, color: _gold),
-            const SizedBox(width: 6),
-            Flexible(child: Text(text, style: tBody(12.5, w: FontWeight.w800, color: K.text))),
-          ]),
-        );
+    // Minimal: a small flat card, the case name and one quiet line (no pills, no big gradient box).
+    Widget stat(IconData icon, String text) => Row(mainAxisSize: MainAxisSize.min, children: [
+          Icon(icon, size: 15, color: _gold),
+          const SizedBox(width: 5),
+          Flexible(child: Text(text, style: tBody(12.5, w: FontWeight.w800, color: K.textSoft))),
+        ]);
     return [
       Container(
         key: const ValueKey('daily-stats'),
-        constraints: const BoxConstraints(minHeight: 136),
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
-        alignment: Alignment.bottomRight,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: const Color(0x0FFFFFFF)),
-          gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF2B2414), Color(0xFF15130E), Color(0xFF0E0F11)]),
-        ),
+        padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+        alignment: AlignmentDirectional.centerStart,
+        decoration: BoxDecoration(color: _panel, borderRadius: BorderRadius.circular(16), border: Border.all(color: _line)),
         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(21, w: FontWeight.w900, color: K.text).copyWith(height: 1.3)),
-          if (d != null && d.solved > 0) ...[
-            const SizedBox(height: 8),
-            Wrap(key: const ValueKey('daily-stats-line'), spacing: 8, runSpacing: 6, children: [
-              chip(Icons.groups_rounded, '${fa(d.solved)} کارآگاه'),
-              if (d.mean != null) chip(Icons.timer_outlined, 'میانگین ${boardTime(d.mean!)}')
-              else if (d.median != null) chip(Icons.timer_outlined, 'میانه ${boardTime(d.median!)}'),
+          Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(17, w: FontWeight.w900, color: K.text).copyWith(height: 1.4)),
+          if (d != null && d.solved > 0)
+            Wrap(key: const ValueKey('daily-stats-line'), spacing: 14, runSpacing: 2, children: [
+              stat(Icons.groups_rounded, '${fa(d.solved)} کارآگاه'),
+              if (d.mean != null) stat(Icons.timer_outlined, 'میانگین ${boardTime(d.mean!)}')
+              else if (d.median != null) stat(Icons.timer_outlined, 'میانه ${boardTime(d.median!)}'),
             ]),
-          ],
         ]),
       ),
     ];
@@ -439,18 +427,26 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
 
   String _weekLeft(Duration d) => d.inHours >= 24 ? '${fa(d.inDays)} روز و ${fa(d.inHours % 24)} ساعت' : faDuration(d.inSeconds);
 
-  /// The weekly board: the four league shields (the chosen one lit) and one pill with the time left.
+  /// The weekly board: the eight league shields in one row. The chosen one is large and lit, the ones the player has
+  /// reached are in colour, the ones ahead are grey. Only the chosen league's name is written.
   List<Widget> _weeklyHeader(Leaderboard lb, int? selected) {
     final end = lb.weekEndsAt;
     final left = end?.difference(DateTime.now());
     return [
-      if (lb.leagues.isNotEmpty)
-        Row(children: [
-          for (int i = 0; i < lb.leagues.length; i++) ...[
-            if (i > 0) const SizedBox(width: 8),
-            Expanded(child: _leagueCard(i, lb, selected)),
-          ],
-        ]),
+      if (lb.leagues.isNotEmpty) ...[
+        SizedBox(
+          height: 74,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [for (int i = 0; i < lb.leagues.length; i++) Expanded(child: _leagueShield(i, lb, selected))],
+          ),
+        ),
+        if (selected != null && selected >= 0 && selected < lb.leagues.length)
+          Padding(
+            padding: const EdgeInsets.only(top: 4, bottom: 8),
+            child: Center(child: Text('لیگ ${lb.leagues[selected]}', key: const ValueKey('league-name'), style: tBody(15, w: FontWeight.w900))),
+          ),
+      ],
       if (left != null && !left.isNegative)
         Center(
           child: Container(
@@ -468,9 +464,20 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     ];
   }
 
-  Widget _leagueCard(int i, Leaderboard lb, int? selected) {
+  Widget _leagueShield(int i, Leaderboard lb, int? selected) {
     final on = selected == i;
     final look = LeagueLook.of(i);
+    final reached = i <= (lb.myLeague ?? 0);
+    final size = on ? 54.0 : 30.0;
+    Widget img = Image.asset(look.shield, width: size, height: size, fit: BoxFit.contain);
+    if (!reached && !on) {
+      img = Opacity(opacity: 0.45, child: ColorFiltered(colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.saturation), child: img));
+    } else if (on) {
+      img = DecoratedBox(
+        decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [BoxShadow(color: look.glow.withValues(alpha: 0.55), blurRadius: 18)]),
+        child: img,
+      );
+    }
     return GestureDetector(
       key: ValueKey('league-$i'),
       behavior: HitTestBehavior.opaque,
@@ -478,34 +485,14 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
       child: Semantics(
         selected: on,
         label: lb.leagues[i],
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
-          height: 106,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: on ? look.glow.withValues(alpha: 0.2) : _panel,
-            border: Border.all(color: on ? look.accent.withValues(alpha: 0.7) : _line),
-            boxShadow: on ? [BoxShadow(color: look.glow.withValues(alpha: 0.35), blurRadius: 20, offset: const Offset(0, 6))] : null,
-          ),
-          child: Stack(alignment: Alignment.center, children: [
+        child: SizedBox(
+          width: double.infinity,
+          height: 56 + (on ? 14 : 0),
+          child: Stack(alignment: Alignment.bottomCenter, children: [
             if (on) SizedBox.shrink(key: ValueKey('league-on-$i')),
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Opacity(opacity: on ? 1 : 0.62, child: Image.asset(look.shield, width: 54, height: 54, fit: BoxFit.contain)),
-              const SizedBox(height: 6),
-              Text(lb.leagues[i], maxLines: 1, style: tBody(12, w: FontWeight.w900, color: on ? K.text : const Color(0xFFB9B5AA))),
-            ]),
+            Padding(padding: const EdgeInsets.only(bottom: 10), child: img),
             if (lb.myLeague == i)
-              PositionedDirectional(
-                top: 7,
-                start: 7,
-                child: Container(
-                  height: 18,
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(99)),
-                  child: Text('تو', style: tBody(10, w: FontWeight.w900, color: const Color(0xFF1A1407)).copyWith(height: 1.1)),
-                ),
-              ),
+              Container(key: ValueKey('league-me-$i'), width: 6, height: 6, decoration: const BoxDecoration(color: K.brass, shape: BoxShape.circle)),
           ]),
         ),
       ),
@@ -514,7 +501,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
 
   static const _silver = Color(0xFFC9CED8);
   static const _bronze = Color(0xFFCD8B52);
-  static const _prizes = {1: 120, 2: 80, 3: 50};
+  static const _prizes = {1: 60, 2: 40, 3: 25};
 
   Color _medal(int rank) => switch (rank) { 1 => K.brass, 2 => _silver, 3 => _bronze, _ => K.night3 };
 

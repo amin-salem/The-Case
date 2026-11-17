@@ -1,7 +1,40 @@
-# server 1.67.0: nightly cases c077, c078 (17 Nov 2026)
+# server 1.71.0: nightly cases c077, c078 (17 Nov 2026)
 
 - Two new nightly cases from the idea bank: c077 «اعلامِ دوم» (idea 25, style S2 impossible, puzzle type 5 time trick, airport / travel, difficulty 5, publish 14 Dec 2026) and c078 «پارگی در سمتِ تماشاگر» (idea 26, style S6 conflicting accounts, puzzle type 6 staging, theater / art, difficulty 5, publish 15 Dec 2026), with their notify entries. Content only, no migration.
 - Blind tests: c077 90%, c078 90%; no single card decides. All findings fixed in one round (see `docs/case-log.md`).
+
+# server 1.70.0: admin panel back to the table look (17 Nov 2026)
+
+- Panel: the old look is back (menu at the top, real tables on every screen, smaller text, emojis in the section names). The 15 Nov redesign (bottom tab bar, tables turned into small cards on phones, larger text) is dropped because it was harder to read. Everything added since stays: member numbers, hiding duplicate accounts, the nudge events and tool kit lines in the economy report, «→ فهرست».
+- Only `server/app/admin_page.html` and the menu browser test (`server/tools/test_admin_menu.cjs`, back to the top-menu version) changed. No migration, no app build.
+
+# server 1.69.0 / app 1.46.0+99: eight leagues (17 Nov 2026)
+
+- Leagues: تازه‌کار، کارآموز، کارآگاه، کاردان، بازرس، سربازرس، سرپرست، اسطوره (`weekboard.LEAGUE_DEFS`, first profile ranks 0, 2, 4, 6, 8, 10, 12, 15; XP floors 0 / 550 / 1600 / 3200 / 5600 / 9000 / 13500 / 24000). Migration 0039 doubles every stored `week_leagues.league` (0,1,2,3 -> 0,2,4,6), so nobody changes league; the snapshot code builds all eight from the XP floors.
+- Prizes: per league 60 / 40 / 25 coins (was 120 / 80 / 50 for four leagues), so the weekly bill stays 1000 coins. Settlement pays each of the eight leagues once, as before.
+- App: the weekly board shows the eight shields in one row (chosen one large and lit, reached ones in colour, ahead ones grey; only the chosen name is written); the ID card and the profile ladder use eight shields and eight looks. League art renumbered (old 0,1,2,3 -> 0,2,4,6) and the four new shields moved from `assets/leagues/expansion/` to `assets/leagues/` (art registry updated).
+- Server 1.69.0 must be live with this app: an older server sends only four leagues; the app still shows them (the shield look follows the league index).
+
+# server 1.68.0 / app 1.45.1+98: free first case «intro01» (17 Nov 2026)
+
+- Content: «انگشترِ لبِ پنجره» (sweet shop on Yalda night, difficulty 2, 3 suspects, 6 cards, proof e2 e4 e5), in `server/app/content/intro/`, outside the nightly schedule, the archive and the notify list. Two blind tests: 93% and 95%, no single card names the culprit; one ambiguity (white fingertips: flour or sugar) fixed.
+- Server: `GET /v1/cases` returns `intro` (a case row) for a player with no solved case, or one who already opened it; `GET/hints/accuse` work on `intro01` like any case, free to open; normal solve rewards. `INTRO_CASE_ENABLED=false` hides and refuses it. No migration. `check_case.py` knows `intro01`.
+- App: one card above tonight's hero, «پرونده‌ی اول · رایگان»; gone once solved. The stamp reads «پرونده‌ی اول».
+
+# server 1.67.0 / app 1.45.0+97: «کمک کارآگاه», tool kit, minimal board header (16 Nov 2026)
+
+- App: one «کمک» button on the case screen opens a sheet with all six helps, cheapest first (magnifier 35, hint 1 40, fingerprint 65, camera 100, hint 2 80, hint 3 120), a three-step hint ladder, and the price and plaque effect on every row. Tools and hint 1 never cost a plaque; hints 2 and 3 cost one.
+- App: a quiet strip (once per case per player, closable, never blocking) suggests help after a long stall; the first case teaches the button with a spotlight; the last try shows a one-line reminder and the attempts as dots on the accuse screen.
+- Shop: «کیف کارآگاه» tool kit (3 magnifiers + 2 fingerprint readers + 1 camera for 280 coins; singles cost 335). Short on coins leads to the coin packs. Note: the coin pack `coins_medium` is also titled «کیف کارآگاه» in the shop; rename one of them.
+- Server: `POST /v1/tools/kit` with `request_id`: the player row is locked, the coin-log row `kit:<id>` marks "already paid", the debit cannot go below zero, stock is granted in the same transaction. 402 `not_enough_coins` with `need`, 503 `kit_disabled`. Config `TOOL_KIT_ENABLED` (default true), `TOOL_KIT_PRICE` (default 280); public config carries `economy.tool_kit`. Rate-limit route `tool_buy` policy. No migration.
+- Server: the admin economy report shows help nudge events (shown / tapped / closed) from the existing events path.
+- Leaderboard: the nightly header is one compact card: «N کارآگاه» with the fastest time and the mean in one line, no stat boxes.
+
+# app 1.44.7+96: suspect sheet and archive filters (16 Nov 2026)
+
+- App only, no server change (server stays 1.66.0).
+- Suspect sheet: tall portrait frame on the right (first in RTL), then name, age, the one role line (`intro`) and two mark buttons (مشکوک / بی‌گناه, tap again to clear); then the speech bubble, the questions, and «یافته‌های ابزار» (camera / fingerprint findings for this suspect, one short line each with its icon, repeated sentences dropped, at most two sentences, display only). With a big font (scale 1.3 and up) or a narrow screen it stacks.
+- Archive: one search field and ONE filter button with a count badge; its sheet has «اصلی», «موضوعی», «ترتیب», «پاک کردن همه» and «نشان بده · N پرونده». Options that would show nothing stay hidden. `archive_logic.dart` is unchanged.
 
 # server 1.66.0 / app 1.44.6+95: board header, suspect list, new portraits (16 Nov 2026)
 

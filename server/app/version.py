@@ -1,6 +1,11 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.67.0"
-# server 1.67.0: board header from the table rows, arithmetic mean, 33 new portraits (16 Nov 2026)
+VERSION = "1.71.0"
+# server 1.71.0: nightly cases c077, c078 (17 Nov 2026)
+# server 1.70.0: admin panel back to the table look, menu at the top (17 Nov 2026)
+# server 1.69.0: eight leagues (migration 0039 doubles stored league indexes), weekly prizes 60/40/25 per league (17 Nov 2026)
+# server 1.68.0: free first case intro01 (INTRO_CASE_ENABLED, GET /v1/cases `intro`) (17 Nov 2026)
+# server 1.67.0: tool kit «کیف کارآگاه» (POST /v1/tools/kit), help nudge events in the economy report (16 Nov 2026)
+# server 1.66.0: board header from the table rows, arithmetic mean, 33 new portraits (16 Nov 2026)
 # server 1.65.0: nightly cases c075, c076 (16 Nov 2026)
 # server 1.63.1: weekend case w009 (16 Nov 2026)
 # server 1.63.0: nightly cases c071, c072 (15 Nov 2026)

@@ -271,7 +271,7 @@ async def test_player_card_id_card_fields(client, clock):
     a, b = await new_player(client, "bd-idc-a", aged=True), await new_player(client, "bd-idc-b", aged=True)
     ids, i = ids_from()
     clock(evening_of(ids[i]))
-    xp_inspector = next(n for n, t in economy.RANKS if t == "بازرس")                    # first rank of league 2
+    xp_inspector = next(n for n, t in economy.RANKS if t == "بازرس")                    # first rank of league 4
     await set_player(b["player_id"], xp=xp_inspector, last_daily_solved=pub(ids, i))
     await solve(b["player_id"], ids[i], 3, evening_of(ids[i]), seconds=95)
     await solve(b["player_id"], ids[i - 1], 2, evening_of(ids[i]), seconds=61)
@@ -283,7 +283,7 @@ async def test_player_card_id_card_fields(client, clock):
             s.add(PlayerAchievement(player_id=b["player_id"], achievement_id=aid, at=utcnow() - timedelta(days=9 - n)))
         await s.commit()
     j = (await get(client, a, f"/v1/players/{b['player_id']}/card")).json()
-    assert j["league"] == 2 and j["league_name"] == weekboard.LEAGUES[2] == "بازرس"
+    assert j["league"] == 4 and j["league_name"] == weekboard.LEAGUES[4] == "بازرس"
     assert j["fastest"] == 61
     assert j["since"] > 0 and j["member_no"] >= 2
     me = (await get(client, a, f"/v1/players/{a['player_id']}/card")).json()
@@ -306,7 +306,7 @@ async def test_player_card_league_history_is_bounded_and_newest_first(client, cl
     a, b = await new_player(client, "bd-lh-a", aged=True), await new_player(client, "bd-lh-b", aged=True)
     async with db.SessionLocal() as s:
         for k in (0, 1, 3, 9):                                  # week 9 is older than the 6 weeks the sheet shows
-            s.add(WeekLeague(week=(ws - timedelta(days=7 * k)).isoformat(), player_id=b["player_id"], league=min(k, 3)))
+            s.add(WeekLeague(week=(ws - timedelta(days=7 * k)).isoformat(), player_id=b["player_id"], league=min(k, 3) * 2))  # 0, 2, 6: تازه‌کار, کارآگاه, سرپرست
         await s.commit()
     j = (await get(client, a, f"/v1/players/{b['player_id']}/card")).json()
     assert [w["week"] for w in j["league_history"]] == [(ws - timedelta(days=7 * k)).isoformat() for k in (0, 1, 3)]

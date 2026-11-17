@@ -17,11 +17,18 @@ import '../theme.dart';
 // =====================================================================================================================
 
 /// League names, by the index the server sends (`weekboard.LEAGUES`).
-const List<String> kLeagueNames = ['تازه‌کار', 'کارآگاه', 'بازرس', 'سرپرست'];
+const List<String> kLeagueNames = ['تازه‌کار', 'کارآموز', 'کارآگاه', 'کاردان', 'بازرس', 'سربازرس', 'سرپرست', 'اسطوره'];
 
-/// The league a profile rank (index into the server's ranks) belongs to. Same ranges as `weekboard.LEAGUE_FROM_RANK`:
-/// ranks 0-3, 4-7, 8-11 and 12 and up.
-int leagueOfRank(int rank) => rank >= 12 ? 3 : rank >= 8 ? 2 : rank >= 4 ? 1 : 0;
+/// The first profile rank (index into the server's ranks) of each of the eight leagues: `weekboard.LEAGUE_FROM_RANK`.
+const List<int> kLeagueFirstRank = [0, 2, 4, 6, 8, 10, 12, 15];
+
+/// The league a profile rank belongs to (same ranges as the server).
+int leagueOfRank(int rank) {
+  for (var i = kLeagueFirstRank.length - 1; i > 0; i--) {
+    if (rank >= kLeagueFirstRank[i]) return i;
+  }
+  return 0;
+}
 
 /// How a league looks: leather and copper, steel, black and gold, royal blue with a hologram.
 class LeagueLook {
@@ -69,6 +76,19 @@ class LeagueLook {
       shield: 'assets/leagues/league_0.webp',
     ),
     LeagueLook(
+      gradient: [Color(0xFF5E3F26), Color(0xFF3F2A18), Color(0xFF251A0E)],
+      texture: 'assets/textures/kraft.webp',
+      textureOpacity: 0.30,
+      textureBlend: BlendMode.multiply,
+      accent: Color(0xFFE8BD8C),
+      ink: Color(0xFFF8EBDA),
+      glow: Color(0xFFB07640),
+      chip: [Color(0xFFEDC79A), Color(0xFFB5733A)],
+      sheen: 0.15,
+      holo: false,
+      shield: 'assets/leagues/league_1.webp',
+    ),
+    LeagueLook(
       gradient: [Color(0xFF3C4757), Color(0xFF252D39), Color(0xFF141920)],
       texture: 'assets/textures/steel.webp',
       textureOpacity: 0.55,
@@ -79,7 +99,20 @@ class LeagueLook {
       chip: [Color(0xFFF2F5F9), Color(0xFF8E9AAB)],
       sheen: 0.35,
       holo: false,
-      shield: 'assets/leagues/league_1.webp',
+      shield: 'assets/leagues/league_2.webp',
+    ),
+    LeagueLook(
+      gradient: [Color(0xFF40495A), Color(0xFF272E3A), Color(0xFF151A22)],
+      texture: 'assets/textures/steel.webp',
+      textureOpacity: 0.5,
+      textureBlend: BlendMode.overlay,
+      accent: Color(0xFFE8D9AE),
+      ink: Color(0xFFF4F6F9),
+      glow: Color(0xFF9AA4B8),
+      chip: [Color(0xFFF5EBCB), Color(0xFFA8A08A)],
+      sheen: 0.45,
+      holo: false,
+      shield: 'assets/leagues/league_3.webp',
     ),
     LeagueLook(
       gradient: [Color(0xFF2B2414), Color(0xFF17140D), Color(0xFF0B0A07)],
@@ -92,7 +125,20 @@ class LeagueLook {
       chip: [Color(0xFFFBE7A6), Color(0xFFC8901E)],
       sheen: 0.55,
       holo: false,
-      shield: 'assets/leagues/league_2.webp',
+      shield: 'assets/leagues/league_4.webp',
+    ),
+    LeagueLook(
+      gradient: [Color(0xFF16452E), Color(0xFF0E2B1D), Color(0xFF07150E)],
+      texture: 'assets/textures/paper.webp',
+      textureOpacity: 0.08,
+      textureBlend: BlendMode.screen,
+      accent: Color(0xFFF4CF73),
+      ink: Color(0xFFF4FBEA),
+      glow: Color(0xFF2FA866),
+      chip: [Color(0xFFFBE7A6), Color(0xFFC8901E)],
+      sheen: 0.6,
+      holo: false,
+      shield: 'assets/leagues/league_5.webp',
     ),
     LeagueLook(
       gradient: [Color(0xFF1E3388), Color(0xFF14205A), Color(0xFF090F2E)],
@@ -105,7 +151,20 @@ class LeagueLook {
       chip: [Color(0xFFFBE7A6), Color(0xFFC8901E)],
       sheen: 0.7,
       holo: true,
-      shield: 'assets/leagues/league_3.webp',
+      shield: 'assets/leagues/league_6.webp',
+    ),
+    LeagueLook(
+      gradient: [Color(0xFF2A1218), Color(0xFF170A0E), Color(0xFF0A0507)],
+      texture: 'assets/textures/steel.webp',
+      textureOpacity: 0.3,
+      textureBlend: BlendMode.overlay,
+      accent: Color(0xFFF6D27A),
+      ink: Color(0xFFFFF3F0),
+      glow: Color(0xFFE0343F),
+      chip: [Color(0xFFFBE7A6), Color(0xFFC8901E)],
+      sheen: 0.8,
+      holo: true,
+      shield: 'assets/leagues/league_7.webp',
     ),
   ];
 

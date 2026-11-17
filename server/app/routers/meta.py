@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import content
+from .. import content, tools
 from .. import economy as eco
 from ..cache import TTLCache
 from ..config import get_settings
@@ -42,6 +42,9 @@ def _economy() -> dict:
             "streak_badges": list(eco.STREAK_BADGES),
             "streak_milestones": list(eco.STREAK_MILESTONES),
             "streak_cosmetic_milestones": list(eco.STREAK_COSMETIC_MILESTONES),
+            "tool_kit": {"enabled": bool(get_settings().detective_tools_enabled and get_settings().tool_kit_enabled),
+                         "price": tools.kit_price(get_settings().tool_kit_price), "singles": tools.kit_singles_total(),
+                         "items": dict(tools.KIT)},
             "streak_repair": {"enabled": get_settings().streak_repair_enabled, "min_streak": eco.REPAIR_MIN_STREAK,
                               "base": eco.REPAIR_BASE, "per_day": eco.REPAIR_PER_DAY, "cap": eco.REPAIR_CAP},
             "riddles_per_day": eco.RIDDLES_PER_DAY, "riddle_free": eco.RIDDLE_FREE,

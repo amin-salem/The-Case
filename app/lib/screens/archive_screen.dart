@@ -205,9 +205,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _summary(rows)),
               if (rows != null && _nudgeVisible(rows)) SliverToBoxAdapter(child: _rateNudge(rows)),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _picksRow(rows)),
-              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _searchBox()),
-              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _filters(rows)),
-              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _categoryChips(rows)),
+              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _searchRow(rows)),
+              if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _summaryLine(rows)),
               if (rows == null && _error == null)
                 const SliverToBoxAdapter(
                   child: Padding(padding: EdgeInsets.all(40), child: Center(child: CircularProgressIndicator(color: K.brass))),
@@ -350,9 +349,170 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
     );
   }
 
-  Widget _searchBox() => Padding(
+  /// One search field and ONE filter button (with a count badge); everything else lives in the filter sheet.
+  Widget _searchRow(List<CaseRow> rows) => Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-        child: TextField(
+        child: Row(children: [
+          Expanded(child: _searchBox()),
+          const SizedBox(width: 8),
+          _filterButton(rows),
+        ]),
+      );
+
+  int get _activeCount => (_filter != ArchiveFilter.all ? 1 : 0) + (_cat.isNotEmpty ? 1 : 0) + (_sort != ArchiveSort.newest ? 1 : 0);
+
+  Widget _filterButton(List<CaseRow> rows) {
+    final n = _activeCount;
+    return Stack(clipBehavior: Clip.none, children: [
+      Semantics(
+        button: true,
+        label: 'فیلتر',
+        child: InkWell(
+          key: const ValueKey('archive-filter-button'),
+          onTap: () => _openFilterSheet(rows),
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: n > 0 ? K.brass : K.night3, width: 2),
+            ),
+            child: const Icon(Icons.tune_rounded, color: K.brass, size: 22),
+          ),
+        ),
+      ),
+      if (n > 0)
+        PositionedDirectional(
+          end: -7,
+          top: -7,
+          child: Container(
+            key: const ValueKey('archive-filter-badge'),
+            constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(999)),
+            child: Text(fa(n), style: tBody(11, color: K.ink, w: FontWeight.w900).copyWith(height: 1.2)),
+          ),
+        ),
+    ]);
+  }
+
+  /// «N پرونده · filter · topic · order»: what the list below shows right now.
+  Widget _summaryLine(List<CaseRow> rows) {
+    final parts = [
+      if (_filter != ArchiveFilter.all) archiveFilterLabels[_filter]!,
+      if (_cat.isNotEmpty) categoryName(_cat),
+      archiveSortLabels[_sort]!,
+    ];
+    return Padding(
+      key: const ValueKey('archive-summary-line'),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+      child: Text('${fa(_shown(rows).length)} پرونده · ${parts.join(' · ')}', style: tBody(12.5, color: K.textSoft, w: FontWeight.w700)),
+    );
+  }
+
+  Future<void> _openFilterSheet(List<CaseRow> rows) {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: K.paper,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(22))),
+      builder: (ctx) => StatefulBuilder(builder: (ctx, setSheet) {
+        void upd(VoidCallback f) {
+          setState(f);
+          setSheet(() {});
+        }
+
+        final all = _rows ?? rows;
+        final fCounts = archiveFilterCounts(all, category: _cat, query: _query);
+        final cCounts = archiveCategoryCounts(all, filter: _filter, query: _query);
+        final present = {for (final r in all) r.category}..remove('');
+
+        Widget chip(String key, String label, bool on, VoidCallback tap) => InkWell(
+              key: ValueKey(key),
+              onTap: tap,
+              borderRadius: BorderRadius.circular(999),
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: on ? K.ink : Colors.transparent,
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(color: on ? K.ink : K.paperDark.withValues(alpha: 0.9)),
+                ),
+                child: Text(label, style: tBody(13, color: on ? K.paper : K.ink, w: FontWeight.w800).copyWith(height: 1.3)),
+              ),
+            );
+
+        Widget group(String title, List<Widget> chips) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(title, style: tBody(13, color: K.inkSoft, w: FontWeight.w900)),
+              const SizedBox(height: 8),
+              Wrap(spacing: 6, runSpacing: 6, children: chips),
+              const SizedBox(height: 14),
+            ]);
+
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              Row(children: [
+                Expanded(child: Text('فیلتر', style: tBody(17, color: K.ink, w: FontWeight.w900))),
+                TextButton(
+                  key: const ValueKey('archive-filter-clear'),
+                  onPressed: _activeCount == 0
+                      ? null
+                      : () => upd(() {
+                            _filter = ArchiveFilter.all;
+                            _cat = '';
+                            _sort = ArchiveSort.newest;
+                          }),
+                  child: Text('پاک کردن همه', style: tBody(13, color: K.stamp, w: FontWeight.w900)),
+                ),
+              ]),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                    group('اصلی', [
+                      for (final f in ArchiveFilter.values)
+                        // an option that would show nothing is hidden, except «همه» and the one that is on
+                        if (f == ArchiveFilter.all || f == _filter || (fCounts[f] ?? 0) > 0)
+                          chip('filter-chip-${f.name}', archiveFilterLabels[f]!, _filter == f, () => upd(() => _filter = f)),
+                    ]),
+                    if (present.isNotEmpty)
+                      group('موضوعی', [
+                        chip('cat-chip-all', 'همه', _cat.isEmpty, () => upd(() => _cat = '')),
+                        for (final e in kCategories.entries)
+                          if (present.contains(e.key) && ((cCounts[e.key] ?? 0) > 0 || _cat == e.key))
+                            chip('cat-chip-${e.key}', e.value.name, _cat == e.key, () => upd(() => _cat = e.key)),
+                      ]),
+                    group('ترتیب', [
+                      for (final e in archiveSortLabels.entries)
+                        chip('sort-chip-${e.key.name}', e.value, _sort == e.key, () => upd(() => _sort = e.key)),
+                    ]),
+                  ]),
+                ),
+              ),
+              InkWell(
+                key: const ValueKey('archive-filter-show'),
+                onTap: () => Navigator.of(ctx).pop(),
+                borderRadius: BorderRadius.circular(14),
+                child: Container(
+                  height: 52,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(color: K.ink, borderRadius: BorderRadius.circular(14)),
+                  child: Text('نشان بده · ${fa(_shown(all).length)} پرونده', style: tBody(15, color: K.paper, w: FontWeight.w900)),
+                ),
+              ),
+            ]),
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget _searchBox() => TextField(
           key: const ValueKey('archive-search'),
           controller: _searchCtl,
           textInputAction: TextInputAction.search,
@@ -360,7 +520,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
           onChanged: (v) => setState(() => _query = v),
           decoration: InputDecoration(
             isDense: true,
-            hintText: 'جست‌وجو در نام، مکان یا شماره‌ی پرونده',
+            hintText: 'جست‌وجو در نام، مکان یا شماره',
             hintStyle: tBody(13, color: K.textSoft),
             prefixIcon: const Icon(Icons.search_rounded, color: K.textSoft, size: 20),
             suffixIcon: _query.isEmpty
@@ -375,99 +535,13 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                   ),
             filled: true,
             fillColor: K.night2,
-            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            contentPadding: const EdgeInsets.symmetric(vertical: 13, horizontal: 12),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: K.night3)),
             enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: K.night3)),
             focusedBorder:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: K.brass.withValues(alpha: 0.7))),
           ),
-        ),
       );
-
-  Widget _filters(List<CaseRow> rows) {
-    final counts = archiveFilterCounts(rows, category: _cat, query: _query);
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-      child: Row(children: [
-        PopupMenuButton<ArchiveSort>(
-          tooltip: 'مرتب‌سازی',
-          color: K.night2,
-          initialValue: _sort,
-          onSelected: (v) => setState(() => _sort = v),
-          itemBuilder: (_) => [
-            for (final e in archiveSortLabels.entries)
-              PopupMenuItem<ArchiveSort>(
-                  value: e.key, child: Text(e.value, style: tBody(14, w: e.key == _sort ? FontWeight.w900 : FontWeight.w400))),
-          ],
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-            decoration: BoxDecoration(
-                color: K.night2, borderRadius: BorderRadius.circular(999), border: Border.all(color: K.brass.withValues(alpha: 0.5))),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              const Icon(Icons.swap_vert_rounded, color: K.brass, size: 18),
-              const SizedBox(width: 4),
-              Text(archiveSortLabels[_sort]!, style: tBody(13, w: FontWeight.w700)),
-            ]),
-          ),
-        ),
-        for (final f in ArchiveFilter.values)
-          // a filter that would show nothing is hidden, except «همه» and the one that is on
-          if (f == ArchiveFilter.all || f == _filter || (counts[f] ?? 0) > 0)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: ChoiceChip(
-                key: ValueKey('filter-chip-${f.name}'),
-                label: Text(f == ArchiveFilter.all ? archiveFilterLabels[f]! : '${archiveFilterLabels[f]} · ${fa(counts[f] ?? 0)}',
-                    style: tBody(13, w: FontWeight.w700, color: _filter == f ? K.ink : K.text)),
-                selected: _filter == f,
-                showCheckmark: false,
-                selectedColor: K.brass,
-                backgroundColor: K.night2,
-                side: BorderSide(color: _filter == f ? K.brass : K.night3),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-                onSelected: (_) => setState(() => _filter = f),
-              ),
-            ),
-      ]),
-    );
-  }
-
-  /// Topic chips (only the topics that exist in the archive), under the sort/filter row.
-  Widget _categoryChips(List<CaseRow> rows) {
-    final present = {for (final r in rows) r.category}..remove('');
-    if (present.isEmpty) return const SizedBox.shrink();
-    final counts = archiveCategoryCounts(rows, filter: _filter, query: _query);
-    Widget chip(String key, String label, IconData? icon) {
-      final on = _cat == key;
-      final n = counts[key] ?? 0;
-      return Padding(
-        padding: const EdgeInsets.only(right: 8),
-        child: ChoiceChip(
-          key: ValueKey('cat-chip-${key.isEmpty ? 'all' : key}'),
-          avatar: icon == null ? null : Icon(icon, size: 16, color: on ? K.ink : K.kraft),
-          label: Text('$label · ${fa(n)}', style: tBody(13, w: FontWeight.w700, color: on ? K.ink : K.text)),
-          selected: on,
-          showCheckmark: false,
-          selectedColor: K.kraft,
-          backgroundColor: K.night2,
-          side: BorderSide(color: on ? K.kraft : K.night3),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-          onSelected: (_) => setState(() => _cat = key),
-        ),
-      );
-    }
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-      child: Row(children: [
-        chip('', 'همه‌ی موضوع‌ها', null),
-        for (final e in kCategories.entries)
-          if (present.contains(e.key) && ((counts[e.key] ?? 0) > 0 || _cat == e.key)) chip(e.key, e.value.name, e.value.icon),
-      ]),
-    );
-  }
 
   Widget _list(List<CaseRow> rows) {
     if (rows.isEmpty) {

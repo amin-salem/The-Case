@@ -162,7 +162,7 @@ class _AccountScreenState extends State<AccountScreen> {
     ]);
   }
 
-  /// Four shields: the one he stands on is large and lit, the ones behind him are in colour, the ones ahead are grey.
+  /// Eight shields: the one he stands on is large and lit, the ones behind him are in colour, the ones ahead are grey.
   Widget _ladder(Profile p) {
     final cur = leagueOfRank(p.rank);
     final next = p.nextRankXp;
@@ -173,7 +173,7 @@ class _AccountScreenState extends State<AccountScreen> {
         SizedBox(
           height: 84,
           child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            for (var i = 0; i < 4; i++) _shield(i, cur),
+            for (var i = 0; i < kLeagueNames.length; i++) _shield(i, cur),
           ]),
         ),
         const SizedBox(height: 10),
@@ -198,7 +198,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget _shield(int i, int cur) {
     final look = LeagueLook.of(i);
-    final size = i == cur ? 72.0 : 48.0;
+    final size = i == cur ? 62.0 : 34.0;
     Widget img = Image.asset(look.shield, width: size, height: size, fit: BoxFit.contain);
     if (i > cur) {
       img = Opacity(opacity: 0.4, child: ColorFiltered(colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.saturation), child: img));

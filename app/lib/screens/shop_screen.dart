@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'account_sheets.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../models/tools.dart';
 import '../services/api.dart';
 import '../services/billing.dart';
 import '../services/shop_value.dart';
@@ -21,6 +24,153 @@ class ShopScreen extends StatefulWidget {
 
 class _ShopScreenState extends State<ShopScreen> {
   bool _busy = false;
+
+  // «کیف کارآگاه» (the tool bundle)
+  bool _kitBusy = false, _kitShort = false, _kitBought = false;
+  String? _kitReq; // one id per purchase attempt: a retry after a lost answer can never pay twice
+  final _packsKey = GlobalKey();
+
+  Future<void> _buyKit(KitOffer k) async {
+    if (_kitBusy || !needOnline(context)) return;
+    setState(() => _kitBusy = true);
+    final rng = Random.secure();
+    _kitReq ??= List.generate(16, (_) => 'abcdefghijklmnopqrstuvwxyz0123456789'[rng.nextInt(36)]).join();
+    try {
+      await Api.i.buyKit(_kitReq!);
+      _kitReq = null;
+      if (mounted) {
+        setState(() {
+          _kitBought = true;
+          _kitShort = false;
+        });
+      }
+    } on ApiException catch (e) {
+      _kitReq = null;
+      if (!mounted) return;
+      if (e.code == 'not_enough_coins') {
+        setState(() => _kitShort = true);
+      } else {
+        toast(context, Api.friendly(e));
+      }
+    } catch (e) {
+      // a lost answer keeps the same id, so pressing again is safe
+      if (mounted) toast(context, Api.friendly(e));
+    } finally {
+      if (mounted) setState(() => _kitBusy = false);
+    }
+  }
+
+  void _toPacks() {
+    final c = _packsKey.currentContext;
+    if (c != null) Scrollable.ensureVisible(c, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+  }
+
+  Widget _kitCard() {
+    final k = Api.i.toolKit;
+    if (k == null || !k.enabled || k.price <= 0) return const SizedBox.shrink();
+    final coins = Api.i.coins;
+    final short = coins < k.price;
+    final off = k.singles > k.price ? ((k.singles - k.price) * 100 / k.singles).round() : 0;
+    Widget item(IconData icon, String kind, String name) => Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+            decoration: BoxDecoration(color: K.paperDark, borderRadius: BorderRadius.circular(12)),
+            child: Column(children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(color: K.ink, borderRadius: BorderRadius.circular(10)),
+                child: Icon(icon, color: K.brass, size: 20),
+              ),
+              const SizedBox(height: 4),
+              Text('×${fa(k.items[kind] ?? 0)}', style: tBody(16, color: K.ink, w: FontWeight.w900).copyWith(height: 1.3)),
+              Text(name, style: tBody(11, color: K.inkSoft, w: FontWeight.w800).copyWith(height: 1.3)),
+            ]),
+          ),
+        );
+    return Container(
+      key: const ValueKey('kit-card'),
+      margin: const EdgeInsets.only(top: 22),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(color: K.paper, borderRadius: BorderRadius.circular(18)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Row(children: [
+          Container(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(color: K.ink, borderRadius: BorderRadius.circular(14)),
+            child: const Icon(Icons.work_rounded, color: K.brass, size: 28),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('کیف کارآگاه', style: tBody(18, color: K.ink, w: FontWeight.w900).copyWith(height: 1.3)),
+              Text('برای شب‌هایی که پرونده سخت است', style: tBody(12.5, color: K.inkSoft, w: FontWeight.w700).copyWith(height: 1.4)),
+            ]),
+          ),
+          if (off > 0)
+            Container(
+              key: const ValueKey('kit-off'),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(color: K.stamp, borderRadius: BorderRadius.circular(99)),
+              child: Text('${fa(off)}٪ ارزان‌تر', style: tBody(11, color: Colors.white, w: FontWeight.w900).copyWith(height: 1.4)),
+            ),
+        ]),
+        const SizedBox(height: 14),
+        Row(children: [
+          item(Icons.search_rounded, 'magnifier', 'ذره‌بین'),
+          const SizedBox(width: 8),
+          item(Icons.fingerprint_rounded, 'fingerprint', 'اثر انگشت'),
+          const SizedBox(width: 8),
+          item(Icons.videocam_rounded, 'camera', 'دوربین'),
+        ]),
+        const SizedBox(height: 12),
+        Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
+          Text('${fa(k.price)} سکه', style: tBody(24, color: K.kraftDark, w: FontWeight.w900)),
+          const SizedBox(width: 8),
+          if (k.singles > k.price)
+            Text('${fa(k.singles)} سکه',
+                style: tBody(13, color: K.inkSoft, w: FontWeight.w700).copyWith(decoration: TextDecoration.lineThrough)),
+        ]),
+        const SizedBox(height: 12),
+        if (_kitBought)
+          Container(
+            key: const ValueKey('kit-bought'),
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(color: K.ink, borderRadius: BorderRadius.circular(12)),
+            child: Text(
+                'توی کیفت: ذره‌بین ×${fa(k.items['magnifier'] ?? 0)} · اثر انگشت ×${fa(k.items['fingerprint'] ?? 0)} · دوربین ×${fa(k.items['camera'] ?? 0)}',
+                textAlign: TextAlign.center,
+                style: tBody(13.5, color: K.brass, w: FontWeight.w800)),
+          ),
+        if (short || _kitShort)
+          InkWell(
+            key: const ValueKey('kit-short'),
+            onTap: _toPacks,
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              height: 52,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: K.ink, width: 2)),
+              child: Text('${fa(max(1, k.price - coins))} سکه کم داری · بسته‌های سکه', style: tBody(14, color: K.ink, w: FontWeight.w900)),
+            ),
+          )
+        else
+          InkWell(
+            key: const ValueKey('kit-buy'),
+            onTap: _kitBusy ? null : () => _buyKit(k),
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              height: 52,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(color: K.ink, borderRadius: BorderRadius.circular(12)),
+              child: Text(_kitBusy ? '...' : 'بخر · ${fa(k.price)} سکه', style: tBody(15, color: K.paper, w: FontWeight.w900)),
+            ),
+          ),
+      ]),
+    );
+  }
 
   Future<void> _buy(String productId, String title) async {
     if (!needOnline(context)) return;
@@ -134,8 +284,9 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
               // the «کارآگاه ویژه» card leads; the one-time starter pack is its own row below the bags
               ListenableBuilder(listenable: api, builder: (_, __) => _vipHero()),
+              ListenableBuilder(listenable: api, builder: (_, __) => _kitCard()),
               const SizedBox(height: 22),
-              _heading('سکه', null),
+              KeyedSubtree(key: _packsKey, child: _heading('سکه', null)),
               const SizedBox(height: 16),
               ListenableBuilder(
                 listenable: api,

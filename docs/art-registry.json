@@ -9994,8 +9994,8 @@
       "visual_review_date": "2026-11-11"
     },
     {
-      "id": "league_1",
-      "path": "app/assets/leagues/league_1.webp",
+      "id": "league_2",
+      "path": "app/assets/leagues/league_2.webp",
       "kind": "leagues",
       "sha256": "5aab5b1fe7935328253b2ae809db4e7d2a76db44d4368e4eb0dd9b45b3468a6e",
       "size_bytes": 11424,
@@ -10014,8 +10014,8 @@
       "visual_review_date": "2026-11-11"
     },
     {
-      "id": "league_2",
-      "path": "app/assets/leagues/league_2.webp",
+      "id": "league_4",
+      "path": "app/assets/leagues/league_4.webp",
       "kind": "leagues",
       "sha256": "e0b9af150ccaa28e5248d60e375642f1e4b163cc13df704f423afa947aebf85d",
       "size_bytes": 13674,
@@ -10034,8 +10034,8 @@
       "visual_review_date": "2026-11-11"
     },
     {
-      "id": "league_3",
-      "path": "app/assets/leagues/league_3.webp",
+      "id": "league_6",
+      "path": "app/assets/leagues/league_6.webp",
       "kind": "leagues",
       "sha256": "7820a32306e1285dec20c2e85e896e3e28c78be6cd77b094eb81fe785147c71b",
       "size_bytes": 17760,
@@ -10306,8 +10306,8 @@
       "transparent": true
     },
     {
-      "id": "league_expansion_1",
-      "path": "app/assets/leagues/expansion/league_1.webp",
+      "id": "league_1",
+      "path": "app/assets/leagues/league_1.webp",
       "kind": "leagues",
       "league_tier": 1,
       "display_name": "کارآموز",
@@ -10322,15 +10322,15 @@
       "usable_from": null,
       "quality": 82,
       "method": 6,
-      "release_basis": "Eight-league expansion staged for scheduled integration; existing four badges unchanged.",
+      "release_basis": "Eight-league art, bundled with the eight-league build (17 Nov 2026); odd numbers are the new steps, even numbers are the four original badges renumbered (0,1,2,3 -> 0,2,4,6).",
       "restrictions": [
         "UI badge only. Move to final league path together with old shield renumbering."
       ],
       "visual_review_date": "2026-11-16"
     },
     {
-      "id": "league_expansion_3",
-      "path": "app/assets/leagues/expansion/league_3.webp",
+      "id": "league_3",
+      "path": "app/assets/leagues/league_3.webp",
       "kind": "leagues",
       "league_tier": 3,
       "display_name": "کاردان",
@@ -10345,15 +10345,15 @@
       "usable_from": null,
       "quality": 82,
       "method": 6,
-      "release_basis": "Eight-league expansion staged for scheduled integration; existing four badges unchanged.",
+      "release_basis": "Eight-league art, bundled with the eight-league build (17 Nov 2026); odd numbers are the new steps, even numbers are the four original badges renumbered (0,1,2,3 -> 0,2,4,6).",
       "restrictions": [
         "UI badge only. Move to final league path together with old shield renumbering."
       ],
       "visual_review_date": "2026-11-16"
     },
     {
-      "id": "league_expansion_5",
-      "path": "app/assets/leagues/expansion/league_5.webp",
+      "id": "league_5",
+      "path": "app/assets/leagues/league_5.webp",
       "kind": "leagues",
       "league_tier": 5,
       "display_name": "سربازرس",
@@ -10368,15 +10368,15 @@
       "usable_from": null,
       "quality": 82,
       "method": 6,
-      "release_basis": "Eight-league expansion staged for scheduled integration; existing four badges unchanged.",
+      "release_basis": "Eight-league art, bundled with the eight-league build (17 Nov 2026); odd numbers are the new steps, even numbers are the four original badges renumbered (0,1,2,3 -> 0,2,4,6).",
       "restrictions": [
         "UI badge only. Move to final league path together with old shield renumbering."
       ],
       "visual_review_date": "2026-11-16"
     },
     {
-      "id": "league_expansion_7",
-      "path": "app/assets/leagues/expansion/league_7.webp",
+      "id": "league_7",
+      "path": "app/assets/leagues/league_7.webp",
       "kind": "leagues",
       "league_tier": 7,
       "display_name": "اسطوره",
@@ -10391,7 +10391,7 @@
       "usable_from": null,
       "quality": 80,
       "method": 6,
-      "release_basis": "Eight-league expansion staged for scheduled integration; existing four badges unchanged.",
+      "release_basis": "Eight-league art, bundled with the eight-league build (17 Nov 2026); odd numbers are the new steps, even numbers are the four original badges renumbered (0,1,2,3 -> 0,2,4,6).",
       "restrictions": [
         "UI badge only. Move to final league path together with old shield renumbering."
       ],

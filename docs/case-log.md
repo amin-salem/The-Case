@@ -446,3 +446,8 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 
 - Plan: docs/reviews/c077-c078-plan.md. Name changes: c078 کسری دادآفرین -> کسری پاک‌نژاد (Nooshin's brother); ages adjusted to unused culprit faces (Hamed 64, Nooshin 32 etc.).
 - Fixed after the tests (one round, chains unchanged, no retest): c077 (Kowsar's sleep time, box sizes, Kowsar's sighting wording, return/search times, Sayeh's bag and coat, print lines); c078 (guard-log date, hole height, empty bridge at 19:50, Hediyeh's and Nooshin's scissors accounted, Kasra's silence, Siavash and Orang alibis, Nooshin's print line). Receipts that clear people: c077 e4, e6; c078 e7, e3.
+
+
+### 2026-11-17 intro01 «انگشترِ لبِ پنجره» (free first case, written by Opus)
+- Sweet shop on Yalda night, culprit s3 تیرداد کلانتری (cashier, nephew), difficulty 2, proof e2 e4 e5. Chain: ring seen 17:06, taken 17:10 from inside the kitchen (e2) -> only the back door and the curtain lead in (e1) -> cook outside at the cart, courier at a customer's door (e2, e3) -> counter empty 17:08-17:11 and the cashier comes out of the curtain with powdery white fingertips (e4) -> ring in the powdered-sugar tin, scoop clean, sink trap empty (e5).
+- Blind tests: 93% and 95%, no single card decides. Wrong: white fingertips could be flour. Fixed: e4 now says powdery, not flour-like. Resolved.

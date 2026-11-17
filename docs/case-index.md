@@ -86,8 +86,8 @@ c073 | 2026-12-10 | 5 | bazaar_night | business | حسابی که دوبار ب�
 c074 | 2026-12-11 | 5 | train | travel | تهدیدی برای مسافر دیگر | s4 ساغر آذرفر (مترجم رسمی، مسافر تور) | f_mid_mechanic | 5 | 11 | batch 1 idea #22, style classic, puzzle type 4 (train / travel), difficulty 5
 c075 | 2026-12-12 | 5 | snow_lodge | crime | جمله‌ای روی بخار | s3 ارژنگ فرهود (راهنمای کوهستان) | m_old_woolcap | 5 | 11 | batch 1 idea #23, style S3, puzzle type 8 (snow_lodge / crime), difficulty 5, شکل شب: ظاهر
 c076 | 2026-12-13 | 5 | school | science | بذرهایی برای نمایش | s4 آذین مهرآسا (دبیر زیست بازنشسته) | f_old_professor | 5 | 11 | batch 1 idea #24, style S1, puzzle type 10 (school / science), difficulty 5, شکل شب: پروند
-c077 | 2026-12-14 | 5 | airport | travel | اعلامِ دوم | s1 حامد نوبهار (راهنمای تور) | m_old_farmer | 5 | 10 | batch 1 idea #25, style S2, puzzle type 5 (airport / travel), difficulty 5, شکل شب: ترتیب‌
-c078 | 2026-12-15 | 5 | theater | art | پارگی در سمتِ تماشاگر | s5 نوشین پاک‌نژاد (خیاط و مسئول کارگاه لباس و پرده) | f_young_waitress | 5 | 11 | batch 1 idea #26, style S6, puzzle type 6 (theater / art), difficulty 5, شکل شب: بازجویی‌م
+c077 | 2026-12-14 | 5 | airport | travel | اعلامِ دوم | s1 حامد نوبهار (راهنمای تور) | m_old_farmer | 5 | 10 | batch 1 idea #25, style S2, puzzle type 5 (airport / travel), difficulty 5
+c078 | 2026-12-15 | 5 | theater | art | پارگی در سمتِ تماشاگر | s5 نوشین پاک‌نژاد (خیاط و مسئول کارگاه لباس و پرده) | f_young_waitress | 5 | 11 | batch 1 idea #26, style S6, puzzle type 6 (theater / art), difficulty 5
 
 ## Weekend
 
@@ -117,8 +117,8 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 - c074: scene train, category travel, culprit slot s4, type: batch 1 idea #22, style classic, puzzle type 4 (train / travel), difficulty 5
 - c075: scene snow_lodge, category crime, culprit slot s3, type: batch 1 idea #23, style S3, puzzle type 8 (snow_lodge / crime), difficulty 5, شکل شب: ظاهر
 - c076: scene school, category science, culprit slot s4, type: batch 1 idea #24, style S1, puzzle type 10 (school / science), difficulty 5, شکل شب: پروند
-- c077: scene airport, category travel, culprit slot s1, type: batch 1 idea #25, style S2, puzzle type 5 (airport / travel), difficulty 5, شکل شب: ترتیب‌
-- c078: scene theater, category art, culprit slot s5, type: batch 1 idea #26, style S6, puzzle type 6 (theater / art), difficulty 5, شکل شب: بازجویی‌م
+- c077: scene airport, category travel, culprit slot s1, type: batch 1 idea #25, style S2, puzzle type 5 (airport / travel), difficulty 5
+- c078: scene theater, category art, culprit slot s5, type: batch 1 idea #26, style S6, puzzle type 6 (theater / art), difficulty 5
 
 ## Counts
 

@@ -186,6 +186,7 @@ class CasesOut(BaseModel):
     today: CaseRow | None
     next_case_at: int   # unix seconds
     archive: list[CaseRow]
+    intro: CaseRow | None = None          # the free first case, only for a player who has not solved any case yet
     weekly: CaseRow | None = None         # this weekend's big case, while it is open
     weekly_closes_at: int | None = None
     weekly_next_chapter_at: int | None = None  # when chapter 2 opens (None once it has, or no chapters)

@@ -213,3 +213,63 @@ Build 93
 
 ## developer_note
 Build 95
+
+
+<!-- build: 96 -->
+## changelog_fa
+- فیلتر بایگانی ساده‌تر شد: یک جست‌وجو و یک دکمه‌ی فیلتر
+- برگه‌ی مظنون بازطراحی شد: عکس بزرگ‌تر کنار مشخصات و یافته‌های ابزار
+- بهبود پایداری برنامه
+
+## changelog_en
+- Simpler archive filters: one search field and one filter button
+- Redesigned suspect sheet with a larger portrait next to the details and tool findings
+- Improved app stability
+
+## developer_note
+Build 96
+
+
+<!-- build: 97 -->
+## changelog_fa
+- دکمه‌ی «کمک» تازه: همه‌ی کمک‌ها یک‌جا، از ارزان‌ترین
+- «کیف کارآگاه» در فروشگاه
+- جدول برترها مینیمال‌تر شد
+- بهبود پایداری برنامه
+
+## changelog_en
+- New help button: all helps in one place, cheapest first
+- Detective kit in the shop
+- A more minimal leaderboard header
+- Improved app stability
+
+## developer_note
+Build 97
+
+
+<!-- build: 98 -->
+## changelog_fa
+- پرونده‌ی اول رایگان برای کارآگاه‌های تازه
+- بهبود پایداری برنامه
+
+## changelog_en
+- A free first case for new detectives
+- Improved app stability
+
+## developer_note
+Build 98
+
+
+<!-- build: 99 -->
+## changelog_fa
+- ۸ لیگ کارآگاهی در جدول برترهای هفته
+- کارت شناسایی و پروفایل با نشان‌های تازه
+- بهبود پایداری برنامه
+
+## changelog_en
+- Eight detective leagues on the weekly board
+- New badges on the ID card and profile
+- Improved app stability
+
+## developer_note
+Build 99

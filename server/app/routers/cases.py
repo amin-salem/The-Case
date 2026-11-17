@@ -13,6 +13,7 @@ from ..cache import TTLCache
 from ..services import case_reset
 from .. import economy as eco
 from ..content import Case
+from ..config import get_settings
 from ..db import get_session, lock_players
 from ..models import CaseProgress, Player, utcnow
 from ..schemas import (AccuseIn, AccuseOut, CaseOut, CaseRow, CasesOut, GainsOut, HintOut, LiarIn, LiarOut, PicksOut, PickOut, ProgressOut, SeenIn, SeenOut,
@@ -138,6 +139,11 @@ def _opened_case(case_id: str, player: Player) -> Case:
         if c is None or not content.story_open_for(player):
             raise HTTPException(404, "no_case")
         return c
+    if content.is_intro(case_id):
+        c = content.intro_by_id(case_id)
+        if c is None or not get_settings().intro_case_enabled:
+            raise HTTPException(404, "no_case")
+        return c
     if content.is_weekly(case_id):
         c = content.weekly_by_id(case_id)
         if c is None or content.opens_at(c) > content.now_local():
@@ -166,6 +172,14 @@ def add_active_time(p: CaseProgress, seconds: int, now) -> int:
     return add
 
 
+def intro_for(player: Player, p: CaseProgress | None) -> bool:
+    """The free first case is offered to a player who has not solved any case yet, and stays for one who has opened it
+    (so it can be finished or replayed). Off with INTRO_CASE_ENABLED=false."""
+    if not get_settings().intro_case_enabled:
+        return False
+    return p is not None or (player.cases_solved or 0) == 0
+
+
 def _is_today(c: Case, today: Case | None = ...) -> bool:
     """`today` may be passed by a caller that already knows today's case (the case list asks for 50 rows)."""
     t = content.todays_case() if today is ... else today
@@ -175,6 +189,8 @@ def _is_today(c: Case, today: Case | None = ...) -> bool:
 def _can_open(c: Case, p: CaseProgress | None, player: Player, today: Case | None = ...) -> bool:
     if content.is_story(c.id):
         return p is not None  # a story chapter is opened on /v1/story, never bought here
+    if content.is_intro(c.id):
+        return True  # free for everyone who may see it (intro_for)
     if p is not None and p.failed and not p.solved:
         return False  # a LOST case stays closed for everybody (VIP too) until the second chance is paid for
     if content.is_weekly(c.id):
@@ -222,6 +238,7 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
                        comment_count=rated.get(c.id, (0.0, 0, 0))[2], my_rating=my_stars.get(c.id, 0),
                        suspect_count=len(c.data.get("suspects") or []))
 
+    intro_c = content.intro_by_id(content.INTRO_ID) if intro_for(player, mine.get(content.INTRO_ID)) else None
     archive = [row(c) for c in reversed(opened) if today is None or c.id != today.id]
     now = content.now_local()
     # expired weekend cases join the archive (newest first by publish date)
@@ -231,6 +248,7 @@ async def list_cases(player: Player = Depends(current_player), session: AsyncSes
     return fast_json(CasesOut(today=row(today) if today else None,
                               next_case_at=int(content.next_case_at().timestamp()), archive=archive,
                               weekly=row(weekly) if weekly else None,
+                              intro=row(intro_c) if intro_c else None,
                               weekly_closes_at=int(content.weekly_closes_at(weekly).timestamp()) if weekly else None,
                               weekly_next_chapter_at=_next_chapter_at(weekly),
                               weekly_format=int(weekly.data.get("format", 0)) if weekly else 0))

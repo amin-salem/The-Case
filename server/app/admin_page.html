@@ -6,115 +6,124 @@
 <meta name="robots" content="noindex,nofollow">
 <title>پنل مدیریت پرونده</title>
 <style>
-:root{--bg:#131416;--bg2:#1b1c1f;--bg3:#25262a;--text:#efede8;--soft:#a3a099;--brass:#e0a526;--ok:#5dae7e;--bad:#e0604a;--line:#2b2c30;--r:16px}
+:root{--bg:#17181a;--bg2:#202124;--bg3:#2b2d31;--text:#e6e2da;--soft:#9a9890;--brass:#e0a526;--ok:#5dae7e;--bad:#d0543f;--line:#34363b}
 *{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 Tahoma,Vazirmatn,system-ui,sans-serif}
+header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header h1{font-size:16px;margin:0 0 0 10px;color:var(--brass)}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+button,input,select,textarea{font:inherit;color:var(--text);background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--brass)}
+nav button.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
+.row button.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass)}
+button.danger{border-color:var(--bad);color:var(--bad)}
+main{padding:14px;max-width:1200px;margin:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.card b{display:block;font-size:22px;color:var(--brass)}.card span{color:var(--soft);font-size:12px}
+table{width:100%;border-collapse:collapse;background:var(--bg2);border-radius:10px;overflow:hidden}
+th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+th{color:var(--soft);font-weight:normal;font-size:12px;background:var(--bg3)}
+tr.click{cursor:pointer}tr.click:hover td{background:var(--bg3)}
+.tag{display:inline-block;padding:0 7px;border-radius:9px;font-size:11px;background:var(--bg3);color:var(--soft)}
+.tag.solved{color:var(--ok)}.tag.failed,.tag.banned{color:var(--bad)}.tag.purchase{color:var(--brass)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+h2{font-size:15px;margin:18px 0 8px;color:var(--brass)}
+.chart{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:12px}
+.chart svg{width:100%;height:120px;display:block}
+.plink{color:var(--brass);text-decoration:none;border-bottom:1px dotted var(--brass)}
+.muted{color:var(--soft)}.ltr{direction:ltr;unicode-bidi:embed;display:inline-block}
+#login{max-width:340px;margin:18vh auto;text-align:center}
+#login input{width:100%;margin:10px 0}
+.err{color:var(--bad)}
+dialog{background:var(--bg2);color:var(--text);border:1px solid var(--line);border-radius:12px;max-width:440px;width:92%}
+dialog::backdrop{background:#000a}
+dialog input,dialog textarea{width:100%;margin:4px 0 10px}
+.scroll{overflow-x:auto}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.hcard{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;overflow-x:auto}.hcard h3{margin:0 0 6px;font-size:14px;color:var(--brass)}
+.hcard table{background:none}.hcard .big{display:block;font-size:24px;color:var(--brass)}.hcard small{font-size:12px;color:var(--soft)}
+.st{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--soft);vertical-align:middle}.st.ok{background:var(--ok)}.st.warn{background:#e0a526}.st.bad{background:var(--bad)}
+
+/* ---- look & feel v2 ---- */
+body{background:radial-gradient(1200px 500px at 85% -10%,#2a2412 0,transparent 60%),var(--bg);min-height:100vh}
+header{background:linear-gradient(180deg,#26241c,#1d1e20);border-bottom:1px solid #3d3a2c;box-shadow:0 4px 18px #0006;flex-wrap:nowrap;gap:6px;padding:8px 12px}
+header h1{white-space:nowrap;font-size:17px;letter-spacing:.2px;margin:0 0 0 6px;background:linear-gradient(90deg,#f3c964,#e0a526 60%,#b9801a);-webkit-background-clip:text;background-clip:text;color:transparent}
+nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;flex:1;gap:6px;padding:2px 0}nav::-webkit-scrollbar{display:none}
+nav button{white-space:nowrap;border-radius:999px;padding:6px 13px;background:#25262a;transition:.15s}
+nav button.on{background:linear-gradient(135deg,#f0bd45,#d99a1c);box-shadow:0 2px 10px #e0a52655;font-weight:bold}
+header .hbtn{padding:6px 10px;border-radius:999px;white-space:nowrap}
+main{animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card,.hcard,.chart{border-radius:14px;background:linear-gradient(180deg,#232427,#1d1e21);border-color:#33353a;box-shadow:0 2px 10px #0004}
+.cards{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.card{position:relative;overflow:hidden;padding:12px 14px}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--ac,var(--brass))}
+.card b{font-size:26px;color:var(--ac,var(--brass))}
+.card small{display:block;margin-top:4px;font-size:11px}
+details.acwrap{margin-bottom:12px}details.acwrap>summary{cursor:pointer;padding:10px 12px;border-radius:12px;background:var(--bg2);border:1px solid var(--line)}
+.card i{position:absolute;left:10px;top:8px;font-style:normal;font-size:20px;opacity:.55}
+button:active{transform:scale(.97)}
+table{border-radius:14px}tr:nth-child(even) td{background:#ffffff05}
+h2{border-right:3px solid var(--brass);padding-right:8px}
+/* charts */
+.chart{padding:12px 12px 8px}
+.ch-head{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:4px}.ch-head b{font-size:15px}
+.ch-stats{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--soft);font-size:12px}.ch-stats em{font-style:normal;color:var(--text)}
+.ch-tip{min-height:22px;font-size:13px;color:var(--text);margin:2px 0 4px}
+.cols{display:flex;gap:3px;align-items:flex-end;height:130px;direction:ltr;position:relative}
+.col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.col .v{font-size:10px;line-height:1.2;color:var(--soft);height:14px;white-space:nowrap}
+.col .bar{width:100%;border-radius:5px 5px 2px 2px;background:var(--c);opacity:.6;min-height:2px;transition:opacity .15s}
+.col.today .bar,.col.sel .bar{opacity:1}.col.today .v,.col.sel .v{color:var(--text);font-weight:bold}
+.col.zero .bar{opacity:.25}
+.axis{display:flex;gap:3px;direction:ltr;margin-top:3px}.axis span{flex:1;text-align:center;font-size:10px;color:var(--soft);min-width:0}
+.avgline{position:absolute;left:0;right:0;border-top:1px dashed #ffffff55;pointer-events:none}
+.avgline small{position:absolute;right:0;top:-14px;font-size:9px;color:#ffffffaa;background:#1d1e21cc;padding:0 3px}
+@media(max-width:600px){main{padding:10px}.cols{height:120px}.col .v{font-size:9px}}
+
+/* ---- look & feel v3: app font, readable numbers, all tabs visible ---- */
 @font-face{font-family:Vazirmatn;font-weight:400;font-display:swap;src:url(/static/fonts/Vazirmatn-Regular.ttf)}
 @font-face{font-family:Vazirmatn;font-weight:700;font-display:swap;src:url(/static/fonts/Vazirmatn-Bold.ttf)}
 @font-face{font-family:Vazirmatn;font-weight:900;font-display:swap;src:url(/static/fonts/Vazirmatn-Black.ttf)}
 body,button,input,select,textarea{font-family:Vazirmatn,Tahoma,system-ui,sans-serif}
-body{margin:0;background:var(--bg);color:var(--text);font-size:15.5px;line-height:1.85;font-variant-numeric:tabular-nums;padding-bottom:84px}
-a{color:var(--brass)}
-/* top bar: where you are, and two quiet actions */
-header{display:flex;align-items:center;gap:10px;padding:14px 18px;position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
-header h1{flex:1;margin:0;font-size:20px;font-weight:900}
-.hbtn{padding:8px 14px;border-radius:12px;background:transparent;border:1px solid var(--line);color:var(--soft);font-size:14px}
-button,input,select,textarea{color:var(--text);background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:15px}
-button{cursor:pointer;min-height:44px}button:hover{border-color:var(--brass)}button:active{transform:scale(.98)}
-button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
-button.on,.row button.on{background:var(--brass);color:#1a1a1a;border-color:var(--brass);font-weight:700}
-button.danger{border-color:var(--bad);color:var(--bad);background:transparent}
-button[disabled]{opacity:.45;cursor:default}
-main{padding:20px 18px;max-width:1100px;margin:auto}
-h2{font-size:18px;font-weight:900;margin:30px 0 12px}
-h3{font-size:16px;font-weight:700;margin:22px 0 8px}
-main>div>h2:first-child{margin-top:4px}
-.muted{color:var(--soft)}.ltr{direction:ltr;unicode-bidi:embed;display:inline-block}.err{color:var(--bad)}
-p{margin:8px 0}
-/* numbers first */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:0 0 20px}
-.card{background:var(--bg2);border-radius:var(--r);padding:16px 18px}
-.card b{display:block;font-size:30px;font-weight:900;line-height:1.3;color:var(--text)}
-.card span{display:block;color:var(--soft);font-size:14px;margin-top:2px}
-.card small{display:block;margin-top:6px;font-size:13px}
-.card i{display:none}
-.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-.hcard,.chart,.box{background:var(--bg2);border-radius:var(--r);padding:16px 18px;margin:0 0 14px}
-.hcard h3{margin:0 0 8px;font-size:16px}.hcard .big{display:block;font-size:28px;font-weight:900}.hcard small{color:var(--soft)}
-.hcard{overflow-x:auto}
-/* tables: calm rows, no cell borders */
-table{width:100%;border-collapse:collapse}
-th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
-th{color:var(--soft);font-weight:400;font-size:13px;white-space:nowrap}
-tr:last-child td{border-bottom:0}
-tr.click{cursor:pointer}tr.click:hover td{background:var(--bg2)}
-.scroll{overflow-x:auto;background:var(--bg2);border-radius:var(--r);padding:4px 12px;margin:0 0 14px}
-.hcard table,.hcard .scroll{background:none;padding:0}
-td.num,th.num{white-space:nowrap}td.na{color:var(--soft)}
-.tag{display:inline-block;padding:1px 10px;border-radius:999px;font-size:12px;background:var(--bg3);color:var(--soft)}
-.tag.solved,.tag.purchase{color:var(--ok)}.tag.failed,.tag.banned{color:var(--bad)}
-.plink{color:var(--text);text-decoration:none;border-bottom:1px solid var(--line)}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
-.row input[type=text],.row input:not([type]),.row input[type=search]{min-width:0}
-label{display:inline-flex;gap:8px;align-items:center}
-input[type=checkbox]{width:22px;height:22px;min-height:0;padding:0;accent-color:var(--brass)}
-/* quick actions */
-.quick{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 22px}
-.quick button{flex:1 1 150px}
-.quick button.hot{background:var(--brass);color:#1a1a1a;border-color:transparent;font-weight:900}
-details.acwrap{margin:0 0 16px}
-details.acwrap>summary,details.more>summary{cursor:pointer;padding:14px 18px;border-radius:var(--r);background:var(--bg2);list-style:none;min-height:44px}
-details>summary::-webkit-details-marker{display:none}
-details.more{margin:10px 0}
-details.more[open]>summary{margin-bottom:12px}
-/* charts */
-.ch-head b{font-size:16px}
-.ch-stats{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--soft);font-size:13px;margin-top:2px}.ch-stats em{font-style:normal;color:var(--text)}
-.ch-tip{min-height:24px;font-size:14px;margin:6px 0}
-.cols{display:flex;gap:4px;align-items:flex-end;height:130px;direction:ltr;position:relative}
-.col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.col .v{font-size:10px;line-height:1.2;color:var(--soft);height:14px;white-space:nowrap}
-.col .bar{width:100%;border-radius:6px 6px 2px 2px;background:var(--c);opacity:.55;min-height:2px}
-.col.today .bar,.col.sel .bar{opacity:1}.col.today .v,.col.sel .v{color:var(--text);font-weight:700}.col.zero .bar{opacity:.2}
-.axis{display:flex;gap:4px;direction:ltr;margin-top:4px}.axis span{flex:1;text-align:center;font-size:10px;color:var(--soft);min-width:0}
-.avgline{position:absolute;left:0;right:0;border-top:1px dashed #ffffff44;pointer-events:none}
-.avgline small{position:absolute;right:0;top:-14px;font-size:9px;color:#ffffffaa;padding:0 3px}
-/* status */
-.st{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--soft);vertical-align:middle}.st.ok{background:var(--ok)}.st.warn{background:var(--brass)}.st.bad{background:var(--bad)}
+body{font-size:14.5px;line-height:1.75;font-variant-numeric:tabular-nums}
+.card b,.hcard .big,.ch-head b,td,th,.col .v{font-variant-numeric:tabular-nums}
+.card b{font-size:32px;font-weight:900;line-height:1.3;display:block;letter-spacing:0}
+.card span{font-size:13px;color:var(--soft)}
+th{font-weight:700;white-space:nowrap}
+.cards{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+h2{font-weight:900}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
+.quick button{flex:1 1 140px;padding:11px 12px;border-radius:14px;font-weight:700;background:#25262a}
+.quick button.hot{background:linear-gradient(135deg,#f0bd45,#d99a1c);color:#1a1a1a;border-color:transparent;font-weight:900}
+/* A bounded, scrollable menu keeps every section reachable on narrow screens. */
+header{flex-wrap:wrap}
+header h1{flex:1}
+#admin-menu{flex:none}
+#menu-toggle{display:flex;align-items:center;gap:8px;min-height:44px;padding:7px 12px;list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:12px;background:var(--bg3)}
+#menu-toggle::-webkit-details-marker{display:none}
+#menu-toggle:focus-visible,nav button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.menu-icon{display:inline-flex;flex-direction:column;gap:4px;width:20px}
+.menu-icon i{height:2px;width:100%;background:currentColor;border-radius:2px}
+#admin-menu:not([open])>nav{display:none}
+#admin-menu>nav{position:absolute;inset-inline-start:12px;top:calc(100% + 8px);display:flex;flex-direction:column;flex-wrap:nowrap;width:min(22rem,calc(100vw - 24px));max-height:min(70vh,calc(100vh - 100% - 24px));max-height:min(70dvh,calc(100dvh - 100% - 24px));overflow-y:auto;overflow-x:hidden;gap:6px;padding:10px;background:var(--bg2);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px #0008;scrollbar-width:auto}
+#admin-menu nav button{flex:none;min-height:44px;white-space:normal;overflow-wrap:anywhere;text-align:start;border-radius:10px;padding:10px 12px}
+@media(max-width:700px){header h1{font-size:15px}header .hbtn{min-height:44px}}
+
+/* funnel screen */
 .fbar{display:block;height:10px;min-width:60px;background:var(--bg3);border-radius:5px;overflow:hidden;direction:ltr}.fbar i{display:block;height:100%;background:var(--brass)}
 .fbar.ok i{background:var(--ok)}.fbar.bad i{background:var(--bad)}
 .spark{display:inline-flex;gap:1px;align-items:flex-end;height:22px;direction:ltr}.spark i{display:block;width:5px;background:var(--brass);opacity:.8;min-height:1px}
-.ac{background:var(--bg2);border-right:5px solid var(--c,var(--soft));border-radius:var(--r);padding:14px 18px;margin:0 0 14px}
+td.na{color:var(--soft)}td.num,th.num{white-space:nowrap}
+/* anti-cheat watcher card */
+.ac{background:linear-gradient(180deg,#232427,#1d1e21);border:1px solid var(--line);border-right:6px solid var(--c,var(--soft));border-radius:14px;padding:12px 14px;margin:0 0 14px}
 .ac.green{--c:var(--ok)}.ac.amber{--c:var(--brass)}.ac.red{--c:var(--bad)}
-.ac h3{margin:0 0 4px;font-size:16px}.ac details{margin-top:8px}.ac summary{cursor:pointer;color:var(--soft)}
-.ac .box{background:var(--bg3);margin-top:10px}
-/* bottom tab bar + "more" sheet */
-#tabbar{position:fixed;inset:auto 0 0 0;z-index:8;display:flex;background:var(--bg2);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
-#tabbar button{flex:1;min-width:0;background:none;border:0;border-radius:12px;color:var(--soft);font-size:13.5px;padding:10px 2px;min-height:48px}
-#tabbar button.on{color:var(--brass);font-weight:900;background:var(--bg3)}
-#more{position:fixed;inset:0;z-index:9;background:#000a;display:flex;align-items:flex-end}
-#more[hidden]{display:none}
-#more .sheet{width:100%;max-height:80vh;overflow:auto;background:var(--bg2);border-radius:22px 22px 0 0;padding:16px 16px calc(24px + env(safe-area-inset-bottom,0px))}
-#more .sheet button{display:block;width:100%;text-align:right;margin:0 0 8px;background:var(--bg3);border:0;padding:14px 16px}
-#more .sheet button.on{background:var(--brass);color:#1a1a1a;font-weight:700}
-/* dialogs, login, toast */
-dialog{background:var(--bg2);color:var(--text);border:0;border-radius:20px;max-width:460px;width:92%;padding:22px}
-dialog::backdrop{background:#000a}
-dialog input,dialog textarea{width:100%;margin:4px 0 12px}
-#login{max-width:340px;margin:18vh auto;text-align:center;padding:0 18px}
-#login h1{font-size:22px}#login input{width:100%;margin:12px 0}
-/* phone: a table becomes a list of small cards (labels come from the header row) */
-@media(max-width:720px){
-  main{padding:16px 14px}
-  table.cz,table.cz tbody{display:block}
-  table.cz tr:first-child{display:none}
-  table.cz tr{display:block;padding:10px 0;border-bottom:1px solid var(--line)}
-  table.cz tr:last-child{border-bottom:0}
-  table.cz td{display:flex;justify-content:space-between;gap:14px;border:0;padding:4px 2px;text-align:left}
-  table.cz td::before{content:attr(data-l);color:var(--soft);font-size:13px;flex:none;text-align:right}
-  table.cz td:first-child{font-weight:700;font-size:16px;justify-content:flex-start}
-  table.cz td:first-child::before{display:none}
-  .scroll{padding:2px 14px}
-}
+.ac h3{margin:0 0 4px;font-size:15px;color:var(--c,var(--text))}.ac p{margin:4px 0}
+.ac details{margin-top:6px}.ac summary{cursor:pointer;color:var(--soft)}
+.ac .box{background:var(--bg3);border-radius:10px;padding:8px 10px;margin-top:8px}
+
+details.more{margin:10px 0}details.more>summary{cursor:pointer;padding:10px 12px;border-radius:12px;background:var(--bg2);border:1px solid var(--line)}details.more[open]>summary{margin-bottom:10px}
+.box{background:var(--bg3);border-radius:10px;padding:8px 10px;margin:8px 0}
 </style>
 </head>
 <body>
@@ -127,13 +136,15 @@ dialog input,dialog textarea{width:100%;margin:4px 0 12px}
 </div>
 <div id="app" hidden>
 <header>
-  <h1 id="ttl">نمای کلی</h1>
-  <button id="refresh" class="hbtn">تازه‌سازی</button>
+  <details id="admin-menu">
+    <summary id="menu-toggle" aria-label="منوی بخش‌های پنل" aria-controls="nav"><span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span><span>منو</span></summary>
+    <nav id="nav" aria-label="بخش‌های پنل مدیریت"></nav>
+  </details>
+  <h1>پنل «پرونده»</h1>
+  <button id="refresh" class="hbtn">⟳ تازه</button>
   <button id="logout" class="hbtn">خروج</button>
 </header>
 <main id="main"></main>
-<nav id="tabbar" aria-label="بخش‌های پنل"></nav>
-<div id="more" hidden><div class="sheet" id="moresheet"></div></div>
 </div>
 <dialog id="cdlg"><form method="dialog"><p id="cmsg" style="margin-top:0"></p><div class="row"><button id="cok" class="on">تأیید</button><button id="cno">انصراف</button></div></form></dialog>
 <dialog id="dlg"><form method="dialog" id="dform"></form></dialog>
@@ -172,25 +183,15 @@ async function api(path, opts = {}) {
   if (!r.ok) throw new Error('خطا ' + r.status + ': ' + (await r.text()).slice(0, 200));
   return r.json();
 }
-const TABS = [['overview','نمای کلی'],['players','بازیکن‌ها'],['cases','پرونده‌ها'],['comments','نظرها'],['feed','فعالیت زنده'],['reviews','نظرات بازار'],['money','پول و سکه'],['funnel','قیف و ماندگاری'],['economy','اقتصاد سکه'],['health','سلامت'],['actions','اقدام‌ها']];
-const PRIMARY = ['overview', 'players', 'cases', 'comments'];
+const TABS = [['overview','📊 نمای کلی'],['feed','📡 فعالیت زنده'],['players','👥 بازیکن‌ها'],['cases','🗂 پرونده‌ها'],['comments','💬 نظرها'],['reviews','⭐ نظرات بازار'],['money','💰 پول و سکه'],['funnel','🧭 قیف و ماندگاری'],['economy','🪙 اقتصاد سکه'],['health','🩺 سلامت'],['actions','⚙ اقدام‌ها']];
 // remember the open tab (per browser tab / app session) so a reload or a refresh never jumps elsewhere
 let tab = 'overview', timer = null;
 try { const t = sessionStorage.getItem('adminTab'); if (TABS.some(x => x[0] === t)) tab = t; } catch (e) {}
-const moreOpen = () => !$('#more').hidden;
-const closeMore = () => { $('#more').hidden = true; };
-function buildNav() {
-  try { sessionStorage.setItem('adminTab', tab); } catch (e) {}
-  const title = (TABS.find(x => x[0] === tab) || [0, ''])[1]; $('#ttl').textContent = title; document.title = title + ' · پنل پرونده';
-  const inMore = !PRIMARY.includes(tab);
-  $('#tabbar').innerHTML = PRIMARY.map(k => `<button type="button" data-k="${k}" class="${k === tab ? 'on' : ''}"${k === tab ? ' aria-current="page"' : ''}>${TABS.find(x => x[0] === k)[1]}</button>`).join('') +
-    `<button type="button" data-more="1" class="${inMore ? 'on' : ''}">بیشتر</button>`;
-  $('#moresheet').innerHTML = TABS.filter(x => !PRIMARY.includes(x[0])).map(([k, n]) => `<button type="button" data-k="${k}" class="${k === tab ? 'on' : ''}">${n}</button>`).join('');
-}
-$('#tabbar').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.more) { $('#more').hidden = false; return; } if (b.dataset.k) go(b.dataset.k); };
-$('#more').onclick = e => { if (e.target === $('#more')) { closeMore(); return; } const b = e.target.closest('button[data-k]'); if (b) go(b.dataset.k); };
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && moreOpen()) { e.preventDefault(); closeMore(); } });
-function go(k, arg) { closeMore(); tab = k; buildNav(); clearInterval(timer); timer = null; window.scrollTo(0, 0); render(arg); }
+function buildNav() { try { sessionStorage.setItem('adminTab', tab); } catch (e) {} $('#nav').innerHTML = TABS.map(([k, n]) => `<button type="button" data-k="${k}" class="${k===tab?'on':''}"${k===tab?' aria-current="page"':''}>${n}</button>`).join(''); }
+$('#nav').onclick = e => { const b = e.target.closest('button[data-k]'); if (b) { go(b.dataset.k); $('#menu-toggle').focus(); } };
+document.addEventListener('click', e => { if (!$('#admin-menu').contains(e.target)) $('#admin-menu').open = false; });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#admin-menu').open) { e.preventDefault(); $('#admin-menu').open = false; $('#menu-toggle').focus(); } });
+function go(k, arg) { $('#admin-menu').open = false; tab = k; buildNav(); clearInterval(timer); timer = null; render(arg); }
 async function render(arg) {
   const m = document.createElement('div'); $('#main').replaceChildren(m); // a fresh box per render: a late answer of an old tab writes into a detached box
   m.innerHTML = '<p class="muted">در حال بارگذاری…</p>';
@@ -291,24 +292,6 @@ function acWire() {
   };
 }
 
-// ---- reading comfort, applied to every screen after it is drawn ----
-const EMOJI = /\p{Extended_Pictographic}️?\s?/gu;
-function tidy(root) {
-  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const todo = [];
-  while (w.nextNode()) { const n = w.currentNode; if (EMOJI.test(n.nodeValue)) todo.push(n); EMOJI.lastIndex = 0; }
-  todo.forEach(n => { n.nodeValue = n.nodeValue.replace(EMOJI, ''); });
-  root.querySelectorAll('table').forEach(t => {
-    if (t.classList.contains('cz') || t.classList.contains('kv')) return;
-    const rows = t.rows; if (!rows.length) return;
-    const head = [...rows[0].cells];
-    if (!head.length || head.some(c => c.tagName !== 'TH')) { t.classList.add('kv'); return; }   // key/value tables stay tables
-    const labels = head.map(c => c.textContent.trim());
-    [...rows].slice(1).forEach(r => [...r.cells].forEach((c, i) => { if (labels[i]) c.setAttribute('data-l', labels[i]); }));
-    t.classList.add('cz');
-  });
-}
-let tidying = false;
-new MutationObserver(() => { if (tidying) return; tidying = true; try { tidy($('#main')); } finally { setTimeout(() => { tidying = false; }, 0); } }).observe(document.getElementById('main'), {childList: true, subtree: true});
 const VIEWS = {
   async overview(m) {
     const d = await api('/admin/api/overview?days=14'), t = d.totals || {};
@@ -589,8 +572,9 @@ const VIEWS = {
       const al = sec(d, 'after_loss', a => `<div class="cards">${card(a.lost_cases, 'پرونده‌ی باخته')}${card(a.came_back_pct == null ? 0 : a.came_back_pct, 'بعدش پرونده‌ی دیگری باز کردند ٪')}${card(a.paid_second_chance, 'فرصت دوباره‌ی پولی')}</div>`);
       const fd = sec(d, 'first_day', x => x.players ? `<p class="muted">${num(x.players)} کارآگاه تازه (دست‌کم ۲ روز از ثبت‌نامشان گذشته). «برگشته» یعنی ۲۴ ساعت یا بیشتر بعد از ثبت‌نام دوباره دیده شده.</p><div class="cards">${card(x.spent_first_day, 'روز اول برای سرنخ/ابزار خرج کردند')}${card(x.spenders_came_back_pct == null ? 0 : x.spenders_came_back_pct, 'برگشتند ٪ (خرج‌کرده‌ها)')}${card(x.others_came_back_pct == null ? 0 : x.others_came_back_pct, 'برگشتند ٪ (بقیه)')}</div>` : '<p class="muted">هنوز داده‌ای نیست.</p>');
       const so = sec(d, 'starter_offer', x => !x || typeof x !== 'object' || x.shown == null ? '<p class="muted">هنوز داده‌ای نیست.</p>' : `<div class="cards">${card(x.shown, 'نمایش بسته‌ی شروع')}${card(x.tapped_players, 'کارآگاه روی خرید زد')}${card(x.bought_players, 'کارآگاه خرید')}${card(x.closed, 'بستن')}</div><p class="muted">از ${n0(x.shown_players)} کارآگاهی که دیدند: ${pc(x.tapped_pct)} روی خرید زدند و ${pc(x.bought_pct)} خریدند. هر حساب حداکثر دو بار می‌بیند.</p>` + (x.by_moment && Object.keys(x.by_moment).length ? tbl(['لحظه', 'نمایش', 'خرید زد', 'خرید', 'بستن'], Object.entries(x.by_moment).map(([k, v]) => `<tr><td>${k === 'lack_coins' ? 'سکه کم آمد' : k === 'first_solve' ? 'بعد از اولین حل' : 'سایر'}</td><td class="num">${n0(v.shown)}</td><td class="num">${n0(v.tapped)}</td><td class="num">${n0(v.bought)}</td><td class="num">${n0(v.closed)}</td></tr>`)) : ''));
+      const hn = sec(d, 'help_nudge', x => !x || typeof x !== 'object' || !x.shown ? '<p class="muted">هنوز نکته‌ای نمایش داده نشده (یا اپ نسخه‌ی تازه هنوز پخش نشده).</p>' : `<div class="cards">${card(x.shown, 'نمایش نکته')}${card(x.tapped_players, 'کارآگاه روی نکته زد')}${card(x.closed, 'بستن')}</div><p class="muted">از ${n0(x.shown_players)} کارآگاهی که نکته را دیدند: ${pc(x.tapped_pct)} روی آن زدند.</p>` + (x.by_kind && Object.keys(x.by_kind).length ? tbl(['لحظه', 'نمایش', 'زد', 'بستن'], Object.entries(x.by_kind).map(([k, v]) => `<tr><td>${k === 'wrong_accusation' ? 'بعد از اتهام اشتباه' : k === 'half_finished' ? 'برگشت به پرونده‌ی نیمه‌کاره' : k === 'idle' ? 'چند دقیقه بی‌حرکتی' : 'سایر'}</td><td class="num">${n0(v.shown)}</td><td class="num">${n0(v.tapped)}</td><td class="num">${n0(v.closed)}</td></tr>`)) : ''));
       const wt = sec(d, 'weekend_tab', x => !x || typeof x !== 'object' || !Array.isArray(x.days) || !x.opens ? '<p class="muted">هنوز کسی تب «آخر هفته» را باز نکرده (یا اپ نسخه‌ی تازه هنوز پخش نشده).</p>' : `<div class="cards">${card(x.opens, 'بار باز شدن تب')}${card(x.players, 'کارآگاه')}${card(x.thu_sat && x.thu_sat.per_day != null ? x.thu_sat.per_day : 0, 'میانگین روزانه، پنجشنبه تا شنبه')}${card(x.other && x.other.per_day != null ? x.other.per_day : 0, 'میانگین روزانه، بقیه‌ی روزها')}</div><p class="muted">اگر روزهای عادی هم باز می‌شود، تب به کارآگاه‌ها کمک می‌کند؛ اگر تقریباً فقط پنجشنبه تا شنبه باز می‌شود، می‌شود بعداً آن را به خانه یا بایگانی بُرد.</p>` + tbl(['روز', 'پنجشنبه تا شنبه؟', 'بار باز شدن', 'کارآگاه'], x.days.slice(-30).map(r => `<tr><td>${esc(r.day)}</td><td>${r.thu_sat ? 'بله' : 'نه'}</td><td class="num">${n0(r.opens)}</td><td class="num">${n0(r.players)}</td></tr>`)));
-      $('#ebody').innerHTML = nt + '<h2>۱. جریان سکه</h2>' + fl + '<h2>۲. موجودی فعال‌ها</h2>' + bl + '<h2>۳. پرونده، سرنخ و ابزار</h2>' + cs + '<h2>۴. بعد از باخت</h2>' + al + '<h2>۵. خرج روز اول و ماندن</h2>' + fd + '<h2>۶. بسته‌ی شروع</h2>' + so + '<h2>۷. تب «آخر هفته»</h2>' + wt;
+      $('#ebody').innerHTML = nt + '<h2>۱. جریان سکه</h2>' + fl + '<h2>۲. موجودی فعال‌ها</h2>' + bl + '<h2>۳. پرونده، سرنخ و ابزار</h2>' + cs + '<h2>۴. بعد از باخت</h2>' + al + '<h2>۵. خرج روز اول و ماندن</h2>' + fd + '<h2>۶. بسته‌ی شروع</h2>' + so + '<h2>۷. تب «آخر هفته»</h2>' + wt + '<h2>۸. نکته‌های «کمک کارآگاه»</h2>' + hn;
     };
     const load = async () => { $('#ere').disabled = true; try { data = await api('/admin/api/economy?days=' + days); show(); } catch (e) { $('#ebody').innerHTML = '<p class="err">' + esc(e.message) + '</p>'; } finally { $('#ere').disabled = false; } };
     $('#ere').onclick = load;
@@ -722,8 +706,8 @@ $('#enter').onclick = enter; $('#key').onkeydown = e => { if (e.key === 'Enter')
 $('#refresh').onclick = () => render(); $('#logout').onclick = logout;
 // pull down at the top of the page to refresh (touch screens, also in the admin app)
 (() => { let y0 = null; const top = () => (window.scrollY || document.documentElement.scrollTop) <= 0;
-  addEventListener('touchstart', e => { y0 = !moreOpen() && top() && e.touches.length === 1 ? e.touches[0].clientY : null; }, {passive: true});
-  addEventListener('touchend', e => { if (y0 !== null && e.changedTouches[0].clientY - y0 > 120 && !$('#app').hidden && !$('#dlg').open && !moreOpen()) render(); y0 = null; }, {passive: true}); })();
+  addEventListener('touchstart', e => { y0 = !$('#admin-menu').open && top() && e.touches.length === 1 ? e.touches[0].clientY : null; }, {passive: true});
+  addEventListener('touchend', e => { if (y0 !== null && e.changedTouches[0].clientY - y0 > 120 && !$('#app').hidden && !$('#dlg').open && !$('#admin-menu').open) render(); y0 = null; }, {passive: true}); })();
 if (KEY) enter();
 </script>
 </body>

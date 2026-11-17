@@ -348,7 +348,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _content(CasesList cs) {
     final c = cs.today;
     final finished = c != null && (c.solved || c.failed);
+    final intro = cs.intro;
     return [
+      if (intro != null && !intro.solved && !intro.failed) ...[_introCard(intro), const SizedBox(height: 10)],
       if (!finished) FadeSlideIn(child: _hero(c)) else if (c.solved) _solvedCard(c, cs) else _lostCard(c, cs),
       const SizedBox(height: 10),
       _giftCard(cs),
@@ -365,6 +367,35 @@ class _HomeScreenState extends State<HomeScreen> {
         _missionsCompact(_missions!),
       ],
     ];
+  }
+
+  /// The free first case: one calm card above tonight's hero, gone once it is solved. Nothing else to read.
+  Widget _introCard(CaseRow r) {
+    return InkWell(
+      key: const ValueKey('home-intro'),
+      borderRadius: BorderRadius.circular(16),
+      onTap: () => openCaseRow(context, r),
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 64),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: K.brass.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: K.brass, width: 1.5),
+        ),
+        child: Row(children: [
+          const Icon(Icons.auto_awesome_rounded, color: K.brass, size: 26),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+              Text('پرونده‌ی اول · رایگان', style: tBody(12.5, color: K.brass, w: FontWeight.w900).copyWith(height: 1.4)),
+              Text(r.title, style: tBody(15, w: FontWeight.w900).copyWith(height: 1.4)),
+            ]),
+          ),
+          const Icon(Icons.chevron_right_rounded, color: K.brass, size: 26),
+        ]),
+      ),
+    );
   }
 
   // ---------------------------------------------------------------- top bar
