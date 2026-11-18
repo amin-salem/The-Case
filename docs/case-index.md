@@ -4,7 +4,7 @@ Run `python3 server/tools/case_index.py` after adding or changing a case. One li
 puzzle type, culprit slot and portrait that the last cases did NOT use, and to find the next free slot. It carries no clue text
 and no solution. Names are in `docs/case-names.md`.
 
-Nightly cases: 82 (last: c082 published 2026-12-19). Weekend cases: 9 (last: w009 published 2026-12-03). Story chapters: 1.
+Nightly cases: 84 (last: c084 published 2026-12-21). Weekend cases: 9 (last: w009 published 2026-12-03). Story chapters: 1.
 
 ## Nightly
 
@@ -92,6 +92,8 @@ c079 | 2026-12-16 | 5 | subway | medical | صندوقِ خروج اضطراری 
 c080 | 2026-12-17 | 5 | library | crime | نامِ مستعارِ شاهد | s4 بهداد آریامنش (پژوهشگر نمایشگاه) | m_neutral_49_reserve29 | 5 | 10 | batch 1 idea #28, style S5, puzzle type 2 (library / crime), difficulty 5, شکل شب: پرونده‌
 c081 | 2026-12-18 | 5 | kitchen | business | رزرو به نام مهمان | s3 هوتن کیانفر (شریک شرکت ادویه) | m_neutral_45_freckles | 5 | 11 | batch 1 idea #29, style classic, puzzle type 4 (kitchen / business), difficulty 5
 c082 | 2026-12-19 | 5 | harbor | crime | نور زیرِ اسکله | s5 فرخ پارسامهر (پیمانکار باربری) | m_neutral_43_reserve31 | 5 | 11 | batch 1 idea #30, style S3, puzzle type 1 (harbor / crime), difficulty 5, شکل شب: ظاهراً م
+c083 | 2026-12-20 | 5 | hospital | medical | نوبتی که نرسید | s1 مهرداد پویان (مدیر اداری) | m_neutral_41_oval | 5 | 11 | -
+c084 | 2026-12-21 | 5 | school | art | برگه‌ی شماره‌ی پنج | s1 سپهر روشن (مربی سابق کلاس طراحی کارگاه) | m_neutral_46_reserve30 | 5 | 11 | -
 
 ## Weekend
 
@@ -113,8 +115,6 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 
 ## Last ten nightly cases (a new case differs from all of these)
 
-- c073: scene bazaar_night, category business, culprit slot s2, type: batch 1 idea #21, style S5, puzzle type 11 (bazaar_night / business), difficulty 5
-- c074: scene train, category travel, culprit slot s4, type: batch 1 idea #22, style classic, puzzle type 4 (train / travel), difficulty 5
 - c075: scene snow_lodge, category crime, culprit slot s3, type: batch 1 idea #23, style S3, puzzle type 8 (snow_lodge / crime), difficulty 5, شکل شب: ظاهر
 - c076: scene school, category science, culprit slot s4, type: batch 1 idea #24, style S1, puzzle type 10 (school / science), difficulty 5, شکل شب: پروند
 - c077: scene airport, category travel, culprit slot s1, type: batch 1 idea #25, style S2, puzzle type 5 (airport / travel), difficulty 5
@@ -123,10 +123,12 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 - c080: scene library, category crime, culprit slot s4, type: batch 1 idea #28, style S5, puzzle type 2 (library / crime), difficulty 5, شکل شب: پرونده‌
 - c081: scene kitchen, category business, culprit slot s3, type: batch 1 idea #29, style classic, puzzle type 4 (kitchen / business), difficulty 5
 - c082: scene harbor, category crime, culprit slot s5, type: batch 1 idea #30, style S3, puzzle type 1 (harbor / crime), difficulty 5, شکل شب: ظاهراً م
+- c083: scene hospital, category medical, culprit slot s1, type: -
+- c084: scene school, category art, culprit slot s1, type: -
 
 ## Counts
 
-scenes: airport 4, bazaar_night 4, desert 4, harbor 5, hospital 5, hotel 4, kitchen 4, lab 6, library 6, museum 5, office 5, school 5, snow_lodge 4, subway 3, theater 4, tower 4, train 4, villa_rain 5, warehouse 4, wedding 6
-categories: art 15, business 14, crime 14, family 11, medical 9, science 13, travel 15
-culprit slots (nightly): s1 16, s2 17, s3 17, s4 15, s5 17
-difficulty (nightly): 2 2, 3 4, 4 44, 5 32
+scenes: airport 4, bazaar_night 4, desert 4, harbor 5, hospital 6, hotel 4, kitchen 4, lab 6, library 6, museum 5, office 5, school 6, snow_lodge 4, subway 3, theater 4, tower 4, train 4, villa_rain 5, warehouse 4, wedding 6
+categories: art 16, business 14, crime 14, family 11, medical 10, science 13, travel 15
+culprit slots (nightly): s1 18, s2 17, s3 17, s4 15, s5 17
+difficulty (nightly): 2 2, 3 4, 4 44, 5 34

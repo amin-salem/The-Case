@@ -94,7 +94,7 @@ Original 50×70 board (folder -> behind the blue cardboard 18:0x Thu -> found 18
 - s1 camera 18:40 drawer pull then office; print drawer handle + poster frame glass.
 - s2 camera 19:40 sketchbook page beside the poster; print back of the board near sticker 5 + edge of sheet 5.
 - s3 camera 17:30 folder into her bag unopened, brought 19:10; print folder string + notebook cover.
-- s4 camera 18:35 tests the bottom edge first; print bottom edge of the cardboard + two bottom-row staples.
+- s4 camera 18:35 tests the bottom edge and its staples with a finger; print bottom edge of the cardboard + two bottom-row staples (from that test).
 - s5 camera 19:25 gloves, turns sheet 5 under the lamp; print only list + his jury sheet, nothing on the sheets.
 None decides; each opens or closes a question (the drawer, the poster dates, the folder alone tonight -> e7, the bottom edge -> Shahriar's answer, gloves -> e5/e2).
 
@@ -104,3 +104,15 @@ s1 culprit `m_neutral_46_reserve30` (46, mid; no culprit uses it; last c074 as a
 ### Notes for the coordinator
 - The scene cap test (`test_scenes_are_varied_and_known`, max 5) fails with a sixth `school` case; the idea fixes the scene, so the cap needs raising to 6 (or the coordinator's call).
 - New surnames: کامرانی, وفادار, دادگر (all free). نیک‌روش (c065, w006) and روشن (c045, w003) are far away.
+
+### Blind-test loose ends, fixed (18 Nov 2026; clue chain, culprit and proof unchanged, no card made decisive)
+- Bottom-edge staples: new Shahriyar answer: the workshop gun stapler (long staples) ran out at 15:40; short staples come only from
+  Sepehr's desk stapler, kept on his desk where pupils also used it (points at the desk, not alone at the man).
+- Charcoal thumb: Shahriyar's charcoal answer now says it was the new box of Sepehr's own class, and all nine in the class (eight pupils
+  and the teacher) had charcoal hands from 17:00; no other charcoal in the workshop.
+- 18:00-18:15 gap: Parvaneh's after-class answer adds that Sepehr did not leave with them, closed the workshop door behind them, folder
+  still on the table by the door; with Ghafoor's notebook (e6) and Sepehr's own «left with the children at six» (statement, e8).
+- Shahriyar's prints on the staples: camera and print lines now say he ran his finger over the bottom edge AND its staples at 18:35 tonight.
+- e3 vs Mahvash: e3 now says the list stayed in «my own desk, the workshop head's desk»; Mahvash's key answer adds the list envelope was
+  in her own drawer, not Sepehr's.
+- Explanation updated for each point. `check_case.py c084`: only the coordinator's notify entry missing.

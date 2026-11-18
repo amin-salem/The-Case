@@ -162,7 +162,7 @@ back 17:26; the mother's crutch left on the floor: Saman's print line); booklets
 
 ### Tool lines (true facts, equal weight)
 - s1 camera: 17:00 opened the basement room with his own ring; the small cabinet keys were not on it (fits his story; fails with e6/e7).
-  print: fresh prints on the handle of his 214 desk drawer and on the 214 handset.
+  print: only his fresh prints on the 214 handset, no one else's; its last dialled number is reception (checks against his «anyone passing could use it»).
 - s2 camera: 16:35 locked the drawer, key on her neck, went to the back stairs with her phone. print: on the drawer key and on the blue cover by the spine.
 - s3 camera: 16:59 left 205 writing in a small notebook, towards the stairs down. print: his thumb on the BACK of sheet 12, on the stamp column.
 - s4 camera: 17:33 came up from the basement with the index, straight to 205. print: on the key of cabinet 3 and on the corner numbers of the sheets.
@@ -176,3 +176,17 @@ back 17:26; the mother's crutch left on the floor: Saman's print line); booklets
   مهرداد w001, نرگس c070, ساعی c044, الهام c051, سامان c002).
 - Offline `test_content.py` (pydantic stub): all content checks pass except the three shared ones the coordinator owns: case count (82 -> 83),
   notify entry, and `test_scenes_are_varied_and_known`: hospital becomes the 6th hospital case while the test allows 5 per scene.
+
+### Blind-test loose ends, fixed (18 Nov 2026; clue chain, culprit and proof unchanged, no card made decisive)
+- Alham 16:10-16:20: her answer «چهار و ده تا چهار و بیست؟» now admits the front-door sale of photocopied course notes (a side job the head
+  forbade); the folder was at the binder's then (e3, e5).
+- Saman 16:40-17:26: answer «ساعت پنج زیرزمین بودی؟» explains the van trip (took his mother, leg in plaster, home from physiotherapy; asked
+  the guard not to log the clinic van) and the crutch on the van floor is hers.
+- Narges 16:35-16:38: her 16:35 answer says the landing call was to the university to enrol for the unfinished last term; her degree answer
+  admits the employment file claims a degree she does not have. Drawer locked, key on her neck.
+- Page 37 at 16:57: Saei counted all 42 sheets (1-42) for a certified copy before reading sheet 12 (e6 + his answer), so both 12 and 37
+  were still in the folder at 16:57.
+- Pooyan print: see tool lines above (handset prints + last-dialled reception), a checkable contradiction of his denial, not proof of tearing.
+- Installments: e8 now states monthly on the 18th from Farvardin 1404, so #18-#21 = 18 Shahrivar - 18 Azar 1405, all before the 25 Azar
+  lawyer letter and the 28 Azar case day.
+- Explanation updated for each point. `check_case.py c083`: only the coordinator's notify entry missing.

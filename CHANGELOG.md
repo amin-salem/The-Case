@@ -1,3 +1,8 @@
+# server 1.75.0: nightly cases c083, c084 (18 Nov 2026)
+
+- Two new nightly cases from batch 3 of the idea bank: c083 «نوبتی که نرسید» (idea 1, classic style, puzzle type 12, hospital / medical, difficulty 5, publish 20 Dec 2026) and c084 «برگه‌ی شماره‌ی پنج» (idea 2, style S1 cold case, puzzle type 17, school / art, difficulty 5, publish 21 Dec 2026).
+- Blind tests: c083 ~90%, c084 ~92%; no single card decides. Findings fixed in one round (see `docs/case-log.md`). Case-count tests are 84; the per-scene cap is 6 (batch 3 fixes each case's scene).
+
 # server 1.74.0: nightly cases c081, c082 (18 Nov 2026)
 
 - Two new nightly cases from the idea bank: c081 «رزرو به نام مهمان» (idea 29, classic style, puzzle type 4 wrong victim, kitchen / business, difficulty 5, publish 18 Dec 2026) and c082 «نور زیرِ اسکله» (idea 30, style S3 seemingly supernatural, puzzle type 1 guilty knowledge, harbor / crime, difficulty 5, publish 19 Dec 2026), with their notify entries. Content only, no migration.
