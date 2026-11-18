@@ -348,6 +348,251 @@
       "first_build": 99,
       "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
+    },
+    "f_neutral_22_longb152": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_23_pearb153": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_28_pearb155": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_24_rectb151": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_24_diamondb156": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_26_heartb157": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_26_pearb158": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_26_squareb162": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_35_ovalb201": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_38_roundb202": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_42_heartb203": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_43_ovalb204": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_45_longb206": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_48_squareb205": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_42_diamondb207": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_40_longb208": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_47_rectb211": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_68_ovalb251": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_72_pearb253": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_62_rectb252": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_64_broadb254": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_68_pearb255": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_63_longb256": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_64_longb257": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "f_neutral_67_diamondb261": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_20_broadb003": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_25_cheekb004": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_24_diamondb002": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_25_longb001": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_25_pearb005": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_26_broadb007": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_21_longb008": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_26_rectb006": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_25_heartb011": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_38_ovalb051": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_38_roundb052": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_45_rectb053": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_43_longb055": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_42_rectb056": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_45_heartb057": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_43_pearb058": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_42_rectb061": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_64_diamondb101": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_70_ovalb102": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_62_ovalb103": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_70_diamondb105": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_70_longb104": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_65_diamondb106": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
+    },
+    "m_neutral_62_heartb107": {
+      "first_build": null,
+      "usable_from": null,
+      "note": "Not shipped; owner/Claude fills confirmed APK release metadata."
     }
   }
 }

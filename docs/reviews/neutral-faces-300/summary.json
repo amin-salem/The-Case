@@ -1,0 +1,22 @@
+{
+  "count": 49,
+  "gender": {
+    "f": 25,
+    "m": 24
+  },
+  "age_band": {
+    "young": 17,
+    "mid": 17,
+    "old": 15
+  },
+  "assets_before_bytes": 10159778,
+  "added_portrait_bytes": 705294,
+  "assets_after_bytes": 10865072,
+  "min_file_bytes": 11084,
+  "max_file_bytes": 17984,
+  "min_ssim": 0.9501759620330319,
+  "max_ssim": 0.9699969934994433,
+  "first_build": null,
+  "usable_from": null,
+  "new_same_cast_avoid_pairs": 7
+}
