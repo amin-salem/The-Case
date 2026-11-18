@@ -273,3 +273,13 @@ Build 98
 
 ## developer_note
 Build 99
+
+<!-- build: 100 -->
+## changelog_fa
+- بهبود پایداری و سرعت برنامه
+
+## changelog_en
+- Improved app stability and speed
+
+## developer_note
+Build 100
