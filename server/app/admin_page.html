@@ -191,6 +191,34 @@ function buildNav() { try { sessionStorage.setItem('adminTab', tab); } catch (e)
 $('#nav').onclick = e => { const b = e.target.closest('button[data-k]'); if (b) { go(b.dataset.k); $('#menu-toggle').focus(); } };
 document.addEventListener('click', e => { if (!$('#admin-menu').contains(e.target)) $('#admin-menu').open = false; });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#admin-menu').open) { e.preventDefault(); $('#admin-menu').open = false; $('#menu-toggle').focus(); } });
+
+// «شکار سه‌روزه»: the owner's test of the three-day real-time case (testers only until it opens to everybody)
+function huntCard(h) {
+  if (!h) return '';
+  const c = h.config, st = h.stats, AUD = {off: 'خاموش', testers: 'فقط تسترها', all: 'همه'};
+  const when = fmtT(c.starts_at);
+  const end = fmtT(h.ends_at);
+  return `<h3>🎯 شکار سه‌روزه: «${esc(h.title || '')}»</h3>
+  <div class="scroll"><table><tr><th>نمایش</th><td>${AUD[c.audience] || c.audience}</td></tr><tr><th>شروع</th><td>${when}</td></tr><tr><th>پایان</th><td>${end}</td></tr><tr><th>سرعت</th><td>${c.speed === 1 ? 'زمان واقعی' : '×' + num(c.speed) + ' (فقط تست)'}</td></tr>
+  <tr><th>کارآگاه‌ها</th><td>${num(st.players)} · پیدا کردند ${num(st.solved)} (${num(st.pct)}٪)</td></tr><tr><th>منع خروج / مدرک زودتر</th><td>${num(st.holds)} / ${num(st.early)} · ${num(st.coins_spent)} سکه</td></tr>
+  <tr><th>متهم‌شده‌ها</th><td>${st.accused.map(a => esc(a.suspect) + ' ×' + num(a.n) + (a.culprit ? ' ✔' : '')).join('، ') || '—'}</td></tr>
+  <tr><th>تسترها</th><td>${h.testers.map(t => esc(t.nickname || t.id.slice(0, 6))).join('، ') || '— (از صفحه‌ی هر بازیکن «تستر شود» را بزن)'}</td></tr></table></div>
+  <div class="row"><select id="hau"><option value="off">خاموش</option><option value="testers">فقط تسترها</option><option value="all">همه</option></select>
+  <select id="hsp"><option value="1">زمان واقعی</option><option value="12">×۱۲ (هر ساعت = ۵ دقیقه)</option><option value="60">×۶۰ (هر ساعت = ۱ دقیقه)</option></select>
+  <button id="hnow">شروع از همین الان</button><button id="hsave">ذخیره بدون تغییر شروع</button><button id="hreset" class="danger">پاک‌کردن بازی‌ها</button></div>
+  <p class="muted">شروع از همین الان: مظنون اول ۶ ساعت بعد می‌رود و همه چیز طبق زمان واقعی جلو می‌رود. «پاک‌کردن بازی‌ها» برای تست دوباره است و وقتی برای همه باز است کار نمی‌کند.</p>`;
+}
+function wireHunt(h) {
+  if (!h) return;
+  $('#hau').value = h.config.audience; $('#hsp').value = String(h.config.speed);
+  const save = async start => {
+    try { await api('/admin/api/hunt', {method: 'POST', body: JSON.stringify({audience: $('#hau').value, speed: parseInt($('#hsp').value, 10) || 1, start})}); note('ذخیره شد'); go('cases'); }
+    catch (e) { note(e.message); }
+  };
+  $('#hnow').onclick = async () => { if (await ask('شکار از همین الان شروع شود؟')) save('now'); };
+  $('#hsave').onclick = () => save(h.config.starts_at ? String(h.config.starts_at) : '');
+  $('#hreset').onclick = async () => { if (await ask('بازی همه‌ی تسترها در این شکار پاک شود؟')) { try { await api('/admin/api/hunt/reset', {method: 'POST'}); note('پاک شد'); go('cases'); } catch (e) { note(e.message); } } };
+}
 function go(k, arg) { $('#admin-menu').open = false; tab = k; buildNav(); clearInterval(timer); timer = null; render(arg); }
 async function render(arg) {
   const m = document.createElement('div'); $('#main').replaceChildren(m); // a fresh box per render: a late answer of an old tab writes into a detached box
@@ -404,7 +432,7 @@ const VIEWS = {
   async player(m, id) {
     const d = await api('/admin/api/players/' + encodeURIComponent(id)), p = d.player;
     const kv = (k, v) => `<tr><th>${k}</th><td>${v}</td></tr>`;
-    m.innerHTML = `<div class="row"><button id="back">→ فهرست</button><h2 style="margin:0">${esc(p.nickname || p.id)} ${p.banned ? '<span class="tag banned">بن‌شده</span>' : ''}</h2><span style="flex:1"></span><button id="gift">هدیه / پیام</button><button id="lph">📱 وصل کردن شماره</button><button id="crs">↺ ریست پرونده</button><button id="ban" class="danger">${p.banned ? 'رفع بن' : 'بن کردن'}</button></div>
+    m.innerHTML = `<div class="row"><button id="back">→ فهرست</button><h2 style="margin:0">${esc(p.nickname || p.id)} ${p.banned ? '<span class="tag banned">بن‌شده</span>' : ''}</h2><span style="flex:1"></span><button id="gift">هدیه / پیام</button><button id="lph">📱 وصل کردن شماره</button><button id="crs">↺ ریست پرونده</button><button id="tst">${p.tester ? 'تستر نباشد' : 'تستر شود'}</button><button id="ban" class="danger">${p.banned ? 'رفع بن' : 'بن کردن'}</button></div>
     <div class="scroll"><table>${kv('شناسه', `<span class="ltr">${esc(p.id)}</span>`)}${kv('ایمیل', esc(p.email || '—'))}${kv('شماره', p.phone_last4 ? `<span class="ltr">•••• ••• ${esc(p.phone_last4)}</span>` : '—')}${kv('دستگاه', `<span class="ltr">${esc(p.device_id)}</span>`)}${kv('کد دعوت', `<span class="ltr">${esc(p.invite_code)}</span> ${p.referred_by ? '· دعوت‌شده توسط ' + esc(p.referred_by.slice(0,6)) : ''}`)}${kv('سکه / XP / حکم', `${num(p.coins)} / ${num(p.xp)} / ${num(p.warrants)}`)}${kv('حل‌شده / ستاره', `${num(p.solved)} / ${num(p.stars)}`)}${kv('استریک (بهترین)', `${num(p.streak)} (${num(p.best_streak)})`)}${kv('VIP تا', fmtT(p.vip_until))}${kv('نسخه‌ی برنامه', `<span class="ltr">${esc(p.client.version || '؟')} (${num(p.client.build)})</span> · ${esc(p.client.platform || '—')}`)}${kv('سیستم‌عامل / دستگاه', `<span class="ltr">${esc(p.client.os_version || '—')} / ${esc(p.client.device_model || '—')}</span> · گزارش: ${ago(p.client.reported)}`)}${kv('ثبت‌نام', fmtT(p.created))}${kv('آخرین فعالیت', fmtT(p.last_seen))}</table></div>
     ${d.same_device.length ? `<h2>حساب‌های دیگر روی همین دستگاه (${d.same_device.length})</h2><div class="scroll"><table>${d.same_device.map(x => `<tr class="click" data-p="${esc(x.id)}"><td>${esc(x.nickname || x.id.slice(0,6))}</td><td>${ago(x.created)}</td></tr>`).join('')}</table></div>` : ''}
     <h2>پرونده‌ها</h2><div class="scroll"><table><tr><th>پرونده</th><th>نتیجه</th><th>ستاره</th><th>سرنخ</th><th>اتهام اشتباه</th><th>زمان فعال</th><th>مظنون دیده</th><th>باز شد</th></tr>${d.cases.map(c => `<tr><td>${esc(c.title)}</td><td>${c.solved ? '<span class="tag solved">حل</span>' : c.failed ? '<span class="tag failed">شکست</span>' : 'در جریان'}</td><td>${c.stars}</td><td>${c.hints}</td><td>${c.attempts}</td><td>${c.active_seconds}ث</td><td>${c.seen}</td><td>${ago(c.opened)}</td></tr>`).join('')}</table></div>
@@ -415,12 +443,15 @@ const VIEWS = {
     $('#gift').onclick = () => giftDialog(p.id, p.nickname);
     $('#lph').onclick = () => phoneDialog(p.id, p.nickname);
     $('#crs').onclick = () => resetCaseDialog(p.id, p.nickname);
+    $('#tst').onclick = async () => { try { await api(`/admin/api/players/${p.id}/tester`, {method: 'POST', body: JSON.stringify({tester: !p.tester})}); note(p.tester ? 'دیگر تستر نیست' : 'تستر شد'); go('player', p.id); } catch (e) { note(e.message); } };
     $('#ban').onclick = async () => { if (await ask((p.banned ? 'رفع بن' : 'بن') + ' «' + (p.nickname || p.id) + '»؟')) { await api(`/admin/players/${p.id}/ban`, {method: 'POST', body: JSON.stringify({banned: !p.banned})}); go('players', {id: p.id}); } };
   },
   async cases(m) {
     const d = await api('/admin/api/cases');
-    m.innerHTML = '<p class="muted">برای دیدن سختی: «حل‌شده» کم و «اتهام اشتباه» زیاد یعنی سخت؛ اگر بیشتر بازیکن‌ها اول به مجرم شک کنند یعنی قابل حدس است.</p><div class="scroll"><table><tr><th>پرونده</th><th>باز شد</th><th>حل</th><th>شکست</th><th>میانگین ستاره</th><th>زمان</th><th>سرنخ</th><th>اتهام اشتباه</th><th>اولین حدس‌ها</th></tr>' +
+    const hd = await api('/admin/api/hunt').catch(() => null);
+    m.innerHTML = huntCard(hd) + '<p class="muted">برای دیدن سختی: «حل‌شده» کم و «اتهام اشتباه» زیاد یعنی سخت؛ اگر بیشتر بازیکن‌ها اول به مجرم شک کنند یعنی قابل حدس است.</p><div class="scroll"><table><tr><th>پرونده</th><th>باز شد</th><th>حل</th><th>شکست</th><th>میانگین ستاره</th><th>زمان</th><th>سرنخ</th><th>اتهام اشتباه</th><th>اولین حدس‌ها</th></tr>' +
       d.map(c => `<tr><td>${esc(c.title)}</td><td>${num(c.opened)}</td><td>${num(c.solved)}</td><td>${num(c.failed)}</td><td>${c.avg_stars ?? '—'}</td><td>${c.avg_seconds ?? '—'}ث</td><td>${c.avg_hints ?? '—'}</td><td>${c.avg_wrong ?? '—'}</td><td>${c.first_guess.map(g => esc(g.suspect) + ' ×' + g.n + (g.culprit ? ' ✔' : '')).join('، ')}</td></tr>`).join('') + '</table></div>';
+    wireHunt(hd);
     const pr = await api('/admin/api/promo').catch(() => null);
     if (pr) {
       const ST = {open: 'باز', upcoming: 'به‌زودی', ended: 'تمام‌شده'};

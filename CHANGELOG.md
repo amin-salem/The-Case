@@ -1,3 +1,11 @@
+# server 1.77.0 + game APK: «شکار سه‌روزه» test, testers only (18 Nov 2026)
+
+- New special-case format played in real time over 47 hours: 8 suspects, one leaves town every 6 hours (gone for good), six evidence drops on a schedule, the killer writes from the victim's phone, one accusation (suspect + the evidence that proves it). The share of detectives who found the killer by the deadline decides the ending. First hunt: h001 «شمع‌ها که خاموش شد» (Kashan).
+- Server: `app/hunt.py`, `/v1/hunt` (+ `/hold`, `/early`, `/accuse`, rate limits accuse / wallet), table `hunt_states` (migration 0040), remote config key `hunt` (audience off / testers / all, start, speed), pictures at `/hunt-img/<hunt>/<name>.webp` (a picture is offered only when its file exists). The answer never leaves the server before the player accused or the hunt ended.
+- Coins: «منع خروج» 40 (a suspect stays 6 h more, once per suspect), «مدرک زودتر» 60 (next drop now), reward 300 / 200 / 120 for 3 / 2 / 1 stars.
+- Admin panel → پرونده‌ها: the hunt card (on/off, start now, test speed ×12 / ×60, live numbers, reset for another test run) and «تستر شود» on each player's page.
+- App: weekend tab shows the hunt card only when the server shows a hunt to this player; `HuntScreen` (suspects with departure ring, evidence, the killer's chat, accusation, ending); local notifications for drops, messages, departures and the result.
+
 # server 1.76.0: nightly cases c085, c086 (18 Nov 2026)
 
 - Two new nightly cases from batch 3 of the idea bank: c085 «قاب رو به دیوار» (idea 3, style S2 impossible puzzle, puzzle type 16, villa_rain / family, difficulty 5, publish 22 Dec 2026) and c086 «سوت باغ شیشه‌ای» (idea 4, style S3 seemingly supernatural, puzzle type 13, lab / science, difficulty 5, publish 23 Dec 2026)

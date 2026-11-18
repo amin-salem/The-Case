@@ -513,3 +513,26 @@ class CaseGuess(Base):
     case_id: Mapped[str] = mapped_column(String(16))
     suspect: Mapped[str] = mapped_column(String(16))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class HuntState(Base):
+    """One player in one «شکار سه‌روزه» (a three-day real-time special case, app/hunt.py): suspects held back with
+    «منع خروج», evidence opened early with coins, and the one accusation. Unique per player and hunt, so two taps never
+    make two rows; every change happens under the player's row lock (db.lock_players)."""
+
+    __tablename__ = "hunt_states"
+    __table_args__ = (UniqueConstraint("player_id", "hunt_id", name="uq_hunt_state"),
+                      Index("ix_hunt_state_hunt_solved", "hunt_id", "solved"))
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    hunt_id: Mapped[str] = mapped_column(String(16))
+    holds: Mapped[dict] = mapped_column(JSON, default=dict)     # suspect id -> times held (1 at most)
+    early: Mapped[list] = mapped_column(JSON, default=list)     # drop ids opened early with coins
+    accused: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    evidence: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    accused_minute: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    solved: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+    stars: Mapped[int] = mapped_column(Integer, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

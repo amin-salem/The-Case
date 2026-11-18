@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui' show Color;
 
 import 'package:flutter/foundation.dart';
@@ -236,6 +237,7 @@ class Reminders extends ChangeNotifier with WidgetsBindingObserver {
       }
       // the week's result (prizes in the inbox) comes from the server's plan as kind "weekresult" (Friday 21:10 Tehran):
       // no day or week math on the phone
+      await _huntAgain();
       final sr = (_prefs?.getString('story_ready') ?? '').split('|');
       if (sr.length >= 2) {
         final ms = int.tryParse(sr[0]);
@@ -264,6 +266,35 @@ class Reminders extends ChangeNotifier with WidgetsBindingObserver {
       await _at(600, at, 'فصل بعدی داستان آماده‌ست 🔥', 'ناصری منتظره: «$chapterTitle» رو باز کن.');
     } catch (e) {
       debugPrint('reminders story: $e');
+    }
+  }
+
+  /// «شکار سه‌روزه»: the coming drops, messages and departures (texts from the server, generic on purpose).
+  /// Kept on the phone too, because plan() clears everything and then puts it back.
+  Future<void> huntPlan(List<Map<String, dynamic>> events) async {
+    if (!_ready) return;
+    try {
+      await _prefs?.setString('hunt_plan', jsonEncode(events.take(24).toList()));
+      if (_last != null) {
+        await replanLast(); // clears everything and puts it back, the hunt included
+      } else if (enabled) {
+        await _huntAgain();
+      }
+    } catch (e) {
+      debugPrint('reminders hunt: $e');
+    }
+  }
+
+  Future<void> _huntAgain() async {
+    final raw = _prefs?.getString('hunt_plan');
+    if (raw == null || raw.isEmpty) return;
+    final list = jsonDecode(raw);
+    if (list is! List) return;
+    var n = 0;
+    for (final e in list) {
+      if (e is! Map || e['at'] is! num || n >= 24) continue;
+      await _at(700 + n, DateTime.fromMillisecondsSinceEpoch((e['at'] as num).toInt() * 1000), '${e['head'] ?? ''}', '${e['body'] ?? ''}');
+      n++;
     }
   }
 

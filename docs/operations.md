@@ -1,3 +1,10 @@
+## «شکار سه‌روزه» (18 Nov 2026, server 1.77.0)
+
+- Admin panel → پرونده‌ها → «شکار سه‌روزه». Make yourself and friends testers first (player page → «تستر شود»).
+- «فقط تسترها» + «شروع از همین الان» starts the 47-hour hunt now; a real test is best started on a Wednesday at 22:00 Tehran (the story days then match). Speed ×12 / ×60 is only for a quick look; set it back to «زمان واقعی» and «پاک‌کردن بازی‌ها» before a real run.
+- Pictures: `server/app/content/hunts/h001/img/<name>.webp` (cover, killer_photo, howzkhaneh, ev_lantern, ev_tripod, ev_invoices, ev_oldfile, ending, map). A missing picture is simply not shown; adding one needs a server deploy, not a new APK.
+- Never open it to «همه» before Amin decides; «پاک‌کردن بازی‌ها» is refused while it is open to everybody.
+
 ## Daily leaderboard freshness (15 Nov 2026, server 1.61.3)
 
 Daily summary no longer uses a per-worker TTL cache. One SQL statement counts visible daily solves and computes fastest/median for positive ranked times using window rows in the same snapshot. This works across workers without Redis or cache invalidation. The all-time case-list solver count still includes archive solves; it is a different metric. No migration or environment change. App 1.44.5+94 adds pull-to-refresh and foreground resume refresh to the board, and simplifies desk/settings/shop. Notification battery help no longer points at the removed test row; ordinary reminder scheduling is unchanged.

@@ -59,6 +59,18 @@ async def site_image(name: str):
     return FileResponse(_IMG_DIR / name, media_type="image/webp", headers={"Cache-Control": "public, max-age=604800"})
 
 
+@router.get("/hunt-img/{hunt_id}/{name}.webp")
+async def hunt_image(hunt_id: str, name: str):
+    """Pictures of a «شکار سه‌روزه» (app/content/hunts/<id>/img): only names of our own pattern, cached for a day."""
+    from . import hunt
+    if not hunt.HUNT_ID.match(hunt_id) or not hunt.IMG_NAME.match(name):
+        raise HTTPException(404, "no_image")
+    path = hunt.HUNTS_DIR / hunt_id / "img" / f"{name}.webp"
+    if not path.is_file():
+        raise HTTPException(404, "no_image")
+    return FileResponse(path, media_type="image/webp", headers={"Cache-Control": "public, max-age=86400"})
+
+
 # ---- the page of one case, for ad links (2 Nov 2026): «/c/c020» ----
 _CASE_ID = re.compile(r"^[cw]\d{3}$")
 _FA = str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")

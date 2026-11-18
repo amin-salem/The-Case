@@ -24,6 +24,7 @@ from .routers import achievements as achievement_routes
 from .routers import missions as mission_routes
 from .routers import riddles as riddle_routes
 from .routers import story as story_routes
+from .routers import hunt as hunt_routes
 from .services import ratelimit, runtime_stats
 from .services.ratelimit import RateLimitMiddleware, RateLimited
 
@@ -70,7 +71,7 @@ def create_app() -> FastAPI:
                        allow_methods=["*"], allow_headers=["*"])
     app.add_middleware(runtime_stats.StatsMiddleware)  # outermost: counts every request and 5xx
     for r in (analytics.router, meta.router, pages.router, site.router, auth.router, phone.router, profile.router, cases.router, leaderboard.router,
-              purchases.router, riddle_routes.router, mission_routes.router, achievement_routes.router, avatar_routes.router, story_routes.router, tool_routes.router, tool_routes.kit_router, album_routes.router, guess_routes.router, comments.router, comments.admin_router, inbox.router, admin.router, admin_ui.page_router, admin_ui.router):
+              purchases.router, riddle_routes.router, mission_routes.router, achievement_routes.router, avatar_routes.router, story_routes.router, hunt_routes.router, tool_routes.router, tool_routes.kit_router, album_routes.router, guess_routes.router, comments.router, comments.admin_router, inbox.router, admin.router, admin_ui.page_router, admin_ui.router):
         app.include_router(r)
     return app
 

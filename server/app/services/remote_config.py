@@ -40,6 +40,9 @@ DEFAULTS: dict[str, Any] = {
     "news": [],
     # Promo cases: free to open for a new detective for a while (services/promo.py). Edited in the panel, not by hand.
     "promo_cases": [],
+    # «شکار سه‌روزه» (app/hunt.py): which hunt, who sees it (off | testers | all), when it starts (unix seconds) and
+    # speed (1 = real time; more only for the owner's quick test). Set from the admin panel's hunt card.
+    "hunt": {"id": "h001", "audience": "off", "starts_at": None, "speed": 1},
 }
 
 

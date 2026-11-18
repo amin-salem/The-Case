@@ -10,6 +10,7 @@ import '../widgets/coming_soon.dart';
 import '../widgets/scene.dart';
 import 'archive_screen.dart' show unlockQuotedCase;
 import 'case_screen.dart';
+import 'hunt_screen.dart';
 
 DateTime? _time(Object? v) => v is num ? DateTime.fromMillisecondsSinceEpoch(v.toInt() * 1000) : null;
 
@@ -34,6 +35,7 @@ class WeekendScreen extends StatefulWidget {
 
 class _WeekendScreenState extends State<WeekendScreen> {
   CasesList? _cases;
+  Map<String, dynamic>? _hunt; // «شکار سه‌روزه», only when the server shows one to this player (testers first)
 
   @override
   void initState() {
@@ -46,6 +48,13 @@ class _WeekendScreenState extends State<WeekendScreen> {
       final c = await Api.i.cases();
       if (mounted) setState(() => _cases = c);
     } catch (_) {}
+    final h = await Api.i.hunt();
+    if (mounted) setState(() => _hunt = h);
+  }
+
+  Future<void> _openHunt() async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => HuntScreen(initial: _hunt)));
+    _load();
   }
 
   Future<void> _opened() async {
@@ -182,6 +191,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
               ),
             ]),
             const SizedBox(height: 14),
+            if (_hunt != null) ...[HuntEntryCard(hunt: _hunt!, onOpen: _openHunt), const SizedBox(height: 14)],
             if (weekly != null)
               SectionBanner(
                 background: AnimatedScene(scene: weekly.scene, height: double.infinity, dim: 0.2),

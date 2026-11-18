@@ -401,7 +401,7 @@ async def player(player_id: str, session: AsyncSession = Depends(get_session)):
         "player": {"id": p.id, "nickname": p.nickname, "email": p.email, "phone_last4": p.phone_last4 if p.phone_hash else None, "device_id": p.device_id, "coins": p.coins,
                    "xp": p.xp, "streak": p.streak, "best_streak": p.best_streak, "solved": p.cases_solved,
                    "stars": p.stars_total, "warrants": p.warrants, "no_ads": p.no_ads, "vip_until": ts(p.vip_until),
-                   "banned": p.banned, "app_version": p.app_version, "invite_code": p.invite_code,
+                   "banned": p.banned, "tester": p.tester, "app_version": p.app_version, "invite_code": p.invite_code,
                    "referred_by": p.referred_by, "client": {
                        "version": p.client_version, "build": p.client_build, "platform": p.platform,
                        "os_version": p.os_version, "device_model": p.device_model, "reported": ts(p.client_at)},
@@ -669,3 +669,97 @@ async def bazaar_reviews_reply(review_id: int, body: ReviewReplyIn):
     except bazaar_reviews.ReviewsError as e:
         return {"ok": False, "error": e.code, "detail": e.message}
     return {"ok": True, "detail": "پاسخ فرستاده شد؛ بعد از تأیید بازار دیده می‌شود"}
+
+
+# ---- «شکار سه‌روزه» (app/hunt.py): on/off, start, speed, testers, live numbers -------------------------------------
+class HuntIn(BaseModel):
+    audience: str = Field(pattern="^(off|testers|all)$")
+    start: str | None = Field(default=None, max_length=20)   # "now", unix seconds as text, or empty = not scheduled
+    speed: int = Field(default=1, ge=1, le=120)
+
+
+class TesterIdIn(BaseModel):
+    tester: bool = True
+
+
+@router.get("/hunt")
+async def hunt_view(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. The hunt settings and its live numbers (testers' rows included: this is the owner's test)."""
+    from .. import hunt
+    from ..models import HuntState
+    from ..services.remote_config import load_config
+    from .hunt import collective
+    cfg = hunt.config(await load_config(session))
+    h = hunt.load(cfg["id"]) or {}
+    rows = (await session.execute(select(HuntState.accused, HuntState.solved, HuntState.holds, HuntState.early)
+                                  .where(HuntState.hunt_id == cfg["id"]).limit(5000))).all()
+    by = defaultdict(int)
+    holds = early = 0
+    for acc, _solved, hd, ea in rows:
+        if acc:
+            by[acc] += 1
+        holds += sum((hd or {}).values())
+        early += len(ea or [])
+    spent = await session.scalar(select(func.coalesce(func.sum(-CoinLog.amount), 0)).where(
+        CoinLog.reason.in_(("hunt_hold", "hunt_early")))) or 0
+    names = {s["id"]: s["name"] for s in h.get("suspects", [])}
+    testers = (await session.execute(select(Player.id, Player.nickname).where(Player.tester.is_(True)).limit(50))).all()
+    out = {"config": cfg, "title": h.get("title"), "duration_hours": round(h.get("duration_minutes", 0) / 60, 1),
+           "stats": await collective(session, cfg["id"]) | {"holds": holds, "early": early, "coins_spent": int(spent),
+                    "accused": [{"suspect": names.get(k, k), "n": v, "culprit": k == h.get("answer", {}).get("culprit")} for k, v in sorted(by.items(), key=lambda x: -x[1])]},
+           "testers": [{"id": i, "nickname": n} for i, n in testers]}
+    if cfg["starts_at"]:
+        out["ends_at"] = hunt.wall(cfg, int(h.get("duration_minutes", 0)))
+    return out
+
+
+@router.post("/hunt")
+async def hunt_set(body: HuntIn, session: AsyncSession = Depends(get_session)):
+    from .. import gameclock
+    from ..models import ConfigValue
+    from ..services.remote_config import invalidate
+    start = None
+    if body.start == "now":
+        start = int(gameclock.now().timestamp())
+    elif body.start:
+        try:
+            start = int(body.start)
+        except ValueError:
+            raise HTTPException(422, "bad_start")
+    value = {"id": "h001", "audience": body.audience, "starts_at": start, "speed": body.speed}
+    row = await session.get(ConfigValue, "hunt")
+    if row is None:
+        session.add(ConfigValue(key="hunt", value=value))
+    else:
+        row.value = value
+    session.add(AdminLog(action="hunt", target="h001", detail=value))
+    await session.commit()
+    invalidate()
+    return await hunt_view(session)
+
+
+@router.post("/hunt/reset")
+async def hunt_reset(session: AsyncSession = Depends(get_session)):
+    """Clears every player's game of the current hunt, for another test run. Refused while it is open to everybody."""
+    from sqlalchemy import delete
+    from .. import hunt
+    from ..models import HuntState
+    from ..services.remote_config import load_config
+    cfg = hunt.config(await load_config(session))
+    if cfg["audience"] == "all":
+        raise HTTPException(409, "hunt_is_public")
+    await session.execute(delete(HuntState).where(HuntState.hunt_id == cfg["id"]))
+    session.add(AdminLog(action="hunt_reset", target=cfg["id"], detail={}))
+    await session.commit()
+    return await hunt_view(session)
+
+
+@router.post("/players/{player_id}/tester")
+async def player_tester(player_id: str, body: TesterIdIn, session: AsyncSession = Depends(get_session)):
+    p = await session.get(Player, player_id)
+    if p is None:
+        raise HTTPException(404, "no_player")
+    p.tester = body.tester
+    session.add(AdminLog(action="tester" if body.tester else "untester", target=p.id, detail={"nickname": p.nickname}))
+    await session.commit()
+    return {"id": p.id, "tester": p.tester}
