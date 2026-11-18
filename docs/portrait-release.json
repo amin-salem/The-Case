@@ -1,352 +1,352 @@
 {
-  "_note": "Portraits are app assets: a player on an older APK sees the drawn fallback face instead (Amin, 9 Nov 2026: «تصاویر تولید نشده» in w005). A case may use a portrait only when it is published on or after `usable_from` of that portrait = the day the APK that ships it reached most players (about 14 days after it was published on Cafe Bazaar). Portraits not listed here shipped in build 78 (27 Oct 2026) or earlier. Cases published before `check_from` are exempt. Tested by server/tests/test_content.py::test_case_uses_only_portraits_players_have.",
+  "_note": "Portraits are app assets: a player on an older APK sees the drawn fallback face instead (Amin, 9 Nov 2026: «تصاویر تولید نشده» in w005). A case may use a portrait only when it is published on or after `usable_from` of that portrait = the day the APK that ships it reached most players (about 14 days after it was published on Cafe Bazaar). Portraits not listed here shipped in build 78 (27 Oct 2026) or earlier. Cases published before `check_from` are exempt. Tested by server/tests/test_content.py::test_case_uses_only_portraits_players_have. UPDATE 18 Nov 2026 (Amin): every shipped portrait is usable now; the owner raised the minimum app version to the build that ships them (build 99), so no player is on an older build. Rows were set to first_build 99 / usable_from 2026-11-18.",
   "check_from": "2026-11-09",
   "portraits": {
     "f_mid_waitress": {
       "first_build": 83,
-      "usable_from": "2026-11-26"
+      "usable_from": "2026-11-18"
     },
     "m_mid_worker": {
       "first_build": 83,
-      "usable_from": "2026-11-26"
+      "usable_from": "2026-11-18"
     },
     "m_mid_researcher": {
       "first_build": 83,
-      "usable_from": "2026-11-26"
+      "usable_from": "2026-11-18"
     },
     "m_neutral_56_round": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_44_long": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_53_square": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_41_oval": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_56_angular": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_39_broad": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_45_waves": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_45_freckles": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_38_coils": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_46_angular": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_20_round": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_24_freckles": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "m_neutral_29_coils": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "f_neutral_20_pixie": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "f_neutral_27_coils": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged asset, not authorised for any case. Set real majority-availability date after confirmed Bazaar release."
     },
     "f_neutral_29_square": {
-      "first_build": null,
-      "usable_from": "9999-12-31",
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged, not permitted in any case until confirmed Bazaar rollout."
     },
     "m_neutral_29_long": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "m_neutral_34_dimples": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "m_neutral_41_shaved": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "m_neutral_44_nose": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "m_neutral_47_copper": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "m_neutral_50_silver": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "m_neutral_52_curls": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "m_neutral_55_brow": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "m_neutral_64_lined": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "m_neutral_62_soft": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Unreleased staged portrait. Set only after confirmed APK release and majority availability; never backdate."
     },
     "f_neutral_36_round": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
     },
     "f_neutral_42_diamond": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
     },
     "f_neutral_48_square": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
     },
     "f_neutral_54_heart": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
     },
     "f_neutral_58_pear": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
     },
     "f_neutral_64_long": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
     },
     "f_neutral_70_soft": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
     },
     "f_neutral_77_angular": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged neutral woman with plain matte scarf; no case use until confirmed release and majority availability."
     },
     "f_neutral_43_reserve01": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "f_neutral_45_reserve02": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_48_reserve03": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_46_reserve04": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_47_reserve05": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "f_neutral_43_reserve06": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_48_reserve07": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "f_neutral_40_reserve08": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_57_reserve09": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_46_reserve10": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "f_neutral_41_reserve11": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_50_reserve12": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_51_reserve13": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "f_neutral_44_reserve14": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_48_reserve15": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "f_neutral_42_reserve16": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_53_reserve17": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "f_neutral_46_reserve18": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_52_reserve19": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_37_reserve20": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_48_reserve21": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_45_reserve22": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_53_reserve23": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_38_brownotch": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Staged future-case capacity; not authorised for a case until confirmed release."
     },
     "m_neutral_38_reserve25": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
     },
     "f_neutral_44_reserve26": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
     },
     "m_neutral_53_reserve27": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
     },
     "m_neutral_49_reserve28": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
     },
     "m_neutral_49_reserve29": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
     },
     "m_neutral_46_reserve30": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
     },
     "m_neutral_43_reserve31": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
     },
     "f_neutral_49_reserve32": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
     },
     "m_neutral_35_reserve33": {
-      "first_build": null,
-      "usable_from": null,
+      "first_build": 99,
+      "usable_from": "2026-11-18",
       "note": "Future outline proposal only; not released."
     }
   }

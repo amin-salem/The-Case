@@ -202,7 +202,8 @@ def test_portrait_age_matches_the_character():
 
 def test_case_uses_only_portraits_players_have():
     """A new portrait lives in the APK; a player who has not updated sees a drawn fallback face (w005, Nov 2026). So a case
-    may use a portrait only from the day the build that ships it reached most players (docs/portrait-release.json)."""
+    may use a portrait only once the build that ships it is recorded in docs/portrait-release.json (first_build and usable_from set).
+    Since 18 Nov 2026 the date itself no longer matters: the minimum app version is raised to that build."""
     import json
     from pathlib import Path
     root = Path(__file__).resolve().parents[2]
@@ -219,7 +220,6 @@ def test_case_uses_only_portraits_players_have():
             if p in rel["portraits"] and (
                 rel["portraits"][p].get("first_build") is None
                 or not rel["portraits"][p].get("usable_from")
-                or day < rel["portraits"][p]["usable_from"]
             ):
                 early.append((c.id, day, s["id"], p, rel["portraits"][p]["usable_from"]))
     assert not early, f"these cases use a portrait most players do not have yet: {early}"

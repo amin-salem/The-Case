@@ -1,3 +1,10 @@
+# server 1.72.0: faces spread over all cases, portrait lock removed (18 Nov 2026)
+
+- Lock: `docs/portrait-release.json` rows now carry `first_build` 99 / `usable_from` 2026-11-18 (Amin raised the minimum app version), and the date check is removed from `tools/art_rules.available`, `test_case_uses_only_portraits_players_have` and `check_case.py`. A face with no recorded build is still refused.
+- The 15 pending remaps from 11 Nov are applied (c003, c007, c020, c026, c029, c033, c038, c039, c043, c051, c055, c063, w002, w004, w007); `pending-remap.json` is empty.
+- Spread: 200 innocent suspects in 80 cases got a different compatible face (same gender, age within 7, role, glasses/beard words in the text, no lookalike in the same cast, no repeat inside a case; culprits untouched, the culprit album is still unique). Before: 104 faces in use, one face up to 16 times; after: 178 faces, none more than 4 times (list in `docs/reviews/portrait-spread-20261118.csv`). Only portrait ids changed in case files.
+- Writers: `tools/portrait_pool.py` lists compatible faces least used first; `docs/case-writing-rules.md` has the spread rule. More neutral faces are needed to stay under 2 uses per face.
+
 # server 1.71.0: nightly cases c077, c078 (17 Nov 2026)
 
 - Two new nightly cases from the idea bank: c077 «اعلامِ دوم» (idea 25, style S2 impossible, puzzle type 5 time trick, airport / travel, difficulty 5, publish 14 Dec 2026) and c078 «پارگی در سمتِ تماشاگر» (idea 26, style S6 conflicting accounts, puzzle type 6 staging, theater / art, difficulty 5, publish 15 Dec 2026), with their notify entries. Content only, no migration.

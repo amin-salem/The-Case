@@ -25,7 +25,7 @@
     "glasses": false,
     "outfit": "#1f3a5f",
     "accessory": "badge",
-    "portrait": "m_mid_business"
+    "portrait": "m_old_butler"
    },
    "motive": "دکتر سعیدی پارسال به خاطر گم شدن کیفش ازش شکایت کرده بود.",
    "statement": "ساعت ۱۲ آخرین بار راهرو رو چک کردم. چراغ کوپه‌ی ۷ روشن بود و صدای حرف زدن دو نفر میومد.",
@@ -58,7 +58,7 @@
     "glasses": true,
     "outfit": "#4b3f33",
     "accessory": "none",
-    "portrait": "m_mid_chef"
+    "portrait": "m_neutral_44_nose"
    },
    "motive": "دکتر سعیدی مقاله‌ی ده سال کارش رو به اسم خودش چاپ کرده بود.",
    "statement": "اصلاً نمی‌دونستم دکتر توی این قطاره. ساعت ۱۱ خوابیدم و تا صبح از کوپه‌ام بیرون نیومدم.",
@@ -91,7 +91,7 @@
     "glasses": true,
     "outfit": "#8c3b3b",
     "accessory": "none",
-    "portrait": "f_young_artist"
+    "portrait": "f_neutral_20_pixie"
    },
    "motive": "دکتر سعیدی پایان‌نامه‌اش رو رد کرده بود و یک سالش هدر رفته بود.",
    "statement": "خوابم نمی‌برد. حدود ساعت ۱ رفتم واگن رستوران و تا نزدیک ۲ اونجا کتاب خوندم.",
@@ -124,7 +124,7 @@
     "glasses": false,
     "outfit": "#2c3e50",
     "accessory": "scarf",
-    "portrait": "f_mid_witness"
+    "portrait": "f_neutral_41_reserve11"
    },
    "motive": "پدرش هفته‌ی پیش گفته بود وصیت‌نامه رو عوض می‌کنه و همه‌چی رو به دانشگاه می‌بخشه.",
    "statement": "ساعت ۱۰ شب آخرین بار پدرم رو دیدم، حالش خوب بود. رفتم کوپه‌ی خودم و تا صبح خوابیدم.",

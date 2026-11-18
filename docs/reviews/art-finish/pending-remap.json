@@ -2,13 +2,17 @@
   "schema_version": 2,
   "review_date": "2026-11-11",
   "source_commit": "ccc8fc2b60c76a7a3b613fb8ad212caece10238f",
-  "status": "در انتظار با مهلت محدود؛ شکست واقعی از usable_from یا پایان مهلت",
+  "status": "applied 18 Nov 2026 by Amin's order (lock removed, build 99 shipped); nothing is pending",
   "test_exemption": "time-limited pending skip explicitly requested by Amin on 2026-11-11",
   "automatic_apply": false,
   "allowed_from": null,
   "reason_date_is_empty": "No APK built or released. Amin confirms the shipping build and majority-availability day; never invent or backdate.",
   "historical_case_policy": "The existing case.publish >= usable_from rule remains in force. These old cases need an explicitly approved version-aware rollout policy before a future remap can be applied.",
-  "remaps": [
+  "remaps": [],
+  "waiting_timezone": "Asia/Tehran",
+  "waiting_policy": "Until the earlier of actual usable_from and waiting_until. Missing or invalid dates fail; no indefinite skip. waiting_until is a review deadline, never a release/usage date.",
+  "applied_on": "2026-11-18",
+  "applied": [
     {
       "slot": "c003/s2",
       "case_id": "c003",
@@ -327,7 +331,5 @@
       "reviewed_on": "2026-11-11",
       "waiting_until": "2026-11-25"
     }
-  ],
-  "waiting_timezone": "Asia/Tehran",
-  "waiting_policy": "Until the earlier of actual usable_from and waiting_until. Missing or invalid dates fail; no indefinite skip. waiting_until is a review deadline, never a release/usage date."
+  ]
 }

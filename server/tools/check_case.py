@@ -120,8 +120,8 @@ def check(cid: str) -> tuple[list[str], list[str]]:
             seen[p] += 1
             if not (portraits / f"{p}.webp").exists():
                 problems.append(f"{s['id']}: portrait {p} is not shipped")
-            if p in rel["portraits"] and d.get("publish", "") < rel["portraits"][p]["usable_from"]:
-                problems.append(f"{s['id']}: portrait {p} is usable only from {rel['portraits'][p]['usable_from']}")
+            if p in rel["portraits"] and (rel["portraits"][p].get("first_build") is None or not rel["portraits"][p].get("usable_from")):
+                problems.append(f"{s['id']}: portrait {p} is not released yet (no first_build / usable_from in docs/portrait-release.json)")
         if s.get("avatar", {}).get("gender") == "f" and s.get("avatar", {}).get("hair") != "hijab":
             problems.append(f"{s['id']}: a woman must have hair=hijab")
         if not isinstance(s.get("age"), int):

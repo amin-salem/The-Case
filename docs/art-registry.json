@@ -1681,7 +1681,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_mid_waitress.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim.",
       "head_covering": "scarf_hair_visible"
     },
@@ -3890,7 +3890,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_mid_researcher.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
     },
     {
@@ -4193,7 +4193,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_mid_worker.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Existing pool; consult portrait-release.json. Null is not a new release claim."
     },
     {
@@ -5620,7 +5620,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_56_round.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -5660,7 +5660,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_44_long.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -5700,7 +5700,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_53_square.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -5740,7 +5740,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_41_oval.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -5780,7 +5780,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_56_angular.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -5820,7 +5820,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_39_broad.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -5860,7 +5860,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_45_waves.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -5900,7 +5900,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_45_freckles.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -5940,7 +5940,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_38_coils.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -5980,7 +5980,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_46_angular.webp",
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "not released; first_build unknown"
     },
     {
@@ -6013,7 +6013,7 @@
       "restrictions": [],
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build unknown",
       "visual_review": {
         "date": "2026-11-11",
@@ -6053,7 +6053,7 @@
       "restrictions": [],
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build unknown",
       "visual_review": {
         "date": "2026-11-11",
@@ -6093,7 +6093,7 @@
       "restrictions": [],
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build unknown",
       "visual_review": {
         "date": "2026-11-11",
@@ -6133,7 +6133,7 @@
       "restrictions": [],
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build unknown",
       "visual_review": {
         "date": "2026-11-11",
@@ -6174,7 +6174,7 @@
       "restrictions": [],
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build unknown",
       "visual_review": {
         "date": "2026-11-11",
@@ -6216,7 +6216,7 @@
       "restrictions": [],
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
-      "usable_from": "9999-12-31",
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build unknown",
       "sha256": "38b318bc0cb9d54e39cb6b0b7c48a676a8c31f99e027561cda387b3cb0124271",
       "visual_review": {
@@ -6266,7 +6266,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_29_long.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6309,7 +6309,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_34_dimples.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6352,7 +6352,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_41_shaved.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6395,7 +6395,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_44_nose.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6438,7 +6438,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_47_copper.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6481,7 +6481,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_50_silver.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6524,7 +6524,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_52_curls.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6567,7 +6567,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_55_brow.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6611,7 +6611,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_64_lined.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6654,7 +6654,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/m_neutral_62_soft.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged; first_build and usable_from unknown; not released"
     },
     {
@@ -6698,7 +6698,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_neutral_36_round.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build and majority availability unknown"
     },
     {
@@ -6742,7 +6742,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_neutral_42_diamond.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build and majority availability unknown"
     },
     {
@@ -6786,7 +6786,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_neutral_48_square.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build and majority availability unknown"
     },
     {
@@ -6830,7 +6830,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_neutral_54_heart.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build and majority availability unknown"
     },
     {
@@ -6874,7 +6874,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_neutral_58_pear.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build and majority availability unknown"
     },
     {
@@ -6918,7 +6918,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_neutral_64_long.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build and majority availability unknown"
     },
     {
@@ -6962,7 +6962,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_neutral_70_soft.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build and majority availability unknown"
     },
     {
@@ -7006,7 +7006,7 @@
       "legacy_disposition": "خنثی هست و بمونه",
       "new_assignments_ok": true,
       "path": "app/assets/portraits/f_neutral_77_angular.webp",
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Not released; first_build and majority availability unknown"
     },
     {
@@ -7041,7 +7041,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "a3377407e33300256daf279b780c8ea46dcc113864a067e716c35db5719ed92d",
       "visual_review": {
@@ -7084,7 +7084,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "afba94165f74b467fafb3553dd0f4cd37d3396204248c9a4034348702403cd4d",
       "visual_review": {
@@ -7127,7 +7127,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "c93692be04bf5b5e58db26969a3eb614c459674ba8a40fa1ece08bf97f3312c4",
       "visual_review": {
@@ -7169,7 +7169,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "e594c1e3e688ff31c4dd45e834793ec6056798c5415680684e0422ed5c705c73",
       "visual_review": {
@@ -7211,7 +7211,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "79eca1eba7f94004f70e0fda18e6d7649dc29228f73fa3a80a90b2dfc9cdfc25",
       "visual_review": {
@@ -7253,7 +7253,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "f66a5efa1b2c5c8e0dfebf4b8e71541069c66025ec812954dc7305ad44f24350",
       "visual_review": {
@@ -7296,7 +7296,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "cd84cd9742dfb8b108af3278f8a8e351101201637098a68fdf07fb5fa8b5fa18",
       "visual_review": {
@@ -7338,7 +7338,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "e57edc6c09e454f2d25c4a7ff7d4045ff5e6f6db73668b2b1c9ace4e7a7bdcbf",
       "visual_review": {
@@ -7381,7 +7381,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "8b7a302d0b0cfc6aeb22546a025131893540bfe4429b3d4f78f3c32f734adae5",
       "visual_review": {
@@ -7423,7 +7423,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "5e8f69a71828423c07d0a7114f1bee8ab755d8f6a320d8d7222d08ee7403dcca",
       "visual_review": {
@@ -7465,7 +7465,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "bd57cd6fbf52d1f90d3e51ac68ab1dc122fdf67c13f288385a92229733373fcb",
       "visual_review": {
@@ -7508,7 +7508,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "8714aca7c6d0fec2df78ec303621ff3863fc547e7639d22b5942ae34d1d8fbb9",
       "visual_review": {
@@ -7550,7 +7550,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "2bd31d663c4325057ff07f8ab2029fa2c709ef85d6424b0e3206d540bcbdb4ea",
       "visual_review": {
@@ -7592,7 +7592,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "87d7e0bc108d715cd28d4d12382e9de72f273a187b28f723377c2cc30c1cc730",
       "visual_review": {
@@ -7635,7 +7635,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "752aabf8217d9082c2feb3af7bad4ddc9041e8327b4b9e11e10d5f50740ef7ec",
       "visual_review": {
@@ -7677,7 +7677,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "debe87ca909fc912276f5c3f58719fc140e6b9479819456fd26080fded6d2e4a",
       "visual_review": {
@@ -7720,7 +7720,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "2923bf69dafdf1878a29722bcc61f18e03cccdd1049d89f94fc401079fccc384",
       "visual_review": {
@@ -7762,7 +7762,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "aebfe5ec7b90c6a0f4b652a7d5f1b277bbb0f30b597b5e51b34d1b92ae2c59f6",
       "visual_review": {
@@ -7805,7 +7805,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "857a4007942a1b2bca4ac5d665c4e9069a86f900211269553ec74c1ebdb747d1",
       "visual_review": {
@@ -7847,7 +7847,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "8849ed55bbf18d263ccfc2f1006363f97e77598e15c543f58ac78f3e31a6566b",
       "visual_review": {
@@ -7889,7 +7889,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "179e087a7732b902e039bf7ac19ba9e509a6db324d5a97ae55c217e5292efec1",
       "visual_review": {
@@ -7931,7 +7931,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "5fededeb3fd76e8054fbf8ae050348b811d258bd12009e2c847358af54ecc181",
       "visual_review": {
@@ -7973,7 +7973,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "63a86f3acbab3f89e77866bf0013933a357ed039802789b00eb78257dadec7b6",
       "visual_review": {
@@ -8015,7 +8015,7 @@
         "No case assignment before verified release and usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "staged; first_build unknown",
       "sha256": "f80558d6bd8332abc4ec107f314e02b5b95d3a24e6565bee7622a8f7376fc182",
       "visual_review": {
@@ -8057,7 +8057,7 @@
         "No assignment until confirmed usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged, first build unknown",
       "sha256": "a1a7f2aae56ecd728e82182a814a7b600846b143b2b7425edcf966b877858e6f",
       "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 36. Wide rectangular face, very short straight BLACK hair, NO beard or moustache, light olive skin, no glasses, small scar on right eyebrow, plain slate-blue cotton shirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
@@ -8099,7 +8099,7 @@
         "No assignment until confirmed usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged, first build unknown",
       "sha256": "e94d02853849228d81fb5623583ca966612f0f415479d783855c8ecb86eaf7db",
       "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult woman, apparent age 39. Broad square feminine face, strong rounded jaw, medium brown Iranian skin, thin round glasses, matte dusty rose scarf ON HEAD covering hair and neck, plain charcoal blouse. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. Scarf must be matte and visibly on head, not neck only.",
@@ -8142,7 +8142,7 @@
         "No assignment until confirmed usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged, first build unknown",
       "sha256": "e25e3f7e58a742fe240c203b18d3fbeefaa42f7c5a5baef6136c990dd44fae60",
       "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 50. Pear-shaped face with broad chin and narrow temples, thick straight GRAY side-parted hair, short pointed goatee and NO moustache, no glasses, pale warm skin, plain olive cardigan. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
@@ -8184,7 +8184,7 @@
         "No assignment until confirmed usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged, first build unknown",
       "sha256": "e4e30e75e31062e841e9f2c41c2f4e2f2419ebf5c18f1072b2d5683f55af16c2",
       "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 47. Very narrow oval face, short tight black curls, CLEAN SHAVEN, wide nose, deep olive skin, no glasses, plain beige cotton shirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
@@ -8226,7 +8226,7 @@
         "No assignment until confirmed usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged, first build unknown",
       "sha256": "256f628cf30966ead2b5d803e7e95e3e0125a25114bf7cc5eb234b604caf1df2",
       "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 45. Long rectangular face, bald on top with black side hair, clean shaven, thin OVAL metal spectacles, warm tan skin, plain dark brown shirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
@@ -8268,7 +8268,7 @@
         "No assignment until confirmed usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged, first build unknown",
       "sha256": "62eb30f3a486c2f579ec0d5ed090462394027f1c7f87cd7b93239a53ca99feb1",
       "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 43. Broad round face, straight dark brown hair worn slightly long behind ears, wide handlebar moustache and NO beard, no glasses, medium olive skin, plain navy cardigan. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
@@ -8310,7 +8310,7 @@
         "No assignment until confirmed usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged, first build unknown",
       "sha256": "2071d46c3acb5bd83dc0de231a28bfce9cd58aff332151fe2ce8d0ccc82019c9",
       "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 41. Angular triangular face, shaved head, thick full BLACK beard with sparse gray flecks, no glasses, light warm skin, plain gray collarless cotton shirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",
@@ -8352,7 +8352,7 @@
         "No assignment until confirmed usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged, first build unknown",
       "sha256": "aaa85da4f5a05ce16140c47856cd0f490d84ae6fd9d4072e81166cecd0782514",
       "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult woman, apparent age 46. Long heart-shaped face, narrow jaw, NO glasses, medium tan skin, fine forehead lines, matte muted cocoa-brown headscarf ON HEAD fully covering hair and neck, simple slate-blue Iranian everyday blouse. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. Scarf must be matte and visibly on head, not neck only.",
@@ -8395,7 +8395,7 @@
         "No assignment until confirmed usable_from."
       ],
       "new_assignments_ok": true,
-      "usable_from": null,
+      "usable_from": "2026-11-18",
       "release_basis": "Staged, first build unknown",
       "sha256": "f72258c0bc271f77b920c7a5515a3999a72dfeded7b28f148d859a5205bac8fb",
       "generation_specification": "ONE square 1024x1024 portrait of a distinct Iranian adult man, apparent age 34. Soft round youthful adult face, short straight black hair brushed forward, clean-shaven, rectangular dark acetate glasses, medium warm olive skin, plain charcoal T-shirt and muted teal casual overshirt. Face centered, head and shoulders, reserved expression. Same semi-realistic painted digital noir game aesthetic: dark navy plain background, warm amber side light, natural skin and clean edges. Unique identity. No occupational costume or uniform, props, tools, badges, formal suit or text. Age-appropriate natural wrinkles. ",

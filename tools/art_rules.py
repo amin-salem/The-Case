@@ -68,10 +68,9 @@ def available(portrait_id, case, releases, original_id=None):
         return True  # pre-existing pool, per the repository's release ledger
     if record.get('first_build') is None or not record.get('usable_from'):
         return False
-    if case['publish'] >= record['usable_from']:
-        return True
-    # Historical grandfathering permits retention, never a new assignment.
-    return (case['publish'] < releases['check_from'] and portrait_id == original_id)
+    # Amin, 18 Nov 2026: the date lock is gone. The owner raises the minimum app version to the build that ships the
+    # portraits, so a shipped portrait (first_build and usable_from both recorded) may be used by any case.
+    return True
 
 
 def incompatibilities(portrait, suspect):

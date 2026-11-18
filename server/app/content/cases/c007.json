@@ -25,7 +25,7 @@
     "glasses": true,
     "outfit": "#2e4a4a",
     "accessory": "badge",
-    "portrait": "m_mid_policeman"
+    "portrait": "m_neutral_45_waves"
    },
    "motive": "کم‌حقوقه و اخیراً ماشین گرونی خریده.",
    "statement": "چهارشنبه ساعت ۴ بعدازظهر کانتینر ۱۷ رو بازرسی کردم، گزارش رو همون موقع نوشتم و تحویل دادم، بعد رفتم خونه.",
@@ -58,7 +58,7 @@
     "glasses": true,
     "outfit": "#444b57",
     "accessory": "none",
-    "portrait": "m_mid_driver"
+    "portrait": "m_neutral_39_broad"
    },
    "motive": "قماربازه و چند نفر طلبکار دارن.",
    "statement": "فقط طبق برنامه‌ی روزانه جابه‌جا کردم. بعد از شیفت ساعت ۱۱:۳۰ رفتم خونه.",
@@ -91,7 +91,7 @@
     "glasses": true,
     "outfit": "#33463a",
     "accessory": "badge",
-    "portrait": "f_mid_housewife"
+    "portrait": "f_neutral_48_square"
    },
    "motive": "حقوق ثابت داره و ۱۷ سال سابقه.",
    "statement": "همه‌ی ورودی و خروجی‌ها رو ثبت می‌کنم. عکس پلمب هم هر کانتینری که وارد می‌شه گرفته می‌شه.",
@@ -157,7 +157,7 @@
     "glasses": true,
     "outfit": "#33463a",
     "accessory": "badge",
-    "portrait": "m_mid_sailor"
+    "portrait": "m_neutral_48_reserve03"
    },
    "motive": "کشتی‌اش تعمیر گرون داشته و صاحب کشتی تهدیدش کرده اخراج می‌شه.",
    "statement": "از ساعت ۹ شب تا ۱۱:۳۰ برای خرید دارو از بندر بیرون بودم. بقیه‌ی شب تو کشتی بودم و کانتینرها رو از دور هم ندیدم.",

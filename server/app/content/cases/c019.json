@@ -25,7 +25,7 @@
     "glasses": false,
     "outfit": "#7a5c2e",
     "accessory": "none",
-    "portrait": "m_mid_artist"
+    "portrait": "m_neutral_44_long"
    },
    "motive": "بدهکار قماره.",
    "statement": "من چمدان‌ها رو از نوار تا هواپیما می‌برم. بازشون نمی‌کنم و نمی‌تونم هم.",
@@ -58,7 +58,7 @@
     "glasses": false,
     "outfit": "#5d4037",
     "accessory": "badge",
-    "portrait": "m_mid_tycoon"
+    "portrait": "m_neutral_52_reserve19"
    },
    "motive": "ارشدترین فرد شیفت و وام بزرگ داره.",
    "statement": "ساعت ۱:۱۰ تا ۱:۱۸ یه چمدان دیگه رو بازبینی کردم و بعد دیگه وارد اتاق دستی نشدم.",
@@ -91,7 +91,7 @@
     "glasses": true,
     "outfit": "#2c3e50",
     "accessory": "tie",
-    "portrait": "m_old_boss"
+    "portrait": "m_neutral_51_reserve13"
    },
    "motive": "نمی‌خواد بابت یه سفر تجاری دردسر داشته باشه.",
    "statement": "چمدانم رو ساعت ۰:۵۰ تحویل دادم. بعدش رفتم سالن انتظار و تا ۳ صبح اونجا بودم.",

@@ -1,5 +1,6 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.71.0"
+VERSION = "1.72.0"
+# server 1.72.0: portrait lock removed, faces spread over all cases (18 Nov 2026)
 # server 1.71.0: nightly cases c077, c078 (17 Nov 2026)
 # server 1.70.0: admin panel back to the table look, menu at the top (17 Nov 2026)
 # server 1.69.0: eight leagues (migration 0039 doubles stored league indexes), weekly prizes 60/40/25 per league (17 Nov 2026)
