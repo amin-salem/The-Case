@@ -13,7 +13,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 آذرکیش: c064, c064
 آذری: c033
 آذری‌نیا: w007
-آراسته: c047, c070
+آراسته: c047, c070, c085
 آرامش: c075
 آرمان: c002
 آریامنش: c080
@@ -61,7 +61,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 بهزاد فرخی: c020
 بهزادی: c077
 بهشتی: c056, c056
-بهنام: c043, c054
+بهنام: c043, c054, c086
 به‌آفرین: w009
 به‌آیین: w007
 تابان: c061
@@ -102,7 +102,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 دهقانی: c027
 راد: c029, w001
 رادفر: c075
-رادمنش: c004, w005
+رادمنش: c004, c086, w005
 رادمهر: c026
 رادکیش: w007
 راستی: c038
@@ -201,6 +201,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 فرخ‌داد: w009
 فرخ‌زاد: w008
 فرخ‌پی: c080
+فرزان: c086
 فرزان‌مهر: w009
 فرزان‌پور: c078
 فرنام: c077
@@ -254,7 +255,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 نادری: c012
 ناصر فاضلی: c029
 ناصری: c006, c021, c028, w004
-ناظمی: c063
+ناظمی: c063, c085, c085
 نامجو: c066
 نامدار: c056
 نامور: c060, w005
@@ -262,6 +263,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 نصیری: c012
 نظری: c030, c037, c039
 نقره‌کار: c047
+نقش‌بند: c085
 نوبهار: c077
 نوذری: w008
 نوروزی: c011, c033, w001
@@ -283,7 +285,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 هرمزی: c027
 همتی: w005
 هوشنگ وفایی: c016
-وثوق: c046
+وثوق: c046, c086
 ورجاوند: c076
 ورزنده: c071, c071
 وزیری: c058, c058
@@ -297,6 +299,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 پاکزاد: c020
 پاک‌نژاد: c078, c078
 پاک‌نیت: c047
+پایدار: c085
 پرتوی: c067
 پرند: w003
 پرنیان: c043
@@ -324,6 +327,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 کمالی: c029
 کنگی: c049
 کهربایی: c063
+کهن‌دل: c086
 کیارش امینی: c051
 کیافر: w007
 کیانفر: c081
@@ -370,7 +374,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 افسانه: c043, c080
 الهام: c051, c083
 امید: c030, c070, w002
-امیر: c008
+امیر: c008, c085
 امیرهوشنگ: c076
 انوشه: c079
 اهورا: w008
@@ -393,7 +397,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 بیتا: c065, c082
 بیژن: w005
 تارا: c074, w005
-ترانه: c056, w004
+ترانه: c056, c086, w004
 ترمه: c072
 تهمینه: c043, c082
 تورج: c046
@@ -416,7 +420,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 خسرو: c064
 خسروان: c061
 دارا: c067
-داریوش: c038, c054
+داریوش: c038, c054, c086
 داوود: c040
 دلارام: w007
 دکتر: c004, c005, c008, c009, c016, c024, c025, c028, c029, c033, c034, c036, c036, c040, c042, c044, c047, c050, c051, c051, c052, c052, c052, c057, c057, c083, w001, w004, w006
@@ -433,7 +437,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 روزبه: c057
 روشنک: c033, c080
 روژان: c073
-رویا: c005, w004
+رویا: c005, c085, w004
 زری: c011, c025
 زهرا: c015, c017
 زهره: c008, c029, c045
@@ -443,7 +447,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 سامان: c002, c045, c083, w004
 سامیار: c074
 سایه: c077
-ستاره: c063
+ستاره: c063, c086
 ستایش: w008
 سحر: c019, c060
 سعید: c021, c032
@@ -470,6 +474,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 شقایق: c067
 شمسی: c048
 شمیم: w008
+شهاب: c085
 شهرام: c002, c068
 شهرزاد: w009
 شهریار: c084
@@ -506,11 +511,11 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 فریار: w008
 فریبرز: c056
 فریده: c028, c068
-فریدون: w005
+فریدون: c086, w005
 فیروزه: c067
 قباد: c075
 قدسی: c065
-لادن: c053, w002
+لادن: c053, c085, w002
 لاله: c079, w005
 لیلا: c003, c014, c039, c077
 مازیار: c066
@@ -521,7 +526,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 محسن: c042, w003
 مرتضی: c021, c035
 مرجان: w005
-مریم: c022, c029, c037
+مریم: c022, c029, c037, c085
 مسعود: c013, c071
 مسیب: c047
 مش: c021
@@ -581,7 +586,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 هوتن: c081
 هوشنگ: c059, w001
 هوشیار: w008
-هومن: c020
+هومن: c020, c086
 هیربد: w009
 وحید: c045, c069
 ویدا: c063

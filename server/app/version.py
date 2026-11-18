@@ -1,5 +1,6 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.75.0"
+VERSION = "1.76.0"
+# server 1.76.0: nightly cases c085, c086 (18 Nov 2026)
 # server 1.75.0: nightly cases c083, c084 (18 Nov 2026)
 # server 1.74.0: nightly cases c081, c082 (18 Nov 2026)
 # server 1.73.0: nightly cases c079, c080 (18 Nov 2026)

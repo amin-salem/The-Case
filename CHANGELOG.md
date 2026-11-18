@@ -1,3 +1,8 @@
+# server 1.76.0: nightly cases c085, c086 (18 Nov 2026)
+
+- Two new nightly cases from batch 3 of the idea bank: c085 «قاب رو به دیوار» (idea 3, style S2 impossible puzzle, puzzle type 16, villa_rain / family, difficulty 5, publish 22 Dec 2026) and c086 «سوت باغ شیشه‌ای» (idea 4, style S3 seemingly supernatural, puzzle type 13, lab / science, difficulty 5, publish 23 Dec 2026)
+- Blind tests: c085 ~85%, c086 ~93%; no single card decides. Findings fixed in one round (see `docs/case-log.md`). Case-count tests are 86; the per-scene cap stays 6 (lab and villa_rain are now at it).
+
 # server 1.75.0: nightly cases c083, c084 (18 Nov 2026)
 
 - Two new nightly cases from batch 3 of the idea bank: c083 «نوبتی که نرسید» (idea 1, classic style, puzzle type 12, hospital / medical, difficulty 5, publish 20 Dec 2026) and c084 «برگه‌ی شماره‌ی پنج» (idea 2, style S1 cold case, puzzle type 17, school / art, difficulty 5, publish 21 Dec 2026).
