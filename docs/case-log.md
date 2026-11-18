@@ -460,3 +460,13 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 
 - Plan: docs/reviews/c079-c080-plan.md. Name changes: c079 انوشه رهی -> انوشه نیک‌فر (Shahrokh's sister); c080 فرشته نیک‌اندیش -> فرشته کامیارپور, age 62 -> 56 (Roshanak's sister).
 - Fixed after the tests (one round, chains unchanged, no retest): c079 (intro times vs the 11:27 photo, Shahrokh's print line, why he stayed at the lift, Laleh's corridor times, Bahareh and the cash rule, who could reach the stand); c080 (Afsaneh's print line, question wording author vs assembler, Behdad's surface motive, passed deadline, Afsaneh's times, Behdad's camera/print lines).
+
+
+### 2026-11-18 nightly (Sonnet coordinator, Opus writer): c081, c082 from the idea bank (batch 1 ideas 29, 30)
+| id | publish | idea / style / type | culprit | result |
+|---|---|---|---|---|
+| c081 «رزرو به نام مهمان» | 2026-12-18 | batch 1 idea #29, style classic, puzzle type 4 (kitchen / business), difficulty 5 | s3 هوتن کیانفر | blind test 85-90%; no single card decides |
+| c082 «نور زیرِ اسکله» | 2026-12-19 | batch 1 idea #30, style S3, puzzle type 1 (harbor / crime), difficulty 5, شکل شب: ظاهراً ماورایی | s5 فرخ پارسامهر | blind test 90%; no single card decides |
+
+- Plan: docs/reviews/c081-c082-plan.md. Name changes: c081 کیافر -> کیانفر (surname used in w007); c082 گودرز ساحلی -> گودرز دریابان (Tahmineh's brother).
+- Fixed after the tests (one round, chains unchanged, no retest): c081 (timed send of the message and carry route, coat, bank call, cloakroom door, others in the window, heater and terrace lines, signed agreement shown); c082 (hatch checklist, tide and exit, lowering the crate, plate weight, sack left, porter named, Bita's shifts, Gudarz night-line report, lantern, oil, month names, print lines).

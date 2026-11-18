@@ -1,3 +1,8 @@
+# server 1.74.0: nightly cases c081, c082 (18 Nov 2026)
+
+- Two new nightly cases from the idea bank: c081 «رزرو به نام مهمان» (idea 29, classic style, puzzle type 4 wrong victim, kitchen / business, difficulty 5, publish 18 Dec 2026) and c082 «نور زیرِ اسکله» (idea 30, style S3 seemingly supernatural, puzzle type 1 guilty knowledge, harbor / crime, difficulty 5, publish 19 Dec 2026), with their notify entries. Content only, no migration.
+- Blind tests: c081 85-90%, c082 90%; no single card decides. All findings fixed in one round (see `docs/case-log.md`). Case-count tests are 82.
+
 # server 1.73.0: nightly cases c079, c080 (18 Nov 2026)
 
 - Two new nightly cases from the idea bank: c079 «صندوقِ خروج اضطراری» (idea 27, style S7 crime inside a crisis, puzzle type 11, subway / medical, difficulty 5, publish 16 Dec 2026) and c080 «نامِ مستعارِ شاهد» (idea 28, style S5 documents, puzzle type 2, library / crime, difficulty 5, publish 17 Dec 2026).
