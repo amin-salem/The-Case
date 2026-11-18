@@ -451,3 +451,12 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 ### 2026-11-17 intro01 «انگشترِ لبِ پنجره» (free first case, written by Opus)
 - Sweet shop on Yalda night, culprit s3 تیرداد کلانتری (cashier, nephew), difficulty 2, proof e2 e4 e5. Chain: ring seen 17:06, taken 17:10 from inside the kitchen (e2) -> only the back door and the curtain lead in (e1) -> cook outside at the cart, courier at a customer's door (e2, e3) -> counter empty 17:08-17:11 and the cashier comes out of the curtain with powdery white fingertips (e4) -> ring in the powdered-sugar tin, scoop clean, sink trap empty (e5).
 - Blind tests: 93% and 95%, no single card decides. Wrong: white fingertips could be flour. Fixed: e4 now says powdery, not flour-like. Resolved.
+
+### 2026-11-18 nightly (Sonnet coordinator, Opus writer): c079, c080 from the idea bank (batch 1 ideas 27, 28)
+| id | publish | idea / style / type | culprit | result |
+|---|---|---|---|---|
+| c079 «صندوقِ خروج اضطراری» | 2026-12-16 | batch 1 idea #27, style S7, puzzle type 11 (subway / medical), difficulty 5, شکل شب: جرم در دل بحران | s2 شاهرخ نیک‌فر | blind test 90%; no single card decides |
+| c080 «نامِ مستعارِ شاهد» | 2026-12-17 | batch 1 idea #28, style S5, puzzle type 2 (library / crime), difficulty 5, شکل شب: پرونده‌ی اسنادی | s4 بهداد آریامنش | blind test 93%; no single card decides |
+
+- Plan: docs/reviews/c079-c080-plan.md. Name changes: c079 انوشه رهی -> انوشه نیک‌فر (Shahrokh's sister); c080 فرشته نیک‌اندیش -> فرشته کامیارپور, age 62 -> 56 (Roshanak's sister).
+- Fixed after the tests (one round, chains unchanged, no retest): c079 (intro times vs the 11:27 photo, Shahrokh's print line, why he stayed at the lift, Laleh's corridor times, Bahareh and the cash rule, who could reach the stand); c080 (Afsaneh's print line, question wording author vs assembler, Behdad's surface motive, passed deadline, Afsaneh's times, Behdad's camera/print lines).

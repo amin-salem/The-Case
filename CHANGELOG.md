@@ -1,3 +1,8 @@
+# server 1.73.0: nightly cases c079, c080 (18 Nov 2026)
+
+- Two new nightly cases from the idea bank: c079 «صندوقِ خروج اضطراری» (idea 27, style S7 crime inside a crisis, puzzle type 11, subway / medical, difficulty 5, publish 16 Dec 2026) and c080 «نامِ مستعارِ شاهد» (idea 28, style S5 documents, puzzle type 2, library / crime, difficulty 5, publish 17 Dec 2026).
+- Blind tests: c079 90%, c080 93%; no single card decides. All findings fixed in one round (see `docs/case-log.md`). Case-count tests are 80.
+
 # server 1.72.0: faces spread over all cases, portrait lock removed (18 Nov 2026)
 
 - Lock: `docs/portrait-release.json` rows now carry `first_build` 99 / `usable_from` 2026-11-18 (Amin raised the minimum app version), and the date check is removed from `tools/art_rules.available`, `test_case_uses_only_portraits_players_have` and `check_case.py`. A face with no recorded build is still refused.
