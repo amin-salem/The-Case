@@ -104,7 +104,7 @@
    "avatar": {
     "gender": "f",
     "age": "young",
-    "skin": 4,
+    "skin": 3,
     "hair": "hijab",
     "hairColor": "#141010",
     "beard": "none",
@@ -148,7 +148,7 @@
     "skin": 2,
     "hair": "short",
     "hairColor": "#3a3430",
-    "beard": "beard",
+    "beard": "full",
     "glasses": false,
     "outfit": "#3a3a44",
     "accessory": "none",
