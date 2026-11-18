@@ -1,3 +1,7 @@
+# server 1.77.1: real pictures for «شکار سه‌روزه» h001 (18 Nov 2026)
+
+- Cover, killer photo, lantern, tripod, invoices and old file now show real pictures (served by the server, no new APK). `howzkhaneh` and `ending` are on the server for later use; the map is still the drawn one.
+
 # server 1.77.0 + game build 100 (1.47.0, test APK, not for Bazaar): «شکار سه‌روزه» test, testers only (18 Nov 2026)
 
 - New special-case format played in real time over 47 hours: 8 suspects, one leaves town every 6 hours (gone for good), six evidence drops on a schedule, the killer writes from the victim's phone, one accusation (suspect + the evidence that proves it). The share of detectives who found the killer by the deadline decides the ending. First hunt: h001 «شمع‌ها که خاموش شد» (Kashan).
