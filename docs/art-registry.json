@@ -9151,6 +9151,214 @@
       "restrictions": [
         "Atmosphere only, not evidence. No active scene mapping before application support and release."
       ]
+    },
+    {
+      "id": "hunt_kashan_cover",
+      "path": "app/assets/hunt/cover.webp",
+      "kind": "hunt",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 116062,
+      "sha256": "c00eb057674087710aed39d8830ea6b0aabfdfaee0adc71f6f1e29818f4debea",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Prepared assets only; no case or UI mapping added. Release availability must be confirmed before activation."
+      ],
+      "visual_review": {
+        "date": "2026-11-18",
+        "status": "reviewed",
+        "method": "Visual inspection of generated originals and decoded final WebP contact sheet; no people, human shadows, body parts, corpses, blood, readable text, digits or logos observed."
+      },
+      "encoding": {
+        "format": "WebP",
+        "quality": 80,
+        "method": 6
+      }
+    },
+    {
+      "id": "hunt_kashan_killer_photo",
+      "path": "app/assets/hunt/killer_photo.webp",
+      "kind": "hunt",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "size_bytes": 92096,
+      "sha256": "c2a4940f8bbfebd713c90143f2a32a9fa6ec3af645b2d9d0b902ee2e1d35d10a",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Prepared assets only; no case or UI mapping added. Release availability must be confirmed before activation."
+      ],
+      "visual_review": {
+        "date": "2026-11-18",
+        "status": "reviewed",
+        "method": "Visual inspection of generated originals and decoded final WebP contact sheet; no people, human shadows, body parts, corpses, blood, readable text, digits or logos observed."
+      },
+      "encoding": {
+        "format": "WebP",
+        "quality": 80,
+        "method": 6
+      }
+    },
+    {
+      "id": "hunt_kashan_howzkhaneh",
+      "path": "app/assets/hunt/howzkhaneh.webp",
+      "kind": "hunt",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 97846,
+      "sha256": "299551131e8f13299c7356f99a1e21324c637123b90b5eaf32ee0a11846c9a3f",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Prepared assets only; no case or UI mapping added. Release availability must be confirmed before activation."
+      ],
+      "visual_review": {
+        "date": "2026-11-18",
+        "status": "reviewed",
+        "method": "Visual inspection of generated originals and decoded final WebP contact sheet; no people, human shadows, body parts, corpses, blood, readable text, digits or logos observed."
+      },
+      "encoding": {
+        "format": "WebP",
+        "quality": 80,
+        "method": 6
+      }
+    },
+    {
+      "id": "hunt_kashan_ev_lantern",
+      "path": "app/assets/hunt/ev_lantern.webp",
+      "kind": "hunt",
+      "dimensions": [
+        768,
+        768
+      ],
+      "size_bytes": 59196,
+      "sha256": "6894e08c02e76f3cae8e4ad99f6f0fccf5779a003a9a3c828fb1d35307585543",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Prepared assets only; no case or UI mapping added. Release availability must be confirmed before activation."
+      ],
+      "visual_review": {
+        "date": "2026-11-18",
+        "status": "reviewed",
+        "method": "Visual inspection of generated originals and decoded final WebP contact sheet; no people, human shadows, body parts, corpses, blood, readable text, digits or logos observed."
+      },
+      "encoding": {
+        "format": "WebP",
+        "quality": 80,
+        "method": 6
+      }
+    },
+    {
+      "id": "hunt_kashan_ev_tripod",
+      "path": "app/assets/hunt/ev_tripod.webp",
+      "kind": "hunt",
+      "dimensions": [
+        768,
+        768
+      ],
+      "size_bytes": 116682,
+      "sha256": "3e46e2899731d318c4d57677718baebc0be776c2df4821ce2c057367f9117a02",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Prepared assets only; no case or UI mapping added. Release availability must be confirmed before activation."
+      ],
+      "visual_review": {
+        "date": "2026-11-18",
+        "status": "reviewed",
+        "method": "Visual inspection of generated originals and decoded final WebP contact sheet; no people, human shadows, body parts, corpses, blood, readable text, digits or logos observed."
+      },
+      "encoding": {
+        "format": "WebP",
+        "quality": 80,
+        "method": 6
+      }
+    },
+    {
+      "id": "hunt_kashan_ev_invoices",
+      "path": "app/assets/hunt/ev_invoices.webp",
+      "kind": "hunt",
+      "dimensions": [
+        768,
+        768
+      ],
+      "size_bytes": 53042,
+      "sha256": "ac2af0686e434d0f401e4f0a6e162dfebab1fbd2a53d1af8ec222f6cc6fa6f24",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Prepared assets only; no case or UI mapping added. Release availability must be confirmed before activation."
+      ],
+      "visual_review": {
+        "date": "2026-11-18",
+        "status": "reviewed",
+        "method": "Visual inspection of generated originals and decoded final WebP contact sheet; no people, human shadows, body parts, corpses, blood, readable text, digits or logos observed."
+      },
+      "encoding": {
+        "format": "WebP",
+        "quality": 80,
+        "method": 6
+      }
+    },
+    {
+      "id": "hunt_kashan_ev_oldfile",
+      "path": "app/assets/hunt/ev_oldfile.webp",
+      "kind": "hunt",
+      "dimensions": [
+        768,
+        768
+      ],
+      "size_bytes": 69198,
+      "sha256": "c58e887d28b23e412d004b125e38214c5281b2cc6872aa11b3bd6ed95fe1d5e6",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Prepared assets only; no case or UI mapping added. Release availability must be confirmed before activation."
+      ],
+      "visual_review": {
+        "date": "2026-11-18",
+        "status": "reviewed",
+        "method": "Visual inspection of generated originals and decoded final WebP contact sheet; no people, human shadows, body parts, corpses, blood, readable text, digits or logos observed."
+      },
+      "encoding": {
+        "format": "WebP",
+        "quality": 80,
+        "method": 6
+      }
+    },
+    {
+      "id": "hunt_kashan_ending",
+      "path": "app/assets/hunt/ending.webp",
+      "kind": "hunt",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "size_bytes": 64042,
+      "sha256": "99bc4901c544ef7144f352a0cbfdb3300681e9495171d2f52743ddede0083607",
+      "first_build": null,
+      "usable_from": null,
+      "restrictions": [
+        "Prepared assets only; no case or UI mapping added. Release availability must be confirmed before activation."
+      ],
+      "visual_review": {
+        "date": "2026-11-18",
+        "status": "reviewed",
+        "method": "Visual inspection of generated originals and decoded final WebP contact sheet; no people, human shadows, body parts, corpses, blood, readable text, digits or logos observed."
+      },
+      "encoding": {
+        "format": "WebP",
+        "quality": 80,
+        "method": 6
+      }
     }
   ],
   "head_covering_visual_audit": [
