@@ -1,4 +1,4 @@
-# server 1.77.0 + game APK: «شکار سه‌روزه» test, testers only (18 Nov 2026)
+# server 1.77.0 + game build 100 (1.47.0, test APK, not for Bazaar): «شکار سه‌روزه» test, testers only (18 Nov 2026)
 
 - New special-case format played in real time over 47 hours: 8 suspects, one leaves town every 6 hours (gone for good), six evidence drops on a schedule, the killer writes from the victim's phone, one accusation (suspect + the evidence that proves it). The share of detectives who found the killer by the deadline decides the ending. First hunt: h001 «شمع‌ها که خاموش شد» (Kashan).
 - Server: `app/hunt.py`, `/v1/hunt` (+ `/hold`, `/early`, `/accuse`, rate limits accuse / wallet), table `hunt_states` (migration 0040), remote config key `hunt` (audience off / testers / all, start, speed), pictures at `/hunt-img/<hunt>/<name>.webp` (a picture is offered only when its file exists). The answer never leaves the server before the player accused or the hunt ended.
