@@ -47,9 +47,9 @@ const ColorFilter _grey = ColorFilter.matrix(<double>[
 const Map<String, String> _errors = {
   'gone': 'این مظنون از شهر رفته.',
   'already_held': 'این مظنون یک بار نگه داشته شده.',
-  'already_accused': 'یک بار متهم کرده‌ای.',
+  'already_accused': 'یه بار متهم کردی.',
   'no_evidence': 'این مدرک هنوز دستت نرسیده.',
-  'hunt_over': 'وقت شکار تمام شده.',
+  'hunt_over': 'وقت شکار تموم شده.',
   'not_started': 'شکار هنوز شروع نشده.',
   'nothing_left': 'همه‌ی مدارک باز شده.',
 };
@@ -68,7 +68,7 @@ class HuntEntryCard extends StatelessWidget {
         ? 'شروع: ${huntWhen(_int(hunt['starts_at']))}'
         : status == 'ended'
             ? 'نتیجه اعلام شد'
-            : 'تا ${huntWhen(_int(hunt['deadline_at']))} · ${fa(_int((hunt['collective'] as Map?)?['pct']))}٪ پیدایش کرده‌اند';
+            : 'تا ${huntWhen(_int(hunt['deadline_at']))} · ${fa(_int((hunt['collective'] as Map?)?['pct']))}٪ پیداش کردن';
     return GestureDetector(
       key: const ValueKey('hunt-entry'),
       onTap: onOpen,
@@ -299,7 +299,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
         for (final r in (j['rules'] as List? ?? const []))
           if (r is List && r.length == 2) _RuleRow(kind: '${r[0]}', text: '${r[1]}'),
         const SizedBox(height: 10),
-        StampButton(label: 'پرونده را باز کن', icon: Icons.search_rounded, color: K.brass, onTap: () => Navigator.pop(ctx)),
+        StampButton(label: 'پرونده رو باز کن', icon: Icons.search_rounded, color: K.brass, onTap: () => Navigator.pop(ctx)),
       ]),
     );
   }
@@ -364,7 +364,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
           _CoinChip(coins: Api.i.coins),
           const SizedBox(width: 12),
           Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Text(j['status'] == 'ended' ? 'تمام شد' : 'تا قتل بعدی', style: tBody(11, color: K.textSoft)),
+            Text(j['status'] == 'ended' ? 'تموم شد' : 'تا قتل بعدی', style: tBody(11, color: K.textSoft)),
             Text(j['status'] == 'ended' ? '—' : _hm(left), style: tDisplay(18, color: K.stamp)),
           ]),
         ]),
@@ -376,7 +376,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
               Expanded(
                 child: Text.rich(TextSpan(children: [
                   TextSpan(text: '${fa(pct)}٪', style: tBody(14, w: FontWeight.w900)),
-                  TextSpan(text: ' از ${fa(_int((j['collective'] as Map?)?['players']))} کارآگاه پیدایش کرده‌اند', style: tBody(12, color: K.textSoft)),
+                  TextSpan(text: ' از ${fa(_int((j['collective'] as Map?)?['players']))} کارآگاه پیداش کردن', style: tBody(12, color: K.textSoft)),
                 ])),
               ),
               TextButton(onPressed: _invite, child: Text('دعوت', style: tBody(12.5, color: K.clue, w: FontWeight.w900))),
@@ -615,7 +615,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
               gone
                   ? 'از شهر رفته.'
                   : leaveAt is num
-                      ? 'می‌رود: ${huntWhen(leaveAt.toInt())} · ${s['why']}'
+                      ? 'می‌ره: ${huntWhen(leaveAt.toInt())} · ${s['why']}'
                       : '${s['why']}',
               style: tBody(13, color: K.textSoft),
             ),
@@ -639,7 +639,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
           const SizedBox(width: 8),
           Expanded(
             child: _SheetButton(
-              label: _crossed.contains(id) ? 'برگرداندن' : 'خط زدن',
+              label: _crossed.contains(id) ? 'برگردون' : 'خط بزن',
               color: K.night3,
               onTap: () {
                 Navigator.pop(ctx);
@@ -661,7 +661,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
         ),
         if (canHold) ...[
           const SizedBox(height: 10),
-          Text('منع خروج: ${fa(_int(j['hold_hours']))} ساعت بیشتر در شهر می‌ماند.', style: tBody(12, color: K.textSoft)),
+          Text('منع خروج: ${fa(_int(j['hold_hours']))} ساعت بیشتر تو شهر می‌مونه.', style: tBody(12, color: K.textSoft)),
         ],
       ]),
     );
@@ -772,8 +772,8 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
       builder: (ctx) => StatefulBuilder(builder: (ctx, set) {
         final name = who == null ? null : '${_suspects.firstWhere((s) => s['id'] == who)['name']}';
         return _Sheet(children: [
-          Text('چه کسی؟', style: tDisplay(18)),
-          Text('فقط یک بار. کسی که رفته را نمی‌شود متهم کرد.', style: tBody(12.5, color: K.textSoft)),
+          Text('کی؟', style: tDisplay(18)),
+          Text('فقط یه بار. کسی که رفته رو نمی‌شه متهم کرد.', style: tBody(12.5, color: K.textSoft)),
           const SizedBox(height: 10),
           GridView.count(
             crossAxisCount: 4,
@@ -804,7 +804,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
           ),
           const SizedBox(height: 14),
           Text('چطور فهمیدی؟', style: tDisplay(18)),
-          Text('مدرکی که دروغش را رو می‌کند.', style: tBody(12.5, color: K.textSoft)),
+          Text('مدرکی که دستش رو رو می‌کنه.', style: tBody(12.5, color: K.textSoft)),
           const SizedBox(height: 8),
           for (final it in items)
             Padding(
@@ -825,7 +825,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
             ),
           const SizedBox(height: 8),
           StampButton(
-            label: name == null ? 'متهم کن' : '$name را متهم کن',
+            label: name == null ? 'متهم کن' : '$name رو متهم کن',
             icon: Icons.gavel_rounded,
             onTap: who != null && key != null ? () => Navigator.pop(ctx, (who!, key!)) : null,
           ),
@@ -856,7 +856,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
                   : ColorFiltered(colorFilter: _grey, child: SuspectPortrait(AvatarSpec({'portrait': s['portrait']}), size: 110, circle: true)),
             ),
             const SizedBox(height: 10),
-            Text(ok ? 'درست گرفتی.' : 'او نبود.', style: tDisplay(26)),
+            Text(ok ? 'درست گرفتی.' : 'اون نبود.', style: tDisplay(26)),
             Row(mainAxisSize: MainAxisSize.min, children: [
               for (int i = 1; i <= 3; i++) Icon(Icons.star_rounded, size: 34, color: i <= stars ? K.brass : K.night3),
             ]),
@@ -864,18 +864,18 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
             Text(
               ok
                   ? (stars == 3
-                      ? 'پیش از عکس‌ها فهمیدی. کمتر کارآگاهی این کار را کرد.'
+                      ? 'قبل از عکس‌ها فهمیدی. کمتر کارآگاهی این کارو کرد.'
                       : stars == 2
                           ? 'با عکس‌ها فهمیدی.'
                           : 'آدمش درست بود، دلیلت نه.')
-                  : 'پرونده برای تو بسته شد. جواب ${huntWhen(_int(j['deadline_at']))} اعلام می‌شود.',
+                  : 'پرونده برای تو بسته شد. جواب ${huntWhen(_int(j['deadline_at']))} اعلام می‌شه.',
               textAlign: TextAlign.center,
               style: tBody(13.5, color: K.textSoft),
             ),
             if (reward > 0) Text('+${fa(reward)} سکه', style: tBody(15, color: K.brass, w: FontWeight.w900)),
             if (ok) ...[
               const SizedBox(height: 10),
-              Text('حالا بقیه باید برسند. هر کارآگاهی که دعوت کنی و حلش کند، به ${fa(_threshold)}٪ نزدیک‌ترمان می‌کند.',
+              Text('حالا بقیه باید برسن. هر کارآگاهی که دعوت کنی و حلش کنه، ما رو به ${fa(_threshold)}٪ نزدیک‌تر می‌کنه.',
                   textAlign: TextAlign.center, style: tBody(12.5, color: K.textSoft)),
               const SizedBox(height: 12),
               StampButton(label: 'دعوت کارآگاه', icon: Icons.person_add_alt_1_rounded, color: K.brass, onTap: _invite),
@@ -919,12 +919,12 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
     final lines = (e['lines'] as List? ?? const []).map((x) => '$x').toList();
     String myLine;
     if (mine == null) {
-      myLine = 'کسی را متهم نکردی.';
+      myLine = 'کسی رو متهم نکردی.';
     } else if (mine['solved'] == true) {
       myLine = 'تو درست گرفته بودی · ${'★' * _int(mine['stars'])}';
     } else {
       final s = _suspects.firstWhere((x) => x['id'] == mine['suspect'], orElse: () => <String, dynamic>{'name': ''});
-      myLine = 'تو ${s['name']} را متهم کرده بودی.';
+      myLine = 'تو ${s['name']} رو متهم کرده بودی.';
     }
     return ListView(padding: const EdgeInsets.fromLTRB(8, 8, 16, 32), children: [
       Align(alignment: AlignmentDirectional.centerStart, child: _backButton()),
@@ -933,7 +933,7 @@ class _HuntScreenState extends State<HuntScreen> with WidgetsBindingObserver {
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Text('نتیجه‌ی ${j['kicker']}', textAlign: TextAlign.center, style: tBody(12, color: K.kraft, w: FontWeight.w900)),
           const SizedBox(height: 6),
-          Text('${fa(_pct)}٪ کارآگاه‌ها\n${e['culprit_name']} را نشان دادند.', textAlign: TextAlign.center, style: tDisplay(26)),
+          Text('${fa(_pct)}٪ کارآگاه‌ها\n${e['culprit_name']} رو نشون دادن.', textAlign: TextAlign.center, style: tDisplay(26)),
           const SizedBox(height: 6),
           Text(myLine, textAlign: TextAlign.center, style: tBody(13.5, color: K.textSoft)),
           const SizedBox(height: 14),

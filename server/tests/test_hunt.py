@@ -39,7 +39,7 @@ async def configure(client, audience="testers"):
     assert r.status_code == 200, r.text
 
 
-async def tester(client, device):
+async def make_tester(client, device):
     p = await new_player(client, device, aged=True)
     r = await client.post(f"/admin/api/players/{p['player_id']}/tester", headers=ADMIN, json={"tester": True})
     assert r.status_code == 200, r.text
@@ -57,14 +57,14 @@ async def test_hidden_from_players_who_are_not_testers(client):
 
 
 async def test_off_by_default_even_for_testers(client):
-    p = await tester(client, "hunt-off-1")
+    p = await make_tester(client, "hunt-off-1")
     at_minute(10)
     assert (await client.get("/v1/hunt", headers=p["headers"])).json() == {"visible": False}
 
 
 async def test_scheduled_shows_no_suspects_or_evidence(client):
     await configure(client)
-    p = await tester(client, "hunt-sched-1")
+    p = await make_tester(client, "hunt-sched-1")
     at_minute(-30)
     j = (await client.get("/v1/hunt", headers=p["headers"])).json()
     assert j["status"] == "scheduled" and "suspects" not in j and "drops" not in j
@@ -72,7 +72,7 @@ async def test_scheduled_shows_no_suspects_or_evidence(client):
 
 async def test_timeline_and_no_answer_before_the_end(client):
     await configure(client)
-    p = await tester(client, "hunt-time-1")
+    p = await make_tester(client, "hunt-time-1")
     at_minute(11 * H + 1)
     j = (await client.get("/v1/hunt", headers=p["headers"])).json()
     gone = {s["id"] for s in j["suspects"] if s["gone"]}
@@ -87,7 +87,7 @@ async def test_timeline_and_no_answer_before_the_end(client):
 
 async def test_hold_costs_once_and_keeps_the_suspect(client):
     await configure(client)
-    p = await tester(client, "hunt-hold-1")
+    p = await make_tester(client, "hunt-hold-1")
     at_minute(5 * H)
     r = await client.post("/v1/hunt/hold", headers=p["headers"], json={"suspect": "s8"})
     assert r.status_code == 200, r.text
@@ -104,7 +104,7 @@ async def test_hold_costs_once_and_keeps_the_suspect(client):
 
 async def test_hold_without_coins_changes_nothing(client):
     await configure(client)
-    p = await tester(client, "hunt-poor-1")
+    p = await make_tester(client, "hunt-poor-1")
     await fund(p["player_id"], 10)
     at_minute(H)
     r = await client.post("/v1/hunt/hold", headers=p["headers"], json={"suspect": "s5"})
@@ -115,7 +115,7 @@ async def test_hold_without_coins_changes_nothing(client):
 
 async def test_early_opens_the_next_drop(client):
     await configure(client)
-    p = await tester(client, "hunt-early-1")
+    p = await make_tester(client, "hunt-early-1")
     at_minute(H)
     r = await client.post("/v1/hunt/early", headers=p["headers"])
     assert r.status_code == 200, r.text
@@ -126,7 +126,7 @@ async def test_early_opens_the_next_drop(client):
 
 async def test_accuse_once_with_visible_evidence(client):
     await configure(client)
-    p = await tester(client, "hunt-acc-1")
+    p = await make_tester(client, "hunt-acc-1")
     at_minute(18 * H)    # after Aghdas (Thursday 15:00): the tripod is visible, the photos are not
     hidden = await client.post("/v1/hunt/accuse", headers=p["headers"], json={"suspect": "s5", "evidence": "e_contact"})
     assert hidden.status_code == 409 and hidden.json()["detail"]["error"] == "no_evidence"
@@ -148,7 +148,7 @@ async def test_accuse_once_with_visible_evidence(client):
 
 async def test_wrong_accusation_pays_nothing_and_ending_comes_at_the_deadline(client):
     await configure(client)
-    p = await tester(client, "hunt-wrong-1")
+    p = await make_tester(client, "hunt-wrong-1")
     at_minute(20 * H)
     r = await client.post("/v1/hunt/accuse", headers=p["headers"], json={"suspect": "s4", "evidence": "e_check"})
     assert r.status_code == 200 and r.json()["mine"]["solved"] is False and r.json()["reward"] == 0
@@ -163,7 +163,7 @@ async def test_admin_card_and_reset(client):
     r = await client.post("/admin/api/hunt", headers=ADMIN, json={"audience": "testers", "start": str(START), "speed": 60})
     assert r.status_code == 200, r.text
     assert r.json()["config"]["speed"] == 60 and r.json()["config"]["starts_at"] == START
-    p = await tester(client, "hunt-admin-1")
+    p = await make_tester(client, "hunt-admin-1")
     at_minute(0)
     await client.get("/v1/hunt", headers=p["headers"])
     v = (await client.get("/admin/api/hunt", headers=ADMIN)).json()
