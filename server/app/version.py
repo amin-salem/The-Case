@@ -1,5 +1,6 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
-VERSION = "1.77.1"
+VERSION = "1.78.0"
+# server 1.78.0: nightly cases c087, c088 (19 Nov 2026)
 # server 1.77.1: real pictures for the hunt h001 (18 Nov 2026)
 # server 1.77.0: «شکار سه‌روزه» test (h001), testers only (18 Nov 2026)
 # server 1.76.0: nightly cases c085, c086 (18 Nov 2026)

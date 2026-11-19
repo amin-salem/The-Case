@@ -1,3 +1,7 @@
+# server 1.78.0: nightly cases c087, c088 (19 Nov 2026)
+
+- Two new nightly cases: c087 «ریاست بر صندلی تاشو» (publish 24 Dec 2026, difficulty 4) and c088 «سفری که کوتاه‌تر شد» (publish 25 Dec 2026, difficulty 5), with notify entries.
+
 # server 1.77.1: real pictures for «شکار سه‌روزه» h001 (18 Nov 2026)
 
 - Cover, killer photo, lantern, tripod, invoices and old file now show real pictures (served by the server, no new APK). `howzkhaneh` and `ending` are on the server for later use; the map is still the drawn one.

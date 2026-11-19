@@ -9,6 +9,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 آذرخش: c083
 آذرفر: c074
 آذرنوش: c055
+آذرپاد: c088, c088
 آذرپور: c059
 آذرکیش: c064, c064
 آذری: c033
@@ -18,6 +19,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 آرمان: c002
 آریامنش: c080
 آرین‌فر: c067
+آزرم: c087
 آشتیان: c079
 آشتیانی: c065, c065
 آقازاده: c004
@@ -84,10 +86,13 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 حمیدی: c004
 حکیمی: c041
 حیدری: c031, c036
+خجسته: c088
+خرسند: c087, c087
 خرم‌دل: c074
 خسروی: c030, c040
 خلیلی: c042
 خوشدل: c060
+دادخواه: c088
 دادرس: c062, c062
 دادفر: c053
 دادمهر: c073
@@ -138,6 +143,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 ساناز میرزایی: c042
 سبحانی: c053
 سرافراز: c043
+سرمد: c087
 سروش‌فر: w007
 سعیدی: c003
 سلطانی: c010, c023, c035, w006
@@ -243,6 +249,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 مهدوی: c063
 مهرآب: w008
 مهرآسا: c076
+مهرآور: c088
 مهرآیین: c078
 مهراسپ: w009
 مهرجو: c032, c043, c080
@@ -277,6 +284,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 نیک‌خواه: c058
 نیک‌روش: c065, c084, w006
 نیک‌روش‌فر: w009, w009
+نیک‌سیرت: c087
 نیک‌فر: c079, c079
 نیک‌نام: c005, c010, c013, c017
 نیک‌پور: c002
@@ -348,7 +356,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 آبتین: c056
 آذین: c076
 آرش: c010, c014, c022, c060, w002, w004
-آرمان: c018
+آرمان: c018, c088
 آرمین: c038, w007
 آریا: w007
 آزاده: c012, c062
@@ -427,7 +435,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 رادین: w009
 رافائل: c040
 رامتین: c075
-رامین: c046
+رامین: c046, c088
 رحیم: c001, c068
 رخشنده: c068
 رستم: c077
@@ -447,6 +455,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 سامان: c002, c045, c083, w004
 سامیار: c074
 سایه: c077
+ستار: c087
 ستاره: c063, c086
 ستایش: w008
 سحر: c019, c060
@@ -497,12 +506,13 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 غلامعلی: c049
 غلام‌رضا: c038
 فاطمه: c038
+فخری: c087
 فرامرز: c058
 فربد: c079
 فرخ: c082
 فرخنده: c076
 فرزام: c074
-فرزانه: c048
+فرزانه: c048, c088
 فرشاد: c070, w004
 فرشته: c008, c014, c021, c080
 فرشید: c003, c023, c064
@@ -521,6 +531,8 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 مازیار: c066
 مانی: c056
 ماهرخ: w008
+ماهیار: c087
+ماکان: c087
 مجتبی: c036
 مجید: c016, c059
 محسن: c042, w003
@@ -555,7 +567,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 میلاد: c017
 مینا: c019, c041
 مینو: c032
-نادر: c004, c010, c027, c041
+نادر: c004, c010, c027, c041, c088
 ناره: c040
 نازنین: c023
 ناصر: c033
@@ -570,7 +582,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 نوشین: c078
 نوید: c055
 نکیسا: c072
-نگار: c014, c036
+نگار: c014, c036, c088
 نگین: c044
 نیلوفر: c016, c030, w007
 نیما: c071, w001
@@ -600,6 +612,7 @@ Check one name: `python3 server/tools/case_index.py --find <name>`.
 پریسا: c028, c055, w001, w002, w005
 پریوش: c050, c072
 پریچهر: c073
+پوران: c087
 پوریا: c048
 پویا: c011, c069, w003
 پژمان: c034

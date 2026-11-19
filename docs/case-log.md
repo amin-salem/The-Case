@@ -480,3 +480,10 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 
 - Plans: docs/reviews/c085-plan.md, c086-plan.md. Renames vs the ideas: c085 house «سروستان» -> «خانه‌ی سروبن», مریم کیان‌فر -> مریم ناظمی, امیر یگانه -> امیر نقش‌بند, Roya is the cousin through the aunt (دخترعمه), the morning photo became Ladan's photo at 18:20 and the receipts were dropped; c086 نسیم بهنام -> ترانه بهنام, فریدون آذرخش -> فریدون کهن‌دل, the destroyed seeds became 48 tomato pots.
 - Fixed after the tests (one round, chains unchanged, no retest): c085 (the 20:10-20:12 trunk timing, Roya's frame at home disproved by a witness, cars not searched stated, buyer of frame 2 named, why the frame hangs 2 cm lower, letter back stated, Ladan's tool lines); c086 (name typo, yard time, Kohandel's visit time, blower washed and empty at 18:00, Farzan's rust-dusted forearm seen by Torane's colleague, clause 7 explained, Farzan's tool lines softened).
+
+### 2026-11-19 nightly (Sonnet coordinator, Opus writer): c087, c088 from the idea bank (batch 3 ideas 5, 6)
+| c087 «ریاست بر صندلی تاشو» | 2026-12-24 | batch3 idea #5, style S4, puzzle type 15, bazaar_night / business, difficulty 4, شکل شب: ریزنشانه‌محور | s3 ستار سرمد | blind test ~93%; no single card decides |
+| c088 «سفری که کوتاه‌تر شد» | 2026-12-25 | batch3 idea #6, style S5, puzzle type 3ج, airport / travel, difficulty 5, شکل شب: ترتیب‌محور | s3 فرزانه مهرآور | blind test ~88-90%; no single card decides |
+
+- Plans: docs/reviews/c087-plan.md, c088-plan.md. Renames vs the ideas: c087 جلال -> ستار سرمد, ناهید -> فخری خرسند, مسعود -> ماهیار خرسند, پیمان -> ماکان نیک‌سیرت, هما -> پوران آزرم; c088 فرزانه سپهری -> فرزانه مهرآور, بیتا -> نگار آذرپاد (sister of Ramin), the agency «گلبانگ».
+- Fixed after the tests (one round, chains unchanged, no retest): c087 (the credit-sale strip is now a checked lie via Mrs. Ghannadi's call, swap feasibility and timing, shutter, e9 ledgers used, Fakhri's times, tool lines); c088 (Farzaneh's tool lines no longer cancel each other, stapler in her room, sender of the 20 Azar email tied to her, blue cartons seen at 16:00, the 17:30 count on paper, filler tool lines).
