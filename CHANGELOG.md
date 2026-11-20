@@ -1,3 +1,7 @@
+# server 1.83.0: weekend case w013 (20 Nov 2026)
+
+- New weekend case w013 «بارِ صاحب‌ندار» (format 3, publish Thu 24 Dec 2026, difficulty 5), with notify entry and camera/print lines. Deploy the server from the Liara panel.
+
 # server 1.82.0: weekend case w011 (20 Nov 2026)
 
 - New weekend case w011 «پس از بسته‌شدن در» (format 3, publish Thu 17 Dec 2026, difficulty 5), with notify entry and camera/print lines. Deploy the server from the Liara panel.

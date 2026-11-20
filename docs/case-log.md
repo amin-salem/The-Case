@@ -509,3 +509,12 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Plan: docs/reviews/w011-plan.md. Name changes from the idea: ارغوان شایگان‌فر -> ارغوان دادآیین (siblings share a surname; «شایگان» is in c089), پریا مهرسا -> پریا مهرسان; non-suspect names new (منصور دادآیین, استاد نصرت زرین‌کوب, ویدا آذرمهر, کامبیز رهنورد, کیهان زربافت).
 - Clearing by forms: e14 (clockmaker's card) and e15 (Jahangir's copy of the pledge) only; the rest by objects, photos and people.
 - Still open for Amin: no scene image / art-registry entry for w011 (same as w010); no new portraits were needed.
+
+### 2026-11-20 weekend session (Sonnet coordinator, Opus writer): w013 from batch 3
+| w013 «بارِ صاحب‌ندار» (format 3) | 2026-12-24 | batch3 idea #43, style classic, puzzle type 9 (object biography), شکل شب: شیءمحور, harbor / business, difficulty 5 | s7 سیروس دادبه (m2) | day 1 (2 runs): Sirus 70-75% leaning, m2 80% then 45% after the motive rework (m1/m3 alive), no single card decides, difficulty 4; full (1 run): 93%, m2 85%, chapter-2 cards e12-e16 needed, no single card, difficulty 4 (field kept at 5); every finding fixed in three rounds (Farinaz's trip, Sirus's customer, captain, loose ends, wording, kinship, who sent the folder, triangle, trunk). Wording-only fixes of round 3 were not retested. |
+
+- Plan: docs/reviews/w013-plan.md. Name changes from the idea: کامران‌فر شکیبا -> سیروس دادبه, نگین -> نادیا دادبه (siblings), بهنام‌فر -> بابک جاوید, هوشنگیار -> ابراهیم رادپور, سهرابک -> صابر کاوندی, رامین‌مهر -> تورج سلیمی; فریناز مهرپویا and آذرنوش بهروان kept.
+- Clearing by forms: only e2 (countersigned appraisal note) and partly e7; the rest by people and objects.
+- Publish 2026-12-24 = w011 + 7 days; w012 (idea #36) does not exist yet, so a later w012 will have to be dated by hand.
+- Still open for Amin: no scene image / art-registry entry for w013; portraits of s6 and s8 chosen from the existing pool.
+
