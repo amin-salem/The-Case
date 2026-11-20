@@ -487,3 +487,10 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 
 - Plans: docs/reviews/c087-plan.md, c088-plan.md. Renames vs the ideas: c087 جلال -> ستار سرمد, ناهید -> فخری خرسند, مسعود -> ماهیار خرسند, پیمان -> ماکان نیک‌سیرت, هما -> پوران آزرم; c088 فرزانه سپهری -> فرزانه مهرآور, بیتا -> نگار آذرپاد (sister of Ramin), the agency «گلبانگ».
 - Fixed after the tests (one round, chains unchanged, no retest): c087 (the credit-sale strip is now a checked lie via Mrs. Ghannadi's call, swap feasibility and timing, shutter, e9 ledgers used, Fakhri's times, tool lines); c088 (Farzaneh's tool lines no longer cancel each other, stapler in her room, sender of the 20 Azar email tied to her, blue cartons seen at 16:00, the 17:30 count on paper, filler tool lines).
+
+### 2026-11-20 nightly (Sonnet coordinator, Opus writer): c089, c090 from the idea bank (batch 3 ideas 7, 8)
+| c089 «گزارش مو به مو» | 2026-12-26 | batch3 idea #7, style S6, puzzle type 8الف, subway / crime, difficulty 4, شکل شب: بازجویی‌محور | s5 وحید شایگان | blind test ~93%; no single card decides |
+| c090 «آستین تاخورده» | 2026-12-27 | batch3 idea #8, style S7, puzzle type 14, warehouse / medical, difficulty 5, شکل شب: ریزنشانه‌محور | s5 شروین فروغی | blind test ~92%; no single card decides |
+
+- Plans: docs/reviews/c089-plan.md, c090-plan.md. Changes vs the ideas: c089 new title (the reporter stood at the door, not behind the pillar), احسان نیکزاد -> احسان فرهود (Mina's brother); c090 ages changed (Yalda 41, Nima 37, Mahtab 54).
+- Fixed after the tests (one round, chains unchanged, no retest): c089 (Katayoun's statement and answer now agree about who she saw leave, «ظهر» -> «عصر» for 16:20; the exam disagreement between Sohrab and Vahid is deliberate: his hidden recommendation); c090 (guard card times in order, officer's note no longer states the inference and says the sleeves were above the water). c089 difficulty set to 4 (tester rated 4, keeps the «mostly difficulty 4» test true).
