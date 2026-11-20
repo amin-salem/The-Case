@@ -502,3 +502,10 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Fixed after the tests (two rounds, chain unchanged, no retest): sweep/snow wording (e1/e5/e9), how the folder reached the props table, Toumaj's loan lie vs Kiana's cash answer, Parastoo's «تا جایی که می‌دونم», grand-niece renamed نگین (Samen/Samin clash), Mahtaj's half-rise, intro timing, the dress of a neighbour client (no loose «پ.»), Rana's alibi at the prompt desk, Afshin hears only the door click.
 - Still open for Amin: no scene image / art-registry entry for w010 (w007-w009 have staged scenes).
 
+
+### 2026-11-20 weekend session (coordinator, Opus writer): w011 from the idea bank
+| w011 «پس از بسته‌شدن در» (format 3) | 2026-12-17 | idea #35, style classic (no S-number), puzzle type 11 (villa_rain / family), difficulty 5 | s2 ارغوان دادآیین (m4) | day 1 (1 run + liar-question rewording): Arghavan 55% leaning, m4 55%, no single card decides, difficulty 4; full (3 runs): 92% then 85%, m4 90-95%, chapter-2 cards needed, no single card, difficulty 4 (field kept at 5); every finding fixed (clock 17:34/17:36, buyer call 17:10, weights with paper, independent alibi sources, Rasht 15 km, leftover names cleared, Vida note, Sepanta/Farid checks, tape/glue). Last weekend case of batch 1: idea bank used up. |
+
+- Plan: docs/reviews/w011-plan.md. Name changes from the idea: ارغوان شایگان‌فر -> ارغوان دادآیین (siblings share a surname; «شایگان» is in c089), پریا مهرسا -> پریا مهرسان; non-suspect names new (منصور دادآیین, استاد نصرت زرین‌کوب, ویدا آذرمهر, کامبیز رهنورد, کیهان زربافت).
+- Clearing by forms: e14 (clockmaker's card) and e15 (Jahangir's copy of the pledge) only; the rest by objects, photos and people.
+- Still open for Amin: no scene image / art-registry entry for w011 (same as w010); no new portraits were needed.

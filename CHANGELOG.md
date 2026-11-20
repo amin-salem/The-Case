@@ -1,3 +1,7 @@
+# server 1.82.0: weekend case w011 (20 Nov 2026)
+
+- New weekend case w011 «پس از بسته‌شدن در» (format 3, publish Thu 17 Dec 2026, difficulty 5), with notify entry and camera/print lines. Deploy the server from the Liara panel.
+
 # server 1.81.0 / app 1.48.0 build 101: «آخر هفته» tag on the weekly board, hunt parked (20 Nov 2026)
 
 - Weekly board rows carry `weekend: true` when the player solved this week's weekend case (same filters as the points: solved, ranked, finished before the week closed), and the app shows a small «آخر هفته» tag on the row and on the podium. The weekend stars already counted in the weekly points (tests in `test_weekend_weekboard.py`); only the tag is new. One extra indexed query per board page, fails to «no tag».

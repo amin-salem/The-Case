@@ -4,7 +4,7 @@ Run `python3 server/tools/case_index.py` after adding or changing a case. One li
 puzzle type, culprit slot and portrait that the last cases did NOT use, and to find the next free slot. It carries no clue text
 and no solution. Names are in `docs/case-names.md`.
 
-Nightly cases: 90 (last: c090 published 2026-12-27). Weekend cases: 10 (last: w010 published 2026-12-10). Story chapters: 1.
+Nightly cases: 90 (last: c090 published 2026-12-27). Weekend cases: 11 (last: w011 published 2026-12-17). Story chapters: 1.
 
 ## Nightly
 
@@ -115,6 +115,7 @@ w007 | 2026-11-19 | 5 | hotel | art | جای سخنران | s5 آرمین رهی
 w008 | 2026-11-26 | 5 | harbor | business | قایقِ برگشت | s4 بهادر دریامنش (سرپرست کارگاه و نگهبان شب) | m_mid_guard | 8 | 13 | idea #32, style S7, puzzle type 9 (harbor / business), difficulty 5
 w009 | 2026-12-03 | 5 | lab | science | وزنه‌های سرِ جا | s6 کیانوش نیک‌روش‌فر (مسئول آزمون پذیرش) | m_old_professor | 8 | 14 | idea #33 (title was «سنگینیِ یک برچسب»), style S2, puzzle type 3c silent theft (lab / scie
 w010 | 2026-12-10 | 5 | theater | art | تشویق برای یک سکوت | s3 توماج روشن‌آرا (دستیار صحنه) | m_neutral_45_reserve22 | 8 | 15 | idea #34, style S6, puzzle type 8 (theater / art), difficulty 5
+w011 | 2026-12-17 | 5 | villa_rain | family | پس از بسته‌شدن در | s2 ارغوان دادآیین (مدیر تحویل؛ دختر منصور دادآیین) | f_neutral_43_reserve01 | 8 | 15 | idea #35, style classic (no S-number), puzzle type 11 (villa_rain / family), difficulty 5
 
 ## Story chapters
 
@@ -135,7 +136,7 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 
 ## Counts
 
-scenes: airport 5, bazaar_night 5, desert 4, harbor 5, hospital 6, hotel 4, kitchen 4, lab 7, library 6, museum 5, office 5, school 6, snow_lodge 4, subway 4, theater 5, tower 4, train 4, villa_rain 6, warehouse 5, wedding 6
-categories: art 17, business 15, crime 15, family 12, medical 11, science 14, travel 16
+scenes: airport 5, bazaar_night 5, desert 4, harbor 5, hospital 6, hotel 4, kitchen 4, lab 7, library 6, museum 5, office 5, school 6, snow_lodge 4, subway 4, theater 5, tower 4, train 4, villa_rain 7, warehouse 5, wedding 6
+categories: art 17, business 15, crime 15, family 13, medical 11, science 14, travel 16
 culprit slots (nightly): s1 18, s2 18, s3 19, s4 16, s5 19
 difficulty (nightly): 2 2, 3 4, 4 46, 5 38
