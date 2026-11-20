@@ -494,3 +494,11 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 
 - Plans: docs/reviews/c089-plan.md, c090-plan.md. Changes vs the ideas: c089 new title (the reporter stood at the door, not behind the pillar), احسان نیکزاد -> احسان فرهود (Mina's brother); c090 ages changed (Yalda 41, Nima 37, Mahtab 54).
 - Fixed after the tests (one round, chains unchanged, no retest): c089 (Katayoun's statement and answer now agree about who she saw leave, «ظهر» -> «عصر» for 16:20; the exam disagreement between Sohrab and Vahid is deliberate: his hidden recommendation); c090 (guard card times in order, officer's note no longer states the inference and says the sleeves were above the water). c089 difficulty set to 4 (tester rated 4, keeps the «mostly difficulty 4» test true).
+
+### 2026-11-20 weekend session (Sonnet coordinator, Opus writer): w010 from the idea bank
+| w010 «تشویق برای یک سکوت» (format 3) | 2026-12-10 | idea #34, style S6, puzzle type 8 (theater / art), difficulty 5 | s3 توماج روشن‌آرا (m3) | day 1: Toumaj ~60% leaning, Kiana found as liar (e9), no single card decides; full: 93%, m3 92%, chapter-2 cards needed, helper difficulty 4-5 |
+
+- Plan and revisions 1-2: docs/reviews/w010-plan.md. Name changes from the idea: شایسته -> مهتاج, یاسمن -> پرستو, مهرداد -> افشین, کیانا دادمهرپور -> فره‌مند (sisters), non-suspect names new.
+- Fixed after the tests (two rounds, chain unchanged, no retest): sweep/snow wording (e1/e5/e9), how the folder reached the props table, Toumaj's loan lie vs Kiana's cash answer, Parastoo's «تا جایی که می‌دونم», grand-niece renamed نگین (Samen/Samin clash), Mahtaj's half-rise, intro timing, the dress of a neighbour client (no loose «پ.»), Rana's alibi at the prompt desk, Afshin hears only the door click.
+- Still open for Amin: no scene image / art-registry entry for w010 (w007-w009 have staged scenes).
+

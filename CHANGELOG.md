@@ -1,3 +1,7 @@
+# server 1.80.0: weekend case w010 (20 Nov 2026)
+
+- New weekend case w010 «تشویق برای یک سکوت» (format 3, publish Thu 10 Dec 2026, difficulty 5), with notify entry and camera/print lines. Deploy the server from the Liara panel.
+
 # server 1.79.0: nightly cases c089, c090 (20 Nov 2026)
 
 - Two new nightly cases: c089 «گزارش مو به مو» (publish 26 Dec 2026, difficulty 4) and c090 «آستین تاخورده» (publish 27 Dec 2026, difficulty 5), with notify entries and camera/print lines. Case count tests now expect 90 cases. Deploy the server from the Liara panel.
