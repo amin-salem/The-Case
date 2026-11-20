@@ -1,3 +1,8 @@
+# server 1.81.0 / app 1.48.0 build 101: «آخر هفته» tag on the weekly board, hunt parked (20 Nov 2026)
+
+- Weekly board rows carry `weekend: true` when the player solved this week's weekend case (same filters as the points: solved, ranked, finished before the week closed), and the app shows a small «آخر هفته» tag on the row and on the podium. The weekend stars already counted in the weekly points (tests in `test_weekend_weekboard.py`); only the tag is new. One extra indexed query per board page, fails to «no tag».
+- «شکار سه‌روزه» is parked: the app no longer asks for it, shows no card and plans no notifications (build 101); `hunt_screen.dart` is kept as `docs/parked/hunt_screen.dart.txt`. The server code and admin card stay, the config stays `audience: off`. Phones with build 100 may still see it only if an admin sets the audience to testers/all.
+
 # server 1.80.0: weekend case w010 (20 Nov 2026)
 
 - New weekend case w010 «تشویق برای یک سکوت» (format 3, publish Thu 10 Dec 2026, difficulty 5), with notify entry and camera/print lines. Deploy the server from the Liara panel.

@@ -100,9 +100,10 @@ def leagues_on() -> bool:
     return bool(get_settings().leagues_enabled)
 
 
-def week_filters(ws: date):
-    """SQL conditions of "a CaseProgress row counts for week ws" (the shared definition)."""
-    ids = [c.id for c in content.week_cases(ws)] or ["-"]
+def week_filters(ws: date, only: list[str] | None = None):
+    """SQL conditions of "a CaseProgress row counts for week ws" (the shared definition). `only` narrows it to some of the
+    week's cases (the weekend tag); the solved/ranked/closing rules stay the same."""
+    ids = only if only is not None else [c.id for c in content.week_cases(ws)] or ["-"]
     close = gameclock.to_utc_naive(gameclock.week_end(ws))
     return [CaseProgress.case_id.in_(ids), CaseProgress.solved.is_(True), CaseProgress.ranked.is_(True),
             CaseProgress.finished_at.is_not(None), CaseProgress.finished_at < close]
@@ -211,6 +212,21 @@ async def my_standing(session: AsyncSession, ws: date, player: Player, league: i
         equal_so_far = eq if equal_so_far is None else (equal_so_far & eq)
     ahead = await session.scalar(select(func.count()).select_from(sub).where(better))
     return int(ahead or 0) + 1, pts
+
+
+async def weekend_solvers(session: AsyncSession, ws: date, player_ids: list[str]) -> set[str]:
+    """Who of `player_ids` solved this week's weekend case on the board's own terms (same filters as the points), for the
+    «آخر هفته» tag next to the nickname. One indexed query for at most one page of players; fails to «nobody» (the tag is a
+    decoration, a broken lookup must never take the board down)."""
+    wk = [c.id for c in content.week_cases(ws) if content.is_weekly(c.id)]
+    if not wk or not player_ids:
+        return set()
+    try:
+        q = select(CaseProgress.player_id).where(CaseProgress.player_id.in_(player_ids), *week_filters(ws, wk))
+        return set((await session.execute(q)).scalars().all())
+    except Exception:
+        log.warning("weekend_solvers failed week=%s", ws, exc_info=True)
+        return set()
 
 
 async def cached_rows(session: AsyncSession, ws: date, league: int | None, limit: int) -> list[dict]:

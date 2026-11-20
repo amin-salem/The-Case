@@ -492,7 +492,8 @@ class LeaderRow {
         me = _b(j['me']),
         rankTitle = _s(j['rank_title']),
         leagueName = _s(j['league_name']),
-        pid = _s(j['pid']);
+        pid = _s(j['pid']),
+        weekend = _b(j['weekend']);
   final int rank, avatar, value, stars, streak; // streak: the flame next to the name (0 = none)
   final String nickname, rankTitle, avatarId, avatarFrame;
   /// Opens the player sheet (`/v1/players/<pid>/card`); empty from an old server = the row is not tappable.
@@ -500,6 +501,8 @@ class LeaderRow {
   /// Weekly board: the league this row plays in this week (empty on old servers / other boards).
   final String leagueName;
   final bool me;
+  /// Weekly board: this player solved this week's weekend case (the small «آخر هفته» tag).
+  final bool weekend;
 }
 
 class Leaderboard {

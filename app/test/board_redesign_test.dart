@@ -14,7 +14,7 @@ import 'package:the_case/theme.dart';
 http.Response response(Object body, [int status = 200]) => http.Response.bytes(utf8.encode(jsonEncode(body)), status,
     headers: {'content-type': 'application/json; charset=utf-8'});
 
-Map<String, dynamic> row(int rank, {int value = 100, bool me = false, String pid = '', int stars = 3}) => {
+Map<String, dynamic> row(int rank, {int value = 100, bool me = false, String pid = '', int stars = 3, bool weekend = false}) => {
       'rank': rank,
       'nickname': 'کارآگاه$rank',
       'avatar': 0,
@@ -23,6 +23,7 @@ Map<String, dynamic> row(int rank, {int value = 100, bool me = false, String pid
       'me': me,
       'rank_title': 'بازرس',
       'pid': pid.isEmpty ? 'p$rank' : pid,
+      if (weekend) 'weekend': true,
     };
 
 Map<String, dynamic> dailyBoard({bool oldServer = false}) => {
@@ -139,6 +140,27 @@ void main() {
     expect(find.byKey(const ValueKey('time-4')), findsOneWidget);
     expect(find.text('۱۱:۴۰'), findsOneWidget);
     expect(find.text('۱۲:۱۳'), findsOneWidget);
+  });
+
+  testWidgets('weekly: the «آخر هفته» tag sits only on the rows that solved the weekend case', (t) async {
+    final b = {
+      'period': 'weekly',
+      'title': 'این هفته',
+      'top': [row(1, value: 9, weekend: true), row(2, value: 6), row(3, value: 5), row(4, value: 4, weekend: true), row(5, value: 3)],
+      'me': null,
+    };
+    server({'/v1/leaderboard': (_) => b});
+    await t.pumpWidget(host(const LeaderboardBoard('weekly')));
+    await pump(t);
+    expect(find.byKey(const ValueKey('weekend-tag-1')), findsOneWidget, reason: 'the podium shows it too');
+    expect(find.byKey(const ValueKey('weekend-tag-2')), findsNothing);
+    expect(find.byKey(const ValueKey('weekend-tag')), findsOneWidget, reason: 'a list row: only where the server says so');
+    final old = {...b, 'top': [for (var i = 1; i <= 5; i++) row(i, value: 10 - i)]};
+    server({'/v1/leaderboard': (_) => old});
+    await t.pumpWidget(host(const LeaderboardBoard('weekly')));
+    await pump(t);
+    expect(find.byKey(const ValueKey('weekend-tag')), findsNothing, reason: 'an old server sends no flag: no tag');
+    expect(find.byKey(const ValueKey('weekend-tag-1')), findsNothing);
   });
 
   testWidgets('the info sheet says how a tie on plaques is broken', (t) async {

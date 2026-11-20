@@ -182,9 +182,11 @@ async def _weekly(player: Player, league: int | None, limit: int, offset: int, s
     page = rows[offset:offset + limit] if offset < WEEKLY_WINDOW else []
     more = len(rows) > offset + limit and offset + limit < WEEKLY_WINDOW
     lname = weekboard.LEAGUES[shown] if shown is not None else ""
+    wk = await weekboard.weekend_solvers(session, ws, [r["id"] for r in page] + [player.id])
     out = [LeaderRow(rank=offset + i + 1, nickname=r["nickname"], avatar=r["avatar"], avatar_id=r["avatar_id"],
                      avatar_frame=r["avatar_frame"], streak=r.get("streak", 0), value=r["points"], stars=r["points"],
-                     me=r["id"] == player.id, rank_title=r["rank_title"], league_name=lname, pid=r["id"])
+                     me=r["id"] == player.id, rank_title=r["rank_title"], league_name=lname, pid=r["id"],
+                     weekend=r["id"] in wk)
            for i, r in enumerate(page)]
     me = next((r for r in out if r.me), None)
     gap = None
@@ -196,14 +198,14 @@ async def _weekly(player: Player, league: int | None, limit: int, offset: int, s
             if me is None:
                 me = LeaderRow(rank=rank, nickname=player.nickname, avatar=player.avatar, avatar_id=avatars.avatar_key(player),
                                avatar_frame=avatars.frame_key(player), streak=live.of(player), value=pts, stars=pts, me=True,
-                               rank_title=rank_title(player), league_name=lname, pid=player.id)
+                               rank_title=rank_title(player), league_name=lname, pid=player.id, weekend=player.id in wk)
         else:
             st = await weekboard.my_standing(session, ws, player, shown)
             rank, pts, above = (st[0], st[1], None) if st is not None else (0, 0, None)
             if st is not None:
                 me = LeaderRow(rank=rank, nickname=player.nickname, avatar=player.avatar, avatar_id=avatars.avatar_key(player),
                                avatar_frame=avatars.frame_key(player), streak=live.of(player), value=pts, stars=pts, me=True,
-                               rank_title=rank_title(player), league_name=lname, pid=player.id)
+                               rank_title=rank_title(player), league_name=lname, pid=player.id, weekend=player.id in wk)
                 if rank > 1:
                     prev = await weekboard.standings(session, ws, league=shown, limit=1, offset=rank - 2)
                     above = prev[0].points if prev else None

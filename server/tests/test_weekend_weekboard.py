@@ -134,3 +134,25 @@ def test_real_weekend_cases_are_in_their_publication_week():
         ws = content.case_week(weekend)
         assert weekend.id in {case.id for case in content.week_cases(ws)}
         assert weekend.id not in {case.id for case in content.week_cases(ws + timedelta(days=7))}
+
+
+async def test_weekend_tag_only_for_who_solved_the_weekend_case(client, monkeypatch, board_cases):
+    """The «آخر هفته» tag on the weekly board: the weekend case solved on the board's own terms, nothing else."""
+    monkeypatch.setattr(weekboard, "leagues_on", lambda: False)
+    a = await new_player(client, "weekend-tag-a", aged=True)
+    b = await new_player(client, "weekend-tag-b", aged=True)
+    await solve_case(client, a, board_cases.nightly)
+    await solve_case(client, b, board_cases.nightly)
+    first = await board(client, a)
+    assert not any(row["weekend"] for row in first["top"]) and first["me"]["weekend"] is False
+    await solve_case(client, a, board_cases.weekend)
+    monkeypatch.setattr(weekboard._boards, "clock", lambda: 200.0)  # a fresh board, not the warmed one
+    after = await board(client, a)
+    rows = {row["pid"]: row for row in after["top"]}
+    assert rows[a["player_id"]]["weekend"] is True and rows[a["player_id"]]["stars"] == 6
+    assert rows[b["player_id"]]["weekend"] is False and rows[b["player_id"]]["stars"] == 3
+    assert after["me"]["weekend"] is True
+    assert (await board(client, b))["me"]["weekend"] is False
+    async with db.SessionLocal() as session:
+        assert await weekboard.weekend_solvers(session, board_cases.ws, [a["player_id"], b["player_id"]]) == {a["player_id"]}
+        assert await weekboard.weekend_solvers(session, board_cases.ws, []) == set()

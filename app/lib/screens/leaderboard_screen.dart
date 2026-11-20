@@ -569,6 +569,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
               fit: BoxFit.scaleDown,
               child: Text(r.me ? 'تو' : r.nickname, maxLines: 1, textAlign: TextAlign.center, style: tBody(13.5, w: FontWeight.w900, color: K.text)),
             ),
+            if (r.weekend && _period == 'weekly') Padding(padding: const EdgeInsets.only(top: 3), child: _weekendTag(podium: rank)),
             SizedBox(
               height: _period == 'daily' ? 40 : 22,
               child: Center(
@@ -671,6 +672,14 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
     );
   }
 
+  /// «آخر هفته»: solved this week's weekend case (one small brass outline, no icon, no more words).
+  Widget _weekendTag({int? podium}) => Container(
+        key: ValueKey(podium == null ? 'weekend-tag' : 'weekend-tag-$podium'),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(99), border: Border.all(color: K.brass.withValues(alpha: 0.7))),
+        child: Text('آخر هفته', maxLines: 1, style: tBody(10.5, w: FontWeight.w900, color: K.brass)),
+      );
+
   Widget _row(LeaderRow r) {
     final daily = _period == 'daily';
     final content = Container(
@@ -695,8 +704,15 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
               ),
               if (r.streak >= 2) ...[const SizedBox(width: 6), StreakFlame(r.streak, size: 12)],
             ]),
-            if (r.rankTitle.isNotEmpty)
-              Text(r.rankTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, w: FontWeight.w700, color: const Color(0xFFA59C83))),
+            if (r.rankTitle.isNotEmpty || r.weekend)
+              Row(children: [
+                if (r.rankTitle.isNotEmpty)
+                  Flexible(child: Text(r.rankTitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, w: FontWeight.w700, color: const Color(0xFFA59C83)))),
+                if (r.weekend) ...[
+                  if (r.rankTitle.isNotEmpty) const SizedBox(width: 6),
+                  _weekendTag(),
+                ],
+              ]),
           ]),
         ),
         if (daily) _dailyEnd(r) else Text(_value(r), style: tBody(14, color: K.brass, w: FontWeight.w900)),

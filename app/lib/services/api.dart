@@ -866,32 +866,6 @@ class Api extends ChangeNotifier {
     return StoryMap(j.cast<String, dynamic>());
   }
 
-  // ---------------------------------------------------------------- «شکار سه‌روزه» (server app/hunt.py)
-
-  /// The hunt as the server sees it for this player, or null when there is none for him (hidden, off, offline).
-  Future<Map<String, dynamic>?> hunt() async {
-    try {
-      final j = await _call('GET', '/v1/hunt');
-      if (j is! Map || j['visible'] != true) return null;
-      final m = j.cast<String, dynamic>();
-      if (m['coins'] is int) _setCoins(m['coins'] as int);
-      return m;
-    } catch (e) {
-      debugPrint('hunt: $e');
-      return null;
-    }
-  }
-
-  /// «منع خروج» / «مدرک زودتر» / the accusation. Throws ApiException (not_enough_coins, gone, already_accused ...).
-  Future<Map<String, dynamic>> huntAction(String action, [Map<String, dynamic>? body]) async {
-    final j = (await _call('POST', '/v1/hunt/$action', body: body ?? const {}) as Map).cast<String, dynamic>();
-    if (j['coins'] is int) _setCoins(j['coins'] as int);
-    return j;
-  }
-
-  /// Full address of a hunt picture (served by the server, so new pictures need no new app).
-  String huntImage(String base, String name) => '$apiBase$base$name.webp';
-
   /// Returns (hint text, progress).
   Future<(String, Progress)> buyHint(String id) async {
     final j = (await _call('POST', '/v1/cases/$id/hint') as Map).cast<String, dynamic>();

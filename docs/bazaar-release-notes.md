@@ -283,3 +283,15 @@ Build 99
 
 ## developer_note
 Build 100
+
+<!-- build: 101 -->
+## changelog_fa
+- نمایش برچسب «آخر هفته» برای حل‌کنندگان پرونده آخر هفته در جدول هفتگی
+- بهبود پایداری برنامه
+
+## changelog_en
+- A weekend tag on the weekly board for players who solved the weekend case
+- Improved app stability
+
+## developer_note
+Build 101

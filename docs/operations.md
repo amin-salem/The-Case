@@ -1,5 +1,8 @@
 ## «شکار سه‌روزه» (18 Nov 2026, server 1.77.0)
 
+> **Parked (20 Nov 2026, Amin):** the app from build 101 has no hunt screen (`docs/parked/hunt_screen.dart.txt` keeps it). Only build 100 can show it. Keep the config on `audience: off`.
+
+
 - Admin panel → پرونده‌ها → «شکار سه‌روزه». Make yourself and friends testers first (player page → «تستر شود»).
 - «فقط تسترها» + «شروع از همین الان» starts the 47-hour hunt now; a real test is best started on a Wednesday at 22:00 Tehran (the story days then match). Speed ×12 / ×60 is only for a quick look; set it back to «زمان واقعی» and «پاک‌کردن بازی‌ها» before a real run.
 - Pictures: `server/app/content/hunts/h001/img/<name>.webp` (cover, killer_photo, howzkhaneh, ev_lantern, ev_tripod, ev_invoices, ev_oldfile, ending, map). A missing picture is simply not shown; adding one needs a server deploy, not a new APK.

@@ -324,6 +324,7 @@ class LeaderRow(BaseModel):
     rank_title: str = ""      # the player's CURRENT detective rank (same as the profile)
     league_name: str = ""     # weekly board: the league this row plays in this week (decided at the week's start)
     pid: str = ""             # opens the player sheet (GET /v1/players/{pid}/card); "" on old servers
+    weekend: bool = False     # weekly board: solved this week's weekend case (the «آخر هفته» tag)
 
 
 class LeagueInfo(BaseModel):
