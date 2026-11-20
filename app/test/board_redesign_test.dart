@@ -157,7 +157,8 @@ void main() {
     expect(find.byKey(const ValueKey('weekend-tag')), findsOneWidget, reason: 'a list row: only where the server says so');
     final old = {...b, 'top': [for (var i = 1; i <= 5; i++) row(i, value: 10 - i)]};
     server({'/v1/leaderboard': (_) => old});
-    await t.pumpWidget(host(const LeaderboardBoard('weekly')));
+    await t.pumpWidget(const SizedBox());
+    await t.pumpWidget(host(LeaderboardBoard('weekly', key: UniqueKey())));
     await pump(t);
     expect(find.byKey(const ValueKey('weekend-tag')), findsNothing, reason: 'an old server sends no flag: no tag');
     expect(find.byKey(const ValueKey('weekend-tag-1')), findsNothing);
