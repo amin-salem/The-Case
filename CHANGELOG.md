@@ -1,3 +1,7 @@
+# server 1.84.0: nightly cases c091, c092 (24 Nov 2026)
+
+- New nightly cases c091 «دسته‌ای که برگشت» (publish Mon 28 Dec 2026, difficulty 4) and c092 «اجاره برای یک غریبه» (publish Tue 29 Dec 2026, difficulty 5), with notify entries and camera/print lines. Deploy the server from the Liara panel.
+
 # server 1.83.0: weekend case w013 (20 Nov 2026)
 
 - New weekend case w013 «بارِ صاحب‌ندار» (format 3, publish Thu 24 Dec 2026, difficulty 5), with notify entry and camera/print lines. Deploy the server from the Liara panel.

@@ -4,7 +4,7 @@ Run `python3 server/tools/case_index.py` after adding or changing a case. One li
 puzzle type, culprit slot and portrait that the last cases did NOT use, and to find the next free slot. It carries no clue text
 and no solution. Names are in `docs/case-names.md`.
 
-Nightly cases: 90 (last: c090 published 2026-12-27). Weekend cases: 12 (last: w013 published 2026-12-24). Story chapters: 1.
+Nightly cases: 92 (last: c092 published 2026-12-29). Weekend cases: 12 (last: w013 published 2026-12-24). Story chapters: 1.
 
 ## Nightly
 
@@ -100,6 +100,8 @@ c087 | 2026-12-24 | 4 | bazaar_night | business | ریاست بر صندلی ت�
 c088 | 2026-12-25 | 5 | airport | travel | سفری که کوتاه‌تر شد | s3 فرزانه مهرآور (مدیر تور) | f_neutral_45_reserve02 | 5 | 10 | batch3 idea #6, style S5, puzzle type 3ج, airport / travel, difficulty 5, شکل شب: ترتیب‌مح
 c089 | 2026-12-26 | 4 | subway | crime | گزارش مو به مو | s5 وحید شایگان (مأمور تحویل) | m_neutral_48_reserve03 | 5 | 8 | batch3 idea #7, style S6, puzzle type 8الف, subway / crime, difficulty 4, شکل شب: بازجویی‌
 c090 | 2026-12-27 | 5 | warehouse | medical | آستین تاخورده | s5 شروین فروغی (مدیر انبار) | m_neutral_46_reserve04 | 5 | 9 | batch3 idea #8, style S7, puzzle type 14, warehouse / medical, difficulty 5, شکل شب: ریزنش
+c091 | 2026-12-28 | 4 | theater | art | دسته‌ای که برگشت | s4 خشایار فخاری (مدیر صحنه) | m_neutral_48_reserve15 | 5 | 9 | -
+c092 | 2026-12-29 | 5 | office | family | اجاره برای یک غریبه | s2 فرحناز مستشار (مدیر دفتر املاک) | f_neutral_54_heart | 5 | 10 | -
 
 ## Weekend
 
@@ -124,8 +126,6 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 
 ## Last ten nightly cases (a new case differs from all of these)
 
-- c081: scene kitchen, category business, culprit slot s3, type: batch 1 idea #29, style classic, puzzle type 4 (kitchen / business), difficulty 5
-- c082: scene harbor, category crime, culprit slot s5, type: batch 1 idea #30, style S3, puzzle type 1 (harbor / crime), difficulty 5, شکل شب: ظاهراً م
 - c083: scene hospital, category medical, culprit slot s1, type: batch3 idea #1, style classic, puzzle type 12, hospital / medical, difficulty 5, شکل شب: ب
 - c084: scene school, category art, culprit slot s1, type: batch3 idea #2, style S1, puzzle type 17, school / art, difficulty 5, شکل شب: سندمحور
 - c085: scene villa_rain, category family, culprit slot s2, type: batch3 idea #3, style S2, puzzle type 16, villa_rain / family, difficulty 5, شکل شب: شیءمح
@@ -134,10 +134,12 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 - c088: scene airport, category travel, culprit slot s3, type: batch3 idea #6, style S5, puzzle type 3ج, airport / travel, difficulty 5, شکل شب: ترتیب‌مح
 - c089: scene subway, category crime, culprit slot s5, type: batch3 idea #7, style S6, puzzle type 8الف, subway / crime, difficulty 4, شکل شب: بازجویی‌
 - c090: scene warehouse, category medical, culprit slot s5, type: batch3 idea #8, style S7, puzzle type 14, warehouse / medical, difficulty 5, شکل شب: ریزنش
+- c091: scene theater, category art, culprit slot s4, type: -
+- c092: scene office, category family, culprit slot s2, type: -
 
 ## Counts
 
-scenes: airport 5, bazaar_night 5, desert 4, harbor 6, hospital 6, hotel 4, kitchen 4, lab 7, library 6, museum 5, office 5, school 6, snow_lodge 4, subway 4, theater 5, tower 4, train 4, villa_rain 7, warehouse 5, wedding 6
-categories: art 17, business 16, crime 15, family 13, medical 11, science 14, travel 16
-culprit slots (nightly): s1 18, s2 18, s3 19, s4 16, s5 19
-difficulty (nightly): 2 2, 3 4, 4 46, 5 38
+scenes: airport 5, bazaar_night 5, desert 4, harbor 6, hospital 6, hotel 4, kitchen 4, lab 7, library 6, museum 5, office 6, school 6, snow_lodge 4, subway 4, theater 6, tower 4, train 4, villa_rain 7, warehouse 5, wedding 6
+categories: art 18, business 16, crime 15, family 14, medical 11, science 14, travel 16
+culprit slots (nightly): s1 18, s2 19, s3 19, s4 17, s5 19
+difficulty (nightly): 2 2, 3 4, 4 47, 5 39

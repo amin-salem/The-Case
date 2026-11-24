@@ -518,3 +518,9 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Publish 2026-12-24 = w011 + 7 days; w012 (idea #36) does not exist yet, so a later w012 will have to be dated by hand.
 - Still open for Amin: no scene image / art-registry entry for w013; portraits of s6 and s8 chosen from the existing pool.
 
+### 2026-11-24 nightly (Sonnet coordinator, Opus writer): c091, c092 from batch 3 (ideas 9, 10)
+| c091 «دسته‌ای که برگشت» | 2026-12-28 | batch3 idea #9, style S2, puzzle type 9, theater / art, difficulty 4, شکل شب: شیءمحور | s4 خشایار فخاری | blind test ~93%; no single card decides; difficulty 3.5-4 |
+| c092 «اجاره برای یک غریبه» | 2026-12-29 | batch3 idea #10, style S5, puzzle type 10, office / family, difficulty 5, شکل شب: سندمحور | s2 فرحناز مستشار | blind test ~93%; no single card decides; tester rated 4 (field kept at 5) |
+
+- Plans: docs/reviews/c091-plan.md, c092-plan.md (with «Fixes after the blind test»). Changes vs the ideas: all suspect names new; c091 difficulty 4 (two 5s would break «mostly difficulty 4»), new title; c092 Farahnaz is a half-sister via the mother, Atena is Kaykhosrow's niece, chain rebuilt without logs or exclusive-access forms (only two forms clear people).
+- Fixed after the tests (one round, chains unchanged, no retest): c091 (intro tense, Fakhari's one consistent lie, 22:50 call tied to the curator, cover zips, Iman/Nozar lines, how the tar leaves at 7:00, Mansoura's cover, softer guard line); c092 (Farahnaz's print on the shredder slot, one staircase, 1398 stamp, kinship, e10 dates, bin layers, terms, Atena's 17:20 run, the 400M coincidence spelled out).
