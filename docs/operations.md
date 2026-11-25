@@ -1,10 +1,10 @@
-## «کی کجا؟» (25 Nov 2026, server 1.87.0, app build 102)
+## «کی کجا؟» (25 Nov 2026, server 1.88.0, app build 103)
 
-- Admin panel → پرونده‌ها → «کی کجا؟»: set «فقط تسترها» after the server is deployed and the testers (player page → «تستر شود») have build 102. Only a tester sees the card (weekend tab). «خاموش» hides it again at once (no new APK). «پاک‌کردن بازی‌ها» clears everybody's runs for another test; it is refused when the audience is «همه».
-- Today's puzzle is `pool[game day mod pool size]` (rolls at 21:00 Tehran like the cases); 60 puzzles = 60 days. More puzzles: `node server/tools/kikoja/generate.js 120 > server/app/content/kikoja/puzzles.json` (the order of the first ones may change, so do it before a public launch) and run the tests.
-- Money: hints 15 / 35 coins once per puzzle, reopen 15 coins, reward 5 coins for a clean first solve (all in `app/kikoja.py`, `PRICES`, `REWARD`). Everything is decided on the server; the page only shows it.
-- The practice files and the first-run tutorial run inside the page and never touch coins.
-- `server/tools/kikoja` holds the puzzle engine and the pool generator. The page itself is the built file `app/assets/kikoja/index.html` (its source, the prototype, is kept by the owner).
+- Three puzzles a day (easy, medium, hard) as a card on the home screen. They open at 09:00 Tehran (`kikoja.OPEN_HOUR`), the pool index is `day.toordinal() % 10` per level (10 puzzles per level, a 10-day cycle). More puzzles: `node server/tools/kikoja/generate.js 20 > server/app/content/kikoja/puzzles.json` (then run the tests; do it before a public launch because the order changes).
+- Admin panel → پرونده‌ها → «کی کجا؟»: set «فقط تسترها» after the server is deployed and the testers (player page → «تستر شود») have build 103; «همه» opens it to everybody; «خاموش» hides it at once. «پاک‌کردن بازی‌ها» clears everybody's runs for another test (refused when the audience is «همه»). The panel shows runs / solved / unlocked per level and the coins spent on unlocks.
+- Money (all in `app/kikoja.py`: `UNLOCK`, `PRICES`, `REWARD`): easy is free and pays 5 coins for a clean first solve; medium 30 and hard 50 coins to open (once per day per puzzle, idempotent, no coin reward); hints 15 (time) / 35 (pair) once per puzzle; reopen after 3 mistakes 15 coins (1 plaque, no reward). Everything is decided on the server.
+- Plaques and time are not in any board or league for now; judge with the admin numbers after 2-3 weeks.
+- Migration 0042 adds `kikoja_runs.unlocked`. The page is built from `tools/kikoja_page` (`python3 tools/kikoja_page/build.py`).
 
 ## «شکار سه‌روزه» (18 Nov 2026, server 1.77.0)
 

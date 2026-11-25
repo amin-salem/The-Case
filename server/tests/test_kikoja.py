@@ -40,9 +40,9 @@ async def make_tester(client, device, coins=500):
     return p
 
 
-def good_accusation():
-    """A complete accusation for today's puzzle (the first accepted contradiction, the first witness set)."""
-    pz = kikoja.today_puzzle()
+def good_accusation(level="easy"):
+    """A complete accusation for today's puzzle of the level (the first accepted contradiction, the first witness set)."""
+    pz = kikoja.today_puzzle(level)
     a = pz["answer"]
     con, wits = next(iter(a["cons"].items()))
     return pz, {"who": a["thief"], "lie": a["lie"], "con": con, "wit": wits[0] if wits else []}
@@ -50,6 +50,10 @@ def good_accusation():
 
 def wrong_who(pz):
     return (pz["answer"]["thief"] + 1) % pz["n"]
+
+
+def url(level, action=""):
+    return f"/v1/kikoja/{level}" + (f"/{action}" if action else "")
 
 
 # ---- the pool itself: a small independent solver (the page and the generator are JavaScript) ---------------------------------
@@ -108,7 +112,9 @@ def true_of(s, paths):
 
 def test_every_pooled_puzzle_has_one_thief_and_one_lie():
     pool = kikoja.pool()
-    assert len(pool) >= 40
+    assert len(pool) >= 30
+    assert {lv: sum(1 for p in pool if p['level'] == lv) for lv in kikoja.LEVELS} == {lv: 10 for lv in kikoja.LEVELS}
+    assert len({p['id'] for p in pool}) == len(pool)
     for pz in pool:
         rooms, nb, locks = house_graph(pz)
         a = pz["answer"]
@@ -123,7 +129,7 @@ def test_every_pooled_puzzle_has_one_thief_and_one_lie():
 
 
 def test_every_accepted_proof_is_sound_and_leaks_nothing_wrong():
-    for pz in kikoja.pool()[:20]:
+    for pz in kikoja.pool():
         rooms, nb, locks = house_graph(pz)
         a = pz["answer"]
         by = {s["id"]: s for s in pz["S"]}
@@ -140,6 +146,33 @@ def test_every_accepted_proof_is_sound_and_leaks_nothing_wrong():
                 assert all(by[i]["p"] != c["p"] for i in w)
 
 
+def test_levels_have_the_agreed_shape_and_the_day_turns_at_nine_in_the_morning():
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    tz = ZoneInfo("Asia/Tehran")
+    shape = {"easy": ("qolhak", 4, 4), "medium": ("qolhak", 5, 5), "hard": ("kashan", 6, 5)}
+    for lv, (house, n, T) in shape.items():
+        assert all((p["house"], p["n"], p["T"]) == (house, n, T) for p in kikoja.level_pool(lv)), lv
+    assert kikoja.day(datetime(2026, 11, 26, 8, 59, tzinfo=tz)).isoformat() == "2026-11-25"
+    assert kikoja.day(datetime(2026, 11, 26, 9, 0, tzinfo=tz)).isoformat() == "2026-11-26"
+    assert kikoja.day(datetime(2026, 11, 26, 20, 59, tzinfo=tz)) == kikoja.day(datetime(2026, 11, 26, 21, 1, tzinfo=tz))   # 21:00 is NOT a turn
+    assert kikoja.next_open(datetime(2026, 11, 26, 8, 0, tzinfo=tz)).isoformat().startswith("2026-11-26T09:00")
+    assert kikoja.next_open(datetime(2026, 11, 26, 9, 0, tzinfo=tz)).isoformat().startswith("2026-11-27T09:00")
+    # a week of days gives a week of different puzzles on every level
+    from datetime import timedelta
+    for lv in kikoja.LEVELS:
+        ids = []
+        for d in range(7):
+            gameclock_now = datetime(2026, 11, 26, 12, 0, tzinfo=tz) + timedelta(days=d)
+            from app import gameclock
+            gameclock.set_clock(lambda n=gameclock_now: n)
+            try:
+                ids.append(kikoja.today_puzzle(lv)["id"])
+            finally:
+                gameclock.set_clock(None)
+        assert len(set(ids)) == 7, (lv, ids)
+
+
 # ---- the game through the API --------------------------------------------------------------------------------------------------
 async def test_hidden_from_players_who_are_not_testers_and_off_by_default(client):
     plain = await new_player(client, "kk-plain-1", aged=True)
@@ -147,36 +180,92 @@ async def test_hidden_from_players_who_are_not_testers_and_off_by_default(client
     assert (await client.get("/v1/kikoja", headers=t["headers"])).json() == {"visible": False}   # off, even for testers
     await configure(client)
     assert (await client.get("/v1/kikoja", headers=plain["headers"])).json() == {"visible": False}
-    for path in ("hint", "accuse", "reopen"):
-        r = await client.post(f"/v1/kikoja/{path}", headers=plain["headers"], json={"kind": "time", "who": 0, "lie": "s0", "con": "s1"})
+    for path in ("hint", "accuse", "reopen", "unlock"):
+        r = await client.post(url("easy", path), headers=plain["headers"], json={"kind": "time", "who": 0, "lie": "s0", "con": "s1"})
         assert r.status_code == 404, path
+    assert (await client.get(url("easy"), headers=plain["headers"])).status_code == 404
+    assert (await client.get("/v1/kikoja/impossible", headers=t["headers"])).status_code == 422
 
 
-async def test_a_tester_sees_the_puzzle_without_the_answer(client):
+async def test_a_tester_sees_three_tiles_and_the_free_puzzle_without_the_answer(client):
     await configure(client)
     t = await make_tester(client, "kk-view-1")
     j = (await client.get("/v1/kikoja", headers=t["headers"])).json()
-    assert j["visible"] and j["puzzle"]["S"] and "answer" not in j["puzzle"] and "reveal" not in j
-    assert "paths" not in str(j) and j["run"] == {"mistakes": 0, "hints": [], "reopened": False, "solved": False,
-                                                    "failed": False, "stars": 0, "secs": 0, "paid": 0}
+    assert j["visible"] and [x["level"] for x in j["levels"]] == ["easy", "medium", "hard"] and j["next_at"]
+    assert [(x["price"], x["open"]) for x in j["levels"]] == [(0, True), (30, False), (50, False)]
+    assert "puzzle" not in str(j) and "answer" not in str(j) and "paths" not in str(j)
+    e = (await client.get(url("easy"), headers=t["headers"])).json()
+    assert e["puzzle"]["S"] and "answer" not in e["puzzle"] and "reveal" not in e and "paths" not in str(e)
+    assert e["run"] == {"mistakes": 0, "hints": [], "reopened": False, "solved": False, "failed": False, "stars": 0, "secs": 0, "paid": 0}
     await configure(client, "all")
     plain = await new_player(client, "kk-all-1", aged=True)
     assert (await client.get("/v1/kikoja", headers=plain["headers"])).json()["visible"] is True
+
+
+async def test_a_paid_level_stays_closed_until_unlocked_and_never_leaks(client):
+    await configure(client)
+    t = await make_tester(client, "kk-lock-1")
+    for lv in ("medium", "hard"):
+        j = (await client.get(url(lv), headers=t["headers"])).json()
+        assert j["open"] is False and "puzzle" not in j and "run" not in j and "S" not in str(j) and j["price"] == kikoja.UNLOCK[lv]
+        for action, body in (("hint", {"kind": "time"}), ("accuse", {"who": 0, "lie": "s0", "con": "s1"}), ("reopen", None)):
+            r = await client.post(url(lv, action), headers=t["headers"], json=body)
+            assert r.status_code == 403 and r.json()["detail"]["error"] == "locked", (lv, action)
+    assert await balance(t["player_id"]) == 500
+
+
+async def test_unlock_takes_the_coins_once_even_with_retries_and_races(client):
+    await configure(client)
+    t = await make_tester(client, "kk-unl-1")
+    r = await client.post(url("medium", "unlock"), headers=t["headers"])
+    j = r.json()
+    assert r.status_code == 200 and j["open"] is True and j["puzzle"]["S"] and "answer" not in j["puzzle"]
+    assert await balance(t["player_id"]) == 500 - kikoja.UNLOCK["medium"]
+    again = await asyncio.gather(*[client.post(url("medium", "unlock"), headers=t["headers"]) for _ in range(3)])
+    assert [x.status_code for x in again] == [200, 200, 200]
+    assert await balance(t["player_id"]) == 500 - kikoja.UNLOCK["medium"]
+    hard = await asyncio.gather(*[client.post(url("hard", "unlock"), headers=t["headers"]) for _ in range(3)])
+    assert [x.status_code for x in hard] == [200, 200, 200]
+    assert await balance(t["player_id"]) == 500 - kikoja.UNLOCK["medium"] - kikoja.UNLOCK["hard"]
+    tiles = (await client.get("/v1/kikoja", headers=t["headers"])).json()["levels"]
+    assert [x["open"] for x in tiles] == [True, True, True]
+
+
+async def test_unlock_needs_coins_and_the_free_level_costs_nothing(client):
+    await configure(client)
+    t = await make_tester(client, "kk-unl-2", coins=20)
+    r = await client.post(url("medium", "unlock"), headers=t["headers"])
+    assert r.status_code == 402 and await balance(t["player_id"]) == 20
+    assert (await client.get(url("medium"), headers=t["headers"])).json()["open"] is False
+    r = await client.post(url("easy", "unlock"), headers=t["headers"])
+    assert r.status_code == 200 and await balance(t["player_id"]) == 20
+
+
+async def test_a_paid_level_wins_stars_but_never_pays_coins(client):
+    await configure(client)
+    t = await make_tester(client, "kk-paid-1")
+    await client.post(url("hard", "unlock"), headers=t["headers"])
+    pz, ok = good_accusation("hard")
+    j = (await client.post(url("hard", "accuse"), headers=t["headers"], json=ok | {"secs": 200})).json()
+    assert j["ok"] and j["run"]["stars"] == 3 and j["run"]["paid"] == 0 and j["reveal"]["thief"] == pz["answer"]["thief"]
+    assert await balance(t["player_id"]) == 500 - kikoja.UNLOCK["hard"]
+    tiles = (await client.get("/v1/kikoja", headers=t["headers"])).json()["levels"]
+    assert tiles[2]["solved"] is True and tiles[2]["stars"] == 3 and tiles[0]["solved"] is False
 
 
 async def test_wrong_accusations_say_the_step_and_three_fail_the_file(client):
     await configure(client)
     t = await make_tester(client, "kk-fail-1")
     pz, ok = good_accusation()
-    r = await client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok | {"who": wrong_who(pz)})
+    r = await client.post(url("easy", "accuse"), headers=t["headers"], json=ok | {"who": wrong_who(pz)})
     j = r.json()
     assert r.status_code == 200 and j["ok"] is False and j["step"] == "who" and j["run"]["mistakes"] == 1
-    r = await client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok | {"lie": next(s["id"] for s in pz["S"] if s["id"] != ok["lie"])})
+    r = await client.post(url("easy", "accuse"), headers=t["headers"], json=ok | {"lie": next(s["id"] for s in pz["S"] if s["id"] != ok["lie"])})
     assert r.json()["step"] == "lie" and r.json()["run"]["mistakes"] == 2
-    r = await client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok | {"con": "zz"})
+    r = await client.post(url("easy", "accuse"), headers=t["headers"], json=ok | {"con": "zz"})
     j = r.json()
     assert j["step"] == "con" and j["run"]["failed"] is True and "reveal" not in j and "paths" not in str(j)
-    r = await client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok)
+    r = await client.post(url("easy", "accuse"), headers=t["headers"], json=ok)
     assert r.status_code == 409 and r.json()["detail"]["error"] == "failed"
 
 
@@ -185,28 +274,28 @@ async def test_reopen_costs_once_and_the_win_is_worth_one_star_and_no_reward(cli
     t = await make_tester(client, "kk-reopen-1")
     pz, ok = good_accusation()
     for _ in range(3):
-        await client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok | {"who": wrong_who(pz)})
-    assert (await client.post("/v1/kikoja/reopen", headers=t["headers"])).status_code == 200
+        await client.post(url("easy", "accuse"), headers=t["headers"], json=ok | {"who": wrong_who(pz)})
+    assert (await client.post(url("easy", "reopen"), headers=t["headers"])).status_code == 200
     assert await balance(t["player_id"]) == 500 - kikoja.PRICES["reopen"]
-    again = await client.post("/v1/kikoja/reopen", headers=t["headers"])
+    again = await client.post(url("easy", "reopen"), headers=t["headers"])
     assert again.status_code == 409 and again.json()["detail"]["error"] == "not_failed"
-    j = (await client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok)).json()
+    j = (await client.post(url("easy", "accuse"), headers=t["headers"], json=ok)).json()
     assert j["ok"] and j["run"]["stars"] == 1 and j["run"]["paid"] == 0
     assert await balance(t["player_id"]) == 500 - kikoja.PRICES["reopen"]
 
 
-async def test_clean_win_pays_five_coins_once_and_reveals_the_answer(client):
+async def test_clean_win_of_the_free_level_pays_five_coins_once_and_reveals_the_answer(client):
     await configure(client)
     t = await make_tester(client, "kk-win-1")
     pz, ok = good_accusation()
-    j = (await client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok | {"secs": 95})).json()
+    j = (await client.post(url("easy", "accuse"), headers=t["headers"], json=ok | {"secs": 95})).json()
     assert j["ok"] and j["run"]["stars"] == 3 and j["run"]["secs"] == 95 and j["run"]["paid"] == kikoja.REWARD
     assert j["reveal"]["thief"] == pz["answer"]["thief"] and j["reveal"]["paths"] == pz["answer"]["paths"]
     assert await balance(t["player_id"]) == 500 + kikoja.REWARD
-    again = await client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok)
+    again = await client.post(url("easy", "accuse"), headers=t["headers"], json=ok)
     assert again.status_code == 409 and again.json()["detail"]["error"] == "already_solved"
     assert await balance(t["player_id"]) == 500 + kikoja.REWARD
-    j = (await client.get("/v1/kikoja", headers=t["headers"])).json()
+    j = (await client.get(url("easy"), headers=t["headers"])).json()
     assert j["run"]["solved"] and j["reveal"]["thief"] == pz["answer"]["thief"]
 
 
@@ -214,8 +303,8 @@ async def test_two_simultaneous_correct_accusations_pay_once(client):
     await configure(client)
     t = await make_tester(client, "kk-race-1")
     _, ok = good_accusation()
-    a, b = await asyncio.gather(client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok),
-                                client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok))
+    a, b = await asyncio.gather(client.post(url("easy", "accuse"), headers=t["headers"], json=ok),
+                                client.post(url("easy", "accuse"), headers=t["headers"], json=ok))
     assert sorted([a.status_code, b.status_code]) == [200, 409]
     assert await balance(t["player_id"]) == 500 + kikoja.REWARD
 
@@ -223,40 +312,40 @@ async def test_two_simultaneous_correct_accusations_pay_once(client):
 async def test_witness_is_required_when_the_contradiction_alone_does_not_clear_the_speaker(client, monkeypatch):
     await configure(client)
     t = await make_tester(client, "kk-wit-1")
-    pz = next(p for p in kikoja.pool() if any(w for w in p["answer"]["cons"].values()))
-    monkeypatch.setattr(kikoja, "today_puzzle", lambda: pz)
+    pz = next(p for p in kikoja.level_pool("easy") if any(w for w in p["answer"]["cons"].values()))
+    monkeypatch.setattr(kikoja, "today_puzzle", lambda level="easy": pz)
     a = pz["answer"]
     con = next((c for c, w in a["cons"].items() if w), None)
     base = {"who": a["thief"], "lie": a["lie"], "con": con}
-    j = (await client.post("/v1/kikoja/accuse", headers=t["headers"], json=base | {"wit": []})).json()
+    j = (await client.post(url("easy", "accuse"), headers=t["headers"], json=base | {"wit": []})).json()
     assert j["ok"] is False and j["step"] == "wit"
     bad = next(s["id"] for s in pz["S"] if [s["id"]] not in a["cons"][con] and s["id"] not in (a["lie"], con))
-    j = (await client.post("/v1/kikoja/accuse", headers=t["headers"], json=base | {"wit": [bad]})).json()
+    j = (await client.post(url("easy", "accuse"), headers=t["headers"], json=base | {"wit": [bad]})).json()
     assert j["ok"] is False and j["step"] == "wit" and j["run"]["mistakes"] == 2
-    j = (await client.post("/v1/kikoja/accuse", headers=t["headers"], json=base | {"wit": a["cons"][con][0]})).json()
+    j = (await client.post(url("easy", "accuse"), headers=t["headers"], json=base | {"wit": a["cons"][con][0]})).json()
     assert j["ok"] is True and j["run"]["stars"] == 1 and j["run"]["paid"] == 0       # two mistakes: one star, no reward
 
 
 async def test_hint_is_paid_once_and_costs_a_star(client):
     await configure(client)
     t = await make_tester(client, "kk-hint-1")
-    r = await client.post("/v1/kikoja/hint", headers=t["headers"], json={"kind": "time"})
-    assert r.status_code == 200 and r.json()["hint_data"]["time"] == kikoja.today_puzzle()["answer"]["hints"]["time"]
-    again = await client.post("/v1/kikoja/hint", headers=t["headers"], json={"kind": "time"})
+    r = await client.post(url("easy", "hint"), headers=t["headers"], json={"kind": "time"})
+    assert r.status_code == 200 and r.json()["hint_data"]["time"] == kikoja.today_puzzle("easy")["answer"]["hints"]["time"]
+    again = await client.post(url("easy", "hint"), headers=t["headers"], json={"kind": "time"})
     assert again.status_code == 200
     assert await balance(t["player_id"]) == 500 - kikoja.PRICES["time"]
-    two = await asyncio.gather(*[client.post("/v1/kikoja/hint", headers=t["headers"], json={"kind": "pair"}) for _ in range(2)])
+    two = await asyncio.gather(*[client.post(url("easy", "hint"), headers=t["headers"], json={"kind": "pair"}) for _ in range(2)])
     assert [x.status_code for x in two] == [200, 200]
     assert await balance(t["player_id"]) == 500 - kikoja.PRICES["time"] - kikoja.PRICES["pair"]
     _, ok = good_accusation()
-    j = (await client.post("/v1/kikoja/accuse", headers=t["headers"], json=ok)).json()
+    j = (await client.post(url("easy", "accuse"), headers=t["headers"], json=ok)).json()
     assert j["ok"] and j["run"]["stars"] == 2 and j["run"]["paid"] == 0
 
 
 async def test_hint_needs_coins(client):
     await configure(client)
     t = await make_tester(client, "kk-poor-1", coins=10)
-    r = await client.post("/v1/kikoja/hint", headers=t["headers"], json={"kind": "pair"})
+    r = await client.post(url("easy", "hint"), headers=t["headers"], json={"kind": "pair"})
     assert r.status_code == 402 and await balance(t["player_id"]) == 10
 
 
@@ -265,4 +354,16 @@ async def test_bad_input_is_refused(client):
     t = await make_tester(client, "kk-bad-1")
     for body in ({"who": 99, "lie": "s0", "con": "s1"}, {"who": 0, "lie": "x" * 40, "con": "s1"},
                  {"who": 0, "lie": "s0", "con": "s1", "wit": ["a", "b", "c"]}, {"who": -1, "lie": "s0", "con": "s1"}):
-        assert (await client.post("/v1/kikoja/accuse", headers=t["headers"], json=body)).status_code == 422
+        assert (await client.post(url("easy", "accuse"), headers=t["headers"], json=body)).status_code == 422
+
+
+async def test_admin_numbers_count_levels_and_unlocks(client):
+    await configure(client)
+    t = await make_tester(client, "kk-adm-1")
+    await client.post(url("medium", "unlock"), headers=t["headers"])
+    _, ok = good_accusation()
+    await client.post(url("easy", "accuse"), headers=t["headers"], json=ok)
+    j = (await client.get("/admin/api/kikoja", headers=ADMIN)).json()
+    st = j["stats"]
+    assert st["by_level"]["easy"]["solved"] == 1 and st["by_level"]["medium"]["unlocked"] == 1 and st["coins_unlock"] == 30
+    assert st["by_level"]["hard"]["puzzles"] == 10 and st["by_level"]["hard"]["today"].startswith("h")

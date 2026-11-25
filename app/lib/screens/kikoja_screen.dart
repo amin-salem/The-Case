@@ -11,8 +11,11 @@ import '../theme.dart';
 /// (assets/kikoja/index.html); it never knows an answer. Everything that earns something (today's puzzle, hints, the
 /// accusation, coins) is asked from the server through this screen: the page posts `{id, op, body}` on the `KK` channel
 /// and this screen answers with `window.__kkReply(id, {ok, data | error})`.
+///
+/// One screen per level (`easy`, `medium`, `hard`). It closes with `'next'` when the player asks for the next level.
 class KikojaScreen extends StatefulWidget {
-  const KikojaScreen({super.key});
+  const KikojaScreen({super.key, required this.level});
+  final String level;
 
   @override
   State<KikojaScreen> createState() => _KikojaScreenState();
@@ -55,7 +58,7 @@ class _KikojaScreenState extends State<KikojaScreen> {
       final body = (m['body'] as Map?)?.cast<String, dynamic>() ?? const <String, dynamic>{};
       switch (m['op']) {
         case 'close':
-          if (mounted) Navigator.of(context).maybePop();
+          if (mounted) Navigator.of(context).pop(body['next'] == true ? 'next' : null);
           return;
         case 'share':
           final text = '${body['text'] ?? ''}'.trim();
@@ -63,12 +66,15 @@ class _KikojaScreenState extends State<KikojaScreen> {
           await _reply(id, true, const <String, dynamic>{});
           return;
         case 'state':
-          await _reply(id, true, await Api.i.kikojaState());
+          final s = await Api.i.kikojaLevel(widget.level);
+          final today = await Api.i.kikojaToday();
+          if (today != null) s['levels'] = today['levels'];
+          await _reply(id, true, s);
           return;
         case 'hint':
         case 'accuse':
         case 'reopen':
-          await _reply(id, true, await Api.i.kikojaAction('${m['op']}', body));
+          await _reply(id, true, await Api.i.kikojaAction(widget.level, '${m['op']}', body));
           return;
         default:
           await _reply(id, false, 'bad_op');
@@ -101,35 +107,6 @@ class _KikojaScreenState extends State<KikojaScreen> {
       child: Scaffold(
         backgroundColor: K.night,
         body: SafeArea(child: WebViewWidget(controller: _web)),
-      ),
-    );
-  }
-}
-
-/// The entry card (weekend tab): shown only when the server shows the game to this player (testers first).
-class KikojaEntryCard extends StatelessWidget {
-  const KikojaEntryCard({super.key, required this.onOpen});
-  final VoidCallback onOpen;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      key: const ValueKey('kikoja-entry'),
-      onTap: onOpen,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: K.night2, border: Border.all(color: K.kraft.withValues(alpha: 0.7))),
-        child: Row(children: [
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('آزمایشی', style: tBody(12, color: K.kraft, w: FontWeight.w900)),
-              const SizedBox(height: 2),
-              Text('کی کجا؟', style: tDisplay(24)),
-              const SizedBox(height: 2),
-              Text('هر کس می‌گوید آن شب کجا بود. فقط یکی دروغ می‌گوید.', style: tBody(12.5, color: K.textSoft)),
-            ]),
-          ),
-        ]),
       ),
     );
   }

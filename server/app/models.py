@@ -551,6 +551,7 @@ class KikojaRun(Base):
     puzzle_id: Mapped[str] = mapped_column(String(8))
     mistakes: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     hints: Mapped[list] = mapped_column(JSON, default=list)     # bought hint kinds ("time", "pair")
+    unlocked: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())   # a paid level opened for today (coins taken once)
     reopened: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
     solved: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
     stars: Mapped[int] = mapped_column(Integer, default=0, server_default="0")

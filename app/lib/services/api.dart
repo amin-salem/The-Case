@@ -868,29 +868,33 @@ class Api extends ChangeNotifier {
 
   // ---------------------------------------------------------------- «کی کجا؟» (server app/kikoja.py)
 
-  /// True when the server shows the game to this player (testers first); false when hidden, off or offline.
-  Future<bool> kikojaVisible() async {
+  /// The three tiles of today («کی کجا؟»), or null when the server hides the game from this player (off, testers only) or is offline.
+  Future<Map<String, dynamic>?> kikojaToday() async {
     try {
       final j = await _call('GET', '/v1/kikoja');
-      return j is Map && j['visible'] == true;
+      if (j is! Map || j['visible'] != true) return null;
+      if (j['coins'] is int) _setCoins(j['coins'] as int);
+      return j.cast<String, dynamic>();
     } catch (e) {
       debugPrint('kikoja: $e');
-      return false;
+      return null;
     }
   }
 
-  /// Today's puzzle and this player's run, for the game page.
-  Future<Map<String, dynamic>> kikojaState() async {
-    final j = (await _call('GET', '/v1/kikoja') as Map).cast<String, dynamic>();
+  /// One level's puzzle and this player's run, for the game page.
+  Future<Map<String, dynamic>> kikojaLevel(String level) async {
+    final j = (await _call('GET', '/v1/kikoja/$level') as Map).cast<String, dynamic>();
     if (j['visible'] != true) throw ApiException(404, {'error': 'no_kikoja'});
     if (j['coins'] is int) _setCoins(j['coins'] as int);
     return j;
   }
 
-  /// hint / accuse / reopen. Throws ApiException (not_enough_coins, failed, already_solved ...).
-  Future<Map<String, dynamic>> kikojaAction(String action, Map<String, dynamic> body) async {
-    if (action != 'hint' && action != 'accuse' && action != 'reopen') throw ApiException(400, {'error': 'bad_op'});
-    final j = (await _call('POST', '/v1/kikoja/$action', body: body) as Map).cast<String, dynamic>();
+  /// unlock / hint / accuse / reopen. Throws ApiException (not_enough_coins, locked, failed, already_solved ...).
+  Future<Map<String, dynamic>> kikojaAction(String level, String action, Map<String, dynamic> body) async {
+    if (!const {'easy', 'medium', 'hard'}.contains(level) || !const {'unlock', 'hint', 'accuse', 'reopen'}.contains(action)) {
+      throw ApiException(400, {'error': 'bad_op'});
+    }
+    final j = (await _call('POST', '/v1/kikoja/$level/$action', body: body) as Map).cast<String, dynamic>();
     if (j['coins'] is int) _setCoins(j['coins'] as int);
     return j;
   }

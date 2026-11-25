@@ -784,12 +784,21 @@ async def kikoja_view(session: AsyncSession = Depends(get_session)):
     stars = await session.scalar(select(func.coalesce(func.avg(KikojaRun.stars), 0)).where(KikojaRun.solved.is_(True))) or 0
     paid = await session.scalar(select(func.coalesce(func.sum(KikojaRun.reward), 0))) or 0
     spent = await session.scalar(select(func.coalesce(func.sum(-CoinLog.amount), 0)).where(
-        CoinLog.reason.in_(("kikoja_hint", "kikoja_reopen")))) or 0
+        CoinLog.reason.in_(("kikoja_hint", "kikoja_reopen", "kikoja_unlock")))) or 0
+    unlock_coins = await session.scalar(select(func.coalesce(func.sum(-CoinLog.amount), 0)).where(CoinLog.reason == "kikoja_unlock")) or 0
+    by_level = {}
+    for lv in kikoja.LEVELS:
+        like = f"{(kikoja.level_pool(lv) or [{'id': 'x'}])[0]['id'][0]}%"
+        n_runs = await session.scalar(select(func.count(KikojaRun.id)).where(KikojaRun.puzzle_id.like(like))) or 0
+        n_solved = await session.scalar(select(func.count(KikojaRun.id)).where(KikojaRun.puzzle_id.like(like), KikojaRun.solved.is_(True))) or 0
+        n_paid = await session.scalar(select(func.count(KikojaRun.id)).where(KikojaRun.puzzle_id.like(like), KikojaRun.unlocked.is_(True))) or 0
+        by_level[lv] = {"runs": n_runs, "solved": n_solved, "unlocked": n_paid, "puzzles": len(kikoja.level_pool(lv)),
+                        "today": (kikoja.today_puzzle(lv) or {}).get("id")}
     today = kikoja.today_puzzle() or {}
     testers = (await session.execute(select(Player.id, Player.nickname).where(Player.tester.is_(True)).limit(50))).all()
     return {"config": cfg, "puzzles": len(kikoja.pool()), "today": today.get("id"),
             "stats": {"runs": runs, "solved": solved, "failed": failed, "avg_stars": round(float(stars), 2),
-                      "coins_paid": int(paid), "coins_spent": int(spent)},
+                      "coins_paid": int(paid), "coins_spent": int(spent), "coins_unlock": int(unlock_coins), "by_level": by_level},
             "testers": [{"id": i, "nickname": n} for i, n in testers]}
 
 

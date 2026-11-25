@@ -11,13 +11,19 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
+from datetime import date, datetime, timedelta
+
 from . import gameclock
 
 POOL = Path(__file__).resolve().parent / "content" / "kikoja" / "puzzles.json"
 AUDIENCES = ("off", "testers", "all")
 DEFAULT_CONFIG = {"audience": "off"}
+LEVELS = ("easy", "medium", "hard")
+OPEN_HOUR = 9               # the three puzzles change every day at 09:00 Tehran (the main case still opens at 21:00)
+UNLOCK = {"easy": 0, "medium": 30, "hard": 50}   # coins to open a level for today; easy is free (Amin, 25 Nov 2026)
 PRICES = {"time": 15, "pair": 35, "reopen": 15}
-REWARD = 5                  # coins, only for today's puzzle solved cleanly (3 stars) the first time
+REWARD = 5                  # coins, only for the FREE level solved cleanly (3 stars) the first time: a paid level never pays coins
+REWARD_LEVELS = ("easy",)
 MAX_MISTAKES = 3
 MAX_SECS = 6 * 3600
 
@@ -44,9 +50,30 @@ def visible(cfg: dict, player) -> bool:
     return cfg["audience"] == "testers" and bool(getattr(player, "tester", False))
 
 
-def today_puzzle() -> dict | None:
-    p = pool()
-    return p[gameclock.game_day().toordinal() % len(p)] if p else None
+def day(dt: datetime | None = None) -> date:
+    """The «کی کجا؟» day a moment belongs to: it starts at 09:00 Tehran (named by the date it starts on)."""
+    loc = gameclock._local(dt)
+    return loc.date() if loc.hour >= OPEN_HOUR else loc.date() - timedelta(days=1)
+
+
+def next_open(dt: datetime | None = None) -> datetime:
+    """When the next set of puzzles opens (aware, Tehran)."""
+    d = day(dt) + timedelta(days=1)
+    return datetime(d.year, d.month, d.day, OPEN_HOUR, tzinfo=gameclock.tz())
+
+
+def level_pool(level: str) -> list[dict]:
+    return [p for p in pool() if p.get("level") == level]
+
+
+def today_puzzle(level: str = "easy") -> dict | None:
+    """The level's puzzle of today: the verified pool turns round one puzzle a day (ids are stable, order never changes)."""
+    p = level_pool(level)
+    return p[day().toordinal() % len(p)] if p else None
+
+
+def price_of(level: str) -> int:
+    return int(UNLOCK.get(level, 0))
 
 
 def by_id(pid: str) -> dict | None:

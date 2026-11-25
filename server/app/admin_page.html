@@ -213,13 +213,14 @@ function kikojaCard(k) {
   if (!k) return '';
   const c = k.config, st = k.stats, AUD = {off: 'خاموش', testers: 'فقط تسترها', all: 'همه'};
   return `<h3>🧭 کی کجا؟</h3>
-  <div class="scroll"><table><tr><th>نمایش</th><td>${AUD[c.audience] || c.audience}</td></tr><tr><th>معمای امروز</th><td>${esc(k.today || '—')} از ${num(k.puzzles)}</td></tr>
+  <div class="scroll"><table><tr><th>نمایش</th><td>${AUD[c.audience] || c.audience}</td></tr><tr><th>معماهای امروز</th><td>${['easy','medium','hard'].map(l => ({easy:'آسان',medium:'متوسط',hard:'سخت'}[l]) + ' ' + esc(st.by_level[l].today || '—') + ' از ' + num(st.by_level[l].puzzles)).join(' · ')}</td></tr>
+  <tr><th>به تفکیک سطح</th><td>${['easy','medium','hard'].map(l => ({easy:'آسان',medium:'متوسط',hard:'سخت'}[l]) + ': ' + num(st.by_level[l].runs) + ' بازی، ' + num(st.by_level[l].solved) + ' حل' + (l === 'easy' ? '' : '، ' + num(st.by_level[l].unlocked) + ' خرید')).join('<br>')}</td></tr>
   <tr><th>بازی‌ها</th><td>${num(st.runs)} · حل ${num(st.solved)} · شکست ${num(st.failed)} · میانگین ستاره ${num(st.avg_stars)}</td></tr>
-  <tr><th>سکه</th><td>پاداش ${num(st.coins_paid)} · خرج راهنما و بازگشایی ${num(st.coins_spent)}</td></tr>
+  <tr><th>سکه</th><td>پاداش ${num(st.coins_paid)} · خرید معما ${num(st.coins_unlock)} · کل خرج (راهنما، بازگشایی، معما) ${num(st.coins_spent)}</td></tr>
   <tr><th>تسترها</th><td>${k.testers.map(t => esc(t.nickname || t.id.slice(0, 6))).join('، ') || '— (از صفحه‌ی هر بازیکن «تستر شود» را بزن)'}</td></tr></table></div>
   <div class="row"><select id="kau"><option value="off">خاموش</option><option value="testers">فقط تسترها</option><option value="all">همه</option></select>
   <button id="ksave">ذخیره</button><button id="kreset" class="danger">پاک‌کردن بازی‌ها</button></div>
-  <p class="muted">«فقط تسترها»: فقط بازیکن‌هایی که «تستر» شده‌اند کارتش را در تب آخر هفته می‌بینند. «پاک‌کردن بازی‌ها» برای تست دوباره است و وقتی برای همه باز است کار نمی‌کند.</p>`;
+  <p class="muted">«فقط تسترها»: فقط بازیکن‌هایی که «تستر» شده‌اند کارتش را در صفحه‌ی خانه می‌بینند. «پاک‌کردن بازی‌ها» برای تست دوباره است و وقتی برای همه باز است کار نمی‌کند.</p>`;
 }
 function wireKikoja(k) {
   if (!k) return;

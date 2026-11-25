@@ -10,6 +10,7 @@ import '../services/app_update.dart';
 import '../services/billing.dart';
 import '../services/home_rules.dart';
 import '../widgets/category.dart';
+import '../widgets/kikoja_card.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
 import '../theme.dart';
@@ -354,6 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (!finished) FadeSlideIn(child: _hero(c)) else if (c.solved) _solvedCard(c, cs) else _lostCard(c, cs),
       const SizedBox(height: 10),
       _giftCard(cs),
+      const KikojaHomeCard(),
       if (finished) ...[
         _archiveInvite(cs),
         _weekendRow(),

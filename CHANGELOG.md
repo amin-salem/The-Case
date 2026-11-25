@@ -1,3 +1,11 @@
+# server 1.88.0 / app 1.50.0 build 103 (test APK): «کی کجا؟» three levels a day (25 Nov 2026)
+
+- Three puzzles a day on the home screen (a card with three tiles) instead of one in the weekend tab: easy is free (5 coins only for a clean first solve), medium costs 30 coins and hard 50 to open (paid levels give plaques, never coins). They open at 09:00 Tehran every day, separate from the 21:00 case.
+- Server: `/v1/kikoja` (the three tiles), `/v1/kikoja/{easy|medium|hard}` (+ `/unlock`, `/hint`, `/accuse`, `/reopen`), column `kikoja_runs.unlocked` (migration 0042, additive). The unlock takes the coins once under the player's row lock; a second tap or a race never pays twice. The pool is 30 verified puzzles, 10 per level (`server/tools/kikoja/generate.js`), so the day cycle is 10 days; more puzzles later with `node generate.js 20`.
+- Admin panel → «کی کجا؟»: today's puzzle per level, runs / solved / unlocked per level and the coins spent on unlocks. The audience switch (خاموش / فقط تسترها / همه) is unchanged.
+- App: new home card with the three tiles and a small unlock sheet; the new game page (plan with portraits, time chips, pinned statements, 4-step accusation, result with plaques) comes from `tools/kikoja_page` (`python3 tools/kikoja_page/build.py` writes `app/assets/kikoja/index.html`). The weekend-tab card is gone.
+- Deploy the server from the Liara panel, install build 103 on the testers' phones.
+
 # server 1.87.0 / app 1.49.0 build 102 (test APK): «کی کجا؟» for testers (25 Nov 2026)
 
 - New small game «کی کجا؟»: each suspect says where he was at each quarter hour, only the thief lies, and the detective places the suspects on the house plan, finds the lie and proves it (the thief, his false statement, the statement that contradicts it and, when that alone does not clear the other speaker, one or two witness statements). Houses: Qolhak and Kashan.

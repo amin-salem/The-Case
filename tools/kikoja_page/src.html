@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>کی کجا؟</title>
+<style>
+/*__FONTS__*/
+:root{--night:#17181A;--night2:#202124;--night3:#2B2D31;--line:#34363B;--text:#E6E2DA;--soft:#9A9890;--brass:#E0A526;--stamp:#D0543F;--kraft:#C9A15E;--paper:#E9E4D8;--ink:#222326;--inksoft:#615F5A;--ok:#5DAE7E}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--night);color:var(--text);font-family:KV,Tahoma,sans-serif;overflow:hidden;overscroll-behavior:none}
+button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0;text-align:inherit}
+#app{height:100%;display:flex;flex-direction:column;position:relative}
+.scr{height:100%;display:flex;flex-direction:column;min-height:0;position:relative;overflow:hidden}
+.bar{display:flex;align-items:center;gap:10px;padding:12px 14px 6px;flex:none}
+.rbtn{width:44px;height:44px;flex:none;border-radius:50%;background:var(--night2);display:flex;align-items:center;justify-content:center}
+.rbtn:active{background:var(--night3)}
+.grow{flex:1;min-width:0}
+.ttl{font-weight:900;font-size:16px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{font-size:11.5px;color:var(--soft)}
+.dots{display:flex;gap:5px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--brass);display:block}.dots i.off{background:var(--night3)}
+.lvl{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:900;color:var(--brass)}
+.lvl b{display:flex;align-items:flex-end;gap:3px}.lvl b i{width:5px;border-radius:2px;background:var(--line);display:block}.lvl b i.on{background:var(--brass)}
+/* plan */
+.plan{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#111214;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.plan svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.plan .vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.38) 100%)}
+.rc{position:absolute}
+.rc .lab{position:absolute;top:4%;right:4%;font-size:10.5px;font-weight:700;line-height:1.5;color:var(--text);background:rgba(17,18,20,.72);border-radius:6px;padding:0 5px}
+.rc .glow{position:absolute;inset:0;background:radial-gradient(circle at 68% 30%,rgba(224,165,38,.42),rgba(224,165,38,.08) 45%,transparent 70%)}
+.rc .hl{position:absolute;inset:2%;border-radius:6px}
+.rc .faces{position:absolute;left:0;right:0;bottom:6%;display:flex;justify-content:center;gap:4px}
+.face{position:relative;width:27px;height:27px;flex:none}
+.face img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:2px solid;box-shadow:0 2px 8px rgba(0,0,0,.6)}
+.face.out img{filter:grayscale(1);opacity:.55}
+.face .no{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.face b{position:absolute;top:-5px;left:-5px;width:15px;height:15px;border-radius:50%;color:#17181A;font-size:9.5px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.lock{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#111214;border:1.5px solid var(--stamp);display:flex;align-items:center;justify-content:center;opacity:.55}
+.lock.on{opacity:1;box-shadow:0 0 12px rgba(208,84,63,.7)}
+/* chips */
+.chips{display:grid;gap:6px}
+.chip{height:46px;border-radius:12px;background:#26272B;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:900;font-size:13.5px;font-variant-numeric:tabular-nums;position:relative}
+.chip.sel{background:var(--brass);color:#17181A}
+.chip.hint{box-shadow:inset 0 0 0 2px var(--brass),0 0 14px rgba(224,165,38,.45)}
+.chip .pd{display:flex;gap:3px;height:6px}.chip .pd i{width:6px;height:6px;border-radius:50%;display:block}
+/* tray + list */
+.tray{display:flex;flex-direction:column;gap:6px;padding:8px 12px 2px;flex:none}
+.pin{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-radius:14px;background:var(--paper);color:var(--ink)}
+.pin .w{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:900;color:var(--inksoft)}
+.pin .w img{width:18px;height:18px;border-radius:50%;object-fit:cover}
+.pin .tx{font-size:13.5px;line-height:1.65;font-weight:500}
+.nb{width:24px;height:24px;flex:none;border-radius:50%;color:#17181A;font-weight:900;font-size:12.5px;display:flex;align-items:center;justify-content:center}
+.empty{height:46px;border-radius:14px;border:1.5px dashed #3A3C41;display:flex;align-items:center;justify-content:center;gap:8px;color:#7C7A73;font-size:12.5px}
+.list{flex:1;min-height:0;overflow-y:auto;padding:6px 12px 12px;display:flex;flex-direction:column;gap:14px}
+.list::-webkit-scrollbar{width:0}
+.grp{display:flex;flex-direction:column;gap:6px}
+.gh{display:flex;align-items:center;gap:8px;padding:0 4px}
+.gh img,.gh .doc{width:28px;height:28px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px #3A3C41}
+.gh .doc{background:#3A3220;display:flex;align-items:center;justify-content:center;box-shadow:none}
+.gh.pair img{box-shadow:0 0 0 2px var(--brass)}
+.gh b{font-weight:900;font-size:13.5px}.gh small{font-size:11.5px;color:var(--soft)}
+.st{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:14px;background:#1F2023;text-align:right}
+.st .t{flex:1;min-width:0;font-size:13.5px;line-height:1.75;color:#C9C4B8}
+.st.on{background:var(--night3)}
+.st.line{background:transparent;padding:4px 12px;cursor:default}
+.k-t{color:var(--brass);font-weight:900;font-variant-numeric:tabular-nums}
+.k-r{color:#E9E4D8;font-weight:700;border-bottom:1.5px dotted #8A6A2E}
+.k-p{color:var(--text);font-weight:900}
+.paper .k-t{color:#8A6A2E}.paper .k-r{color:var(--ink);border-bottom-color:#8A6A2E}.paper .k-p{color:var(--ink)}
+.foot{padding:10px 14px 16px;background:linear-gradient(to top,var(--night) 70%,rgba(23,24,26,0));flex:none;display:flex;gap:10px}
+.btn{height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;font-size:16.5px;flex:1;width:100%}
+.btn.red{background:var(--stamp);color:#FFF6EE;box-shadow:0 10px 24px rgba(208,84,63,.32)}
+.btn.gold{background:var(--brass);color:#17181A}
+.btn.ghost{background:var(--night2);color:var(--text);font-weight:700;font-size:14.5px;height:50px}
+.btn[disabled]{opacity:.38;pointer-events:none}
+.coin{width:14px;height:14px;border-radius:50%;background:var(--brass);box-shadow:inset 0 0 0 3px #9C7420;display:inline-block;flex:none}
+.pill{display:flex;align-items:center;gap:5px;background:rgba(23,24,26,.14);border-radius:999px;padding:4px 11px}
+/* intro */
+.intro{flex:1;min-height:0;overflow-y:auto;padding:6px 20px 8px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.intro::-webkit-scrollbar{width:0}
+.paper{background:var(--paper);color:var(--ink);border-radius:16px;padding:14px 18px;font-size:14.5px;line-height:1.9;font-weight:500;text-align:center;width:100%}
+.cast{display:grid;gap:12px 8px;width:100%}
+.cm{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.cm img{width:62px;height:62px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--night3),0 6px 16px rgba(0,0,0,.5)}
+.cm b{font-size:13px;font-weight:900}.cm small{font-size:11px;color:var(--soft);margin-top:-3px;text-align:center}
+.legend{display:flex;justify-content:center;gap:22px;color:var(--soft);font-size:12.5px;padding:2px 24px 12px;flex:none}
+.legend span{display:flex;align-items:center;gap:6px}.legend i{width:8px;height:8px;border-radius:50%;display:block}
+/* accuse */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:10px 16px 4px;flex:none}
+.steps div{display:flex;flex-direction:column;gap:6px;font-size:11.5px;color:#5B5C60;font-weight:700}
+.steps i{height:5px;border-radius:3px;background:var(--night3);display:block}
+.steps .done i{background:var(--brass)}.steps .done{color:var(--soft)}
+.steps .cur i{background:var(--brass);box-shadow:0 0 10px rgba(224,165,38,.7)}.steps .cur{color:var(--brass);font-weight:900}
+.acc.paper{width:auto}.acc{margin:12px 16px 0;min-width:0;overflow:hidden;border-radius:20px;background:var(--paper);color:var(--ink);padding:14px 16px;display:flex;flex-direction:column;gap:10px;flex:none}
+.acc .who{min-width:0;display:flex;align-items:center;gap:10px}
+.acc .who img{width:48px;height:48px;border-radius:50%;object-fit:cover;filter:grayscale(.35) sepia(.25)}
+.acc .stamp{margin-right:auto;margin-left:6px;flex:none;transform:rotate(-8deg);border:2px solid var(--stamp);color:var(--stamp);border-radius:8px;padding:1px 10px;font-weight:900;font-size:14px}
+.acc .lie{display:flex;gap:10px;align-items:flex-start;border-top:1px dashed #BDB5A3;padding-top:10px;font-size:14px;line-height:1.75;font-weight:500}
+.q{padding:16px 20px 6px;font-weight:900;font-size:18px;flex:none}
+.opts{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 8px;display:flex;flex-direction:column;gap:8px}
+.opts::-webkit-scrollbar{width:0}
+.op{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border-radius:16px;background:var(--night2);text-align:right}
+.op.on{background:#2A261C;box-shadow:inset 0 0 0 2px var(--brass)}
+.op.pair{box-shadow:inset 0 0 0 1.5px rgba(224,165,38,.5)}
+.rad{width:22px;height:22px;flex:none;border-radius:50%;border:2px solid #5B5C60;display:flex;align-items:center;justify-content:center}
+.op.on .rad{border-color:var(--brass)}.op.on .rad i{width:10px;height:10px;border-radius:50%;background:var(--brass);display:block}
+.chk{border-radius:7px}.op.on .chk i{border-radius:3px}
+.op .sp{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:900;color:var(--soft)}
+.op .sp img{width:20px;height:20px;border-radius:50%;object-fit:cover}
+.op .tx{font-size:13.5px;line-height:1.7;color:#D8D3C8}
+.big{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.big .op{flex-direction:column;gap:6px;padding:14px 10px;text-align:center;justify-content:center}
+.big img{width:72px;height:72px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--night3)}
+.big .op.on img{box-shadow:0 0 0 3px var(--brass)}
+/* result */
+.res{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding:8px 20px 8px;gap:14px;position:relative}
+.res::-webkit-scrollbar{width:0}
+.halo{position:absolute;inset:0 0 auto 0;height:440px;background:radial-gradient(300px 250px at 50% 34%,rgba(224,165,38,.22),transparent 70%);pointer-events:none}
+.seal{position:relative;width:148px;height:148px;border-radius:50%;border:3px solid var(--stamp);display:flex;align-items:center;justify-content:center;transform:rotate(-10deg);box-shadow:inset 0 0 0 6px var(--night),inset 0 0 0 8px rgba(208,84,63,.55);margin-top:14px;flex:none}
+.seal span{font-weight:900;font-size:32px;color:var(--stamp)}
+.shields{display:flex;gap:10px;align-items:flex-end;position:relative}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;position:relative}
+.stat{border-radius:18px;background:var(--night2);padding:14px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.stat b{font-weight:900;font-size:28px;font-variant-numeric:tabular-nums}
+.proof{width:100%;border-radius:18px;background:var(--paper);color:var(--ink);padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.7;position:relative}
+.proof .r{display:flex;gap:8px;align-items:flex-start}.proof img{width:28px;height:28px;flex:none;border-radius:50%;object-fit:cover}
+.proof hr{border:0;height:1px;background:#CFC7B5;margin:0;width:100%}
+.next{font-size:12.5px;color:var(--soft);text-align:center;padding-top:2px}
+/* sheet + toast */
+.ov{position:absolute;inset:0;background:rgba(8,8,10,.66);z-index:20;display:flex;align-items:flex-end}
+.sheet{width:100%;background:var(--night2);border-radius:28px 28px 0 0;padding:10px 20px 24px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -20px 50px rgba(0,0,0,.5)}
+.grab{width:40px;height:4px;border-radius:2px;background:#45464A;align-self:center}
+.hc{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:var(--night);width:100%}
+.hc .ic{width:40px;height:40px;border-radius:50%;background:#2E281B;display:flex;align-items:center;justify-content:center;flex:none}
+.toast{position:absolute;left:16px;right:16px;bottom:90px;z-index:30;background:#0F1012;border:1px solid var(--line);color:var(--text);border-radius:14px;padding:12px 14px;font-size:13.5px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.spin{height:100%;display:flex;align-items:center;justify-content:center;color:var(--soft);font-size:14px}
+</style>
+</head>
+<body>
+<div id="app"><div class="spin">…</div></div>
+<script>
+'use strict';
+const IMG = /*__IMG__*/;
+const PLANS = /*__PLANS__*/;
+const NAMES = {mina:'مینا',nasrin:'نسرین',taraneh:'ترانه',kaveh:'کاوه',bahram:'بهرام',mansour:'منصور',farhad:'فرهاد',reza:'رضا'};
+const HOUSES = {
+  qolhak:{name:'خانهٔ باغِ قلهک',h:212,rooms:{lib:['کتابخونه','کتابخانه',2,0],salon:['سالن','سالن',1,0],yard:['حیاط','حیاط',0,0],study:['اتاق کار','اتاق کار',2,1],hall:['راهرو','راهرو',1,1],kitchen:['آشپزخونه','آشپزخانه',0,1]}},
+  kashan:{name:'خانهٔ تاریخیِ کاشان',h:312,rooms:{upper:['بالاخونه','بالاخانه',2,0],porch:['ایوون','ایوان',1,0],shah:['شاه‌نشین','شاه‌نشین',0,0],kitchen:['مطبخ','مطبخ',2,1],court:['حیاط','حیاط و حوض',1,1],lib:['کتابخونه','کتابخانه',0,1],store:['انبار','انبار',2,2],hashti:['هشتی','هشتی',1,2],guest:['اتاق مهمون','اتاق مهمان',0,2]}}
+};
+const ACT = {
+  lib:['دنبالِ یه کتاب می‌گشتم','روزنامه می‌خوندم'],salon:['پای تلویزیون نشسته بودم','داشتم با بقیه حرف می‌زدم'],
+  yard:['رفته بودم هوا بخورم','داشتم با تلفن حرف می‌زدم'],study:['داشتم یه نامه رو امضا می‌کردم','دنبالِ شارژرِ گوشیم بودم'],
+  hall:['داشتم کتم رو از جالباسی برمی‌داشتم','منتظرِ تاکسی بودم'],kitchen:['داشتم چای دم می‌کردم','یه لیوان آب خوردم'],
+  upper:['داشتم چمدونم رو می‌بستم','از پنجره بیرون رو نگاه می‌کردم'],porch:['روی پله‌ها نشسته بودم','داشتم عکس می‌گرفتم'],
+  shah:['داشتم گچ‌بری‌ها رو نگاه می‌کردم','شمع‌ها رو روشن می‌کردم'],court:['کنارِ حوض نشسته بودم','داشتم گلدون‌ها رو آب می‌دادم'],
+  store:['دنبالِ فانوس می‌گشتم','داشتم صندلی‌ها رو جابه‌جا می‌کردم'],hashti:['داشتم در رو قفل می‌کردم','منتظرِ کسی بودم'],
+  guest:['داشتم لباس عوض می‌کردم','کمی دراز کشیده بودم']
+};
+const LEVEL_FA = {easy:'آسان',medium:'متوسط',hard:'سخت'};
+const COLORS = ['#E0A526','#7FB8D8','#E07A5F'];
+const STEP_FA = ['دزد','دروغ','تناقض','شاهد'];
+const WRONG_FA = {who:'این مظنون دزد نیست.',lie:'این حرفش دروغ نبود.',con:'این صحبت دروغش رو رد نمی‌کنه.',wit:'شاهد کافی نیست؛ حرفی رو انتخاب کن که گوینده‌ی «ردکننده» رو تبرئه کنه.'};
+const ERR_FA = {not_enough_coins:'سکه‌ات کافی نیست.',locked:'این معما هنوز باز نشده.',failed:'این پرونده بسته شده.',already_solved:'این معما قبلاً حل شده.',closed:'این پرونده بسته شده.',no_kikoja:'فعلاً در دسترس نیست.',error:'یه مشکلی پیش اومد؛ دوباره امتحان کن.'};
+const fa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $app = document.getElementById('app');
+
+/* ---------------- bridge ---------------- */
+const KKB = (() => {
+  let n = 0; const wait = {};
+  window.__kkReply = (id, r) => { const w = wait[id]; if (!w) return; delete wait[id]; r && r.ok ? w.ok(r.data) : w.no(r && r.error || 'error'); };
+  const hasApp = () => typeof window.KK !== 'undefined' && window.KK && typeof window.KK.postMessage === 'function';
+  return { call(op, body) { return new Promise((ok, no) => { if (!hasApp()) { no('error'); return; } const id = ++n; wait[id] = {ok, no}; window.KK.postMessage(JSON.stringify({id, op, body: body || {}})); }); } };
+})();
+const closeApp = next => { KKB.call('close', next ? {next: true} : {}).catch(() => {}); };
+
+/* ---------------- state ---------------- */
+let D = null, view = 'boot', pins = [], time = -1, t0 = Date.now(), toastT = null;
+let sheet = null, busy = false, acc = {step: 0, who: -1, lie: null, con: null, wit: []};
+const P = () => D.puzzle, H = () => HOUSES[P().house];
+const clockStart = () => (P().T === 5 ? 20 * 60 + 45 : 21 * 60);
+const TT = () => [...Array(P().T)].map((_, i) => { const m = clockStart() + 15 * i; return fa(Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0')); });
+const person = p => ({id: P().cast[p][0], role: P().cast[p][1], name: NAMES[P().cast[p][0]] || '؟', img: IMG[P().cast[p][0]]});
+const byId = id => P().S.find(s => s.id === id);
+const whoName = s => s.p >= 0 ? person(s.p).name : 'مدرک';
+const roomN = (id, short) => { const r = H().rooms[id]; return r ? (short ? r[0] : r[1]) : id; };
+
+/* ---------------- statements ---------------- */
+function segs(s) {
+  const T = TT(), v = ((+s.id.slice(1)) + (+P().id.slice(1))) % 2;
+  const t = u => ({k: 't', x: T[u]}), r = id => ({k: 'r', x: roomN(id, true)}), y = q => ({k: 'p', x: person(q).name});
+  const x = z => ({k: '', x: z});
+  switch (s.kind) {
+    case 'self': return [t(s.t), x(' تو '), r(s.r), x(' بودم؛ ' + ((ACT[s.r] || ['اون‌جا بودم', 'اون‌جا بودم'])[v]) + '.')];
+    case 'alone': return v ? [t(s.t), x(' تو '), r(s.r), x(' تنها بودم.')] : [t(s.t), x(' تو '), r(s.r), x(' بودم و هیچ‌کس دیگه اون‌جا نبود.')];
+    case 'saw': return v ? [t(s.t), x(' تو '), r(s.r), x(' بودم؛ '), y(s.y), x(' هم اون‌جا بود.')] : [t(s.t), x(' با '), y(s.y), x(' تو '), r(s.r), x(' بودیم.')];
+    case 'only': return [t(s.t), x(' تو '), r(s.r), x(' فقط من بودم و '), y(s.y), x('.')];
+    case 'heard': return v ? [t(s.t), x(' صدای '), y(s.y), x(' رو از '), r(s.r), x(' شنیدم.')] : [t(s.t), x(' از لای در '), y(s.y), x(' رو تو '), r(s.r), x(' دیدم.')];
+    case 'absent': return [t(s.t), x(' تو '), r(s.r), x(' بودم؛ '), y(s.y), x(' اون‌جا نبود.')];
+    case 'stayed': return [x('از '), t(s.t), x(' تا '), t(s.t2), x(' از '), r(s.r), x(' بیرون نیومدم.')];
+    case 'never': return v ? [x('من اون شب اصلاً پام رو تو '), r(s.r), x(' نذاشتم.')] : [x('من کلِ شب نزدیکِ '), r(s.r), x(' هم نرفتم.')];
+    case 'photo': return [x('عکسِ ساعتِ '), t(s.t), x(' از کلِ '), r(s.r), x(': فقط '), ...s.ys.flatMap((q, i) => i ? [x(' و '), y(q)] : [y(q)]), x('.')];
+    case 'dark': return [x('نگهبان ساعتِ '), t(s.t), x(' کلِ '), r(s.r), x(' رو گشت و تأیید کرد هیچ‌کس اون‌جا نبود.')];
+  }
+  return [x('')];
+}
+const sayHtml = s => segs(s).map(z => z.k ? `<span class="k-${z.k}">${esc(z.x)}</span>` : esc(z.x)).join('');
+const facesOf = s => {
+  switch (s.kind) {
+    case 'self': case 'alone': case 'stayed': return [{p: s.p}];
+    case 'saw': case 'only': return [{p: s.p}, {p: s.y}];
+    case 'heard': return [{p: s.y}];
+    case 'absent': return [{p: s.p}, {p: s.y, out: true}];
+    case 'never': return [{p: s.p, out: true}];
+    case 'photo': return s.ys.map(q => ({p: q}));
+    default: return [];
+  }
+};
+const inSlot = s => time < 0 || s.t == null || (s.t2 != null ? (time >= s.t && time <= s.t2) : s.t === time);
+
+/* ---------------- plan ---------------- */
+function planHtml(o) {
+  const hs = H(), Hh = hs.h, W = 312, rooms = hs.rooms;
+  const target = P().target, marks = o.marks || [], T = P().T;
+  const cells = Object.entries(rooms).map(([id, [, n, cx, cy]]) => {
+    const mine = marks.filter(m => m.room === id);
+    const style = `left:${(cx * 100 + 6) / W * 100}%;top:${(cy * 100 + 6) / (Hh) * 100}%;width:${100 / W * 100}%;height:${100 / Hh * 100}%`;
+    const first = mine[0];
+    const faces = mine.flatMap(m => m.faces.map(f => ({...f, c: m.c, n: m.n})));
+    return `<div class="rc" style="${style}">${id === target ? '<div class="glow"></div>' : ''}
+      ${first ? `<div class="hl" style="background:${first.c}1F;box-shadow:inset 0 0 0 2px ${first.c},0 0 16px ${first.c}55"></div>` : ''}
+      ${o.labels === false ? '' : `<span class="lab">${esc(n)}</span>`}
+      ${id === target && o.labels !== false ? '<svg style="position:absolute;top:6%;left:6%;width:15px;height:15px" viewBox="0 0 24 24" fill="none" stroke="#E0A526" stroke-width="2.2" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>' : ''}
+      <div class="faces">${faces.map(f => `<span class="face${f.out ? ' out' : ''}"><img src="${person(f.p).img}" alt="" style="border-color:${f.c}">${f.out ? '<span class="no"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></span>' : ''}<b style="background:${f.c}">${fa(f.n)}</b></span>`).join('')}${mine.filter(m => m.dark).map(m => `<span class="face"><span class="no" style="position:static;width:27px;height:27px;border-radius:50%;background:#111214;border:2px solid ${m.c};display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${m.c}" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></span><b style="background:${m.c}">${fa(m.n)}</b></span>`).join('')}</div>
+    </div>`;
+  }).join('');
+  const locks = (P().locks || []).map(([a, b, u]) => {
+    const ra = rooms[a], rb = rooms[b]; if (!ra || !rb) return '';
+    const ax = ra[2], ay = ra[3], bx = rb[2], by = rb[3];
+    const px = ((ax + bx) / 2 * 100 + 50 + 6) / W * 100 + (ax === bx ? 0 : 0), py = ((ay + by) / 2 * 100 + 50 + 6) / Hh * 100;
+    const on = time === u || time === u + 1;
+    return `<span class="lock${on ? ' on' : ''}" style="left:${px}%;top:${py}%"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D0543F" stroke-width="2.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>`;
+  }).join('');
+  return `<div class="plan" style="aspect-ratio:${W}/${Hh};width:min(100%,${Math.round((o.maxh || 999) * W / Hh)}px);margin:0 auto">${PLANS[P().house]}${cells}${locks}<div class="vig"></div></div>`;
+}
+/* locks sit between two rooms: the midpoint of the two cell centres is the door */
+
+/* ---------------- views ---------------- */
+const ARROW_BACK = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E6E2DA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg>';
+const CHEV = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg>';
+const BULB = c => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${c || '#E0A526'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>`;
+const PIN = c => `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l-1 5 3 3H7l3-3zM12 12v8"/></svg>`;
+const SHIELD = on => `<svg width="${on ? 40 : 30}" height="${on ? 40 : 30}" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z" fill="${on ? '#E0A526' : 'none'}" stroke="${on ? '#E0A526' : '#5B5C60'}" stroke-width="1.8"${on ? ' style="filter:drop-shadow(0 0 8px rgba(224,165,38,.6))"' : ''}/>${on ? '<path d="m12 7 1.5 3 3.3.4-2.4 2.3.6 3.3L12 14.5 9 16l.6-3.3-2.4-2.3 3.3-.4z" fill="#17181A"/>' : ''}</svg>`;
+const lvlHtml = () => { const i = ['easy', 'medium', 'hard'].indexOf(D.level); return `<span class="lvl"><b>${[0, 1, 2].map(k => `<i class="${k <= i ? 'on' : ''}" style="height:${6 + k * 5}px"></i>`).join('')}</b>${LEVEL_FA[D.level]}</span>`; };
+const timeRange = () => { const t = TT(); return `${t[0]} تا ${t[t.length - 1]}`; };
+const dots = () => `<div class="dots" aria-label="فرصت‌ها">${[0, 1, 2].map(i => `<i class="${i < D.max_mistakes - D.run.mistakes ? '' : 'off'}"></i>`).join('')}</div>`;
+
+function vIntro() {
+  const n = P().n;
+  return `<div class="scr">
+    <div class="bar"><button class="rbtn" data-a="close" aria-label="بستن">${ARROW_BACK}</button><div class="grow" style="text-align:center">${lvlHtml()}</div><span style="width:44px"></span></div>
+    <div class="intro">
+      ${planHtml({labels: true, maxh: 300})}
+      <div style="text-align:center"><div style="font-weight:900;font-size:30px;line-height:1.25">${esc(P().title)}</div>
+      <div style="font-size:13.5px;color:var(--kraft);font-weight:700;margin-top:4px">${esc(H().name)} · ${timeRange()}</div></div>
+      <p class="paper" style="margin:0">${esc(P().story)}</p>
+      <div class="cast" style="grid-template-columns:repeat(${n <= 4 ? 4 : 3},minmax(0,1fr))">${P().cast.map((_, i) => { const p = person(i); return `<div class="cm"><img src="${p.img}" alt=""><b>${esc(p.name)}</b><small>${esc(p.role)}</small></div>`; }).join('')}</div>
+    </div>
+    <div class="legend"><span><i style="background:var(--stamp)"></i>یک مظنون دروغ می‌گه</span><span><i style="background:var(--brass)"></i>${fa(D.max_mistakes)} فرصت</span></div>
+    <div class="foot" style="padding-top:0"><button class="btn red" data-a="start"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFF6EE" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></svg>شروع تحقیقات</button></div>
+  </div>`;
+}
+
+function marksOfPins() {
+  return pins.map((id, k) => { const s = byId(id); return {room: s.r, c: COLORS[k], n: k + 1, faces: facesOf(s), dark: s.kind === 'dark'}; });
+}
+function stRow(s, opt) {
+  const k = pins.indexOf(s.id), on = k >= 0;
+  return `<button class="st${on ? ' on' : ''}" data-a="pin" data-id="${s.id}" aria-pressed="${on}" ${on ? `style="box-shadow:inset 0 0 0 1.5px ${COLORS[k]}66"` : ''}>
+    <span class="t">${sayHtml(s)}</span>${on ? `<span class="nb" style="background:${COLORS[k]}">${fa(k + 1)}</span>` : `<span style="width:24px;height:24px;display:flex;align-items:center;justify-content:center">${PIN('#5B5C60')}</span>`}</button>`;
+}
+function lockLines() {
+  const T = TT();
+  return (P().locks || []).map(([a, b, u]) => `<div class="st line"><span class="t"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D0543F" stroke-width="2.4" stroke-linecap="round" style="vertical-align:-2px;margin-left:6px"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>از <span class="k-t">${T[u]}</span> تا <span class="k-t">${T[u + 1]}</span> درِ بینِ <span class="k-r">${esc(roomN(a, true))}</span> و <span class="k-r">${esc(roomN(b, true))}</span> قفل بود.</span></div>`).join('');
+}
+function vBoard() {
+  const T = TT(), hd = D.hint_data || {}, pair = hd.pair || [];
+  const chips = T.map((lab, i) => {
+    const sel = time === i, pd = pins.map((id, k) => ({id, k})).filter(o => { const s = byId(o.id); return s.t != null && (s.t2 != null ? i >= s.t && i <= s.t2 : s.t === i); });
+    return `<button class="chip${sel ? ' sel' : ''}${hd.time === i ? ' hint' : ''}" data-a="time" data-i="${i}" aria-label="فقط صحبت‌های ${lab}"><span>${lab}</span><span class="pd">${pd.map(o => `<i style="background:${sel ? '#17181A' : COLORS[o.k]}"></i>`).join('')}</span></button>`;
+  }).join('');
+  const tray = pins.length ? pins.map((id, k) => { const s = byId(id); const who = s.p >= 0 ? `<img src="${person(s.p).img}" alt="">` : ''; return `<div class="pin paper"><span class="nb" style="background:${COLORS[k]}">${fa(k + 1)}</span><div style="flex:1;min-width:0"><div class="w">${who}${esc(whoName(s))}</div><div class="tx">${sayHtml(s)}</div></div><button data-a="pin" data-id="${id}" aria-label="برداشتن سنجاق" style="width:28px;height:28px;flex:none;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#615F5A" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`; }).join('')
+    : `<div class="empty">${PIN('#7C7A73')}تا سه صحبت رو کنار هم بذار</div>`;
+  const ev = P().S.filter(s => s.p < 0 && inSlot(s));
+  const groups = [];
+  if (ev.length || (P().locks || []).length) groups.push(`<div class="grp"><div class="gh"><span class="doc"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E0A526" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span><b>مدارک</b><small>همه‌شون درستن</small></div>${lockLines()}${ev.map(stRow).join('')}</div>`);
+  P().cast.forEach((_, i) => { const items = P().S.filter(s => s.p === i && inSlot(s)); if (!items.length) return; const p = person(i); groups.push(`<div class="grp"><div class="gh${pair.includes(i) ? ' pair' : ''}"><img src="${p.img}" alt=""><b>${esc(p.name)}</b><small>${esc(p.role)}</small>${pair.includes(i) ? '<small style="color:var(--brass);font-weight:900;margin-right:auto">مشکوک</small>' : ''}</div>${items.map(stRow).join('')}</div>`); });
+  const note = (hd.time != null || pair.length) ? `<div style="padding:6px 16px 0;font-size:12.5px;color:var(--brass);display:flex;gap:6px;align-items:center;flex:none">${BULB()}${[hd.time != null ? 'ساعت ' + T[hd.time] + ' مهمه' : '', pair.length ? 'دزد یکی از ' + pair.map(i => person(i).name).join(' و ') + 'ه' : ''].filter(Boolean).join(' · ')}</div>` : '';
+  return `<div class="scr">
+    <div class="bar"><button class="rbtn" data-a="back" aria-label="برگشت">${ARROW_BACK}</button>
+      <div class="grow"><div class="ttl">${esc(P().title)}</div><div class="sub">${LEVEL_FA[D.level]} · ${fa(P().n)} مظنون</div></div>${dots()}
+      <button class="rbtn" data-a="hints" aria-label="راهنما">${BULB()}</button></div>
+    <div style="margin:0 12px;padding:10px;border-radius:20px;background:#1D1E21;box-shadow:inset 0 0 0 1px var(--night3);display:flex;flex-direction:column;gap:10px;flex:none">
+      ${planHtml({marks: marksOfPins(), labels: true, maxh: 214})}
+      <div class="chips" style="grid-template-columns:repeat(${T.length},minmax(0,1fr))">${chips}</div></div>
+    ${note}<div class="tray">${tray}</div>
+    <div class="list">${groups.join('') || '<div class="empty" style="margin:8px 0">صحبتی توی این ساعت نیست</div>'}</div>
+    <div class="foot"><button class="btn red" data-a="accuse"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFF6EE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 4 6 6M11 7l6 6M4 20l7-7M9 9l6 6"/></svg>متهم کردن</button></div>
+    ${sheet === 'hints' ? hintSheet() : ''}</div>`;
+}
+
+function hintSheet() {
+  const hd = D.hint_data || {}, hs = D.run.hints || [], T = TT();
+  const row = (kind, title, desc, price) => { const got = hs.includes(kind); return `<button class="hc" data-a="buy" data-kind="${kind}" ${got ? 'disabled' : ''}><span class="ic">${BULB()}</span><span style="flex:1;min-width:0;text-align:right"><b style="font-size:15px;display:block">${title}</b><span style="font-size:12.5px;color:var(--soft)">${got ? (kind === 'time' ? 'ساعت ' + T[hd.time] + ' مهمه' : 'دزد یکی از ' + (hd.pair || []).map(i => person(i).name).join(' و ') + 'ه') : desc}</span></span>${got ? '<span style="font-size:12.5px;color:var(--ok);font-weight:900">گرفتی</span>' : `<span class="pill" style="background:#2B2D31"><i class="coin"></i><b>${fa(price)}</b></span>`}</button>`; };
+  return `<div class="ov" data-a="sheetclose"><div class="sheet" data-stop="1"><div class="grab"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between"><b style="font-size:20px">راهنما</b><button class="rbtn" data-a="sheetclose" aria-label="بستن" style="width:40px;height:40px;background:var(--night3)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E6E2DA" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    ${row('time', 'ساعتِ مهم', 'کدوم ساعت رو بیشتر نگاه کنی', D.prices.time)}${row('pair', 'دو مظنون', 'دزد یکی از دو مظنونه', D.prices.pair)}
+    <span style="text-align:center;font-size:12px;color:var(--soft)">هر راهنما یه پلاک از نتیجه کم می‌کنه · موجودی ${fa(D.coins)}</span></div></div>`;
+}
+
+function accStatements() {
+  const S = P().S, lie = acc.lie, con = acc.con;
+  if (acc.step === 1) return S.filter(s => s.p === acc.who);
+  if (acc.step === 2) return S.filter(s => s.p !== acc.who && s.id !== lie);
+  const conS = con ? byId(con) : null;
+  return S.filter(s => s.id !== lie && s.id !== con && (!conS || s.p !== conS.p || conS.p < 0));
+}
+function vAccuse() {
+  const q = ['دزد کیه؟', 'کدوم حرفش دروغه؟', 'کدوم صحبت ردش می‌کنه؟', 'کدوم صحبت‌ها گوینده‌ی اون رو تبرئه می‌کنن؟'][acc.step];
+  const steps = STEP_FA.map((l, i) => `<div class="${i < acc.step ? 'done' : i === acc.step ? 'cur' : ''}"><i></i>${l}</div>`).join('');
+  let opts = '', ready = false;
+  if (acc.step === 0) {
+    opts = `<div class="big">${P().cast.map((_, i) => { const p = person(i), on = acc.who === i; return `<button class="op${on ? ' on' : ''}" data-a="who" data-i="${i}" aria-pressed="${on}"><img src="${p.img}" alt=""><b style="font-size:15px">${esc(p.name)}</b><small style="color:var(--soft);font-size:11.5px">${esc(p.role)}</small></button>`; }).join('')}</div>`;
+    ready = acc.who >= 0;
+  } else {
+    const multi = acc.step === 3, pair = (D.hint_data || {}).pair || [];
+    opts = accStatements().map(s => { const on = multi ? acc.wit.includes(s.id) : (acc.step === 1 ? acc.lie === s.id : acc.con === s.id); const sp = s.p >= 0 ? `<img src="${person(s.p).img}" alt="">` : ''; return `<button class="op${on ? ' on' : ''}" data-a="opt" data-id="${s.id}" aria-pressed="${on}"><span class="rad${multi ? ' chk' : ''}"><i></i></span><span style="flex:1;min-width:0;text-align:right"><span class="sp">${sp}${esc(whoName(s))}</span><span class="tx">${sayHtml(s)}</span></span></button>`; }).join('');
+    ready = acc.step === 1 ? !!acc.lie : acc.step === 2 ? !!acc.con : true;
+  }
+  const head = acc.step >= 1 ? (() => { const p = person(acc.who), l = acc.lie ? byId(acc.lie) : null; return `<div class="acc paper"><div class="who"><img src="${p.img}" alt=""><div><b style="font-size:16px">${esc(p.name)}</b><div style="font-size:12px;color:var(--inksoft)">${esc(p.role)}</div></div><span class="stamp">متهم</span></div>${l ? `<div class="lie"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D0543F" stroke-width="2.4" stroke-linecap="round" style="flex:none;margin-top:4px"><path d="M6 6l12 12M18 6 6 18"/></svg><span>${sayHtml(l)}</span></div>` : ''}</div>`; })() : '';
+  const last = acc.step === 3;
+  return `<div class="scr">
+    <div class="bar"><button class="rbtn" data-a="back" aria-label="برگشت">${ARROW_BACK}</button><span class="grow ttl" style="font-size:17px">اثبات</span>${dots()}</div>
+    <div class="steps">${steps}</div>${head}
+    <div class="q">${q}${acc.step === 3 ? '<div style="font-size:12px;color:var(--soft);font-weight:500;margin-top:2px">تا ۲ تا؛ اگه لازم نیست خالی بذار.</div>' : ''}</div>
+    <div class="opts">${opts}</div>
+    <div class="foot"><button class="btn ${last ? 'red' : 'gold'}" data-a="${last ? 'submit' : 'next'}" ${ready && !busy ? '' : 'disabled'}>${last ? 'ثبت اتهام' : 'بعدی' + CHEV}</button></div></div>`;
+}
+
+const mmss = s => fa(Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'));
+function nextLevel() {
+  const L = D.levels || [], i = L.findIndex(x => x.level === D.level);
+  return i >= 0 ? L.slice(i + 1).find(x => !x.solved) : null;
+}
+function vResult() {
+  const R = D.reveal, stars = D.run.stars, sec = D.secs_shown || D.run.secs;
+  const lie = byId(R.lie), conId = (R.proof || [])[1], con = conId ? byId(conId) : null;
+  const nx = nextLevel();
+  const wits = ((R.proof || [])[2] || []).map(byId).filter(Boolean);
+  const row = s => `<div class="r">${s.p >= 0 ? `<img src="${person(s.p).img}" alt="${esc(whoName(s))}">` : ''}<span><b>${esc(whoName(s))}</b> · ${sayHtml(s)}</span></div>`;
+  return `<div class="scr"><div class="halo"></div>
+    <div class="bar" style="position:relative"><button class="rbtn" data-a="close" aria-label="بستن"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E6E2DA" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="res">
+      <div class="seal"><span>حل شد</span></div>
+      <div class="shields" role="img" aria-label="${fa(stars)} پلاک">${[0, 1, 2].map(i => SHIELD(i < stars)).join('')}</div>
+      <div class="two"><div class="stat"><b>${mmss(sec)}</b><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9A9890" stroke-width="2" stroke-linecap="round" role="img" aria-label="زمان"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg></div>
+        ${D.run.paid > 0 ? `<div class="stat"><b style="color:var(--brass)">+${fa(D.run.paid)}</b><i class="coin" role="img" aria-label="سکه"></i></div>` : `<div class="stat"><b>${fa(stars)}</b><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9A9890" stroke-width="1.8" role="img" aria-label="پلاک"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/></svg></div>`}</div>
+      <div class="proof"><div style="font-size:12px;color:var(--inksoft);font-weight:900">دزد: ${esc(person(R.thief).name)}</div>${lie ? row(lie) : ''}${con ? '<hr>' + row(con) : ''}${wits.map(w => '<hr>' + row(w)).join('')}</div>
+    </div>
+    <div class="foot" style="flex-direction:column;gap:10px;padding-top:6px">
+      ${nx ? `<button class="btn gold" style="justify-content:space-between;padding:0 18px" data-a="next-level"><span>معمای ${LEVEL_FA[nx.level]}</span>${nx.open || !nx.price ? '' : `<span class="pill"><i class="coin" style="box-shadow:inset 0 0 0 3px #17181A;background:#9C7420"></i>${fa(nx.price)}</span>`}</button>` : ''}
+      <button class="btn ghost" data-a="share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E6E2DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"/></svg>فرستادن برای دوستان</button>
+      <div class="next">معماهای تازه · فردا ساعت ۹ صبح</div></div></div>`;
+}
+function vFailed() {
+  return `<div class="scr"><div class="bar"><button class="rbtn" data-a="close" aria-label="بستن"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E6E2DA" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="res" style="justify-content:center"><div class="seal" style="margin-top:0"><span style="font-size:28px">بسته شد</span></div>
+      <div style="font-weight:900;font-size:20px;text-align:center">سه بار اشتباه کردی</div>
+      <div style="font-size:13.5px;color:var(--soft);text-align:center;max-width:280px;line-height:1.8">می‌تونی پرونده رو دوباره باز کنی. این بار فقط یه پلاک می‌گیری و سکه‌ای در کار نیست.</div></div>
+    <div class="foot" style="flex-direction:column;gap:10px"><button class="btn gold" data-a="reopen"><i class="coin" style="box-shadow:inset 0 0 0 3px #17181A;background:#9C7420"></i>فرصت دوباره · ${fa(D.prices.reopen)} سکه</button><button class="btn ghost" data-a="close">بعداً</button></div></div>`;
+}
+
+/* ---------------- render + events ---------------- */
+function render() {
+  if (!D) return;
+  $app.innerHTML = (view === 'intro' ? vIntro() : view === 'board' ? vBoard() : view === 'accuse' ? vAccuse() : view === 'result' ? vResult() : vFailed()) + (toastT ? `<div class="toast" role="status">${esc(toastT.m)}</div>` : '');
+  const l = document.querySelector('.list'); if (l && render.scroll != null) l.scrollTop = render.scroll;
+}
+function toast(m) { toastT = {m}; render(); clearTimeout(toast.h); toast.h = setTimeout(() => { toastT = null; render(); }, 2600); }
+const errText = e => ERR_FA[e] || ERR_FA.error;
+function setD(r) { const keep = D && D.levels, ks = D && D.secs_shown; D = r; if (keep && !D.levels) D.levels = keep; if (ks && !D.secs_shown) D.secs_shown = ks; }
+
+async function act(a, el) {
+  const id = el && el.dataset.id, i = el && el.dataset.i != null ? +el.dataset.i : null;
+  if (a === 'close') return closeApp(false);
+  if (a === 'next-level') return closeApp(true);
+  if (a === 'start') { view = 'board'; t0 = Date.now(); return render(); }
+  if (a === 'sheetclose') { sheet = null; return render(); }
+  if (a === 'hints') { sheet = 'hints'; return render(); }
+  if (a === 'back') { if (!window.__kkBack()) closeApp(false); return; }
+  if (a === 'time') { time = time === i ? -1 : i; return render(); }
+  if (a === 'pin') { const at = pins.indexOf(id); if (at >= 0) pins.splice(at, 1); else { pins.push(id); if (pins.length > 3) pins.shift(); } const l = document.querySelector('.list'); render.scroll = l ? l.scrollTop : null; render(); render.scroll = null; return; }
+  if (a === 'accuse') { acc = {step: 0, who: -1, lie: null, con: null, wit: []}; view = 'accuse'; return render(); }
+  if (a === 'who') { acc.who = i; acc.lie = null; acc.con = null; acc.wit = []; return render(); }
+  if (a === 'opt') {
+    if (acc.step === 1) acc.lie = id; else if (acc.step === 2) acc.con = id;
+    else { const at = acc.wit.indexOf(id); if (at >= 0) acc.wit.splice(at, 1); else { acc.wit.push(id); if (acc.wit.length > 2) acc.wit.shift(); } }
+    return render();
+  }
+  if (a === 'next') { acc.step = Math.min(3, acc.step + 1); return render(); }
+  if (busy) return;
+  busy = true;
+  try {
+    if (a === 'buy') { setD(await KKB.call('hint', {kind: el.dataset.kind})); sheet = null; toast('راهنما گرفتی؛ یه پلاک از نتیجه کم می‌شه.'); }
+    else if (a === 'reopen') { setD(await KKB.call('reopen', {})); view = 'board'; t0 = Date.now(); render(); }
+    else if (a === 'share') { await KKB.call('share', {text: `کی کجا؟ · ${P().title}\n${fa(D.run.stars)} پلاک در ${mmss(D.run.secs || Math.round((Date.now() - t0) / 1000))}\nتو هم حلش کن!`}); }
+    else if (a === 'submit') {
+      const secs = Math.min(36000, Math.max(1, Math.round((Date.now() - t0) / 1000)));
+      const r = await KKB.call('accuse', {who: acc.who, lie: acc.lie, con: acc.con, wit: acc.wit, secs});
+      setD(r);
+      if (r.ok) { D.secs_shown = secs; view = 'result'; render(); }
+      else if (D.run.failed) { view = 'failed'; render(); }
+      else { const s = r.step; acc.step = {who: 0, lie: 1, con: 2, wit: 3}[s] ?? 0; if (acc.step < 1) { acc.lie = null; acc.con = null; acc.wit = []; } if (acc.step < 2) { acc.con = null; acc.wit = []; } if (acc.step < 3) acc.wit = []; render(); toast(WRONG_FA[s] || 'اشتباه بود.'); }
+    }
+  } catch (e) { toast(errText(e)); }
+  busy = false; render();
+}
+document.addEventListener('click', ev => {
+  const el = ev.target.closest('[data-a]');
+  if (!el || (el.disabled)) return;
+  if (el.classList.contains('ov') && ev.target !== el) return;     // taps inside a sheet stay in the sheet
+  act(el.dataset.a, el);
+});
+window.__kkBack = () => {
+  if (sheet) { sheet = null; render(); return true; }
+  if (view === 'accuse') { if (acc.step > 0) acc.step--; else view = 'board'; render(); return true; }
+  if (view === 'board') { view = 'intro'; render(); return true; }
+  return false;
+};
+
+/* ---------------- start ---------------- */
+async function boot() {
+  try {
+    setD(await KKB.call('state', {}));
+    if (!D.puzzle) { $app.innerHTML = '<div class="spin">این معما هنوز باز نشده.</div>'; return; }
+    t0 = Date.now();
+    view = D.run.solved && D.reveal ? 'result' : D.run.failed ? 'failed' : (D.run.mistakes > 0 || (D.run.hints || []).length) ? 'board' : 'intro';
+    render();
+  } catch (e) { $app.innerHTML = `<div class="spin">${esc(errText(e))}</div>`; }
+}
+boot();
+</script>
+</body>
+</html>
