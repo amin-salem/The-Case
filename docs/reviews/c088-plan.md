@@ -11,8 +11,8 @@ Written before the JSON. Every card, answer, tool line and the explanation were 
 - **Money path on one plain card (e5)**: families paid 4 nights -> agency paid hotel 3000 $ -> 20 Azar an e-mail from the agency's shared inbox cancels the 31 Dec night for 5 rooms (5 x 150 = 750 $) -> instead of returning to the agency (and by contract e9 to the families) the 750 $ clears the 750 $ debt of the private «گروه پاییزه». Whose group that is comes from two people (Arman, Ramin), not from the card.
 - Trip «shortened»: the 31 Dec hotel night (check-out 03:30 for a 06:10 flight on 1 Jan) is removed; A' sends the families to the Batumi airport lounge from 23:00 on New Year's night. Flights and tickets unchanged, so nothing in the envelopes contradicts A'.
 - No machine card at all (no logs, CCTV, phone records). Two papers clear people at most (e4, e7).
-- «آژانس پرستو» (Farzaneh and Ramin's former agency) -> «آژانس گلبانگ»: پرستو is a motif of c084 four days earlier.
-- Culprit slot s3 (recent: c083 s1, c084 s1, c085 s2, c086 s4).
+- «آژانس پرستو» (Farzaneh and Ramin's former agency) -> «آژانس گلبانگ»: پرستو is a motif of c085 four days earlier.
+- Culprit slot s3 (recent: c083 s1, c085 s1, c084 s2, c086 s4).
 
 ### Cast (slot, name, age, role, ties, secret, lie, what explains the lie)
 - **s1 آرمان دادخواه**, 41, Tabriz representative of Hotel Marina Batumi; flies tonight on the same flight. Friend of Negar (university); chases Farzaneh's hotel debt; knew Ramin from the autumn group. Surface motive: the hotel resold the New Year rooms at a high price and he asked for that night in writing (e4). Secret: separated from his wife for four months; hides it because his father-in-law is the hotel's Iranian partner who got him the job; he moves to Batumi for a month; Negar booked him a monthly apartment with her staff discount. Lies: Wednesday visit «for the rooming list»; «my wife and son come next week». Explained by Nader's answer (tried Negar's drawer, asked twice for her), his own answer, Negar's camera line, his print line.

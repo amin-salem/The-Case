@@ -6,12 +6,12 @@ Written before the JSON. Every card, answer, tool line and the explanation were 
 
 ### Changes from the idea (and why)
 - **What is destroyed:** «مجموعه بذرهای آزمایشی» -> the **48 trial pots of tomato seedlings** of a contract test. c076 «بذرهایی برای نمایش» (published 10 days earlier) is already about destroyed research seeds hiding faked results; pots that an inspector will re-measure the next morning keep the idea's motive without repeating that object.
-- **Names:** نسیم بهنام -> **ترانه بهنام** (نسیم is a name in c084's entrant list, two days earlier). فریدون آذرخش -> **فریدون کهن‌دل** (آذرخش is a suspect surname in c083, three days earlier). ستاره وثوق, داریوش فرزان, هومن رادمنش kept (all far from this week: ستاره c063, وثوق c046, داریوش c054, هومن c020, رادمنش c004/w005). New free names: کهن‌دل, سبزینه‌کار (company), صارمی (inspector, card only), نجفی (Fereydoun's private client, answer only), گلی خانم (cleaner, card only).
+- **Names:** نسیم بهنام -> **ترانه بهنام** (نسیم is a name in c085's entrant list, two days earlier). فریدون آذرخش -> **فریدون کهن‌دل** (آذرخش is a suspect surname in c083, three days earlier). ستاره وثوق, داریوش فرزان, هومن رادمنش kept (all far from this week: ستاره c063, وثوق c046, داریوش c054, هومن c020, رادمنش c004/w005). New free names: کهن‌دل, سبزینه‌کار (company), صارمی (inspector, card only), نجفی (Fereydoun's private client, answer only), گلی خانم (cleaner, card only).
 - **Whistle mechanism on ONE plain illustrated card** (e5, the repair minute, with a three-line text diagram using arrows; the card text uses line breaks). **No machine card at all** (no logs, sensors, phone records; the photo is a photo; the blower's battery gauge is part of an object card).
 - **False trails cleared by different kinds of evidence:** Taraneh's fertilizer by a form (care log e2, the only form that clears anyone); Fereydoun's vent tampering by a photo + people (e3, Setareh's and Hooman's answers) and by the logic of his own minute (he wedged the vent OPEN, which stops the whistle). Hooman by people (Fereydoun's answer + his own). Setareh by the photo and people.
 - **Clue chain rebuilt so that the «hidden device in the director's cupboard» is not a giveaway:** Darius openly admits he took the blower at 19:00 «to clean his AC grille» (Hooman saw him). The cupboard card alone is a cleaning tool where he said it is. It becomes proof only with the cleaning sheet (washed nozzle + full battery at 18:00), the minute (red rust = the duct) and the untouched grey dust on his AC grille.
 - S3: the «breathing greenhouse» talk is Darius's plan: at the Saturday meeting he told staff it «breathes before a misfortune» and that everybody must go to it TOGETHER, which empties the building (e6). No single card refutes the ghost: the minute gives the rule, the photo gives the night's vent state, the greenhouse/boiler-room cards show the duct was blown.
-- Culprit slot s4 (recent: c079 s2, c080 s4, c081 s3, c082 s5, c083 s1, c084 s1).
+- Culprit slot s4 (recent: c079 s2, c080 s4, c081 s3, c082 s5, c083 s1, c085 s1).
 
 ### Cast (slot, name, age, role, ties, secret, lie, what explains the lie)
 - **s1 ستاره وثوق**, 41, contract researcher (drought-tolerance project). Darius's partner for eight years, split two years ago; Taraneh's former teacher. Surface motive: her paper was rejected because Darius would not sign the data-use permit (e6 item 5); «rival sabotage». Secret: interview at a rival institute (پژوهشکده‌ی دشت) on Thursday; tonight at 21:00 she copied her own project data onto a green flash drive (against the rules). Lie: «I was writing my paper all evening». Explained by Taraneh's answer and her own answer when pressed; camera line (22:15 flash drive).
@@ -84,7 +84,7 @@ None decides; each confirms or weakens a statement (s1 her evening, s2 his round
 s1 `f_neutral_42_diamond` (42, scarf). s2 `m_mid_guard` (40, security; 2x). s3 `f_neutral_27_coils` (27, scarf). s4 culprit `m_neutral_47_reserve05` (47; no culprit uses it; last c046). s5 `m_neutral_62_soft` (62).
 
 ### Notes for the coordinator
-- Scene `lab` goes from 5 to 6 (cap in `test_scenes_are_varied_and_known` is 6): fine unless c085 is also lab (idea #3 is villa_rain).
+- Scene `lab` goes from 5 to 6 (cap in `test_scenes_are_varied_and_known` is 6): fine unless c084 is also lab (idea #3 is villa_rain).
 - e5 uses line breaks (\n) for the text diagram; no other evidence card in the repo does; Flutter `Text` shows them as new lines.
 
 ### Fixes after the blind test (PASS: 8 steps, 93%, difficulty 4; chain and culprit unchanged, no retest)

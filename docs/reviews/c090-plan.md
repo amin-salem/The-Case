@@ -13,7 +13,7 @@ Written before the JSON. Every card, answer, tool line and the explanation were 
 - **False trail 2 adapted:** the idea's «the box left after the swap was discovered» became «the box left the warehouse (into Khosrow's van at 19:23) after it had already been opened and re-taped»: the paper van label lies on top of the clear tape (e6), Nima saw the clear tape shine at 19:22 (answer), and Khosrow has only brown tape. The swap also needed box 12, deep inside, where Khosrow never went (e3).
 - **Only two forms clear people:** e5 (Nima's repair sheet: why his multimeter and tools are next to box 12) and e6 (Khosrow's delivery label, as an object lying over the tape). Everyone else is cleared by people (e3 guard, statements and answers) and objects (e2 photo, e4 box 12, e7 inspection).
 - One machine-like card: e2 (photo posted in the staff group). e3 is a person (guard) reading from his own notebook.
-- Culprit slot s5 (recent: c085 s2, c086 s4, c087 s3, c088 s3).
+- Culprit slot s5 (recent: c084 s2, c086 s4, c087 s3, c088 s3).
 
 ### Cast
 - **s1 یلدا پارسا**, 41, delivery officer (مسئول تحویل), 6 years here. Nima's colleague, Mahtab's friend. Packed module 7 at 17:20. Secret: has resigned in her head: tonight 18:30 she signed a contract with a rehab clinic (starts in Bahman) and has not told Shervin. Lie: «came from home». Explained by Mahtab's answer and her own.

@@ -9,7 +9,7 @@ Written before the JSON. Every card, answer, tool line and the explanation were 
 - **The «name on all fakes»** is printed on the practice sheets (a filled-in example, delivered a week ago and joked about in the سرا group the same day), so nobody needs to have heard anything tonight to produce it. The tea quarrel is pure situation humour: no step of the solution depends on what anyone heard about tea, and no joke is needed by the culprit before the reveal.
 - **Only two forms clear people:** e3 (printer's delivery slip: practice sheets open to everyone) and e6 (motorbike instalment receipt). Everybody else is cleared by people (tea man e8, observer e10, answers) and objects (e2 photo, e4 carton/clips, e9 storeroom).
 - **Tidiness is never proof.** It only leads the eye (re-wrapped parcel, fanned originals, his fanned swatches). The decision is physical and timed: the ledger strip with «تحویل ساعت ۲۰:۰۵» inside the parcel (e1) + the torn page and the brass clip with the broken third tooth (e5) + who could hold that ledger after 20:05 (e8, e10, e6, his own words).
-- No machine card (no logs/CCTV/phone records); the photo is a photo. Culprit slot s3 (recent: c083 s1, c084 s1, c085 s2, c086 s4).
+- No machine card (no logs/CCTV/phone records); the photo is a photo. Culprit slot s3 (recent: c083 s1, c085 s1, c084 s2, c086 s4).
 - Note: c073 (two weeks earlier) also has a cloth shop and a torn ledger page; here the object is a ballot parcel, the torn half-page is the idea's own physical link, the tone is comic and the swap is of ballots, not money.
 
 ### Cast (slot, name, age, role, ties, secret, lie, what explains the lie)

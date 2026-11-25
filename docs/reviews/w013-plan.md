@@ -7,7 +7,7 @@ day 1 = Thursday, day 2 = Friday morning («صبح جمعه»). Monday ۳۰ آذ
 
 ## Changes against the idea
 - Names. The idea's invented first names (کامران‌فر, بهنام‌فر, هوشنگیار, سهرابک, رامین‌مهر) were replaced by natural ones that do
-  not clash with the cases of the same fortnight (c084 کامرانی, c086 بهنام/فرزان, c088 رامین, c089 سهراب, c076 امیرهوشنگ, c085 قاسم,
+  not clash with the cases of the same fortnight (c085 کامرانی, c086 بهنام/فرزان, c088 رامین, c089 سهراب, c076 امیرهوشنگ, c084 قاسم,
   c082 جاسم, w008 نوذری): culprit **سیروس دادبه**; his sister **نادیا دادبه** (siblings share the surname; the idea's نگین is
   also overused); **بابک جاوید** (appraiser); **ابراهیم رادپور** (trustee); **صابر کاوندی** (porter); **تورج سلیمی** (courier).
   Kept: **فریناز مهرپویا**, **آذرنوش بهروان**. Non-suspects: ناخدا **یحیی دریاگرد** (captain of the lenj «نسیم», Nadia's secret
