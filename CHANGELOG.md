@@ -1,3 +1,7 @@
+# server 1.86.0: weekend case w012 (25 Nov 2026)
+
+- New weekend case w012 «آخرین اتاقِ گرم» (format 3, publish Thu 31 Dec 2026, difficulty 5), with notify entry and camera/print lines. It is dated after w013 because 17 and 24 Dec were already taken. Deploy the server from the Liara panel.
+
 # server 1.85.0: nightly cases c093, c094 (25 Nov 2026)
 
 - New nightly cases c093 «نامی زیر کرایه قایق» (publish Wed 30 Dec 2026, difficulty 4) and c094 «بشقاب صندلی سه» (publish Thu 31 Dec 2026, difficulty 5), with notify entries and camera/print lines. This push also carries c091 and c092 (1.84.0, never deployed alone). Deploy the server from the Liara panel.

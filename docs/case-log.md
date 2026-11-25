@@ -532,3 +532,11 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Plans: docs/reviews/c093-plan.md, c094-plan.md (with «Fixes after the blind test» and «Final wording round»). Changes vs the ideas: all suspect names new; c094 renamed (seat 3 is the trick), لیلا -> صدف (name clash), victim is a consultant doctor, not a suspect.
 - Fixed after the tests: c093 receipt dates (19/5 note, 25/5 settlement, 26/5 approval), money closes (18M = 8M + 10M, 2M float 1.9M + 0.1M), coat-pocket catch kept with a hint, clause 7 widened, Zahedi's clearance, leftover names, e1/e4 wording; c094 corridor and kitchen-door gaps closed with a second witness, hint 3 softened, times aligned, drug access (two missing bottles), fish plate, tray sighting, all camera/print lines made checkable. The last wording round was not retested.
 - This branch is based on content/nightly-20261124 (c091, c092 from an earlier run that never reached main); one push to main carries all four.
+
+### 2026-11-25 weekend session (Sonnet coordinator, Opus writer): w012 from the idea bank
+| w012 «آخرین اتاقِ گرم» (format 3) | 2026-12-31 | batch1 idea #36, style S7, puzzle type 10 (motive inversion), snow_lodge / medical, difficulty 5 | s2 شاهین سپهرداد (m3) | day 1 (4 runs): Shahin 45-60% leaning, Sanjar 22-30%, motive open (m3 about 40-55%), no single card decides, difficulty 4; full (2 runs): Shahin and m3 correct, chapter-2 cards e12-e15 needed, no single card decides; every finding fixed in six rounds (dates and weekdays, road-closure timeline, key and wet key, Sorena's times, e14 slip, receipts and stub, two power events, wording of times). The last wording-only rounds were not retested in a full run. |
+
+- Plan: docs/reviews/w012-plan.md. Name changes from the idea: بنفشه -> گیتی, کیانوش -> سنجر, شهلا -> فرنگیس, surnames of siblings shared (سپهرداد); portraits are existing faces.
+- w012 is dated 2026-12-31 (after w013) because 17 and 24 Dec were already taken by w011 and w013.
+- Clearing by forms: e10 and e15 only; the rest by people, objects and the rescue-post watch log.
+- Still open for Amin: no scene image / art-registry entry for w012.

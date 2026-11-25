@@ -4,7 +4,7 @@ Run `python3 server/tools/case_index.py` after adding or changing a case. One li
 puzzle type, culprit slot and portrait that the last cases did NOT use, and to find the next free slot. It carries no clue text
 and no solution. Names are in `docs/case-names.md`.
 
-Nightly cases: 94 (last: c094 published 2026-12-31). Weekend cases: 12 (last: w013 published 2026-12-24). Story chapters: 1.
+Nightly cases: 94 (last: c094 published 2026-12-31). Weekend cases: 13 (last: w013 published 2026-12-24). Story chapters: 1.
 
 ## Nightly
 
@@ -120,6 +120,7 @@ w008 | 2026-11-26 | 5 | harbor | business | قایقِ برگشت | s4 بهاد�
 w009 | 2026-12-03 | 5 | lab | science | وزنه‌های سرِ جا | s6 کیانوش نیک‌روش‌فر (مسئول آزمون پذیرش) | m_old_professor | 8 | 14 | idea #33 (title was «سنگینیِ یک برچسب»), style S2, puzzle type 3c silent theft (lab / scie
 w010 | 2026-12-10 | 5 | theater | art | تشویق برای یک سکوت | s3 توماج روشن‌آرا (دستیار صحنه) | m_neutral_45_reserve22 | 8 | 15 | idea #34, style S6, puzzle type 8 (theater / art), difficulty 5
 w011 | 2026-12-17 | 5 | villa_rain | family | پس از بسته‌شدن در | s2 ارغوان دادآیین (مدیر تحویل؛ دختر منصور دادآیین) | f_neutral_43_reserve01 | 8 | 15 | idea #35, style classic (no S-number), puzzle type 11 (villa_rain / family), difficulty 5
+w012 | 2026-12-31 | 5 | snow_lodge | medical | آخرین اتاقِ گرم | s2 شاهین سپهرداد (هماهنگ‌کننده‌ی اردو) | m_neutral_39_broad | 8 | 16 | batch1 idea #36, style S7, puzzle type 10 (motive inversion), snow_lodge / medical, diffic
 w013 | 2026-12-24 | 5 | harbor | business | بارِ صاحب‌ندار | s7 سیروس دادبه (تاجر فرش؛ شریک تجارتخانه) | m_neutral_53_reserve17 | 8 | 16 | batch3 idea #43, style classic, puzzle type 9 (object biography), شکل شب: شیءمحور, harbor 
 
 ## Story chapters
@@ -141,7 +142,7 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 
 ## Counts
 
-scenes: airport 5, bazaar_night 5, desert 4, harbor 7, hospital 6, hotel 4, kitchen 5, lab 7, library 6, museum 5, office 6, school 6, snow_lodge 4, subway 4, theater 6, tower 4, train 4, villa_rain 7, warehouse 5, wedding 6
-categories: art 18, business 16, crime 15, family 14, medical 12, science 14, travel 17
+scenes: airport 5, bazaar_night 5, desert 4, harbor 7, hospital 6, hotel 4, kitchen 5, lab 7, library 6, museum 5, office 6, school 6, snow_lodge 5, subway 4, theater 6, tower 4, train 4, villa_rain 7, warehouse 5, wedding 6
+categories: art 18, business 16, crime 15, family 14, medical 13, science 14, travel 17
 culprit slots (nightly): s1 19, s2 19, s3 20, s4 17, s5 19
 difficulty (nightly): 2 2, 3 4, 4 48, 5 40
