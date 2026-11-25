@@ -208,6 +208,25 @@ function huntCard(h) {
   <button id="hnow">شروع از همین الان</button><button id="hsave">ذخیره بدون تغییر شروع</button><button id="hreset" class="danger">پاک‌کردن بازی‌ها</button></div>
   <p class="muted">شروع از همین الان: مظنون اول ۶ ساعت بعد می‌رود و همه چیز طبق زمان واقعی جلو می‌رود. «پاک‌کردن بازی‌ها» برای تست دوباره است و وقتی برای همه باز است کار نمی‌کند.</p>`;
 }
+// «کی کجا؟»: the small deduction game (testers only until it opens to everybody)
+function kikojaCard(k) {
+  if (!k) return '';
+  const c = k.config, st = k.stats, AUD = {off: 'خاموش', testers: 'فقط تسترها', all: 'همه'};
+  return `<h3>🧭 کی کجا؟</h3>
+  <div class="scroll"><table><tr><th>نمایش</th><td>${AUD[c.audience] || c.audience}</td></tr><tr><th>معمای امروز</th><td>${esc(k.today || '—')} از ${num(k.puzzles)}</td></tr>
+  <tr><th>بازی‌ها</th><td>${num(st.runs)} · حل ${num(st.solved)} · شکست ${num(st.failed)} · میانگین ستاره ${num(st.avg_stars)}</td></tr>
+  <tr><th>سکه</th><td>پاداش ${num(st.coins_paid)} · خرج راهنما و بازگشایی ${num(st.coins_spent)}</td></tr>
+  <tr><th>تسترها</th><td>${k.testers.map(t => esc(t.nickname || t.id.slice(0, 6))).join('، ') || '— (از صفحه‌ی هر بازیکن «تستر شود» را بزن)'}</td></tr></table></div>
+  <div class="row"><select id="kau"><option value="off">خاموش</option><option value="testers">فقط تسترها</option><option value="all">همه</option></select>
+  <button id="ksave">ذخیره</button><button id="kreset" class="danger">پاک‌کردن بازی‌ها</button></div>
+  <p class="muted">«فقط تسترها»: فقط بازیکن‌هایی که «تستر» شده‌اند کارتش را در تب آخر هفته می‌بینند. «پاک‌کردن بازی‌ها» برای تست دوباره است و وقتی برای همه باز است کار نمی‌کند.</p>`;
+}
+function wireKikoja(k) {
+  if (!k) return;
+  $('#kau').value = k.config.audience;
+  $('#ksave').onclick = async () => { try { await api('/admin/api/kikoja', {method: 'POST', body: JSON.stringify({audience: $('#kau').value})}); note('ذخیره شد'); go('cases'); } catch (e) { note(e.message); } };
+  $('#kreset').onclick = async () => { if (await ask('بازی همه‌ی تسترها پاک شود؟')) { try { await api('/admin/api/kikoja/reset', {method: 'POST'}); note('پاک شد'); go('cases'); } catch (e) { note(e.message); } } };
+}
 function wireHunt(h) {
   if (!h) return;
   $('#hau').value = h.config.audience; $('#hsp').value = String(h.config.speed);
@@ -449,9 +468,11 @@ const VIEWS = {
   async cases(m) {
     const d = await api('/admin/api/cases');
     const hd = await api('/admin/api/hunt').catch(() => null);
-    m.innerHTML = huntCard(hd) + '<p class="muted">برای دیدن سختی: «حل‌شده» کم و «اتهام اشتباه» زیاد یعنی سخت؛ اگر بیشتر بازیکن‌ها اول به مجرم شک کنند یعنی قابل حدس است.</p><div class="scroll"><table><tr><th>پرونده</th><th>باز شد</th><th>حل</th><th>شکست</th><th>میانگین ستاره</th><th>زمان</th><th>سرنخ</th><th>اتهام اشتباه</th><th>اولین حدس‌ها</th></tr>' +
+    const kd = await api('/admin/api/kikoja').catch(() => null);
+    m.innerHTML = huntCard(hd) + kikojaCard(kd) + '<p class="muted">برای دیدن سختی: «حل‌شده» کم و «اتهام اشتباه» زیاد یعنی سخت؛ اگر بیشتر بازیکن‌ها اول به مجرم شک کنند یعنی قابل حدس است.</p><div class="scroll"><table><tr><th>پرونده</th><th>باز شد</th><th>حل</th><th>شکست</th><th>میانگین ستاره</th><th>زمان</th><th>سرنخ</th><th>اتهام اشتباه</th><th>اولین حدس‌ها</th></tr>' +
       d.map(c => `<tr><td>${esc(c.title)}</td><td>${num(c.opened)}</td><td>${num(c.solved)}</td><td>${num(c.failed)}</td><td>${c.avg_stars ?? '—'}</td><td>${c.avg_seconds ?? '—'}ث</td><td>${c.avg_hints ?? '—'}</td><td>${c.avg_wrong ?? '—'}</td><td>${c.first_guess.map(g => esc(g.suspect) + ' ×' + g.n + (g.culprit ? ' ✔' : '')).join('، ')}</td></tr>`).join('') + '</table></div>';
     wireHunt(hd);
+    wireKikoja(kd);
     const pr = await api('/admin/api/promo').catch(() => null);
     if (pr) {
       const ST = {open: 'باز', upcoming: 'به‌زودی', ended: 'تمام‌شده'};

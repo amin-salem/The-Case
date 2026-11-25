@@ -536,3 +536,26 @@ class HuntState(Base):
     stars: Mapped[int] = mapped_column(Integer, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class KikojaRun(Base):
+    """One player on one «کی کجا؟» puzzle (app/kikoja.py): mistakes, bought hints, the result. Unique per player and puzzle, so
+    two taps never make two rows; every change happens under the player's row lock (db.lock_players)."""
+
+    __tablename__ = "kikoja_runs"
+    __table_args__ = (UniqueConstraint("player_id", "puzzle_id", name="uq_kikoja_run"),
+                      Index("ix_kikoja_run_puzzle_solved", "puzzle_id", "solved"))
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    player_id: Mapped[str] = mapped_column(ForeignKey("players.id", ondelete="CASCADE"), index=True)
+    puzzle_id: Mapped[str] = mapped_column(String(8))
+    mistakes: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    hints: Mapped[list] = mapped_column(JSON, default=list)     # bought hint kinds ("time", "pair")
+    reopened: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+    solved: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
+    stars: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    secs: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    reward: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    proof: Mapped[list] = mapped_column(JSON, default=list)     # [lie, con, wit ids] of the accepted accusation
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

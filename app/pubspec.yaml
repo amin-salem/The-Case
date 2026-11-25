@@ -1,7 +1,7 @@
 name: the_case
 description: "پرونده - a daily Persian crime-mystery game."
 publish_to: 'none'
-version: 1.48.0+101
+version: 1.49.0+102
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -21,6 +21,8 @@ dependencies:
   flutter_poolakey:
     path: third_party/flutter_poolakey
   url_launcher: ^6.3.1
+  # «کی کجا؟» runs as one local page inside the app (assets/kikoja/index.html)
+  webview_flutter: ^4.10.0
   # the «درباره‌ی برنامه» card in Settings, and the version the app reports to the server
   package_info_plus: ^10.2.2
 
@@ -33,6 +35,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/sounds/
+    - assets/kikoja/
     - assets/icon/
     - assets/portraits/
     - assets/scenes/

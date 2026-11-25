@@ -10,6 +10,7 @@ import '../widgets/coming_soon.dart';
 import '../widgets/scene.dart';
 import 'archive_screen.dart' show unlockQuotedCase;
 import 'case_screen.dart';
+import 'kikoja_screen.dart';
 
 DateTime? _time(Object? v) => v is num ? DateTime.fromMillisecondsSinceEpoch(v.toInt() * 1000) : null;
 
@@ -34,6 +35,7 @@ class WeekendScreen extends StatefulWidget {
 
 class _WeekendScreenState extends State<WeekendScreen> {
   CasesList? _cases;
+  bool _kikoja = false; // «کی کجا؟», only when the server shows it to this player (testers first)
 
   @override
   void initState() {
@@ -46,6 +48,13 @@ class _WeekendScreenState extends State<WeekendScreen> {
       final c = await Api.i.cases();
       if (mounted) setState(() => _cases = c);
     } catch (_) {}
+    final k = await Api.i.kikojaVisible();
+    if (mounted) setState(() => _kikoja = k);
+  }
+
+  Future<void> _openKikoja() async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const KikojaScreen()));
+    _load();
   }
 
   Future<void> _opened() async {
@@ -182,6 +191,7 @@ class _WeekendScreenState extends State<WeekendScreen> {
               ),
             ]),
             const SizedBox(height: 14),
+            if (_kikoja) ...[KikojaEntryCard(onOpen: _openKikoja), const SizedBox(height: 14)],
             if (weekly != null)
               SectionBanner(
                 background: AnimatedScene(scene: weekly.scene, height: double.infinity, dim: 0.2),

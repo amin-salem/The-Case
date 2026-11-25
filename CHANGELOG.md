@@ -1,3 +1,11 @@
+# server 1.87.0 / app 1.49.0 build 102 (test APK): «کی کجا؟» for testers (25 Nov 2026)
+
+- New small game «کی کجا؟»: each suspect says where he was at each quarter hour, only the thief lies, and the detective places the suspects on the house plan, finds the lie and proves it (the thief, his false statement, the statement that contradicts it and, when that alone does not clear the other speaker, one or two witness statements). Houses: Qolhak and Kashan.
+- Server: `app/kikoja.py`, `/v1/kikoja` (+ `/hint`, `/accuse`, `/reopen`), table `kikoja_runs` (migration 0041), remote config key `kikoja` (audience off / testers / all). The pool of 60 verified puzzles is `app/content/kikoja/puzzles.json` (made by `tools/kikoja/generate.js`, checked in `tests/test_kikoja.py` by an independent solver: one thief, one false statement, every accepted proof sound). The answer never leaves the server before the puzzle is solved. Hints (15 / 35 coins) are paid once per puzzle, a clean first solve of today's puzzle gives 5 coins once, three mistakes close the file, reopening costs 15 coins (one star, no reward). Coins, mistakes and the result are decided on the server under the player's row lock.
+- Admin panel → پرونده‌ها → «کی کجا؟»: audience (خاموش / فقط تسترها / همه), today's puzzle, live numbers, «پاک‌کردن بازی‌ها». Testers: player page → «تستر شود».
+- App (test APK, not for Bazaar): the weekend tab shows a «کی کجا؟» card only when the server shows the game to that player; the game is one local page (`app/assets/kikoja/index.html`, shown with `webview_flutter`) that talks to the server only through the app. The three practice files and the tutorial run inside the page, cost nothing and give nothing.
+- Deploy the server from the Liara panel, install build 102 on the testers' phones, then set the audience to «فقط تسترها».
+
 # server 1.86.0: weekend case w012 (25 Nov 2026)
 
 - New weekend case w012 «آخرین اتاقِ گرم» (format 3, publish Thu 31 Dec 2026, difficulty 5), with notify entry and camera/print lines. It is dated after w013 because 17 and 24 Dec were already taken. Deploy the server from the Liara panel.

@@ -866,6 +866,35 @@ class Api extends ChangeNotifier {
     return StoryMap(j.cast<String, dynamic>());
   }
 
+  // ---------------------------------------------------------------- «کی کجا؟» (server app/kikoja.py)
+
+  /// True when the server shows the game to this player (testers first); false when hidden, off or offline.
+  Future<bool> kikojaVisible() async {
+    try {
+      final j = await _call('GET', '/v1/kikoja');
+      return j is Map && j['visible'] == true;
+    } catch (e) {
+      debugPrint('kikoja: $e');
+      return false;
+    }
+  }
+
+  /// Today's puzzle and this player's run, for the game page.
+  Future<Map<String, dynamic>> kikojaState() async {
+    final j = (await _call('GET', '/v1/kikoja') as Map).cast<String, dynamic>();
+    if (j['visible'] != true) throw ApiException(404, {'error': 'no_kikoja'});
+    if (j['coins'] is int) _setCoins(j['coins'] as int);
+    return j;
+  }
+
+  /// hint / accuse / reopen. Throws ApiException (not_enough_coins, failed, already_solved ...).
+  Future<Map<String, dynamic>> kikojaAction(String action, Map<String, dynamic> body) async {
+    if (action != 'hint' && action != 'accuse' && action != 'reopen') throw ApiException(400, {'error': 'bad_op'});
+    final j = (await _call('POST', '/v1/kikoja/$action', body: body) as Map).cast<String, dynamic>();
+    if (j['coins'] is int) _setCoins(j['coins'] as int);
+    return j;
+  }
+
   /// Returns (hint text, progress).
   Future<(String, Progress)> buyHint(String id) async {
     final j = (await _call('POST', '/v1/cases/$id/hint') as Map).cast<String, dynamic>();

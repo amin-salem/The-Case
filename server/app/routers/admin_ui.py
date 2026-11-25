@@ -763,3 +763,62 @@ async def player_tester(player_id: str, body: TesterIdIn, session: AsyncSession 
     session.add(AdminLog(action="tester" if body.tester else "untester", target=p.id, detail={"nickname": p.nickname}))
     await session.commit()
     return {"id": p.id, "tester": p.tester}
+
+
+# ---- «کی کجا؟» (app/kikoja.py): who sees it, live numbers, reset for another test ---------------------------------
+class KikojaIn(BaseModel):
+    audience: str = Field(pattern="^(off|testers|all)$")
+
+
+@router.get("/kikoja")
+async def kikoja_view(session: AsyncSession = Depends(get_session)):
+    """READ ONLY. The game's setting and its numbers (testers' rows included: this is the owner's test)."""
+    from .. import kikoja
+    from ..models import KikojaRun
+    from ..services.remote_config import load_config
+    cfg = kikoja.config(await load_config(session))
+    runs = await session.scalar(select(func.count(KikojaRun.id))) or 0
+    solved = await session.scalar(select(func.count(KikojaRun.id)).where(KikojaRun.solved.is_(True))) or 0
+    failed = await session.scalar(select(func.count(KikojaRun.id)).where(
+        KikojaRun.solved.is_(False), KikojaRun.mistakes >= kikoja.MAX_MISTAKES)) or 0
+    stars = await session.scalar(select(func.coalesce(func.avg(KikojaRun.stars), 0)).where(KikojaRun.solved.is_(True))) or 0
+    paid = await session.scalar(select(func.coalesce(func.sum(KikojaRun.reward), 0))) or 0
+    spent = await session.scalar(select(func.coalesce(func.sum(-CoinLog.amount), 0)).where(
+        CoinLog.reason.in_(("kikoja_hint", "kikoja_reopen")))) or 0
+    today = kikoja.today_puzzle() or {}
+    testers = (await session.execute(select(Player.id, Player.nickname).where(Player.tester.is_(True)).limit(50))).all()
+    return {"config": cfg, "puzzles": len(kikoja.pool()), "today": today.get("id"),
+            "stats": {"runs": runs, "solved": solved, "failed": failed, "avg_stars": round(float(stars), 2),
+                      "coins_paid": int(paid), "coins_spent": int(spent)},
+            "testers": [{"id": i, "nickname": n} for i, n in testers]}
+
+
+@router.post("/kikoja")
+async def kikoja_set(body: KikojaIn, session: AsyncSession = Depends(get_session)):
+    from ..models import ConfigValue
+    from ..services.remote_config import invalidate
+    value = {"audience": body.audience}
+    row = await session.get(ConfigValue, "kikoja")
+    if row is None:
+        session.add(ConfigValue(key="kikoja", value=value))
+    else:
+        row.value = value
+    session.add(AdminLog(action="kikoja", target="kikoja", detail=value))
+    await session.commit()
+    invalidate()
+    return await kikoja_view(session)
+
+
+@router.post("/kikoja/reset")
+async def kikoja_reset(session: AsyncSession = Depends(get_session)):
+    """Clears every player's runs, for another test. Refused while the game is open to everybody."""
+    from sqlalchemy import delete
+    from .. import kikoja
+    from ..models import KikojaRun
+    from ..services.remote_config import load_config
+    if kikoja.config(await load_config(session))["audience"] == "all":
+        raise HTTPException(409, "kikoja_is_public")
+    await session.execute(delete(KikojaRun))
+    session.add(AdminLog(action="kikoja_reset", target="kikoja", detail={}))
+    await session.commit()
+    return await kikoja_view(session)

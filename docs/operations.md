@@ -1,3 +1,11 @@
+## «کی کجا؟» (25 Nov 2026, server 1.87.0, app build 102)
+
+- Admin panel → پرونده‌ها → «کی کجا؟»: set «فقط تسترها» after the server is deployed and the testers (player page → «تستر شود») have build 102. Only a tester sees the card (weekend tab). «خاموش» hides it again at once (no new APK). «پاک‌کردن بازی‌ها» clears everybody's runs for another test; it is refused when the audience is «همه».
+- Today's puzzle is `pool[game day mod pool size]` (rolls at 21:00 Tehran like the cases); 60 puzzles = 60 days. More puzzles: `node server/tools/kikoja/generate.js 120 > server/app/content/kikoja/puzzles.json` (the order of the first ones may change, so do it before a public launch) and run the tests.
+- Money: hints 15 / 35 coins once per puzzle, reopen 15 coins, reward 5 coins for a clean first solve (all in `app/kikoja.py`, `PRICES`, `REWARD`). Everything is decided on the server; the page only shows it.
+- The practice files and the first-run tutorial run inside the page and never touch coins.
+- The page is a copy of the prototype built from `docs`-free sources: `tools/kikoja` has the engine and the pool generator; the page source is kept with the owner (prototype `kikoja-source`), the built file is `app/assets/kikoja/index.html`.
+
 ## «شکار سه‌روزه» (18 Nov 2026, server 1.77.0)
 
 > **Parked (20 Nov 2026, Amin):** the app from build 101 has no hunt screen (`docs/parked/hunt_screen.dart.txt` keeps it). Only build 100 can show it. Keep the config on `audience: off`.
