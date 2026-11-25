@@ -181,7 +181,7 @@ class _MainShellState extends State<MainShell> {
   static int _navOf(int tab) => _tabs.indexOf(tab).clamp(0, 4);
 
   /// An icon with a red dot while [flag] is on (a weekend case is open and unsolved; new cases in the archive).
-  Widget _dotIcon(IconData icon, ValueListenable<bool> flag, String key) => ValueListenableBuilder<bool>(
+  Widget _dotIcon(IconData icon, ValueNotifier<bool> flag, String key) => ValueListenableBuilder<bool>(
       valueListenable: flag,
       builder: (_, on, __) => Badge(
           key: on ? ValueKey(key) : null, smallSize: 9, isLabelVisible: on, backgroundColor: K.stamp, child: Icon(icon)));

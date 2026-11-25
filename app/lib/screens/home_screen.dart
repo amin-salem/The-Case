@@ -785,43 +785,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ---------------------------------------------------------------- one-line rows
-
-  /// A one-line row: icon, title (and a short line under it), something small at the end, a chevron.
-  Widget _line({required IconData icon, required String title, String? sub, Color subColor = K.textSoft, Widget? trailing,
-      required VoidCallback onTap}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: K.night2,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: onTap,
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 52),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: K.night3)),
-            child: Row(children: [
-              Icon(icon, color: K.brass, size: 22),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                  Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w700).copyWith(height: 1.5)),
-                  if (sub != null)
-                    Text(sub, maxLines: 1, overflow: TextOverflow.ellipsis,
-                        style: tBody(12, color: subColor, w: FontWeight.w700).copyWith(height: 1.5)),
-                ]),
-              ),
-              if (trailing != null) ...[const SizedBox(width: 8), trailing],
-              const Icon(Icons.chevron_right_rounded, color: K.textSoft),
-            ]),
-          ),
-        ),
-      ),
-    );
-  }
-
   static final Set<String> _giftHidden = {}; // closed with the ✕ in this launch: «case id:player id»
 
   /// A promo case that is free for this new detective right now: one card under tonight's case, with the time left.
