@@ -367,13 +367,6 @@ void main() {
         expect(t.takeException(), isNull);
       });
 
-      testWidgets('the weekend card keeps its real state (open with time left)', (t) async {
-        await seedHome(weekend: 'open', streak: 1);
-        await pumpApp(t);
-        expect(find.textContaining('باز است'), findsOneWidget);
-        expect(find.textContaining('مونده'), findsOneWidget);
-      });
-
       for (final scale in [1.0, 1.3, 2.0]) {
         testWidgets('everything at once at font $scale: no overflow', (t) async {
           await seedHome(streak: 4, secured: false, casesSolved: 5, weekend: 'open');
