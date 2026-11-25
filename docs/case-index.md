@@ -93,8 +93,8 @@ c080 | 2026-12-17 | 5 | library | crime | نامِ مستعارِ شاهد | s4 
 c081 | 2026-12-18 | 5 | kitchen | business | رزرو به نام مهمان | s3 هوتن کیانفر (شریک شرکت ادویه) | m_neutral_45_freckles | 5 | 11 | batch 1 idea #29, style classic, puzzle type 4 (kitchen / business), difficulty 5
 c082 | 2026-12-19 | 5 | harbor | crime | نور زیرِ اسکله | s5 فرخ پارسامهر (پیمانکار باربری) | m_neutral_43_reserve31 | 5 | 11 | batch 1 idea #30, style S3, puzzle type 1 (harbor / crime), difficulty 5, شکل شب: ظاهراً م
 c083 | 2026-12-20 | 5 | hospital | medical | نوبتی که نرسید | s1 مهرداد پویان (مدیر اداری) | m_neutral_41_oval | 5 | 11 | batch3 idea #1, style classic, puzzle type 12, hospital / medical, difficulty 5, شکل شب: ب
-c084 | 2026-12-21 | 5 | school | art | برگه‌ی شماره‌ی پنج | s1 سپهر روشن (مربی سابق کلاس طراحی کارگاه) | m_neutral_46_reserve30 | 5 | 11 | batch3 idea #2, style S1, puzzle type 17, school / art, difficulty 5, شکل شب: سندمحور
-c085 | 2026-12-22 | 5 | villa_rain | family | قاب رو به دیوار | s2 رویا آراسته (دخترعمه‌ی مریم و شهاب؛ شریک کارگاه قاب‌سازی نقش‌بند) | f_neutral_43_reserve06 | 5 | 10 | batch3 idea #3, style S2, puzzle type 16, villa_rain / family, difficulty 5, شکل شب: شیءمح
+c084 | 2026-12-21 | 5 | villa_rain | family | قاب رو به دیوار | s2 رویا آراسته (دخترعمه‌ی مریم و شهاب؛ شریک کارگاه قاب‌سازی نقش‌بند) | f_neutral_43_reserve06 | 5 | 11 | batch3 idea #3, style S2, puzzle type 16, villa_rain / family, difficulty 5, شکل شب: شیءمح
+c085 | 2026-12-22 | 5 | school | art | برگه‌ی شماره‌ی پنج | s1 سپهر روشن (مربی سابق کلاس طراحی کارگاه) | m_neutral_46_reserve30 | 5 | 11 | batch3 idea #2, style S1, puzzle type 17, school / art, difficulty 5, شکل شب: سندمحور
 c086 | 2026-12-23 | 5 | lab | science | سوت باغ شیشه‌ای | s4 داریوش فرزان (مدیر مرکز) | m_neutral_47_reserve05 | 5 | 10 | batch3 idea #4, style S3, puzzle type 13, lab / science, difficulty 5, شکل شب: غیبت‌محور
 c087 | 2026-12-24 | 4 | bazaar_night | business | ریاست بر صندلی تاشو | s3 ستار سرمد (پارچه‌فروش) | m_neutral_56_round | 5 | 10 | batch3 idea #5, style S4, puzzle type 15, bazaar_night / business, difficulty 4, شکل شب: ر
 c088 | 2026-12-25 | 5 | airport | travel | سفری که کوتاه‌تر شد | s3 فرزانه مهرآور (مدیر تور) | f_neutral_45_reserve02 | 5 | 10 | batch3 idea #6, style S5, puzzle type 3ج, airport / travel, difficulty 5, شکل شب: ترتیب‌مح
@@ -129,7 +129,7 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 
 ## Last ten nightly cases (a new case differs from all of these)
 
-- c085: scene villa_rain, category family, culprit slot s2, type: batch3 idea #3, style S2, puzzle type 16, villa_rain / family, difficulty 5, شکل شب: شیءمح
+- c085: scene school, category art, culprit slot s1, type: batch3 idea #2, style S1, puzzle type 17, school / art, difficulty 5, شکل شب: سندمحور
 - c086: scene lab, category science, culprit slot s4, type: batch3 idea #4, style S3, puzzle type 13, lab / science, difficulty 5, شکل شب: غیبت‌محور
 - c087: scene bazaar_night, category business, culprit slot s3, type: batch3 idea #5, style S4, puzzle type 15, bazaar_night / business, difficulty 4, شکل شب: ر
 - c088: scene airport, category travel, culprit slot s3, type: batch3 idea #6, style S5, puzzle type 3ج, airport / travel, difficulty 5, شکل شب: ترتیب‌مح

@@ -540,3 +540,9 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - w012 is dated 2026-12-31 (after w013) because 17 and 24 Dec were already taken by w011 and w013.
 - Clearing by forms: e10 and e15 only; the rest by people, objects and the rescue-post watch log.
 - Still open for Amin: no scene image / art-registry entry for w012.
+
+### 2026-11-25 Yalda swap (Sonnet coordinator, Opus writer): c084 and c085
+- Moved: «قاب رو به دیوار» (Yalda night) c085 -> **c084**, publish 2026-12-22 -> **2026-12-21**; «برگه‌ی شماره‌ی پنج» c084 -> **c085**, publish 2026-12-21 -> **2026-12-22**, intro date «یکشنبه ۲۹ آذر ۱۴۰۵» -> «سه‌شنبه ۱ دی ۱۴۰۵». The rows for the two cases in the 2026-11-18 batch above carry the new ids and dates. Name check c083-c086: no clash within 7 days. The older branch `content/yalda-20261221` (c084 -> c095) was not used.
+- Yalda elements in c084: korsi, watermelon, beet and pomegranate in intro, statements and e9; «فال حافظ» notebook card e11 (Ladan's hand, 20:03-20:20, Roya absent 20:07-20:13) added to proof; closing fal-style line; notify teaser updated. Skipped: stain test and counted-items-with-hidden-napkin (no natural place in the frame swap; would add an object with no role).
+- Blind tests (two fresh Sonnet runs on the public file): culprit s2 رویا found both times, ~90%, difficulty rated 4-5, no single card decides, no tool line decides. Findings fixed: Maryam's marriage year Tir 1370 -> Tir 1375 (Shahab would have been 16 and a conscript), Maryam's print line mentions older unreadable prints under hers. The school case c085 is untouched apart from the intro date line.
+

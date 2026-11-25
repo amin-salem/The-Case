@@ -104,3 +104,40 @@ s1 `f_neutral_58_pear` (58, scarf). s2 culprit `f_neutral_43_reserve06` (43, sca
 6. e5 now states the back's content: a few lines in another hand about the Sarvbon share, signed «ملیحه», Mehr 81, mounted so the back can be read.
 7. s5 lines: camera = 18:25 leaving the memorial room with Maryam, briefcase so small an A4 folder barely fits (container size); print = stair rail and the upstairs guest-room handle, nothing on the wood or wire of the memorial frame.
 `check_case.py c084`: only the notify entry (coordinator) missing.
+
+## Yalda pass (25 Nov 2026)
+
+Enrichment only: id, number, publish, scene, category, title, culprit (s2 رویا آراسته), the swap trick, proof logic and false trails stay.
+Machine cards before and after: two (e2 and e7, the two timestamped phone photos). The new card is handwritten (people, not a log).
+
+### What is added
+- **The korsi.** Dinner and the rest of the night are around the korsi in the hall (سفره روی کرسی), behind the drawn curtain of the arch. Every «سر میز» becomes «دور کرسی» / «سر کرسی»; nothing else about the room changes (from the korsi the corridor is not visible, e9).
+- **Manuchehr's fal notebook (new card e11, document, human).** A small notebook kept inside the hall's Divan of Hafez. On its first page, Manuchehr's rule: take the fal of each person in turn around the korsi; whoever is not at the korsi gets the fal «به نیت» and the page says where he is. Pages of 1402, 1403, 1404 in Manuchehr's hand, each opening with the same line «نامه‌ی آقاجان را سر جایش خواندم» (supports e10: the letter was always read in place, never taken out). Tonight's page in Ladan's hand: Maryam handed her the Divan and the notebook at 20:02, when Ladan sat down again («دستت سبکه»). Origin: Manuchehr's desk drawer -> the hall Divan since 1402. Final place: in the Divan on the korsi (the detective photographs the page; nobody takes it).
+- **Yalda food as mood and as times** (no new object that must be accounted for): Maryam's kitchen work 20:03-20:20 = tea from the samovar, watermelon slices, beet (لبو); Shahab's gaz box; nuts on the korsi; pomegranates in Roya's box, de-seeded at the korsi by Roya and Ladan from 20:13.
+- **Explanation ends** with one misra (no poet named): «گو برون آی که کار شب تار آخر شد».
+- Skipped: (b) stain test and (c) counted item + hidden napkin. The swap is dry and takes three minutes in a closed room; a stain or a missing piece would need a new event and a new object with no job in the frame/letter chain (and a soap/alkali test is close to a lab card). Yalda colour comes from the korsi, food and fal instead.
+
+### True timeline, tonight (only the minutes that change or gain a witness; the rest is as above)
+- 19:40 dinner served on the korsi in the hall, curtain of the arch drawn. Divan of Hafez with the notebook inside on the korsi.
+- 19:48-19:50 Shahab to the porch corner (phone, no cigarette). 19:52-20:00 Amir out (van, wedding frame, storage). 19:57-20:02 Ladan upstairs (medicine, charger).
+- 20:00 Amir back at the korsi. Maryam asks about the pomegranates; Roya: in the trunk.
+- 20:02 Ladan back; Maryam hands her the Divan and the notebook: «امسال فال‌ها با تو».
+- 20:03 Maryam to the kitchen (tea, watermelon, beet). **e11: 20:03 Amir's fal, at the korsi.**
+- **20:05 e11: Maryam's fal «به نیت», kitchen.** 20:05 Roya gets up «to bring the pomegranates» and goes out.
+- 20:06-20:09 the swap in the memorial room (unchanged).
+- **20:07 e11: Roya's fal «به نیت», gone to bring the pomegranates.** ~20:09 Maryam sees Roya in the corridor with the flat bag.
+- **20:09 e11: Shahab's fal «به نیت», porch.** 20:10-20:12 Roya at her trunk; 20:11 e7; 20:12 photo sent.
+- **20:11 e11: Ladan's own fal, at the korsi.**
+- **20:13 e11: Roya back with the pomegranate box; reads her ghazal aloud herself.** Roya and Ladan start de-seeding the pomegranates at the korsi.
+- 20:15 Shahab back (e11 line). 20:20 Maryam back with tea, watermelon and beet (e11 line).
+- 20:30 all five to the memorial room (unchanged).
+- At the korsi 20:03-20:13 without a break: Ladan and Amir (e11 + Ladan's answer + Amir's new sentence in his statement).
+
+### Clue chain after the pass
+1-2 unchanged (e2 vs e1; e5 + Amir + Shahab's answer).
+3. Containers unchanged; Roya's absence is now in a card too: e11 has her «به نیت» at 20:07 and back at 20:13 with the box, against «دو دقیقه هم نشد». Witness chain: Shahab (out 20:05, in 20:06, out 20:10, in 20:12), Maryam (~20:09 corridor, bag), e7 (20:11, bag in her hands), Ladan's answer + e11 (20:05-20:13).
+4. Motive unchanged (e10 + e6 + e5 + Ladan's answer); e11's old pages add that the letter was always read in place.
+Proof = e1, e2, e5, e7, e11 (5 of 11, ≤ half). e11 alone: a woman who went to fetch pomegranates and came back eight minutes later with them; it names nobody.
+False trails: Ladan is now also cleared by e11 + Amir's statement (both at the korsi 20:03-20:13); Amir likewise (e11, Ladan). Maryam's and Shahab's «به نیت» lines only confirm where they said they were; they do not clear them alone (Maryam's kitchen and Shahab's porch are still cleared as before).
+Hints: hint 3 adds the fal notebook beside Shahab's and Maryam's answers.
+Tool lines: unchanged (none contradicts the korsi or e11; all still in the timeline).

@@ -1,3 +1,9 @@
+# server 1.87.0: Yalda case on Yalda night (25 Nov 2026)
+
+- The Yalda-night case «قاب رو به دیوار» (Monday 30 Azar 1405) is now c084 (publish 21 Dec 2026, the night itself); «برگه‌ی شماره‌ی پنج» is c085 (22 Dec 2026, intro dated Tuesday 1 Dey 1405). Ids, numbers, dates, notify keys, plans, log rows and indexes were swapped together; the case count is unchanged.
+- c084 gained Yalda elements: a korsi dinner, watermelon, beet and pomegranate, a «فال حافظ» notebook (new card e11, people-made timeline of who left the circle, proof now e1, e2, e5, e7, e11), a closing fal-style line, and a new notify teaser. Solution, culprit and false trails are unchanged.
+- Blind tests: two fresh runs, culprit found both times (~90%), difficulty rated 4-5, no single card decides. Fixed: Maryam's marriage year (Shahab was too young: now Tir 1375) and the older prints under her print line.
+
 # server 1.86.0: weekend case w012 (25 Nov 2026)
 
 - New weekend case w012 «آخرین اتاقِ گرم» (format 3, publish Thu 31 Dec 2026, difficulty 5), with notify entry and camera/print lines. It is dated after w013 because 17 and 24 Dec were already taken. Deploy the server from the Liara panel.
