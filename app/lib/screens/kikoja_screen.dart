@@ -59,7 +59,7 @@ class _KikojaScreenState extends State<KikojaScreen> {
           return;
         case 'share':
           final text = '${body['text'] ?? ''}'.trim();
-          if (text.isNotEmpty) await Share.share(text.length > 400 ? text.substring(0, 400) : text);
+          if (text.isNotEmpty) await SharePlus.instance.share(ShareParams(text: text.length > 400 ? text.substring(0, 400) : text));
           await _reply(id, true, const <String, dynamic>{});
           return;
         case 'state':

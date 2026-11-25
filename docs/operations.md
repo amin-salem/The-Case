@@ -4,7 +4,7 @@
 - Today's puzzle is `pool[game day mod pool size]` (rolls at 21:00 Tehran like the cases); 60 puzzles = 60 days. More puzzles: `node server/tools/kikoja/generate.js 120 > server/app/content/kikoja/puzzles.json` (the order of the first ones may change, so do it before a public launch) and run the tests.
 - Money: hints 15 / 35 coins once per puzzle, reopen 15 coins, reward 5 coins for a clean first solve (all in `app/kikoja.py`, `PRICES`, `REWARD`). Everything is decided on the server; the page only shows it.
 - The practice files and the first-run tutorial run inside the page and never touch coins.
-- The page is a copy of the prototype built from `docs`-free sources: `tools/kikoja` has the engine and the pool generator; the page source is kept with the owner (prototype `kikoja-source`), the built file is `app/assets/kikoja/index.html`.
+- `server/tools/kikoja` holds the puzzle engine and the pool generator. The page itself is the built file `app/assets/kikoja/index.html` (its source, the prototype, is kept by the owner).
 
 ## «شکار سه‌روزه» (18 Nov 2026, server 1.77.0)
 
