@@ -359,11 +359,12 @@ async def test_bad_input_is_refused(client):
 
 async def test_admin_numbers_count_levels_and_unlocks(client):
     await configure(client)
+    before = (await client.get("/admin/api/kikoja", headers=ADMIN)).json()["stats"]["coins_unlock"]   # the coin ledger keeps other tests' unlocks
     t = await make_tester(client, "kk-adm-1")
     await client.post(url("medium", "unlock"), headers=t["headers"])
     _, ok = good_accusation()
     await client.post(url("easy", "accuse"), headers=t["headers"], json=ok)
     j = (await client.get("/admin/api/kikoja", headers=ADMIN)).json()
     st = j["stats"]
-    assert st["by_level"]["easy"]["solved"] == 1 and st["by_level"]["medium"]["unlocked"] == 1 and st["coins_unlock"] == 30
+    assert st["by_level"]["easy"]["solved"] == 1 and st["by_level"]["medium"]["unlocked"] == 1 and st["coins_unlock"] - before == 30
     assert st["by_level"]["hard"]["puzzles"] == 10 and st["by_level"]["hard"]["today"].startswith("h")

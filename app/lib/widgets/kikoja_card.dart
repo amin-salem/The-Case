@@ -203,7 +203,7 @@ class _UnlockSheetState extends State<_UnlockSheet> {
   Widget build(BuildContext context) {
     final l = widget.level;
     final price = (l['price'] as int?) ?? 0;
-    final house = l['house'] == 'kashan' ? 'خانهٔ تاریخیِ کاشان' : 'خانهٔ باغِ قلهک';
+    final house = l['house'] == 'kashan' ? 'خانه‌ی تاریخیِ کاشان' : 'خانه‌ی باغِ قلهک';
     return SafeArea(
       top: false,
       child: Container(
