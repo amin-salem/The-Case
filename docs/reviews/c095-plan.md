@@ -1,8 +1,8 @@
-# c084 logic plan (nightly, 18 Nov 2026 session c, second case)
+# c095 (was c084 until 25 Nov 2026) logic plan (nightly, 18 Nov 2026 session c, second case)
 
 Written before the JSON. Every card, answer, tool line and the explanation were checked against the true timelines below.
 
-## c084 «برگه‌ی شماره‌ی پنج» (batch 3 idea #2, style S1 cold case, puzzle type 17 meaningful order, school / art, difficulty 5, publish 2026-12-21, شکل شب: سندمحور)
+## c095 «برگه‌ی شماره‌ی پنج» (batch 3 idea #2, style S1 cold case, puzzle type 17 meaningful order, school / art, difficulty 5, publish 2027-01-01 (moved from 2026-12-21 for the Yalda case), شکل شب: سندمحور)
 
 ### Changes from the idea (and why)
 - Title «پشت مقوای آبی» -> «برگه‌ی شماره‌ی پنج»: the idea title has the same shape and category as c045 «پشتِ تصویرِ باران» (art). The blue cardboard stays as the place where the original is found.
