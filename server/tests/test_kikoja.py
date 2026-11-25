@@ -313,7 +313,7 @@ async def test_witness_is_required_when_the_contradiction_alone_does_not_clear_t
     await configure(client)
     t = await make_tester(client, "kk-wit-1")
     pz = next(p for p in kikoja.level_pool("easy") if any(w for w in p["answer"]["cons"].values()))
-    monkeypatch.setattr(kikoja, "today_puzzle", lambda level="easy": pz)
+    monkeypatch.setattr(kikoja, "today_puzzle", lambda level="easy", back=0: pz)
     a = pz["answer"]
     con = next((c for c, w in a["cons"].items() if w), None)
     base = {"who": a["thief"], "lie": a["lie"], "con": con}

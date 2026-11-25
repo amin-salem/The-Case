@@ -29,7 +29,8 @@ class _KikojaArchiveViewState extends State<KikojaArchiveView> {
 
   Future<void> _load() async {
     final d = await Api.i.kikojaArchive();
-    if (mounted) setState(() {
+    if (!mounted) return;
+    setState(() {
       _data = d;
       _loaded = true;
     });
@@ -114,7 +115,7 @@ class _ArchiveTile extends StatelessWidget {
       button: true,
       label: '$name، $state',
       child: GestureDetector(
-        key: ValueKey('kikoja-archive-${level}-${l['id']}'),
+        key: ValueKey('kikoja-archive-$level-${l['id']}'),
         onTap: onTap,
         child: Container(
           height: 98,
