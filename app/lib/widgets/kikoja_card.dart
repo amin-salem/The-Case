@@ -4,6 +4,7 @@ import '../screens/dialogs.dart';
 import '../screens/kikoja_screen.dart';
 import '../services/api.dart';
 import '../theme.dart';
+import 'kikoja_archive.dart' show MiniPlan;
 
 /// «کی کجا؟» on the home screen (Amin, 25 Nov 2026): three tiles for today (easy, medium, hard). Easy is free, the other two
 /// open for coins. Shown only when the server shows the game to this player (testers first). It asks the server for the
@@ -50,27 +51,50 @@ class _KikojaHomeCardState extends State<KikojaHomeCard> {
     final ls = _levels;
     if (_today == null || ls.isEmpty) return const SizedBox.shrink();
     final foot = _footer();
+    final fresh = ls.any((l) => l['open'] == true && l['solved'] != true && l['failed'] != true);
     return Container(
       key: const ValueKey('kikoja-card'),
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(18), color: K.night2),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          Expanded(child: Text('کی کجا؟', style: tDisplay(20))),
-          Text('آزمایشی', style: tBody(11.5, color: K.kraft, w: FontWeight.w900)),
-        ]),
-        const SizedBox(height: 10),
-        Row(children: [
-          for (var i = 0; i < ls.length; i++) ...[
-            if (i > 0) const SizedBox(width: 8),
-            Expanded(child: _Tile(l: ls[i], onTap: () => _tap(ls[i]))),
-          ],
-        ]),
-        if (foot.isNotEmpty) ...[
-          const SizedBox(height: 8),
-          Center(child: Text(foot, style: tBody(12, color: K.textSoft))),
-        ],
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        gradient: const LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [Color(0xFF3A2E14), Color(0xFF221E16), K.night2]),
+        border: Border.all(color: K.brass.withValues(alpha: 0.7), width: 1.5),
+        boxShadow: const [BoxShadow(color: Color(0x73000000), blurRadius: 20, offset: Offset(0, 10))],
+      ),
+      child: Stack(children: [
+        // the house of the first puzzle, faint, behind the title (a hint of what the game is)
+        Positioned(
+          left: -24,
+          top: -10,
+          child: Opacity(
+            opacity: 0.35,
+            child: Transform.rotate(angle: -0.14, child: SizedBox(width: 130, child: MiniPlan(house: '${ls.first['house']}', target: '${ls.first['target']}'))),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [
+              Text('کی کجا؟', style: tDisplay(27)),
+              if (fresh) ...[
+                const SizedBox(width: 10),
+                Container(key: const ValueKey('kikoja-dot'), width: 9, height: 9, decoration: const BoxDecoration(shape: BoxShape.circle, color: K.brass)),
+              ],
+            ]),
+            const SizedBox(height: 14),
+            Row(children: [
+              for (var i = 0; i < ls.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(child: _Tile(l: ls[i], onTap: () => _tap(ls[i]))),
+              ],
+            ]),
+            if (foot.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Center(child: Text(foot, style: tBody(12, color: K.textSoft))),
+            ],
+          ]),
+        ),
       ]),
     );
   }
@@ -123,7 +147,11 @@ class _Tile extends StatelessWidget {
     } else if (failed) {
       status = Text('بسته شد', style: tBody(12, color: K.stamp, w: FontWeight.w900));
     } else if (open) {
-      status = Text(price == 0 ? 'رایگان' : 'باز شده', style: tBody(12, color: K.ok, w: FontWeight.w900));
+      status = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 1),
+        decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(99)),
+        child: Text(price == 0 ? 'رایگان' : 'باز شده', style: tBody(12.5, color: K.night, w: FontWeight.w900)),
+      );
     } else {
       status = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         const _Coin(),
@@ -141,8 +169,8 @@ class _Tile extends StatelessWidget {
           height: 84,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            color: solved ? K.night : K.night3,
-            border: solved ? null : Border.all(color: open && !failed ? K.brass.withValues(alpha: 0.55) : Colors.transparent),
+            color: solved ? const Color(0xFF25231E) : price == 0 && open ? const Color(0x29E0A526) : const Color(0x9917181A),
+            border: Border.all(color: solved ? Colors.transparent : price == 0 && open && !failed ? K.brass : K.brass.withValues(alpha: 0.25), width: price == 0 && open && !solved ? 1.5 : 1),
           ),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end, children: [

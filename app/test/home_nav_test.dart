@@ -14,17 +14,17 @@ int selectedTab(WidgetTester t) => t.widget<NavigationBar>(find.byType(Navigatio
 
 void main() {
   group('bottom navigation', () {
-    testWidgets('four tabs in order; the active one is selected; switching works', (t) async {
+    testWidgets('five tabs in order; the active one is selected; switching works', (t) async {
       await seedHome();
       await pumpApp(t);
       final bar = t.widget<NavigationBar>(find.byType(NavigationBar));
-      expect(bar.destinations.length, 4);
+      expect(bar.destinations.length, 5);
       expect([for (final d in bar.destinations) (d as NavigationDestination).label],
-          ['میز کار', 'بایگانی', 'برترها', 'کارت من']);
+          ['میز کار', 'آخر هفته', 'بایگانی', 'برترها', 'کارت من']);
       expect(selectedTab(t), 0);
       await t.tap(find.text('بایگانی').last);
       await t.pump(const Duration(milliseconds: 300));
-      expect(selectedTab(t), 1);
+      expect(selectedTab(t), 2);
       expect(find.byType(ArchiveScreen), findsOneWidget);
       await t.tap(find.text('میز کار').last);
       await t.pump(const Duration(milliseconds: 300));
@@ -34,7 +34,7 @@ void main() {
     testWidgets('each tab is at least 48 dp tall and wide', (t) async {
       await seedHome();
       await pumpApp(t);
-      for (final label in ['میز کار', 'بایگانی', 'برترها', 'کارت من']) {
+      for (final label in ['میز کار', 'آخر هفته', 'بایگانی', 'برترها', 'کارت من']) {
         final r = t.getRect(find.ancestor(of: find.text(label).last, matching: find.byType(NavigationDestination)).first);
         expect(r.height, greaterThanOrEqualTo(48), reason: label);
         expect(r.width, greaterThanOrEqualTo(48), reason: label);
@@ -63,7 +63,7 @@ void main() {
       await pumpApp(t);
       await t.tap(find.text('برترها').last);
       await t.pump(const Duration(milliseconds: 300));
-      expect(selectedTab(t), 2);
+      expect(selectedTab(t), 3);
       final onTab = t.widget<PopScope>(find.byWidgetPredicate((w) => w is PopScope).first);
       expect(onTab.canPop, isFalse, reason: 'on another tab, back must not leave the app');
       onTab.onPopInvokedWithResult!(false, null);
@@ -147,6 +147,23 @@ void main() {
       expect(find.byType(NavigationBar), findsNothing);
     });
 
+    testWidgets('archive tab shows a dot for cases the player has not seen; opening it clears the dot', (t) async {
+      await seedHome();
+      await Api.i.setIntPref('archive_seen_count', 1); // the seed holds 4 old cases
+      await pumpApp(t);
+      expect(find.byKey(const ValueKey('archive-dot')), findsOneWidget);
+      await t.tap(find.text('بایگانی').last);
+      await t.pump(const Duration(milliseconds: 400));
+      expect(find.byKey(const ValueKey('archive-dot')), findsNothing);
+    });
+
+    testWidgets('a first count is taken as seen: no dot for the old cases of a new install', (t) async {
+      await seedHome();
+      await Api.i.setIntPref('archive_seen_count', 0);
+      await pumpApp(t);
+      expect(find.byKey(const ValueKey('archive-dot')), findsNothing);
+    });
+
     testWidgets('weekend tab shows a dot only while a weekend case is open and unsolved', (t) async {
       await seedHome(weekend: 'open');
       await pumpApp(t);
@@ -162,17 +179,18 @@ void main() {
   });
 
   group('home', () {
-    testWidgets('before solved: hero, real archive count and real weekend state, header with coins', (t) async {
+    testWidgets('before solved: a lean hero, the streak and the missions; no archive or weekend card, header with coins', (t) async {
       await seedHome(weekend: 'open');
       await pumpApp(t);
       expect(find.text('ساعت‌شمار موتور'), findsOneWidget);
       expect(find.text('شروع تحقیقات'), findsOneWidget);
       expect(find.textContaining('رایگان'), findsOneWidget);
       expect(find.text('سلام، آرش'), findsOneWidget);
-      expect(find.text('بایگانی پرونده‌ها'), findsOneWidget);
-      expect(find.text('۳ پرونده منتظرته'), findsOneWidget); // 4 old cases, 1 solved
-      expect(find.text('پرونده‌ی آخر هفته'), findsOneWidget);
-      expect(find.textContaining('باز است'), findsOneWidget);
+      // the archive and the weekend case live in the bar (a red dot says when something is new), not on the home screen
+      expect(find.text('بایگانی پرونده‌ها'), findsNothing);
+      expect(find.text('پرونده‌ی آخر هفته'), findsNothing);
+      expect(find.byKey(const ValueKey('quick-archive')), findsNothing);
+      expect(find.byKey(const ValueKey('quick-weekend')), findsNothing);
       // the streak is at risk (tonight is open, 4 nights): its row asks something of the player, so it is shown
       await t.scrollUntilVisible(find.text('۴ شب پشت سر هم'), 200, scrollable: find.byType(Scrollable).first);
       expect(find.text('۴ شب پشت سر هم'), findsOneWidget);
@@ -183,45 +201,26 @@ void main() {
       expect(find.byKey(const ValueKey('home-solved')), findsNothing);
     });
 
-    testWidgets('weekend card with no open case says closed', (t) async {
-      await seedHome();
-      await pumpApp(t);
-      expect(find.textContaining('بسته'), findsWidgets);
-    });
-
-    testWidgets('the archive card opens the archive tab', (t) async {
-      await seedHome();
-      await pumpApp(t);
-      await t.tap(find.byKey(const ValueKey('quick-archive')));
-      await t.pump(const Duration(milliseconds: 400));
-      expect(selectedTab(t), 1);
-      expect(find.byType(ArchiveScreen), findsOneWidget);
-    });
-
-    testWidgets('the weekend card opens the weekend page (not in the bar; «میز کار» stays lit) and back returns home', (t) async {
+    testWidgets('the weekend item of the bar opens the weekend page and back returns home', (t) async {
       await seedHome(weekend: 'open');
       await pumpApp(t);
-      await t.tap(find.byKey(const ValueKey('quick-weekend')));
+      await t.tap(find.text('آخر هفته').last);
       await t.pump(const Duration(milliseconds: 400));
       expect(MainShell.tab.value, MainShell.weekend);
-      expect(selectedTab(t), 0);
+      expect(selectedTab(t), 1);
       await t.tap(find.byKey(const ValueKey('weekend-back')));
       await t.pump(const Duration(milliseconds: 400));
       expect(MainShell.tab.value, MainShell.home);
     });
 
-    testWidgets('after solved: result card and archive invitation instead of the hero', (t) async {
+    testWidgets('after solved: the result card instead of the hero (the archive is in the bar)', (t) async {
       await seedHome(tonight: 'solved');
       await pumpApp(t);
       expect(find.byKey(const ValueKey('home-hero')), findsNothing);
       expect(find.text('شروع تحقیقات'), findsNothing);
       expect(find.text('پرونده‌ی امشب حل شد'), findsOneWidget);
       expect(find.textContaining('مرور نتیجه'), findsOneWidget);
-      expect(find.text('یک پرونده‌ی دیگر؟'), findsOneWidget);
-      expect(find.text('۳ پرونده‌ی بایگانی منتظرته'), findsOneWidget);
-      await t.tap(find.text('برو به بایگانی'));
-      await t.pump(const Duration(milliseconds: 400));
-      expect(selectedTab(t), 1);
+      expect(find.text('یک پرونده‌ی دیگر؟'), findsNothing);
     });
 
     testWidgets('lost today: closed, second chance with the real reopen price, no answer', (t) async {
@@ -339,8 +338,6 @@ void main() {
         await seedHome(streak: 1);
         await pumpApp(t);
         expect(find.byKey(const ValueKey('home-hero')), findsOneWidget);
-        expect(find.byKey(const ValueKey('quick-archive')), findsOneWidget);
-        expect(find.byKey(const ValueKey('quick-weekend')), findsOneWidget);
         await toBottom(t);
         expect(streakRow(), findsNothing);
         expect(secureRow(), findsNothing);
@@ -446,20 +443,11 @@ void main() {
     });
 
     for (final scale in [1.0, 1.3]) {
-      testWidgets('360x740 at font $scale: the hero and both quick cards are on the first screen', (t) async {
+      testWidgets('360x740 at font $scale: the hero is whole on the first screen, above the bottom bar', (t) async {
         await seedHome(weekend: 'open');
         await pumpApp(t, scale: scale);
-        final visibleBottom = 740 - _navHeight;
-        // at font 1.0 everything fits; at 1.3 the hero fits whole and both quick cards start on the first screen
-        // (their last lines are one short scroll away: the text is never clipped or shrunk).
-        for (final k in ['home-hero', 'quick-archive', 'quick-weekend']) {
-          final r = t.getRect(find.byKey(ValueKey(k)));
-          if (scale > 1.0 && k != 'home-hero') {
-            expect(r.top, lessThanOrEqualTo(visibleBottom - 8), reason: '$k must start above the bottom bar');
-          } else {
-            expect(r.bottom, lessThanOrEqualTo(visibleBottom), reason: '$k must be above the bottom bar');
-          }
-        }
+        final r = t.getRect(find.byKey(const ValueKey('home-hero')));
+        expect(r.bottom, lessThanOrEqualTo(740 - _navHeight));
         expect(t.takeException(), isNull);
       });
     }

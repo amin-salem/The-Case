@@ -1,3 +1,9 @@
+# app 1.52.0 build 105 (test APK): new home screen (26 Nov 2026)
+
+- Home: a tall scene image with the title, the difficulty and one red «شروع تحقیقات» button (no number, category, place or solver count). «کی کجا؟» is a bolder gold card right under it. Missions stay one line. After solving, tonight's case becomes a compact strip and «کی کجا؟» sits on top.
+- The weekend and archive cards are gone from home. The bottom bar has five items: میز کار، آخر هفته، بایگانی، برترها، کارت من. A red dot sits on «آخر هفته» while a weekend case is open and unsolved, and on «بایگانی» when it holds cases the player has not seen (the first count of an install counts as seen).
+- App only, no server change: build the APK from the branch (`release`), no push to `main`.
+
 # server 1.89.1: /health counts (25 Nov 2026)
 
 - `/health` now says `nightly` (94) and `weekend` (13) separately; `cases` stays the nightly count. If the live server shows fewer than the repo (it showed 90 nightly), it is an older deployment: redeploy from the Liara panel and check `version` in the same answer.

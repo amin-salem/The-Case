@@ -9,7 +9,6 @@ import '../services/api.dart';
 import '../services/app_update.dart';
 import '../services/billing.dart';
 import '../services/home_rules.dart';
-import '../widgets/category.dart';
 import '../widgets/kikoja_card.dart';
 import '../services/reminders.dart';
 import '../services/sound.dart';
@@ -167,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
         // the dot on the weekend tab: a weekend case is open and not yet finished
         MainShell.weekendOpen.value = c.weekly != null && !c.weekly!.solved && !c.weekly!.failed;
+        MainShell.noteArchiveCount(c.archive.length); // the dot on the archive tab: cases the player has not seen yet
       }
       unawaited(_loadExtras());
       unawaited(_maybeOfferRepair());
@@ -352,15 +352,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final intro = cs.intro;
     return [
       if (intro != null && !intro.solved && !intro.failed) ...[_introCard(intro), const SizedBox(height: 10)],
-      if (!finished) FadeSlideIn(child: _hero(c)) else if (c.solved) _solvedCard(c, cs) else _lostCard(c, cs),
-      const SizedBox(height: 10),
-      _giftCard(cs),
-      const KikojaHomeCard(),
-      if (finished) ...[
-        _archiveInvite(cs),
-        _weekendRow(),
-      ] else
-        _quickCards(cs),
+      if (!finished) ...[
+        FadeSlideIn(child: _hero(c)),
+        const SizedBox(height: 10),
+        _giftCard(cs),
+        const KikojaHomeCard(),
+      ] else ...[
+        // tonight is done: the daily puzzle moves up, the result stays as a short strip below it
+        _giftCard(cs),
+        const KikojaHomeCard(),
+        if (c.solved) _solvedCard(c, cs) else _lostCard(c, cs),
+        const SizedBox(height: 10),
+      ],
       // only what asks something of the player now (a streak at risk, an account worth securing) ...
       _streakRow(cs),
       _secureRow(),
@@ -490,37 +493,48 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       );
     }
-    return _heroFrame(
+    return GestureDetector(
       key: const ValueKey('home-hero'),
       onTap: () => _open(c),
-      art: AnimatedScene(scene: c.scene, height: double.infinity),
-      badge: const _NewBadge(),
-      children: [
-        Wrap(spacing: 8, runSpacing: 2, crossAxisAlignment: WrapCrossAlignment.center, children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
-            decoration: BoxDecoration(color: K.brass, borderRadius: BorderRadius.circular(999)),
-            child: Text('پرونده‌ی امشب · رایگان', style: tBody(11.5, color: K.ink, w: FontWeight.w900)),
-          ),
-          Text('شماره‌ی ${fa(c.number)}', style: tBody(11.5, color: K.textSoft, w: FontWeight.w700)),
-          CategoryBadge(c.category),
-        ]),
-        const SizedBox(height: 4),
-        Text(c.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: tDisplay(22).copyWith(height: 1.3)),
-        Text('${c.location} · ${fa(c.solvers)} کارآگاه حلش کردن',
-            maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(12.5, color: K.textSoft).copyWith(height: 1.5)),
-        const SizedBox(height: 4),
-        Row(children: [
-          DifficultyBar(c.difficulty, compact: true),
-          const SizedBox(width: 6),
-          Flexible(
-            child: Text(kDifficultyLabels[clampDifficulty(c.difficulty) - 1],
-                maxLines: 1, overflow: TextOverflow.ellipsis, style: tBody(11.5, color: K.textSoft)),
-          ),
-        ]),
-        const SizedBox(height: 10),
-        StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, height: 50, onTap: () => _open(c)),
-      ],
+      child: Container(
+        height: 320,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: K.brass.withValues(alpha: 0.4)),
+          boxShadow: const [BoxShadow(color: Color(0x80000000), blurRadius: 24, offset: Offset(0, 12))],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(23),
+          child: Stack(fit: StackFit.expand, children: [
+            AnimatedScene(scene: c.scene, height: double.infinity),
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0x0017181A), Color(0xBF17181A), K.night],
+                  stops: [0.3, 0.64, 1],
+                ),
+              ),
+            ),
+            const Positioned(right: 14, top: 14, child: _NewBadge()),
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 16,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                Text('امشب · رایگان', style: tBody(12, color: K.brass, w: FontWeight.w900)),
+                const SizedBox(height: 2),
+                Text(c.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: tDisplay(27).copyWith(height: 1.25)),
+                const SizedBox(height: 6),
+                DifficultyBar(c.difficulty, compact: true),
+                const SizedBox(height: 12),
+                StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, height: 52, onTap: () => _open(c)),
+              ]),
+            ),
+          ]),
+        ),
+      ),
     );
   }
 
@@ -623,156 +637,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () => _open(c)),
       ]),
     );
-  }
-
-  int _unsolved(CasesList cs) => cs.archive.where((r) => !r.solved).length;
-
-  /// After tonight's case: the way to the archive, with the real number of old cases still waiting.
-  Widget _archiveInvite(CasesList cs) {
-    if (cs.archive.isEmpty) return const SizedBox.shrink();
-    final n = _unsolved(cs);
-    return Container(
-      key: const ValueKey('archive-invite'),
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-      decoration: BoxDecoration(
-        color: K.night2,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: K.brass.withValues(alpha: 0.6)),
-      ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Row(children: [
-          const Icon(Icons.inventory_2_rounded, color: K.brass, size: 26),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('یک پرونده‌ی دیگر؟', style: tDisplay(18)),
-              Text(n > 0 ? '${fa(n)} پرونده‌ی بایگانی منتظرته' : 'همه‌ی پرونده‌های بایگانی رو حل کردی',
-                  style: tBody(12.5, color: K.textSoft)),
-            ]),
-          ),
-        ]),
-        if (n > 0) ...[
-          const SizedBox(height: 10),
-          StampButton(
-              label: 'برو به بایگانی',
-              icon: Icons.inventory_2_outlined,
-              height: 48,
-              onTap: () => MainShell.tab.value = MainShell.archive),
-        ],
-      ]),
-    );
-  }
-
-  // ---------------------------------------------------------------- the two quick cards
-
-  /// Archive and weekend case side by side (stacked on a very large font).
-  Widget _quickCards(CasesList cs) {
-    final a = _archiveCard(cs), w = _weekendCard(cs);
-    final big = MediaQuery.textScalerOf(context).scale(10) > 15;
-    if (big) return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [a, const SizedBox(height: 10), w]);
-    return IntrinsicHeight(
-      child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Expanded(child: a),
-        const SizedBox(width: 10),
-        Expanded(child: w),
-      ]),
-    );
-  }
-
-  Widget _quickCard({Key? key, required IconData icon, required String title, required String line, Color lineColor = K.textSoft,
-      Widget? badge, required VoidCallback onTap}) {
-    return Material(
-      key: key,
-      color: K.night2,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 76),
-          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), border: Border.all(color: K.night3)),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
-            Row(children: [
-              Icon(icon, color: K.brass, size: 22),
-              if (badge != null) ...[const SizedBox(width: 6), badge],
-            ]),
-            const SizedBox(height: 4),
-            Text(title, maxLines: 2, overflow: TextOverflow.ellipsis, style: tBody(14, w: FontWeight.w900).copyWith(height: 1.4)),
-            Text(line,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: tBody(12, color: lineColor, w: FontWeight.w700).copyWith(height: 1.5)),
-          ]),
-        ),
-      ),
-    );
-  }
-
-  Widget _archiveCard(CasesList cs) {
-    final n = _unsolved(cs);
-    return _quickCard(
-      key: const ValueKey('quick-archive'),
-      icon: Icons.inventory_2_outlined,
-      title: 'بایگانی پرونده‌ها',
-      line: cs.archive.isEmpty
-          ? 'هنوز پرونده‌ی قدیمی نیست'
-          : n > 0
-              ? '${fa(n)} پرونده منتظرته'
-              : 'همه‌ی پرونده‌ها رو حل کردی',
-      lineColor: n > 0 ? K.brass : K.textSoft,
-      onTap: () => MainShell.tab.value = MainShell.archive,
-    );
-  }
-
-  Widget _weekendCard(CasesList cs) {
-    final (line, color) = _weekendState(cs);
-    return _quickCard(
-      key: const ValueKey('quick-weekend'),
-      icon: Icons.nightlight_round,
-      title: 'پرونده‌ی آخر هفته',
-      line: line,
-      lineColor: color,
-      badge: const NewTag('weekend_tab'),
-      onTap: () {
-        final w = cs.weekly;
-        // a lost weekend case opens the same second-chance flow as the weekend tab (price, confirm, shop), not an error
-        if (w != null && w.failed && !w.solved) {
-          openCaseRow(context, w).then((_) {
-            if (mounted) _load();
-          });
-        } else {
-          MainShell.tab.value = MainShell.weekend;
-        }
-      },
-    );
-  }
-
-  String _longLeft(Duration d) =>
-      d.inHours >= 24 ? '${fa(d.inDays)} روز و ${fa(d.inHours % 24)} ساعت' : faClock(d);
-
-  /// The real state of the weekend case: open (with its chapters), solved, lost, or closed with the opening time.
-  (String, Color) _weekendState(CasesList cs) {
-    final w = cs.weekly;
-    final now = DateTime.now();
-    if (w != null) {
-      if (w.solved) return ('حلش کردی!', K.brass);
-      if (w.failed) return ('این بار نشد', K.stamp);
-      final next = cs.weeklyNextChapterAt;
-      if (cs.weeklyFormat == 3 && next != null && next.isAfter(now)) {
-        return ('باز است · فصل دوم: ${_longLeft(next.difference(now))} دیگه', K.brass);
-      }
-      final left = cs.weeklyClosesAt?.difference(now);
-      if (left == null || left.isNegative) return ('باز است', K.brass);
-      return ('باز است · ${_longLeft(left)} مونده', K.brass);
-    }
-    final at = Api.i.upcomingWeekend['opens_at'];
-    if (at is num) {
-      final d = DateTime.fromMillisecondsSinceEpoch(at.toInt() * 1000).difference(now);
-      if (!d.isNegative) return ('بسته · ${_longLeft(d)} دیگه باز می‌شه', K.textSoft);
-    }
-    return ('بسته · به‌زودی', K.textSoft);
   }
 
   // ---------------------------------------------------------------- missions, streak, news
@@ -973,23 +837,6 @@ class _HomeScreenState extends State<HomeScreen> {
         await openCaseRow(context, c);
         if (mounted) _load();
       },
-    );
-  }
-
-  /// The weekend case as a one-line row (shown after tonight's case is finished).
-  Widget _weekendRow() {
-    final cs = _cases!;
-    final w = cs.weekly;
-    final t = Api.i.upcomingWeekend['title'];
-    final title = w != null ? 'آخر هفته: ${w.title}' : (t is String && t.isNotEmpty ? 'آخر هفته: $t' : 'آخر هفته');
-    final (sub, color) = _weekendState(cs);
-    return _line(
-      icon: Icons.nightlight_round,
-      title: title,
-      sub: sub,
-      subColor: color,
-      trailing: const NewTag('weekend_tab'),
-      onTap: () => MainShell.tab.value = MainShell.weekend,
     );
   }
 

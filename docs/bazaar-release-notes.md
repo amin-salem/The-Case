@@ -325,3 +325,15 @@ Build 103
 
 ## developer_note
 Build 104
+
+<!-- build: 105 -->
+## changelog_fa
+- صفحه‌ی اصلی تازه: تصویر بزرگ‌تر پرونده، متن کمتر و بخش «کی کجا؟» پررنگ‌تر
+- آخر هفته و بایگانی حالا در نوار پایین هستن و با نقطه‌ی قرمز خبر می‌دن چیزی تازه است
+
+## changelog_en
+- New home screen: a larger case image, less text and a bolder daily puzzle section
+- Weekend and archive moved to the bottom bar with a red dot for news
+
+## developer_note
+Build 105

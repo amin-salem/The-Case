@@ -17,7 +17,7 @@ import 'leaderboard_screen.dart';
 import 'story_screen.dart';
 import 'weekend_screen.dart';
 
-/// The app's main frame: four items in the bottom bar (the desk, archive, leaderboard, my card); the weekend page opens from the home card.
+/// The app's main frame: five items in the bottom bar (the desk, weekend, archive, leaderboard, my card); the home screen no longer carries weekend or archive cards (Amin, 26 Nov 2026), a red dot on those two items says when something is new.
 /// The story opens from the «تازه‌ها» section of the home screen (a normal route, see [openStory]).
 /// Quick riddles (riddles_screen.dart) are hidden for now. The shop opens from the coin chip.
 class MainShell extends StatefulWidget {
@@ -25,11 +25,33 @@ class MainShell extends StatefulWidget {
 
   /// Any screen can switch tabs: `MainShell.tab.value = MainShell.weekend;`
   static final ValueNotifier<int> tab = ValueNotifier(0);
-  static const home = 0, archive = 1, weekend = 2, leaderboard = 3, profile = 4;
+  static const home = 0, archive = 1, weekend = 2, leaderboard = 3, profile = 4;  // tab ids; the bar's order is [home, weekend, archive, leaderboard, profile]
   static const count = 5;
 
   /// True while a weekend case is open and not yet solved or lost (the home screen sets it): a small dot on the tab.
   static final ValueNotifier<bool> weekendOpen = ValueNotifier(false);
+
+  /// True while the archive holds cases the player has not seen yet (a red dot on the tab). Home reports the count after each load;
+  /// opening the archive tab marks them seen. The first count of an account is taken as seen (no dot for old cases).
+  static final ValueNotifier<bool> archiveNew = ValueNotifier(false);
+  static int _archiveCount = 0;
+  static const _archiveSeenKey = 'archive_seen_count';
+
+  static void noteArchiveCount(int n) {
+    _archiveCount = n;
+    final seen = Api.i.intPref(_archiveSeenKey);
+    if (seen == 0 && n > 0) {
+      Api.i.setIntPref(_archiveSeenKey, n);
+      archiveNew.value = false;
+    } else {
+      archiveNew.value = n > seen;
+    }
+  }
+
+  static void markArchiveSeen() {
+    if (_archiveCount > 0) Api.i.setIntPref(_archiveSeenKey, _archiveCount);
+    archiveNew.value = false;
+  }
 
   /// The «آخر هفته» tab was opened and counted in this app launch (at most one `weekend_tab_open` event per launch).
   static bool _weekendTabLogged = false;
@@ -110,6 +132,7 @@ class _MainShellState extends State<MainShell> {
         Api.i.track('weekend_tab_open');
       }
     }
+    if (i == MainShell.archive) MainShell.markArchiveSeen();
     setState(() {
       _visits[i]++;
       _seen.add(i);
@@ -153,19 +176,15 @@ class _MainShellState extends State<MainShell> {
     if (leave == true) MainShell.exitApp();
   }
 
-  /// The tab behind each bar item (the weekend page, tab 2, has no item).
-  static const _tabs = [MainShell.home, MainShell.archive, MainShell.leaderboard, MainShell.profile];
-  static int _navOf(int tab) => tab == MainShell.weekend ? 0 : _tabs.indexOf(tab).clamp(0, 3);
+  /// The tab behind each bar item.
+  static const _tabs = [MainShell.home, MainShell.weekend, MainShell.archive, MainShell.leaderboard, MainShell.profile];
+  static int _navOf(int tab) => _tabs.indexOf(tab).clamp(0, 4);
 
-  /// The desk icon; a small dot while a weekend case is open and unsolved (the weekend page is not in the bar).
-  Widget _homeIcon(IconData icon) => ListenableBuilder(
-      listenable: MainShell.weekendOpen,
-      builder: (_, __) => Badge(
-          key: MainShell.weekendOpen.value ? const ValueKey('weekend-dot') : null,
-          smallSize: 9,
-          isLabelVisible: MainShell.weekendOpen.value,
-          backgroundColor: K.stamp,
-          child: Icon(icon)));
+  /// An icon with a red dot while [flag] is on (a weekend case is open and unsolved; new cases in the archive).
+  Widget _dotIcon(IconData icon, ValueListenable<bool> flag, String key) => ValueListenableBuilder<bool>(
+      valueListenable: flag,
+      builder: (_, on, __) => Badge(
+          key: on ? ValueKey(key) : null, smallSize: 9, isLabelVisible: on, backgroundColor: K.stamp, child: Icon(icon)));
 
   Widget _page(int i) => switch (i) {
         MainShell.home => const HomeScreen(),
@@ -211,19 +230,21 @@ class _MainShellState extends State<MainShell> {
               ),
               child: NavigationBar(
                 height: 66,
-                // the weekend page is not in the bar (it opens from the home card): the bar keeps «میز کار» lit there
                 selectedIndex: _navOf(current),
                 onDestinationSelected: (i) {
                   Sfx.i.play('tap', volume: 0.4);
                   MainShell.tab.value = _tabs[i];
                 },
                 destinations: [
+                  const NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'میز کار'),
                   NavigationDestination(
-                      icon: _homeIcon(Icons.home_outlined),
-                      selectedIcon: _homeIcon(Icons.home_rounded),
-                      label: 'میز کار'),
-                  const NavigationDestination(
-                      icon: Icon(Icons.inventory_2_outlined), selectedIcon: Icon(Icons.inventory_2_rounded), label: 'بایگانی'),
+                      icon: _dotIcon(Icons.nightlight_outlined, MainShell.weekendOpen, 'weekend-dot'),
+                      selectedIcon: _dotIcon(Icons.nightlight_rounded, MainShell.weekendOpen, 'weekend-dot'),
+                      label: 'آخر هفته'),
+                  NavigationDestination(
+                      icon: _dotIcon(Icons.inventory_2_outlined, MainShell.archiveNew, 'archive-dot'),
+                      selectedIcon: _dotIcon(Icons.inventory_2_rounded, MainShell.archiveNew, 'archive-dot'),
+                      label: 'بایگانی'),
                   const NavigationDestination(
                       icon: Icon(Icons.emoji_events_outlined), selectedIcon: Icon(Icons.emoji_events_rounded), label: 'برترها'),
                   NavigationDestination(
