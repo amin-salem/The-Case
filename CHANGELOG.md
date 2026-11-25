@@ -1,3 +1,7 @@
+# server 1.85.0: nightly cases c093, c094 (25 Nov 2026)
+
+- New nightly cases c093 «نامی زیر کرایه قایق» (publish Wed 30 Dec 2026, difficulty 4) and c094 «بشقاب صندلی سه» (publish Thu 31 Dec 2026, difficulty 5), with notify entries and camera/print lines. This push also carries c091 and c092 (1.84.0, never deployed alone). Deploy the server from the Liara panel.
+
 # server 1.84.0: nightly cases c091, c092 (24 Nov 2026)
 
 - New nightly cases c091 «دسته‌ای که برگشت» (publish Mon 28 Dec 2026, difficulty 4) and c092 «اجاره برای یک غریبه» (publish Tue 29 Dec 2026, difficulty 5), with notify entries and camera/print lines. Deploy the server from the Liara panel.
