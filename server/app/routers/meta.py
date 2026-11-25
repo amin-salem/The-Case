@@ -24,7 +24,9 @@ router = APIRouter(tags=["meta"])
 @router.get("/health")
 async def health(session: AsyncSession = Depends(get_session)):
     await session.execute(text("SELECT 1"))
-    return {"ok": True, "cases": len(content.all_cases()), "version": VERSION}
+    nightly, weekend = len(content.all_cases()), len(content.weekly_cases())
+    # "cases" stays the nightly count (what it always meant); the weekend cases have their own number
+    return {"ok": True, "cases": nightly, "nightly": nightly, "weekend": weekend, "version": VERSION}
 
 
 _public = TTLCache("config_public", ttl=30, max_size=2)

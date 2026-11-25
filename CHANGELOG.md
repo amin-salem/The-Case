@@ -1,3 +1,7 @@
+# server 1.89.1: /health counts (25 Nov 2026)
+
+- `/health` now says `nightly` (94) and `weekend` (13) separately; `cases` stays the nightly count. If the live server shows fewer than the repo (it showed 90 nightly), it is an older deployment: redeploy from the Liara panel and check `version` in the same answer.
+
 # server 1.89.0 / app 1.51.0 build 104 (test APK): «کی کجا؟» archive (25 Nov 2026)
 
 - The archive tab gets a second tab «کی کجا؟» (only for players who see the game): the last 7 days, three tiles each (a small plan of the house, plaques, the price of a closed one). A day's puzzle opens the same game page as today's. Old easy puzzles are free, old medium / hard ones cost the same 30 / 50 coins; the archive pays plaques, never coins (the 5-coin reward stays for today's easy puzzle).

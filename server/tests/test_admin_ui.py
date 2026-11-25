@@ -224,3 +224,10 @@ async def test_admin_panel_font_and_tabs(client):
     assert (await client.get("/static/fonts/Other.ttf")).status_code == 404
     html = (await client.get("/admin/ui")).text
     assert "/static/fonts/Vazirmatn-Regular.ttf" in html and 'id="qm"' in html
+
+
+async def test_public_health_counts_nightly_and_weekend_cases(client):
+    from app import content
+    j = (await client.get("/health")).json()
+    assert j["ok"] and j["nightly"] == j["cases"] == len(content.all_cases()) and j["weekend"] == len(content.weekly_cases())
+    assert j["nightly"] >= 94 and j["weekend"] >= 13
