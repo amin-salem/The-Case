@@ -368,3 +368,48 @@ async def test_admin_numbers_count_levels_and_unlocks(client):
     st = j["stats"]
     assert st["by_level"]["easy"]["solved"] == 1 and st["by_level"]["medium"]["unlocked"] == 1 and st["coins_unlock"] - before == 30
     assert st["by_level"]["hard"]["puzzles"] == 10 and st["by_level"]["hard"]["today"].startswith("h")
+
+
+# ---- the archive (Amin, 25 Nov 2026): the last 7 days, same rules, no coins back for the free level -----------------------------------
+def test_the_archive_never_reaches_today_and_its_days_are_all_different():
+    for lv in kikoja.LEVELS:
+        ids = [kikoja.today_puzzle(lv, b)["id"] for b in range(0, kikoja.ARCHIVE_DAYS + 1)]
+        assert len(set(ids)) == kikoja.ARCHIVE_DAYS + 1, (lv, ids)   # room for more days later: the pool must stay bigger than the archive
+
+
+async def test_archive_lists_seven_days_of_three_tiles_without_statements(client):
+    await configure(client)
+    t = await make_tester(client, "kk-arc-1")
+    j = (await client.get("/v1/kikoja/archive", headers=t["headers"])).json()
+    assert j["visible"] and j["total"] == 21 and j["solved"] == 0 and [d["back"] for d in j["days"]] == list(range(1, 8))
+    assert all([x["level"] for x in d["levels"]] == ["easy", "medium", "hard"] for d in j["days"])
+    assert [(x["price"], x["open"]) for x in j["days"][0]["levels"]] == [(0, True), (30, False), (50, False)]
+    assert "puzzle" not in str(j) and "answer" not in str(j) and "paths" not in str(j)
+    plain = await new_player(client, "kk-arc-2", aged=True)
+    assert (await client.get("/v1/kikoja/archive", headers=plain["headers"])).json() == {"visible": False}
+    assert (await client.get("/v1/kikoja/easy?back=8", headers=t["headers"])).status_code == 422
+
+
+async def test_an_old_free_puzzle_is_played_for_plaques_and_pays_no_coins(client):
+    await configure(client)
+    t = await make_tester(client, "kk-arc-3")
+    pz = kikoja.today_puzzle("easy", 2)
+    e = (await client.get(url("easy") + "?back=2", headers=t["headers"])).json()
+    assert e["id"] == pz["id"] and pz["id"] != kikoja.today_puzzle("easy")["id"]
+    a = pz["answer"]
+    con, wits = next(iter(a["cons"].items()))
+    before = (await client.get("/v1/kikoja", headers=t["headers"])).json()["coins"]
+    r = (await client.post(url("easy", "accuse") + "?back=2", headers=t["headers"], json={"who": a["thief"], "lie": a["lie"], "con": con, "wit": wits[0] if wits else []})).json()
+    assert r["ok"] and r["run"]["stars"] == 3 and r["run"]["paid"] == 0 and r["coins"] == before
+    j = (await client.get("/v1/kikoja/archive", headers=t["headers"])).json()
+    assert j["solved"] == 1 and [x for x in j["days"][1]["levels"] if x["level"] == "easy"][0]["solved"] is True
+
+
+async def test_an_old_paid_puzzle_opens_with_the_same_coins_once(client):
+    await configure(client)
+    t = await make_tester(client, "kk-arc-4", coins=100)
+    u = url("hard", "unlock") + "?back=3"
+    assert (await client.get(url("hard") + "?back=3", headers=t["headers"])).json().get("puzzle") is None
+    a = (await client.post(u, headers=t["headers"])).json()
+    b = (await client.post(u, headers=t["headers"])).json()
+    assert a["open"] and a["coins"] == 50 and b["coins"] == 50 and b["puzzle"]["S"]

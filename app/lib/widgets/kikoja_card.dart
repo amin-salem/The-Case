@@ -31,26 +31,8 @@ class _KikojaHomeCardState extends State<KikojaHomeCard> {
 
   List<Map<String, dynamic>> get _levels => ((_today?['levels'] as List?) ?? const []).map((e) => (e as Map).cast<String, dynamic>()).toList();
 
-  Future<void> _play(String level) async {
-    final r = await Navigator.of(context).push<String>(MaterialPageRoute(builder: (_) => KikojaScreen(level: level)));
-    await _load();
-    if (r != 'next' || !mounted) return;
-    final i = _levels.indexWhere((l) => l['level'] == level);
-    final next = i >= 0 ? _levels.skip(i + 1).where((l) => l['solved'] != true).firstOrNull : null;
-    if (next != null) await _tap(next);
-  }
-
   Future<void> _tap(Map<String, dynamic> l) async {
-    if (l['open'] == true) return _play('${l['level']}');
-    final ok = await showModalBottomSheet<bool>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      useSafeArea: true,
-      builder: (_) => _UnlockSheet(level: l, coins: (_today?['coins'] as int?) ?? Api.i.coins),
-    );
-    await _load();
-    if (ok == true && mounted) await _play('${l['level']}');
+    await openKikojaTile(context, l, coins: (_today?['coins'] as int?) ?? Api.i.coins, siblings: _levels, reload: _load);
   }
 
   /// «فردا ساعت ۹ صبح» once all three are solved; otherwise the hours left in the day.
@@ -92,6 +74,31 @@ class _KikojaHomeCardState extends State<KikojaHomeCard> {
       ]),
     );
   }
+}
+
+/// Opens a tile of «کی کجا؟» (today's or an archive day's): the game when it is open, the unlock sheet when it is paid and closed.
+/// When the page asks for the next level (`'next'`), the next unsolved sibling is opened the same way.
+Future<void> openKikojaTile(BuildContext context, Map<String, dynamic> l,
+    {required int coins, required List<Map<String, dynamic>> siblings, required Future<void> Function() reload, int back = 0}) async {
+  Future<void> play(String level) async {
+    final r = await Navigator.of(context).push<String>(MaterialPageRoute(builder: (_) => KikojaScreen(level: level, back: back)));
+    await reload();
+    if (r != 'next' || !context.mounted) return;
+    final i = siblings.indexWhere((x) => x['level'] == level);
+    final next = i >= 0 ? siblings.skip(i + 1).where((x) => x['solved'] != true).firstOrNull : null;
+    if (next != null) await openKikojaTile(context, next, coins: coins, siblings: siblings, reload: reload, back: back);
+  }
+
+  if (l['open'] == true) return play('${l['level']}');
+  final ok = await showModalBottomSheet<bool>(
+    context: context,
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (_) => _UnlockSheet(level: l, coins: coins, back: back),
+  );
+  await reload();
+  if (ok == true && context.mounted) await play('${l['level']}');
 }
 
 const _levelFa = {'easy': 'آسان', 'medium': 'متوسط', 'hard': 'سخت'};
@@ -164,9 +171,10 @@ class _Coin extends StatelessWidget {
 
 /// The paid level's door: what is inside (counts only, never a statement), the price and the balance; one tap opens it.
 class _UnlockSheet extends StatefulWidget {
-  const _UnlockSheet({required this.level, required this.coins});
+  const _UnlockSheet({required this.level, required this.coins, this.back = 0});
   final Map<String, dynamic> level;
   final int coins;
+  final int back;
 
   @override
   State<_UnlockSheet> createState() => _UnlockSheetState();
@@ -179,7 +187,7 @@ class _UnlockSheetState extends State<_UnlockSheet> {
     final price = (widget.level['price'] as int?) ?? 0;
     setState(() => _busy = true);
     try {
-      await Api.i.kikojaAction('${widget.level['level']}', 'unlock', const {});
+      await Api.i.kikojaAction('${widget.level['level']}', 'unlock', const {}, back: widget.back);
       if (mounted) Navigator.of(context).pop(true);
     } on ApiException catch (e) {
       if (!mounted) return;

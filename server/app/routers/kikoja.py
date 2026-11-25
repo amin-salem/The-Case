@@ -4,8 +4,9 @@ count a mistake twice or give the reward twice. The answer never leaves before t
 from __future__ import annotations
 
 import logging
+from datetime import timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -19,6 +20,8 @@ from ..util import add_coins
 
 router = APIRouter(prefix="/v1/kikoja", tags=["kikoja"])
 LEVEL = Path(pattern="^(easy|medium|hard)$")
+# 0 = today; 1..ARCHIVE_DAYS = a day of the archive (the same endpoints, the same rules; only the free level pays no coins back there)
+BACK = Query(0, ge=0, le=kikoja.ARCHIVE_DAYS)
 log = logging.getLogger("kikoja")
 
 
@@ -34,10 +37,10 @@ class AccuseIn(BaseModel):
     secs: int = Field(default=0, ge=0, le=10 * 3600)
 
 
-async def _setup(session: AsyncSession, player: Player, level: str) -> dict:
-    """The level's puzzle of today or a 404 the app reads as «no game for you»."""
+async def _setup(session: AsyncSession, player: Player, level: str, back: int = 0) -> dict:
+    """The level's puzzle of today (or of an archive day) or a 404 the app reads as «no game for you»."""
     cfg = kikoja.config(await load_config(session))
-    p = kikoja.today_puzzle(level)
+    p = kikoja.today_puzzle(level, back)
     if p is None or not kikoja.visible(cfg, player):
         raise HTTPException(404, {"error": "no_kikoja"})
     return p
@@ -106,16 +109,37 @@ async def get_kikoja(player: Player = Depends(current_player), session: AsyncSes
     return {"visible": True, "coins": player.coins, "next_at": kikoja.next_open().isoformat(), "levels": levels}
 
 
+@router.get("/archive")
+async def get_archive(player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    """The last ARCHIVE_DAYS days, newest first, three tiles each (no statements): the archive tab reads this. Same prices as today's."""
+    cfg = kikoja.config(await load_config(session))
+    if not kikoja.visible(cfg, player):
+        return {"visible": False}
+    today = kikoja.day()
+    ids = [(b, lv, kikoja.today_puzzle(lv, b)) for b in range(1, kikoja.ARCHIVE_DAYS + 1) for lv in kikoja.LEVELS]
+    ids = [x for x in ids if x[2] is not None]
+    rows = {}
+    if ids:
+        found = (await session.scalars(select(KikojaRun).where(KikojaRun.player_id == player.id, KikojaRun.puzzle_id.in_([p["id"] for _, _, p in ids])))).all()
+        rows = {r.puzzle_id: r for r in found}
+    days: dict[int, dict] = {}
+    for b, lv, p in ids:
+        d = days.setdefault(b, {"back": b, "date": (today - timedelta(days=b)).isoformat(), "levels": []})
+        d["levels"].append(_meta(lv, p, rows.get(p["id"])))
+    return {"visible": True, "coins": player.coins, "solved": sum(1 for _, _, p in ids if rows.get(p["id"]) and rows[p["id"]].solved),
+            "total": len(ids), "days": [days[b] for b in sorted(days)]}
+
+
 @router.get("/{level}")
-async def get_level(level: str = LEVEL, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
-    p = await _setup(session, player, level)
+async def get_level(level: str = LEVEL, back: int = BACK, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+    p = await _setup(session, player, level, back)
     return _answer(player, level, p, await _run(session, player, p["id"], create=False))
 
 
 @router.post("/{level}/unlock")
-async def unlock(level: str = LEVEL, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+async def unlock(level: str = LEVEL, back: int = BACK, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """Opens a paid level for today: the coins are taken once (a second tap, a retry or a race never pays twice)."""
-    p = await _setup(session, player, level)
+    p = await _setup(session, player, level, back)
     await lock_players(session, [player.id])
     row = await _run(session, player, p["id"], create=True)
     if not row.unlocked:
@@ -129,9 +153,9 @@ async def unlock(level: str = LEVEL, player: Player = Depends(current_player), s
 
 
 @router.post("/{level}/hint")
-async def hint(body: HintIn, level: str = LEVEL, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+async def hint(body: HintIn, level: str = LEVEL, back: int = BACK, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """Buys a hint once per puzzle; asking again for a bought hint is free (a reload never pays twice)."""
-    p = await _setup(session, player, level)
+    p = await _setup(session, player, level, back)
     await lock_players(session, [player.id])
     row = await _run(session, player, p["id"], create=True)
     _need_open(level, row)
@@ -147,10 +171,10 @@ async def hint(body: HintIn, level: str = LEVEL, player: Player = Depends(curren
 
 
 @router.post("/{level}/accuse")
-async def accuse(body: AccuseIn, level: str = LEVEL, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+async def accuse(body: AccuseIn, level: str = LEVEL, back: int = BACK, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """The accusation: the thief, his false statement, the statement that contradicts it and, when the contradiction alone does not
     clear the other speaker, the witness statements. A wrong one costs a mistake and says which step to redo."""
-    p = await _setup(session, player, level)
+    p = await _setup(session, player, level, back)
     await lock_players(session, [player.id])
     row = await _run(session, player, p["id"], create=True)
     _need_open(level, row)
@@ -167,7 +191,7 @@ async def accuse(body: AccuseIn, level: str = LEVEL, player: Player = Depends(cu
     row.solved, row.proof, row.secs = True, [body.lie, body.con, sorted(set(body.wit))], min(body.secs, kikoja.MAX_SECS)
     row.stars = kikoja.stars_for(row.mistakes, list(row.hints or []), row.reopened)
     paid = 0
-    if row.stars == 3 and not row.reopened and row.reward == 0 and level in kikoja.REWARD_LEVELS:
+    if row.stars == 3 and not row.reopened and row.reward == 0 and level in kikoja.REWARD_LEVELS and back == 0:   # the archive pays plaques, never coins
         paid = kikoja.REWARD
         row.reward = paid
         await add_coins(session, player, paid, "kikoja_win")
@@ -178,9 +202,9 @@ async def accuse(body: AccuseIn, level: str = LEVEL, player: Player = Depends(cu
 
 
 @router.post("/{level}/reopen")
-async def reopen(level: str = LEVEL, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
+async def reopen(level: str = LEVEL, back: int = BACK, player: Player = Depends(current_player), session: AsyncSession = Depends(get_session)):
     """After three mistakes: opens the file again for coins (one star at most, no reward)."""
-    p = await _setup(session, player, level)
+    p = await _setup(session, player, level, back)
     await lock_players(session, [player.id])
     row = await _run(session, player, p["id"], create=True)
     _need_open(level, row)

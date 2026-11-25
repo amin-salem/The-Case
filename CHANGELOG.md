@@ -1,3 +1,9 @@
+# server 1.89.0 / app 1.51.0 build 104 (test APK): «کی کجا؟» archive (25 Nov 2026)
+
+- The archive tab gets a second tab «کی کجا؟» (only for players who see the game): the last 7 days, three tiles each (a small plan of the house, plaques, the price of a closed one). A day's puzzle opens the same game page as today's. Old easy puzzles are free, old medium / hard ones cost the same 30 / 50 coins; the archive pays plaques, never coins (the 5-coin reward stays for today's easy puzzle).
+- Server: `GET /v1/kikoja/archive` and an optional `?back=1..7` on `/v1/kikoja/{level}` (+ `/unlock`, `/hint`, `/accuse`, `/reopen`). `kikoja.ARCHIVE_DAYS = 7` (the test keeps it below the pool size so no archived puzzle is today's); more days and more puzzles come together later. No migration.
+- Deploy the server from the Liara panel, install build 104 on the testers' phones.
+
 # server 1.88.0 / app 1.50.0 build 103 (test APK): «کی کجا؟» three levels a day (25 Nov 2026)
 
 - Three puzzles a day on the home screen (a card with three tiles) instead of one in the weekend tab: easy is free (5 coins only for a clean first solve), medium costs 30 coins and hard 50 to open (paid levels give plaques, never coins). They open at 09:00 Tehran every day, separate from the 21:00 case.

@@ -14,8 +14,11 @@ import '../theme.dart';
 ///
 /// One screen per level (`easy`, `medium`, `hard`). It closes with `'next'` when the player asks for the next level.
 class KikojaScreen extends StatefulWidget {
-  const KikojaScreen({super.key, required this.level});
+  const KikojaScreen({super.key, required this.level, this.back = 0});
   final String level;
+
+  /// 0 = today's puzzle, 1.. = a day of the archive.
+  final int back;
 
   @override
   State<KikojaScreen> createState() => _KikojaScreenState();
@@ -66,15 +69,22 @@ class _KikojaScreenState extends State<KikojaScreen> {
           await _reply(id, true, const <String, dynamic>{});
           return;
         case 'state':
-          final s = await Api.i.kikojaLevel(widget.level);
-          final today = await Api.i.kikojaToday();
-          if (today != null) s['levels'] = today['levels'];
+          final s = await Api.i.kikojaLevel(widget.level, back: widget.back);
+          if (widget.back == 0) {
+            final today = await Api.i.kikojaToday();
+            if (today != null) s['levels'] = today['levels'];
+          } else {
+            final arc = await Api.i.kikojaArchive();
+            final days = ((arc?['days'] as List?) ?? const []).cast<Map>();
+            final day = days.where((d) => d['back'] == widget.back).firstOrNull;
+            if (day != null) s['levels'] = day['levels'];
+          }
           await _reply(id, true, s);
           return;
         case 'hint':
         case 'accuse':
         case 'reopen':
-          await _reply(id, true, await Api.i.kikojaAction(widget.level, '${m['op']}', body));
+          await _reply(id, true, await Api.i.kikojaAction(widget.level, '${m['op']}', body, back: widget.back));
           return;
         default:
           await _reply(id, false, 'bad_op');

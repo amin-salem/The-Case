@@ -1,11 +1,12 @@
 """Server version: bump it for every release (it also forces Liara to redeploy)."""
+# server 1.89.0: «کی کجا؟» archive of the last 7 days (25 Nov 2026)
 # server 1.88.0: «کی کجا؟» three levels a day, opens 09:00 (25 Nov 2026)
 # server 1.87.0: «کی کجا؟» for testers (25 Nov 2026)
 # server 1.86.0: weekend case w012 (25 Nov 2026)
 # server 1.85.0: nightly cases c093, c094 (25 Nov 2026)
 # server 1.84.0: nightly cases c091, c092 (24 Nov 2026)
 # server 1.83.0: weekend case w013 (20 Nov 2026)
-VERSION = "1.88.0"
+VERSION = "1.89.0"
 # server 1.82.0: weekend case w011 (20 Nov 2026)
 # server 1.81.0: «آخر هفته» tag on the weekly board (20 Nov 2026)
 # server 1.80.0: weekend case w010 (20 Nov 2026)

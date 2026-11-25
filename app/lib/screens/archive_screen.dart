@@ -9,6 +9,7 @@ import '../services/sound.dart';
 import '../theme.dart';
 import '../widgets/category.dart';
 import '../widgets/gift_case.dart';
+import '../widgets/kikoja_archive.dart';
 import '../widgets/offline.dart';
 import '../widgets/archive_picks.dart';
 import '../widgets/archive_stats.dart';
@@ -100,6 +101,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
   String _cat = ''; // topic filter ('' = all topics)
   String _query = ''; // search text
   final _searchCtl = TextEditingController();
+  bool _kikojaOn = false; // «کی کجا؟» is shown to this player (testers first): the archive gets a second tab
+  bool _kk = false; // the «کی کجا؟» tab is the open one
 
   @override
   void dispose() {
@@ -112,12 +115,49 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
   void initState() {
     super.initState();
     _load();
+    _checkKikoja();
     if (widget.embedded) MainShell.tab.addListener(_onTab);
   }
 
   void _onTab() {
-    if (MainShell.tab.value == MainShell.archive && mounted) _load();
+    if (MainShell.tab.value == MainShell.archive && mounted) {
+      _load();
+      _checkKikoja();
+    }
   }
+
+  Future<void> _checkKikoja() async {
+    final on = (await Api.i.kikojaToday()) != null;
+    if (mounted && on != _kikojaOn) {
+      setState(() {
+        _kikojaOn = on;
+        if (!on) _kk = false;
+      });
+    }
+  }
+
+  Widget _tabs() => Container(
+        key: const ValueKey('archive-tabs'),
+        margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(color: K.night2, borderRadius: BorderRadius.circular(14)),
+        child: Row(children: [
+          for (final (i, label) in ['پرونده‌ها', 'کی کجا؟'].indexed)
+            Expanded(
+              child: GestureDetector(
+                key: ValueKey('archive-tab-$i'),
+                behavior: HitTestBehavior.opaque,
+                onTap: () => setState(() => _kk = i == 1),
+                child: Container(
+                  height: 40,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(color: (i == 1) == _kk ? K.night3 : Colors.transparent, borderRadius: BorderRadius.circular(11)),
+                  child: Text(label, style: tBody(14.5, color: (i == 1) == _kk ? K.brass : K.textSoft, w: (i == 1) == _kk ? FontWeight.w900 : FontWeight.w700)),
+                ),
+              ),
+            ),
+        ]),
+      );
 
   Future<void> _load() async {
     try {
@@ -201,6 +241,8 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
             color: K.stamp,
             child: CustomScrollView(physics: const AlwaysScrollableScrollPhysics(), slivers: [
               const SliverToBoxAdapter(child: OfflineBanner(margin: EdgeInsets.fromLTRB(16, 10, 16, 0))),
+              if (_kikojaOn) SliverToBoxAdapter(child: _tabs()),
+              if (_kk) const SliverToBoxAdapter(child: KikojaArchiveView()) else ...[
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _giftPin(rows)),
               if (rows != null && rows.isNotEmpty) SliverToBoxAdapter(child: _summary(rows)),
               if (rows != null && _nudgeVisible(rows)) SliverToBoxAdapter(child: _rateNudge(rows)),
@@ -220,6 +262,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                 )
               else
                 _list(_shown(rows)),
+              ],
             ]),
           ),
         ),

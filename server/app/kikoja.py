@@ -25,6 +25,7 @@ PRICES = {"time": 15, "pair": 35, "reopen": 15}
 REWARD = 5                  # coins, only for the FREE level solved cleanly (3 stars) the first time: a paid level never pays coins
 REWARD_LEVELS = ("easy",)
 MAX_MISTAKES = 3
+ARCHIVE_DAYS = 7            # past days the archive shows (Amin, 25 Nov 2026: 7 while testing, more later). Must stay at most pool size - 3 so no archived puzzle is today's
 MAX_SECS = 6 * 3600
 
 
@@ -66,10 +67,10 @@ def level_pool(level: str) -> list[dict]:
     return [p for p in pool() if p.get("level") == level]
 
 
-def today_puzzle(level: str = "easy") -> dict | None:
-    """The level's puzzle of today: the verified pool turns round one puzzle a day (ids are stable, order never changes)."""
+def today_puzzle(level: str = "easy", back: int = 0) -> dict | None:
+    """The level's puzzle of today (back=0) or of `back` days ago: the verified pool turns round one puzzle a day (ids are stable, order never changes)."""
     p = level_pool(level)
-    return p[day().toordinal() % len(p)] if p else None
+    return p[(day().toordinal() - back) % len(p)] if p else None
 
 
 def price_of(level: str) -> int:
