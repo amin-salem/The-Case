@@ -1,3 +1,8 @@
+# app 1.49.0 build 102 (test APK, not for Bazaar): «شکار سه‌روزه» back in the app, for testers only (25 Nov 2026)
+
+- The hunt screen, its weekend-tab card and its local notifications are back (`app/lib/screens/hunt_screen.dart`, un-parked from build 101). Nothing on the server changed: a phone sees the hunt only when the server shows it to that player, and the config stays `audience: off` until Amin sets «فقط تسترها» in the admin panel (hunt card) and marks the players as testers. Everyone else, with any build, sees no card.
+- To run it: install build 102 on the testers' phones, admin panel → پرونده‌ها → «شکار سه‌روزه» → «فقط تسترها» → «شروع از همین الان» (see `docs/operations.md`). No server deploy is needed for this build.
+
 # server 1.86.0: weekend case w012 (25 Nov 2026)
 
 - New weekend case w012 «آخرین اتاقِ گرم» (format 3, publish Thu 31 Dec 2026, difficulty 5), with notify entry and camera/print lines. It is dated after w013 because 17 and 24 Dec were already taken. Deploy the server from the Liara panel.

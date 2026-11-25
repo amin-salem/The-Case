@@ -1,6 +1,6 @@
 ## «شکار سه‌روزه» (18 Nov 2026, server 1.77.0)
 
-> **Parked (20 Nov 2026, Amin):** the app from build 101 has no hunt screen (`docs/parked/hunt_screen.dart.txt` keeps it). Only build 100 can show it. Keep the config on `audience: off`.
+> **Back for testers (25 Nov 2026, Amin):** build 102 (test APK, not for Bazaar) has the hunt screen again. It is shown only when the config says `testers` (or `all`) and the player is a tester. Builds 101 and later from Bazaar never show it. Keep the config on `audience: off` when no test is running.
 
 
 - Admin panel → پرونده‌ها → «شکار سه‌روزه». Make yourself and friends testers first (player page → «تستر شود»).
