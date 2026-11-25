@@ -149,9 +149,10 @@ def build_names() -> str:
 
 def next_slots() -> dict:
     n, w = nightly(), weekend()
-    ln, lw = n[-1], w[-1]
+    ln = n[-1]
+    lw = max(w, key=lambda d: d["publish"])  # a weekend case may be written out of order (w012 was dated after w013)
     nn = int(ln["id"][1:]) + 1
-    nw = int(lw["id"][1:]) + 1
+    nw = max(int(d["id"][1:]) for d in w) + 1
     return {
         "nightly": [{"id": f"c{nn + i:03d}", "number": nn + i,
                      "publish": (date.fromisoformat(ln["publish"]) + timedelta(days=1 + i)).isoformat()} for i in range(2)],

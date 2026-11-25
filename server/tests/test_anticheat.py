@@ -187,10 +187,13 @@ async def test_time_alone_or_suspects_alone_is_not_enough(client, clock, strict_
 
 
 # ---------------------------------------------------------------- 3. throwaway accounts
-async def test_new_guest_accounts_are_on_the_boards_by_default(client, clock):
+async def test_new_guest_accounts_are_on_the_boards_by_default(client, clock, monkeypatch):
     """28 Oct 2026 (Amin): a guest who solved a case is on the boards at once."""
     c = content.by_id("c049")
-    clock(night("c049"))
+    when = clock(night("c049"))
+    # the solve time must follow the game clock too, or the test stops working once the real date passes c049's week (25 Nov 2026)
+    from app.routers import cases as cases_router
+    monkeypatch.setattr(cases_router, "utcnow", lambda: gameclock.to_utc_naive(when))
     fresh = await new_player(client, "young-0", aged=False)
     await client.get(f"/v1/cases/{c.id}", headers=fresh["headers"])
     r = await accuse(client, fresh["headers"], c, c.culprit)
