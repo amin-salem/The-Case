@@ -540,3 +540,14 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - w012 is dated 2026-12-31 (after w013) because 17 and 24 Dec were already taken by w011 and w013.
 - Clearing by forms: e10 and e15 only; the rest by people, objects and the rescue-post watch log.
 - Still open for Amin: no scene image / art-registry entry for w012.
+
+### 2026-11-26 nightly (Sonnet coordinator, Opus writer): c095, c096 from batch 3 (ideas 13, 14)
+
+| case | publish | type | culprit | blind test |
+|---|---|---|---|---|
+| c095 «کمک برای طبقه‌ی اشتباه» | 2027-01-01 | batch3 idea #13, style S7, puzzle type 12, tower / business, difficulty 3, شکل شب: بازجویی‌محور | s4 ریحانه ستاری | final runs ~92-95%; no single card decides; difficulty 3; last wording round not retested |
+| c096 «رد پای رو به ویترین» | 2027-01-02 | batch3 idea #14, style S3, puzzle type 6, museum / art, difficulty 4, شکل شب: شیءمحور | s2 دکتر محمود لطفی | final run ~95%; no single card decides; tester rated 4 (earlier runs 3-3.5); last wording round not retested |
+
+- Plans: docs/reviews/c095-plan.md, c096-plan.md (all fix rounds listed there). Ideas said difficulty 5; lowered under the 26 Nov rule. All suspect names new.
+- Length: c095 about 10.7k characters, c096 about 16k.
+

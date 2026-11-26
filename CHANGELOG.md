@@ -1,3 +1,8 @@
+# server 1.90.0: nightly cases c095, c096 (26 Nov 2026)
+
+- c095 «کمک برای طبقه‌ی اشتباه» (2027-01-01, medium) and c096 «رد پای رو به ویترین» (2027-01-02, hard), the first nightly cases under the shorter, not-very-hard rule. Notification teasers added.
+- Content only: no app change, no migration. Deploy the server from the Liara panel.
+
 # server 1.89.1: /health counts (25 Nov 2026)
 
 - `/health` now says `nightly` (94) and `weekend` (13) separately; `cases` stays the nightly count. If the live server shows fewer than the repo (it showed 90 nightly), it is an older deployment: redeploy from the Liara panel and check `version` in the same answer.
