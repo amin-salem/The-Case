@@ -497,7 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: const ValueKey('home-hero'),
       onTap: () => _open(c),
       child: Container(
-        height: 320,
+        height: 262,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: K.brass.withValues(alpha: 0.4)),
@@ -525,11 +525,11 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
                 Text('امشب · رایگان', style: tBody(12, color: K.brass, w: FontWeight.w900)),
                 const SizedBox(height: 2),
-                Text(c.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: tDisplay(27).copyWith(height: 1.25)),
+                Text(c.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: tDisplay(25).copyWith(height: 1.2)),
                 const SizedBox(height: 6),
                 DifficultyBar(c.difficulty, compact: true),
                 const SizedBox(height: 12),
-                StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, height: 52, onTap: () => _open(c)),
+                StampButton(label: 'شروع تحقیقات', icon: Icons.search_rounded, height: 48, onTap: () => _open(c)),
               ]),
             ),
           ]),

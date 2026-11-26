@@ -32,20 +32,14 @@ class MainShell extends StatefulWidget {
   static final ValueNotifier<bool> weekendOpen = ValueNotifier(false);
 
   /// True while the archive holds cases the player has not seen yet (a red dot on the tab). Home reports the count after each load;
-  /// opening the archive tab marks them seen. The first count of an account is taken as seen (no dot for old cases).
+  /// opening the archive tab marks them seen.  A player who never opened the archive sees the dot too.
   static final ValueNotifier<bool> archiveNew = ValueNotifier(false);
   static int _archiveCount = 0;
   static const _archiveSeenKey = 'archive_seen_count';
 
   static void noteArchiveCount(int n) {
     _archiveCount = n;
-    final seen = Api.i.intPref(_archiveSeenKey);
-    if (seen == 0 && n > 0) {
-      Api.i.setIntPref(_archiveSeenKey, n);
-      archiveNew.value = false;
-    } else {
-      archiveNew.value = n > seen;
-    }
+    archiveNew.value = n > Api.i.intPref(_archiveSeenKey);
   }
 
   static void markArchiveSeen() {

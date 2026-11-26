@@ -127,6 +127,9 @@ Future<void> openKikojaTile(BuildContext context, Map<String, dynamic> l,
 
 const _levelFa = {'easy': 'آسان', 'medium': 'متوسط', 'hard': 'سخت'};
 
+/// The three puzzle levels on the app's one difficulty scale (the same bar as the case cards): easy 1, medium 3, hard 5.
+const kikojaDifficulty = {'easy': 1, 'medium': 3, 'hard': 5};
+
 class _Tile extends StatelessWidget {
   const _Tile({required this.l, required this.onTap});
   final Map<String, dynamic> l;
@@ -138,7 +141,6 @@ class _Tile extends StatelessWidget {
     final solved = l['solved'] == true, failed = l['failed'] == true, open = l['open'] == true;
     final price = (l['price'] as int?) ?? 0;
     final stars = (l['stars'] as int?) ?? 0;
-    final bars = const {'easy': 1, 'medium': 2, 'hard': 3}[level] ?? 1;
     Widget status;
     if (solved) {
       status = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -154,7 +156,7 @@ class _Tile extends StatelessWidget {
       );
     } else {
       status = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const _Coin(),
+        const CoinIcon(size: 15),
         const SizedBox(width: 4),
         Text(fa(price), style: tBody(13, color: K.brass, w: FontWeight.w900)),
       ]);
@@ -166,19 +168,14 @@ class _Tile extends StatelessWidget {
         key: ValueKey('kikoja-tile-$level'),
         onTap: onTap,
         child: Container(
-          height: 84,
+          height: 78,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: solved ? const Color(0xFF25231E) : price == 0 && open ? const Color(0x29E0A526) : const Color(0x9917181A),
             border: Border.all(color: solved ? Colors.transparent : price == 0 && open && !failed ? K.brass : K.brass.withValues(alpha: 0.25), width: price == 0 && open && !solved ? 1.5 : 1),
           ),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end, children: [
-              for (var i = 0; i < 3; i++) ...[
-                if (i > 0) const SizedBox(width: 2),
-                Container(width: 4, height: 6.0 + i * 4, decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: i < bars ? K.brass : K.night)),
-              ],
-            ]),
+            DifficultyBar(kikojaDifficulty[level], compact: true),
             const SizedBox(height: 6),
             Text(_levelFa[level] ?? '', style: tBody(15, w: FontWeight.w900, color: solved ? K.textSoft : K.text)),
             const SizedBox(height: 4),
@@ -188,13 +185,6 @@ class _Tile extends StatelessWidget {
       ),
     );
   }
-}
-
-class _Coin extends StatelessWidget {
-  const _Coin();
-  @override
-  Widget build(BuildContext context) =>
-      Container(width: 13, height: 13, decoration: BoxDecoration(shape: BoxShape.circle, color: K.brass, border: Border.all(color: const Color(0xFF9C7420), width: 3)));
 }
 
 /// The paid level's door: what is inside (counts only, never a statement), the price and the balance; one tap opens it.
@@ -264,7 +254,7 @@ class _UnlockSheetState extends State<_UnlockSheet> {
               child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text('باز کردن', style: tBody(16.5, color: K.night, w: FontWeight.w900)),
                 const SizedBox(width: 10),
-                const _Coin(),
+                const CoinIcon(size: 15),
                 const SizedBox(width: 4),
                 Text(fa(price), style: tBody(16.5, color: K.night, w: FontWeight.w900)),
               ]),

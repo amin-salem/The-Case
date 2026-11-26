@@ -337,3 +337,13 @@ Build 104
 
 ## developer_note
 Build 105
+
+<!-- build: 106 -->
+## changelog_fa
+- بهبود ظاهر صفحه‌ی اصلی و یکدست‌شدن نمایش سختی و سکه در همه‌ی بخش‌ها
+
+## changelog_en
+- Home screen polish and a consistent look for difficulty and coins everywhere
+
+## developer_note
+Build 106

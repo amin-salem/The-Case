@@ -107,7 +107,6 @@ class _ArchiveTile extends StatelessWidget {
     final level = '${l['level']}';
     final solved = l['solved'] == true, failed = l['failed'] == true, open = l['open'] == true;
     final price = (l['price'] as int?) ?? 0, stars = (l['stars'] as int?) ?? 0;
-    final bars = const {'easy': 1, 'medium': 2, 'hard': 3}[level] ?? 1;
     final lit = solved || (open && !failed);
     final name = const {'easy': 'آسان', 'medium': 'متوسط', 'hard': 'سخت'}[level] ?? '';
     final state = solved ? 'حل شده' : failed ? 'بسته شده' : open ? 'باز' : 'قفل، ${fa(price)} سکه';
@@ -136,17 +135,12 @@ class _ArchiveTile extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Row(children: [
-              Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end, children: [
-                for (var i = 0; i < 3; i++) ...[
-                  if (i > 0) const SizedBox(width: 2),
-                  Container(width: 4, height: 5.0 + i * 4, decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: i < bars ? (lit ? K.brass : K.kraftDark.withValues(alpha: 0.5)) : K.night3)),
-                ],
-              ]),
+              DifficultyBar(kikojaDifficulty[level], compact: true),
               const Spacer(),
               if (solved)
                 for (var i = 0; i < 3; i++) Icon(Icons.shield_rounded, size: 12, color: i < stars ? K.brass : K.night3)
               else if (!open && !failed) ...[
-                const Icon(Icons.circle, size: 11, color: K.brass),
+                const CoinIcon(size: 13),
                 const SizedBox(width: 3),
                 Text(fa(price), style: tBody(12, w: FontWeight.w900)),
               ],

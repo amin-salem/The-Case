@@ -157,11 +157,11 @@ void main() {
       expect(find.byKey(const ValueKey('archive-dot')), findsNothing);
     });
 
-    testWidgets('a first count is taken as seen: no dot for the old cases of a new install', (t) async {
+    testWidgets('a player who never opened the archive sees the dot; an empty archive has none', (t) async {
       await seedHome();
       await Api.i.setIntPref('archive_seen_count', 0);
       await pumpApp(t);
-      expect(find.byKey(const ValueKey('archive-dot')), findsNothing);
+      expect(find.byKey(const ValueKey('archive-dot')), findsOneWidget);
     });
 
     testWidgets('weekend tab shows a dot only while a weekend case is open and unsolved', (t) async {

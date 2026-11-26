@@ -595,7 +595,7 @@ class _BoardState extends State<LeaderboardBoard> with AutomaticKeepAliveClientM
                       padding: const EdgeInsets.symmetric(horizontal: 9),
                       decoration: BoxDecoration(color: const Color(0x800A0A0C), borderRadius: BorderRadius.circular(99), border: Border.all(color: const Color(0x59F4CF73))),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        const Icon(Icons.monetization_on_rounded, size: 13, color: K.brass),
+                        const CoinIcon(size: 13),
                         const SizedBox(width: 4),
                         Text(fa(_prizes[rank]!), style: tBody(11.5, w: FontWeight.w900, color: _gold).copyWith(height: 1.1)),
                       ]),
