@@ -1,3 +1,8 @@
+# server 1.92.0: nightly cases c099, c100 (26 Nov 2026)
+
+- c099 «فهرست پیش از امانت» (2027-01-05, hard) and c100 «اتاقی که دو بار مرتب شد» (2027-01-06, hard), batch 3 ideas 17 and 18, with their notification teasers.
+- Content only: no app change, no migration. Deploy the server from the Liara panel.
+
 # server 1.91.0: nightly cases c097, c098 (26 Nov 2026)
 
 - c097 «مهمان بدون صندلی» (2027-01-03, hard) and c098 «دو نیمه‌ی یک راهرو» (2027-01-04, hard), batch 3 ideas 15 and 16, with their notification teasers.

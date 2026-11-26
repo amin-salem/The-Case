@@ -562,3 +562,13 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Length: both about 17.9k characters (target 15-17k); trimming further would have cut clue text.
 - Some first names repeat much older cases (none from c085-c096).
 - Some tool lines in both cases were rated weak by the tester (none is false or decisive).
+
+### 2026-11-26 nightly, third session (Sonnet coordinator, Opus writer): c099, c100 from batch 3 (ideas 17, 18)
+
+| case | publish | type | culprit | blind test |
+|---|---|---|---|---|
+| c099 «فهرست پیش از امانت» | 2027-01-05 | batch3 idea #17, style S1, puzzle type 17, library / science, difficulty 4, شکل شب: سندمحور | s3 کیهان مینوی | five runs: 3, 3, 3 (reader chain rewritten), then 4 and 4; final run 95%, no single card or tool line decides; last wording edits not retested |
+| c100 «اتاقی که دو بار مرتب شد» | 2027-01-06 | batch3 idea #18, style S6, puzzle type 11, hotel / family, difficulty 4, شکل شب: ریزنشانه‌محور | s4 آرتین فراهی | five runs: 2.5-3, 4, 3, 4, 3 (tester: napkin count is direct); final run 97%, no single card or tool line decides; last wording edits not retested |
+
+- Plans: docs/reviews/c099-plan.md, c100-plan.md (all fix rounds listed there). Ideas said difficulty 5; lowered under the 26 Nov rule. All suspect names new.
+- Length: both about 17.8k characters (target 15-17k).
