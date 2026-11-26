@@ -29,7 +29,7 @@ case writing is the one job CLAUDE.md reserves for Opus. The blind test is a **S
 1. Read CLAUDE.md, docs/case-writing-rules.md (§9, §10), docs/case-log.md, docs/chatgpt-case-prompt.md if present.
 2. Slots come from the repo: highest nightly number N in server/app/content/cases and its `publish` date D. Write c(N+1) and
    c(N+2) with publish D+1 and D+2 (contiguous; if a file already exists, continue after it; never touch published cases).
-3. Brief for the Opus writer: difficulty 4 and 5; puzzle types and settings different from the last 10 cases and from each other;
+3. Brief for the Opus writer: difficulty 4 or 3 for nightly cases from c095 (never 5; 3 only on Thursday/Friday, see case-writing-rules section 1), 5 only for weekend cases; shorter text (hard 15-17k, medium 8-10k characters); puzzle types and settings different from the last 10 cases and from each other;
    `category`/`scene` like the others; 5-6 suspects, 8-12 cards; LOGIC PLAN first (culprit, trick, clue chain with card ids, two
    false trails each cleared by a card, alibis with exact times, motive, every object/bag/phone accounted for), then the JSON in
    the house voice (c020-c024), then for EVERY suspect `camera` and `print` lines (rules §10b, Amin 25 Oct 2026, REPLACES the old «neutral» rule: each line is a

@@ -20,6 +20,13 @@ def test_mostly_difficulty_four():
     assert levels[4] > sum(v for k, v in levels.items() if k != 4)
 
 
+def test_nightly_from_95_is_never_very_hard():
+    # Amin, 26 Nov 2026: very hard (5) stays for weekend cases; nightly c095+ is hard (4) or medium (3)
+    for c in content.all_cases():
+        if int(c.data["number"]) >= 95:
+            assert c.data["difficulty"] in (3, 4), c.data["id"]
+
+
 def test_scenes_are_varied_and_known():
     scenes = Counter(c.data["scene"] for c in content.all_cases())
     assert set(scenes) <= content.SCENES

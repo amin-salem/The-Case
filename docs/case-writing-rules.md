@@ -6,7 +6,13 @@ future big 7-day cases. Every scheduled writing run reads this file first. The o
 make people think the app is not good; **there must be no easy case.**
 
 ## 1. Difficulty
-- Every case is difficulty **4 or 5**. Nightly cases are mostly 4, with some 5; weekend and big cases are 5.
+- Nightly cases from **c095 on** (Amin, 26 Nov 2026; players found c048+ too hard, too long and hard to remember): difficulty **4 (hard)
+  about two nights in three, 3 (medium) about one in three, never 5**. Medium goes on Thursday/Friday nights (the weekend case is open),
+  and no two medium nights in a row. Length: hard about 15-17 thousand characters of file, medium about 8-10 thousand (c048-c094 are ~23
+  thousand). Shorter does not mean easier to guess: keep the clue chain (two or three cards combined, one strong false trail for
+  hard, one for medium) and cut padding, repeated descriptions and filler cards.
+- Difficulty **5 (very hard) is only for weekend and big cases**; they keep their depth.
+- Older cases (c001-c094) are not renamed here; only the schedule listed in `docs/case-log.md` changes them.
 - No card gives the answer on its own. The culprit is only proven by **combining at least two cards**,
   usually three. The weekend and big cases need three to four.
 - Every suspect looks guilty for a while. There are at least **two strong false trails** that each look like
@@ -142,7 +148,7 @@ c020-c024) and checks every item below. Findings are FIXED in the file, never on
 - **Motives.** The `motive` field is only what everybody believes (a surface motive, never exculpatory). The real motive is in a card.
 - **Names and polish.** No repeated first name inside one case; no leftover names from other cases in the same week; ZWNJ only where
   needed (no «جا‌لیوانی»); proof ≤ half the cards and every proof card contradicts the culprit's own words.
-- **Difficulty is measured, not claimed.** Blind test the public file; below 3.5 → harden (a second strong false trail, no
+- **Difficulty is measured, not claimed.** Blind test the public file; below 3.5 (medium cases: below 3.0) → harden (a second strong false trail, no
   card that names him) and test again. Weekend cases: a chapter-1-only run and a full run.
 
 ## 10. Data for the detective tools (optional, from 20 Oct 2026)
