@@ -551,3 +551,14 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 - Plans: docs/reviews/c095-plan.md, c096-plan.md (all fix rounds listed there). Ideas said difficulty 5; lowered under the 26 Nov rule. All suspect names new.
 - Length: c095 about 10.7k characters, c096 about 16k.
 
+### 2026-11-26 nightly, second session (Sonnet coordinator, Opus writer): c097, c098 from batch 3 (ideas 15, 16)
+
+| case | publish | type | culprit | blind test |
+|---|---|---|---|---|
+| c097 «مهمان بدون صندلی» | 2027-01-03 | batch3 idea #15, style S4, puzzle type 13, wedding / travel, difficulty 4, شکل شب: غیبت‌محور | s5 آهو سروش | five runs: 2.5, 3, 3 (hardened each time), then 4 and 3.5-4; final run 95%, no single card or tool line decides; last wording fixes not retested |
+| c098 «دو نیمه‌ی یک راهرو» | 2027-01-04 | batch3 idea #16, style classic, puzzle type 7, snow_lodge / crime, difficulty 4, شکل شب: ترتیب‌محور | s1 رامتین فراهانی (s3 پدرام knowing accomplice) | three runs: 3, then 3.5 and 3.5; final run 97%, no single card or tool line decides; last error fixes not retested |
+
+- Plans: docs/reviews/c097-plan.md, c098-plan.md (all fix rounds listed there). Idea 16 said difficulty 5; lowered under the 26 Nov rule.
+- Length: both about 17.9k characters (target 15-17k); trimming further would have cut clue text.
+- Some first names repeat much older cases (none from c085-c096).
+- Some tool lines in both cases were rated weak by the tester (none is false or decisive).

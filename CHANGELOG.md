@@ -1,3 +1,8 @@
+# server 1.91.0: nightly cases c097, c098 (26 Nov 2026)
+
+- c097 «مهمان بدون صندلی» (2027-01-03, hard) and c098 «دو نیمه‌ی یک راهرو» (2027-01-04, hard), batch 3 ideas 15 and 16, with their notification teasers.
+- Content only: no app change, no migration. Deploy the server from the Liara panel.
+
 # server 1.90.0: nightly cases c095, c096 (26 Nov 2026)
 
 - c095 «کمک برای طبقه‌ی اشتباه» (2027-01-01, medium) and c096 «رد پای رو به ویترین» (2027-01-02, hard), the first nightly cases under the shorter, not-very-hard rule. Notification teasers added.
