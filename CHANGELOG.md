@@ -1,3 +1,9 @@
+# server 1.93.0: nightly cases c101, c102 (28 Nov 2026)
+
+- c101 «پاکتی که وزنش درست بود» (2027-01-07, medium) and c102 «امضاکننده‌ی پشت شیشه» (2027-01-08, hard), batch 3 ideas 19 and 20, with their notification teasers.
+- The scene cap in the content test went from 6 to 7 (`office` now has seven cases).
+- Content only: no app change, no migration. Deploy the server from the Liara panel.
+
 # server 1.92.0: nightly cases c099, c100 (26 Nov 2026)
 
 - c099 «فهرست پیش از امانت» (2027-01-05, hard) and c100 «اتاقی که دو بار مرتب شد» (2027-01-06, hard), batch 3 ideas 17 and 18, with their notification teasers.

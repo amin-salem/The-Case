@@ -10,7 +10,8 @@
 # server 1.90.0: nightly cases c095, c096 (26 Nov 2026)
 # server 1.91.0: nightly cases c097, c098 (26 Nov 2026)
 # server 1.92.0: nightly cases c099, c100 (26 Nov 2026)
-VERSION = "1.92.0"
+# server 1.93.0: nightly cases c101, c102 (28 Nov 2026)
+VERSION = "1.93.0"
 # server 1.82.0: weekend case w011 (20 Nov 2026)
 # server 1.81.0: «آخر هفته» tag on the weekly board (20 Nov 2026)
 # server 1.80.0: weekend case w010 (20 Nov 2026)

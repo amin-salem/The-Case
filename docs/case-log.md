@@ -572,3 +572,14 @@ Opus fixers applied the audit findings (key facts into cards, one meaning per wo
 
 - Plans: docs/reviews/c099-plan.md, c100-plan.md (all fix rounds listed there). Ideas said difficulty 5; lowered under the 26 Nov rule. All suspect names new.
 - Length: both about 17.8k characters (target 15-17k).
+
+### 2026-11-28 nightly (Sonnet coordinator, Opus writer): c101, c102 from batch 3 (ideas 19, 20)
+
+| case | publish | type | culprit | blind test |
+|---|---|---|---|---|
+| c101 «پاکتی که وزنش درست بود» | 2027-01-07 | batch3 idea #19, style S7, puzzle type 15, desert / business, difficulty 3, شکل شب: بازجویی‌محور | s2 بهرام ایزدی | three runs: all 3, 95-97%; no single card or tool line decides; last wording edits not retested |
+| c102 «امضاکننده‌ی پشت شیشه» | 2027-01-08 | batch3 idea #20, style S2, puzzle type 16, office / crime, difficulty 4, شکل شب: شیءمحور | s5 سمانه نیک‌اندیش | six runs: 3, 3, 3 (chain rewritten), 3, then 4 and 4; final run 94%, no single card or tool line decides; last one-sentence edit not retested |
+
+- Plans: docs/reviews/c101-plan.md, c102-plan.md (all fix rounds listed there). Ideas said difficulty 5; lowered under the 26 Nov rule.
+- Name changes: خسروان -> بهرام ایزدی, آرمین فرخ‌زاد -> آرمین ایزدی, سامانتا -> سمانه نیک‌اندیش, نیوشا فرهم‌پور -> نیوشا نیک‌اندیش, فرهادان -> بردیا یزدی. c101 title changed (the idea's title pointed at the culprit).
+- Length: c101 about 11.6k characters (medium target 8-10k), c102 about 17.9k (hard target 15-17k).

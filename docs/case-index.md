@@ -4,7 +4,7 @@ Run `python3 server/tools/case_index.py` after adding or changing a case. One li
 puzzle type, culprit slot and portrait that the last cases did NOT use, and to find the next free slot. It carries no clue text
 and no solution. Names are in `docs/case-names.md`.
 
-Nightly cases: 100 (last: c100 published 2027-01-06). Weekend cases: 13 (last: w013 published 2026-12-24). Story chapters: 1.
+Nightly cases: 102 (last: c102 published 2027-01-08). Weekend cases: 13 (last: w013 published 2026-12-24). Story chapters: 1.
 
 ## Nightly
 
@@ -110,6 +110,8 @@ c097 | 2027-01-03 | 4 | wedding | travel | مهمان بدون صندلی | s5 �
 c098 | 2027-01-04 | 4 | snow_lodge | crime | دو نیمه‌ی یک راهرو | s1 رامتین فراهانی (مسئول پذیرش شب، دوست پدرام) | m_neutral_37_reserve20 | 5 | 9 | batch3 idea #16, style classic, puzzle type 7, snow_lodge / crime, difficulty 4, شکل شب: ت
 c099 | 2027-01-05 | 4 | library | science | فهرست پیش از امانت | s3 کیهان مینوی (دانشیار گیاه‌شناسی، در سال ۸۳ پژوهشگر جوان (آن موقع ۲۶ ساله)) | m_neutral_48_reserve21 | 5 | 8 | batch3 idea #17, style S1, puzzle type 17, library / science, difficulty 4, شکل شب: سندمحو
 c100 | 2027-01-06 | 4 | hotel | family | اتاقی که دو بار مرتب شد | s4 آرتین فراهی (خواهرزاده‌ی شوکت و یعقوب نوبهاری) | m_neutral_38_brownotch | 5 | 7 | batch3 idea #18, style S6, puzzle type 11, hotel / family, difficulty 4, شکل شب: ریزنشانه‌
+c101 | 2027-01-07 | 3 | desert | business | پاکتی که وزنش درست بود | s2 بهرام ایزدی (حسابدار و شریک شرکت) | m_neutral_52_reserve19 | 5 | 7 | batch3 idea #19, style S7, puzzle type 15, desert / business, difficulty 3, شکل شب: بازجوی
+c102 | 2027-01-08 | 4 | office | crime | امضاکننده‌ی پشت شیشه | s5 سمانه نیک‌اندیش (مدیر دفتر) | f_neutral_42_reserve16 | 5 | 9 | batch3 idea #20, style S2, puzzle type 16, office / crime, difficulty 4, شکل شب: شیءمحور
 
 ## Weekend
 
@@ -135,8 +137,6 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 
 ## Last ten nightly cases (a new case differs from all of these)
 
-- c091: scene theater, category art, culprit slot s4, type: batch3 idea #9, style S2, puzzle type 9, theater / art, difficulty 4, شکل شب: شیءمحور
-- c092: scene office, category family, culprit slot s2, type: batch3 idea #10, style S5, puzzle type 10, office / family, difficulty 5, شکل شب: سندمحور
 - c093: scene harbor, category travel, culprit slot s1, type: batch3 idea #11, style S1, puzzle type 2, harbor / travel, difficulty 4 (idea said 5; lowe
 - c094: scene kitchen, category medical, culprit slot s3, type: batch3 idea #12, style S6, puzzle type 4, kitchen / medical, difficulty 5, شکل شب: ترتیب‌م
 - c095: scene tower, category business, culprit slot s4, type: batch3 idea #13, style S7, puzzle type 12, tower / business, difficulty 3, شکل شب: بازجویی
@@ -145,10 +145,12 @@ s01ch01 | هفت‌ستاره | bazaar_night | family
 - c098: scene snow_lodge, category crime, culprit slot s1, type: batch3 idea #16, style classic, puzzle type 7, snow_lodge / crime, difficulty 4, شکل شب: ت
 - c099: scene library, category science, culprit slot s3, type: batch3 idea #17, style S1, puzzle type 17, library / science, difficulty 4, شکل شب: سندمحو
 - c100: scene hotel, category family, culprit slot s4, type: batch3 idea #18, style S6, puzzle type 11, hotel / family, difficulty 4, شکل شب: ریزنشانه‌
+- c101: scene desert, category business, culprit slot s2, type: batch3 idea #19, style S7, puzzle type 15, desert / business, difficulty 3, شکل شب: بازجوی
+- c102: scene office, category crime, culprit slot s5, type: batch3 idea #20, style S2, puzzle type 16, office / crime, difficulty 4, شکل شب: شیءمحور
 
 ## Counts
 
-scenes: airport 5, bazaar_night 5, desert 4, harbor 7, hospital 6, hotel 5, kitchen 5, lab 7, library 7, museum 6, office 6, school 6, snow_lodge 6, subway 4, theater 6, tower 5, train 4, villa_rain 7, warehouse 5, wedding 7
-categories: art 19, business 17, crime 16, family 15, medical 13, science 15, travel 18
-culprit slots (nightly): s1 20, s2 20, s3 21, s4 19, s5 20
-difficulty (nightly): 2 2, 3 5, 4 53, 5 40
+scenes: airport 5, bazaar_night 5, desert 5, harbor 7, hospital 6, hotel 5, kitchen 5, lab 7, library 7, museum 6, office 7, school 6, snow_lodge 6, subway 4, theater 6, tower 5, train 4, villa_rain 7, warehouse 5, wedding 7
+categories: art 19, business 18, crime 17, family 15, medical 13, science 15, travel 18
+culprit slots (nightly): s1 20, s2 21, s3 21, s4 19, s5 21
+difficulty (nightly): 2 2, 3 6, 4 54, 5 40
